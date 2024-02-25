@@ -14,6 +14,7 @@ class AuthenticationBloc
   final AuthService authService = AuthService();
 
   AuthenticationBloc() : super(AuthenticationInitial()) {
+
     on<SignUpUser>((event, emit) async {
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
@@ -50,6 +51,21 @@ class AuthenticationBloc
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
         final UserModel? user = await authService.signInWithGoogle();
+        if (user != null) {
+          emit(AuthenticationSuccessState(user));
+        } else {
+          emit(const AuthenticationFailureState('create user failed'));
+        }
+      } catch (e) {
+        print(e.toString());
+      }
+      emit(const AuthenticationLoadingState(isLoading: false));
+    });
+
+    on<SignInUserWithApple>((event, emit) async {
+      emit(const AuthenticationLoadingState(isLoading: true));
+      try {
+        final UserModel? user = await authService.signInWithApple();
         if (user != null) {
           emit(AuthenticationSuccessState(user));
         } else {

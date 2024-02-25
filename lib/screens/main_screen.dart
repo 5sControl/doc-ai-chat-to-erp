@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:summishare/bloc/shared_links/shared_links_bloc.dart';
 import 'package:summishare/screens/account_screen.dart';
-import 'package:summishare/screens/auth/auth_sreen.dart';
+import 'package:summishare/screens/auth/auth_screen.dart';
 import 'package:summishare/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {

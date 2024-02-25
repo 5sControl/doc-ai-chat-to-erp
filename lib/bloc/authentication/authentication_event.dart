@@ -30,6 +30,12 @@ class SignInUserWithGoogle extends AuthenticationEvent {
   List<Object> get props => [];
 }
 
+class SignInUserWithApple extends AuthenticationEvent {
+
+  @override
+  List<Object> get props => [];
+}
+
 class SignOut extends AuthenticationEvent {
   @override
   List<Object> get props => [];

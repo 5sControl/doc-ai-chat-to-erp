@@ -38,6 +38,12 @@ class _AuthScreenState extends State<AuthScreen> {
       );
     }
 
+    void onPressApple() {
+      BlocProvider.of<AuthenticationBloc>(context).add(
+        SignInUserWithApple(),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Account'),
@@ -99,7 +105,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
                 InkWell(
-                  // onTap: onPressGoogle,
+                  onTap: onPressApple,
                   child: Container(
                     padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(

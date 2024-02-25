@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:summishare/bloc/authentication/authentication_bloc.dart';
-import 'package:summishare/screens/auth/auth_sreen.dart';
+import 'package:summishare/screens/auth/auth_screen.dart';
 import 'package:summishare/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
 import 'firebase_options.dart';

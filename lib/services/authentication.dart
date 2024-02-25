@@ -1,10 +1,30 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../models/models.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  String generateNonce([int length = 32]) {
+    final charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
 
   Future<UserModel?> signUpUser(
     String email,
@@ -71,6 +91,44 @@ class AuthService {
     try {
       final UserCredential userCredential =
           await _firebaseAuth.signInWithCredential(credential);
+      final User? firebaseUser = userCredential.user;
+      if (firebaseUser != null) {
+        return UserModel(
+          id: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+          displayName: firebaseUser.displayName ?? '',
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<UserModel?> signInWithApple() async {
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+
+    // Name:SummishareKey
+    // Key ID:XA6S384FYU
+    // Services:Sign in with Apple
+
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      nonce: nonce,
+    );
+
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+
+    try {
+      final UserCredential userCredential =
+          await _firebaseAuth.signInWithCredential(oauthCredential);
       final User? firebaseUser = userCredential.user;
       if (firebaseUser != null) {
         return UserModel(
