@@ -31,11 +31,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'SummiShare',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
-        elevation: 10,
-        shadowColor: Colors.black,
-        backgroundColor: Colors.teal.shade500,
       ),
       body: BlocBuilder<SharedLinksBloc, SharedLinksState>(
           builder: (context, sharedLinksState) {
@@ -55,15 +51,10 @@ class HomeScreen extends StatelessWidget {
               },
               child: ListTile(
                 leading: AnimatedCrossFade(
-                  duration: Duration(milliseconds: 400),
-                  // firstChild: const Icon(
-                  //   Icons.check,
-                  //   color: Colors.teal,
-                  //   size: 30,
-                  // ),
+                  duration: const Duration(milliseconds: 400),
                   firstChild: AnimatedCrossFade(
-                    duration: Duration(milliseconds: 400),
-                    firstChild: Icon(
+                    duration: const Duration(milliseconds: 400),
+                    firstChild: const Icon(
                       Icons.check,
                       color: Colors.teal,
                       size: 30,

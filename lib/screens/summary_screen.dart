@@ -10,16 +10,9 @@ class SummaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white, //change your color here
-        ),
         title: const Text(
           'Summary',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
-        elevation: 10,
-        shadowColor: Colors.black,
-        backgroundColor: Colors.teal.shade500,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

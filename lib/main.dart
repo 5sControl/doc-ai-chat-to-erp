@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:summishare/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
 import 'screens/main_screen.dart';
 
@@ -36,8 +36,9 @@ class _SummishareAppState extends State<SummishareApp> {
             create: (context) => SharedLinksBloc(),
           )
         ],
-        child: const MaterialApp(
-          home: MainScreen(),
+        child: MaterialApp(
+          theme: baseTheme,
+          home: const MainScreen(),
         ));
   }
 }
