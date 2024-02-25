@@ -1,0 +1,32 @@
+part of 'shared_links_bloc.dart';
+
+abstract class SharedLinksEvent extends Equatable {
+  const SharedLinksEvent();
+}
+
+class SaveSharedItem extends SharedLinksEvent {
+  final SharedMediaItem sharedItem;
+
+  const SaveSharedItem({required this.sharedItem});
+
+  @override
+  List<Object?> get props => [sharedItem];
+}
+
+class SaveSharedLink extends SharedLinksEvent {
+  final String sharedLink;
+
+  const SaveSharedLink({required this.sharedLink});
+
+  @override
+  List<String?> get props => [sharedLink];
+}
+
+class DeleteSharedLink extends SharedLinksEvent {
+  final String sharedLink;
+
+  const DeleteSharedLink({required this.sharedLink});
+
+  @override
+  List<String?> get props => [sharedLink];
+}
