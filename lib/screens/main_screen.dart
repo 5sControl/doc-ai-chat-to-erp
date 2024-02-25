@@ -16,9 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late StreamSubscription _intentSub;
-
   static const screens = [HomeScreen(), AuthScreen()];
-
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -38,6 +36,9 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _intentSub = ReceiveSharingIntent.getMediaStream().listen((value) {
       // print(value);
+      setState(() {
+        _selectedIndex = 0;
+      });
       for (var sharedItem in value) {
         saveLink(sharedItem);
       }
@@ -47,13 +48,12 @@ class _MainScreenState extends State<MainScreen> {
 
     // Get the media sharing coming from outside the app while the app is closed.
     ReceiveSharingIntent.getInitialMedia().then((value) {
-      // value.forEach((shareItem) => print(shareItem.path));
-      print('!!!!>>>>>');
-      // setState(() {
-      //   _sharedFiles.clear();
-      //   _sharedFiles.addAll(value);
-      //   ReceiveSharingIntent.reset();
-      // });
+      setState(() {
+        _selectedIndex = 0;
+      });
+      for (var sharedItem in value) {
+        saveLink(sharedItem);
+      }
       ReceiveSharingIntent.reset();
     });
   }

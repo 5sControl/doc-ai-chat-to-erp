@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../bloc/authentication/authentication_bloc.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -14,8 +18,24 @@ class _AuthScreenState extends State<AuthScreen> {
     final TextEditingController passwordController = TextEditingController();
 
     void onPressSignUp() {
-      // print(emailController.text);
-      // print(passwordController.text);
+      BlocProvider.of<AuthenticationBloc>(context).add(
+        SignInUserWithEmail(
+          emailController.text.trim(),
+          passwordController.text.trim(),
+        ),
+      );
+    }
+
+    void onPressSignOut() {
+      BlocProvider.of<AuthenticationBloc>(context).add(
+        SignOut(),
+      );
+    }
+
+    void onPressGoogle() {
+      BlocProvider.of<AuthenticationBloc>(context).add(
+        SignInUserWithGoogle(),
+      );
     }
 
     return Scaffold(
@@ -67,21 +87,27 @@ class _AuthScreenState extends State<AuthScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: const Icon(Icons.g_mobiledata),
+                InkWell(
+                  onTap: onPressGoogle,
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 2),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10))),
+                    child: const Icon(Icons.g_mobiledata),
+                  ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black, width: 2),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: const Icon(Icons.apple),
+                InkWell(
+                  // onTap: onPressGoogle,
+                  child: Container(
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 2),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10))),
+                    child: const Icon(Icons.apple),
+                  ),
                 ),
               ],
             ),
@@ -92,6 +118,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 textAlign: TextAlign.center,
               ),
             ),
+            IconButton(
+                onPressed: onPressSignOut,
+                icon: Icon(Icons.follow_the_signs_outlined))
           ],
         ),
       ),
