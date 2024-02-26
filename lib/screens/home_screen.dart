@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:summishare/screens/summary_screen.dart';
 
@@ -29,15 +30,23 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // leading: Padding(
-        //   padding: const EdgeInsets.only(left: 10),
-        //   child: Icon(Icons.screen_rotation, size: 40,),
-        // ),
-        title: const Text(
-          'SummiShare',
-        ),
-        // centerTitle: false,
-      ),
+          title: Row(
+        children: [
+          SvgPicture.asset(
+            'assets/svg/logo.svg',
+            height: 40,
+            width: 40,
+            colorFilter:
+                ColorFilter.mode(Colors.teal.shade500, BlendMode.srcIn),
+          ),
+          const Text(
+            '  Summify',
+            style: TextStyle(color: Colors.black),
+          )
+        ],
+      )
+          // centerTitle: false,
+          ),
       body: BlocBuilder<SharedLinksBloc, SharedLinksState>(
           builder: (context, sharedLinksState) {
         return ListView.builder(
