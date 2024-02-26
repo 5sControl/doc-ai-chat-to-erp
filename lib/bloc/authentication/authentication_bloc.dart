@@ -14,37 +14,21 @@ class AuthenticationBloc
   final AuthService authService = AuthService();
 
   AuthenticationBloc() : super(AuthenticationInitial()) {
-
-    on<SignUpUser>((event, emit) async {
-      emit(const AuthenticationLoadingState(isLoading: true));
-      try {
-        final UserModel? user =
-            await authService.signUpUser(event.email, event.password);
-        if (user != null) {
-          emit(AuthenticationSuccessState(user));
-        } else {
-          emit(const AuthenticationFailureState('create user failed'));
-        }
-      } catch (e) {
-        print(e.toString());
-      }
-      emit(const AuthenticationLoadingState(isLoading: false));
-    });
-
     on<SignInUserWithEmail>((event, emit) async {
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
         final UserModel? user =
             await authService.signInUserWithEmail(event.email, event.password);
         if (user != null) {
-          emit(AuthenticationSuccessState(user));
+          emit(const AuthenticationLoadingState(isLoading: false));
+          emit(AuthenticationSuccessState(user: user));
         } else {
+          emit(const AuthenticationLoadingState(isLoading: false));
           emit(const AuthenticationFailureState('create user failed'));
         }
       } catch (e) {
         print(e.toString());
       }
-      emit(const AuthenticationLoadingState(isLoading: false));
     });
 
     on<SignInUserWithGoogle>((event, emit) async {
@@ -52,14 +36,15 @@ class AuthenticationBloc
       try {
         final UserModel? user = await authService.signInWithGoogle();
         if (user != null) {
-          emit(AuthenticationSuccessState(user));
+          emit(const AuthenticationLoadingState(isLoading: false));
+          emit(AuthenticationSuccessState(user: user));
         } else {
+          emit(const AuthenticationLoadingState(isLoading: false));
           emit(const AuthenticationFailureState('create user failed'));
         }
       } catch (e) {
         print(e.toString());
       }
-      emit(const AuthenticationLoadingState(isLoading: false));
     });
 
     on<SignInUserWithApple>((event, emit) async {
@@ -67,14 +52,15 @@ class AuthenticationBloc
       try {
         final UserModel? user = await authService.signInWithApple();
         if (user != null) {
-          emit(AuthenticationSuccessState(user));
+          emit(const AuthenticationLoadingState(isLoading: false));
+          emit(AuthenticationSuccessState(user: user));
         } else {
+          emit(const AuthenticationLoadingState(isLoading: false));
           emit(const AuthenticationFailureState('create user failed'));
         }
       } catch (e) {
         print(e.toString());
       }
-      emit(const AuthenticationLoadingState(isLoading: false));
     });
 
     on<SignOut>((event, emit) async {

@@ -29,9 +29,14 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        // leading: Padding(
+        //   padding: const EdgeInsets.only(left: 10),
+        //   child: Icon(Icons.screen_rotation, size: 40,),
+        // ),
         title: const Text(
           'SummiShare',
         ),
+        // centerTitle: false,
       ),
       body: BlocBuilder<SharedLinksBloc, SharedLinksState>(
           builder: (context, sharedLinksState) {

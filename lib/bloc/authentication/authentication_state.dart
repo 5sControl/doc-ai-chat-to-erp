@@ -21,7 +21,8 @@ class AuthenticationLoadingState extends AuthenticationState {
 class AuthenticationSuccessState extends AuthenticationState {
   final UserModel user;
 
-  const AuthenticationSuccessState(this.user);
+  const AuthenticationSuccessState({required this.user});
+
   @override
   List<Object> get props => [user];
 }

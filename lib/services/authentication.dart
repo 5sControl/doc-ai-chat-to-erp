@@ -32,10 +32,11 @@ class AuthService {
   ) async {
     try {
       final UserCredential userCredential =
-          await _firebaseAuth.createUserWithEmailAndPassword(
+          await _firebaseAuth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
       );
+      print(userCredential);
       final User? firebaseUser = userCredential.user;
       if (firebaseUser != null) {
         return UserModel(

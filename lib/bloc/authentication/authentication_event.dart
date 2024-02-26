@@ -4,15 +4,15 @@ abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
 }
 
-class SignUpUser extends AuthenticationEvent {
-  final String email;
-  final String password;
-
-  const SignUpUser(this.email, this.password);
-
-  @override
-  List<Object> get props => [email, password];
-}
+// class SignInUser extends AuthenticationEvent {
+//   final String email;
+//   final String password;
+//
+//   const SignInUser(this.email, this.password);
+//
+//   @override
+//   List<Object> get props => [email, password];
+// }
 
 class SignInUserWithEmail extends AuthenticationEvent {
   final String email;
@@ -21,7 +21,7 @@ class SignInUserWithEmail extends AuthenticationEvent {
   const SignInUserWithEmail(this.email, this.password);
 
   @override
-  List<Object> get props => [email, password];
+  List<String> get props => [email, password];
 }
 
 class SignInUserWithGoogle extends AuthenticationEvent {

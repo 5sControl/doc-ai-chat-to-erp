@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summishare/bloc/authentication/authentication_bloc.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -6,14 +8,23 @@ class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Account',
+        appBar: AppBar(
+          title: const Text(
+            'Account',
+          ),
         ),
-      ),
-      body: Center(
-        child: Text('Account'),
-      ),
+        body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, authState) {
+            final user = authState is AuthenticationSuccessState ? authState.user : null;
+            print(user);
+            return Container(
+              child: Text(user?.email ?? ''),
+            );
+          },
+        )
     );
+    // return BlocBuilder(builder: (context, authState) {
+    //   return Scaffold();
+    // });
   }
 }

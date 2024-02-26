@@ -1,4 +1,3 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -54,17 +53,26 @@ class _SummishareAppState extends State<SummishareApp> {
         ],
         child: MaterialApp(
           theme: baseTheme,
-          home: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return const MainScreen();
+          // home: StreamBuilder<User?>(
+          //   stream: FirebaseAuth.instance.authStateChanges(),
+          //   builder: (context, snapshot) {
+          //     if (snapshot.hasData) {
+          //       return const MainScreen();
+          //     } else {
+          //       return const AuthScreen();
+          //     }
+          //   },
+          // ),
+          home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              print(state);
+              if (state is AuthenticationSuccessState) {
+                return MainScreen();
               } else {
-                return const AuthScreen();
+                return MainScreen();
               }
             },
           ),
-          // home: MainScreen(),
         ));
   }
 }

@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 
 final baseTheme = ThemeData(
-  useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.teal,
-    titleTextStyle: TextStyle(
-        color: Colors.white, fontWeight: FontWeight.w600, fontSize: 22),
-    elevation: 10,
-    shadowColor: Colors.black54,
-    iconTheme: IconThemeData(
-      color: Colors.white, //change your color here
+    useMaterial3: true,
+    scaffoldBackgroundColor: Colors.white,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      titleTextStyle: TextStyle(
+          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 22),
+      // elevation: 10,
+      // shadowColor: Colors.black54,
+      iconTheme: IconThemeData(
+        color: Colors.teal, //change your color here
+      ),
     ),
-  ),
-);
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.teal,
+        elevation: 10,
+        selectedIconTheme: IconThemeData(size: 30),
+        unselectedIconTheme: IconThemeData(size: 25)),
+    floatingActionButtonTheme:
+        const FloatingActionButtonThemeData(backgroundColor: Colors.teal));

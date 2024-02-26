@@ -16,7 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late StreamSubscription _intentSub;
-  static const screens = [HomeScreen(), AuthScreen()];
+  static const screens = [HomeScreen(), AccountScreen()];
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -68,9 +68,13 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: screens.elementAt(_selectedIndex),
+        floatingActionButton: FloatingActionButton.small(
+            onPressed: () {},
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            )),
         bottomNavigationBar: BottomNavigationBar(
-          elevation: 10,
-          backgroundColor: Colors.teal.shade500,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
@@ -85,7 +89,6 @@ class _MainScreenState extends State<MainScreen> {
               label: 'Account',
             ),
           ],
-          selectedItemColor: Colors.white,
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
         ));

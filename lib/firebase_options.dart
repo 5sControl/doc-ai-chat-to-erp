@@ -28,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -64,16 +67,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'elang-extension-dev.appspot.com',
     iosClientId: '905111238498-1l4fom9c69i5vlutiuras65vnbgsd1qf.apps.googleusercontent.com',
     iosBundleId: 'com.englishingames.summiShare',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD8IPLPWGcdDiGhr1NsFLBZvyzKoiEA8JY',
-    appId: '1:905111238498:ios:c0b8fd8cb6320021bfde3b',
-    messagingSenderId: '905111238498',
-    projectId: 'elang-extension-dev',
-    databaseURL: 'https://elang-extension-dev-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'elang-extension-dev.appspot.com',
-    iosClientId: '905111238498-ekd9gcfp3ff0v0apia27aqerrncsb9gv.apps.googleusercontent.com',
-    iosBundleId: 'com.englishingames.summishare.RunnerTests',
   );
 }
