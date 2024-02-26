@@ -55,14 +55,14 @@ class _SummishareAppState extends State<SummishareApp> {
           theme: baseTheme,
           // home: StreamBuilder<User?>(
           //   stream: FirebaseAuth.instance.authStateChanges(),
-          //   builder: (context, snapshot) {
-          //     if (snapshot.hasData) {
-          //       return const MainScreen();
-          //     } else {
-          //       return const AuthScreen();
-          //     }
-          //   },
-          // ),
+          //           //   builder: (context, snapshot) {
+          //           //     if (snapshot.hasData) {
+          //           //       return const MainScreen();
+          //           //     } else {
+          //           //       return const AuthScreen();
+          //           //     }
+          //           //   },
+          //           // ),
           home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
               print(state);
@@ -73,6 +73,8 @@ class _SummishareAppState extends State<SummishareApp> {
               }
             },
           ),
+          // showSemanticsDebugger: true,
+          debugShowCheckedModeBanner: false,
         ));
   }
 }
