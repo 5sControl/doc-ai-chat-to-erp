@@ -29,17 +29,16 @@ class HomeScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
           title: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            'assets/svg/logo.svg',
-            height: 40,
-            width: 40,
-            colorFilter:
-                ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            'assets/icons/logo.svg',
+            height: 30,
+            width: 30,
+            colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
           const Text(
             '  Summify',

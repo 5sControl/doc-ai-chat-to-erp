@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 final baseTheme = ThemeData(
     useMaterial3: true,
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: Colors.transparent,
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       titleTextStyle: TextStyle(
-          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 22),
+          color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
       // elevation: 10,
       // shadowColor: Colors.black54,
       iconTheme: IconThemeData(
