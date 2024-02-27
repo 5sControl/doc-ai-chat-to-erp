@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
 
 final baseTheme = ThemeData(
-    useMaterial3: true,
-    scaffoldBackgroundColor: Colors.transparent,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
-      titleTextStyle: TextStyle(
-          color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
-      // elevation: 10,
-      // shadowColor: Colors.black54,
-      iconTheme: IconThemeData(
-        color: Colors.teal, //change your color here
-      ),
+  useMaterial3: true,
+  scaffoldBackgroundColor: Colors.transparent,
+  appBarTheme: const AppBarTheme(
+    backgroundColor: Colors.transparent,
+    titleTextStyle: TextStyle(
+        color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+    // elevation: 10,
+    // shadowColor: Colors.black54,
+    iconTheme: IconThemeData(
+      color: Colors.white, //change your color here
     ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.teal,
-        elevation: 10,
-        selectedIconTheme: IconThemeData(size: 30),
-        unselectedIconTheme: IconThemeData(size: 25)),
-    floatingActionButtonTheme:
-        const FloatingActionButtonThemeData(backgroundColor: Colors.teal));
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.teal,
+      elevation: 10,
+      selectedIconTheme: IconThemeData(size: 30),
+      unselectedIconTheme: IconThemeData(size: 25)),
+  floatingActionButtonTheme:
+      const FloatingActionButtonThemeData(backgroundColor: Colors.teal),
+  tabBarTheme: const TabBarTheme(
+    splashFactory: NoSplash.splashFactory,
+    labelColor: Colors.black,
+    labelStyle: TextStyle(
+        fontSize: 12, fontWeight: FontWeight.w400, color: Colors.black),
+    unselectedLabelColor: Colors.white,
+    unselectedLabelStyle: TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+    ),
+    indicator: BoxDecoration(
+        color: Color.fromRGBO(4, 49, 57, 1),
+        borderRadius: BorderRadius.all(Radius.circular(8))),
+    dividerColor: Colors.transparent,
+  ),
+);

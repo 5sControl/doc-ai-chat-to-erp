@@ -8,7 +8,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
+import 'package:summify/models/models.dart';
 import 'package:summify/screens/auth/auth_screen.dart';
+import 'package:summify/screens/summary_screen.dart';
 import 'package:summify/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
 import 'firebase_options.dart';
@@ -62,6 +64,11 @@ class _SummishareAppState extends State<SummishareApp> {
               case '/':
                 return MaterialWithModalsPageRoute(
                     builder: (_) => const MainScreen(), settings: settings);
+              // case '/summary':
+              //   return MaterialWithModalsPageRoute(
+              //       builder: (_) => SummaryScreen(
+              //           summaryData: settings.arguments as Summary),
+              //       settings: settings);
             }
             return MaterialPageRoute(
               builder: (context) => Scaffold(

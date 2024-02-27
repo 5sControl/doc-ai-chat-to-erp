@@ -46,9 +46,10 @@ class Summary {
 @JsonSerializable()
 class SummaryData {
   final SummaryStatus status;
+  final DateTime date;
   final Summary? summary;
 
-  SummaryData({ required this.status, this.summary });
+  SummaryData({ required this.status, required this.date, this.summary, });
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
       _$SummaryDataFromJson(json);

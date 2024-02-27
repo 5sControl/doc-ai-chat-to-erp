@@ -31,8 +31,8 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       );
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.addAll({
-        event.sharedLink:
-            SummaryData(status: SummaryStatus.Loading, summary: null)
+        event.sharedLink: SummaryData(
+            status: SummaryStatus.Loading, summary: null, date: DateTime.now())
       });
       emit(state.copyWith(savedLinks: summaryMap));
       // print('loading');
@@ -51,15 +51,17 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
-          event.sharedLink:
-              SummaryData(status: SummaryStatus.Complete, summary: summary)
+          event.sharedLink: SummaryData(
+              status: SummaryStatus.Complete,
+              summary: summary,
+              date: DateTime.now())
         });
         emit(state.copyWith(savedLinks: summaryMap));
       } else if (response.statusCode == 500) {
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
-          event.sharedLink:
-              SummaryData(status: SummaryStatus.Error, summary: null)
+          event.sharedLink: SummaryData(
+              status: SummaryStatus.Error, summary: null, date: DateTime.now())
         });
         emit(state.copyWith(savedLinks: summaryMap));
       }
