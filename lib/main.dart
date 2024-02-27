@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/screens/auth/auth_screen.dart';
@@ -53,27 +56,28 @@ class _SummishareAppState extends State<SummishareApp> {
         ],
         child: MaterialApp(
           theme: baseTheme,
-          // home: StreamBuilder<User?>(
-          //   stream: FirebaseAuth.instance.authStateChanges(),
-          //           //   builder: (context, snapshot) {
-          //           //     if (snapshot.hasData) {
-          //           //       return const MainScreen();
-          //           //     } else {
-          //           //       return const AuthScreen();
-          //           //     }
-          //           //   },
-          //           // ),
-          home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              print(state);
-              if (state is AuthenticationSuccessState) {
-                return MainScreen();
-              } else {
-                return MainScreen();
-              }
-            },
-          ),
-          // showSemanticsDebugger: true,
+          builder: (context, Widget? child) => child!,
+          onGenerateRoute: (RouteSettings settings) {
+            switch (settings.name) {
+              case '/':
+                return MaterialWithModalsPageRoute(
+                    builder: (_) => const MainScreen(), settings: settings);
+            }
+            return MaterialPageRoute(
+              builder: (context) => Scaffold(
+                body: CupertinoScaffold(
+                  body: Builder(
+                    builder: (context) => CupertinoPageScaffold(
+                      child: Center(
+                        child: Container(),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              settings: settings,
+            );
+          },
           debugShowCheckedModeBanner: false,
         ));
   }

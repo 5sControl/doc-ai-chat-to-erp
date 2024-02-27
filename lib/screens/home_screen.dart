@@ -29,7 +29,9 @@ class HomeScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
           title: Row(
         children: [
           SvgPicture.asset(
@@ -37,11 +39,11 @@ class HomeScreen extends StatelessWidget {
             height: 40,
             width: 40,
             colorFilter:
-                ColorFilter.mode(Colors.teal.shade500, BlendMode.srcIn),
+                ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
           const Text(
             '  Summify',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white),
           )
         ],
       )

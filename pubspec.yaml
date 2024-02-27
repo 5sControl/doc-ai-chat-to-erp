@@ -47,6 +47,7 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   crypto: ^3.0.3
   flutter_svg: ^2.0.10+1
+  modal_bottom_sheet: ^3.0.0-pre
 
 dev_dependencies:
   flutter_test:
