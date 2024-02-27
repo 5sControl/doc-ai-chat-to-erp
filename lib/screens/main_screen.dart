@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:summishare/bloc/shared_links/shared_links_bloc.dart';
-import 'package:summishare/screens/account_screen.dart';
-import 'package:summishare/screens/auth/auth_screen.dart';
-import 'package:summishare/screens/home_screen.dart';
+import 'package:summify/bloc/shared_links/shared_links_bloc.dart';
+import 'package:summify/screens/account_screen.dart';
+import 'package:summify/screens/auth/auth_screen.dart';
+import 'package:summify/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +16,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late StreamSubscription _intentSub;
-  static const screens = [HomeScreen(), AccountScreen()];
+  static const screens = [HomeScreen(), AccountScreen(), AccountScreen()];
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -68,12 +68,12 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: screens.elementAt(_selectedIndex),
-        floatingActionButton: FloatingActionButton.small(
-            onPressed: () {},
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
-            )),
+        // floatingActionButton: FloatingActionButton.small(
+        //     onPressed: () {},
+        //     child: const Icon(
+        //       Icons.add,
+        //       color: Colors.white,
+        //     )),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
@@ -81,6 +81,12 @@ class _MainScreenState extends State<MainScreen> {
                 Icons.home_filled,
               ),
               label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.add_circle_outlined,
+              ),
+              label: 'Add',
             ),
             BottomNavigationBarItem(
               icon: Icon(
