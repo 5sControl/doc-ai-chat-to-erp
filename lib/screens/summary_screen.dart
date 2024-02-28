@@ -23,8 +23,6 @@ class SummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final displayLink = sharedLink.replaceAll('https://', '');
-
     void onPressDelete(sharedLink) {
       Navigator.of(context).pop();
       context
@@ -35,51 +33,7 @@ class SummaryScreen extends StatelessWidget {
     return Stack(
       children: [
         const BackgroundGradient(),
-        ClipPath(
-          child: AspectRatio(
-            aspectRatio: 1.3,
-            child: Hero(
-              tag: summaryData.title!,
-              child: Material(
-                color: Colors.transparent,
-                child: CachedNetworkImage(
-                  imageUrl: summaryData?.imageUrl ?? '',
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        scale: 1,
-                        fit: BoxFit.cover,
-                        // colorFilter:
-                        // ColorFilter.mode(Colors.red, BlendMode.colorBurn)
-                      ),
-                    ),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                      child: Container(
-                        decoration:
-                            new BoxDecoration(color: Colors.black.withOpacity(0.5)),
-                      ),
-                    ),
-                  ),
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white70,
-                      strokeCap: StrokeCap.round,
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.error,
-                    color: Colors.red.shade400,
-                  ),
-                  // width: 120,
-                  // height: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-        ),
+        HeroImage(summaryData: summaryData),
         Scaffold(
           appBar: AppBar(
             title: Row(
@@ -90,7 +44,7 @@ class SummaryScreen extends StatelessWidget {
                   onPressed: () {
                     onPressDelete(sharedLink);
                   },
-                  icon: Icon(Icons.delete_forever_outlined),
+                  icon: const Icon(Icons.delete_forever_outlined),
                   color: Colors.white,
                 )
               ],
@@ -103,15 +57,15 @@ class SummaryScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  displayLink ?? '',
+                  displayLink,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
                       color: Colors.white),
                 ),
-                Divider(color: Colors.transparent),
+                const Divider(color: Colors.transparent),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -128,7 +82,7 @@ class SummaryScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Divider(color: Colors.transparent),
+                const Divider(color: Colors.transparent),
                 Row(
                   children: [
                     Flexible(
@@ -141,114 +95,183 @@ class SummaryScreen extends StatelessWidget {
                             color: Colors.white),
                       ),
                     ),
-                    Icon(
+                    const Icon(
                       Icons.keyboard_arrow_right,
                       color: Colors.white,
                     )
                   ],
                 ),
-                Expanded(
-                  child: DefaultTabController(
-                    length: 2,
-                    child: Scaffold(
-                      appBar: AppBar(
-                        toolbarHeight: 0,
-                        bottom: PreferredSize(
-                          preferredSize: Size(150.0, 50.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white70,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: TabBar(
-                              labelColor: Colors.white,
-                              unselectedLabelColor: Colors.black,
-                              dividerColor: Colors.transparent,
-                              labelPadding: EdgeInsets.zero,
-                              // padding: EdgeInsets.zero,
-                              // indicatorPadding: EdgeInsets.zero,
-
-                              // indicator: BoxDecoration(
-                              //   color: Colors.teal.shade900,borderRadius: BorderRadius.circular(12)
-                              // ),
-                              tabAlignment: TabAlignment.center,
-                              tabs: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12),
-                                  child: new Tab(
-                                      text: 'Action Points', height: 30),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12),
-                                  child: new Tab(
-                                    text: 'Summary',
-                                    height: 30,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      body: TabBarView(
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: summaryData.summary?.keyPoints
-                                    .map((e) => Text(
-                                          '- $e',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
-                                        ))
-                                    .toList() ??
-                                [],
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text(summaryData.summary?.summary ?? '',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                SummaryTabs(
+                  summaryData: summaryData,
                 ),
-                Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(4, 49, 57, 1),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Share',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Icon(
-                            Icons.arrow_upward_sharp,
-                            color: Colors.white,
-                          ))
-                    ],
-                  ),
-                )
+                const ShareButton()
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+class ShareButton extends StatelessWidget {
+  const ShareButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: const Color.fromRGBO(4, 49, 57, 1),
+          borderRadius: BorderRadius.circular(12)),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Share',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Icon(
+                Icons.arrow_upward_sharp,
+                color: Colors.white,
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+class SummaryTabs extends StatelessWidget {
+  final SummaryData summaryData;
+  const SummaryTabs({super.key, required this.summaryData});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 0,
+            bottom: PreferredSize(
+              preferredSize: const Size(150.0, 50.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white70,
+                    borderRadius: BorderRadius.circular(8)),
+                child: TabBar(
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.black,
+                  dividerColor: Colors.transparent,
+                  labelPadding: EdgeInsets.zero,
+                  // padding: EdgeInsets.zero,
+                  // indicatorPadding: EdgeInsets.zero,
+
+                  // indicator: BoxDecoration(
+                  //   color: Colors.teal.shade900,borderRadius: BorderRadius.circular(12)
+                  // ),
+                  tabAlignment: TabAlignment.center,
+                  tabs: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: const Tab(text: 'Action Points', height: 30),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: const Tab(
+                        text: 'Summary',
+                        height: 30,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: summaryData.summary?.keyPoints
+                        .map((e) => Text(
+                              '- $e',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16),
+                            ))
+                        .toList() ??
+                    [],
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Text(summaryData.summary?.summary ?? '',
+                    style: const TextStyle(color: Colors.white, fontSize: 16)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HeroImage extends StatelessWidget {
+  final SummaryData summaryData;
+  const HeroImage({super.key, required this.summaryData});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+      child: AspectRatio(
+        aspectRatio: 1.3,
+        child: Hero(
+          tag: summaryData.title!,
+          child: Material(
+            color: Colors.transparent,
+            child: CachedNetworkImage(
+              imageUrl: summaryData.imageUrl ?? '',
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    scale: 1,
+                    fit: BoxFit.cover,
+                    // colorFilter:
+                    // ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                  ),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                  child: Container(
+                    decoration:
+                        BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                  ),
+                ),
+              ),
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white70,
+                  strokeCap: StrokeCap.round,
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(
+                Icons.error,
+                color: Colors.red.shade400,
+              ),
+              // width: 120,
+              // height: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
