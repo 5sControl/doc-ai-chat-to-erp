@@ -48,8 +48,18 @@ class SummaryData {
   final SummaryStatus status;
   final DateTime date;
   final Summary? summary;
+  final String? imageUrl;
+  final String? title;
+  final String? description;
 
-  SummaryData({ required this.status, required this.date, this.summary, });
+  SummaryData({
+    required this.status,
+    required this.date,
+    this.summary,
+    this.imageUrl,
+    this.title,
+    this.description,
+  });
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
       _$SummaryDataFromJson(json);
@@ -63,5 +73,9 @@ class UserModel {
   final String? id;
   final String? email;
   final String? displayName;
-  UserModel({ this.id, this.email, this.displayName, });
+  UserModel({
+    this.id,
+    this.email,
+    this.displayName,
+  });
 }

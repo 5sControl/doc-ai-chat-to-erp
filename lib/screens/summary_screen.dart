@@ -1,17 +1,22 @@
+import 'dart:ui';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../bloc/shared_links/shared_links_bloc.dart';
 import '../models/models.dart';
 import '../widgets/backgroung_gradient.dart';
 
 class SummaryScreen extends StatelessWidget {
-  final Summary summary;
+  final SummaryData summaryData;
   final String displayLink;
   final String formattedDate;
   final String sharedLink;
   const SummaryScreen(
       {super.key,
-      required this.summary,
+      required this.summaryData,
       required this.formattedDate,
       required this.sharedLink,
       required this.displayLink});
@@ -19,17 +24,73 @@ class SummaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final displayLink = sharedLink.replaceAll('https://', '');
+
+    void onPressDelete(sharedLink) {
+      Navigator.of(context).pop();
+      context
+          .read<SharedLinksBloc>()
+          .add(DeleteSharedLink(sharedLink: sharedLink));
+    }
+
     return Stack(
       children: [
         const BackgroundGradient(),
+        ClipPath(
+          child: AspectRatio(
+            aspectRatio: 1.3,
+            child: Hero(
+              tag: summaryData.title!,
+              child: Material(
+                color: Colors.transparent,
+                child: CachedNetworkImage(
+                  imageUrl: summaryData?.imageUrl ?? '',
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        scale: 1,
+                        fit: BoxFit.cover,
+                        // colorFilter:
+                        // ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                      ),
+                    ),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                      child: Container(
+                        decoration:
+                            new BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white70,
+                      strokeCap: StrokeCap.round,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error,
+                    color: Colors.red.shade400,
+                  ),
+                  // width: 120,
+                  // height: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
         Scaffold(
           appBar: AppBar(
-            title: const Row(
+            title: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(
-                  Icons.settings,
+                IconButton(
+                  onPressed: () {
+                    onPressDelete(sharedLink);
+                  },
+                  icon: Icon(Icons.delete_forever_outlined),
                   color: Colors.white,
                 )
               ],
@@ -41,8 +102,10 @@ class SummaryScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                 Text(
-                  summary.supportingEvidence[0],
+                Text(
+                  displayLink ?? '',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -132,17 +195,19 @@ class SummaryScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: summary.keyPoints
-                                .map((e) => Text(
-                                      '- $e',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ))
-                                .toList(),
+                            children: summaryData.summary?.keyPoints
+                                    .map((e) => Text(
+                                          '- $e',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ))
+                                    .toList() ??
+                                [],
                           ),
                           Container(
                             alignment: Alignment.center,
-                            child: Text(summary.summary,
+                            child: Text(summaryData.summary?.summary ?? '',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 16)),
                           ),

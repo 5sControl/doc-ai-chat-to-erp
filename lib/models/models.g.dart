@@ -61,6 +61,9 @@ SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
       summary: json['summary'] == null
           ? null
           : Summary.fromJson(json['summary'] as Map<String, dynamic>),
+      imageUrl: json['imageUrl'] as String?,
+      title: json['title'] as String?,
+      description: json['description'] as String?,
     );
 
 Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
@@ -68,6 +71,9 @@ Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
       'status': _$SummaryStatusEnumMap[instance.status]!,
       'date': instance.date.toIso8601String(),
       'summary': instance.summary,
+      'imageUrl': instance.imageUrl,
+      'title': instance.title,
+      'description': instance.description,
     };
 
 const _$SummaryStatusEnumMap = {

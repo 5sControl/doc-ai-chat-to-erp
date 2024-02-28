@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-
 import 'package:summify/screens/summary_screen.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
@@ -59,24 +59,21 @@ class ListTileElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoading = summaryData?.status == SummaryStatus.Loading;
-    final bool isError = summaryData?.status == SummaryStatus.Error;
     final displayLink = sharedLink.replaceAll('https://', '');
     final summaryDate = summaryData!.date;
     final DateFormat formatter = DateFormat('H:m E, MM.dd.yy');
     final String formattedDate = formatter.format(summaryDate);
 
-    void onPressSharedItem(Summary summary) {
+    void onPressSharedItem(SummaryData summaryData) {
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => SummaryScreen(
-                summary: summary,
-                displayLink: displayLink,
+                summaryData: summaryData,
+                displayLink: summaryData.title ?? displayLink,
                 formattedDate: formattedDate,
                 sharedLink: sharedLink)),
       );
-      // Navigator.pushNamed(context, '/summary', arguments: summary);
     }
 
     void onPressDelete(sharedLink) {
@@ -85,58 +82,101 @@ class ListTileElement extends StatelessWidget {
           .add(DeleteSharedLink(sharedLink: sharedLink));
     }
 
-    return Container(
-      margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.white54, borderRadius: BorderRadius.circular(10)),
-      child: ListTile(
-        onTap: () {
-          if (summaryData != null && summaryData!.summary != null) {
-            onPressSharedItem(summaryData!.summary!);
-          }
-        },
-        leading: AnimatedCrossFade(
-          duration: const Duration(milliseconds: 400),
-          firstChild: AnimatedCrossFade(
-            duration: const Duration(milliseconds: 400),
-            firstChild: const Icon(
-              Icons.check,
-              color: Colors.white,
-              size: 30,
-            ),
-            secondChild: Icon(
-              Icons.error_outline,
-              color: Colors.red.shade400,
-            ),
-            crossFadeState:
-                !isError ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+    return AspectRatio(
+      aspectRatio: 3.5,
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Colors.white54, borderRadius: BorderRadius.circular(10)),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          onTap: () {
+            if (summaryData != null && summaryData != null) {
+              onPressSharedItem(summaryData!);
+            }
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  child: summaryData?.imageUrl != null
+                      ? Hero(
+                          tag: summaryData!.title!,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: CachedNetworkImage(
+                              imageUrl: summaryData!.imageUrl!,
+                              imageBuilder: (context, imageProvider) => Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    scale: 1,
+                                    fit: BoxFit.cover,
+                                    // colorFilter:
+                                    // ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                                  ),
+                                ),
+                              ),
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white70,
+                                  strokeCap: StrokeCap.round,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.error,
+                                color: Colors.red.shade400,
+                              ),
+                              width: 120,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          width: 120,
+                          height: double.infinity,
+                          child: summaryData?.status == SummaryStatus.Complete
+                              ? SvgPicture.asset(
+                                  'assets/icons/no-image.svg',
+                                  colorFilter: const ColorFilter.mode(
+                                      Colors.white, BlendMode.srcIn),
+                                )
+                              : const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white70,
+                                    strokeCap: StrokeCap.round,
+                                  ),
+                                ),
+                        )),
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        summaryData?.title ?? displayLink,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        formattedDate,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-          secondChild: const CircularProgressIndicator(
-            color: Colors.white,
-            strokeWidth: 2,
-            strokeCap: StrokeCap.round,
-            strokeAlign: BorderSide.strokeAlignInside,
-          ),
-          crossFadeState:
-              !isLoading ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        ),
-        title: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              displayLink,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 18),
-            ),
-            Divider(color: Colors.transparent),
-            Text(
-              formattedDate,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12),
-            ),
-          ],
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +22,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late StreamSubscription _intentSub;
-  static const screens = [HomeScreen(), AccountScreen()];
+  static final screens = [HomeScreen(), AccountScreen()];
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -105,75 +106,80 @@ class CustomBottomNavBar extends StatelessWidget {
       );
     }
 
-    return Container(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      decoration: const BoxDecoration(
-          color: Colors.white12,
-          border: Border(top: BorderSide(color: Colors.white38))),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: IconButton(
-                onPressed: () => onTap(0),
-                icon: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SvgPicture.asset(
-                      selectedIndex == 0
-                          ? 'assets/icons/home_filled.svg'
-                          : 'assets/icons/home.svg',
-                      width: 26,
-                      height: 26,
-                    ),
-                    const Text(
-                      'Home',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )
-                  ],
-                )),
+    return ClipPath(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+          decoration:  BoxDecoration(
+              color: Colors.teal.withOpacity(0.7),
+              border: Border(top: BorderSide(color: Colors.white38))),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: IconButton(
+                    onPressed: () => onTap(0),
+                    icon: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          selectedIndex == 0
+                              ? 'assets/icons/home_filled.svg'
+                              : 'assets/icons/home.svg',
+                          width: 26,
+                          height: 26,
+                        ),
+                        const Text(
+                          'Home',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        )
+                      ],
+                    )),
+              ),
+              Expanded(
+                child: IconButton(
+                    onPressed: onPressAdd,
+                    icon: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.add_circle,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        Text(
+                          'Add',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        )
+                      ],
+                    )),
+              ),
+              Expanded(
+                child: IconButton(
+                    onPressed: () => onTap(1),
+                    icon: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          selectedIndex == 1
+                              ? 'assets/icons/profile_filled.svg'
+                              : 'assets/icons/profile.svg',
+                          width: 26,
+                          height: 26,
+                        ),
+                        const Text(
+                          'Account',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        )
+                      ],
+                    )),
+              ),
+            ],
           ),
-          Expanded(
-            child: IconButton(
-                onPressed: onPressAdd,
-                icon: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.add_circle,
-                      color: Colors.white,
-                      size: 40,
-                    ),
-                    Text(
-                      'Add',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )
-                  ],
-                )),
-          ),
-          Expanded(
-            child: IconButton(
-                onPressed: () => onTap(1),
-                icon: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SvgPicture.asset(
-                      selectedIndex == 1
-                          ? 'assets/icons/profile_filled.svg'
-                          : 'assets/icons/profile.svg',
-                      width: 26,
-                      height: 26,
-                    ),
-                    const Text(
-                      'Account',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )
-                  ],
-                )),
-          ),
-        ],
+        ),
       ),
     );
   }

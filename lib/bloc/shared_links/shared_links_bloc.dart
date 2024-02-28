@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -50,11 +51,16 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+        final previewData = await getPreviewData(event.sharedLink);
+
         summaryMap.addAll({
           event.sharedLink: SummaryData(
               status: SummaryStatus.Complete,
               summary: summary,
-              date: DateTime.now())
+              date: DateTime.now(),
+              title: previewData.title,
+              description: previewData.description,
+              imageUrl: previewData.image?.url)
         });
         emit(state.copyWith(savedLinks: summaryMap));
       } else if (response.statusCode == 500) {
