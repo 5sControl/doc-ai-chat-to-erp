@@ -93,6 +93,8 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const duration = Duration(milliseconds: 400);
+
     void onPressAdd() {
       showCupertinoModalBottomSheet(
         context: context,
@@ -110,34 +112,47 @@ class CustomBottomNavBar extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-          decoration:  BoxDecoration(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+          decoration: BoxDecoration(
               color: Colors.teal.withOpacity(0.7),
-              border: Border(top: BorderSide(color: Colors.white38))),
+              border: const Border(top: BorderSide(color: Colors.white38))),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                child: IconButton(
-                    onPressed: () => onTap(0),
-                    icon: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          selectedIndex == 0
-                              ? 'assets/icons/home_filled.svg'
-                              : 'assets/icons/home.svg',
-                          width: 26,
-                          height: 26,
-                        ),
-                        const Text(
-                          'Home',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        )
-                      ],
-                    )),
+                child: AnimatedScale(
+                  duration: duration,
+                  scale: selectedIndex == 0 ? 1.2 : 1,
+                  child: IconButton(
+                      onPressed: () => onTap(0),
+                      icon: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AnimatedCrossFade(
+                              firstChild: SvgPicture.asset(
+                                'assets/icons/home_filled.svg',
+                                width: 26,
+                                height: 26,
+                              ),
+                              secondChild: SvgPicture.asset(
+                                'assets/icons/home.svg',
+                                width: 26,
+                                height: 26,
+                              ),
+                              crossFadeState: selectedIndex == 0
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                              duration: duration),
+                          const Text(
+                            'Home',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          )
+                        ],
+                      )),
+                ),
               ),
               Expanded(
                 child: IconButton(
@@ -158,24 +173,36 @@ class CustomBottomNavBar extends StatelessWidget {
                     )),
               ),
               Expanded(
-                child: IconButton(
-                    onPressed: () => onTap(1),
-                    icon: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          selectedIndex == 1
-                              ? 'assets/icons/profile_filled.svg'
-                              : 'assets/icons/profile.svg',
-                          width: 26,
-                          height: 26,
-                        ),
-                        const Text(
-                          'Account',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        )
-                      ],
-                    )),
+                child: AnimatedScale(
+                  duration: duration,
+                  scale: selectedIndex == 1 ? 1.1 : 1,
+                  child: IconButton(
+                      onPressed: () => onTap(1),
+                      icon: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AnimatedCrossFade(
+                              firstChild: SvgPicture.asset(
+                                'assets/icons/profile_filled.svg',
+                                width: 26,
+                                height: 26,
+                              ),
+                              secondChild: SvgPicture.asset(
+                                'assets/icons/profile.svg',
+                                width: 26,
+                                height: 26,
+                              ),
+                              crossFadeState: selectedIndex == 1
+                                  ? CrossFadeState.showFirst
+                                  : CrossFadeState.showSecond,
+                              duration: duration),
+                          const Text(
+                            'Account',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          )
+                        ],
+                      )),
+                ),
               ),
             ],
           ),

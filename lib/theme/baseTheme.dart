@@ -36,4 +36,9 @@ final baseTheme = ThemeData(
         borderRadius: BorderRadius.all(Radius.circular(8))),
     dividerColor: Colors.transparent,
   ),
+  iconButtonTheme: const IconButtonThemeData(
+    style: ButtonStyle(
+      overlayColor: MaterialStatePropertyAll(Colors.white12)
+    )
+  )
 );

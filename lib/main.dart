@@ -66,11 +66,6 @@ class _SummishareAppState extends State<SummishareApp> {
               case '/':
                 return MaterialWithModalsPageRoute(
                     builder: (_) => const MainScreen(), settings: settings);
-              // case '/summary':
-              //   return MaterialWithModalsPageRoute(
-              //       builder: (_) => SummaryScreen(
-              //           summaryData: settings.arguments as Summary),
-              //       settings: settings);
             }
             return MaterialPageRoute(
               builder: (context) => Scaffold(

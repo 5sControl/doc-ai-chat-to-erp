@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
             'assets/icons/logo.svg',
             height: 30,
             width: 30,
-            colorFilter: ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
           const Text(
             '  Summify',
@@ -76,20 +76,17 @@ class ListTileElement extends StatelessWidget {
       );
     }
 
-    void onPressDelete(sharedLink) {
-      context
-          .read<SharedLinksBloc>()
-          .add(DeleteSharedLink(sharedLink: sharedLink));
-    }
-
     return AspectRatio(
-      aspectRatio: 3.5,
+      aspectRatio: 4,
       child: Container(
         margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Colors.white54, borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(boxShadow: const [
+          BoxShadow(
+              color: Colors.black26, blurRadius: 10, blurStyle: BlurStyle.outer)
+        ], color: Colors.white54, borderRadius: BorderRadius.circular(10)),
         clipBehavior: Clip.hardEdge,
         child: InkWell(
+          borderRadius: BorderRadius.circular(10),
           onTap: () {
             if (summaryData != null && summaryData != null) {
               onPressSharedItem(summaryData!);
@@ -107,7 +104,8 @@ class ListTileElement extends StatelessWidget {
                             color: Colors.transparent,
                             child: CachedNetworkImage(
                               imageUrl: summaryData!.imageUrl!,
-                              imageBuilder: (context, imageProvider) => Container(
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: imageProvider,
@@ -134,7 +132,7 @@ class ListTileElement extends StatelessWidget {
                             ),
                           ),
                         )
-                      : Container(
+                      : SizedBox(
                           width: 120,
                           height: double.infinity,
                           child: summaryData?.status == SummaryStatus.Complete

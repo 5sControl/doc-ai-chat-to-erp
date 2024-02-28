@@ -170,12 +170,6 @@ class SummaryTabs extends StatelessWidget {
                   unselectedLabelColor: Colors.black,
                   dividerColor: Colors.transparent,
                   labelPadding: EdgeInsets.zero,
-                  // padding: EdgeInsets.zero,
-                  // indicatorPadding: EdgeInsets.zero,
-
-                  // indicator: BoxDecoration(
-                  //   color: Colors.teal.shade900,borderRadius: BorderRadius.circular(12)
-                  // ),
                   tabAlignment: TabAlignment.center,
                   tabs: [
                     Container(
