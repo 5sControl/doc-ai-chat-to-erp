@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'dart:core';
 
 import 'package:dio/dio.dart';
@@ -44,7 +44,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         },
         options: Options(
           followRedirects: false,
-          // will not throw errors
           validateStatus: (status) => true,
         ),
       );
@@ -52,7 +51,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         final previewData = await getPreviewData(event.sharedLink);
-
+        print('OK');
         summaryMap.addAll({
           event.sharedLink: SummaryData(
               status: SummaryStatus.Complete,
@@ -64,6 +63,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         });
         emit(state.copyWith(savedLinks: summaryMap));
       } else if (response.statusCode == 500) {
+        print('error');
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
           event.sharedLink: SummaryData(
@@ -71,7 +71,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         });
         emit(state.copyWith(savedLinks: summaryMap));
       }
-      print('complete');
     });
 
     on<DeleteSharedLink>((event, emit) {

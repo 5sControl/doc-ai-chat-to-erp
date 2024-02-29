@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../bloc/authentication/authentication_bloc.dart';
 
@@ -25,12 +26,12 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       );
     }
-
-    void onPressSignOut() {
-      BlocProvider.of<AuthenticationBloc>(context).add(
-        SignOut(),
-      );
-    }
+    //
+    // void onPressSignOut() {
+    //   BlocProvider.of<AuthenticationBloc>(context).add(
+    //     SignOut(),
+    //   );
+    // }
 
     void onPressGoogle() {
       BlocProvider.of<AuthenticationBloc>(context).add(
@@ -45,37 +46,77 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: const Text('Account'),
       ),
-      body: Padding(
+      body: Container(
+        margin:
+            EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 15),
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'SummiShare for iPhone',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+            const Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'SummiShare for iPhone',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                ),
+                Text(
+                  'Sign up to',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 36,
+                      height: 1.2,
+                      fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  'get free summary!',
+                  maxLines: 2,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 36,
+                      height: 1.2,
+                      fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
-            const Text(
-              'Sign up a free account',
-              style: TextStyle(fontSize: 36, fontWeight: FontWeight.w700),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Divider(
+                  color: Colors.transparent,
+                  height: 20,
+                ),
+                EmailInput(controller: emailController),
+                const Divider(
+                  color: Colors.transparent,
+                  height: 20,
+                ),
+                PasswordInput(controller: passwordController),
+              ],
             ),
-            const Divider(
-              color: Colors.transparent,
-              height: 20,
-            ),
-            EmailInput(controller: emailController),
-            const Divider(
-              color: Colors.transparent,
-              height: 15,
-            ),
-            PasswordInput(controller: passwordController),
-            const Divider(
-              color: Colors.transparent,
-              height: 50,
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              child: const Text(
+                'Forgot password?',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.right,
+              ),
             ),
             SignUpButton(
               onPress: onPressSignUp,
@@ -85,6 +126,7 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Text(
                 'Already have an account? Sign in',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const DividerRow(),
@@ -96,23 +138,23 @@ class _AuthScreenState extends State<AuthScreen> {
                 InkWell(
                   onTap: onPressGoogle,
                   child: Container(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 2),
+                        border: Border.all(color: Colors.white, width: 2),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10))),
-                    child: const Icon(Icons.g_mobiledata),
+                    child: SvgPicture.asset('assets/icons/google.svg'),
                   ),
                 ),
                 InkWell(
                   onTap: onPressApple,
                   child: Container(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 2),
+                        border: Border.all(color: Colors.white, width: 2),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10))),
-                    child: const Icon(Icons.apple),
+                    child: SvgPicture.asset('assets/icons/apple.svg'),
                   ),
                 ),
               ],
@@ -122,11 +164,9 @@ class _AuthScreenState extends State<AuthScreen> {
               child: Text(
                 'By using this app, you agree to the Terms and Conditions and Privacy Policy ',
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
               ),
             ),
-            IconButton(
-                onPressed: onPressSignOut,
-                icon: Icon(Icons.follow_the_signs_outlined))
           ],
         ),
       ),
@@ -140,13 +180,35 @@ class EmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: TextField(
-        controller: controller,
-        decoration: const InputDecoration(
-            labelText: 'Email', border: OutlineInputBorder()),
-      ),
+    return TextField(
+      textAlignVertical: TextAlignVertical.top,
+      controller: controller,
+      cursorWidth: 3,
+      cursorColor: Colors.black54,
+      cursorHeight: 20,
+      style: const TextStyle(color: Colors.black, fontSize: 20),
+      decoration: InputDecoration(
+          filled: true,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          floatingLabelAlignment: FloatingLabelAlignment.start,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          label: const Padding(
+            padding: EdgeInsets.only(bottom: 25),
+            child: Text(
+              'Email',
+              style: TextStyle(),
+            ),
+          ),
+          border: OutlineInputBorder(
+              gapPadding: 10,
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none),
+          floatingLabelStyle: const TextStyle(
+              color: Colors.white,
+              // height: -2,
+              fontSize: 18,
+              fontWeight: FontWeight.w500)),
     );
   }
 }
@@ -176,25 +238,38 @@ class _PasswordInputState extends State<PasswordInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: TextField(
-        controller: widget.controller,
-        obscureText: !_passwordVisible,
-        enableSuggestions: false,
-        autocorrect: false,
-        decoration: InputDecoration(
-          labelText: 'Password',
-          border: const OutlineInputBorder(),
-          suffixIcon: IconButton(
-            icon: Icon(
-              _passwordVisible ? Icons.visibility : Icons.visibility_off,
-              color: Colors.black,
+    return TextField(
+      textAlignVertical: TextAlignVertical.top,
+      cursorWidth: 3,
+      cursorColor: Colors.black54,
+      cursorHeight: 20,
+      style: const TextStyle(color: Colors.black, fontSize: 20),
+      controller: widget.controller,
+      obscureText: !_passwordVisible,
+      enableSuggestions: false,
+      autocorrect: false,
+      decoration: InputDecoration(
+          filled: true,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          floatingLabelAlignment: FloatingLabelAlignment.start,
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          label: const Padding(
+            padding: EdgeInsets.only(bottom: 25),
+            child: Text(
+              'Password',
+              style: TextStyle(),
             ),
-            onPressed: onPressEye,
           ),
-        ),
-      ),
+          border: OutlineInputBorder(
+              gapPadding: 10,
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none),
+          floatingLabelStyle: const TextStyle(
+              color: Colors.white,
+              // height: -2,
+              fontSize: 18,
+              fontWeight: FontWeight.w500)),
     );
   }
 }
@@ -209,11 +284,12 @@ class SignUpButton extends StatelessWidget {
       onTap: onPress,
       child: Container(
         alignment: Alignment.center,
-        height: 50,
+        // height: 50,
         padding: const EdgeInsets.symmetric(vertical: 12),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Colors.teal, borderRadius: BorderRadius.circular(8)),
+            color: Colors.teal.shade300,
+            borderRadius: BorderRadius.circular(8)),
         child: const Text(
           'Sign up',
           style: TextStyle(
@@ -229,7 +305,8 @@ class DividerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,18 +317,21 @@ class DividerRow extends StatelessWidget {
             child: Container(
               // width: 20,
               height: 1,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('OR'),
+            child: Text(
+              'OR',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           Expanded(
             child: Container(
               // width: 20,
               height: 1,
-              color: Colors.black,
+              color: Colors.white,
             ),
           )
         ],

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../models/models.dart';
@@ -30,6 +31,17 @@ class SummaryScreen extends StatelessWidget {
           .add(DeleteSharedLink(sharedLink: sharedLink));
     }
 
+    void onPressShare(
+      String sharedLink,
+    ) {
+      final box = context.findRenderObject() as RenderBox?;
+      Share.share(
+        '${sharedLink} \n\n ${summaryData.summary?.summary}',
+        // subject: 'asdasdasdasdasd',
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    }
+
     return Stack(
       children: [
         const BackgroundGradient(),
@@ -40,6 +52,13 @@ class SummaryScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                IconButton(
+                  onPressed: () {
+                    onPressShare(sharedLink);
+                  },
+                  icon: const Icon(Icons.share),
+                  color: Colors.white,
+                ),
                 IconButton(
                   onPressed: () {
                     onPressDelete(sharedLink);
@@ -198,7 +217,7 @@ class SummaryTabs extends StatelessWidget {
                         .map((e) => Text(
                               '- $e',
                               style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
+                                  color: Colors.black, fontSize: 16),
                             ))
                         .toList() ??
                     [],
@@ -206,7 +225,7 @@ class SummaryTabs extends StatelessWidget {
               Container(
                 alignment: Alignment.center,
                 child: Text(summaryData.summary?.summary ?? '',
-                    style: const TextStyle(color: Colors.white, fontSize: 16)),
+                    style: const TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ],
           ),
@@ -237,8 +256,6 @@ class HeroImage extends StatelessWidget {
                     image: imageProvider,
                     scale: 1,
                     fit: BoxFit.cover,
-                    // colorFilter:
-                    // ColorFilter.mode(Colors.red, BlendMode.colorBurn)
                   ),
                 ),
                 child: BackdropFilter(
@@ -255,12 +272,7 @@ class HeroImage extends StatelessWidget {
                   strokeCap: StrokeCap.round,
                 ),
               ),
-              errorWidget: (context, url, error) => Icon(
-                Icons.error,
-                color: Colors.red.shade400,
-              ),
-              // width: 120,
-              // height: double.infinity,
+              errorWidget: (context, url, error) => const SizedBox(),
               fit: BoxFit.cover,
             ),
           ),

@@ -88,7 +88,7 @@ class ListTileElement extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            if (summaryData != null && summaryData != null) {
+            if (summaryData?.status == SummaryStatus.Complete) {
               onPressSharedItem(summaryData!);
             }
           },
@@ -135,18 +135,20 @@ class ListTileElement extends StatelessWidget {
                       : SizedBox(
                           width: 120,
                           height: double.infinity,
-                          child: summaryData?.status == SummaryStatus.Complete
-                              ? SvgPicture.asset(
-                                  'assets/icons/no-image.svg',
-                                  colorFilter: const ColorFilter.mode(
-                                      Colors.white, BlendMode.srcIn),
-                                )
-                              : const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white70,
-                                    strokeCap: StrokeCap.round,
-                                  ),
-                                ),
+                          child:
+                              summaryData?.status == SummaryStatus.Complete ||
+                                      summaryData?.status == SummaryStatus.Error
+                                  ? SvgPicture.asset(
+                                      'assets/icons/no-image.svg',
+                                      colorFilter: const ColorFilter.mode(
+                                          Colors.white, BlendMode.srcIn),
+                                    )
+                                  : const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white70,
+                                        strokeCap: StrokeCap.round,
+                                      ),
+                                    ),
                         )),
               Expanded(
                 child: Padding(

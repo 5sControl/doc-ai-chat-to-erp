@@ -5,6 +5,7 @@ final baseTheme = ThemeData(
   scaffoldBackgroundColor: Colors.transparent,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.transparent,
+    toolbarHeight: 40,
     titleTextStyle: TextStyle(
         color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
     // elevation: 10,
