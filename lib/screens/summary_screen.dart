@@ -109,9 +109,7 @@ class SummaryScreen extends StatelessWidget {
                     )
                   ],
                 ),
-                SummaryTabs(
-                  summaryData: summaryData,
-                ),
+                Expanded(child: Text(summaryData.summary!)),
                 ShareButton(
                   sharedLink: sharedLink,
                   summaryData: summaryData,
@@ -174,75 +172,74 @@ class ShareButton extends StatelessWidget {
   }
 }
 
-class SummaryTabs extends StatelessWidget {
-  final SummaryData summaryData;
-  const SummaryTabs({super.key, required this.summaryData});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
-            bottom: PreferredSize(
-              preferredSize: const Size(150.0, 50.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white70,
-                    borderRadius: BorderRadius.circular(8)),
-                child: TabBar(
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Colors.black,
-                  dividerColor: Colors.transparent,
-                  labelPadding: EdgeInsets.zero,
-                  tabAlignment: TabAlignment.center,
-                  tabs: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: const Tab(text: 'Action Points', height: 30),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: const Tab(
-                        text: 'Summary',
-                        height: 30,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // children: summaryData.summary?.keyPoints
-                //         .map((e) => Text(
-                //               '- $e',
-                //               style: const TextStyle(
-                //                   color: Colors.black, fontSize: 16),
-                //             ))
-                //         .toList() ??
-                //     [],
-
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Text(summaryData.summary ?? '',
-                    style: const TextStyle(color: Colors.black, fontSize: 16)),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+// class SummaryTabs extends StatelessWidget {
+//   final SummaryData summaryData;
+//   const SummaryTabs({super.key, required this.summaryData});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       child: DefaultTabController(
+//         length: 2,
+//         child: Scaffold(
+//           appBar: AppBar(
+//             toolbarHeight: 0,
+//             bottom: PreferredSize(
+//               preferredSize: const Size(150.0, 50.0),
+//               child: Container(
+//                 decoration: BoxDecoration(
+//                     color: Colors.white70,
+//                     borderRadius: BorderRadius.circular(8)),
+//                 child: TabBar(
+//                   labelColor: Colors.white,
+//                   unselectedLabelColor: Colors.black,
+//                   dividerColor: Colors.transparent,
+//                   labelPadding: EdgeInsets.zero,
+//                   tabAlignment: TabAlignment.center,
+//                   tabs: [
+//                     Container(
+//                       padding: const EdgeInsets.symmetric(horizontal: 12),
+//                       child: const Tab(text: 'Action Points', height: 30),
+//                     ),
+//                     Container(
+//                       padding: const EdgeInsets.symmetric(horizontal: 12),
+//                       child: const Tab(
+//                         text: 'Summary',
+//                         height: 30,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//           body: TabBarView(
+//             children: [
+//               Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 mainAxisSize: MainAxisSize.max,
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 // children: summaryData.summary?.keyPoints
+//                 //         .map((e) => Text(
+//                 //               '- $e',
+//                 //               style: const TextStyle(
+//                 //                   color: Colors.black, fontSize: 16),
+//                 //             ))
+//                 //         .toList() ??
+//                 //     [],
+//               ),
+//               Container(
+//                 alignment: Alignment.center,
+//                 child: Text(summaryData.summary ?? '',
+//                     style: const TextStyle(color: Colors.black, fontSize: 16)),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class HeroImage extends StatelessWidget {
   final SummaryData summaryData;
@@ -250,43 +247,47 @@ class HeroImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      child: AspectRatio(
-        aspectRatio: 1.3,
-        child: Hero(
-          tag: summaryData.title!,
-          child: Material(
-            color: Colors.transparent,
-            child: CachedNetworkImage(
-              imageUrl: summaryData.imageUrl ?? '',
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    scale: 1,
-                    fit: BoxFit.cover,
+    return Container(
+        child: summaryData?.imageUrl != null
+            ? ClipPath(
+                child: AspectRatio(
+                  aspectRatio: 1.3,
+                  child: Hero(
+                    tag: summaryData.title!,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: CachedNetworkImage(
+                        imageUrl: summaryData.imageUrl ?? '',
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              scale: 1,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: BackdropFilter(
+                            filter:
+                                ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5)),
+                            ),
+                          ),
+                        ),
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white70,
+                            strokeCap: StrokeCap.round,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => const SizedBox(),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: Container(
-                    decoration:
-                        BoxDecoration(color: Colors.black.withOpacity(0.5)),
-                  ),
-                ),
-              ),
-              placeholder: (context, url) => const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white70,
-                  strokeCap: StrokeCap.round,
-                ),
-              ),
-              errorWidget: (context, url, error) => const SizedBox(),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-      ),
-    );
+              )
+            : Container());
   }
 }

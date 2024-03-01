@@ -14,8 +14,10 @@ part 'shared_links_state.dart';
 part 'shared_links_bloc.g.dart';
 
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
-  SharedLinksBloc() : super(const SharedLinksState(savedLinks: {})) {
+  // static var textCounter = 1;
+  SharedLinksBloc() : super(const SharedLinksState(savedLinks: {}, textCounter: 1)) {
     final dio = Dio();
+
     dio.interceptors.add(
       InterceptorsWrapper(
         onError: (DioException error, ErrorInterceptorHandler handler) {
@@ -56,7 +58,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
               imageUrl: previewData.image?.url)
         });
         emit(state.copyWith(savedLinks: summaryMap));
-      } else if (response.statusCode == 500) {
+      } else if (response.statusCode == 500 | 502) {
         print('error');
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
@@ -68,9 +70,11 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
     });
 
     on<SaveText>((event, emit) async {
+      final index = state.textCounter;
+      final title = "My text ($index)";
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.addAll({
-        "text2": SummaryData(
+        title: SummaryData(
             status: SummaryStatus.Loading, summary: null, date: DateTime.now())
       });
       emit(state.copyWith(savedLinks: summaryMap));
@@ -89,16 +93,16 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
-          "text2": SummaryData(
+          title: SummaryData(
               status: SummaryStatus.Complete,
               date: DateTime.now(),
               summary: summary.summary)
         });
         emit(state.copyWith(savedLinks: summaryMap));
-      } else if (response.statusCode == 500) {
+      } else if (response.statusCode == 500 | 502) {
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
-          'text2': SummaryData(
+          title: SummaryData(
               status: SummaryStatus.Error, summary: null, date: DateTime.now())
         });
         emit(state.copyWith(savedLinks: summaryMap));
