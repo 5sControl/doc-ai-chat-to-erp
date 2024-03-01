@@ -22,6 +22,14 @@ class SaveSharedLink extends SharedLinksEvent {
   List<String?> get props => [sharedLink];
 }
 
+class SaveText extends SharedLinksEvent {
+  final String text;
+  const SaveText({required this.text});
+
+  @override
+  List<String?> get props => [text];
+}
+
 class DeleteSharedLink extends SharedLinksEvent {
   final String sharedLink;
 

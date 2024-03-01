@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +11,7 @@ import 'package:summify/screens/account_screen.dart';
 import 'package:summify/screens/add_screen.dart';
 // import 'package:summify/screens/auth/auth_screen.dart';
 import 'package:summify/screens/home_screen.dart';
+import 'package:summify/screens/modal_screens/text_screen.dart';
 import 'package:summify/screens/modal_screens/ulr_screen.dart';
 
 import '../widgets/backgroung_gradient.dart';
@@ -79,10 +81,6 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Colors.transparent,
           extendBody: true,
           body: screens.elementAt(_selectedIndex),
-          // floatingActionButton: FloatingActionButton(
-          //   onPressed: () {},
-          //   child: Icon(Icons.add, color: Colors.white,),
-          // ),
           bottomNavigationBar: Padding(
             padding:
                 EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
@@ -96,10 +94,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ],
             ),
-          )
-          // bottomNavigationBar: CustomBottomNavBar(
-          //     onTap: _onItemTapped, selectedIndex: _selectedIndex),
-          ),
+          )),
     ]);
   }
 }
@@ -113,6 +108,12 @@ class MyButton extends StatefulWidget {
 
 class _MyButtonState extends State<MyButton> {
   bool _isOpen = false;
+  static const XTypeGroup typeGroup = XTypeGroup(
+    label: 'text',
+    extensions: <String>['txt', 'docx', 'pdf'],
+    uniformTypeIdentifiers: <String>['public.text'],
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -142,6 +143,25 @@ class _MyButtonState extends State<MyButton> {
     );
   }
 
+  void onPressText() {
+    showCupertinoModalBottomSheet(
+      context: context,
+      expand: false,
+      bounce: false,
+      barrierColor: Colors.black54,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return const TextModalScreen();
+      },
+    );
+  }
+
+  void onPressOpenFile() async {
+    final XFile? file =
+        await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+    print(file?.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -156,7 +176,7 @@ class _MyButtonState extends State<MyButton> {
             duration: Duration(milliseconds: 400),
             // alignment: !_isOpen ? Alignment.centerRight : Alignment.center,
             padding: EdgeInsets.symmetric(
-                horizontal: !_isOpen ? 10 : 10, vertical: !_isOpen ? 10 : 0),
+                horizontal: !_isOpen ? 10 : 0, vertical: !_isOpen ? 10 : 0),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(!_isOpen ? 50 : 8),
                 color: Colors.teal.shade500.withOpacity(0.6)),
@@ -169,30 +189,38 @@ class _MyButtonState extends State<MyButton> {
               secondChild: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                   Padding(
-                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                     child: SvgPicture.asset('assets/icons/file.svg'),
-                   ),
-                  Container(
-                    color: Colors.white,
-                    width: 1,
-                    height: 40,
+                  GestureDetector(
+                    onTap: onPressOpenFile,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      child: SvgPicture.asset('assets/icons/file.svg'),
+                    ),
                   ),
-                 Padding(
-                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                     child: SvgPicture.asset('assets/icons/text.svg')),
                   Container(
                     color: Colors.white,
                     width: 1,
                     height: 40,
                   ),
                   GestureDetector(
-                    onTap: onPressURl,
+                    onTap: onPressText,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                      child: SvgPicture.asset('assets/icons/url.svg'),
-                    )
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        child: SvgPicture.asset('assets/icons/text.svg')),
                   ),
+                  Container(
+                    color: Colors.white,
+                    width: 1,
+                    height: 40,
+                  ),
+                  GestureDetector(
+                      onTap: onPressURl,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        child: SvgPicture.asset('assets/icons/url.svg'),
+                      )),
                 ],
               ),
               duration: Duration(milliseconds: 400),

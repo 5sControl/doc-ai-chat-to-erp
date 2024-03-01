@@ -15,32 +15,27 @@ part 'shared_links_bloc.g.dart';
 
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   SharedLinksBloc() : super(const SharedLinksState(savedLinks: {})) {
-    // on<SaveSharedItem>((event, emit) {
-    //   print(event.sharedItem.path);
-    //   emit(state.copyWith(
-    //       savedSharedLinks: [...state.savedSharedLinks, event.sharedItem]));
-    // });
+    final dio = Dio();
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (DioException error, ErrorInterceptorHandler handler) {
+          return handler.next(error);
+        },
+      ),
+    );
 
     on<SaveSharedLink>((event, emit) async {
-      final dio = Dio();
-      dio.interceptors.add(
-        InterceptorsWrapper(
-          onError: (DioException error, ErrorInterceptorHandler handler) {
-            return handler.next(error);
-          },
-        ),
-      );
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.addAll({
         event.sharedLink: SummaryData(
             status: SummaryStatus.Loading, summary: null, date: DateTime.now())
       });
       emit(state.copyWith(savedLinks: summaryMap));
-      // print('loading');
       final response = await dio.post(
-        'http://51.159.179.125:8001/url_to_summarize/',
+        'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
         data: {
           'url': event.sharedLink,
+          'context': '',
         },
         options: Options(
           followRedirects: false,
@@ -51,11 +46,10 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         final previewData = await getPreviewData(event.sharedLink);
-        print('OK');
         summaryMap.addAll({
           event.sharedLink: SummaryData(
               status: SummaryStatus.Complete,
-              summary: summary,
+              summary: summary.summary,
               date: DateTime.now(),
               title: previewData.title,
               description: previewData.description,
@@ -67,6 +61,44 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
           event.sharedLink: SummaryData(
+              status: SummaryStatus.Error, summary: null, date: DateTime.now())
+        });
+        emit(state.copyWith(savedLinks: summaryMap));
+      }
+    });
+
+    on<SaveText>((event, emit) async {
+      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+      summaryMap.addAll({
+        "text2": SummaryData(
+            status: SummaryStatus.Loading, summary: null, date: DateTime.now())
+      });
+      emit(state.copyWith(savedLinks: summaryMap));
+      final response = await dio.post(
+        'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
+        data: {
+          'url': '',
+          'context': event.text,
+        },
+        options: Options(
+          followRedirects: false,
+          validateStatus: (status) => true,
+        ),
+      );
+      if (response.statusCode == 200) {
+        final summary = Summary.fromJson(response.data);
+        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+        summaryMap.addAll({
+          "text2": SummaryData(
+              status: SummaryStatus.Complete,
+              date: DateTime.now(),
+              summary: summary.summary)
+        });
+        emit(state.copyWith(savedLinks: summaryMap));
+      } else if (response.statusCode == 500) {
+        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+        summaryMap.addAll({
+          'text2': SummaryData(
               status: SummaryStatus.Error, summary: null, date: DateTime.now())
         });
         emit(state.copyWith(savedLinks: summaryMap));

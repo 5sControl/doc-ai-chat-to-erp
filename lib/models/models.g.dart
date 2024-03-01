@@ -36,31 +36,16 @@ const _$SharedMediaTypeEnumMap = {
 
 Summary _$SummaryFromJson(Map<String, dynamic> json) => Summary(
       summary: json['summary'] as String,
-      keyPoints:
-          (json['keyPoints'] as List<dynamic>).map((e) => e as String).toList(),
-      inDepthAnalysis: json['inDepthAnalysis'] as String,
-      additionalContext: json['additionalContext'] as String,
-      supportingEvidence: (json['supportingEvidence'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      implicationsConclusions: json['implicationsConclusions'] as String,
     );
 
 Map<String, dynamic> _$SummaryToJson(Summary instance) => <String, dynamic>{
       'summary': instance.summary,
-      'keyPoints': instance.keyPoints,
-      'inDepthAnalysis': instance.inDepthAnalysis,
-      'additionalContext': instance.additionalContext,
-      'supportingEvidence': instance.supportingEvidence,
-      'implicationsConclusions': instance.implicationsConclusions,
     };
 
 SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
       status: $enumDecode(_$SummaryStatusEnumMap, json['status']),
       date: DateTime.parse(json['date'] as String),
-      summary: json['summary'] == null
-          ? null
-          : Summary.fromJson(json['summary'] as Map<String, dynamic>),
+      summary: json['summary'] as String?,
       imageUrl: json['imageUrl'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,

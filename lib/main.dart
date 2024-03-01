@@ -11,7 +11,7 @@ import 'package:summify/bloc/authentication/authentication_bloc.dart';
 // import 'package:summify/models/models.dart';
 // import 'package:summify/screens/auth/auth_screen.dart';
 // import 'package:summify/screens/summary_screen.dart';
-// import 'package:summify/services/authentication.dart';
+import 'package:summify/services/authentication.dart';
 import 'package:summify/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
 import 'firebase_options.dart';
@@ -35,14 +35,14 @@ class SummishareApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final AuthService authService = AuthService();
+    final AuthService authService = AuthService();
     return MultiBlocProvider(
         providers: [
           BlocProvider(
             create: (context) => SharedLinksBloc(),
           ),
-          // BlocProvider(
-          //     create: (context) => AuthenticationBloc(authService: authService))
+          BlocProvider(
+              create: (context) => AuthenticationBloc(authService: authService))
         ],
         child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {

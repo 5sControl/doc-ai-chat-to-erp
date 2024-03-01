@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/widgets/modal_handle.dart';
+
+import '../../bloc/shared_links/shared_links_bloc.dart';
 
 class UrlModalScreen extends StatefulWidget {
   const UrlModalScreen({super.key});
@@ -14,6 +18,25 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void onPressSummify() {
+      if (urlController.text.isNotEmpty) {
+        context
+            .read<SharedLinksBloc>()
+            .add(SaveSharedLink(sharedLink: urlController.text));
+
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        }
+      }
+    }
+
+    void onPressPaste() async {
+      final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+      if (clipboardData?.text != null) {
+        urlController.text = clipboardData!.text.toString();
+      }
+    }
+
     return Material(
       color: const Color.fromRGBO(227, 255, 254, 1),
       child: Container(
@@ -33,8 +56,8 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
                   fontWeight: FontWeight.w600,
                   fontSize: 18),
             ),
-            UrlTextField(controller: urlController),
-            const SummifyButton()
+            UrlTextField(controller: urlController, onPressPaste: onPressPaste),
+            SummifyButton(onPressSummify: onPressSummify)
           ],
         ),
       ),
@@ -44,7 +67,9 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
 
 class UrlTextField extends StatelessWidget {
   final TextEditingController controller;
-  const UrlTextField({super.key, required this.controller});
+  final VoidCallback onPressPaste;
+  const UrlTextField(
+      {super.key, required this.controller, required this.onPressPaste});
 
   @override
   Widget build(BuildContext context) {
@@ -99,34 +124,41 @@ class UrlTextField extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-                margin: const EdgeInsets.only(left: 7),
-                child: SvgPicture.asset('assets/icons/copy.svg'))
+            GestureDetector(
+              onTap: onPressPaste,
+              child: Container(
+                  margin: const EdgeInsets.only(left: 7),
+                  child: SvgPicture.asset('assets/icons/copy.svg')),
+            )
           ],
         ));
   }
 }
 
 class SummifyButton extends StatelessWidget {
-  const SummifyButton({super.key});
+  final VoidCallback onPressSummify;
+  const SummifyButton({super.key, required this.onPressSummify});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: Colors.teal.shade300,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.black26, blurRadius: 5, offset: Offset(1, 1))
-          ]),
-      child: const Text(
-        'Summify Now',
-        style: TextStyle(
-            color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+    return GestureDetector(
+      onTap: onPressSummify,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: Colors.teal.shade300,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black26, blurRadius: 5, offset: Offset(1, 1))
+            ]),
+        child: const Text(
+          'Summify Now',
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }

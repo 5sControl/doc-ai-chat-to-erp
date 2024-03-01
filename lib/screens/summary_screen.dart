@@ -31,17 +31,6 @@ class SummaryScreen extends StatelessWidget {
           .add(DeleteSharedLink(sharedLink: sharedLink));
     }
 
-    void onPressShare(
-      String sharedLink,
-    ) {
-      final box = context.findRenderObject() as RenderBox?;
-      Share.share(
-        '${sharedLink} \n\n ${summaryData.summary?.summary}',
-        // subject: 'asdasdasdasdasd',
-        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-      );
-    }
-
     return Stack(
       children: [
         const BackgroundGradient(),
@@ -52,18 +41,18 @@ class SummaryScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(
-                  onPressed: () {
-                    onPressShare(sharedLink);
-                  },
-                  icon: const Icon(Icons.share),
-                  color: Colors.white,
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     onPressShare(sharedLink);
+                //   },
+                //   icon: const Icon(Icons.share),
+                //   color: Colors.white,
+                // ),
                 IconButton(
                   onPressed: () {
                     onPressDelete(sharedLink);
                   },
-                  icon: const Icon(Icons.delete_forever_outlined),
+                  icon: SvgPicture.asset('assets/icons/delete.svg'),
                   color: Colors.white,
                 )
               ],
@@ -123,7 +112,10 @@ class SummaryScreen extends StatelessWidget {
                 SummaryTabs(
                   summaryData: summaryData,
                 ),
-                const ShareButton()
+                ShareButton(
+                  sharedLink: sharedLink,
+                  summaryData: summaryData,
+                )
               ],
             ),
           ),
@@ -134,33 +126,49 @@ class SummaryScreen extends StatelessWidget {
 }
 
 class ShareButton extends StatelessWidget {
-  const ShareButton({super.key});
+  final SummaryData summaryData;
+  final String sharedLink;
+  const ShareButton(
+      {super.key, required this.summaryData, required this.sharedLink});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          color: const Color.fromRGBO(4, 49, 57, 1),
-          borderRadius: BorderRadius.circular(12)),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Share',
-            style: TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Icon(
-                Icons.arrow_upward_sharp,
-                color: Colors.white,
-              ))
-        ],
+    void onPressShare() {
+      final box = context.findRenderObject() as RenderBox?;
+      Share.share(
+        '$sharedLink \n\n ${summaryData.summary}',
+        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+      );
+    }
+
+    return GestureDetector(
+      onTap: onPressShare,
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: const Color.fromRGBO(4, 49, 57, 1),
+            borderRadius: BorderRadius.circular(12)),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Share',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600),
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Icon(
+                  Icons.arrow_upward_sharp,
+                  color: Colors.white,
+                ))
+          ],
+        ),
       ),
     );
   }
@@ -213,18 +221,19 @@ class SummaryTabs extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: summaryData.summary?.keyPoints
-                        .map((e) => Text(
-                              '- $e',
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 16),
-                            ))
-                        .toList() ??
-                    [],
+                // children: summaryData.summary?.keyPoints
+                //         .map((e) => Text(
+                //               '- $e',
+                //               style: const TextStyle(
+                //                   color: Colors.black, fontSize: 16),
+                //             ))
+                //         .toList() ??
+                //     [],
+
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(summaryData.summary?.summary ?? '',
+                child: Text(summaryData.summary ?? '',
                     style: const TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ],
