@@ -24,101 +24,172 @@ class SummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void onPressDelete(sharedLink) {
+    void onPressDelete() {
       Navigator.of(context).pop();
       context
           .read<SharedLinksBloc>()
           .add(DeleteSharedLink(sharedLink: sharedLink));
     }
 
+    void onPressBack() {
+      Navigator.of(context).pop();
+    }
+
     return Stack(
       children: [
         const BackgroundGradient(),
-        HeroImage(summaryData: summaryData),
         Scaffold(
-          appBar: AppBar(
-            title: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
+            body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Stack(
+              fit: StackFit.loose,
               children: [
-                // IconButton(
-                //   onPressed: () {
-                //     onPressShare(sharedLink);
-                //   },
-                //   icon: const Icon(Icons.share),
-                //   color: Colors.white,
-                // ),
-                IconButton(
-                  onPressed: () {
-                    onPressDelete(sharedLink);
-                  },
-                  icon: SvgPicture.asset('assets/icons/delete.svg'),
-                  color: Colors.white,
+                Positioned.fill(
+                  child: HeroImage(
+                    summaryData: summaryData,
+                  ),
+                ),
+                Header(
+                  displayLink: displayLink,
+                  formattedDate: formattedDate,
+                  onPressBack: onPressBack,
+                  onPressDelete: onPressDelete,
                 )
               ],
             ),
+            Expanded(
+                child: SingleChildScrollView(
+                    child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Text(summaryData.summary!)))),
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: ShareButton(
+                sharedLink: sharedLink,
+                summaryData: summaryData,
+              ),
+            )
+          ],
+        )),
+      ],
+    );
+  }
+}
+
+class Header extends StatelessWidget {
+  final String displayLink;
+  final String formattedDate;
+  final VoidCallback onPressDelete;
+  final VoidCallback onPressBack;
+
+  const Header(
+      {super.key,
+      required this.displayLink,
+      required this.formattedDate,
+      required this.onPressDelete,
+      required this.onPressBack});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top,
+          left: 15,
+          right: 15,
+          bottom: 20),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: onPressBack,
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                color: Colors.white,
+              ),
+              IconButton(
+                onPressed: onPressDelete,
+                icon: SvgPicture.asset('assets/icons/delete.svg'),
+                color: Colors.white,
+              )
+            ],
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
+          Text(
+            displayLink,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                      color: Colors.black,
+                      blurRadius: 10,
+                      offset: Offset(0, 0)),
+                ]),
+          ),
+          const Divider(color: Colors.transparent),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                  decoration: const BoxDecoration(boxShadow: [
+                    BoxShadow(
+                        color: Colors.black54,
+                        blurRadius: 10,
+                        blurStyle: BlurStyle.outer,
+                        offset: Offset(0, 0)),
+                  ]),
+                  padding: const EdgeInsets.only(right: 7),
+                  child: SvgPicture.asset('assets/icons/clock.svg')),
+              Text(
+                formattedDate,
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                          color: Colors.black,
+                          blurRadius: 10,
+                          offset: Offset(0, 0)),
+                    ]),
+              ),
+            ],
+          ),
+          const Divider(color: Colors.transparent),
+          Row(
+            children: [
+              Flexible(
+                child: Text(
                   displayLink,
-                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
-                ),
-                const Divider(color: Colors.transparent),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(right: 7),
-                        child: SvgPicture.asset('assets/icons/clock.svg')),
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                const Divider(color: Colors.transparent),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        displayLink,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white),
-                      ),
-                    ),
-                    const Icon(
-                      Icons.keyboard_arrow_right,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
-                    )
-                  ],
+                      shadows: [
+                        Shadow(
+                            color: Colors.black,
+                            blurRadius: 10,
+                            offset: Offset(0, 0)),
+                      ]),
                 ),
-                Expanded(child: Text(summaryData.summary!)),
-                ShareButton(
-                  sharedLink: sharedLink,
-                  summaryData: summaryData,
-                )
-              ],
-            ),
+              ),
+              const Icon(
+                Icons.keyboard_arrow_right,
+                color: Colors.white,
+              )
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -160,7 +231,7 @@ class ShareButton extends StatelessWidget {
                   fontWeight: FontWeight.w600),
             ),
             Padding(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 7),
                 child: Icon(
                   Icons.arrow_upward_sharp,
                   color: Colors.white,
@@ -172,75 +243,6 @@ class ShareButton extends StatelessWidget {
   }
 }
 
-// class SummaryTabs extends StatelessWidget {
-//   final SummaryData summaryData;
-//   const SummaryTabs({super.key, required this.summaryData});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//       child: DefaultTabController(
-//         length: 2,
-//         child: Scaffold(
-//           appBar: AppBar(
-//             toolbarHeight: 0,
-//             bottom: PreferredSize(
-//               preferredSize: const Size(150.0, 50.0),
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                     color: Colors.white70,
-//                     borderRadius: BorderRadius.circular(8)),
-//                 child: TabBar(
-//                   labelColor: Colors.white,
-//                   unselectedLabelColor: Colors.black,
-//                   dividerColor: Colors.transparent,
-//                   labelPadding: EdgeInsets.zero,
-//                   tabAlignment: TabAlignment.center,
-//                   tabs: [
-//                     Container(
-//                       padding: const EdgeInsets.symmetric(horizontal: 12),
-//                       child: const Tab(text: 'Action Points', height: 30),
-//                     ),
-//                     Container(
-//                       padding: const EdgeInsets.symmetric(horizontal: 12),
-//                       child: const Tab(
-//                         text: 'Summary',
-//                         height: 30,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//           body: TabBarView(
-//             children: [
-//               Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 mainAxisSize: MainAxisSize.max,
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 // children: summaryData.summary?.keyPoints
-//                 //         .map((e) => Text(
-//                 //               '- $e',
-//                 //               style: const TextStyle(
-//                 //                   color: Colors.black, fontSize: 16),
-//                 //             ))
-//                 //         .toList() ??
-//                 //     [],
-//               ),
-//               Container(
-//                 alignment: Alignment.center,
-//                 child: Text(summaryData.summary ?? '',
-//                     style: const TextStyle(color: Colors.black, fontSize: 16)),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 class HeroImage extends StatelessWidget {
   final SummaryData summaryData;
   const HeroImage({super.key, required this.summaryData});
@@ -248,42 +250,40 @@ class HeroImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: summaryData?.imageUrl != null
+        child: summaryData.imageUrl != null
             ? ClipPath(
-                child: AspectRatio(
-                  aspectRatio: 1.3,
-                  child: Hero(
-                    tag: summaryData.title!,
-                    child: Material(
-                      color: Colors.transparent,
-                      child: CachedNetworkImage(
-                        imageUrl: summaryData.imageUrl ?? '',
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              scale: 1,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: BackdropFilter(
-                            filter:
-                                ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5)),
-                            ),
+                child: Hero(
+                  tag: summaryData.title!,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: CachedNetworkImage(
+                      imageUrl: summaryData.imageUrl ?? '',
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            scale: 1,
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white70,
-                            strokeCap: StrokeCap.round,
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.5)),
                           ),
                         ),
-                        errorWidget: (context, url, error) => const SizedBox(),
-                        fit: BoxFit.cover,
                       ),
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white70,
+                          strokeCap: StrokeCap.round,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => const SizedBox(),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
