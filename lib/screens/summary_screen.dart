@@ -141,7 +141,7 @@ class Header extends StatelessWidget {
               Container(
                   decoration: const BoxDecoration(boxShadow: [
                     BoxShadow(
-                        color: Colors.black54,
+                        color: Colors.black26,
                         blurRadius: 10,
                         blurStyle: BlurStyle.outer,
                         offset: Offset(0, 0)),
@@ -249,45 +249,26 @@ class HeroImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: summaryData.imageUrl != null
-            ? ClipPath(
-                child: Hero(
-                  tag: summaryData.title!,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: CachedNetworkImage(
-                      imageUrl: summaryData.imageUrl ?? '',
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            scale: 1,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.5)),
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white70,
-                          strokeCap: StrokeCap.round,
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => const SizedBox(),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+    return Hero(
+        tag: summaryData.date,
+        child: summaryData.imageUrl == null
+            ? ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Image.asset(
+                  'assets/placeholder_logo.png',
+                  fit: BoxFit.cover,
+                  color: Colors.black54,
+                  colorBlendMode: BlendMode.colorBurn,
                 ),
               )
-            : Container());
+            : ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: CachedNetworkImage(
+                  imageUrl: summaryData.imageUrl!,
+                  fit: BoxFit.cover,
+                  color: Colors.black54,
+                  colorBlendMode: BlendMode.colorBurn,
+                ),
+              ));
   }
 }

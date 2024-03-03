@@ -37,8 +37,8 @@ class HomeScreen extends StatelessWidget {
           itemCount: sharedLinksState.savedLinks.length,
           itemBuilder: (context, index) {
             final sharedLink = sharedLinksState.savedLinks.keys.toList()[index];
-            final SummaryData? summaryData =
-                sharedLinksState.savedLinks[sharedLink];
+            final SummaryData summaryData =
+                sharedLinksState.savedLinks[sharedLink]!;
             return ListTileElement(
               sharedLink: sharedLink,
               summaryData: summaryData,
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
 
 class ListTileElement extends StatelessWidget {
   final String sharedLink;
-  final SummaryData? summaryData;
+  final SummaryData summaryData;
 
   const ListTileElement(
       {super.key, required this.sharedLink, required this.summaryData});
@@ -77,7 +77,7 @@ class ListTileElement extends StatelessWidget {
     }
 
     return AspectRatio(
-      aspectRatio: 4,
+      aspectRatio: 3,
       child: Container(
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(boxShadow: const [
@@ -96,60 +96,38 @@ class ListTileElement extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                  child: summaryData?.imageUrl != null
-                      ? Hero(
-                          tag: summaryData!.title!,
-                          child: Material(
-                            color: Colors.transparent,
-                            child: CachedNetworkImage(
-                              imageUrl: summaryData!.imageUrl!,
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    scale: 1,
-                                    fit: BoxFit.cover,
-                                    // colorFilter:
-                                    // ColorFilter.mode(Colors.red, BlendMode.colorBurn)
-                                  ),
+              AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    // height: 80,
+
+                    clipBehavior: Clip.hardEdge,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 12),
+                    child: Container(
+                        child: switch (summaryData.status) {
+                      SummaryStatus.Error =>
+                        Image.asset('assets/placeholder_logo.png'),
+                      SummaryStatus.Complete => Hero(
+                          tag: summaryData.date,
+                          child: summaryData.imageUrl == null
+                              ? Image.asset('assets/placeholder_logo.png')
+                              : CachedNetworkImage(
+                                  imageUrl: summaryData.imageUrl!,
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                              placeholder: (context, url) => const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white70,
-                                  strokeCap: StrokeCap.round,
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.error,
-                                color: Colors.red.shade400,
-                              ),
-                              width: 120,
-                              height: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+                        ),
+                      SummaryStatus.Loading => const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white70,
+                            strokeCap: StrokeCap.round,
                           ),
                         )
-                      : SizedBox(
-                          width: 120,
-                          height: double.infinity,
-                          child:
-                              summaryData?.status == SummaryStatus.Complete ||
-                                      summaryData?.status == SummaryStatus.Error
-                                  ? SvgPicture.asset(
-                                      'assets/icons/no-image.svg',
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.white, BlendMode.srcIn),
-                                    )
-                                  : const Center(
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white70,
-                                        strokeCap: StrokeCap.round,
-                                      ),
-                                    ),
-                        )),
+                    }),
+                  )),
               Expanded(
                 child: Padding(
                   padding:
@@ -157,7 +135,7 @@ class ListTileElement extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         summaryData?.title ?? displayLink,

@@ -98,14 +98,14 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
               date: DateTime.now(),
               summary: summary.summary)
         });
-        emit(state.copyWith(savedLinks: summaryMap));
+        emit(state.copyWith(savedLinks: summaryMap, textCounter: index + 1));
       } else if (response.statusCode == 500 | 502) {
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
           title: SummaryData(
               status: SummaryStatus.Error, summary: null, date: DateTime.now())
         });
-        emit(state.copyWith(savedLinks: summaryMap));
+        emit(state.copyWith(savedLinks: summaryMap, textCounter: index + 1));
       }
     });
 
