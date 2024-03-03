@@ -159,10 +159,13 @@ class _MyButtonState extends State<MyButton> {
   void onPressOpenFile() async {
     final XFile? file =
         await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-     context.read<SharedLinksBloc>().add(SaveFile(
-          fileName: file!.name,
-          filePath: file.path,
-        ));
+    if (file != null) {
+
+      context.read<SharedLinksBloc>().add(SaveFile(
+            fileName: file.name,
+            filePath: file.path,
+          ));
+    }
     // print(file?.name);
     // print(file?.path);
   }

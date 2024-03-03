@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:summify/bloc/shared_links/shared_links_bloc.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
@@ -52,7 +53,7 @@ class _TextModalScreenState extends State<TextModalScreen> {
                   fontWeight: FontWeight.w600,
                   fontSize: 18),
             ),
-            MyTextField(controller: textController),
+            MyTextField(controller: textController, onPressPaste: onPressPaste),
             SummifyButton(onPress: onPressSummify)
           ],
         ),
@@ -62,8 +63,10 @@ class _TextModalScreenState extends State<TextModalScreen> {
 }
 
 class MyTextField extends StatelessWidget {
+  final VoidCallback onPressPaste;
   final TextEditingController controller;
-  const MyTextField({super.key, required this.controller});
+  const MyTextField(
+      {super.key, required this.controller, required this.onPressPaste});
 
   @override
   Widget build(BuildContext context) {
@@ -84,46 +87,84 @@ class MyTextField extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.white12,
                   borderRadius: BorderRadius.circular(8)),
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.white70,
-                    border: Border.all(
-                        color: Colors.teal.withOpacity(0.5), width: 1),
-                    borderRadius: BorderRadius.circular(8)),
-                child: TextField(
-                  maxLines: null,
-                  autofocus: false,
-                  controller: controller,
-                  keyboardType: TextInputType.multiline,
-                  textAlignVertical: TextAlignVertical.top,
-                  cursorWidth: 3,
-                  cursorColor: Colors.black54,
-                  cursorHeight: 20,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400),
-                  decoration: InputDecoration(
-                    label: const Text(
-                      'Start typing or paste your content here ...',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+              child: Stack(
+                fit: StackFit.expand,
+                // alignment: Alignment.bottomLeft,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        color: Colors.white70,
+                        border: Border.all(
+                            color: Colors.teal.withOpacity(0.5), width: 1),
+                        borderRadius: BorderRadius.circular(8)),
+                    child: TextField(
+                      maxLines: null,
+                      autofocus: false,
+                      controller: controller,
+                      keyboardType: TextInputType.multiline,
+                      textAlignVertical: TextAlignVertical.top,
+                      cursorWidth: 3,
+                      cursorColor: Colors.black54,
+                      cursorHeight: 20,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                      decoration: InputDecoration(
+                        label: const Text(
+                          'Start typing or paste your content here ...',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w300),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 0),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: OutlineInputBorder(
+                            gapPadding: 10,
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none),
+                        // floatingLabelStyle: const TextStyle(
+                        //     color: Colors.white,
+                        //     // height: -2,
+                        //     fontSize: 18,
+                        //     fontWeight: FontWeight.w500)
+                      ),
                     ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    border: OutlineInputBorder(
-                        gapPadding: 10,
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none),
-                    // floatingLabelStyle: const TextStyle(
-                    //     color: Colors.white,
-                    //     // height: -2,
-                    //     fontSize: 18,
-                    //     fontWeight: FontWeight.w500)
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: GestureDetector(
+                      onTap: onPressPaste,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 2, vertical: 2),
+                        margin: const EdgeInsets.only(left: 17, bottom: 17),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: const Color.fromRGBO(227, 255, 254, 1)),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                                margin: const EdgeInsets.only(left: 7),
+                                child: SvgPicture.asset(
+                                  'assets/icons/copy.svg',
+                                )),
+                            const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  'Paste',
+                                  style: TextStyle(
+                                      fontSize: 17, fontWeight: FontWeight.w300),
+                                ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
