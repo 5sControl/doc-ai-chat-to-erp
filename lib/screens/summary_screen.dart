@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
+import '../gen/assets.gen.dart';
 import '../models/models.dart';
 import '../widgets/backgroung_gradient.dart';
 
@@ -61,12 +62,10 @@ class SummaryScreen extends StatelessWidget {
               ],
             ),
             Expanded(
-                child: Container(
-              child: SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                  child: Text(summaryData.summary!)),
-            )),
+                child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 20),
+                    child: Text(summaryData.summary!))),
             Padding(
               padding: const EdgeInsets.all(15),
               child: ShareButton(
@@ -116,7 +115,7 @@ class Header extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onPressDelete,
-                icon: SvgPicture.asset('assets/icons/delete.svg'),
+                icon: SvgPicture.asset(Assets.icons.delete),
                 color: Colors.white,
               )
             ],
@@ -154,7 +153,7 @@ class Header extends StatelessWidget {
                         offset: Offset(0, 0)),
                   ]),
                   padding: const EdgeInsets.only(right: 7),
-                  child: SvgPicture.asset('assets/icons/clock.svg')),
+                  child: SvgPicture.asset(Assets.icons.clock)),
               Text(
                 formattedDate,
                 style: const TextStyle(
@@ -263,7 +262,7 @@ class HeroImage extends StatelessWidget {
               ? ImageFiltered(
                   imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                   child: Image.asset(
-                    'assets/placeholder_logo.png',
+                    Assets.placeholderLogo.path,
                     fit: BoxFit.cover,
                     color: Colors.black54,
                     colorBlendMode: BlendMode.colorBurn,

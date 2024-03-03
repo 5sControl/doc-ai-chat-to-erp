@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:summify/screens/summary_screen.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
+import '../gen/assets.gen.dart';
 import '../models/models.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            'assets/icons/logo.svg',
+            Assets.icons.logo,
             height: 30,
             width: 30,
             colorFilter: const ColorFilter.mode(
@@ -123,11 +124,11 @@ class ListTileElement extends StatelessWidget {
                     child: Container(
                         child: switch (summaryData.status) {
                       SummaryStatus.Error =>
-                        Image.asset('assets/placeholder_logo.png'),
+                        Image.asset(Assets.placeholderLogo.path),
                       SummaryStatus.Complete => Hero(
                           tag: summaryData.date,
                           child: summaryData.imageUrl == null
-                              ? Image.asset('assets/placeholder_logo.png')
+                              ? Image.asset(Assets.placeholderLogo.path)
                               : CachedNetworkImage(
                                   imageUrl: summaryData.imageUrl!,
                                   fit: BoxFit.cover,
