@@ -15,6 +15,25 @@ class UrlModalScreen extends StatefulWidget {
 
 class _UrlModalScreenState extends State<UrlModalScreen> {
   final TextEditingController urlController = TextEditingController();
+  var controllerText = '';
+
+  void onChangeText() {
+    setState(() {
+      controllerText = urlController.text;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    urlController.addListener(onChangeText);
+  }
+
+  @override
+  void dispose() {
+    urlController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +76,10 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
                   fontSize: 18),
             ),
             UrlTextField(controller: urlController, onPressPaste: onPressPaste),
-            SummifyButton(onPressSummify: onPressSummify)
+            SummifyButton(
+              onPressSummify: onPressSummify,
+              controllerText: controllerText,
+            )
           ],
         ),
       ),
@@ -91,6 +113,9 @@ class UrlTextField extends StatelessWidget {
                 child: TextField(
                   textAlignVertical: TextAlignVertical.top,
                   controller: controller,
+                  onChanged: (text) {
+                    controller.text = text;
+                  },
                   cursorWidth: 3,
                   cursorColor: Colors.black54,
                   cursorHeight: 20,
@@ -98,7 +123,8 @@ class UrlTextField extends StatelessWidget {
                   decoration: InputDecoration(
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                            width: 1, color: Colors.teal), //<-- SEE HERE
+                            width: 2,
+                            color: Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
                       ),
                       filled: true,
                       fillColor: Colors.white,
@@ -136,8 +162,10 @@ class UrlTextField extends StatelessWidget {
 }
 
 class SummifyButton extends StatelessWidget {
+  final String controllerText;
   final VoidCallback onPressSummify;
-  const SummifyButton({super.key, required this.onPressSummify});
+  const SummifyButton(
+      {super.key, required this.onPressSummify, required this.controllerText});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +176,9 @@ class SummifyButton extends StatelessWidget {
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: Colors.teal.shade300,
+            color: controllerText.isNotEmpty
+                ? const Color.fromRGBO(4, 49, 57, 1)
+                : const Color.fromRGBO(49, 210, 206, 1),
             borderRadius: BorderRadius.circular(8),
             boxShadow: const [
               BoxShadow(

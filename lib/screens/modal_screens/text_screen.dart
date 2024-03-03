@@ -14,7 +14,7 @@ class TextModalScreen extends StatefulWidget {
 
 class _TextModalScreenState extends State<TextModalScreen> {
   final TextEditingController textController = TextEditingController();
-
+  var controllerText = '';
   void onPressSummify() {
     if (textController.text.isNotEmpty) {
       context.read<SharedLinksBloc>().add(SaveText(text: textController.text));
@@ -30,6 +30,26 @@ class _TextModalScreenState extends State<TextModalScreen> {
     if (clipboardData?.text != null) {
       textController.text = clipboardData!.text.toString();
     }
+  }
+
+
+
+  void onChangeText() {
+    setState(() {
+      controllerText = textController.text;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    textController.addListener(onChangeText);
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,7 +74,7 @@ class _TextModalScreenState extends State<TextModalScreen> {
                   fontSize: 18),
             ),
             MyTextField(controller: textController, onPressPaste: onPressPaste),
-            SummifyButton(onPress: onPressSummify)
+            SummifyButton(onPress: onPressSummify, controllerText: controllerText)
           ],
         ),
       ),
@@ -100,6 +120,7 @@ class MyTextField extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8)),
                     child: TextField(
                       maxLines: null,
+                      expands: true,
                       autofocus: false,
                       controller: controller,
                       keyboardType: TextInputType.multiline,
@@ -112,6 +133,11 @@ class MyTextField extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w400),
                       decoration: InputDecoration(
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 2,
+                              color: Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
+                        ),
                         label: const Text(
                           'Start typing or paste your content here ...',
                           style: TextStyle(
@@ -173,8 +199,9 @@ class MyTextField extends StatelessWidget {
 }
 
 class SummifyButton extends StatelessWidget {
+  final String controllerText;
   final VoidCallback onPress;
-  const SummifyButton({super.key, required this.onPress});
+  const SummifyButton({super.key, required this.onPress, required this.controllerText});
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +212,9 @@ class SummifyButton extends StatelessWidget {
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: Colors.teal.shade300,
+            color: controllerText.isNotEmpty
+                ? const Color.fromRGBO(4, 49, 57, 1)
+                : const Color.fromRGBO(49, 210, 206, 1),
             borderRadius: BorderRadius.circular(8),
             boxShadow: const [
               BoxShadow(
