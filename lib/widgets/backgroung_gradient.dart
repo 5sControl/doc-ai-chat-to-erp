@@ -7,10 +7,10 @@ class BackgroundGradient extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: [ Colors.teal,  Colors.white],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft)),
+          image: DecorationImage(
+              image: AssetImage('assets/BG.png'),
+              alignment: Alignment.topCenter,
+              fit: BoxFit.cover)),
     );
   }
 }
