@@ -109,9 +109,9 @@ class MyButton extends StatefulWidget {
 class _MyButtonState extends State<MyButton> {
   bool _isOpen = false;
   static const XTypeGroup typeGroup = XTypeGroup(
-    label: 'text',
+    label: '',
     extensions: <String>['txt', 'docx', 'pdf'],
-    uniformTypeIdentifiers: <String>['public.text'],
+    uniformTypeIdentifiers: <String>['public.data'],
   );
 
   @override
@@ -159,7 +159,12 @@ class _MyButtonState extends State<MyButton> {
   void onPressOpenFile() async {
     final XFile? file =
         await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-    print(file?.path);
+     context.read<SharedLinksBloc>().add(SaveFile(
+          fileName: file!.name,
+          filePath: file.path,
+        ));
+    // print(file?.name);
+    // print(file?.path);
   }
 
   @override

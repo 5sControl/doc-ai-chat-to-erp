@@ -31,11 +31,12 @@ class SaveText extends SharedLinksEvent {
 }
 
 class SaveFile extends SharedLinksEvent {
-  final String file;
-  const SaveFile({required this.file});
+  final String fileName;
+  final String filePath;
+  const SaveFile({required this.fileName, required this.filePath});
 
   @override
-  List<String?> get props => [file];
+  List<String?> get props => [fileName, filePath];
 }
 
 class DeleteSharedLink extends SharedLinksEvent {

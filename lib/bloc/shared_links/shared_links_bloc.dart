@@ -15,7 +15,8 @@ part 'shared_links_bloc.g.dart';
 
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   // static var textCounter = 1;
-  SharedLinksBloc() : super(const SharedLinksState(savedLinks: {}, textCounter: 1)) {
+  SharedLinksBloc()
+      : super(const SharedLinksState(savedLinks: {}, textCounter: 1)) {
     final dio = Dio();
 
     dio.interceptors.add(
@@ -106,6 +107,48 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
               status: SummaryStatus.Error, summary: null, date: DateTime.now())
         });
         emit(state.copyWith(savedLinks: summaryMap, textCounter: index + 1));
+      }
+    });
+
+    on<SaveFile>((event, emit) async {
+      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(
+          event.filePath,
+          filename: event.fileName,
+        ),
+      });
+      summaryMap.addAll({
+        event.fileName: SummaryData(
+            status: SummaryStatus.Loading, summary: null, date: DateTime.now())
+      });
+      emit(state.copyWith(savedLinks: summaryMap));
+      final response = await dio.post(
+          'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/',
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+          ),
+          data: formData);
+      if (response.statusCode == 200) {
+        final summary = Summary.fromJson(response.data);
+        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+        summaryMap.addAll({
+          event.fileName: SummaryData(
+              status: SummaryStatus.Complete,
+              date: DateTime.now(),
+              summary: summary.summary)
+        });
+        emit(state.copyWith(savedLinks: summaryMap));
+      } else {
+        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+        summaryMap.addAll({
+          event.fileName: SummaryData(
+              status: SummaryStatus.Error, summary: null, date: DateTime.now())
+        });
+        emit(state.copyWith(
+          savedLinks: summaryMap,
+        ));
       }
     });
 
