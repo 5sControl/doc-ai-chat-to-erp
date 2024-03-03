@@ -23,11 +23,12 @@ class HomeScreen extends StatelessWidget {
             'assets/icons/logo.svg',
             height: 30,
             width: 30,
-            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(
+                Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
           ),
           const Text(
             '  Summify',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Color.fromRGBO(6, 49, 57, 1)),
           )
         ],
       )),
@@ -60,8 +61,8 @@ class ListTileElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayLink = sharedLink.replaceAll('https://', '');
-    final summaryDate = summaryData!.date;
-    final DateFormat formatter = DateFormat('H:m E, MM.dd.yy');
+    final summaryDate = summaryData.date;
+    final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
     final String formattedDate = formatter.format(summaryDate);
 
     void onPressSharedItem(SummaryData summaryData) {
@@ -76,8 +77,20 @@ class ListTileElement extends StatelessWidget {
       );
     }
 
+    void onPressRetry() {
+      context
+          .read<SharedLinksBloc>()
+          .add(SaveSharedLink(sharedLink: sharedLink));
+    }
+
+    void onPressDelete() {
+      context
+          .read<SharedLinksBloc>()
+          .add(DeleteSharedLink(sharedLink: sharedLink));
+    }
+
     return AspectRatio(
-      aspectRatio: 3,
+      aspectRatio: 3.2,
       child: Container(
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(boxShadow: const [
@@ -88,8 +101,8 @@ class ListTileElement extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            if (summaryData?.status == SummaryStatus.Complete) {
-              onPressSharedItem(summaryData!);
+            if (summaryData.status == SummaryStatus.Complete) {
+              onPressSharedItem(summaryData);
             }
           },
           child: Row(
@@ -138,7 +151,7 @@ class ListTileElement extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        summaryData?.title ?? displayLink,
+                        summaryData.title ?? displayLink,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: const TextStyle(
@@ -152,6 +165,31 @@ class ListTileElement extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
+              Container(
+                child: summaryData.status == SummaryStatus.Error
+                    ? Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                              tooltip: 'Retry',
+                              onPressed: onPressRetry,
+                              icon: const Icon(
+                                Icons.change_circle_outlined,
+                                color: Colors.black,
+                              )),
+                          IconButton(
+                              onPressed: onPressDelete,
+                              tooltip: 'Delete',
+                              icon: SvgPicture.asset(
+                                'assets/icons/delete.svg',
+                                colorFilter: const ColorFilter.mode(
+                                    Colors.black, BlendMode.srcIn),
+                              ))
+                        ],
+                      )
+                    : Container(),
               )
             ],
           ),

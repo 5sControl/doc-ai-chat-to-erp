@@ -58,7 +58,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
               imageUrl: previewData.image?.url)
         });
         emit(state.copyWith(savedLinks: summaryMap));
-      } else if (response.statusCode == 500 | 502) {
+      } else {
         print('error');
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
@@ -99,7 +99,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
               summary: summary.summary)
         });
         emit(state.copyWith(savedLinks: summaryMap, textCounter: index + 1));
-      } else if (response.statusCode == 500 | 502) {
+      } else {
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
           title: SummaryData(

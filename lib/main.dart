@@ -26,7 +26,7 @@ void main() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
-  // await HydratedBloc.storage.clear();
+  await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 

@@ -45,6 +45,7 @@ class SummaryScreen extends StatelessWidget {
           children: [
             Stack(
               fit: StackFit.loose,
+              // clipBehavior: Clip.hardEdge,
               children: [
                 Positioned.fill(
                   child: HeroImage(
@@ -60,10 +61,12 @@ class SummaryScreen extends StatelessWidget {
               ],
             ),
             Expanded(
-                child: SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Text(summaryData.summary!)))),
+                child: Container(
+              child: SingleChildScrollView(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  child: Text(summaryData.summary!)),
+            )),
             Padding(
               padding: const EdgeInsets.all(15),
               child: ShareButton(
@@ -118,20 +121,24 @@ class Header extends StatelessWidget {
               )
             ],
           ),
-          Text(
-            displayLink,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-                shadows: [
-                  Shadow(
-                      color: Colors.black,
-                      blurRadius: 10,
-                      offset: Offset(0, 0)),
-                ]),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              displayLink,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                        color: Colors.black,
+                        blurRadius: 10,
+                        offset: Offset(0, 0)),
+                  ]),
+            ),
           ),
           const Divider(color: Colors.transparent),
           Row(
@@ -249,26 +256,28 @@ class HeroImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-        tag: summaryData.date,
-        child: summaryData.imageUrl == null
-            ? ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Image.asset(
-                  'assets/placeholder_logo.png',
-                  fit: BoxFit.cover,
-                  color: Colors.black54,
-                  colorBlendMode: BlendMode.colorBurn,
-                ),
-              )
-            : ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: CachedNetworkImage(
-                  imageUrl: summaryData.imageUrl!,
-                  fit: BoxFit.cover,
-                  color: Colors.black54,
-                  colorBlendMode: BlendMode.colorBurn,
-                ),
-              ));
+    return ClipRect(
+      child: Hero(
+          tag: summaryData.date,
+          child: summaryData.imageUrl == null
+              ? ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Image.asset(
+                    'assets/placeholder_logo.png',
+                    fit: BoxFit.cover,
+                    color: Colors.black54,
+                    colorBlendMode: BlendMode.colorBurn,
+                  ),
+                )
+              : ImageFiltered(
+                  imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: CachedNetworkImage(
+                    imageUrl: summaryData.imageUrl!,
+                    fit: BoxFit.cover,
+                    color: Colors.black54,
+                    colorBlendMode: BlendMode.colorBurn,
+                  ),
+                )),
+    );
   }
 }
