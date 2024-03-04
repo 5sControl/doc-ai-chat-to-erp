@@ -39,6 +39,7 @@ class SummaryScreen extends StatelessWidget {
     return Stack(
       children: [
         const BackgroundGradient(),
+        Container(color: Colors.white38),
         Scaffold(
             body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -67,8 +68,8 @@ class SummaryScreen extends StatelessWidget {
                         horizontal: 15, vertical: 20),
                     child: Text(
                       summaryData.summary!,
-                      style:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w400),
                     ))),
             Padding(
               padding: const EdgeInsets.all(15),
