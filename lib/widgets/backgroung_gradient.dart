@@ -12,5 +12,12 @@ class BackgroundGradient extends StatelessWidget {
               alignment: Alignment.topCenter,
               fit: BoxFit.cover)),
     );
+    // return Container(
+    //   decoration: BoxDecoration(
+    //       gradient: LinearGradient(
+    //           colors: [Colors.teal.shade400, Colors.amber.shade500, Colors.purple,Colors.blue, Colors.white],
+    //           begin: Alignment.topCenter,
+    //           end: Alignment.bottomCenter)),
+    // );
   }
 }

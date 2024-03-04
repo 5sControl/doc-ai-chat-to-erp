@@ -17,7 +17,12 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   // static var textCounter = 1;
   SharedLinksBloc()
       : super(const SharedLinksState(savedLinks: {}, textCounter: 1)) {
-    final dio = Dio();
+    const duration = Duration(seconds: 90);
+    BaseOptions options = BaseOptions(
+        receiveDataWhenStatusError: true,
+        connectTimeout: duration,
+        receiveTimeout: duration);
+    final dio = Dio(options);
 
     dio.interceptors.add(
       InterceptorsWrapper(
@@ -45,6 +50,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           validateStatus: (status) => true,
         ),
       );
+      print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
@@ -90,6 +96,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           validateStatus: (status) => true,
         ),
       );
+      print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);

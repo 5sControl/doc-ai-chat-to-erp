@@ -73,11 +73,32 @@ class $AssetsIconsGen {
       ];
 }
 
+class $AssetsOnboardingGen {
+  const $AssetsOnboardingGen();
+
+  /// File path: assets/onboarding/onboardingImg1.png
+  AssetGenImage get onboardingImg1 =>
+      const AssetGenImage('assets/onboarding/onboardingImg1.png');
+
+  /// File path: assets/onboarding/onboardingImg2.png
+  AssetGenImage get onboardingImg2 =>
+      const AssetGenImage('assets/onboarding/onboardingImg2.png');
+
+  /// File path: assets/onboarding/onboardingImg3.png
+  AssetGenImage get onboardingImg3 =>
+      const AssetGenImage('assets/onboarding/onboardingImg3.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values =>
+      [onboardingImg1, onboardingImg2, onboardingImg3];
+}
+
 class Assets {
   Assets._();
 
   static const AssetGenImage bg = AssetGenImage('assets/BG.png');
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
   static const AssetGenImage placeholderLogo =
       AssetGenImage('assets/placeholder_logo.png');
 

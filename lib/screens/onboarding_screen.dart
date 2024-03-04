@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -41,6 +43,16 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+    if (_currentPageIndex >= 3) {
+      passOnboarding();
+      // Navigator.of(context).pushNamed('/');
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+    }
+  }
+
+  void passOnboarding() {
+    context.read<SettingsBloc>().add(const PassOnboarding());
   }
 
   @override
@@ -68,8 +80,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                     children: const [
                       OnboardingScreen1(),
                       OnboardingScreen2(),
-                      OnboardingScreen3(),
                       OnboardingScreen4(),
+                      OnboardingScreen3(),
                     ],
                   ),
                 ),
@@ -109,21 +121,36 @@ class OnboardingScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
+      fit: StackFit.expand,
       children: [
-        Text('Welcome to Summify',
-            style:
-                TextStyle(fontSize: 46, fontWeight: FontWeight.w700, height: 1),
-            textAlign: TextAlign.center),
-        Divider(
-          color: Colors.transparent,
+        Image.asset(
+          'assets/onboarding/onboardingBG.png',
+          fit: BoxFit.cover,
         ),
-        Text('Personal AI Summarizer',
-            style:
-                TextStyle(fontSize: 24, fontWeight: FontWeight.w400, height: 1),
-            textAlign: TextAlign.center),
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Welcome to Summify',
+                style: TextStyle(
+                    fontSize: 46,
+                    fontWeight: FontWeight.w700,
+                    height: 1,
+                    color: Colors.white),
+                textAlign: TextAlign.center),
+            Divider(
+              color: Colors.transparent,
+            ),
+            Text('Personal AI Summarizer',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                    height: 1,
+                    color: Colors.white),
+                textAlign: TextAlign.center),
+          ],
+        ),
       ],
     );
   }
