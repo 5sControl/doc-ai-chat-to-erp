@@ -8,6 +8,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
+import 'package:summify/screens/onboarding_screen.dart';
 // import 'package:summify/models/models.dart';
 // import 'package:summify/screens/auth/auth_screen.dart';
 // import 'package:summify/screens/summary_screen.dart';
@@ -53,7 +54,7 @@ class SummishareApp extends StatelessWidget {
                 switch (settings.name) {
                   case '/':
                     return MaterialWithModalsPageRoute(
-                        builder: (_) => const MainScreen(), settings: settings);
+                        builder: (_) => const OnboardingScreen(), settings: settings);
                 }
                 return MaterialPageRoute(
                   builder: (context) => Scaffold(
