@@ -28,12 +28,6 @@ class _MainScreenState extends State<MainScreen> {
   static final screens = [const HomeScreen(), AccountScreen()];
   int _selectedIndex = 0;
 
-  // void _onItemTapped(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
-
   void saveLink(SharedMediaFile sharedItem) {
     context
         .read<SharedLinksBloc>()
@@ -43,6 +37,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<SharedLinksBloc>().add(const CancelRequest());
     _intentSub = ReceiveSharingIntent.getMediaStream().listen((value) {
       // print(value);
       setState(() {
@@ -160,7 +155,6 @@ class _MyButtonState extends State<MyButton> {
     final XFile? file =
         await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
     if (file != null) {
-
       context.read<SharedLinksBloc>().add(SaveFile(
             fileName: file.name,
             filePath: file.path,

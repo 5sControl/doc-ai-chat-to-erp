@@ -39,7 +39,10 @@ class HomeScreen extends StatelessWidget {
         return ListView.builder(
           itemCount: sharedLinksState.savedLinks.length,
           itemBuilder: (context, index) {
-            final sharedLink = sharedLinksState.savedLinks.keys.toList().reversed.toList()[index];
+            final sharedLink = sharedLinksState.savedLinks.keys
+                .toList()
+                .reversed
+                .toList()[index];
             final SummaryData summaryData =
                 sharedLinksState.savedLinks[sharedLink]!;
             return ListTileElement(
@@ -91,14 +94,23 @@ class ListTileElement extends StatelessWidget {
           .add(DeleteSharedLink(sharedLink: sharedLink));
     }
 
+    void onPressCancel() {
+      context.read<SharedLinksBloc>().add(const CancelRequest());
+    }
+
     return AspectRatio(
       aspectRatio: 3.2,
       child: Container(
         margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(boxShadow: const [
-          BoxShadow(
-              color: Colors.black26, blurRadius: 10, blurStyle: BlurStyle.outer)
-        ], color: Colors.white54, borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  blurStyle: BlurStyle.outer)
+            ],
+            color: const Color.fromRGBO(238, 255, 254, 1),
+            borderRadius: BorderRadius.circular(10)),
         clipBehavior: Clip.hardEdge,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
@@ -137,7 +149,7 @@ class ListTileElement extends StatelessWidget {
                         ),
                       SummaryStatus.Loading => const Center(
                           child: CircularProgressIndicator(
-                            color: Colors.white70,
+                            color: Colors.teal,
                             strokeCap: StrokeCap.round,
                           ),
                         )
@@ -177,21 +189,46 @@ class ListTileElement extends StatelessWidget {
                           IconButton(
                               tooltip: 'Retry',
                               onPressed: onPressRetry,
-                              icon: const Icon(
-                                Icons.change_circle_outlined,
-                                color: Colors.black,
+                              highlightColor: Colors.teal,
+                              // style:  ButtonStyle(
+                              //     backgroundColor:
+                              //         MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
+                              icon: SvgPicture.asset(
+                                Assets.icons.update,
+                                height: 20,
+                                width: 20,
                               )),
                           IconButton(
                               onPressed: onPressDelete,
                               tooltip: 'Delete',
+                              highlightColor:
+                                  Colors.red.shade400.withOpacity(0.2),
+                              // style:  ButtonStyle(
+                              //     backgroundColor:
+                              //     MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
                               icon: SvgPicture.asset(
-                                'assets/icons/delete.svg',
+                                Assets.icons.delete,
+                                height: 25,
+                                width: 25,
                                 colorFilter: const ColorFilter.mode(
-                                    Colors.black, BlendMode.srcIn),
+                                    Colors.red, BlendMode.srcIn),
                               ))
                         ],
                       )
-                    : Container(),
+                    : summaryData.status == SummaryStatus.Loading
+                        ? Container(
+                            alignment: Alignment.center,
+                            child: IconButton(
+                                onPressed: onPressCancel,
+                                tooltip: 'Cancel',
+                                highlightColor:
+                                    Colors.red.shade400.withOpacity(0.2),
+                                // style:  ButtonStyle(
+                                //     backgroundColor:
+                                //     MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
+                                icon: const Icon(Icons.close)),
+                          )
+                        : Container(),
               )
             ],
           ),

@@ -23,6 +23,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         connectTimeout: duration,
         receiveTimeout: duration);
     final dio = Dio(options);
+    CancelToken cancelToken = CancelToken();
 
     dio.interceptors.add(
       InterceptorsWrapper(
@@ -40,16 +41,16 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       });
       emit(state.copyWith(savedLinks: summaryMap));
       final response = await dio.post(
-        'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
-        data: {
-          'url': event.sharedLink,
-          'context': '',
-        },
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-        ),
-      );
+          'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
+          data: {
+            'url': event.sharedLink,
+            'context': '',
+          },
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+          ),
+          cancelToken: cancelToken);
       print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
@@ -86,16 +87,16 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       });
       emit(state.copyWith(savedLinks: summaryMap));
       final response = await dio.post(
-        'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
-        data: {
-          'url': '',
-          'context': event.text,
-        },
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-        ),
-      );
+          'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
+          data: {
+            'url': '',
+            'context': event.text,
+          },
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+          ),
+          cancelToken: cancelToken);
       print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
@@ -136,6 +137,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             followRedirects: false,
             validateStatus: (status) => true,
           ),
+          cancelToken: cancelToken,
           data: formData);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
@@ -163,6 +165,21 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.remove(event.sharedLink);
       emit(state.copyWith(savedLinks: summaryMap));
+    });
+
+    on<CancelRequest>((event, emit) {
+      print('!!!!!!');
+      cancelToken.cancel("Cancel");
+      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+      summaryMap.forEach((key, value) {
+        if (value.status == SummaryStatus.Loading) {
+          summaryMap.addAll({
+            key: SummaryData(status: SummaryStatus.Error, date: value.date)
+          });
+        }
+      });
+      emit(state.copyWith(savedLinks: summaryMap));
+      cancelToken = CancelToken();
     });
   }
 

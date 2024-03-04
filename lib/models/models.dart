@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -45,7 +46,7 @@ class Summary {
 
 @JsonSerializable()
 class SummaryData {
-  final SummaryStatus status;
+   SummaryStatus status;
   final DateTime date;
   final String? summary;
   final String? imageUrl;

@@ -65,7 +65,11 @@ class SummaryScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 20),
-                    child: Text(summaryData.summary!))),
+                    child: Text(
+                      summaryData.summary!,
+                      style:
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    ))),
             Padding(
               padding: const EdgeInsets.all(15),
               child: ShareButton(

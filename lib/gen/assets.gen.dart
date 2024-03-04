@@ -51,6 +51,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/text.svg
   String get text => 'assets/icons/text.svg';
 
+  /// File path: assets/icons/update.svg
+  String get update => 'assets/icons/update.svg';
+
   /// File path: assets/icons/url.svg
   String get url => 'assets/icons/url.svg';
 
@@ -69,12 +72,17 @@ class $AssetsIconsGen {
         profile,
         profileFilled,
         text,
+        update,
         url
       ];
 }
 
 class $AssetsOnboardingGen {
   const $AssetsOnboardingGen();
+
+  /// File path: assets/onboarding/onboardingBG.png
+  AssetGenImage get onboardingBG =>
+      const AssetGenImage('assets/onboarding/onboardingBG.png');
 
   /// File path: assets/onboarding/onboardingImg1.png
   AssetGenImage get onboardingImg1 =>
@@ -90,7 +98,7 @@ class $AssetsOnboardingGen {
 
   /// List of all assets
   List<AssetGenImage> get values =>
-      [onboardingImg1, onboardingImg2, onboardingImg3];
+      [onboardingBG, onboardingImg1, onboardingImg2, onboardingImg3];
 }
 
 class Assets {
