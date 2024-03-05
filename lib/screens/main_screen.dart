@@ -25,12 +25,12 @@ class _MainScreenState extends State<MainScreen> {
     context
         .read<SharedLinksBloc>()
         .add(SaveSharedLink(sharedLink: sharedItem.path));
+    Navigator.of(context).pushNamed('/');
   }
 
   @override
   void initState() {
     super.initState();
-    context.read<SharedLinksBloc>().add(const CancelRequest());
     _intentSub = ReceiveSharingIntent.getMediaStream().listen((value) {
       setState(() {
         _selectedIndex = 0;
@@ -38,6 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       for (var sharedItem in value) {
         saveLink(sharedItem);
       }
+      // Navigator.of(context).pushNamed('/');
     }, onError: (err) {
       print("getIntentDataStream error: $err");
     });
@@ -56,6 +57,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
+    context.read<SharedLinksBloc>().add(const CancelRequest());
     _intentSub.cancel();
     super.dispose();
   }

@@ -4,7 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:styled_text/tags/styled_text_tag.dart';
+import 'package:styled_text/widgets/styled_text.dart';
 import 'package:summify/widgets/share_copy_button.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
@@ -26,6 +27,15 @@ class SummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final summaryText = summaryData.summary!
+        .replaceFirst('Summary:', '<b>Summary:\n</b>')
+        .replaceFirst('In-depth Analysis:', '<b>In-depth Analysis:\n</b>')
+        .replaceFirst('Key Points:', '<b>Key Points:</b>')
+        .replaceFirst('Additional Context:', '<b>Additional Context:\n</b>')
+        .replaceFirst('Supporting Evidence:', '<b>Supporting Evidence:\n</b>')
+        .replaceFirst('Implications or Conclusions:',
+            '<b>Implications or Conclusions:\n</b>');
+
     void onPressDelete() {
       Navigator.of(context).pop();
       context
@@ -67,10 +77,14 @@ class SummaryScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 20),
-                    child: Text(
-                      summaryData.summary!,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w400),
+                    child: StyledText(
+                      text: summaryText,
+                      style: const TextStyle(fontSize: 16),
+                      tags: {
+                        'b': StyledTextTag(
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                      },
                     ))),
             Padding(
               padding: const EdgeInsets.all(15),

@@ -30,6 +30,7 @@ dependencies:
   share_plus: ^7.2.2
   file_selector: ^1.0.3
   flutter_animate: ^4.5.0
+  styled_text: ^8.1.0
 
 dev_dependencies:
   flutter_test:

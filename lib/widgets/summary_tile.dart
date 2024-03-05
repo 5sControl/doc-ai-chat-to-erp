@@ -87,30 +87,26 @@ class _SummaryTileState extends State<SummaryTile> {
       movementDuration: const Duration(milliseconds: 1000),
       // crossAxisEndOffset: -0.2,
       dragStartBehavior: DragStartBehavior.start,
-      background: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          // width: double.infinity,
-          margin: const EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 20),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-          decoration: BoxDecoration(
-              color: Colors.red.shade600,
-              borderRadius: BorderRadius.circular(10)),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // const Icon(Icons.arrow_back_rounded),
-              const Text(
-                ' Delete',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-              SvgPicture.asset(Assets.icons.delete,
-                  colorFilter:
-                      const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
-            ],
-          ),
+      background: Container(
+        // width: double.infinity,
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+            color: const Color.fromRGBO(4, 49, 57, 1),
+            borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              ' Delete',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            SvgPicture.asset(Assets.icons.delete,
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+          ],
         ),
       ),
       resizeDuration: const Duration(milliseconds: 600),
@@ -120,22 +116,22 @@ class _SummaryTileState extends State<SummaryTile> {
         minVerticalPadding: 0,
         minLeadingWidth: 0,
         horizontalTitleGap: 0,
-        contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        contentPadding:
+            const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
         title: AnimatedScale(
           scale: tapped ? 0.98 : 1,
           duration: duration,
           child: AspectRatio(
             aspectRatio: 3.3,
             child: AnimatedContainer(
-              // margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               duration: duration,
               decoration: BoxDecoration(
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //       color: tapped ? Colors.black54 : Colors.black26,
-                  //       blurRadius: 10,
-                  //       blurStyle: BlurStyle.outer)
-                  // ],
+                  boxShadow: [
+                    BoxShadow(
+                        color: tapped ? Colors.black54 : Colors.black26,
+                        blurRadius: 10,
+                        blurStyle: BlurStyle.outer)
+                  ],
                   color: tapped
                       ? const Color.fromRGBO(213, 255, 252, 1.0)
                       : const Color.fromRGBO(238, 255, 254, 1),
