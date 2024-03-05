@@ -87,27 +87,30 @@ class _SummaryTileState extends State<SummaryTile> {
       movementDuration: const Duration(milliseconds: 1000),
       // crossAxisEndOffset: -0.2,
       dragStartBehavior: DragStartBehavior.start,
-      background: Container(
-        // width: double.infinity,
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-            color: Colors.red.shade600,
-            borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // const Icon(Icons.arrow_back_rounded),
-            const Text(
-              ' Delete',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-            SvgPicture.asset(Assets.icons.delete,
-                colorFilter:
-                    const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
-          ],
+      background: Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          // width: double.infinity,
+          margin: const EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+              color: Colors.red.shade600,
+              borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // const Icon(Icons.arrow_back_rounded),
+              const Text(
+                ' Delete',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+              SvgPicture.asset(Assets.icons.delete,
+                  colorFilter:
+                      const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+            ],
+          ),
         ),
       ),
       resizeDuration: const Duration(milliseconds: 600),

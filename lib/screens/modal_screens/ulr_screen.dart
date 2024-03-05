@@ -6,6 +6,7 @@ import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/shared_links/shared_links_bloc.dart';
 import '../../gen/assets.gen.dart';
+import '../../widgets/summify_button.dart';
 
 class UrlModalScreen extends StatefulWidget {
   const UrlModalScreen({super.key});
@@ -164,35 +165,4 @@ class UrlTextField extends StatelessWidget {
   }
 }
 
-class SummifyButton extends StatelessWidget {
-  final String controllerText;
-  final VoidCallback onPressSummify;
-  const SummifyButton(
-      {super.key, required this.onPressSummify, required this.controllerText});
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressSummify,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: controllerText.isNotEmpty
-                ? const Color.fromRGBO(4, 49, 57, 1)
-                : const Color.fromRGBO(49, 210, 206, 1),
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 5, offset: Offset(1, 1))
-            ]),
-        child: const Text(
-          'Summify Now',
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
-  }
-}

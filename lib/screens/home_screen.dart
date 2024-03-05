@@ -37,9 +37,6 @@ class HomeScreen extends StatelessWidget {
         child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
             builder: (context, sharedLinksState) {
           return ListView.builder(
-            // separatorBuilder: (context, index) => const SizedBox(
-            //   height: 10,
-            // ),
             itemCount: sharedLinksState.savedLinks.length,
             itemBuilder: (context, index) {
               final sharedLink = sharedLinksState.savedLinks.keys

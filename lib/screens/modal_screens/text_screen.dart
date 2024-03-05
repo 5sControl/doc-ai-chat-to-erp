@@ -6,6 +6,7 @@ import 'package:summify/bloc/shared_links/shared_links_bloc.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../widgets/summify_button.dart';
 
 class TextModalScreen extends StatefulWidget {
   const TextModalScreen({super.key});
@@ -33,8 +34,6 @@ class _TextModalScreenState extends State<TextModalScreen> {
       textController.text = clipboardData!.text.toString();
     }
   }
-
-
 
   void onChangeText() {
     setState(() {
@@ -76,7 +75,10 @@ class _TextModalScreenState extends State<TextModalScreen> {
                   fontSize: 18),
             ),
             MyTextField(controller: textController, onPressPaste: onPressPaste),
-            SummifyButton(onPress: onPressSummify, controllerText: controllerText)
+            SummifyButton(
+              onPressSummify: onPressSummify,
+              controllerText: controllerText,
+            )
           ],
         ),
       ),
@@ -105,7 +107,6 @@ class MyTextField extends StatelessWidget {
             ),
             child: Container(
               height: deviceWidth,
-              // margin: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                   color: Colors.white12,
                   borderRadius: BorderRadius.circular(8)),
@@ -138,7 +139,8 @@ class MyTextField extends StatelessWidget {
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                               width: 2,
-                              color: Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
+                              color:
+                                  Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
                         ),
                         label: const Text(
                           'Start typing or paste your content here ...',
@@ -152,11 +154,6 @@ class MyTextField extends StatelessWidget {
                             gapPadding: 10,
                             borderRadius: BorderRadius.circular(10),
                             borderSide: BorderSide.none),
-                        // floatingLabelStyle: const TextStyle(
-                        //     color: Colors.white,
-                        //     // height: -2,
-                        //     fontSize: 18,
-                        //     fontWeight: FontWeight.w500)
                       ),
                     ),
                   ),
@@ -185,7 +182,8 @@ class MyTextField extends StatelessWidget {
                                 child: Text(
                                   'Paste',
                                   style: TextStyle(
-                                      fontSize: 17, fontWeight: FontWeight.w300),
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w300),
                                 ))
                           ],
                         ),
@@ -197,37 +195,5 @@ class MyTextField extends StatelessWidget {
             ),
           ),
         ));
-  }
-}
-
-class SummifyButton extends StatelessWidget {
-  final String controllerText;
-  final VoidCallback onPress;
-  const SummifyButton({super.key, required this.onPress, required this.controllerText});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPress,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: controllerText.isNotEmpty
-                ? const Color.fromRGBO(4, 49, 57, 1)
-                : const Color.fromRGBO(49, 210, 206, 1),
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.black26, blurRadius: 5, offset: Offset(1, 1))
-            ]),
-        child: const Text(
-          'Summify Now',
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-      ),
-    );
   }
 }
