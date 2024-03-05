@@ -1,0 +1,36 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!--<rect width="30" height="30" fill="#F5F5F5"/>-->
+<g id="5" clip-path="url(#clip0_0_1)">
+<!--<rect width="375" height="812" transform="translate(-182 -738)" fill="white"/>-->
+<g id="&#208;&#158;&#208;&#186;&#208;&#189;&#208;&#190;">
+<g id="Frame 427318627" opacity="0.3" clip-path="url(#clip1_0_1)">
+<!--<rect width="375" height="812" transform="translate(-182 -738)" fill="#053139"/>-->
+<!--<rect id="&#208;&#158;&#208;&#186;&#208;&#189;&#208;&#190;_2" opacity="0.2" x="-181.5" y="-737.5" width="374" height="811" fill="#B5F6FF" fill-opacity="0.1" stroke="black"/>-->
+<g id="Frame 427318648">
+<!--<rect width="375" height="812" transform="translate(-182 -738)" fill="url(#paint0_linear_0_1)"/>-->
+</g>
+</g>
+</g>
+<g id="Button">
+
+<g id="&#208;&#186;&#208;&#189;&#208;&#190;&#208;&#191;&#208;&#186;&#208;&#176;">
+<path id="secondary" d="M10.1318 7.74996L14.9652 2.91663L19.7985 7.74996" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="secondary_2" d="M14.9653 2.91663V18.625" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="primary" d="M19.7985 12.5834H22.2152C22.5356 12.5834 22.843 12.7107 23.0696 12.9373C23.2962 13.1639 23.4235 13.4712 23.4235 13.7917V24.6667C23.4235 24.9872 23.2962 25.2945 23.0696 25.5211C22.843 25.7477 22.5356 25.875 22.2152 25.875H7.71517C7.3947 25.875 7.08736 25.7477 6.86075 25.5211C6.63414 25.2945 6.50684 24.9872 6.50684 24.6667V13.7917C6.50684 13.4712 6.63414 13.1639 6.86075 12.9373C7.08736 12.7107 7.3947 12.5834 7.71517 12.5834H10.1318" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_1" x1="9.17706e-06" y1="828.5" x2="355.5" y2="-1.00239e-05" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop stop-color="#E7FEFE"/>
+<stop offset="1" stop-color="#7EEFEF"/>
+</linearGradient>
+<clipPath id="clip0_0_1">
+<rect width="375" height="812" fill="white" transform="translate(-182 -738)"/>
+</clipPath>
+<clipPath id="clip1_0_1">
+<rect width="375" height="812" fill="white" transform="translate(-182 -738)"/>
+</clipPath>
+</defs>
+</svg>

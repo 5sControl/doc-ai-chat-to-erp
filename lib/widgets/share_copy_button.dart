@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -18,7 +17,7 @@ class ShareAndCopyButton extends StatefulWidget {
 }
 
 class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
-  static const duration = Duration(milliseconds: 200);
+  static const duration = Duration(milliseconds: 150);
   bool tappedShare = false;
   bool tappedCopy = false;
 
@@ -70,6 +69,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
+            flex: 1,
             child: GestureDetector(
               onTap: onPressShare,
               onTapDown: (_) {
@@ -94,52 +94,78 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
                             ? Colors.teal
                             : const Color.fromRGBO(4, 49, 57, 1),
                         borderRadius: BorderRadius.circular(12)),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        Padding(
+                            padding: const  EdgeInsets.only(left: 5),
+
+                            child:  SvgPicture.asset(
+                              Assets.icons.share,
+                              height: 24,
+                              width: 24,
+                            ),),
+                        const Text(
                           'Share',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w600),
                         ),
-                        Padding(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Icon(
-                              Icons.arrow_upward_sharp,
-                              color: Colors.white,
-                            ))
                       ],
                     )),
               ),
             ),
           ),
-          GestureDetector(
-            onTap: onPressCopy,
-            onTapDown: (_) {
-              onTapDownCopy();
-            },
-            onTapUp: (_) {
-              onTapUpCopy();
-            },
-            onTapCancel: () {
-              onTapUpCopy();
-            },
-            child: AnimatedScale(
-              curve: Curves.easeIn,
-              duration: duration,
-              scale: tappedCopy ? 0.95 : 1,
-              child: AnimatedContainer(
-                  duration: duration,
-                  padding: const EdgeInsets.all(6),
-                  margin: const EdgeInsets.only(left: 10),
-                  decoration: BoxDecoration(
-                      color: tappedCopy
-                          ? Colors.teal
-                          : const Color.fromRGBO(4, 49, 57, 1),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: SvgPicture.asset(Assets.icons.file)),
+          Expanded(
+            child: GestureDetector(
+              onTap: onPressCopy,
+              onTapDown: (_) {
+                onTapDownCopy();
+              },
+              onTapUp: (_) {
+                onTapUpCopy();
+              },
+              onTapCancel: () {
+                onTapUpCopy();
+              },
+              child: AnimatedScale(
+                alignment: Alignment.center,
+                curve: Curves.easeIn,
+                duration: duration,
+                scale: tappedCopy ? 0.95 : 1,
+                child: AnimatedContainer(
+                    duration: duration,
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                        color: tappedCopy
+                            ? Colors.teal
+                            : const Color.fromRGBO(4, 49, 57, 1),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          Assets.icons.copy,
+                          height: 24,
+                          width: 24,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Text(
+                            'Copy',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      ],
+                    )),
+              ),
             ),
           )
         ],

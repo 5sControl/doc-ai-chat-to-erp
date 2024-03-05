@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/shared_links/shared_links_bloc.dart';
+import '../../gen/assets.gen.dart';
 
 class UrlModalScreen extends StatefulWidget {
   const UrlModalScreen({super.key});
@@ -154,7 +155,9 @@ class UrlTextField extends StatelessWidget {
               onTap: onPressPaste,
               child: Container(
                   margin: const EdgeInsets.only(left: 7),
-                  child: SvgPicture.asset('assets/icons/copy.svg')),
+                  child: SvgPicture.asset(
+                    Assets.icons.paste,
+                  )),
             )
           ],
         ));

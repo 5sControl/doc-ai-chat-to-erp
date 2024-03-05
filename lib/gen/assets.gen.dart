@@ -42,11 +42,17 @@ class $AssetsIconsGen {
   /// File path: assets/icons/no-image.svg
   String get noImage => 'assets/icons/no-image.svg';
 
+  /// File path: assets/icons/paste.svg
+  String get paste => 'assets/icons/paste.svg';
+
   /// File path: assets/icons/profile.svg
   String get profile => 'assets/icons/profile.svg';
 
   /// File path: assets/icons/profile_filled.svg
   String get profileFilled => 'assets/icons/profile_filled.svg';
+
+  /// File path: assets/icons/share.svg
+  String get share => 'assets/icons/share.svg';
 
   /// File path: assets/icons/text.svg
   String get text => 'assets/icons/text.svg';
@@ -69,8 +75,10 @@ class $AssetsIconsGen {
         homeFilled,
         logo,
         noImage,
+        paste,
         profile,
         profileFilled,
+        share,
         text,
         update,
         url

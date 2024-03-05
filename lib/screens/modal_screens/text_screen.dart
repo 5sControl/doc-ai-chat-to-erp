@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:summify/bloc/shared_links/shared_links_bloc.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
+import '../../gen/assets.gen.dart';
+
 class TextModalScreen extends StatefulWidget {
   const TextModalScreen({super.key});
 
@@ -176,7 +178,7 @@ class MyTextField extends StatelessWidget {
                             Container(
                                 margin: const EdgeInsets.only(left: 7),
                                 child: SvgPicture.asset(
-                                  'assets/icons/copy.svg',
+                                  Assets.icons.paste,
                                 )),
                             const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5),
