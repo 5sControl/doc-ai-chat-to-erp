@@ -125,7 +125,7 @@ class _SummaryTileState extends State<SummaryTile> {
           scale: tapped ? 0.98 : 1,
           duration: duration,
           child: AspectRatio(
-            aspectRatio: 3.2,
+            aspectRatio: 3.3,
             child: AnimatedContainer(
               // margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               duration: duration,

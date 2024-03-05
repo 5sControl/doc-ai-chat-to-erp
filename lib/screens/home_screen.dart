@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,48 +15,62 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                Assets.icons.logo,
-                height: 30,
-                width: 30,
-                colorFilter: const ColorFilter.mode(
-                    Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: Stack(
+          children: [
+            ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaY: 10, sigmaX: 10),
+                child: Container(),
               ),
-              const Text(
-                '  Summify',
-                style: TextStyle(color: Color.fromRGBO(6, 49, 57, 1)),
-              )
-            ],
-          )),
-      body: Padding(
-        padding: const EdgeInsets.all(0),
-        child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
-            builder: (context, sharedLinksState) {
-          return ListView.builder(
-            itemCount: sharedLinksState.savedLinks.length,
-            itemBuilder: (context, index) {
-              final sharedLink = sharedLinksState.savedLinks.keys
-                  .toList()
-                  .reversed
-                  .toList()[index];
-              final SummaryData summaryData =
-                  sharedLinksState.savedLinks[sharedLink]!;
-              return SummaryTile(
-                sharedLink: sharedLink,
-                summaryData: summaryData,
-              );
-            },
-          );
-        }),
+            ),
+            AppBar(
+                toolbarHeight: 50,
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+                title: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        Assets.icons.logo,
+                        height: 30,
+                        width: 30,
+                        colorFilter: const ColorFilter.mode(
+                            Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
+                      ),
+                      const Text(
+                        '  Summify',
+                        style: TextStyle(color: Color.fromRGBO(6, 49, 57, 1)),
+                      ),
+                    ],
+                  ),
+                )),
+          ],
+        ),
       ),
+      body: BlocBuilder<SharedLinksBloc, SharedLinksState>(
+          builder: (context, sharedLinksState) {
+        return ListView.builder(
+          itemCount: sharedLinksState.savedLinks.length,
+          itemBuilder: (context, index) {
+            final sharedLink = sharedLinksState.savedLinks.keys
+                .toList()
+                .reversed
+                .toList()[index];
+            final SummaryData summaryData =
+                sharedLinksState.savedLinks[sharedLink]!;
+            return SummaryTile(
+              sharedLink: sharedLink,
+              summaryData: summaryData,
+            );
+          },
+        );
+      }),
     );
   }
 }
-
-
