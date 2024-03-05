@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:styled_text/tags/styled_text_tag.dart';
 import 'package:styled_text/widgets/styled_text.dart';
 import 'package:summify/widgets/share_copy_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
@@ -47,6 +48,12 @@ class SummaryScreen extends StatelessWidget {
       Navigator.of(context).pop();
     }
 
+    void onPressLink() async {
+      print('object');
+      final Uri url = Uri.parse(sharedLink);
+      if (!await launchUrl(url)) {}
+    }
+
     return Stack(
       children: [
         const BackgroundGradient(),
@@ -66,8 +73,10 @@ class SummaryScreen extends StatelessWidget {
                   ),
                 ),
                 Header(
+                  sharedLink: sharedLink,
                   displayLink: displayLink,
                   formattedDate: formattedDate,
+                  onPressLink: onPressLink,
                   onPressBack: onPressBack,
                   onPressDelete: onPressDelete,
                 )
@@ -82,8 +91,10 @@ class SummaryScreen extends StatelessWidget {
                       style: const TextStyle(fontSize: 16),
                       tags: {
                         'b': StyledTextTag(
-                            style:
-                                const TextStyle(fontWeight: FontWeight.bold)),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                height: 2)),
                       },
                     ))),
             Padding(
@@ -102,16 +113,20 @@ class SummaryScreen extends StatelessWidget {
 
 class Header extends StatelessWidget {
   final String displayLink;
+  final String sharedLink;
   final String formattedDate;
   final VoidCallback onPressDelete;
   final VoidCallback onPressBack;
+  final VoidCallback onPressLink;
 
   const Header(
       {super.key,
       required this.displayLink,
       required this.formattedDate,
       required this.onPressDelete,
-      required this.onPressBack});
+      required this.onPressLink,
+      required this.onPressBack,
+      required this.sharedLink});
 
   @override
   Widget build(BuildContext context) {
@@ -190,30 +205,78 @@ class Header extends StatelessWidget {
             ],
           ),
           const Divider(color: Colors.transparent),
-          Row(
-            children: [
-              Flexible(
-                child: Text(
-                  displayLink,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      shadows: [
-                        Shadow(
-                            color: Colors.black,
-                            blurRadius: 10,
-                            offset: Offset(0, 0)),
-                      ]),
-                ),
+          UrlLink(
+            sharedLink: sharedLink,
+            onPressLink: onPressLink,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class UrlLink extends StatefulWidget {
+  final String sharedLink;
+
+  final VoidCallback onPressLink;
+  const UrlLink(
+      {super.key, required this.sharedLink, required this.onPressLink});
+
+  @override
+  State<UrlLink> createState() => _UrlLinkState();
+}
+
+class _UrlLinkState extends State<UrlLink> {
+  static const duration = Duration(milliseconds: 150);
+  bool pressed = false;
+
+  void onTapDown() {
+    setState(() {
+      pressed = true;
+    });
+  }
+
+  void onTapUp() {
+    Future.delayed(duration, () {
+      setState(() {
+        pressed = false;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      highlightColor: Colors.white,
+      onTapDown: (_) => onTapDown(),
+      onTapUp: (_) => onTapUp(),
+      onTapCancel: () => onTapUp(),
+      onTap: widget.onPressLink,
+      child: Row(
+        children: [
+          Flexible(
+            child: AnimatedDefaultTextStyle(
+              duration: duration,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: pressed ? 15 : 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  shadows: const [
+                    Shadow(
+                        color: Colors.black,
+                        blurRadius: 10,
+                        offset: Offset(0, 0)),
+                  ]),
+              child: Text(
+                widget.sharedLink,
               ),
-              const Icon(
-                Icons.keyboard_arrow_right,
-                color: Colors.white,
-              )
-            ],
+            ),
           ),
+          const Icon(
+            Icons.keyboard_arrow_right,
+            color: Colors.white,
+          )
         ],
       ),
     );
