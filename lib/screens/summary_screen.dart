@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:summify/widgets/share_copy_button.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
@@ -73,7 +74,7 @@ class SummaryScreen extends StatelessWidget {
                     ))),
             Padding(
               padding: const EdgeInsets.all(15),
-              child: ShareButton(
+              child: ShareAndCopyButton(
                 sharedLink: sharedLink,
                 summaryData: summaryData,
               ),
@@ -200,55 +201,6 @@ class Header extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class ShareButton extends StatelessWidget {
-  final SummaryData summaryData;
-  final String sharedLink;
-  const ShareButton(
-      {super.key, required this.summaryData, required this.sharedLink});
-
-  @override
-  Widget build(BuildContext context) {
-    void onPressShare() {
-      final box = context.findRenderObject() as RenderBox?;
-      Share.share(
-        '$sharedLink \n\n ${summaryData.summary}',
-        sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
-      );
-    }
-
-    return GestureDetector(
-      onTap: onPressShare,
-      child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: const Color.fromRGBO(4, 49, 57, 1),
-            borderRadius: BorderRadius.circular(12)),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Share',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600),
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 7),
-                child: Icon(
-                  Icons.arrow_upward_sharp,
-                  color: Colors.white,
-                ))
-          ],
-        ),
       ),
     );
   }

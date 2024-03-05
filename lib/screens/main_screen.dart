@@ -192,6 +192,18 @@ class _MyButtonState extends State<MyButton> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
+                      onTap: onPressURl,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        child: SvgPicture.asset('assets/icons/url.svg'),
+                      )),
+                  Container(
+                    color: Colors.white,
+                    width: 1,
+                    height: 40,
+                  ),
+                  GestureDetector(
                     onTap: onPressOpenFile,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -211,18 +223,8 @@ class _MyButtonState extends State<MyButton> {
                             horizontal: 15, vertical: 15),
                         child: SvgPicture.asset('assets/icons/text.svg')),
                   ),
-                  Container(
-                    color: Colors.white,
-                    width: 1,
-                    height: 40,
-                  ),
-                  GestureDetector(
-                      onTap: onPressURl,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
-                        child: SvgPicture.asset('assets/icons/url.svg'),
-                      )),
+
+
                 ],
               ),
               duration: Duration(milliseconds: 400),
