@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -79,38 +80,64 @@ class _SummaryTileState extends State<SummaryTile> {
       behavior: HitTestBehavior.translucent,
       key: Key(widget.sharedLink),
       onDismissed: (direction) {
-        print('remove');
+        onPressDelete();
       },
+      direction: DismissDirection.endToStart,
+      dismissThresholds: const {DismissDirection.endToStart: 0.5},
+      movementDuration: const Duration(milliseconds: 1000),
+      // crossAxisEndOffset: -0.2,
+      dragStartBehavior: DragStartBehavior.start,
       background: Container(
-        color: Colors.red,
+        // width: double.infinity,
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+            color: Colors.red.shade600,
+            borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // const Icon(Icons.arrow_back_rounded),
+            const Text(
+              ' Delete',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+            SvgPicture.asset(Assets.icons.delete,
+                colorFilter:
+                    const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+          ],
+        ),
       ),
+      resizeDuration: const Duration(milliseconds: 600),
       child: ListTile(
         leading: null,
         trailing: null,
         minVerticalPadding: 0,
         minLeadingWidth: 0,
         horizontalTitleGap: 0,
-        contentPadding: EdgeInsets.zero,
+        contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         title: AnimatedScale(
           scale: tapped ? 0.98 : 1,
           duration: duration,
           child: AspectRatio(
             aspectRatio: 3.2,
             child: AnimatedContainer(
+              // margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               duration: duration,
-              margin: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: tapped ? Colors.black54 : Colors.black26,
-                        blurRadius: 10,
-                        blurStyle: BlurStyle.outer)
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //       color: tapped ? Colors.black54 : Colors.black26,
+                  //       blurRadius: 10,
+                  //       blurStyle: BlurStyle.outer)
+                  // ],
                   color: tapped
                       ? const Color.fromRGBO(213, 255, 252, 1.0)
                       : const Color.fromRGBO(238, 255, 254, 1),
                   borderRadius: BorderRadius.circular(10)),
-              clipBehavior: Clip.hardEdge,
+              // clipBehavior: Clip.hardEdge,
               child: InkWell(
                 borderRadius: BorderRadius.circular(10),
                 onTap: () {
@@ -206,21 +233,21 @@ class _SummaryTileState extends State<SummaryTile> {
                                       height: 20,
                                       width: 20,
                                     )),
-                                IconButton(
-                                    onPressed: onPressDelete,
-                                    tooltip: 'Delete',
-                                    highlightColor:
-                                        Colors.red.shade400.withOpacity(0.2),
-                                    // style:  ButtonStyle(
-                                    //     backgroundColor:
-                                    //     MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
-                                    icon: SvgPicture.asset(
-                                      Assets.icons.delete,
-                                      height: 25,
-                                      width: 25,
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.red, BlendMode.srcIn),
-                                    ))
+                                // IconButton(
+                                //     onPressed: onPressDelete,
+                                //     tooltip: 'Delete',
+                                //     highlightColor:
+                                //         Colors.red.shade400.withOpacity(0.2),
+                                //     // style:  ButtonStyle(
+                                //     //     backgroundColor:
+                                //     //     MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
+                                //     icon: SvgPicture.asset(
+                                //       Assets.icons.delete,
+                                //       height: 25,
+                                //       width: 25,
+                                //       colorFilter: const ColorFilter.mode(
+                                //           Colors.red, BlendMode.srcIn),
+                                //     ))
                               ],
                             )
                           : widget.summaryData.status == SummaryStatus.Loading
