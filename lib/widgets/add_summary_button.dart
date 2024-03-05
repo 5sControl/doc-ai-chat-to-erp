@@ -19,7 +19,12 @@ class AddSummaryButton extends StatefulWidget {
 }
 
 class _AddSummaryButtonState extends State<AddSummaryButton> {
+  // static const duration = Duration(milliseconds: 300);
   bool _isOpen = false;
+  // bool tappedUrl = false;
+  // bool tappedFile = false;
+  // bool tappedText = false;
+
   static const XTypeGroup typeGroup = XTypeGroup(
     label: '',
     extensions: <String>['txt', 'docx', 'pdf'],
@@ -41,6 +46,36 @@ class _AddSummaryButtonState extends State<AddSummaryButton> {
       _isOpen = !_isOpen;
     });
   }
+
+  // void onTapDown(String target) {
+  //   setState(() {
+  //     if (target == 'url') {
+  //       tappedUrl = true;
+  //     }
+  //     if (target == 'file') {
+  //       tappedFile = true;
+  //     }
+  //     if (target == 'text') {
+  //       tappedText = true;
+  //     }
+  //   });
+  // }
+  //
+  // void onTapUp(String target) {
+  //   Future.delayed(duration, () {
+  //     setState(() {
+  //       if (target == 'url') {
+  //         tappedUrl = false;
+  //       }
+  //       if (target == 'file') {
+  //         tappedFile = false;
+  //       }
+  //       if (target == 'text') {
+  //         tappedText = false;
+  //       }
+  //     });
+  //   });
+  // }
 
   void onPressURl() {
     showCupertinoModalBottomSheet(
@@ -109,69 +144,83 @@ class _AddSummaryButtonState extends State<AddSummaryButton> {
               secondChild: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  IconButton(
-                      onPressed: onPressURl,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      icon: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SvgPicture.asset(Assets.icons.url, height: 25, width: 25, fit: BoxFit.contain),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: GestureDetector(
+                        onTap: onPressURl,
+                        // onTapDown: (_) => onTapDown('url'),
+                        // onTapUp: (_) => onTapDown('url'),
+                        // onTapCancel: () => onTapUp('url'),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SvgPicture.asset(
+                              Assets.icons.url,
+                              height: 25,
+                              width: 25,
+                              fit: BoxFit.contain,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.white, BlendMode.srcIn),
+                            ),
+                            const Text(
                               'Link',
                               style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        ],
-                      )),
+                            )
+                          ],
+                        )),
+                  ),
                   Container(
                     color: Colors.white,
                     width: 1,
                     height: 40,
                   ),
-                  IconButton(
-                      onPressed: onPressOpenFile,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      icon: Column(
-                        children: [
-                          SvgPicture.asset(Assets.icons.file, height: 25),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: GestureDetector(
+                        onTap: onPressOpenFile,
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Assets.icons.file,
+                              height: 25,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.white, BlendMode.srcIn),
+                            ),
+                            const Text(
                               'File',
                               style: TextStyle(color: Colors.white),
-                            ),
-                          )
-                        ],
-                      )),
+                            )
+                          ],
+                        )),
+                  ),
                   Container(
                     color: Colors.white,
                     width: 1,
                     height: 40,
                   ),
-                  IconButton(
-                      onPressed: onPressText,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      icon: Column(
-                        children: [
-                          SvgPicture.asset(
-                            Assets.icons.text,
-                            height: 25,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              'Link',
-                              style: TextStyle(color: Colors.white),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: GestureDetector(
+                        onTap: onPressText,
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Assets.icons.text,
+                              height: 25,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.white, BlendMode.srcIn),
                             ),
-                          )
-                        ],
-                      )),
+                            const Text(
+                              'Text',
+                              style: TextStyle(color: Colors.white),
+                            )
+                          ],
+                        )),
+                  ),
                 ],
               ),
               duration: Duration(milliseconds: 400),

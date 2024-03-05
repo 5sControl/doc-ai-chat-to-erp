@@ -117,12 +117,12 @@ class _SummaryTileState extends State<SummaryTile> {
         minLeadingWidth: 0,
         horizontalTitleGap: 0,
         contentPadding:
-            const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+            const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
         title: AnimatedScale(
           scale: tapped ? 0.98 : 1,
           duration: duration,
           child: AspectRatio(
-            aspectRatio: 3.3,
+            aspectRatio: 3.5,
             child: AnimatedContainer(
               duration: duration,
               decoration: BoxDecoration(
