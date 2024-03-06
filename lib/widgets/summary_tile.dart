@@ -1,6 +1,11 @@
+import 'dart:async';
+import 'dart:ui';
+
+import 'package:animate_gradient/animate_gradient.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +30,7 @@ class _SummaryTileState extends State<SummaryTile> {
   bool tapped = false;
 
   static const duration = Duration(milliseconds: 200);
+
   void onTapDown() {
     setState(() {
       tapped = true;
@@ -160,39 +166,25 @@ class _SummaryTileState extends State<SummaryTile> {
                     AspectRatio(
                         aspectRatio: 1,
                         child: Container(
-                          // height: 80,
-
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 12),
-                          child: Container(
-                              child: switch (widget.summaryData.status) {
-                            SummaryStatus.Error =>
-                              Image.asset(Assets.placeholderLogo.path),
-                            SummaryStatus.Complete => Hero(
-                                tag: widget.summaryData.date,
-                                child: widget.summaryData.imageUrl == null
-                                    ? Image.asset(Assets.placeholderLogo.path)
-                                    : CachedNetworkImage(
-                                        imageUrl: widget.summaryData.imageUrl!,
-                                        fit: BoxFit.cover,
-                                      ),
-                              ),
-                            SummaryStatus.Loading => const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.teal,
-                                  strokeCap: StrokeCap.round,
-                                ),
-                              )
-                          }),
-                        )),
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 12),
+                            child: Hero(
+                              tag: widget.summaryData.date,
+                              child: widget.summaryData.imageUrl == null
+                                  ? Image.asset(Assets.placeholderLogo.path)
+                                  : CachedNetworkImage(
+                                      imageUrl: widget.summaryData.imageUrl!,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ))),
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 7, vertical: 5),
+                            horizontal: 7, vertical: 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.max,
@@ -201,7 +193,7 @@ class _SummaryTileState extends State<SummaryTile> {
                             Text(
                               widget.summaryData.title ?? displayLink,
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                              maxLines: 1,
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
@@ -210,6 +202,21 @@ class _SummaryTileState extends State<SummaryTile> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(fontSize: 12),
                             ),
+                            if (widget.summaryData.status ==
+                                SummaryStatus.Loading)
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  const Loader(),
+                                  IconButton(
+                                      onPressed: onPressCancel,
+                                      iconSize: 20,
+                                      visualDensity: VisualDensity.compact,
+                                      padding: EdgeInsets.zero,
+                                      icon: const Icon(Icons.stop_circle_outlined))
+                                ],
+                              )
                           ],
                         ),
                       ),
@@ -224,45 +231,14 @@ class _SummaryTileState extends State<SummaryTile> {
                                     tooltip: 'Retry',
                                     onPressed: onPressRetry,
                                     highlightColor: Colors.teal,
-                                    // style:  ButtonStyle(
-                                    //     backgroundColor:
-                                    //         MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
                                     icon: SvgPicture.asset(
                                       Assets.icons.update,
                                       height: 20,
                                       width: 20,
                                     )),
-                                // IconButton(
-                                //     onPressed: onPressDelete,
-                                //     tooltip: 'Delete',
-                                //     highlightColor:
-                                //         Colors.red.shade400.withOpacity(0.2),
-                                //     // style:  ButtonStyle(
-                                //     //     backgroundColor:
-                                //     //     MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
-                                //     icon: SvgPicture.asset(
-                                //       Assets.icons.delete,
-                                //       height: 25,
-                                //       width: 25,
-                                //       colorFilter: const ColorFilter.mode(
-                                //           Colors.red, BlendMode.srcIn),
-                                //     ))
                               ],
                             )
-                          : widget.summaryData.status == SummaryStatus.Loading
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  child: IconButton(
-                                      onPressed: onPressCancel,
-                                      tooltip: 'Cancel',
-                                      highlightColor:
-                                          Colors.red.shade400.withOpacity(0.2),
-                                      // style:  ButtonStyle(
-                                      //     backgroundColor:
-                                      //     MaterialStatePropertyAll(Colors.teal.withOpacity(0.1))),
-                                      icon: const Icon(Icons.close)),
-                                )
-                              : Container(),
+                          : Container(),
                     )
                   ],
                 ),
@@ -270,6 +246,37 @@ class _SummaryTileState extends State<SummaryTile> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class Loader extends StatelessWidget {
+  const Loader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Container(
+            height: 10,
+            width: double.infinity,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                color: Colors.teal.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10)),
+            child: const LinearProgressIndicator(
+              // value: controller.value,
+              color: Colors.teal,
+              backgroundColor: Colors.white,
+            ),
+          ),
+          const Text(
+            'Loading',
+            style: TextStyle(fontSize: 12),
+          )
+        ],
       ),
     );
   }

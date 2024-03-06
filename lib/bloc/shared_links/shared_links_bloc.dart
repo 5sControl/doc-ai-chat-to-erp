@@ -39,6 +39,17 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         event.sharedLink: SummaryData(
             status: SummaryStatus.Loading, summary: null, date: DateTime.now())
       });
+      final previewData = await getPreviewData(event.sharedLink);
+      summaryMap.addAll({
+        event.sharedLink: SummaryData(
+            status: SummaryStatus.Loading,
+            summary: null,
+            date: DateTime.now(),
+            title: previewData.title,
+            description: previewData.description,
+            imageUrl: previewData.image?.url)
+      });
+      // emit(state.copyWith(savedLinks: summaryMap));
       emit(state.copyWith(savedLinks: summaryMap));
       final response = await dio.post(
           'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
@@ -174,7 +185,11 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       summaryMap.forEach((key, value) {
         if (value.status == SummaryStatus.Loading) {
           summaryMap.addAll({
-            key: SummaryData(status: SummaryStatus.Error, date: value.date)
+            key: SummaryData(
+                status: SummaryStatus.Error,
+                date: value.date,
+                imageUrl: value.imageUrl,
+                title: value.title)
           });
         }
       });
