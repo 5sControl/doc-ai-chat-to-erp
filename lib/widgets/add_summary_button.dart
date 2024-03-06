@@ -118,7 +118,7 @@ class AddSummaryButton extends StatelessWidget {
   }
 }
 
-class AddButton extends StatelessWidget {
+class AddButton extends StatefulWidget {
   final String title;
   final String icon;
   final Function({required String title}) onPressButton;
@@ -129,25 +129,58 @@ class AddButton extends StatelessWidget {
       required this.onPressButton});
 
   @override
+  State<AddButton> createState() => _AddButtonState();
+}
+
+class _AddButtonState extends State<AddButton> {
+  static const duration = Duration(milliseconds: 150);
+  bool tapped = false;
+
+  void onTapDown() {
+    setState(() {
+      tapped = true;
+    });
+  }
+
+  void onTapUp() {
+    Future.delayed(duration, () {
+      setState(() {
+        tapped = false;
+      });
+    });
+  }
+
+  void onTap() {
+    Future.delayed(duration, () {
+      widget.onPressButton(title: widget.title);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-      child: GestureDetector(
-        onTap: () => onPressButton(title: title),
+    return GestureDetector(
+      onTap: onTap,
+      onTapDown: (_) => onTapDown(),
+      onTapUp: (_) => onTapUp(),
+      onTapCancel: () => onTapUp(),
+      child: AnimatedContainer(
+        color: Colors.transparent,
+        duration: duration,
+        padding: EdgeInsets.symmetric(horizontal: tapped ? 15 : 10, vertical: 2),
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(
                   left: 15, right: 15, bottom: 5, top: 10),
               child: SvgPicture.asset(
-                icon,
-                height: 25,
+                widget.icon,
+                height: tapped ? 27 : 25,
                 colorFilter:
                     const ColorFilter.mode(Colors.white, BlendMode.srcIn),
               ),
             ),
             Text(
-              title,
+              widget.title,
               style: const TextStyle(color: Colors.white),
             )
           ],
