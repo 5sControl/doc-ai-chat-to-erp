@@ -13,10 +13,20 @@ part 'shared_links_event.dart';
 part 'shared_links_state.dart';
 part 'shared_links_bloc.g.dart';
 
+final initialSummary = SummaryData(
+    status: SummaryStatus.Complete,
+    date: DateTime.now(),
+    title: 'Summify',
+    imageUrl: null,
+    summary:
+        "What should you know about Summify? \n\nIn today's fast-paced world, where information overload is a common concern, the ability to quickly grasp the essence of a piece of content is invaluable. Enter Summify, a revolutionary mobile application designed to simplify and enhance the way we consume and share information. \nSummify is more than just a summarization tool; it's a comprehensive solution that offers a myriad of features to cater to diverse user needs. Let's delve into the intricacies of Summify's core functionalities:\n\n 1. Share and Summarize from Any Resource:        Summify's intuitive interface allows users to share content from any online resource, including webpages, articles, and blog posts. Simply copy the URL of the desired content and paste it into Summify. The app will process the information, condensing it into a succinct summary that captures the key ");
+
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   // static var textCounter = 1;
   SharedLinksBloc()
-      : super(const SharedLinksState(savedLinks: {}, textCounter: 1)) {
+      : super(SharedLinksState(savedLinks: {
+          'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
+        }, textCounter: 1)) {
     const duration = Duration(seconds: 90);
     BaseOptions options = BaseOptions(
         receiveDataWhenStatusError: true,
