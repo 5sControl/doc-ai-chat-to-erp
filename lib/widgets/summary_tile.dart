@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:animate_gradient/animate_gradient.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -202,21 +199,38 @@ class _SummaryTileState extends State<SummaryTile> {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(fontSize: 12),
                             ),
-                            if (widget.summaryData.status ==
-                                SummaryStatus.Loading)
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  const Loader(),
-                                  IconButton(
-                                      onPressed: onPressCancel,
-                                      iconSize: 20,
-                                      visualDensity: VisualDensity.compact,
-                                      padding: EdgeInsets.zero,
-                                      icon: const Icon(Icons.stop_circle_outlined))
-                                ],
-                              )
+                            AnimatedCrossFade(
+                                firstChild: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        const Loader(),
+                                        IconButton(
+                                            onPressed: onPressCancel,
+                                            iconSize: 25,
+                                            visualDensity:
+                                                VisualDensity.compact,
+                                            padding: EdgeInsets.zero,
+                                            icon: const Icon(
+                                                Icons.stop_circle_outlined))
+                                      ],
+                                    ),
+                                    const Text(
+                                      'Loading...     ',
+                                      style: TextStyle(fontSize: 12, height: -1),
+                                    )
+                                  ],
+                                ),
+                                secondChild: Container(),
+                                crossFadeState: widget.summaryData.status ==
+                                        SummaryStatus.Loading
+                                    ? CrossFadeState.showFirst
+                                    : CrossFadeState.showSecond,
+                                duration: duration)
                           ],
                         ),
                       ),
@@ -256,27 +270,17 @@ class Loader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Container(
-            height: 10,
-            width: double.infinity,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                color: Colors.teal.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(10)),
-            child: const LinearProgressIndicator(
-              // value: controller.value,
-              color: Colors.teal,
-              backgroundColor: Colors.white,
-            ),
-          ),
-          const Text(
-            'Loading',
-            style: TextStyle(fontSize: 12),
-          )
-        ],
+    return Flexible(
+      child: Container(
+        height: 10,
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+            color: Colors.teal.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(10)),
+        child: const LinearProgressIndicator(
+          color: Colors.teal,
+          backgroundColor: Colors.white,
+        ),
       ),
     );
   }
