@@ -24,9 +24,8 @@ class SummaryTile extends StatefulWidget {
 }
 
 class _SummaryTileState extends State<SummaryTile> {
-  bool tapped = false;
-
   static const duration = Duration(milliseconds: 200);
+  bool tapped = false;
 
   void onTapDown() {
     setState(() {
@@ -221,7 +220,8 @@ class _SummaryTileState extends State<SummaryTile> {
                                     ),
                                     const Text(
                                       'Loading...     ',
-                                      style: TextStyle(fontSize: 12, height: -1),
+                                      style:
+                                          TextStyle(fontSize: 12, height: -1),
                                     )
                                   ],
                                 ),
@@ -239,16 +239,17 @@ class _SummaryTileState extends State<SummaryTile> {
                       child: widget.summaryData.status == SummaryStatus.Error
                           ? Column(
                               mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 IconButton(
                                     tooltip: 'Retry',
                                     onPressed: onPressRetry,
                                     highlightColor: Colors.teal,
+                                    padding: EdgeInsets.all(10),
                                     icon: SvgPicture.asset(
                                       Assets.icons.update,
-                                      height: 20,
-                                      width: 20,
+                                      height: 25,
+                                      width: 25,
                                     )),
                               ],
                             )

@@ -62,7 +62,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       // emit(state.copyWith(savedLinks: summaryMap));
       emit(state.copyWith(savedLinks: summaryMap));
       final response = await dio.post(
-          'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
+          'http://51.159.179.125:8001/application_by_summarize/',
           data: {
             'url': event.sharedLink,
             'context': '',
@@ -108,7 +108,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       });
       emit(state.copyWith(savedLinks: summaryMap));
       final response = await dio.post(
-          'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/',
+          'http://51.159.179.125:8001/application_by_summarize/',
           data: {
             'url': '',
             'context': event.text,
@@ -153,7 +153,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       });
       emit(state.copyWith(savedLinks: summaryMap));
       final response = await dio.post(
-          'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/',
+          'http://51.159.179.125:8001/application_by_summarize/uploadfile/',
           options: Options(
             followRedirects: false,
             validateStatus: (status) => true,
