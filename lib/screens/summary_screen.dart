@@ -164,7 +164,6 @@ class SummaryScreen extends StatelessWidget {
     }
 
     void onPressLink() async {
-      print('object');
       final Uri url = Uri.parse(sharedLink);
       if (!await launchUrl(url)) {}
     }

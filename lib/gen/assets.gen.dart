@@ -36,6 +36,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home_filled.svg
   String get homeFilled => 'assets/icons/home_filled.svg';
 
+  /// File path: assets/icons/info.svg
+  String get info => 'assets/icons/info.svg';
+
   /// File path: assets/icons/logo.svg
   String get logo => 'assets/icons/logo.svg';
 
@@ -73,6 +76,7 @@ class $AssetsIconsGen {
         google,
         home,
         homeFilled,
+        info,
         logo,
         noImage,
         paste,
