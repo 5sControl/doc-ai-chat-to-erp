@@ -142,10 +142,15 @@ class MyTextField extends StatelessWidget {
                               color:
                                   Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
                         ),
-                        label: const Text(
-                          'Start typing or paste your content here ...',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w300),
+                        label: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
+                          height: double.infinity,
+                          child: const Text(
+                            'Start typing or paste your content here ...',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w300),
+                          ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 0),

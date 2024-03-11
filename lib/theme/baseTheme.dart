@@ -9,7 +9,8 @@ final baseTheme = ThemeData(
     titleTextStyle: TextStyle(
         color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
     // elevation: 10,
-    // shadowColor: Colors.black54,
+    shadowColor: Colors.transparent,
+    elevation: 0,
     iconTheme: IconThemeData(
       color: Colors.white, //change your color here
     ),

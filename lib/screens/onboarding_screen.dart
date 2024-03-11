@@ -57,61 +57,65 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const BackgroundGradient(),
-        Scaffold(
-          body: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-                left: 0,
-                right: 0,
-                top: MediaQuery.of(context).padding.top),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: PageView(
-                    physics: const ClampingScrollPhysics(),
-                    controller: _pageViewController,
-                    onPageChanged: _handlePageViewChanged,
-                    children: const [
-                      OnboardingScreen1(),
-                      OnboardingScreen2(),
-                      OnboardingScreen4(),
-                      OnboardingScreen3(),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: onPressContinue,
-                  child: Container(
-                    margin: const EdgeInsets.all(15),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(31, 188, 183, 1),
-                        borderRadius: BorderRadius.circular(8)),
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white),
+    return PopScope(
+      canPop: false,
+      child: Stack(
+        children: [
+          const BackgroundGradient(),
+          Scaffold(
+
+            body: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom,
+                  left: 0,
+                  right: 0,
+                  top: MediaQuery.of(context).padding.top),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: PageView(
+                      physics: const ClampingScrollPhysics(),
+                      controller: _pageViewController,
+                      onPageChanged: _handlePageViewChanged,
+                      children: const [
+                        OnboardingScreen1(),
+                        OnboardingScreen2(),
+                        OnboardingScreen4(),
+                        OnboardingScreen3(),
+                      ],
                     ),
                   ),
-                ),
-                PageIndicator(
-                  tabController: _tabController,
-                  currentPageIndex: _currentPageIndex,
-                ),
-              ],
+                  GestureDetector(
+                    onTap: onPressContinue,
+                    child: Container(
+                      margin: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                          color: const Color.fromRGBO(31, 188, 183, 1),
+                          borderRadius: BorderRadius.circular(8)),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'Continue',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  PageIndicator(
+                    tabController: _tabController,
+                    currentPageIndex: _currentPageIndex,
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -131,6 +135,7 @@ class OnboardingScreen1 extends StatelessWidget {
         const Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
           children: [
             Text('Welcome to Summify',
                 style: TextStyle(
@@ -162,7 +167,7 @@ class OnboardingScreen2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -187,7 +192,7 @@ class OnboardingScreen3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -212,7 +217,8 @@ class OnboardingScreen4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
