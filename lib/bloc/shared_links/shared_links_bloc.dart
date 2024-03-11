@@ -33,7 +33,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         connectTimeout: duration,
         receiveTimeout: duration);
     final dio = Dio(options);
-    CancelToken cancelToken = CancelToken();
+    // CancelToken cancelToken = CancelToken();
 
     dio.interceptors.add(
       InterceptorsWrapper(
@@ -59,19 +59,29 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             description: previewData.description,
             imageUrl: previewData.image?.url)
       });
-      // emit(state.copyWith(savedLinks: summaryMap));
       emit(state.copyWith(savedLinks: summaryMap));
-      final response = await dio.post(
-          'http://51.159.179.125:8001/application_by_summarize/',
-          data: {
-            'url': event.sharedLink,
-            'context': '',
-          },
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-          ),
-          cancelToken: cancelToken);
+      final response = await dio
+          .post(
+        'http://51.159.179.125:8001/application_by_summarize/',
+        data: {
+          'url': event.sharedLink,
+          'context': '',
+        },
+        options: Options(
+          followRedirects: false,
+          validateStatus: (status) => true,
+        ),
+        // cancelToken: cancelToken
+      )
+          .catchError((onError) {
+        summaryMap.addAll({
+          event.sharedLink: SummaryData(
+              status: SummaryStatus.Error, summary: null, date: DateTime.now())
+        });
+        emit(state.copyWith(
+          savedLinks: summaryMap,
+        ));
+      });
       print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
@@ -107,17 +117,28 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             status: SummaryStatus.Loading, summary: null, date: DateTime.now())
       });
       emit(state.copyWith(savedLinks: summaryMap));
-      final response = await dio.post(
-          'http://51.159.179.125:8001/application_by_summarize/',
-          data: {
-            'url': '',
-            'context': event.text,
-          },
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-          ),
-          cancelToken: cancelToken);
+      final response = await dio
+          .post(
+        'http://51.159.179.125:8001/application_by_summarize/',
+        data: {
+          'url': '',
+          'context': event.text,
+        },
+        options: Options(
+          followRedirects: false,
+          validateStatus: (status) => true,
+        ),
+        // cancelToken: cancelToken
+      )
+          .catchError((onError) {
+        summaryMap.addAll({
+          title: SummaryData(
+              status: SummaryStatus.Error, summary: null, date: DateTime.now())
+        });
+        emit(state.copyWith(
+          savedLinks: summaryMap,
+        ));
+      });
       print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
@@ -152,14 +173,24 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             status: SummaryStatus.Loading, summary: null, date: DateTime.now())
       });
       emit(state.copyWith(savedLinks: summaryMap));
-      final response = await dio.post(
-          'http://51.159.179.125:8001/application_by_summarize/uploadfile/',
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-          ),
-          cancelToken: cancelToken,
-          data: formData);
+      final response = await dio
+          .post(
+              'http://51.159.179.125:8001/application_by_summarize/uploadfile/',
+              options: Options(
+                followRedirects: false,
+                validateStatus: (status) => true,
+              ),
+              // cancelToken: cancelToken,
+              data: formData)
+          .catchError((onError) {
+        summaryMap.addAll({
+          event.fileName: SummaryData(
+              status: SummaryStatus.Error, summary: null, date: DateTime.now())
+        });
+        emit(state.copyWith(
+          savedLinks: summaryMap,
+        ));
+      });
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
@@ -190,7 +221,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
 
     on<CancelRequest>((event, emit) {
       print('!!!!!!');
-      cancelToken.cancel("Cancel");
+      // cancelToken.cancel("Cancel");
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.forEach((key, value) {
         if (value.status == SummaryStatus.Loading) {
@@ -204,7 +235,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         }
       });
       emit(state.copyWith(savedLinks: summaryMap));
-      cancelToken = CancelToken();
+      // cancelToken = CancelToken();
     });
   }
 

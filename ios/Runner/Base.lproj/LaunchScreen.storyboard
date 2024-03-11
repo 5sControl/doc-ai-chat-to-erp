@@ -15,17 +15,28 @@
                         <viewControllerLayoutGuide type="top" id="Ydg-fD-yQy"/>
                         <viewControllerLayoutGuide type="bottom" id="xbc-2k-c8Z"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                    <view key="view" contentMode="scaleToFill" id="ujO-K3-T34">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Loader" translatesAutoresizingMaskIntoConstraints="NO" id="bZz-IQ-Pea">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="LaunchBackground" translatesAutoresizingMaskIntoConstraints="NO" id="7FL-GV-WfU">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="1" blue="0.96257095723508224" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </imageView>
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="Loader" translatesAutoresizingMaskIntoConstraints="NO" id="2fJ-wl-z9V">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="2fJ-wl-z9V" firstAttribute="leading" secondItem="ujO-K3-T34" secondAttribute="leading" id="260-Zf-L41"/>
+                            <constraint firstItem="7FL-GV-WfU" firstAttribute="leading" secondItem="ujO-K3-T34" secondAttribute="leading" id="OhY-05-8TD"/>
+                            <constraint firstAttribute="trailing" secondItem="2fJ-wl-z9V" secondAttribute="trailing" id="Pbb-7N-SiL"/>
+                            <constraint firstItem="2fJ-wl-z9V" firstAttribute="bottom" secondItem="ujO-K3-T34" secondAttribute="bottom" id="bxv-Mq-8s2"/>
+                            <constraint firstItem="7FL-GV-WfU" firstAttribute="bottom" secondItem="ujO-K3-T34" secondAttribute="bottom" id="cmK-wZ-H98"/>
+                            <constraint firstItem="7FL-GV-WfU" firstAttribute="top" secondItem="ujO-K3-T34" secondAttribute="top" id="eNR-26-HZe"/>
+                            <constraint firstItem="2fJ-wl-z9V" firstAttribute="top" secondItem="ujO-K3-T34" secondAttribute="top" id="jkg-f5-Ldj"/>
+                            <constraint firstAttribute="trailing" secondItem="7FL-GV-WfU" secondAttribute="trailing" id="xW5-a2-RAf"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -34,6 +45,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="LaunchBackground" width="1" height="1"/>
         <image name="Loader" width="750" height="1624"/>
     </resources>
 </document>
