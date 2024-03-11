@@ -72,7 +72,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(7),
+                padding: const EdgeInsets.all(3),
                 width: 35,
                 height: 35,
                 child: IconButton(
@@ -80,11 +80,12 @@ class HomeScreen extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   icon: SvgPicture.asset(
                     Assets.icons.info,
-                    height: 30,
-                    width: 30,
+                    height: 35,
+                    width: 35,
                     colorFilter: const ColorFilter.mode(
                         Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
                   ),
+                  // icon: Icon(Icons., color: Colors.black,),
                 ),
               )
             ],
