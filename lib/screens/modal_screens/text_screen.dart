@@ -146,7 +146,7 @@ class MyTextField extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 7),
                           height: double.infinity,
                           child: const Text(
-                            'Start typing or paste your content here ...',
+                            'Start typing or paste your text here ...',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w300),
