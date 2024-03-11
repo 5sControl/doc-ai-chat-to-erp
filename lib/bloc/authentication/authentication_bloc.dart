@@ -25,7 +25,7 @@ class AuthenticationBloc
                 displayName: user.displayName,
                 email: user.email,
                 id: user.uid)));
-        print('User is signed in!');
+        // print('User is signed in!');
       }
     });
 
@@ -41,7 +41,7 @@ class AuthenticationBloc
               user: null, status: AuthenticationStatus.unauthenticated));
         }
       } catch (e) {
-        print(e.toString());
+        // print(e.toString());
       }
     });
 
@@ -61,7 +61,7 @@ class AuthenticationBloc
           // emit(const AuthenticationFailureState('create user failed'));
         }
       } catch (e) {
-        print(e.toString());
+        // print(e.toString());
       }
     });
 
@@ -81,7 +81,7 @@ class AuthenticationBloc
           // emit(const AuthenticationFailureState('create user failed'));
         }
       } catch (e) {
-        print(e.toString());
+        // print(e.toString());
       }
     });
 
@@ -90,7 +90,7 @@ class AuthenticationBloc
       try {
         authService.signOutUser();
       } catch (e) {
-        print('error');
+        // print('error');
       }
       emit(const AuthenticationState(
           user: null, status: AuthenticationStatus.unauthenticated));

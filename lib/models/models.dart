@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:json_annotation/json_annotation.dart';
 

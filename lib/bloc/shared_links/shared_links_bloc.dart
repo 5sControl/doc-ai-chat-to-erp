@@ -82,7 +82,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           savedLinks: summaryMap,
         ));
       });
-      print(response);
+      // print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
@@ -98,7 +98,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         });
         emit(state.copyWith(savedLinks: summaryMap));
       } else {
-        print('error');
+        // print('error');
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
         summaryMap.addAll({
           event.sharedLink: SummaryData(
@@ -139,7 +139,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           savedLinks: summaryMap,
         ));
       });
-      print(response);
+      // print(response);
       if (response.statusCode == 200) {
         final summary = Summary.fromJson(response.data);
         final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
@@ -220,7 +220,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
     });
 
     on<CancelRequest>((event, emit) {
-      print('!!!!!!');
+      // print('!!!!!!');
       // cancelToken.cancel("Cancel");
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.forEach((key, value) {
