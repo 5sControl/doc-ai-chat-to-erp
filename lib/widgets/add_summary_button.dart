@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +25,7 @@ class AddSummaryButton extends StatelessWidget {
   const AddSummaryButton({super.key});
   static const XTypeGroup typeGroup = XTypeGroup(
     label: '',
-    extensions: <String>['txt', 'docx', 'pdf'],
+    extensions: <String>['txt', 'docx', 'pdf', 'doc', 'docx'],
     uniformTypeIdentifiers: <String>['public.data'],
   );
 
@@ -56,13 +58,30 @@ class AddSummaryButton extends StatelessWidget {
     }
 
     void onPressOpenFile() async {
-      final XFile? file =
-          await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-      if (file != null) {
-        context.read<SharedLinksBloc>().add(SaveFile(
-              fileName: file.name,
-              filePath: file.path,
-            ));
+      if (Platform.isIOS) {
+        final XFile? file =
+            await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+        if (file != null) {
+          context.read<SharedLinksBloc>().add(SaveFile(
+                fileName: file.name,
+                filePath: file.path,
+              ));
+        }
+      }
+
+      if (Platform.isAndroid) {
+        FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+        if (result != null) {
+          File file = File(result.files.single.path!);
+          String fileName = result.files.first.name;
+          context.read<SharedLinksBloc>().add(SaveFile(
+                fileName: fileName,
+                filePath: file.path,
+              ));
+        } else {
+          // User canceled the picker
+        }
       }
     }
 
@@ -166,7 +185,8 @@ class _AddButtonState extends State<AddButton> {
       child: AnimatedContainer(
         color: Colors.transparent,
         duration: duration,
-        padding: EdgeInsets.symmetric(horizontal: tapped ? 15 : 10, vertical: 2),
+        padding:
+            EdgeInsets.symmetric(horizontal: tapped ? 15 : 10, vertical: 2),
         child: Column(
           children: [
             Padding(

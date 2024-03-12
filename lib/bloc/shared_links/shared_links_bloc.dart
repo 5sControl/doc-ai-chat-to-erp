@@ -166,7 +166,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         "file": await MultipartFile.fromFile(
           event.filePath,
           filename: event.fileName,
-        ),
+        )
       });
       summaryMap.addAll({
         event.fileName: SummaryData(
