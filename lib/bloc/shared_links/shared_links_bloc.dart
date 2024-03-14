@@ -1,4 +1,3 @@
-// import 'dart:convert';
 import 'dart:core';
 
 import 'package:dio/dio.dart';
@@ -120,53 +119,16 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
     on<SaveText>((event, emit) async {
       final index = state.textCounter;
       final title = "My text ($index)";
-      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
-      summaryMap.addAll({
-        title: SummaryData(
-            status: SummaryStatus.Loading, summary: null, date: DateTime.now())
-      });
-      emit(state.copyWith(savedLinks: summaryMap));
-      final response = await dio
-          .post(
-        'http://51.159.179.125:8001/application_by_summarize/',
-        data: {
-          'url': '',
-          'context': event.text,
-        },
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-        ),
-        // cancelToken: cancelToken
-      )
-          .catchError((onError) {
-        summaryMap.addAll({
-          title: SummaryData(
-              status: SummaryStatus.Error, summary: null, date: DateTime.now())
-        });
-        emit(state.copyWith(
-          savedLinks: summaryMap,
-        ));
-      });
-      // print(response);
-      if (response.statusCode == 200) {
-        final summary = Summary.fromJson(response.data);
-        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
-        summaryMap.addAll({
-          title: SummaryData(
-              status: SummaryStatus.Complete,
-              date: DateTime.now(),
-              summary: summary.summary)
-        });
-        emit(state.copyWith(savedLinks: summaryMap, textCounter: index + 1));
+      startSummaryLoading(summaryLink: title);
+      final summary =
+          await summaryRepository.getSummaryFromText(textToSummify: event.text);
+      if (summary != null) {
+        setSummaryComplete(summaryLink: title, summary: summary);
       } else {
-        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
-        summaryMap.addAll({
-          title: SummaryData(
-              status: SummaryStatus.Error, summary: null, date: DateTime.now())
-        });
-        emit(state.copyWith(savedLinks: summaryMap, textCounter: index + 1));
+        setSummaryError(summaryLink: title);
       }
+
+      emit(state.copyWith(textCounter: index + 1));
     });
 
     on<SaveFile>((event, emit) async {

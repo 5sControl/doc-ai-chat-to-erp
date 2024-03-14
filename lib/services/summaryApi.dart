@@ -22,6 +22,19 @@ class SummaryApiRepository {
       return null;
     }
   }
+
+  Future<Summary?> getFromText({required String textToSummify}) async {
+    try {
+      Response response = await _dio.post(linkUrl, data: {
+        'url': '',
+        'context': textToSummify,
+      });
+      return Summary.fromJson(response.data);
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
 }
 
 class SummaryRepository {
@@ -29,6 +42,10 @@ class SummaryRepository {
 
   Future<Summary?> getSummaryFromLink({required String summaryLink}) {
     return _summaryRepository.getFromLink(summaryLink: summaryLink);
+  }
+
+  Future<Summary?> getSummaryFromText({required String textToSummify}) {
+    return _summaryRepository.getFromText(textToSummify: textToSummify);
   }
 }
 
