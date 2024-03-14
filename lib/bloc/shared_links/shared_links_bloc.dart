@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:summify/services/summaryApi.dart';
 
 import '../../models/models.dart';
 
@@ -42,69 +43,77 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         },
       ),
     );
+    final SummaryRepository summaryRepository = SummaryRepository();
 
-    on<SaveSharedLink>((event, emit) async {
+    void startSummaryLoading({required String summaryLink}) async {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.addAll({
-        event.sharedLink: SummaryData(
-            status: SummaryStatus.Loading, summary: null, date: DateTime.now())
-      });
-      final previewData = await getPreviewData(event.sharedLink);
-      summaryMap.addAll({
-        event.sharedLink: SummaryData(
+        summaryLink: SummaryData(
             status: SummaryStatus.Loading,
             summary: null,
             date: DateTime.now(),
-            title: previewData.title,
-            description: previewData.description,
-            imageUrl: previewData.image?.url)
+            imageUrl: state.savedLinks[summaryLink]?.imageUrl,
+            title: state.savedLinks[summaryLink]?.title)
       });
+
       emit(state.copyWith(savedLinks: summaryMap));
-      final response = await dio
-          .post(
-        'http://51.159.179.125:8001/application_by_summarize/',
-        data: {
-          'url': event.sharedLink,
-          'context': '',
-        },
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-        ),
-        // cancelToken: cancelToken
-      )
-          .catchError((onError) {
-        summaryMap.addAll({
-          event.sharedLink: SummaryData(
-              status: SummaryStatus.Error, summary: null, date: DateTime.now())
-        });
-        emit(state.copyWith(
-          savedLinks: summaryMap,
-        ));
-      });
-      // print(response);
-      if (response.statusCode == 200) {
-        final summary = Summary.fromJson(response.data);
-        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
-        final previewData = await getPreviewData(event.sharedLink);
-        summaryMap.addAll({
-          event.sharedLink: SummaryData(
-              status: SummaryStatus.Complete,
-              summary: summary.summary,
-              date: DateTime.now(),
-              title: previewData.title,
-              description: previewData.description,
-              imageUrl: previewData.image?.url)
-        });
-        emit(state.copyWith(savedLinks: summaryMap));
+    }
+
+    void getSummaryPreviewData(String summaryLink) async {
+      final previewData = await getPreviewData(summaryLink);
+      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+      summaryMap.update(
+          summaryLink,
+          (summary) => SummaryData(
+                status: SummaryStatus.Loading,
+                date: summary.date,
+                summary: summary.summary,
+                imageUrl: previewData.image?.url,
+                title: previewData.title,
+              ));
+      emit(state.copyWith(savedLinks: summaryMap));
+    }
+
+    void setSummaryComplete(
+        {required String summaryLink, required Summary summary}) {
+      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+      summaryMap.update(
+          summaryLink,
+          (value) => SummaryData(
+                status: SummaryStatus.Complete,
+                date: value.date,
+                summary: summary.summary,
+                imageUrl: value.imageUrl,
+                title: value.title,
+              ));
+      emit(state.copyWith(savedLinks: summaryMap));
+    }
+
+    void setSummaryError({required String summaryLink}) {
+      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+      summaryMap.update(
+          summaryLink,
+          (value) => SummaryData(
+                status: SummaryStatus.Complete,
+                date: value.date,
+                summary: null,
+                imageUrl: value.imageUrl,
+                title: value.title,
+              ));
+      emit(state.copyWith(savedLinks: summaryMap));
+    }
+
+    on<SaveSharedLink>((event, emit) async {
+      startSummaryLoading(summaryLink: event.sharedLink);
+      if (state.savedLinks[event.sharedLink]?.imageUrl == null) {
+        getSummaryPreviewData(event.sharedLink);
+      }
+      final summary = await summaryRepository.getSummaryFromLink(
+          summaryLink: event.sharedLink);
+      if (summary != null) {
+        setSummaryComplete(summaryLink: event.sharedLink, summary: summary);
       } else {
-        // print('error');
-        final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
-        summaryMap.addAll({
-          event.sharedLink: SummaryData(
-              status: SummaryStatus.Error, summary: null, date: DateTime.now())
-        });
-        emit(state.copyWith(savedLinks: summaryMap));
+        setSummaryError(summaryLink: event.sharedLink);
       }
     });
 

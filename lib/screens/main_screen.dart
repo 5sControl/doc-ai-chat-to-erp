@@ -21,10 +21,12 @@ class _MainScreenState extends State<MainScreen> {
   static final screens = [const HomeScreen(), AccountScreen()];
   int _selectedIndex = 0;
 
-  void saveLink(SharedMediaFile sharedItem) {
-    context
-        .read<SharedLinksBloc>()
-        .add(SaveSharedLink(sharedLink: sharedItem.path));
+  void saveLink(SharedMediaFile sharedItem) async {
+    Future.delayed(const Duration(milliseconds: 150), () {
+      context
+          .read<SharedLinksBloc>()
+          .add(SaveSharedLink(sharedLink: sharedItem.path));
+    });
     Navigator.of(context).pushNamed('/');
   }
 
