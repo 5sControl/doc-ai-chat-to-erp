@@ -65,4 +65,5 @@ const _$SummaryStatusEnumMap = {
   SummaryStatus.Loading: 'Loading',
   SummaryStatus.Complete: 'Complete',
   SummaryStatus.Error: 'Error',
+  SummaryStatus.Rejected: 'Rejected',
 };

@@ -61,7 +61,7 @@ class SummishareApp extends StatelessWidget {
           BlocProvider(create: (context) => SettingsBloc())
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
-          buildWhen: (previous, current) => true,
+          // buildWhen: (previous, current) => true,
           builder: (context, settingsState) {
             return MaterialApp(
               theme: baseTheme,

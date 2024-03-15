@@ -2,13 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:summify/models/models.dart';
 
 class SummaryApiRepository {
-  final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
+  // final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
+  // final String fileUrl =
+  //     "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
+  final String linkUrl =
+      "http://192.168.1.136:8000/application_by_summarize/";
   final String fileUrl =
-      "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
+      "http://192.168.1.136:8000/application_by_summarize/uploadfile/";
   final Dio _dio = Dio(
     BaseOptions(
-        connectTimeout: const Duration(seconds: 60),
-        receiveTimeout: const Duration(seconds: 60),
+        // connectTimeout: const Duration(seconds: 60),
+        // receiveTimeout: const Duration(seconds: 60),
         responseType: ResponseType.json),
   );
 
@@ -19,13 +23,18 @@ class SummaryApiRepository {
   Future<Summary?> getFromLink({required String summaryLink}) async {
     tokens.addAll({summaryLink: CancelToken()});
     try {
+      print('RES!!!!');
       Response response = await _dio.post(linkUrl,
           data: {
             'url': summaryLink,
             'context': '',
           },
           cancelToken: tokens[summaryLink]);
+      if(response != null)  {
+        print('GET DATA');
+      }
       return Summary.fromJson(response.data);
+
     } on DioException catch (e) {
       print(e);
       return null;

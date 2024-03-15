@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -23,9 +24,12 @@ final initialSummary = SummaryData(
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   // static var textCounter = 1;
   SharedLinksBloc()
-      : super(SharedLinksState(savedLinks: {
-          'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
-        }, textCounter: 1)) {
+      : super(SharedLinksState(
+            savedLinks: {
+              'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
+            },
+            textCounter: 1,
+            loadQueue: const {})) {
     final SummaryRepository summaryRepository = SummaryRepository();
 
     void startSummaryLoading({required String summaryLink}) async {
@@ -38,6 +42,14 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             imageUrl: state.savedLinks[summaryLink]?.imageUrl,
             title: state.savedLinks[summaryLink]?.title)
       });
+      summaryMap.update(
+          summaryLink,
+          (summary) => SummaryData(
+              status: SummaryStatus.Loading,
+              summary: null,
+              date: DateTime.now(),
+              imageUrl: state.savedLinks[summaryLink]?.imageUrl,
+              title: state.savedLinks[summaryLink]?.title));
 
       emit(state.copyWith(savedLinks: summaryMap));
     }
@@ -87,8 +99,9 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       emit(state.copyWith(savedLinks: summaryMap));
     }
 
-    on<SaveSharedLink>(
-      (event, emit) async {
+    on<SaveSharedLink>((event, emit) async {
+      if (state.savedLinks[event.sharedLink]?.status != SummaryStatus.Loading) {
+        print('SAVE EVENT');
         startSummaryLoading(summaryLink: event.sharedLink);
         if (state.savedLinks[event.sharedLink]?.imageUrl == null) {
           getSummaryPreviewData(event.sharedLink);
@@ -100,35 +113,35 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         } else {
           setSummaryError(summaryLink: event.sharedLink);
         }
-      },
-      // transformer: (events, mapper) {
-      //   print(events);
-      //   return null;
-      // },
-    );
+      }
+    });
 
     on<SaveText>((event, emit) async {
-      final index = state.textCounter;
-      final title = "My text ($index)";
-      startSummaryLoading(summaryLink: title);
-      final summary =
-          await summaryRepository.getSummaryFromText(textToSummify: event.text);
-      if (summary != null) {
-        setSummaryComplete(summaryLink: title, summary: summary);
-      } else {
-        setSummaryError(summaryLink: title);
+      if (state.savedLinks[event.text]?.status != SummaryStatus.Loading) {
+        final index = state.textCounter;
+        final title = "My text ($index)";
+        startSummaryLoading(summaryLink: title);
+        final summary = await summaryRepository.getSummaryFromText(
+            textToSummify: event.text);
+        if (summary != null) {
+          setSummaryComplete(summaryLink: title, summary: summary);
+        } else {
+          setSummaryError(summaryLink: title);
+        }
+        emit(state.copyWith(textCounter: index + 1));
       }
-      emit(state.copyWith(textCounter: index + 1));
     });
 
     on<SaveFile>((event, emit) async {
-      startSummaryLoading(summaryLink: event.fileName);
-      final summary = await summaryRepository.getSummaryFromFile(
-          filePath: event.filePath, fileName: event.fileName);
-      if (summary != null) {
-        setSummaryComplete(summaryLink: event.fileName, summary: summary);
-      } else {
-        setSummaryError(summaryLink: event.fileName);
+      if (state.savedLinks[event.fileName]?.status != SummaryStatus.Loading) {
+        startSummaryLoading(summaryLink: event.fileName);
+        final summary = await summaryRepository.getSummaryFromFile(
+            filePath: event.filePath, fileName: event.fileName);
+        if (summary != null) {
+          setSummaryComplete(summaryLink: event.fileName, summary: summary);
+        } else {
+          setSummaryError(summaryLink: event.fileName);
+        }
       }
     });
 
@@ -152,6 +165,12 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         }
       });
       emit(state.copyWith(savedLinks: summaryMap));
+    });
+
+    on<AddToQueue>((event, emit) {
+      final Set<String> newQueue = Set.from(state.loadQueue);
+      newQueue.add(event.sharedLink);
+      emit(state.copyWith(loadQueue: newQueue));
     });
   }
 

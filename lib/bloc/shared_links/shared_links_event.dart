@@ -19,7 +19,7 @@ class SaveSharedLink extends SharedLinksEvent {
   const SaveSharedLink({required this.sharedLink});
 
   @override
-  List<String?> get props => [sharedLink];
+  List<String> get props => [sharedLink];
 }
 
 class SaveText extends SharedLinksEvent {
@@ -54,4 +54,12 @@ class CancelRequest extends SharedLinksEvent {
 
   @override
   List<String?> get props => [];
+}
+
+class AddToQueue extends SharedLinksEvent {
+  final String sharedLink;
+  const AddToQueue({required this.sharedLink});
+
+  @override
+  List<String?> get props => [sharedLink];
 }

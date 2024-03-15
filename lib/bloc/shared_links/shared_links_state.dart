@@ -1,29 +1,29 @@
 part of 'shared_links_bloc.dart';
 
-
-
 @JsonSerializable()
 class SharedLinksState extends Equatable {
-  // final List<SharedMediaItem> savedSharedLinks;
   final Map<String, SummaryData> savedLinks;
   final int textCounter;
+  final Set<String> loadQueue;
 
-  const SharedLinksState({required this.savedLinks, required this.textCounter});
+  const SharedLinksState(
+      {required this.savedLinks,
+      required this.textCounter,
+      required this.loadQueue});
 
   SharedLinksState copyWith({
-    // List<SharedMediaItem>? savedSharedLinks,
     Map<String, SummaryData>? savedLinks,
-    int? textCounter
-    // String? loadingLink,
+    int? textCounter,
+    Set<String>? loadQueue,
   }) {
     return SharedLinksState(
-        // savedSharedLinks: savedSharedLinks ?? this.savedSharedLinks,
+        loadQueue: loadQueue ?? this.loadQueue,
         textCounter: textCounter ?? this.textCounter,
         savedLinks: savedLinks ?? this.savedLinks);
   }
 
   @override
-  List<Object> get props => [savedLinks];
+  List<Object> get props => [savedLinks, loadQueue];
 
   factory SharedLinksState.fromJson(Map<String, dynamic> json) =>
       _$SharedLinksStateFromJson(json);

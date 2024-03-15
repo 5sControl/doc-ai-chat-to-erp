@@ -21,12 +21,10 @@ class _MainScreenState extends State<MainScreen> {
   static final screens = [const HomeScreen(), AccountScreen()];
   int _selectedIndex = 0;
 
-  void saveLink(SharedMediaFile sharedItem) async {
-    Future.delayed(const Duration(milliseconds: 150), () {
-      context
-          .read<SharedLinksBloc>()
-          .add(SaveSharedLink(sharedLink: sharedItem.path));
-    });
+  void saveLink(String summaryLink) async {
+    context
+        .read<SharedLinksBloc>()
+        .add(SaveSharedLink(sharedLink: summaryLink));
     Navigator.of(context).pushNamed('/');
   }
 
@@ -38,10 +36,9 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         _selectedIndex = 0;
       });
-      for (var sharedItem in value) {
-        saveLink(sharedItem);
+      if (value.isNotEmpty) {
+        saveLink(value.first.path);
       }
-      // Navigator.of(context).pushNamed('/');
     }, onError: (err) {
       print("getIntentDataStream error: $err");
     });
@@ -51,8 +48,8 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         _selectedIndex = 0;
       });
-      for (var sharedItem in value) {
-        saveLink(sharedItem);
+      if (value.isNotEmpty) {
+        saveLink(value.first.path);
       }
       ReceiveSharingIntent.reset();
     });
