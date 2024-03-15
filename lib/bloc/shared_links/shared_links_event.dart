@@ -49,7 +49,8 @@ class DeleteSharedLink extends SharedLinksEvent {
 }
 
 class CancelRequest extends SharedLinksEvent {
-  const CancelRequest();
+  final String? sharedLink;
+  const CancelRequest({this.sharedLink});
 
   @override
   List<String?> get props => [];

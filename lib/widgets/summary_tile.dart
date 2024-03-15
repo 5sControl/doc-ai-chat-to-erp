@@ -75,7 +75,9 @@ class _SummaryTileState extends State<SummaryTile> {
     }
 
     void onPressCancel() {
-      context.read<SharedLinksBloc>().add(const CancelRequest());
+      context
+          .read<SharedLinksBloc>()
+          .add(CancelRequest(sharedLink: widget.sharedLink));
     }
 
     return Dismissible(

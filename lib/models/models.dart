@@ -67,7 +67,7 @@ class SummaryData {
   Map<String, dynamic> toJson() => _$SummaryDataToJson(this);
 }
 
-enum SummaryStatus { Loading, Complete, Error }
+enum SummaryStatus { Loading, Complete, Error, Rejected }
 
 class UserModel {
   final String? id;

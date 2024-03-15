@@ -3,6 +3,8 @@ import 'package:summify/models/models.dart';
 
 class SummaryApiRepository {
   final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
+  final String fileUrl =
+      "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
   final Dio _dio = Dio(
     BaseOptions(
         connectTimeout: const Duration(seconds: 60),
@@ -10,13 +12,23 @@ class SummaryApiRepository {
         responseType: ResponseType.json),
   );
 
+  final Map<String, CancelToken> tokens = {};
+
+  void canselRequest({required String canselItem}) {}
+
   Future<Summary?> getFromLink({required String summaryLink}) async {
+    tokens.addAll({summaryLink: CancelToken()});
     try {
-      Response response = await _dio.post(linkUrl, data: {
-        'url': summaryLink,
-        'context': '',
-      });
+      Response response = await _dio.post(linkUrl,
+          data: {
+            'url': summaryLink,
+            'context': '',
+          },
+          cancelToken: tokens[summaryLink]);
       return Summary.fromJson(response.data);
+    } on DioException catch (e) {
+      print(e);
+      return null;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;
@@ -30,6 +42,31 @@ class SummaryApiRepository {
         'context': textToSummify,
       });
       return Summary.fromJson(response.data);
+    } on DioException catch (e) {
+      print(e);
+      return null;
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return null;
+    }
+  }
+
+  Future<Summary?> getFromFile(
+      {required String fileName, required String filePath}) async {
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        filePath,
+        filename: fileName,
+      )
+    });
+
+    try {
+      Response response = await _dio.post(fileUrl, data: formData);
+      print(response.data);
+      return Summary.fromJson(response.data);
+    } on DioException catch (e) {
+      print(e);
+      return null;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       return null;
@@ -47,65 +84,10 @@ class SummaryRepository {
   Future<Summary?> getSummaryFromText({required String textToSummify}) {
     return _summaryRepository.getFromText(textToSummify: textToSummify);
   }
-}
 
-// class Paths {
-//   static String linkUrl =
-//       "http://51.159.179.125:8001/application_by_summarize/";
-// }
-//
-// class DioClient {
-//   DioClient._();
-//
-//   static final instance = DioClient._();
-//
-//   factory DioClient() {
-//     return instance;
-//   }
-//
-//   final Dio _dio = Dio(
-//     BaseOptions(
-//         baseUrl: Paths.linkUrl,
-//         connectTimeout: const Duration(seconds: 60),
-//         receiveTimeout: const Duration(seconds: 60),
-//         responseType: ResponseType.json),
-//   );
-//
-//   Future<Map<String, dynamic>> getSummaryFromUrl(String summaryLink,
-//       {Map<String, dynamic>? queryParameters,
-//       Options? options,
-//       CancelToken? cancelToken,
-//       ProgressCallback? onReceiveProgress}) async {
-//     try {
-//       final Response response = await _dio.get(Paths.linkUrl,
-//           queryParameters: queryParameters,
-//           options: options,
-//           cancelToken: cancelToken,
-//           onReceiveProgress: onReceiveProgress,
-//           data: {
-//             'url': summaryLink,
-//             'context': '',
-//           });
-//       if (response.statusCode == 200) {
-//         return response.data;
-//       }
-//       throw "something went wrong";
-//     } catch (e) {
-//       rethrow;
-//     }
-//   }
-// }
-//
-// class SummaryService {
-//   Future<Summary?> getSummaryFromUrl(String summaryLink) async {
-//     try {
-//       final response = await DioClient.instance.getSummaryFromUrl(summaryLink);
-//       final user = Summary.fromJson(response["data"]);
-//       return user;
-//     } on DioException catch (e) {
-//       // var error = DioErrors(e);
-//       // throw error.errorMessage;
-//       return null;
-//     }
-//   }
-// }
+  Future<Summary?> getSummaryFromFile(
+      {required String fileName, required String filePath}) {
+    return _summaryRepository.getFromFile(
+        fileName: fileName, filePath: filePath);
+  }
+}
