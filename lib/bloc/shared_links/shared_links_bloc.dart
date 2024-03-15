@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -117,9 +116,10 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
     });
 
     on<SaveText>((event, emit) async {
-      if (state.savedLinks[event.text]?.status != SummaryStatus.Loading) {
-        final index = state.textCounter;
-        final title = "My text ($index)";
+      final index = state.textCounter;
+      final title = "My text ($index)";
+      emit(state.copyWith(textCounter: index + 1));
+      if (state.savedLinks[title]?.status != SummaryStatus.Loading) {
         startSummaryLoading(summaryLink: title);
         final summary = await summaryRepository.getSummaryFromText(
             textToSummify: event.text);
@@ -128,7 +128,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         } else {
           setSummaryError(summaryLink: title);
         }
-        emit(state.copyWith(textCounter: index + 1));
       }
     });
 

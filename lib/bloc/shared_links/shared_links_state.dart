@@ -23,7 +23,7 @@ class SharedLinksState extends Equatable {
   }
 
   @override
-  List<Object> get props => [savedLinks, loadQueue];
+  List<Object> get props => [savedLinks, loadQueue, textCounter];
 
   factory SharedLinksState.fromJson(Map<String, dynamic> json) =>
       _$SharedLinksStateFromJson(json);

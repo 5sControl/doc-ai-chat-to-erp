@@ -2,13 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:summify/models/models.dart';
 
 class SummaryApiRepository {
-  // final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
-  // final String fileUrl =
-  //     "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
-  final String linkUrl =
-      "http://192.168.1.136:8000/application_by_summarize/";
+  final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
   final String fileUrl =
-      "http://192.168.1.136:8000/application_by_summarize/uploadfile/";
+      "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
+  // final String linkUrl =
+  //     "http://192.168.1.136:8000/application_by_summarize/";
+  // final String fileUrl =
+  //     "http://192.168.1.136:8000/application_by_summarize/uploadfile/";
   final Dio _dio = Dio(
     BaseOptions(
         // connectTimeout: const Duration(seconds: 60),
