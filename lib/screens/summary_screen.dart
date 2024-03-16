@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -93,12 +95,13 @@ class SummaryScreen extends StatelessWidget {
             ),
             Expanded(
               child: Stack(
-                fit: StackFit.loose,
+                fit: StackFit.expand,
                 alignment: Alignment.bottomCenter,
                 children: [
                   Animate(
                     effects: effects,
                     child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
                         padding: const EdgeInsets.only(
                             left: 15, right: 15, bottom: 110, top: 10),
                         child: StyledText(
@@ -113,24 +116,31 @@ class SummaryScreen extends StatelessWidget {
                           },
                         )),
                   ),
-                  Container(
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [
-                              Color.fromRGBO(223, 252, 252, 1),
-                              Color.fromRGBO(223, 252, 252, 0),
-                            ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            stops: [
-                              0.3,
-                              1,
-                            ])),
-                    padding: const EdgeInsets.all(15),
-                    child: ShareAndCopyButton(
-                      sharedLink: sharedLink,
-                      summaryData: summaryData,
-                    ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        // transformAlignment: Alignment.bottomCenter,
+                        decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                                  Color.fromRGBO(223, 252, 252, 1),
+                                  Color.fromRGBO(223, 252, 252, 0),
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                stops: [
+                                  0.3,
+                                  1,
+                                ])),
+                        padding: const EdgeInsets.all(15),
+                        child: ShareAndCopyButton(
+                          sharedLink: sharedLink,
+                          summaryData: summaryData,
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),

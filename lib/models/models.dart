@@ -21,10 +21,10 @@ class SharedMediaItem extends SharedMediaFile {
 
 @JsonSerializable()
 class Summary {
-  final String summary;
-  final String? error;
+  final String? summary;
+  final String? summaryError;
 
-  const Summary({required this.summary, this.error});
+  const Summary({required this.summary, this.summaryError});
 
   factory Summary.fromJson(Map<String, dynamic> json) =>
       _$SummaryFromJson(json);
@@ -40,15 +40,16 @@ class SummaryData {
   final String? imageUrl;
   final String? title;
   final String? description;
+  final String? error;
 
-  SummaryData({
-    required this.status,
-    required this.date,
-    this.summary,
-    this.imageUrl,
-    this.title,
-    this.description,
-  });
+  SummaryData(
+      {required this.status,
+      required this.date,
+      this.summary,
+      this.imageUrl,
+      this.title,
+      this.description,
+      this.error});
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
       _$SummaryDataFromJson(json);

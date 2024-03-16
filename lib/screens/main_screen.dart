@@ -31,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<SharedLinksBloc>().add(const CancelRequest());
+    // context.read<SharedLinksBloc>().add(const CancelRequest());
     _intentSub = ReceiveSharingIntent.getMediaStream().listen((value) {
       setState(() {
         _selectedIndex = 0;

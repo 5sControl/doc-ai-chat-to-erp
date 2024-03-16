@@ -62,6 +62,8 @@ class _SummaryTileState extends State<SummaryTile> {
       });
     }
 
+    print(widget.summaryData.status);
+
     void onPressRetry() {
       context
           .read<SharedLinksBloc>()
@@ -227,7 +229,12 @@ class _SummaryTileState extends State<SummaryTile> {
                                     )
                                   ],
                                 ),
-                                secondChild: Container(),
+                                secondChild: widget.summaryData.error != null
+                                    ? ErrorMessage(
+                                        error: widget.summaryData.error!,
+                                        onPressRetry: onPressRetry,
+                                      )
+                                    : Container(),
                                 crossFadeState: widget.summaryData.status ==
                                         SummaryStatus.Loading
                                     ? CrossFadeState.showFirst
@@ -237,26 +244,26 @@ class _SummaryTileState extends State<SummaryTile> {
                         ),
                       ),
                     ),
-                    Container(
-                      child: widget.summaryData.status == SummaryStatus.Error
-                          ? Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                    tooltip: 'Retry',
-                                    onPressed: onPressRetry,
-                                    highlightColor: Colors.teal,
-                                    padding: EdgeInsets.all(10),
-                                    icon: SvgPicture.asset(
-                                      Assets.icons.update,
-                                      height: 25,
-                                      width: 25,
-                                    )),
-                              ],
-                            )
-                          : Container(),
-                    )
+                    // Container(
+                    //   child: widget.summaryData.status == SummaryStatus.Error
+                    //       ? Column(
+                    //           mainAxisSize: MainAxisSize.max,
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           children: [
+                    //             IconButton(
+                    //                 tooltip: 'Retry',
+                    //                 onPressed: onPressRetry,
+                    //                 highlightColor: Colors.teal,
+                    //                 padding: EdgeInsets.all(10),
+                    //                 icon: SvgPicture.asset(
+                    //                   Assets.icons.update,
+                    //                   height: 25,
+                    //                   width: 25,
+                    //                 )),
+                    //           ],
+                    //         )
+                    //       : Container(),
+                    // )
                   ],
                 ),
               ),
@@ -264,6 +271,45 @@ class _SummaryTileState extends State<SummaryTile> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ErrorMessage extends StatelessWidget {
+  final String error;
+  final VoidCallback onPressRetry;
+  const ErrorMessage(
+      {super.key, required this.error, required this.onPressRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+                child: Text(
+              'Summarize error: $error',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 12, height: 1),
+            )),
+            IconButton(
+                tooltip: 'Retry',
+                onPressed: onPressRetry,
+                highlightColor: Colors.teal,
+                padding: const EdgeInsets.all(10),
+                icon: SvgPicture.asset(
+                  Assets.icons.update,
+                  height: 25,
+                  width: 25,
+                )),
+          ],
+        ),
+      ],
     );
   }
 }

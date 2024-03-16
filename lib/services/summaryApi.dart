@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:summify/models/models.dart';
 
@@ -12,7 +14,7 @@ class SummaryApiRepository {
     BaseOptions(responseType: ResponseType.json),
   );
 
-  Future<Summary?> getFromLink({required String summaryLink}) async {
+  Future<Summary> getFromLink({required String summaryLink}) async {
     try {
       Response response = await _dio.post(
         linkUrl,
@@ -21,21 +23,17 @@ class SummaryApiRepository {
           'context': '',
         },
       );
-      if (response.statusCode == 200) {
-        return Summary.fromJson(response.data);
-      }
+      return Summary.fromJson(response.data);
     } on DioException catch (e) {
-      print(e.response?.data);
-      print(e.response?.statusCode);
-      return null;
+      return Summary(
+          summary: null,
+          summaryError: e.response?.data['detail'] ?? 'Some Error');
     } catch (error, stacktrace) {
-      print('eee');
-      print("Exception occured: $error stackTrace: $stacktrace");
-      return null;
+      return const Summary(summary: null, summaryError: 'Loading error');
     }
   }
 
-  Future<Summary?> getFromText({required String textToSummify}) async {
+  Future<Summary> getFromText({required String textToSummify}) async {
     try {
       Response response = await _dio.post(linkUrl, data: {
         'url': '',
@@ -43,15 +41,15 @@ class SummaryApiRepository {
       });
       return Summary.fromJson(response.data);
     } on DioException catch (e) {
-      print(e);
-      return null;
+      return Summary(
+          summary: null,
+          summaryError: e.response?.data['detail'] ?? 'Some Error');
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
-      return null;
+      return const Summary(summary: null, summaryError: 'Loading error');
     }
   }
 
-  Future<Summary?> getFromFile(
+  Future<Summary> getFromFile(
       {required String fileName, required String filePath}) async {
     FormData formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(
@@ -62,14 +60,13 @@ class SummaryApiRepository {
 
     try {
       Response response = await _dio.post(fileUrl, data: formData);
-      print(response.data);
       return Summary.fromJson(response.data);
     } on DioException catch (e) {
-      print(e);
-      return null;
+      return Summary(
+          summary: null,
+          summaryError: e.response?.data['detail'] ?? 'Some Error');
     } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
-      return null;
+      return const Summary(summary: null, summaryError: 'Loading error');
     }
   }
 }
@@ -77,15 +74,15 @@ class SummaryApiRepository {
 class SummaryRepository {
   final SummaryApiRepository _summaryRepository = SummaryApiRepository();
 
-  Future<Summary?> getSummaryFromLink({required String summaryLink}) {
+  Future<Summary> getSummaryFromLink({required String summaryLink}) {
     return _summaryRepository.getFromLink(summaryLink: summaryLink);
   }
 
-  Future<Summary?> getSummaryFromText({required String textToSummify}) {
+  Future<Summary> getSummaryFromText({required String textToSummify}) {
     return _summaryRepository.getFromText(textToSummify: textToSummify);
   }
 
-  Future<Summary?> getSummaryFromFile(
+  Future<Summary> getSummaryFromFile(
       {required String fileName, required String filePath}) {
     return _summaryRepository.getFromFile(
         fileName: fileName, filePath: filePath);

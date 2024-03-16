@@ -44,8 +44,19 @@ void main() async {
   runApp(const SummishareApp());
 }
 
-class SummishareApp extends StatelessWidget {
+class SummishareApp extends StatefulWidget {
   const SummishareApp({super.key});
+
+  @override
+  State<SummishareApp> createState() => _SummishareAppState();
+}
+
+class _SummishareAppState extends State<SummishareApp> {
+  @override
+  void dispose() {
+    // context.read<SharedLinksBloc>().add(const CancelRequest());
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

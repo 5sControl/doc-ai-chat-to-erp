@@ -35,11 +35,13 @@ const _$SharedMediaTypeEnumMap = {
 };
 
 Summary _$SummaryFromJson(Map<String, dynamic> json) => Summary(
-      summary: json['summary'] as String,
+      summary: json['summary'] as String?,
+      summaryError: json['summaryError'] as String?,
     );
 
 Map<String, dynamic> _$SummaryToJson(Summary instance) => <String, dynamic>{
       'summary': instance.summary,
+      'summaryError': instance.summaryError,
     };
 
 SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
@@ -49,6 +51,7 @@ SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
       imageUrl: json['imageUrl'] as String?,
       title: json['title'] as String?,
       description: json['description'] as String?,
+      error: json['error'] as String?,
     );
 
 Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
@@ -59,6 +62,7 @@ Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
       'imageUrl': instance.imageUrl,
       'title': instance.title,
       'description': instance.description,
+      'error': instance.error,
     };
 
 const _$SummaryStatusEnumMap = {
