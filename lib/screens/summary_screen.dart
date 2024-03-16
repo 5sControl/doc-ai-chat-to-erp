@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:styled_text/tags/styled_text_tag.dart';
@@ -13,121 +14,6 @@ import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../models/models.dart';
 import '../widgets/backgroung_gradient.dart';
-
-// class SummaryScreen extends StatefulWidget {
-//   final SummaryData summaryData;
-//   final String displayLink;
-//   final String formattedDate;
-//   final String sharedLink;
-//   const SummaryScreen(
-//       {super.key,
-//       required this.summaryData,
-//       required this.formattedDate,
-//       required this.sharedLink,
-//       required this.displayLink});
-//
-//   @override
-//   State<SummaryScreen> createState() => _SummaryScreenState();
-// }
-//
-// class _SummaryScreenState extends State<SummaryScreen> {
-//   late ScrollController _controller;
-//   bool sliverActionsHidden = true;
-//   double expanded = 0;
-//
-//   double _calculateExpandRatio(double offset) {
-//     var expandRatio = offset / 150;
-//     if (expandRatio > 1.0) expandRatio = 1.0;
-//     if (expandRatio < 0.0) expandRatio = 0.0;
-//     return expandRatio;
-//   }
-//
-//   void _scrollListener() {
-//     setState(() {
-//       expanded = _calculateExpandRatio(_controller.offset);
-//     });
-//   }
-//
-//   @override
-//   void initState() {
-//     _controller = ScrollController();
-//     _controller.addListener(_scrollListener);
-//     super.initState();
-//   }
-//
-//   @override
-//   void dispose() {
-//     super.dispose();
-//     _controller.removeListener(_scrollListener);
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     void onPressDelete() {
-//       Navigator.of(context).pop();
-//       context
-//           .read<SharedLinksBloc>()
-//           .add(DeleteSharedLink(sharedLink: widget.sharedLink));
-//     }
-//
-//     void onPressBack() {
-//       Navigator.of(context).pop();
-//     }
-//
-//     void onPressLink() async {
-//       print('object');
-//       final Uri url = Uri.parse(widget.sharedLink);
-//       if (!await launchUrl(url)) {}
-//     }
-//
-//     return Stack(
-//       children: [
-//         const BackgroundGradient(),
-//         Scaffold(
-//           body: CustomScrollView(
-//             slivers: <Widget>[
-//               SliverAppBar(
-//                 // automaticallyImplyLeading: false,
-//                 pinned: true,
-//                 stretch: true,
-//                 expandedHeight: 230,
-//                 // toolbarHeight: 50,
-//                 forceMaterialTransparency: false,
-//
-//                 backgroundColor: Colors.transparent,
-//                 flexibleSpace: FlexibleSpaceBar(
-//                   collapseMode: CollapseMode.none,
-//                   expandedTitleScale: 1.4,
-//                   title: Text(
-//                     widget.displayLink,
-//                     style: TextStyle(overflow: TextOverflow.ellipsis),
-//                   ),
-//                   background: HeroImage(summaryData: widget.summaryData),
-//                   stretchModes: [StretchMode.blurBackground],
-//
-//                 ),
-//               ),
-//               SliverList(
-//                 delegate: SliverChildBuilderDelegate(
-//                   (_, int index) {
-//                     return ListTile(
-//                       leading: Container(
-//                           padding: EdgeInsets.all(8),
-//                           width: 100,
-//                           child: Placeholder()),
-//                       title: Text('Place ${index + 1}', textScaleFactor: 2),
-//                     );
-//                   },
-//                   childCount: 20,
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
 
 class SummaryScreen extends StatelessWidget {
   final SummaryData summaryData;
@@ -403,28 +289,28 @@ class HeroImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: Hero(
-          tag: summaryData.date,
-          child: summaryData.imageUrl == null
-              ? ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: Image.asset(
-                    Assets.placeholderLogo.path,
-                    fit: BoxFit.cover,
-                    color: Colors.black54,
-                    colorBlendMode: BlendMode.colorBurn,
-                  ),
-                )
-              : ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: CachedNetworkImage(
-                    imageUrl: summaryData.imageUrl!,
-                    fit: BoxFit.cover,
-                    color: Colors.black54,
-                    colorBlendMode: BlendMode.colorBurn,
-                  ),
-                )),
+    return Hero(
+      tag: summaryData.date,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          CachedNetworkImage(
+            imageUrl: summaryData.imageUrl ?? Assets.placeholderLogo.path,
+            fit: BoxFit.cover,
+            color: Colors.black54,
+            fadeInCurve: Curves.ease,
+            colorBlendMode: BlendMode.colorBurn,
+          ),
+          ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.black.withOpacity(0.2)),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
