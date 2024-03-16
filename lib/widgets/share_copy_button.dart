@@ -67,6 +67,8 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       child: Row(
         mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             flex: 1,
@@ -82,13 +84,13 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
                 onTapUp();
               },
               child: AnimatedScale(
+                alignment: Alignment.center,
                 curve: Curves.easeIn,
                 duration: duration,
                 scale: tappedShare ? 0.95 : 1,
                 child: AnimatedContainer(
                     duration: duration,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: tappedShare
                             ? Colors.teal
@@ -96,6 +98,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
                         borderRadius: BorderRadius.circular(12)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Padding(
                             padding: const  EdgeInsets.only(left: 5),

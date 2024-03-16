@@ -10,31 +10,19 @@ class SummaryApiRepository {
   // final String fileUrl =
   //     "http://192.168.1.136:8000/application_by_summarize/uploadfile/";
   final Dio _dio = Dio(
-    BaseOptions(
-        // connectTimeout: const Duration(seconds: 60),
-        // receiveTimeout: const Duration(seconds: 60),
-        responseType: ResponseType.json),
+    BaseOptions(responseType: ResponseType.json),
   );
 
-  final Map<String, CancelToken> tokens = {};
-
-  void canselRequest({required String canselItem}) {}
-
   Future<Summary?> getFromLink({required String summaryLink}) async {
-    tokens.addAll({summaryLink: CancelToken()});
     try {
-      print('RES!!!!');
-      Response response = await _dio.post(linkUrl,
-          data: {
-            'url': summaryLink,
-            'context': '',
-          },
-          cancelToken: tokens[summaryLink]);
-      if(response != null)  {
-        print('GET DATA');
-      }
+      Response response = await _dio.post(
+        linkUrl,
+        data: {
+          'url': summaryLink,
+          'context': '',
+        },
+      );
       return Summary.fromJson(response.data);
-
     } on DioException catch (e) {
       print(e);
       return null;

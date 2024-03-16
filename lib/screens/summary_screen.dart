@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +38,15 @@ class SummaryScreen extends StatelessWidget {
         .replaceFirst('Supporting Evidence:', '<b>Supporting Evidence:\n</b>')
         .replaceFirst('Implications or Conclusions:',
             '<b>Implications or Conclusions:\n</b>');
+
+    const List<Effect<dynamic>> effects = [
+      MoveEffect(
+          end: Offset(0, 0),
+          begin: Offset(0, 100),
+          curve: Curves.easeIn,
+          duration: Duration(milliseconds: 350)),
+      ShimmerEffect(delay: Duration(milliseconds: 350))
+    ];
 
     void onPressDelete() {
       Navigator.of(context).pop();
@@ -83,27 +93,49 @@ class SummaryScreen extends StatelessWidget {
               ],
             ),
             Expanded(
-                child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 20),
-                    child: StyledText(
-                      text: summaryText,
-                      style: const TextStyle(fontSize: 16),
-                      tags: {
-                        'b': StyledTextTag(
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                height: 2)),
-                      },
-                    ))),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: ShareAndCopyButton(
-                sharedLink: sharedLink,
-                summaryData: summaryData,
+              child: Stack(
+                fit: StackFit.loose,
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Animate(
+                    effects: effects,
+                    child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15, bottom: 110, top: 10),
+                        child: StyledText(
+                          text: summaryText,
+                          style: const TextStyle(fontSize: 16),
+                          tags: {
+                            'b': StyledTextTag(
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    height: 2)),
+                          },
+                        )),
+                  ),
+                  Container(
+                    decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              Color.fromRGBO(223, 252, 252, 1),
+                              Color.fromRGBO(223, 252, 252, 0),
+                            ],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            stops: [
+                              0.3,
+                              1,
+                            ])),
+                    padding: const EdgeInsets.all(15),
+                    child: ShareAndCopyButton(
+                      sharedLink: sharedLink,
+                      summaryData: summaryData,
+                    ),
+                  )
+                ],
               ),
-            )
+            ),
           ],
         )),
       ],
