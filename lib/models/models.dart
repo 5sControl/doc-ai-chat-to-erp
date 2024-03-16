@@ -22,20 +22,9 @@ class SharedMediaItem extends SharedMediaFile {
 @JsonSerializable()
 class Summary {
   final String summary;
-  // final List<String> keyPoints;
-  // final String inDepthAnalysis;
-  // final String additionalContext;
-  // final List<String> supportingEvidence;
-  // final String implicationsConclusions;
+  final String? error;
 
-  const Summary({
-    required this.summary,
-    // required this.keyPoints,
-    // required this.inDepthAnalysis,
-    // required this.additionalContext,
-    // required this.supportingEvidence,
-    // required this.implicationsConclusions,
-  });
+  const Summary({required this.summary, this.error});
 
   factory Summary.fromJson(Map<String, dynamic> json) =>
       _$SummaryFromJson(json);
@@ -45,7 +34,7 @@ class Summary {
 
 @JsonSerializable()
 class SummaryData {
-   SummaryStatus status;
+  SummaryStatus status;
   final DateTime date;
   final String? summary;
   final String? imageUrl;

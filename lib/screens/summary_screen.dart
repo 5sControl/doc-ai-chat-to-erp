@@ -75,7 +75,6 @@ class SummaryScreen extends StatelessWidget {
           children: [
             Stack(
               fit: StackFit.loose,
-              // clipBehavior: Clip.hardEdge,
               children: [
                 Positioned.fill(
                   child: HeroImage(
@@ -326,13 +325,15 @@ class HeroImage extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          CachedNetworkImage(
-            imageUrl: summaryData.imageUrl ?? Assets.placeholderLogo.path,
-            fit: BoxFit.cover,
-            color: Colors.black54,
-            fadeInCurve: Curves.ease,
-            colorBlendMode: BlendMode.colorBurn,
-          ),
+          summaryData.imageUrl != null
+              ? CachedNetworkImage(
+                  imageUrl: summaryData.imageUrl ?? '',
+                  fit: BoxFit.cover,
+                  color: Colors.black54,
+                  fadeInCurve: Curves.ease,
+                  colorBlendMode: BlendMode.colorBurn,
+                )
+              : Image.asset(Assets.placeholderLogo.path),
           ClipRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
