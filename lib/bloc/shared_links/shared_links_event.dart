@@ -56,9 +56,9 @@ class CancelRequest extends SharedLinksEvent {
   List<String?> get props => [];
 }
 
-class AddToQueue extends SharedLinksEvent {
+class SetSummaryOpened extends SharedLinksEvent {
   final String sharedLink;
-  const AddToQueue({required this.sharedLink});
+  const SetSummaryOpened({required this.sharedLink});
 
   @override
   List<String?> get props => [sharedLink];

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -24,9 +25,8 @@ class SummaryTile extends StatefulWidget {
 }
 
 class _SummaryTileState extends State<SummaryTile> {
-  static const duration = Duration(milliseconds: 200);
+  static const duration = Duration(milliseconds: 300);
   bool tapped = false;
-
   void onTapDown() {
     setState(() {
       tapped = true;
@@ -49,6 +49,10 @@ class _SummaryTileState extends State<SummaryTile> {
     final String formattedDate = formatter.format(summaryDate);
 
     void onPressSharedItem(SummaryData summaryData) {
+      context
+          .read<SharedLinksBloc>()
+          .add(SetSummaryOpened(sharedLink: widget.sharedLink));
+
       Future.delayed(duration, () {
         Navigator.push(
           context,
@@ -61,8 +65,6 @@ class _SummaryTileState extends State<SummaryTile> {
         );
       });
     }
-
-    print(widget.summaryData.status);
 
     void onPressRetry() {
       context
@@ -244,26 +246,20 @@ class _SummaryTileState extends State<SummaryTile> {
                         ),
                       ),
                     ),
-                    // Container(
-                    //   child: widget.summaryData.status == SummaryStatus.Error
-                    //       ? Column(
-                    //           mainAxisSize: MainAxisSize.max,
-                    //           mainAxisAlignment: MainAxisAlignment.center,
-                    //           children: [
-                    //             IconButton(
-                    //                 tooltip: 'Retry',
-                    //                 onPressed: onPressRetry,
-                    //                 highlightColor: Colors.teal,
-                    //                 padding: EdgeInsets.all(10),
-                    //                 icon: SvgPicture.asset(
-                    //                   Assets.icons.update,
-                    //                   height: 25,
-                    //                   width: 25,
-                    //                 )),
-                    //           ],
-                    //         )
-                    //       : Container(),
-                    // )
+                    Container(
+                      child: widget.summaryData.opened == false &&
+                              widget.summaryData.status ==
+                                  SummaryStatus.Complete
+                          ? const Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Icon(
+                                Icons.check,
+                                color: Colors.teal,
+                                size: 30,
+                              ),
+                            )
+                          : Container(),
+                    )
                   ],
                 ),
               ),
@@ -295,7 +291,7 @@ class ErrorMessage extends StatelessWidget {
               'Summarize error: $error',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 12, height: 1),
+              style: TextStyle(fontSize: 12, height: 1),
             )),
             IconButton(
                 tooltip: 'Retry',

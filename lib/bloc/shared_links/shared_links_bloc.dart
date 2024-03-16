@@ -14,6 +14,7 @@ part 'shared_links_bloc.g.dart';
 
 final initialSummary = SummaryData(
     status: SummaryStatus.Complete,
+    opened: false,
     date: DateTime.now(),
     title: 'Summify',
     imageUrl: null,
@@ -22,7 +23,6 @@ final initialSummary = SummaryData(
         "What should you know about Summify? \n\nIn today's fast-paced world, where information overload is a common concern, the ability to quickly grasp the essence of a piece of content is invaluable. Enter Summify, a revolutionary mobile application designed to simplify and enhance the way we consume and share information. \nSummify is more than just a summarization tool; it's a comprehensive solution that offers a myriad of features to cater to diverse user needs. Let's delve into the intricacies of Summify's core functionalities:\n\n 1. Share and Summarize from Any Resource:        Summify's intuitive interface allows users to share content from any online resource, including webpages, articles, and blog posts. Simply copy the URL of the desired content and paste it into Summify. The app will process the information, condensing it into a succinct summary that captures the key ");
 
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
-  // static var textCounter = 1;
   SharedLinksBloc()
       : super(SharedLinksState(
             savedLinks: {
@@ -36,6 +36,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.addAll({
         summaryLink: SummaryData(
+            opened: false,
             status: SummaryStatus.Loading,
             summary: null,
             date: DateTime.now(),
@@ -43,16 +44,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             title: state.savedLinks[summaryLink]?.title,
             error: null)
       });
-      // summaryMap.update(
-      //     summaryLink,
-      //     (summary) => SummaryData(
-      //         status: SummaryStatus.Loading,
-      //         summary: null,
-      //         date: DateTime.now(),
-      //         imageUrl: state.savedLinks[summaryLink]?.imageUrl,
-      //         title: state.savedLinks[summaryLink]?.title,
-      //         error: null));
-
       emit(state.copyWith(savedLinks: summaryMap));
     }
 
@@ -64,6 +55,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           (summary) => SummaryData(
               status: SummaryStatus.Loading,
               date: summary.date,
+              opened: false,
               summary: summary.summary,
               imageUrl: previewData.image?.url,
               title: previewData.title,
@@ -81,6 +73,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           (value) => SummaryData(
                 status: SummaryStatus.Complete,
                 date: value.date,
+                opened: false,
                 summary: summary.summary,
                 imageUrl: value.imageUrl,
                 title: value.title,
@@ -97,6 +90,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           (value) => SummaryData(
               status: SummaryStatus.Error,
               date: value.date,
+              opened: false,
               summary: null,
               imageUrl: value.imageUrl,
               title: value.title,
@@ -161,6 +155,22 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       emit(state.copyWith(savedLinks: summaryMap));
     });
 
+    on<SetSummaryOpened>((event, emit) {
+      final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
+      summaryMap.update(
+          event.sharedLink,
+          (value) => SummaryData(
+                summary: value.summary,
+                status: value.status,
+                date: value.date,
+                opened: true,
+                error: value.error,
+                title: value.title,
+                imageUrl: value.imageUrl,
+              ));
+      emit(state.copyWith(savedLinks: summaryMap));
+    });
+
     on<CancelRequest>((event, emit) {
       print('CancelRequest');
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
@@ -170,6 +180,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             key: SummaryData(
                 status: SummaryStatus.Error,
                 date: value.date,
+                opened: value.opened,
                 imageUrl: value.imageUrl,
                 title: value.title,
                 error: 'stopped')

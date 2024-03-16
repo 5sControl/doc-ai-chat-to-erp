@@ -41,10 +41,12 @@ class SummaryData {
   final String? title;
   final String? description;
   final String? error;
+  final bool opened;
 
   SummaryData(
       {required this.status,
       required this.date,
+      required this.opened,
       this.summary,
       this.imageUrl,
       this.title,
