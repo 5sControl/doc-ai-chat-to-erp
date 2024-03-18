@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/screens/modal_screens/info_screen.dart';
+import 'package:summify/services/nitify.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
@@ -110,6 +111,14 @@ class HomeScreen extends StatelessWidget {
             },
           );
         }),
+      ),
+      floatingActionButton: IconButton(
+        icon: Icon(Icons.add),
+        onPressed: () {
+          Future.delayed(const Duration(seconds: 5), () {
+            NotificationService().showNotification(title: 'Hello!', body: 'Motherfucker');
+          });
+        },
       ),
     );
   }

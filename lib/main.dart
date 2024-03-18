@@ -17,6 +17,7 @@ import 'package:summify/screens/onboarding_screen.dart';
 // import 'package:summify/screens/auth/auth_screen.dart';
 // import 'package:summify/screens/summary_screen.dart';
 import 'package:summify/services/authentication.dart';
+import 'package:summify/services/nitify.dart';
 import 'package:summify/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
 import 'firebase_options.dart';
@@ -24,7 +25,7 @@ import 'screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  NotificationService().initNotification();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -39,7 +40,7 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  await HydratedBloc.storage.clear();
+  // await HydratedBloc.storage.clear();
 
   runApp(const SummishareApp());
 }
