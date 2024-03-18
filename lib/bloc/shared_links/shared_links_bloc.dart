@@ -12,6 +12,23 @@ part 'shared_links_event.dart';
 part 'shared_links_state.dart';
 part 'shared_links_bloc.g.dart';
 
+const String initialSummaryText = "What should you know about Summify? "
+    "\n\n In today's fast-paced world, where information overload is a common concern, the ability to quickly grasp the essence of a piece of content is invaluable. Enter Summify, a revolutionary mobile application designed to simplify and enhance the way we consume and share information. "
+    "\n\nSummify is more than just a summarization tool; it's a comprehensive solution that offers a myriad of features to cater to diverse user needs. Let's delve into the intricacies of Summify's core functionalities: "
+    "\n\n1. Share and Summarize from Any Resource:"
+    "\nSummify's intuitive interface allows users to share content from any online resource, including webpages, articles, and blog posts. Simply copy the URL of the desired content and paste it into Summify. The app will process the information, condensing it into a succinct summary that captures the key points and main ideas. "
+    "\n\n2. Summarize via URL: "
+    "\nHave a long article or a complex webpage you need to understand quickly? Summify's URL summarization feature comes to the rescue. Just paste the URL of the content into Summify, and the app will generate a concise summary, making it easier for you to grasp the essential details without having to read through the entire text. "
+    "\n\n3. Summarize Uploaded Documents: "
+    "\nSummify supports document summarization, making it an invaluable tool for professionals, researchers, and students. Users can upload documents in various formats, including PDF, DOCX, or TXT. Summify processes the uploaded document, distilling it into a condensed summary that retains the original document's core message and key insights. "
+    "\n\n4. Summarize Custom Text: "
+    "\nNeed a summary of a specific piece of text or a document you've written? Summify's text summarization feature has you covered. Simply type or paste your custom text into the app, and Summify will generate a summarized version, allowing you to quickly get to the heart of the matter. "
+    "\n\n5. Advanced Summarization Algorithms: "
+    "\nSummify's summarization algorithms are sophisticated and meticulously designed to ensure that the summaries provided are coherent, informative, and relevant to the original content. By analyzing the context, structure, and semantic meaning of the text, Summify delivers summaries that are accurate and comprehensive. "
+    "\n\n6. Save Time and Focus on What Matters: "
+    "\nWith Summify, you can save valuable time by getting the gist of a piece of content without having to read through lengthy paragraphs. Whether you're a busy professional trying to stay updated on industry trends, a student looking for key information for a research project, or simply someone who wants to consume content more efficiently, Summify is the ultimate solution. "
+    "\n\nIn conclusion, Summify is more than just a summarization tool; it's a versatile and indispensable companion that enhances the way we interact with information. Whether you're looking to quickly understand a complex article, share condensed versions of content with your colleagues, or streamline your own written materials, Summify is your go-to app. Experience the convenience and efficiency of content condensation with Summify – your ultimate content consumption and sharing companion!";
+
 final initialSummary = SummaryData(
     status: SummaryStatus.Complete,
     opened: false,
@@ -19,8 +36,7 @@ final initialSummary = SummaryData(
     title: 'Summify',
     imageUrl: null,
     error: null,
-    summary:
-        "What should you know about Summify? \n\nIn today's fast-paced world, where information overload is a common concern, the ability to quickly grasp the essence of a piece of content is invaluable. Enter Summify, a revolutionary mobile application designed to simplify and enhance the way we consume and share information. \nSummify is more than just a summarization tool; it's a comprehensive solution that offers a myriad of features to cater to diverse user needs. Let's delve into the intricacies of Summify's core functionalities:\n\n 1. Share and Summarize from Any Resource:        Summify's intuitive interface allows users to share content from any online resource, including webpages, articles, and blog posts. Simply copy the URL of the desired content and paste it into Summify. The app will process the information, condensing it into a succinct summary that captures the key ");
+    summary: initialSummaryText);
 
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   SharedLinksBloc()
