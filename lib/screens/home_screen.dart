@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .read<SharedLinksBloc>()
           .add(SetSummaryOpened(sharedLink: summaryLink));
 
-      Future.delayed(Duration(milliseconds: 300), () {
+      Future.delayed(const Duration(milliseconds: 300), () {
         Navigator.push(
           context,
           MaterialPageRoute(
