@@ -33,7 +33,6 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
     });
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -45,7 +44,6 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
     urlController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,9 +77,11 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                        alignment: Alignment.centerRight,
+                        visualDensity: VisualDensity.compact,
                         onPressed: onPressClose,
                         style: ButtonStyle(
+                            padding: const MaterialStatePropertyAll(
+                                EdgeInsets.all(2)),
                             backgroundColor: MaterialStatePropertyAll(
                                 const Color.fromRGBO(4, 49, 57, 1)
                                     .withOpacity(0.1))),
@@ -102,6 +102,7 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                 ),
                 const Divider(
                   color: Colors.transparent,
+                  height: 5,
                 ),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
@@ -117,15 +118,13 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                   selectedRate: selectedRate,
                   onPressStar: onPressStar,
                 ),
-                const Divider(
-                  color: Colors.transparent,
-                ),
+                // const Divider(
+                //   color: Colors.transparent,
+                // ),
                 RateTextField(
                   controller: urlController,
                 ),
-                SubmitButton(
-                    onPressSubmit: onPressSubmit
-                )
+                SubmitButton(onPressSubmit: onPressSubmit)
               ],
             ),
           ),
@@ -184,8 +183,8 @@ class _SubmitButtonState extends State<SubmitButton> {
               child: AnimatedContainer(
                 duration: duration,
                 margin: const EdgeInsets.only(bottom: 5),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: tapped
@@ -208,7 +207,6 @@ class _SubmitButtonState extends State<SubmitButton> {
   }
 }
 
-
 class Stars extends StatelessWidget {
   final int selectedRate;
   final Function({required int rate}) onPressStar;
@@ -219,36 +217,50 @@ class Stars extends StatelessWidget {
   Widget build(BuildContext context) {
     final rates = [1, 2, 3, 4, 5];
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: rates
-          .map((rate) => IconButton(
-              onPressed: () => onPressStar(rate: rate),
-              icon: Icon(
-                selectedRate >= rate
-                    ? Icons.star_rate_rounded
-                    : Icons.star_outline_rounded,
-                color: selectedRate >= rate ? Colors.yellow : Colors.black38,
-                size: 40,
-              )))
-          .toList(),
+    return SizedBox(
+      height: 80,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: rates
+            .map((rate) => IconButton(
+                onPressed: () => onPressStar(rate: rate),
+                icon: AnimatedScale(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOutBack,
+                  scale: selectedRate == rate ? 1.5 : 1,
+                  child: AnimatedCrossFade(
+                    duration: const Duration(milliseconds: 500),
+                    firstChild: const Icon(
+                      Icons.star_rate_rounded,
+                      color: Colors.yellow,
+                      size: 40,
+                    ),
+                    secondChild: const Icon(
+                      Icons.star_outline_rounded,
+                      color: Colors.black54,
+                      size: 40,
+                    ),
+                    crossFadeState: selectedRate >= rate
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                  ),
+                )))
+            .toList(),
+      ),
     );
   }
 }
 
 class RateTextField extends StatelessWidget {
   final TextEditingController controller;
-  const RateTextField(
-      {super.key, required this.controller});
+  const RateTextField({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(bottom: 10),
         child: Container(
-
-          decoration: const BoxDecoration(
-              boxShadow: [
+          decoration: const BoxDecoration(boxShadow: [
             // BoxShadow(
             //     color: Colors.black12,
             //     blurRadius: 5,
@@ -265,7 +277,7 @@ class RateTextField extends StatelessWidget {
             cursorHeight: 20,
             style: const TextStyle(color: Colors.black, fontSize: 20),
             decoration: InputDecoration(
-                focusedBorder:  OutlineInputBorder(
+                focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
                       width: 2,
@@ -273,8 +285,8 @@ class RateTextField extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: Colors.teal.withOpacity(0.2),
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 0),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 floatingLabelAlignment: FloatingLabelAlignment.start,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 label: const Padding(
