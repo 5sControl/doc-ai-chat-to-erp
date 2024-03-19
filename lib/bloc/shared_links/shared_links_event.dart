@@ -63,3 +63,11 @@ class SetSummaryOpened extends SharedLinksEvent {
   @override
   List<String?> get props => [sharedLink];
 }
+
+class RateSummary extends SharedLinksEvent {
+  final String sharedLink;
+  const RateSummary({required this.sharedLink});
+
+  @override
+  List<String?> get props => [sharedLink];
+}

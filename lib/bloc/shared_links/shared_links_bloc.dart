@@ -46,6 +46,9 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           },
           textCounter: 1,
           newSummaries: const {},
+          ratedSummaries: const {
+            'https://elang-app-dev-zehqx.ondigitalocean.app/'
+          },
         )) {
     final SummaryRepository summaryRepository = SummaryRepository();
 
@@ -86,6 +89,9 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       final Set<String> loadedSummariesSet = Set.from(state.newSummaries);
       loadedSummariesSet.add(summaryLink);
+      final ratedSummaries = state.ratedSummaries;
+      ratedSummaries.remove(summaryLink);
+
       summaryMap.update(
           summaryLink,
           (value) => SummaryData(
@@ -96,7 +102,10 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
                 title: value.title,
                 error: null,
               ));
-      emit(state.copyWith(savedLinks: summaryMap, newSummaries: loadedSummariesSet));
+      emit(state.copyWith(
+          savedLinks: summaryMap,
+          newSummaries: loadedSummariesSet,
+          ratedSummaries: ratedSummaries));
     }
 
     void setSummaryError({required String summaryLink, required String error}) {
@@ -172,7 +181,10 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
     on<DeleteSharedLink>((event, emit) {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.remove(event.sharedLink);
-      emit(state.copyWith(savedLinks: summaryMap));
+      final Set<String> loadedSummariesSet = Set.from(state.newSummaries);
+      loadedSummariesSet.remove(event.sharedLink);
+      emit(state.copyWith(
+          savedLinks: summaryMap, newSummaries: loadedSummariesSet));
     });
 
     on<SetSummaryOpened>((event, emit) {
@@ -197,6 +209,12 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         }
       });
       emit(state.copyWith(savedLinks: summaryMap));
+    });
+
+    on<RateSummary>((event, emit) {
+      final Set<String> ratedSummaries = Set.from(state.ratedSummaries);
+      ratedSummaries.add(event.sharedLink);
+      emit(state.copyWith(ratedSummaries: ratedSummaries));
     });
   }
 
