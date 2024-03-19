@@ -45,18 +45,8 @@ void main() async {
   runApp(const SummishareApp());
 }
 
-class SummishareApp extends StatefulWidget {
+class SummishareApp extends StatelessWidget {
   const SummishareApp({super.key});
-
-  @override
-  State<SummishareApp> createState() => _SummishareAppState();
-}
-
-class _SummishareAppState extends State<SummishareApp> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +62,6 @@ class _SummishareAppState extends State<SummishareApp> {
           BlocProvider(create: (context) => SettingsBloc())
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
-          // buildWhen: (previous, current) => true,
           builder: (context, settingsState) {
             return MaterialApp(
               theme: baseTheme,

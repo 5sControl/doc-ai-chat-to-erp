@@ -16,6 +16,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     void onPressInfo() {
       showCupertinoModalBottomSheet(
         context: context,
@@ -29,90 +30,98 @@ class HomeScreen extends StatelessWidget {
       );
     }
 
-    return BlocBuilder<SharedLinksBloc, SharedLinksState>(
-      builder: (context, sharedLinksState) {
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-              flexibleSpace: ClipRRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    color: Colors.transparent,
-                  ),
-                ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+          flexibleSpace: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                color: Colors.transparent,
               ),
-              backgroundColor: Colors.transparent,
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              title: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 35,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          Assets.icons.logo,
-                          height: 30,
-                          width: 30,
-                          colorFilter: const ColorFilter.mode(
-                              Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
-                        ),
-                        const Text(
-                          '  Summify',
-                          style: TextStyle(color: Color.fromRGBO(6, 49, 57, 1)),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(3),
-                    width: 35,
-                    height: 35,
-                    child: IconButton(
-                      onPressed: onPressInfo,
-                      padding: EdgeInsets.zero,
-                      icon: SvgPicture.asset(
-                        Assets.icons.info,
-                        height: 35,
-                        width: 35,
-                        colorFilter: const ColorFilter.mode(
-                            Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
-                      ),
-                      // icon: Icon(Icons., color: Colors.black,),
-                    ),
-                  )
-                ],
-              )),
-          body: Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: ListView.builder(
-              itemCount: sharedLinksState.savedLinks.length,
-              itemBuilder: (context, index) {
-                final sharedLink = sharedLinksState.savedLinks.keys
-                    .toList()
-                    .reversed
-                    .toList()[index];
-                final SummaryData summaryData =
-                    sharedLinksState.savedLinks[sharedLink]!;
-                return SummaryTile(
-                  // appLifecycleStatus: appLifecycleStatus,
-                  sharedLink: sharedLink,
-                  summaryData: summaryData,
-                );
-              },
             ),
           ),
-        );
-      },
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 35,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      Assets.icons.logo,
+                      height: 30,
+                      width: 30,
+                      colorFilter: const ColorFilter.mode(
+                          Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
+                    ),
+                    const Text(
+                      '  Summify',
+                      style: TextStyle(color: Color.fromRGBO(6, 49, 57, 1)),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(3),
+                width: 35,
+                height: 35,
+                child: IconButton(
+                  onPressed: onPressInfo,
+                  padding: EdgeInsets.zero,
+                  icon: SvgPicture.asset(
+                    Assets.icons.info,
+                    height: 35,
+                    width: 35,
+                    colorFilter: const ColorFilter.mode(
+                        Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
+                  ),
+                ),
+              )
+            ],
+          )),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
+          buildWhen: (previous, current) {
+            return previous.savedLinks.keys.length != current.savedLinks.keys.length;
+          },
+          builder: (context, sharedLinksState) {
+            print('asdasdadasdasd');
+            final sharedLinks =
+                sharedLinksState.savedLinks.keys.toList().reversed.toList();
+            return ListView.builder(
+              itemCount: sharedLinksState.savedLinks.length,
+              itemBuilder: (context, index) {
+                return SummaryTile(
+                  key: Key(sharedLinks[index]),
+                  sharedLink: sharedLinks[index],
+                  // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
+                );
+              },
+            );
+            // return Column(
+            //   children:
+            //     sharedLinksState.savedLinks.keys.map((e) =>SummaryTile(
+            //         key: Key(e),
+            //         sharedLink: e,
+            //         // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
+            //       )).toList()
+            //   ,
+            // );
+          },
+        ),
+      ),
     );
   }
 }

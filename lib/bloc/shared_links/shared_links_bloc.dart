@@ -31,7 +31,7 @@ const String initialSummaryText = "What should you know about Summify? "
 
 final initialSummary = SummaryData(
     status: SummaryStatus.Complete,
-    opened: false,
+    // opened: false,
     date: DateTime.now(),
     title: 'Summify',
     imageUrl: null,
@@ -41,18 +41,17 @@ final initialSummary = SummaryData(
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   SharedLinksBloc()
       : super(SharedLinksState(
-          savedLinks: {
-            'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
-          },
-          textCounter: 1,
-        )) {
+            savedLinks: {
+              'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
+            },
+            textCounter: 1,
+      openedSummaries: const {})) {
     final SummaryRepository summaryRepository = SummaryRepository();
 
     void startSummaryLoading({required String summaryLink}) async {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       summaryMap.addAll({
         summaryLink: SummaryData(
-            opened: false,
             status: SummaryStatus.Loading,
             summary: null,
             date: DateTime.now(),
@@ -60,7 +59,9 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             title: state.savedLinks[summaryLink]?.title,
             error: null)
       });
-      emit(state.copyWith(savedLinks: summaryMap));
+      final Set<String> loaded = Set.from(state.openedSummaries);
+      loaded.add(summaryLink);
+      emit(state.copyWith(savedLinks: summaryMap, loadedSummaries: loaded));
     }
 
     void getSummaryPreviewData(String summaryLink) async {
@@ -71,7 +72,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           (summary) => SummaryData(
               status: SummaryStatus.Loading,
               date: summary.date,
-              opened: false,
               summary: summary.summary,
               imageUrl: previewData.image?.url,
               title: previewData.title,
@@ -87,7 +87,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           (value) => SummaryData(
                 status: SummaryStatus.Complete,
                 date: value.date,
-                opened: false,
                 summary: summary.summary,
                 imageUrl: value.imageUrl,
                 title: value.title,
@@ -104,7 +103,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           (value) => SummaryData(
               status: SummaryStatus.Error,
               date: value.date,
-              opened: false,
               summary: null,
               imageUrl: value.imageUrl,
               title: value.title,
@@ -113,9 +111,9 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
     }
 
     on<SaveSharedLink>((event, emit) async {
+      print('SaveSharedLink');
       final link = event.sharedLink.toString();
       if (state.savedLinks[link]?.status != SummaryStatus.Loading) {
-        print('SAVE EVENT');
         startSummaryLoading(summaryLink: link);
         if (state.savedLinks[link]?.imageUrl == null) {
           getSummaryPreviewData(link);
@@ -177,7 +175,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
                 summary: value.summary,
                 status: value.status,
                 date: value.date,
-                opened: true,
                 error: value.error,
                 title: value.title,
                 imageUrl: value.imageUrl,
@@ -194,7 +191,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
             key: SummaryData(
                 status: SummaryStatus.Error,
                 date: value.date,
-                opened: value.opened,
                 imageUrl: value.imageUrl,
                 title: value.title,
                 error: 'stopped')

@@ -23,7 +23,7 @@ class SummaryApiRepository {
           'context': '',
         },
       );
-      print(response.data);
+      // print(response.data);
       return Summary.fromJson(response.data);
     } on DioException catch (e) {
       print(e.response?.data);

@@ -21,7 +21,6 @@ class _MainScreenState extends State<MainScreen> {
   late StreamSubscription intentMediaStreamSubscription;
 
   void saveLink(String summaryLink) async {
-    print('asdasdasdasd');
     context
         .read<SharedLinksBloc>()
         .add(SaveSharedLink(sharedLink: summaryLink));
@@ -35,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
         ReceiveSharingIntentPlus.getMediaStream().listen(
       (List<SharedMediaFile> value) {
         if (value.isNotEmpty) {
-          print(
+          debugPrint(
             'Shared:${value?.map((f) => f.path).join(',') ?? ''}',
           );
         }
@@ -48,6 +47,7 @@ class _MainScreenState extends State<MainScreen> {
     intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getTextStream().listen(
       (String value) {
+        print('!');
         saveLink(value);
       },
       onError: (err) {
@@ -56,6 +56,7 @@ class _MainScreenState extends State<MainScreen> {
     );
 
     ReceiveSharingIntentPlus.getInitialText().then((String? value) {
+      print('?');
       if (value != null) {
         saveLink(value);
       }
@@ -65,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
     ReceiveSharingIntentPlus.getInitialMedia().then(
       (List<SharedMediaFile> value) {
         if (value.isNotEmpty) {
-          print(
+          debugPrint(
             'Shared:${value?.map((f) => f.path).join(',') ?? ''}',
           );
         }
@@ -76,12 +77,12 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void dispose() {
     intentMediaStreamSubscription.cancel();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('MAIN');
     return Stack(children: [
       const BackgroundGradient(),
       Scaffold(
