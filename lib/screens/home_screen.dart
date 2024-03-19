@@ -1,22 +1,89 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 import 'package:summify/screens/modal_screens/info_screen.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
-import '../models/models.dart';
 import '../widgets/summary_tile.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  late StreamSubscription intentMediaStreamSubscription;
+
+  void saveLink(String summaryLink) async {
+    context
+        .read<SharedLinksBloc>()
+        .add(SaveSharedLink(sharedLink: summaryLink));
+    Navigator.of(context).pushNamed('/');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    intentMediaStreamSubscription =
+        ReceiveSharingIntentPlus.getMediaStream().listen(
+      (List<SharedMediaFile> value) {
+        if (value.isNotEmpty) {
+          debugPrint(
+            'Shared:${value?.map((f) => f.path).join(',') ?? ''}',
+          );
+        }
+      },
+      onError: (err) {
+        debugPrint('getIntentDataStream error: $err');
+      },
+    );
+
+    intentMediaStreamSubscription =
+        ReceiveSharingIntentPlus.getTextStream().listen(
+      (String value) {
+        print("!");
+        saveLink(value);
+      },
+      onError: (err) {
+        debugPrint('getLinkStream error: $err');
+      },
+    );
+
+    ReceiveSharingIntentPlus.getInitialText().then((String? value) {
+      if (value != null) {
+        print("!!");
+        saveLink(value);
+      }
+    });
+
+    // Get the media sharing coming from outside the app while the app is closed.
+    ReceiveSharingIntentPlus.getInitialMedia().then(
+      (List<SharedMediaFile> value) {
+        if (value.isNotEmpty) {
+          debugPrint(
+            'Shared:${value?.map((f) => f.path).join(',') ?? ''}',
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    intentMediaStreamSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     void onPressInfo() {
       showCupertinoModalBottomSheet(
         context: context,
@@ -94,31 +161,21 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.only(top: 5),
         child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
           buildWhen: (previous, current) {
-            return previous.savedLinks.keys.length != current.savedLinks.keys.length;
+            return previous.savedLinks.keys.length !=
+                current.savedLinks.keys.length;
           },
           builder: (context, sharedLinksState) {
-            print('asdasdadasdasd');
             final sharedLinks =
                 sharedLinksState.savedLinks.keys.toList().reversed.toList();
             return ListView.builder(
               itemCount: sharedLinksState.savedLinks.length,
               itemBuilder: (context, index) {
                 return SummaryTile(
-                  key: Key(sharedLinks[index]),
                   sharedLink: sharedLinks[index],
                   // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
                 );
               },
             );
-            // return Column(
-            //   children:
-            //     sharedLinksState.savedLinks.keys.map((e) =>SummaryTile(
-            //         key: Key(e),
-            //         sharedLink: e,
-            //         // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-            //       )).toList()
-            //   ,
-            // );
           },
         ),
       ),

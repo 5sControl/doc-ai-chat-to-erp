@@ -1,4 +1,3 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -13,9 +12,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
-// import 'package:summify/models/models.dart';
-// import 'package:summify/screens/auth/auth_screen.dart';
-// import 'package:summify/screens/summary_screen.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/theme/baseTheme.dart';

@@ -1,7 +1,24 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 
 part 'models.g.dart';
+
+// @JsonSerializable()
+// class SharedMediaItem extends SharedMediaFile {
+//   SharedMediaItem(
+//       {required super.path,
+//       required super.type,
+//       super.duration,
+//       super.message,
+//       super.mimeType,
+//       super.thumbnail});
+//
+//   factory SharedMediaItem.fromJson(Map<String, dynamic> json) =>
+//       _$SharedMediaItemFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$SharedMediaItemToJson(this);
+// }
 
 @JsonSerializable()
 class Summary extends Equatable {
@@ -28,16 +45,17 @@ class SummaryData extends Equatable {
   final String? title;
   final String? description;
   final String? error;
-  // final bool? opened;
+  final bool opened;
 
   SummaryData(
       {required this.status,
-      required this.date,
-      this.summary,
-      this.imageUrl,
-      this.title,
-      this.description,
-      this.error});
+        required this.date,
+        required this.opened,
+        this.summary,
+        this.imageUrl,
+        this.title,
+        this.description,
+        this.error});
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
       _$SummaryDataFromJson(json);
@@ -46,7 +64,7 @@ class SummaryData extends Equatable {
 
   @override
   List<Object?> get props =>
-      [summary, status, date, imageUrl, title, error, description];
+      [summary, status, date, imageUrl, title, error, opened, description];
 }
 
 enum SummaryStatus { Loading, Complete, Error, Rejected }
