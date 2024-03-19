@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +12,28 @@ import '../gen/assets.gen.dart';
 import '../models/models.dart';
 import '../screens/summary_screen.dart';
 
+class Debouncer {
+  final int milliseconds;
+  Timer? _timer;
+  Debouncer({required this.milliseconds});
+  void run(VoidCallback action) {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+}
+
 class SummaryTile extends StatefulWidget {
   final String sharedLink;
   final SummaryData summaryData;
+  final bool isNew;
 
   const SummaryTile(
-      {super.key, required this.sharedLink, required this.summaryData});
+      {super.key,
+      required this.sharedLink,
+      required this.summaryData,
+      required this.isNew});
 
   @override
   State<SummaryTile> createState() => _SummaryTileState();
@@ -94,8 +112,7 @@ class _SummaryTileState extends State<SummaryTile> {
       movementDuration: const Duration(milliseconds: 1000),
       dragStartBehavior: DragStartBehavior.start,
       background: Container(
-        margin:
-            const EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 20),
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 20),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: BoxDecoration(
             color: const Color.fromRGBO(4, 49, 57, 1),
@@ -195,8 +212,7 @@ class _SummaryTileState extends State<SummaryTile> {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600),
+                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                             Text(
                               formattedDate,
@@ -206,10 +222,8 @@ class _SummaryTileState extends State<SummaryTile> {
                             AnimatedCrossFade(
                                 firstChild: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
@@ -227,8 +241,8 @@ class _SummaryTileState extends State<SummaryTile> {
                                     ),
                                     const Text(
                                       'Loading...     ',
-                                      style: TextStyle(
-                                          fontSize: 12, height: -1),
+                                      style:
+                                          TextStyle(fontSize: 12, height: -1),
                                     )
                                   ],
                                 ),
@@ -238,17 +252,17 @@ class _SummaryTileState extends State<SummaryTile> {
                                         onPressRetry: onPressRetry,
                                       )
                                     : Container(),
-                                crossFadeState: summaryData.status ==
-                                        SummaryStatus.Loading
-                                    ? CrossFadeState.showFirst
-                                    : CrossFadeState.showSecond,
+                                crossFadeState:
+                                    summaryData.status == SummaryStatus.Loading
+                                        ? CrossFadeState.showFirst
+                                        : CrossFadeState.showSecond,
                                 duration: duration)
                           ],
                         ),
                       ),
                     ),
                     Container(
-                      child: summaryData.opened == false &&
+                      child: widget.isNew == true &&
                               summaryData.status == SummaryStatus.Complete
                           ? const Padding(
                               padding: EdgeInsets.all(8),

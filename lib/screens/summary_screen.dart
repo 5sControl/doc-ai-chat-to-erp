@@ -101,7 +101,7 @@ class SummaryScreen extends StatelessWidget {
                   Animate(
                     effects: effects,
                     child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
+                        scrollDirection: Axis.vertical,
                         padding: const EdgeInsets.only(
                             left: 15, right: 15, bottom: 110, top: 10),
                         child: StyledText(

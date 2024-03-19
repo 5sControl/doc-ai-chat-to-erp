@@ -38,24 +38,24 @@ class Summary extends Equatable {
 
 @JsonSerializable()
 class SummaryData extends Equatable {
-  SummaryStatus status;
+  final SummaryStatus status;
   final DateTime date;
   final String? summary;
   final String? imageUrl;
   final String? title;
   final String? description;
   final String? error;
-  final bool opened;
+  // final bool? opened;
 
-  SummaryData(
+  const SummaryData(
       {required this.status,
-        required this.date,
-        required this.opened,
-        this.summary,
-        this.imageUrl,
-        this.title,
-        this.description,
-        this.error});
+      required this.date,
+      // this.opened,
+      this.summary,
+      this.imageUrl,
+      this.title,
+      this.description,
+      this.error});
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
       _$SummaryDataFromJson(json);
@@ -64,7 +64,7 @@ class SummaryData extends Equatable {
 
   @override
   List<Object?> get props =>
-      [summary, status, date, imageUrl, title, error, opened, description];
+      [summary, status, date, imageUrl, title, error, description];
 }
 
 enum SummaryStatus { Loading, Complete, Error, Rejected }

@@ -4,12 +4,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 import 'package:summify/screens/modal_screens/info_screen.dart';
+import 'package:summify/screens/summary_screen.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
+import '../models/models.dart';
 import '../widgets/summary_tile.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     context
         .read<SharedLinksBloc>()
         .add(SaveSharedLink(sharedLink: summaryLink));
-    Navigator.of(context).pushNamed('/');
+    // Navigator.of(context).pushNamed('/');
   }
 
   @override
@@ -97,6 +100,30 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
+    void openLoadedSummary({required SharedLinksState state}) {
+      final summaryLink = state.newSummaries.first;
+      final SummaryData summaryData = state.savedLinks[summaryLink]!;
+      final displayLink = summaryLink.replaceAll('https://', '');
+      final summaryDate = summaryData.date;
+      final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
+      final String formattedDate = formatter.format(summaryDate);
+      context
+          .read<SharedLinksBloc>()
+          .add(SetSummaryOpened(sharedLink: summaryLink));
+
+      Future.delayed(Duration(milliseconds: 300), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SummaryScreen(
+                  summaryData: summaryData,
+                  displayLink: summaryData.title ?? displayLink,
+                  formattedDate: formattedDate,
+                  sharedLink: summaryLink)),
+        );
+      });
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -159,21 +186,34 @@ class _HomeScreenState extends State<HomeScreen> {
           )),
       body: Padding(
         padding: const EdgeInsets.only(top: 5),
-        child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
-          builder: (context, sharedLinksState) {
-            final sharedLinks =
-                sharedLinksState.savedLinks.keys.toList().reversed.toList();
-            return ListView.builder(
-              itemCount: sharedLinksState.savedLinks.length,
-              itemBuilder: (context, index) {
-                return SummaryTile(
-                  sharedLink: sharedLinks[index],
-                  summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-                  // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-                );
-              },
-            );
+        child: BlocListener<SharedLinksBloc, SharedLinksState>(
+          listenWhen: (previous, current) {
+            return previous.newSummaries.length != current.newSummaries.length;
           },
+          listener: (context, state) {
+            if (state.newSummaries.isNotEmpty) {
+              openLoadedSummary(state: state);
+            }
+          },
+          child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
+            builder: (context, sharedLinksState) {
+              final sharedLinks =
+                  sharedLinksState.savedLinks.keys.toList().reversed.toList();
+              return ListView.builder(
+                itemCount: sharedLinksState.savedLinks.length,
+                itemBuilder: (context, index) {
+                  return SummaryTile(
+                    sharedLink: sharedLinks[index],
+                    summaryData:
+                        sharedLinksState.savedLinks[sharedLinks[index]]!,
+                    isNew: sharedLinksState.newSummaries
+                        .contains(sharedLinks[index]),
+                    // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );
