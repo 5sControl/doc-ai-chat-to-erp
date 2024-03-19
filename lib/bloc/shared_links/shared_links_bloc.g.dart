@@ -12,13 +12,10 @@ SharedLinksState _$SharedLinksStateFromJson(Map<String, dynamic> json) =>
         (k, e) => MapEntry(k, SummaryData.fromJson(e as Map<String, dynamic>)),
       ),
       textCounter: json['textCounter'] as int,
-      loadQueue:
-          (json['loadQueue'] as List<dynamic>).map((e) => e as String).toSet(),
     );
 
 Map<String, dynamic> _$SharedLinksStateToJson(SharedLinksState instance) =>
     <String, dynamic>{
       'savedLinks': instance.savedLinks,
       'textCounter': instance.textCounter,
-      'loadQueue': instance.loadQueue.toList(),
     };

@@ -4,14 +4,14 @@ abstract class SharedLinksEvent extends Equatable {
   const SharedLinksEvent();
 }
 
-class SaveSharedItem extends SharedLinksEvent {
-  final SharedMediaItem sharedItem;
-
-  const SaveSharedItem({required this.sharedItem});
-
-  @override
-  List<Object?> get props => [sharedItem];
-}
+// class SaveSharedItem extends SharedLinksEvent {
+//   final SharedMediaItem sharedItem;
+//
+//   const SaveSharedItem({required this.sharedItem});
+//
+//   @override
+//   List<Object?> get props => [sharedItem];
+// }
 
 class SaveSharedLink extends SharedLinksEvent {
   final String sharedLink;

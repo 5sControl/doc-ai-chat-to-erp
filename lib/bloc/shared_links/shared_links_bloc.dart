@@ -41,11 +41,11 @@ final initialSummary = SummaryData(
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   SharedLinksBloc()
       : super(SharedLinksState(
-            savedLinks: {
-              'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
-            },
-            textCounter: 1,
-            loadQueue: const {})) {
+          savedLinks: {
+            'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
+          },
+          textCounter: 1,
+        )) {
     final SummaryRepository summaryRepository = SummaryRepository();
 
     void startSummaryLoading({required String summaryLink}) async {
@@ -82,8 +82,6 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
     void setSummaryComplete(
         {required String summaryLink, required Summary summary}) {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
-      print(summary.summary);
-      print('!!!!');
       summaryMap.update(
           summaryLink,
           (value) => SummaryData(

@@ -23,8 +23,10 @@ class SummaryApiRepository {
           'context': '',
         },
       );
+      print(response.data);
       return Summary.fromJson(response.data);
     } on DioException catch (e) {
+      print(e.response?.data);
       return Summary(
           summary: null,
           summaryError: e.response?.data['detail'] ?? 'Some Error');

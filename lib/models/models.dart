@@ -1,26 +1,27 @@
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 
 part 'models.g.dart';
 
+// @JsonSerializable()
+// class SharedMediaItem extends SharedMediaFile {
+//   SharedMediaItem(
+//       {required super.path,
+//       required super.type,
+//       super.duration,
+//       super.message,
+//       super.mimeType,
+//       super.thumbnail});
+//
+//   factory SharedMediaItem.fromJson(Map<String, dynamic> json) =>
+//       _$SharedMediaItemFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$SharedMediaItemToJson(this);
+// }
+
 @JsonSerializable()
-class SharedMediaItem extends SharedMediaFile {
-  SharedMediaItem(
-      {required super.path,
-      required super.type,
-      super.duration,
-      super.message,
-      super.mimeType,
-      super.thumbnail});
-
-  factory SharedMediaItem.fromJson(Map<String, dynamic> json) =>
-      _$SharedMediaItemFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SharedMediaItemToJson(this);
-}
-
-@JsonSerializable()
-class Summary {
+class Summary extends Equatable {
   final String? summary;
   final String? summaryError;
 
@@ -30,10 +31,13 @@ class Summary {
       _$SummaryFromJson(json);
 
   Map<String, dynamic> toJson() => _$SummaryToJson(this);
+
+  @override
+  List<Object?> get props => [summary, summaryError];
 }
 
 @JsonSerializable()
-class SummaryData {
+class SummaryData extends Equatable {
   SummaryStatus status;
   final DateTime date;
   final String? summary;
@@ -57,6 +61,10 @@ class SummaryData {
       _$SummaryDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$SummaryDataToJson(this);
+
+  @override
+  List<Object?> get props =>
+      [summary, status, date, imageUrl, title, error, opened, description];
 }
 
 enum SummaryStatus { Loading, Complete, Error, Rejected }

@@ -17,7 +17,7 @@ import 'package:summify/screens/onboarding_screen.dart';
 // import 'package:summify/screens/auth/auth_screen.dart';
 // import 'package:summify/screens/summary_screen.dart';
 import 'package:summify/services/authentication.dart';
-import 'package:summify/services/nitify.dart';
+import 'package:summify/services/notify.dart';
 import 'package:summify/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
 import 'firebase_options.dart';
@@ -55,7 +55,6 @@ class SummishareApp extends StatefulWidget {
 class _SummishareAppState extends State<SummishareApp> {
   @override
   void dispose() {
-    // context.read<SharedLinksBloc>().add(const CancelRequest());
     super.dispose();
   }
 
