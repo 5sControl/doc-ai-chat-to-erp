@@ -160,10 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.only(top: 5),
         child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
-          buildWhen: (previous, current) {
-            return previous.savedLinks.keys.length !=
-                current.savedLinks.keys.length;
-          },
           builder: (context, sharedLinksState) {
             final sharedLinks =
                 sharedLinksState.savedLinks.keys.toList().reversed.toList();
@@ -172,6 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (context, index) {
                 return SummaryTile(
                   sharedLink: sharedLinks[index],
+                  summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
                   // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
                 );
               },

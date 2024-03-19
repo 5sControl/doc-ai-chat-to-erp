@@ -58,7 +58,7 @@ class SummaryScreen extends StatelessWidget {
     }
 
     void onPressBack() {
-      Navigator.of(context).pop();
+      Navigator.of(context).pushNamed('/');
     }
 
     void onPressLink() async {
