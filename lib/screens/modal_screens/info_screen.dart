@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/screens/modal_screens/how_to_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/modal_handle.dart';
@@ -11,13 +11,32 @@ class InfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressTerms() async {
-      final Uri url = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+      final Uri url = Uri.parse(
+          'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
       if (!await launchUrl(url)) {}
     }
 
     void onPressPrivacy() async {
       final Uri url = Uri.parse('https://elang.app/privacy');
       if (!await launchUrl(url)) {}
+    }
+
+    void onPressHowTo() async {
+      Navigator.of(context).pop();
+      Future.delayed(Duration(milliseconds: 300), () {
+        showMaterialModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+
+          // enableDrag: false,
+          builder: (context) {
+            return HowToScreen();
+          },
+        );
+      });
     }
 
     return Material(
@@ -69,6 +88,27 @@ class InfoScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Privacy policy',
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: Colors.white,
+                          size: 20,
+                        )
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    color: Colors.white,
+                  ),
+                  InkWell(
+                    onTap: onPressHowTo,
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'How to setup share button',
                           style: TextStyle(color: Colors.white, fontSize: 17),
                         ),
                         Icon(

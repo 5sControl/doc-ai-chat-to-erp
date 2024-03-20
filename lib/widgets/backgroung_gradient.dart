@@ -15,7 +15,7 @@ class BackgroundGradient extends StatelessWidget {
     // return Container(
     //   decoration: BoxDecoration(
     //       gradient: LinearGradient(
-    //           colors: [Colors.pink.shade400, Colors.pink.shade500, Colors.white],
+    //           colors: [Colors.pink.shade200, Colors.pink.shade100, Colors.white],
     //           begin: Alignment.topCenter,
     //           end: Alignment.bottomCenter)),
     // );

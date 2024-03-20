@@ -9,6 +9,16 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsGifGen {
+  const $AssetsGifGen();
+
+  /// File path: assets/gif/how_to.gif
+  AssetGenImage get howTo => const AssetGenImage('assets/gif/how_to.gif');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [howTo];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -117,6 +127,7 @@ class Assets {
   Assets._();
 
   static const AssetGenImage bg = AssetGenImage('assets/BG.png');
+  static const $AssetsGifGen gif = $AssetsGifGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
   static const AssetGenImage placeholderLogo =

@@ -104,7 +104,7 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                      'It will help us to improve the quality of summaries',
+                      'It will help us to improve quality \n of the summaries',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 16,
@@ -115,9 +115,6 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                   selectedRate: selectedRate,
                   onPressStar: onPressStar,
                 ),
-                // const Divider(
-                //   color: Colors.transparent,
-                // ),
                 RateTextField(
                   controller: urlController,
                 ),
@@ -256,52 +253,44 @@ class RateTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(bottom: 10),
-        child: Container(
-          decoration: const BoxDecoration(boxShadow: [
-            // BoxShadow(
-            //     color: Colors.black12,
-            //     blurRadius: 5,
-            //     offset: Offset(1, 1))
-          ]),
-          child: TextField(
-            textAlignVertical: TextAlignVertical.top,
-            controller: controller,
-            onChanged: (text) {
-              controller.text = text;
-            },
-            cursorWidth: 3,
-            cursorColor: Colors.black54,
-            cursorHeight: 20,
-            style: const TextStyle(color: Colors.black, fontSize: 20),
-            decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
+        child: TextField(
+          textAlignVertical: TextAlignVertical.top,
+          controller: controller,
+          onChanged: (text) {
+            controller.text = text;
+          },
+          cursorWidth: 3,
+          cursorColor: Colors.black54,
+          cursorHeight: 20,
+          style: const TextStyle(color: Colors.black, fontSize: 20),
+          decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(
+                    width: 2,
+                    color: Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
+              ),
+              filled: true,
+              fillColor: Colors.teal.withOpacity(0.2),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              floatingLabelAlignment: FloatingLabelAlignment.start,
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              label: const Padding(
+                padding: EdgeInsets.only(bottom: 0),
+                child: Text(
+                  'Enter your feedback',
+                  style: TextStyle(),
+                ),
+              ),
+              border: OutlineInputBorder(
+                  gapPadding: 10,
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(
-                      width: 2,
-                      color: Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
-                ),
-                filled: true,
-                fillColor: Colors.teal.withOpacity(0.2),
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                floatingLabelAlignment: FloatingLabelAlignment.start,
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                label: const Padding(
-                  padding: EdgeInsets.only(bottom: 0),
-                  child: Text(
-                    'Enter your feedback',
-                    style: TextStyle(),
-                  ),
-                ),
-                border: OutlineInputBorder(
-                    gapPadding: 10,
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none),
-                floatingLabelStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500)),
-          ),
+                  borderSide: BorderSide.none),
+              floatingLabelStyle: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500)),
         ));
   }
 }
