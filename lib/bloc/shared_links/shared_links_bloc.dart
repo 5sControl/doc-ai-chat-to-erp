@@ -211,7 +211,21 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       emit(state.copyWith(savedLinks: summaryMap));
     });
 
-    on<RateSummary>((event, emit) {
+    on<RateSummary>((event, emit) async {
+      final rateStatus = await summaryRepository.sendSummaryRate(
+          summaryLink: event.sharedLink,
+          summary: state.savedLinks[event.sharedLink]?.summary ?? '',
+          rate: event.rate,
+          device: event.device,
+          comment: event.comment);
+
+      if (rateStatus == SendRateStatus.Sended) {
+        print('sended finish');
+      }
+      if (rateStatus == SendRateStatus.Error) {
+        print('sended error');
+      }
+
       final Set<String> ratedSummaries = Set.from(state.ratedSummaries);
       ratedSummaries.add(event.sharedLink);
       emit(state.copyWith(ratedSummaries: ratedSummaries));

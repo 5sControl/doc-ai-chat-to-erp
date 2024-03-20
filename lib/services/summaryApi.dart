@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:summify/models/models.dart';
+
+enum SendRateStatus { Loding, Sended, Error }
 
 class SummaryApiRepository {
   final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
   final String fileUrl =
       "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
+  final String rateUrl = 'http://192.168.1.136:8000/api/applications/reviews/';
   // final String linkUrl = "http://192.168.1.136:8000/application_by_summarize/";
   // final String fileUrl =
   //     "http://192.168.1.136:8000/application_by_summarize/uploadfile/";
@@ -71,6 +75,38 @@ class SummaryApiRepository {
       return const Summary(summary: null, summaryError: 'Loading error');
     }
   }
+
+  Future<SendRateStatus> sendRate(
+      {required String summaryLink,
+      required String summary,
+      required int rate,
+      required String device,
+      required String comment}) async {
+    try {
+      Response response = await _dio.post(
+        rateUrl,
+        data: {
+          'comment': comment,
+          'device': device,
+          'grade': rate,
+          'summary': summary,
+          'source': summaryLink,
+        },
+      );
+      if (response.statusCode == 201) {
+        print('Send rate');
+        return SendRateStatus.Sended;
+      } else {
+        return SendRateStatus.Error;
+      }
+    } on DioException catch (e) {
+      print(e.response?.data);
+      return SendRateStatus.Error;
+    } catch (error, stacktrace) {
+      print(error);
+      return SendRateStatus.Error;
+    }
+  }
 }
 
 class SummaryRepository {
@@ -88,5 +124,19 @@ class SummaryRepository {
       {required String fileName, required String filePath}) {
     return _summaryRepository.getFromFile(
         fileName: fileName, filePath: filePath);
+  }
+
+  Future<SendRateStatus> sendSummaryRate(
+      {required String summaryLink,
+      required String summary,
+      required int rate,
+      required String device,
+      required String comment}) {
+    return _summaryRepository.sendRate(
+        summary: summary,
+        summaryLink: summaryLink,
+        comment: comment,
+        device: device,
+        rate: rate);
   }
 }

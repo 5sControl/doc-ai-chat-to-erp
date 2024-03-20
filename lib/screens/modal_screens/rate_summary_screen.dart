@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../bloc/shared_links/shared_links_bloc.dart';
+import '../../gen/assets.gen.dart';
 
 class RateSummaryScreen extends StatefulWidget {
   final String summaryLink;
@@ -14,7 +17,8 @@ class RateSummaryScreen extends StatefulWidget {
 }
 
 class _RateSummaryScreenState extends State<RateSummaryScreen> {
-  int selectedRate = 3;
+  final isRated = false;
+  int selectedRate = 0;
   final TextEditingController urlController = TextEditingController();
   var controllerText = '';
 
@@ -50,9 +54,11 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
     }
 
     void onPressSubmit() {
-      context
-          .read<SharedLinksBloc>()
-          .add(RateSummary(sharedLink: widget.summaryLink));
+      context.read<SharedLinksBloc>().add(RateSummary(
+          sharedLink: widget.summaryLink,
+          rate: selectedRate,
+          device: Platform.isIOS ? 'Ios' : 'Android',
+          comment: controllerText));
       Navigator.of(context).pop();
     }
 
@@ -66,60 +72,92 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        visualDensity: VisualDensity.compact,
-                        onPressed: onPressClose,
-                        style: ButtonStyle(
-                            padding: const MaterialStatePropertyAll(
-                                EdgeInsets.all(2)),
-                            backgroundColor: MaterialStatePropertyAll(
-                                const Color.fromRGBO(4, 49, 57, 1)
-                                    .withOpacity(0.1))),
-                        highlightColor:
-                            const Color.fromRGBO(4, 49, 57, 1).withOpacity(0.2),
-                        icon: const Icon(
-                          Icons.close,
-                          color: Color.fromRGBO(4, 49, 57, 1),
+            child: AnimatedCrossFade(
+              firstChild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          visualDensity: VisualDensity.compact,
+                          onPressed: onPressClose,
+                          style: ButtonStyle(
+                              padding: const MaterialStatePropertyAll(
+                                  EdgeInsets.all(2)),
+                              backgroundColor: MaterialStatePropertyAll(
+                                  const Color.fromRGBO(4, 49, 57, 1)
+                                      .withOpacity(0.1))),
+                          highlightColor: const Color.fromRGBO(4, 49, 57, 1)
+                              .withOpacity(0.2),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Color.fromRGBO(4, 49, 57, 1),
+                          )),
+                    ],
+                  ),
+                  const Text(
+                    'Please rate your summary',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const Divider(
+                    color: Colors.transparent,
+                    height: 5,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                        'It will help us to improve quality \n of the summaries',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
                         )),
+                  ),
+                  Stars(
+                    selectedRate: selectedRate,
+                    onPressStar: onPressStar,
+                  ),
+                  RateTextField(
+                    controller: urlController,
+                  ),
+                  SubmitButton(onPressSubmit: onPressSubmit)
+                ],
+              ),
+              secondChild: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Padding(
+                      padding:  EdgeInsets.all(8.0),
+                      child: Text(
+                        'Thank you for your feedback',
+                        style:
+                            TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SvgPicture.asset(
+                      Assets.icons.like,
+                      height: 100,
+                      width: 100,
+                      colorFilter: ColorFilter.mode(
+                          Colors.teal.shade500, BlendMode.srcIn),
+                    )
                   ],
                 ),
-                const Text(
-                  'Please rate your summary',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const Divider(
-                  color: Colors.transparent,
-                  height: 5,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                      'It will help us to improve quality \n of the summaries',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      )),
-                ),
-                Stars(
-                  selectedRate: selectedRate,
-                  onPressStar: onPressStar,
-                ),
-                RateTextField(
-                  controller: urlController,
-                ),
-                SubmitButton(onPressSubmit: onPressSubmit)
-              ],
+              ),
+              duration: const Duration(milliseconds: 600),
+              crossFadeState: isRated
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
             ),
           ),
         ),
@@ -279,7 +317,7 @@ class RateTextField extends StatelessWidget {
               label: const Padding(
                 padding: EdgeInsets.only(bottom: 0),
                 child: Text(
-                  'Enter your feedback',
+                  'Leave your feedback',
                   style: TextStyle(),
                 ),
               ),

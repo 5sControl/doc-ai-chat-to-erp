@@ -49,6 +49,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/info.svg
   String get info => 'assets/icons/info.svg';
 
+  /// File path: assets/icons/like.svg
+  String get like => 'assets/icons/like.svg';
+
   /// File path: assets/icons/logo.svg
   String get logo => 'assets/icons/logo.svg';
 
@@ -87,6 +90,7 @@ class $AssetsIconsGen {
         home,
         homeFilled,
         info,
+        like,
         logo,
         noImage,
         paste,
