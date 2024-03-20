@@ -174,11 +174,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: onPressInfo,
                   padding: EdgeInsets.zero,
                   icon: SvgPicture.asset(
-                    Assets.icons.info,
+                    Assets.icons.settings,
                     height: 35,
                     width: 35,
-                    colorFilter: const ColorFilter.mode(
-                        Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
+                    colorFilter:  ColorFilter.mode(
+                        Colors.teal.shade900, BlendMode.srcIn),
                   ),
                 ),
               )

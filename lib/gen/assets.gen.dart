@@ -67,6 +67,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/profile_filled.svg
   String get profileFilled => 'assets/icons/profile_filled.svg';
 
+  /// File path: assets/icons/settings.svg
+  String get settings => 'assets/icons/settings.svg';
+
   /// File path: assets/icons/share.svg
   String get share => 'assets/icons/share.svg';
 
@@ -96,6 +99,7 @@ class $AssetsIconsGen {
         paste,
         profile,
         profileFilled,
+        settings,
         share,
         text,
         update,
