@@ -69,12 +69,19 @@ class RateSummary extends SharedLinksEvent {
   final int rate;
   final String comment;
   final String device;
-  // summaryLink: summaryLink, summary: summary, rate: rate, device: device, comment: comment
   const RateSummary(
       {required this.rate,
       required this.comment,
       required this.device,
       required this.sharedLink});
+
+  @override
+  List<String?> get props => [sharedLink];
+}
+
+class SkipRateSummary extends SharedLinksEvent {
+  final String sharedLink;
+  const SkipRateSummary({required this.sharedLink});
 
   @override
   List<String?> get props => [sharedLink];

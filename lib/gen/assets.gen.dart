@@ -40,6 +40,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/google.svg
   String get google => 'assets/icons/google.svg';
 
+  /// File path: assets/icons/headrt.svg
+  String get headrt => 'assets/icons/headrt.svg';
+
   /// File path: assets/icons/home.svg
   String get home => 'assets/icons/home.svg';
 
@@ -90,6 +93,7 @@ class $AssetsIconsGen {
         delete,
         file,
         google,
+        headrt,
         home,
         homeFilled,
         info,
@@ -136,13 +140,14 @@ class Assets {
 
   static const AssetGenImage bg = AssetGenImage('assets/BG.png');
   static const $AssetsGifGen gif = $AssetsGifGen();
+  static const AssetGenImage girla = AssetGenImage('assets/girla.png');
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
   static const AssetGenImage placeholderLogo =
       AssetGenImage('assets/placeholder_logo.png');
 
   /// List of all assets
-  static List<AssetGenImage> get values => [bg, placeholderLogo];
+  static List<AssetGenImage> get values => [bg, girla, placeholderLogo];
 }
 
 class AssetGenImage {

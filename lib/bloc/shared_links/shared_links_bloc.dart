@@ -230,6 +230,12 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       ratedSummaries.add(event.sharedLink);
       emit(state.copyWith(ratedSummaries: ratedSummaries));
     });
+
+    on<SkipRateSummary>((event, emit) async {
+      final Set<String> ratedSummaries = Set.from(state.ratedSummaries);
+      ratedSummaries.add(event.sharedLink);
+      emit(state.copyWith(ratedSummaries: ratedSummaries));
+    });
   }
 
   @override

@@ -77,9 +77,9 @@ class SummaryScreen extends StatelessWidget {
 
         void onPressBack() {
           if (!state.ratedSummaries.contains(sharedLink)) {
-            // context
-            //     .read<SharedLinksBloc>()
-            //     .add(RateSummary(sharedLink: sharedLink));
+            context
+                .read<SharedLinksBloc>()
+                .add(SkipRateSummary(sharedLink: sharedLink));
             showRateScreen();
           } else {
             Navigator.of(context).pushNamed('/');
@@ -92,7 +92,7 @@ class SummaryScreen extends StatelessWidget {
         }
 
         return PopScope(
-          // canPop: false,
+          canPop: false,
           // onPopInvoked: (didPop) {
           //   print('!@!!!!@@@');
           //   didPop = false;
