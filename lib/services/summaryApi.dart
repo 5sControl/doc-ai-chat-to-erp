@@ -10,7 +10,7 @@ class SummaryApiRepository {
   final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
   final String fileUrl =
       "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
-  final String rateUrl = 'http://192.168.1.136:8000/api/applications/reviews/';
+  final String rateUrl = 'http://51.159.179.125:8001/api/applications/reviews/';
   // final String linkUrl = "http://192.168.1.136:8000/application_by_summarize/";
   // final String fileUrl =
   //     "http://192.168.1.136:8000/application_by_summarize/uploadfile/";

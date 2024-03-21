@@ -5,6 +5,14 @@ class SubscriptionState extends Equatable {
   final bool isSubscribed;
   const SubscriptionState({required this.isSubscribed});
 
+  SubscriptionState copyWith({
+    bool? isSubscribed,
+  }) {
+    return SubscriptionState(
+      isSubscribed: isSubscribed ?? this.isSubscribed,
+    );
+  }
+
   @override
   List<Object> get props => [];
 

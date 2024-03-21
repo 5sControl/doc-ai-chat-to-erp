@@ -306,7 +306,8 @@ class ErrorMessage extends StatelessWidget {
               'Summarize error: $error',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 12, height: 1, color: Colors.red.shade400),
+              style: TextStyle(
+                  fontSize: 12, height: 1, color: Colors.red.shade400),
             )),
             IconButton(
                 tooltip: 'Retry',

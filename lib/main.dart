@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +13,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
+import 'package:summify/bloc/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
@@ -41,7 +41,6 @@ void main() async {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
   // await HydratedBloc.storage.clear();
-
   runApp(const SummishareApp());
 }
 
@@ -53,78 +52,28 @@ class SummishareApp extends StatefulWidget {
 }
 
 class _SummishareAppState extends State<SummishareApp> {
-  late StreamSubscription<List<PurchaseDetails>> _subscription;
-  List<ProductDetails> products = [];
-
-  void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
-    purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-
-
-      if (purchaseDetails.status == PurchaseStatus.pending) {
-        // _showPendingUI();
-      } else {
-        if (purchaseDetails.status == PurchaseStatus.error) {
-          // _handleError(purchaseDetails.error!);
-          print('Error');
-        } else if (purchaseDetails.status == PurchaseStatus.purchased ||
-            purchaseDetails.status == PurchaseStatus.restored) {
-          // print(purchaseDetails.status);
-          // print(purchaseDetails.pendingCompletePurchase);
-          // print(purchaseDetails.purchaseID);
-          // print(purchaseDetails.transactionDate);
-          // print(purchaseDetails.verificationData.localVerificationData);
-          // print(purchaseDetails.verificationData.serverVerificationData);
-          // print(purchaseDetails.verificationData.source);
-
-          // bool valid = await _verifyPurchase(purchaseDetails);
-          // if (valid) {
-          //   _deliverProduct(purchaseDetails);
-          // } else {
-          //   _handleInvalidPurchase(purchaseDetails);
-          // }
-
-          print('Success');
-        }
-        if (purchaseDetails.pendingCompletePurchase) {
-          print('asdasd');
-          await InAppPurchase.instance.completePurchase(purchaseDetails);
-        }
-      }
-    });
-  }
-
-  void loadProducts() async {
-    const Set<String> _kIds = <String>{'Weekly_Subscription'};
-    final ProductDetailsResponse response =
-        await InAppPurchase.instance.queryProductDetails(_kIds);
-    if (response.notFoundIDs.isNotEmpty) {
-
-    }
-    setState(() {
-      products = response.productDetails;
-     });
-    // InAppPurchase.instance.buyNonConsumable(
-    //     purchaseParam: PurchaseParam(productDetails: products.first));
-  }
+  // late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
 
   @override
   void initState() {
-    loadProducts();
-    final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    _subscription = purchaseUpdated.listen((purchaseDetailsList) {
-      _listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _subscription.cancel();
-    }, onError: (error) {
-      // handle error here.
-    }) as StreamSubscription<List<PurchaseDetails>>;
-
     super.initState();
+    // final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
+    //
+    // _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
+    //   print("Purchase stream started");
+    //   IAPService(context: context).listenToPurchaseUpdated(purchaseDetailsList);
+    // }, onDone: () {
+    //   _iapSubscription.cancel();
+    // }, onError: (error) {
+    //   _iapSubscription.cancel();
+    // }) as StreamSubscription<List<PurchaseDetails>>;
+    // _iapSubscription.onData((data) {
+    //   print(data.first.productID);
+    // });
   }
 
   @override
   void dispose() {
-    _subscription.cancel();
     super.dispose();
   }
 
@@ -135,6 +84,9 @@ class _SummishareAppState extends State<SummishareApp> {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
+            create: (context) => SubscriptionBloc(),
+          ),
+          BlocProvider(
             create: (context) => SharedLinksBloc(),
           ),
           BlocProvider(
@@ -144,6 +96,7 @@ class _SummishareAppState extends State<SummishareApp> {
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
+            context.read<SubscriptionBloc>().add(Start());
             return MaterialApp(
               theme: baseTheme,
               builder: (context, Widget? child) => child!,

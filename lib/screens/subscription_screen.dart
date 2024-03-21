@@ -1,9 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:summify/bloc/subscription_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class SubscriptionScreen extends StatelessWidget {
+class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
+
+  @override
+  State<SubscriptionScreen> createState() => _SubscriptionScreenState();
+}
+
+class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  // final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  // bool _isAvailable = false;
+  // String? _notice;
+  // List<ProductDetails> _products = [];
+  // bool _loading = true;
+
+  @override
+  void initState() {
+
+    // initStoreInfo();
+    super.initState();
+  }
+
+  // Future<void> initStoreInfo() async {
+  //   final bool isAvailable = await _inAppPurchase.isAvailable();
+  //   setState(() {
+  //     _isAvailable = isAvailable;
+  //   });
+  //
+  //   if (!_isAvailable) {
+  //     setState(() {
+  //       _loading = false;
+  //       _notice = "There are no upgrades at this time";
+  //     });
+  //     return;
+  //   }
+  //
+  //   // get IAP.
+  //   ProductDetailsResponse productDetailsResponse =
+  //       await _inAppPurchase.queryProductDetails({'Weekly_Subscription'});
+  //
+  //   setState(() {
+  //     _loading = false;
+  //     _products = productDetailsResponse.productDetails;
+  //   });
+  //
+  //   if (productDetailsResponse.error != null) {
+  //     setState(() {
+  //       _notice = "There was a problem connecting to the store";
+  //     });
+  //   } else if (productDetailsResponse.productDetails.isEmpty) {
+  //     setState(() {
+  //       _notice = "There are no upgrades at this time";
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -15,79 +72,85 @@ class SubscriptionScreen extends StatelessWidget {
     return Stack(
       children: [
         const BackgroundGradient(),
-        Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            flexibleSpace: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: onPressClose,
-                    style: ButtonStyle(
-                        padding:
-                            const MaterialStatePropertyAll(EdgeInsets.all(2)),
-                        backgroundColor: MaterialStatePropertyAll(
-                            const Color.fromRGBO(4, 49, 57, 1)
-                                .withOpacity(0.1))),
-                    highlightColor:
-                        const Color.fromRGBO(4, 49, 57, 1).withOpacity(0.2),
-                    icon: const Icon(
-                      Icons.close,
-                      color: Color.fromRGBO(4, 49, 57, 1),
-                    )),
-              ],
+        Animate(
+          effects: [FadeEffect()],
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              flexibleSpace: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      visualDensity: VisualDensity.compact,
+                      onPressed: onPressClose,
+                      style: ButtonStyle(
+                          padding:
+                              const MaterialStatePropertyAll(EdgeInsets.all(2)),
+                          backgroundColor: MaterialStatePropertyAll(
+                              const Color.fromRGBO(4, 49, 57, 1)
+                                  .withOpacity(0.1))),
+                      highlightColor:
+                          const Color.fromRGBO(4, 49, 57, 1).withOpacity(0.2),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Color.fromRGBO(4, 49, 57, 1),
+                      )),
+                ],
+              ),
             ),
-          ),
-          body: Padding(
-            padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Image.asset(
-                  Assets.girla.path,
-                  fit: BoxFit.cover,
-                ),
-                const Expanded(
-                    child: Padding(
-                  padding: EdgeInsets.only(
-                    left: 15,
-                    right: 15,
+            body: Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Image.asset(
+                    Assets.girla.path,
+                    fit: BoxFit.cover,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text('Need more summaries?',
-                          style: TextStyle(
-                              fontSize: 46,
-                              fontWeight: FontWeight.w700,
-                              height: 1)),
-                      Divider(
-                        color: Colors.transparent,
-                        height: 25,
-                      ),
-                      Text('Maximize your productivity \nand efficiency! ',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              height: 1.4)),
-                      Divider(
-                        color: Colors.transparent,
-                        height: 20,
-                      ),
-                      PriceBloc(price: '\$1.49'),
-                    ],
-                  ),
-                )),
-                const SubscribeButton(),
-                const TermsRestorePrivacy(),
-              ],
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text('Need more summaries?',
+                            style: TextStyle(
+                                fontSize: 46,
+                                fontWeight: FontWeight.w700,
+                                height: 1)),
+                        const Divider(
+                          color: Colors.transparent,
+                          height: 25,
+                        ),
+                        const Text(
+                            'Maximize your productivity \nand efficiency! ',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                height: 1.4)),
+                        const Divider(
+                          color: Colors.transparent,
+                          height: 20,
+                        ),
+                        // PriceBloc(
+                        //     loading: _loading,
+                        //     price: '${_products.first.price}'),
+                      ],
+                    ),
+                  )),
+                  SubscribeButton(product: null,),
+                  const TermsRestorePrivacy(),
+                ],
+              ),
             ),
           ),
         ),
@@ -97,8 +160,9 @@ class SubscriptionScreen extends StatelessWidget {
 }
 
 class PriceBloc extends StatelessWidget {
-  final String price;
-  const PriceBloc({super.key, required this.price});
+  final String? price;
+  final bool loading;
+  const PriceBloc({super.key, required this.price, required this.loading});
 
   @override
   Widget build(BuildContext context) {
@@ -135,80 +199,169 @@ class PriceBloc extends StatelessWidget {
             child: AspectRatio(
           aspectRatio: 1.2,
           child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white70, borderRadius: BorderRadius.circular(12)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  price,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 46, fontWeight: FontWeight.w500, height: 1),
+              decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(12)),
+              child: AnimatedCrossFade(
+                firstChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      price ?? '',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 46, fontWeight: FontWeight.w500, height: 1),
+                    ),
+                    const Text(
+                      'weekly',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.w400, height: 1),
+                    ),
+                  ],
                 ),
-                const Text(
-                  'weekly',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 25, fontWeight: FontWeight.w400, height: 1),
+                secondChild: const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
                 ),
-              ],
-            ),
-          ),
+                crossFadeState: loading
+                    ? CrossFadeState.showSecond
+                    : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 300),
+              )),
         ))
       ],
     );
   }
 }
 
-class SubscribeButton extends StatelessWidget {
-  const SubscribeButton({super.key});
+class SubscribeButton extends StatefulWidget {
+  final ProductDetails? product;
+  const SubscribeButton({super.key, required this.product});
+
+  @override
+  State<SubscribeButton> createState() => _SubscribeButtonState();
+}
+
+class _SubscribeButtonState extends State<SubscribeButton> {
+  bool tapped = false;
+
+  static const duration = Duration(milliseconds: 150);
+  void onTapDown() {
+    setState(() {
+      tapped = true;
+    });
+  }
+
+  void onTapUp() {
+    Future.delayed(duration, () {
+      setState(() {
+        tapped = false;
+      });
+    });
+  }
+
+  // void onTap() {
+  //   Future.delayed(duration, () {
+  //     onPressGoPremium();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(15),
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: const Color.fromRGBO(31, 188, 183, 1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: const Text(
-        'Go Premium',
-        style: TextStyle(
-            color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
-        textAlign: TextAlign.center,
-      ),
-    );
+    void onPressGoPremium() {
+      // if (widget.product != null) {
+        context
+            .read<SubscriptionBloc>()
+            .add(const BuySubscription(subscriptionId: 'Weekly_Subscription'));
+      // }
+    }
+
+    return GestureDetector(
+        onTap: onPressGoPremium,
+        onTapUp: (_) => onTapUp(),
+        onTapDown: (_) => onTapDown(),
+        onTapCancel: () => onTapUp(),
+        child: AnimatedScale(
+          duration: duration,
+          scale: tapped ? 0.95 : 1,
+          child: AnimatedContainer(
+            duration: duration,
+            margin: const EdgeInsets.all(15),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              color: !tapped
+                  ? const Color.fromRGBO(31, 188, 183, 1)
+                  : const Color.fromRGBO(4, 49, 57, 1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Text(
+              'Go Premium',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ));
   }
 }
 
 class TermsRestorePrivacy extends StatelessWidget {
   const TermsRestorePrivacy({super.key});
 
+  void onPressTerms() async {
+    final Uri url = Uri.parse(
+        'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+    if (!await launchUrl(url)) {}
+  }
+
+  void onPressRestore() async {
+    await InAppPurchase.instance.restorePurchases();
+  }
+
+  void onPressPrivacy() async {
+    final Uri url = Uri.parse('https://elang.app/privacy');
+    if (!await launchUrl(url)) {}
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         Expanded(
-            child: Text(
-          'Terms of use',
-          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-          textAlign: TextAlign.center,
-        )),
+          child: GestureDetector(
+            onTap: onPressTerms,
+            child: const Text(
+              'Terms of use',
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
         Expanded(
-            child: Text(
-          'Restore purchase',
-          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-          textAlign: TextAlign.center,
-        )),
+          child: GestureDetector(
+            onTap: onPressRestore,
+            child: const Text(
+              'Restore purchase',
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
         Expanded(
-            child: Text(
-          'Privacy policy',
-          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-          textAlign: TextAlign.center,
-        )),
+          child: GestureDetector(
+            onTap: onPressPrivacy,
+            child: const Text(
+              'Privacy policy',
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
       ],
     );
   }

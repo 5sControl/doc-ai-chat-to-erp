@@ -26,46 +26,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late StreamSubscription intentMediaStreamSubscription;
-  // late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
-  // final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  //
-  // bool _isAvailable = false;
-  // String? _notice;
-  // List<ProductDetails> products = [];
-
-  // Future<void> initStoreInfo() async {
-  //   final bool isAvailable = await _inAppPurchase.isAvailable();
-  //
-  //   setState(() {
-  //     _isAvailable = isAvailable;
-  //   });
-  //
-  //   if (!_isAvailable) {
-  //     setState(() {
-  //       _notice = 'Purchases not available';
-  //     });
-  //     return;
-  //   }
-  //
-  //   ProductDetailsResponse productDetailsResponse =
-  //   await _inAppPurchase.queryProductDetails({'SummifyPremiumWeekly'});
-  //
-  //   setState(() {
-  //     products = productDetailsResponse.productDetails;
-  //     print(products.first.id);
-  //   });
-  //
-  //   if (productDetailsResponse.error != null) {
-  //     setState(() {
-  //       _notice = 'Problem with connecting to store';
-  //     });
-  //   } else if (productDetailsResponse.productDetails.isEmpty) {
-  //     setState(() {
-  //       _notice = 'There are no upgrades at this time';
-  //     });
-  //   }
-  //
-  // }
 
   void saveLink(String summaryLink) async {
     context
@@ -76,17 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // initStoreInfo();
-    // final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    //
-    // _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
-    //   print("Purchase stream started");
-    //   IAPService().listenToPurchaseUpdated(purchaseDetailsList);
-    // }, onDone: () {
-    //   _iapSubscription.cancel();
-    // }, onError: (error) {
-    //   _iapSubscription.cancel();
-    // }) as StreamSubscription<List<PurchaseDetails>>;
 
     super.initState();
     intentMediaStreamSubscription =
