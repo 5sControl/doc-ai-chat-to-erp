@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
@@ -13,6 +14,7 @@ import 'package:summify/screens/summary_screen.dart';
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../models/models.dart';
+import '../services/payment.dart';
 import '../widgets/summary_tile.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +26,46 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late StreamSubscription intentMediaStreamSubscription;
+  // late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
+  // final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  //
+  // bool _isAvailable = false;
+  // String? _notice;
+  // List<ProductDetails> products = [];
+
+  // Future<void> initStoreInfo() async {
+  //   final bool isAvailable = await _inAppPurchase.isAvailable();
+  //
+  //   setState(() {
+  //     _isAvailable = isAvailable;
+  //   });
+  //
+  //   if (!_isAvailable) {
+  //     setState(() {
+  //       _notice = 'Purchases not available';
+  //     });
+  //     return;
+  //   }
+  //
+  //   ProductDetailsResponse productDetailsResponse =
+  //   await _inAppPurchase.queryProductDetails({'SummifyPremiumWeekly'});
+  //
+  //   setState(() {
+  //     products = productDetailsResponse.productDetails;
+  //     print(products.first.id);
+  //   });
+  //
+  //   if (productDetailsResponse.error != null) {
+  //     setState(() {
+  //       _notice = 'Problem with connecting to store';
+  //     });
+  //   } else if (productDetailsResponse.productDetails.isEmpty) {
+  //     setState(() {
+  //       _notice = 'There are no upgrades at this time';
+  //     });
+  //   }
+  //
+  // }
 
   void saveLink(String summaryLink) async {
     context
@@ -34,6 +76,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    // initStoreInfo();
+    // final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
+    //
+    // _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
+    //   print("Purchase stream started");
+    //   IAPService().listenToPurchaseUpdated(purchaseDetailsList);
+    // }, onDone: () {
+    //   _iapSubscription.cancel();
+    // }, onError: (error) {
+    //   _iapSubscription.cancel();
+    // }) as StreamSubscription<List<PurchaseDetails>>;
+
     super.initState();
     intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
@@ -87,6 +141,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int dailySummaries = 11;
+    int availableSummaries = 15;
+    // final PurchaseParam purchaseParam = PurchaseParam(productDetails: products.first);
+
     void onPressInfo() {
       showCupertinoModalBottomSheet(
         context: context,
@@ -143,45 +201,14 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: 35,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      Assets.icons.logo,
-                      height: 30,
-                      width: 30,
-                      colorFilter: const ColorFilter.mode(
-                          Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
-                    ),
-                    const Text(
-                      '  Summify',
-                      style: TextStyle(color: Color.fromRGBO(6, 49, 57, 1)),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(3),
-                width: 35,
-                height: 35,
-                child: IconButton(
-                  onPressed: onPressInfo,
-                  padding: EdgeInsets.zero,
-                  icon: SvgPicture.asset(
-                    Assets.icons.settings,
-                    height: 35,
-                    width: 35,
-                    colorFilter:  ColorFilter.mode(
-                        Colors.teal.shade900, BlendMode.srcIn),
-                  ),
-                ),
-              )
+              summariesCounter(
+                  availableSummaries: availableSummaries,
+                  dailySummaries: dailySummaries),
+              logo(),
+              settingsButton(onPressInfo: onPressInfo),
+              // IconButton(icon: Icon(Icons.add), onPressed: () {
+              //   InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
+              // },),
             ],
           )),
       body: Padding(
@@ -218,4 +245,73 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Widget summariesCounter(
+    {required int dailySummaries, required int availableSummaries}) {
+  return Expanded(
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+            color: Colors.white70, borderRadius: BorderRadius.circular(20)),
+        child: Text(
+          '$dailySummaries / $availableSummaries',
+          style: const TextStyle(
+              fontSize: 13, color: Colors.black, fontWeight: FontWeight.w500),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget logo() {
+  return Expanded(
+    flex: 2,
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            Assets.icons.logo,
+            height: 30,
+            width: 30,
+            colorFilter: const ColorFilter.mode(
+                Color.fromRGBO(6, 49, 57, 1), BlendMode.srcIn),
+          ),
+          const Text(
+            '  Summify',
+            style: TextStyle(color: Color.fromRGBO(6, 49, 57, 1)),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget settingsButton({required Function() onPressInfo}) {
+  return Expanded(
+    child: Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        padding: const EdgeInsets.all(3),
+        width: 35,
+        height: 35,
+        child: IconButton(
+          onPressed: onPressInfo,
+          padding: EdgeInsets.zero,
+          icon: SvgPicture.asset(
+            Assets.icons.settings,
+            height: 35,
+            width: 35,
+            colorFilter:
+                ColorFilter.mode(Colors.teal.shade900, BlendMode.srcIn),
+          ),
+        ),
+      ),
+    ),
+  );
 }

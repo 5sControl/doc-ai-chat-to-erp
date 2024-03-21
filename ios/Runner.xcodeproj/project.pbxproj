@@ -20,8 +20,13 @@
 		ED277B022B8A9D22000725FB /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED277B012B8A9D22000725FB /* ShareViewController.swift */; };
 		ED277B052B8A9D22000725FB /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED277B032B8A9D22000725FB /* MainInterface.storyboard */; };
 		ED277B092B8A9D22000725FB /* Share Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = ED277AFF2B8A9D22000725FB /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		ED3FB6BD2BAC2DB100DE3F8C /* Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */; };
+		ED3FB6BE2BAC2DB200DE3F8C /* Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */; };
+		ED3FB6BF2BAC2DB200DE3F8C /* Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */; };
+		ED3FB6C12BAC329C00DE3F8C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6C02BAC329C00DE3F8C /* StoreKitTestCertificate.cer */; };
 		EDC3A5F22B8B7BED001F7D7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EDC3A5F12B8B7BED001F7D7D /* GoogleService-Info.plist */; };
 		EDC3A5F32B8B7BED001F7D7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EDC3A5F12B8B7BED001F7D7D /* GoogleService-Info.plist */; };
+		EDFD0EE72BAB216600222AEE /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDFD0EE62BAB216600222AEE /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,7 +103,10 @@
 		ED277B062B8A9D22000725FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ED277B0F2B8A9D56000725FB /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		ED277B102B8A9DCB000725FB /* Share Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Share Extension.entitlements"; sourceTree = "<group>"; };
+		ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.storekit; sourceTree = "<group>"; };
+		ED3FB6C02BAC329C00DE3F8C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		EDC3A5F12B8B7BED001F7D7D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		EDFD0EE62BAB216600222AEE /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		FF090E00FD93B957E01B4AC9 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B5D05A51062277E57EE92A0 /* Pods_Runner.framework in Frameworks */,
+				EDFD0EE72BAB216600222AEE /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +142,7 @@
 		0A965C235B50049DF94A9A11 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EDFD0EE62BAB216600222AEE /* StoreKit.framework */,
 				B4BA68EF12F0D790BB7A0758 /* Pods_Runner.framework */,
 				2CB3675B9411782EE2F9A959 /* Pods_RunnerTests.framework */,
 				E19A620DE3DEAE88E0D9CEB6 /* Pods_Share_Extension.framework */,
@@ -178,6 +188,8 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */,
+				ED3FB6C02BAC329C00DE3F8C /* StoreKitTestCertificate.cer */,
 				EDC3A5F12B8B7BED001F7D7D /* GoogleService-Info.plist */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
@@ -340,6 +352,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED3FB6BE2BAC2DB200DE3F8C /* Config.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +360,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED3FB6BD2BAC2DB100DE3F8C /* Config.storekit in Resources */,
+				ED3FB6C12BAC329C00DE3F8C /* StoreKitTestCertificate.cer in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				EDC3A5F22B8B7BED001F7D7D /* GoogleService-Info.plist in Resources */,
@@ -359,6 +374,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED3FB6BF2BAC2DB200DE3F8C /* Config.storekit in Resources */,
 				ED277B052B8A9D22000725FB /* MainInterface.storyboard in Resources */,
 				EDC3A5F32B8B7BED001F7D7D /* GoogleService-Info.plist in Resources */,
 			);

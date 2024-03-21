@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
@@ -53,9 +51,9 @@ class SubscriptionScreen extends StatelessWidget {
                   Assets.girla.path,
                   fit: BoxFit.cover,
                 ),
-                Expanded(
+                const Expanded(
                     child: Padding(
-                  padding: const EdgeInsets.only(
+                  padding: EdgeInsets.only(
                     left: 15,
                     right: 15,
                   ),
@@ -64,141 +62,153 @@ class SubscriptionScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text('Need more summaries?',
+                      Text('Need more summaries?',
                           style: TextStyle(
                               fontSize: 46,
                               fontWeight: FontWeight.w700,
                               height: 1)),
-                      const Divider(
+                      Divider(
                         color: Colors.transparent,
                         height: 25,
                       ),
-                      const Text(
-                          'Maximize your productivity \nand efficiency! ',
+                      Text('Maximize your productivity \nand efficiency! ',
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
                               height: 1.4)),
-                      const Divider(
+                      Divider(
                         color: Colors.transparent,
                         height: 20,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                              child: AspectRatio(
-                            aspectRatio: 1.2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white70,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: const Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    '15',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 46,
-                                        fontWeight: FontWeight.w500,
-                                        height: 1),
-                                  ),
-                                  Text(
-                                    'summaries daily',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )),
-                          const VerticalDivider(),
-                          Expanded(
-                              child: AspectRatio(
-                            aspectRatio: 1.2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white70,
-                                  borderRadius: BorderRadius.circular(12)),
-                              child: const Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    '\$1.49',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 46,
-                                        fontWeight: FontWeight.w500,
-                                        height: 1),
-                                  ),
-                                  Text(
-                                    'weekly',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ))
-                        ],
-                      ),
+                      PriceBloc(price: '\$1.49'),
                     ],
                   ),
                 )),
-                Container(
-                  margin: const EdgeInsets.all(15),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(31, 188, 183, 1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'Go Premium',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const Row(
-                  children: [
-                    Expanded(
-                        child: Text(
-                      'Terms of use',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-                      textAlign: TextAlign.center,
-                    )),
-                    Expanded(
-                        child: Text(
-                      'Restore purchase',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-                      textAlign: TextAlign.center,
-                    )),
-                    Expanded(
-                        child: Text(
-                      'Privacy policy',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-                      textAlign: TextAlign.center,
-                    )),
-                  ],
-                )
+                const SubscribeButton(),
+                const TermsRestorePrivacy(),
               ],
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class PriceBloc extends StatelessWidget {
+  final String price;
+  const PriceBloc({super.key, required this.price});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+            child: AspectRatio(
+          aspectRatio: 1.2,
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white70, borderRadius: BorderRadius.circular(12)),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  '15',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 46, fontWeight: FontWeight.w500, height: 1),
+                ),
+                Text(
+                  'summaries daily',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w400, height: 1),
+                ),
+              ],
+            ),
+          ),
+        )),
+        const VerticalDivider(),
+        Expanded(
+            child: AspectRatio(
+          aspectRatio: 1.2,
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white70, borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  price,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontSize: 46, fontWeight: FontWeight.w500, height: 1),
+                ),
+                const Text(
+                  'weekly',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w400, height: 1),
+                ),
+              ],
+            ),
+          ),
+        ))
+      ],
+    );
+  }
+}
+
+class SubscribeButton extends StatelessWidget {
+  const SubscribeButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(15),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color.fromRGBO(31, 188, 183, 1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Text(
+        'Go Premium',
+        style: TextStyle(
+            color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+
+class TermsRestorePrivacy extends StatelessWidget {
+  const TermsRestorePrivacy({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      children: [
+        Expanded(
+            child: Text(
+          'Terms of use',
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+          textAlign: TextAlign.center,
+        )),
+        Expanded(
+            child: Text(
+          'Restore purchase',
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+          textAlign: TextAlign.center,
+        )),
+        Expanded(
+            child: Text(
+          'Privacy policy',
+          style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+          textAlign: TextAlign.center,
+        )),
       ],
     );
   }
