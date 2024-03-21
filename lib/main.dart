@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
@@ -17,7 +15,6 @@ import 'package:summify/bloc/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
-import 'package:summify/services/payment.dart';
 import 'package:summify/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
 import 'firebase_options.dart';
@@ -44,38 +41,8 @@ void main() async {
   runApp(const SummishareApp());
 }
 
-class SummishareApp extends StatefulWidget {
+class SummishareApp extends StatelessWidget {
   const SummishareApp({super.key});
-
-  @override
-  State<SummishareApp> createState() => _SummishareAppState();
-}
-
-class _SummishareAppState extends State<SummishareApp> {
-  // late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-    // final Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-    //
-    // _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
-    //   print("Purchase stream started");
-    //   IAPService(context: context).listenToPurchaseUpdated(purchaseDetailsList);
-    // }, onDone: () {
-    //   _iapSubscription.cancel();
-    // }, onError: (error) {
-    //   _iapSubscription.cancel();
-    // }) as StreamSubscription<List<PurchaseDetails>>;
-    // _iapSubscription.onData((data) {
-    //   print(data.first.productID);
-    // });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +63,7 @@ class _SummishareAppState extends State<SummishareApp> {
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
-            context.read<SubscriptionBloc>().add(Start());
+            context.read<SubscriptionBloc>().add(const Start());
             return MaterialApp(
               theme: baseTheme,
               builder: (context, Widget? child) => child!,

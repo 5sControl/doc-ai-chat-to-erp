@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -8,6 +9,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:summify/models/models.dart';
 
 part 'subscription_event.dart';
 part 'subscription_state.dart';
@@ -15,12 +17,15 @@ part 'subscription_bloc.g.dart';
 
 class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
-  static const bool _started = false;
+  // static const bool _started = false;
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   Set<String> _kProductIds = {"Weekly_Subscription"};
   List<ProductDetails> _products = [];
 
-  SubscriptionBloc() : super(const SubscriptionState(isSubscribed: false)) {
+  SubscriptionBloc()
+      : super(const SubscriptionState(
+            subscriptionsStatus: SubscriptionsStatus.unsubscribed,
+            availableProducts: [])) {
     StreamSubscription<List<PurchaseDetails>>? _subscription;
 
     Future<void> initStoreInfo() async {
@@ -41,23 +46,30 @@ class SubscriptionBloc
           await _inAppPurchase.queryProductDetails(_kProductIds);
 
       if (productDetailResponse.error != null) {
-        _products = productDetailResponse.productDetails;
+        // _products = productDetailResponse.productDetails;
         return;
       }
 
       if (productDetailResponse.productDetails.isEmpty) {
-        _products = productDetailResponse.productDetails;
+        // _products = productDetailResponse.productDetails;
         return;
       }
 
       _products = productDetailResponse.productDetails;
       print(_products.first.id);
+      final prod = StoreProduct(
+          id: _products.first.id,
+          title: _products.first.title,
+          description: _products.first.description,
+          price: _products.first.price,
+          rawPrice: _products.first.rawPrice,
+          currencyCode: _products.first.currencyCode);
+      emit(state.copyWith(availableProducts: [prod]));
     }
 
     void _onStarted(event, Emitter emit) {
       final Stream<List<PurchaseDetails>> purchaseUpdated =
           _inAppPurchase.purchaseStream;
-        print('asdasdasdasd');
       _subscription = purchaseUpdated.listen((purchaseDetailsList) {
         purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
           if (purchaseDetails.status == PurchaseStatus.pending) {
@@ -69,8 +81,9 @@ class SubscriptionBloc
               print('error');
             } else if (purchaseDetails.pendingCompletePurchase) {
               await _inAppPurchase.completePurchase(purchaseDetails);
-              // emit(PaymentComplete());
               print('complete');
+
+              add(const PaymentComplete());
             }
           }
         });
@@ -90,8 +103,8 @@ class SubscriptionBloc
         await paymentWrapper.finishTransaction(transaction);
       });
       final PurchaseParam purchaseParam = PurchaseParam(
-          productDetails:
-              _products.firstWhere((product) => product.id == event.subscriptionId));
+          productDetails: _products
+              .firstWhere((product) => product.id == event.subscriptionId));
       await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
     }
 
@@ -101,13 +114,17 @@ class SubscriptionBloc
       return super.close();
     }
 
-    // on<SetIsSubscribed>((event, emit) {
-    //   print('Subscribed');
-    //   emit(state.copyWith(isSubscribed: event.isSubscribed));
-    // });
     on<BuySubscription>(_buyProduct);
 
     on<Start>(_onStarted);
+
+    on<PaymentComplete>(
+      (event, emit) async {
+        emit(
+          state.copyWith(subscriptionsStatus: SubscriptionsStatus.subscribed),
+        );
+      },
+    );
   }
 
   @override

@@ -8,10 +8,21 @@ part of 'subscription_bloc.dart';
 
 SubscriptionState _$SubscriptionStateFromJson(Map<String, dynamic> json) =>
     SubscriptionState(
-      isSubscribed: json['isSubscribed'] as bool,
+      subscriptionsStatus: $enumDecode(
+          _$SubscriptionsStatusEnumMap, json['subscriptionsStatus']),
+      availableProducts: (json['availableProducts'] as List<dynamic>)
+          .map((e) => StoreProduct.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$SubscriptionStateToJson(SubscriptionState instance) =>
     <String, dynamic>{
-      'isSubscribed': instance.isSubscribed,
+      'subscriptionsStatus':
+          _$SubscriptionsStatusEnumMap[instance.subscriptionsStatus]!,
+      'availableProducts': instance.availableProducts,
     };
+
+const _$SubscriptionsStatusEnumMap = {
+  SubscriptionsStatus.subscribed: 'subscribed',
+  SubscriptionsStatus.unsubscribed: 'unsubscribed',
+};

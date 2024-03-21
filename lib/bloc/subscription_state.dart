@@ -1,20 +1,26 @@
 part of 'subscription_bloc.dart';
 
+enum SubscriptionsStatus { subscribed, unsubscribed }
+
 @JsonSerializable()
 class SubscriptionState extends Equatable {
-  final bool isSubscribed;
-  const SubscriptionState({required this.isSubscribed});
+  final SubscriptionsStatus subscriptionsStatus;
+
+  final List<StoreProduct> availableProducts;
+  const SubscriptionState(
+      {required this.subscriptionsStatus, required this.availableProducts});
 
   SubscriptionState copyWith({
-    bool? isSubscribed,
+    SubscriptionsStatus? subscriptionsStatus,
+    List<StoreProduct>? availableProducts,
   }) {
     return SubscriptionState(
-      isSubscribed: isSubscribed ?? this.isSubscribed,
-    );
+        subscriptionsStatus: subscriptionsStatus ?? this.subscriptionsStatus,
+        availableProducts: availableProducts ?? this.availableProducts);
   }
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [subscriptionsStatus, availableProducts];
 
   factory SubscriptionState.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionStateFromJson(json);

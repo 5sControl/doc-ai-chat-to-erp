@@ -4,13 +4,7 @@ abstract class SubscriptionEvent extends Equatable {
   const SubscriptionEvent();
 }
 
-class SetIsSubscribed extends SubscriptionEvent {
-  final bool isSubscribed;
-  const SetIsSubscribed({required this.isSubscribed});
 
-  @override
-  List<Object?> get props => [];
-}
 
 class BuySubscription extends SubscriptionEvent {
   final String subscriptionId;
@@ -22,6 +16,13 @@ class BuySubscription extends SubscriptionEvent {
 
 class Start extends SubscriptionEvent {
   const Start();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class PaymentComplete extends SubscriptionEvent {
+  const PaymentComplete();
 
   @override
   List<Object?> get props => [];

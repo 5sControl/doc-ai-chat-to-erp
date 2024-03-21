@@ -7,6 +7,8 @@ import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/models.dart';
+
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
 
@@ -15,52 +17,10 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
-  // final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  // bool _isAvailable = false;
-  // String? _notice;
-  // List<ProductDetails> _products = [];
-  // bool _loading = true;
-
   @override
   void initState() {
-
-    // initStoreInfo();
     super.initState();
   }
-
-  // Future<void> initStoreInfo() async {
-  //   final bool isAvailable = await _inAppPurchase.isAvailable();
-  //   setState(() {
-  //     _isAvailable = isAvailable;
-  //   });
-  //
-  //   if (!_isAvailable) {
-  //     setState(() {
-  //       _loading = false;
-  //       _notice = "There are no upgrades at this time";
-  //     });
-  //     return;
-  //   }
-  //
-  //   // get IAP.
-  //   ProductDetailsResponse productDetailsResponse =
-  //       await _inAppPurchase.queryProductDetails({'Weekly_Subscription'});
-  //
-  //   setState(() {
-  //     _loading = false;
-  //     _products = productDetailsResponse.productDetails;
-  //   });
-  //
-  //   if (productDetailsResponse.error != null) {
-  //     setState(() {
-  //       _notice = "There was a problem connecting to the store";
-  //     });
-  //   } else if (productDetailsResponse.productDetails.isEmpty) {
-  //     setState(() {
-  //       _notice = "There are no upgrades at this time";
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -69,100 +29,103 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       Navigator.of(context).pop();
     }
 
-    return Stack(
-      children: [
-        const BackgroundGradient(),
-        Animate(
-          effects: [FadeEffect()],
-          child: Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              flexibleSpace: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      visualDensity: VisualDensity.compact,
-                      onPressed: onPressClose,
-                      style: ButtonStyle(
-                          padding:
-                              const MaterialStatePropertyAll(EdgeInsets.all(2)),
-                          backgroundColor: MaterialStatePropertyAll(
-                              const Color.fromRGBO(4, 49, 57, 1)
-                                  .withOpacity(0.1))),
-                      highlightColor:
-                          const Color.fromRGBO(4, 49, 57, 1).withOpacity(0.2),
-                      icon: const Icon(
-                        Icons.close,
-                        color: Color.fromRGBO(4, 49, 57, 1),
-                      )),
-                ],
-              ),
-            ),
-            body: Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Image.asset(
-                    Assets.girla.path,
-                    fit: BoxFit.cover,
+    return BlocBuilder<SubscriptionBloc, SubscriptionState>(
+      builder: (context, state) {
+        return Stack(
+          children: [
+            const BackgroundGradient(),
+            Animate(
+              effects: [FadeEffect()],
+              child: Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  flexibleSpace: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          visualDensity: VisualDensity.compact,
+                          onPressed: onPressClose,
+                          style: ButtonStyle(
+                              padding: const MaterialStatePropertyAll(
+                                  EdgeInsets.all(2)),
+                              backgroundColor: MaterialStatePropertyAll(
+                                  const Color.fromRGBO(4, 49, 57, 1)
+                                      .withOpacity(0.1))),
+                          highlightColor: const Color.fromRGBO(4, 49, 57, 1)
+                              .withOpacity(0.2),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Color.fromRGBO(4, 49, 57, 1),
+                          )),
+                    ],
                   ),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const Text('Need more summaries?',
-                            style: TextStyle(
-                                fontSize: 46,
-                                fontWeight: FontWeight.w700,
-                                height: 1)),
-                        const Divider(
-                          color: Colors.transparent,
-                          height: 25,
+                ),
+                body: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Image.asset(
+                        Assets.girla.path,
+                        fit: BoxFit.cover,
+                      ),
+                      Expanded(
+                          child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 15,
+                          right: 15,
                         ),
-                        const Text(
-                            'Maximize your productivity \nand efficiency! ',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                height: 1.4)),
-                        const Divider(
-                          color: Colors.transparent,
-                          height: 20,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Text('Need more summaries?',
+                                style: TextStyle(
+                                    fontSize: 46,
+                                    fontWeight: FontWeight.w700,
+                                    height: 1)),
+                            const Divider(
+                              color: Colors.transparent,
+                              height: 25,
+                            ),
+                            const Text(
+                                'Maximize your productivity \nand efficiency! ',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.4)),
+                            const Divider(
+                              color: Colors.transparent,
+                              height: 20,
+                            ),
+                            PriceBloc(product: state.availableProducts.first),
+                          ],
                         ),
-                        // PriceBloc(
-                        //     loading: _loading,
-                        //     price: '${_products.first.price}'),
-                      ],
-                    ),
-                  )),
-                  SubscribeButton(product: null,),
-                  const TermsRestorePrivacy(),
-                ],
+                      )),
+                      SubscribeButton(
+                        product: state.availableProducts.first,
+                      ),
+                      const TermsRestorePrivacy(),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
 
 class PriceBloc extends StatelessWidget {
-  final String? price;
-  final bool loading;
-  const PriceBloc({super.key, required this.price, required this.loading});
+  final StoreProduct? product;
+  const PriceBloc({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +171,7 @@ class PriceBloc extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      price ?? '',
+                      product?.price ?? '',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 46, fontWeight: FontWeight.w500, height: 1),
@@ -226,7 +189,7 @@ class PriceBloc extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                crossFadeState: loading
+                crossFadeState: product == null
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
                 duration: const Duration(milliseconds: 300),
@@ -238,7 +201,7 @@ class PriceBloc extends StatelessWidget {
 }
 
 class SubscribeButton extends StatefulWidget {
-  final ProductDetails? product;
+  final StoreProduct? product;
   const SubscribeButton({super.key, required this.product});
 
   @override
@@ -263,20 +226,14 @@ class _SubscribeButtonState extends State<SubscribeButton> {
     });
   }
 
-  // void onTap() {
-  //   Future.delayed(duration, () {
-  //     onPressGoPremium();
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     void onPressGoPremium() {
-      // if (widget.product != null) {
+      if (widget.product != null) {
         context
             .read<SubscriptionBloc>()
-            .add(const BuySubscription(subscriptionId: 'Weekly_Subscription'));
-      // }
+            .add(BuySubscription(subscriptionId: widget.product!.id));
+      }
     }
 
     return GestureDetector(
