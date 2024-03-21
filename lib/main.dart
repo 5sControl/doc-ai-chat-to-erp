@@ -11,7 +11,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
-import 'package:summify/bloc/subscription_bloc.dart';
+import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
@@ -54,7 +54,8 @@ class SummishareApp extends StatelessWidget {
             create: (context) => SubscriptionBloc(),
           ),
           BlocProvider(
-            create: (context) => SharedLinksBloc(),
+            create: (context) => SharedLinksBloc(
+                subscriptionBloc: context.read<SubscriptionBloc>()),
           ),
           BlocProvider(
               create: (context) =>

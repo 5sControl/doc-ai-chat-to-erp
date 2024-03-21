@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:core';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -5,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/services/summaryApi.dart';
 
 import '../../models/models.dart';
@@ -39,17 +41,29 @@ final initialSummary = SummaryData(
     summary: initialSummaryText);
 
 class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
-  SharedLinksBloc()
+  final SubscriptionBloc subscriptionBloc;
+  late final StreamSubscription subscriptionBlocSubscription;
+
+  SharedLinksBloc({required this.subscriptionBloc})
       : super(SharedLinksState(
-          savedLinks: {
-            'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
-          },
-          textCounter: 1,
-          newSummaries: const {},
-          ratedSummaries: const {
-            'https://elang-app-dev-zehqx.ondigitalocean.app/'
-          },
-        )) {
+            savedLinks: {
+              'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
+            },
+            textCounter: 1,
+            newSummaries: const {},
+            ratedSummaries: const {
+              'https://elang-app-dev-zehqx.ondigitalocean.app/'
+            },
+            dailyLimit: 2,
+            dailySummariesCount: 0)) {
+    subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
+      if (state.subscriptionsStatus == SubscriptionsStatus.subscribed) {
+        add(const SetDailyLimit(dailyLimit: 15));
+      } else {
+        add(const SetDailyLimit(dailyLimit: 2));
+      }
+    });
+
     final SummaryRepository summaryRepository = SummaryRepository();
 
     void startSummaryLoading({required String summaryLink}) async {
@@ -102,6 +116,9 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
                 title: value.title,
                 error: null,
               ));
+
+
+
       emit(state.copyWith(
           savedLinks: summaryMap,
           newSummaries: loadedSummariesSet,
@@ -122,6 +139,10 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
               error: error));
       emit(state.copyWith(savedLinks: summaryMap));
     }
+
+    on<SetDailyLimit>((event, emit) {
+      emit(state.copyWith(dailyLimit: event.dailyLimit));
+    });
 
     on<SaveSharedLink>((event, emit) async {
       final summaryLink = event.sharedLink;
@@ -246,5 +267,11 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
   @override
   Map<String, dynamic> toJson(SharedLinksState state) {
     return state.toJson();
+  }
+
+  @override
+  Future<void> close() {
+    subscriptionBlocSubscription.cancel();
+    return super.close();
   }
 }

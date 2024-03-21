@@ -28,15 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
   late StreamSubscription intentMediaStreamSubscription;
 
   void saveLink(String summaryLink) async {
-    context
-        .read<SharedLinksBloc>()
-        .add(SaveSharedLink(sharedLink: summaryLink));
-    // Navigator.of(context).pushNamed('/');
+    Navigator.of(context).pushNamed('/');
+    Future.delayed(const Duration(milliseconds: 200), () {
+      context
+          .read<SharedLinksBloc>()
+          .add(SaveSharedLink(sharedLink: summaryLink));
+    });
   }
 
   @override
   void initState() {
-
     super.initState();
     intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
@@ -55,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
     intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getTextStream().listen(
       (String value) {
-        print("!");
         saveLink(value);
       },
       onError: (err) {
@@ -65,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     ReceiveSharingIntentPlus.getInitialText().then((String? value) {
       if (value != null) {
-        print("!!");
         saveLink(value);
       }
     });
@@ -90,10 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int dailySummaries = 11;
-    int availableSummaries = 15;
-    // final PurchaseParam purchaseParam = PurchaseParam(productDetails: products.first);
-
     void onPressInfo() {
       showCupertinoModalBottomSheet(
         context: context,
@@ -131,67 +126,61 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-          flexibleSpace: ClipRRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                color: Colors.transparent,
+    return BlocConsumer<SharedLinksBloc, SharedLinksState>(
+      listenWhen: (previous, current) {
+        return previous.newSummaries.length != current.newSummaries.length;
+      },
+      listener: (context, state) {
+        if (state.newSummaries.isNotEmpty) {
+          openLoadedSummary(state: state);
+        }
+      },
+      builder: (context, sharedLinksState) {
+        final sharedLinks =
+            sharedLinksState.savedLinks.keys.toList().reversed.toList();
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+              flexibleSpace: ClipRRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
               ),
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              elevation: 0,
+              title: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  summariesCounter(
+                      availableSummaries: sharedLinksState.dailyLimit,
+                      dailySummaries: sharedLinksState.dailySummariesCount),
+                  logo(),
+                  settingsButton(onPressInfo: onPressInfo),
+                ],
+              )),
+          body: Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: ListView.builder(
+              itemCount: sharedLinksState.savedLinks.length,
+              itemBuilder: (context, index) {
+                return SummaryTile(
+                  sharedLink: sharedLinks[index],
+                  summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
+                  isNew: sharedLinksState.newSummaries
+                      .contains(sharedLinks[index]),
+                  // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
+                );
+              },
             ),
           ),
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              summariesCounter(
-                  availableSummaries: availableSummaries,
-                  dailySummaries: dailySummaries),
-              logo(),
-              settingsButton(onPressInfo: onPressInfo),
-              // IconButton(icon: Icon(Icons.add), onPressed: () {
-              //   InAppPurchase.instance.buyNonConsumable(purchaseParam: purchaseParam);
-              // },),
-            ],
-          )),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 5),
-        child: BlocListener<SharedLinksBloc, SharedLinksState>(
-          listenWhen: (previous, current) {
-            return previous.newSummaries.length != current.newSummaries.length;
-          },
-          listener: (context, state) {
-            if (state.newSummaries.isNotEmpty) {
-              openLoadedSummary(state: state);
-            }
-          },
-          child: BlocBuilder<SharedLinksBloc, SharedLinksState>(
-            builder: (context, sharedLinksState) {
-              final sharedLinks =
-                  sharedLinksState.savedLinks.keys.toList().reversed.toList();
-              return ListView.builder(
-                itemCount: sharedLinksState.savedLinks.length,
-                itemBuilder: (context, index) {
-                  return SummaryTile(
-                    sharedLink: sharedLinks[index],
-                    summaryData:
-                        sharedLinksState.savedLinks[sharedLinks[index]]!,
-                    isNew: sharedLinksState.newSummaries
-                        .contains(sharedLinks[index]),
-                    // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-                  );
-                },
-              );
-            },
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

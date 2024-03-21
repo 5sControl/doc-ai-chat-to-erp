@@ -86,3 +86,11 @@ class SkipRateSummary extends SharedLinksEvent {
   @override
   List<String?> get props => [sharedLink];
 }
+
+class SetDailyLimit extends SharedLinksEvent {
+  final int dailyLimit;
+  const SetDailyLimit({required this.dailyLimit});
+
+  @override
+  List<int?> get props => [dailyLimit];
+}
