@@ -46,8 +46,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (_currentPageIndex >= 3) {
       passOnboarding();
       // Navigator.of(context).pushNamed('/');
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/subscribe', (Route<dynamic> route) => false);
     }
   }
 
@@ -63,7 +63,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           const BackgroundGradient(),
           Scaffold(
-
             body: Padding(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom,

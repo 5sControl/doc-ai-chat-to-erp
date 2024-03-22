@@ -14,6 +14,7 @@ import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
+import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/theme/baseTheme.dart';
@@ -66,12 +67,14 @@ class SummishareApp extends StatelessWidget {
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
             context.read<SubscriptionBloc>().add(const Start());
-            context.read<SharedLinksBloc>().add(
-                InitDailySummariesCount(thisDay: DateTime.now()));
+            context
+                .read<SharedLinksBloc>()
+                .add(InitDailySummariesCount(thisDay: DateTime.now()));
             Timer.periodic(const Duration(minutes: 1), (timer) {
               print(132123123123);
-              context.read<SharedLinksBloc>().add(
-                  InitDailySummariesCount(thisDay: DateTime.now()));
+              context
+                  .read<SharedLinksBloc>()
+                  .add(InitDailySummariesCount(thisDay: DateTime.now()));
             });
             return MaterialApp(
               theme: baseTheme,
@@ -86,6 +89,10 @@ class SummishareApp extends StatelessWidget {
                   case '/onboarding':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const OnboardingScreen(),
+                        settings: settings);
+                  case '/subscribe':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const SubscriptionOnboardingScreen(),
                         settings: settings);
                 }
                 return MaterialPageRoute(
