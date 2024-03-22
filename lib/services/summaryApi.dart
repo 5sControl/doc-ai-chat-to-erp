@@ -26,7 +26,9 @@ class SummaryApiRepository {
           'url': summaryLink,
           'context': '',
         },
-      ).catchError(() {});
+      ).catchError(() {
+        return const Summary(summary: null, summaryError: 'Loading error');
+      });
       return Summary.fromJson(response.data);
     } on DioException catch (e) {
       return Summary(
@@ -42,7 +44,9 @@ class SummaryApiRepository {
       Response response = await _dio.post(linkUrl, data: {
         'url': '',
         'context': textToSummify,
-      }).catchError(() {});
+      }).catchError(() {
+        return const Summary(summary: null, summaryError: 'Loading error');
+      });
       return Summary.fromJson(response.data);
     } on DioException catch (e) {
       return Summary(
@@ -64,7 +68,9 @@ class SummaryApiRepository {
 
     try {
       Response response =
-          await _dio.post(fileUrl, data: formData).catchError(() {});
+          await _dio.post(fileUrl, data: formData).catchError(() {
+        return const Summary(summary: null, summaryError: 'Loading error');
+      });
       return Summary.fromJson(response.data);
     } on DioException catch (e) {
       return Summary(

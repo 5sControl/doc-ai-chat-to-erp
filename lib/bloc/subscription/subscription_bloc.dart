@@ -79,9 +79,12 @@ class SubscriptionBloc
               print('error');
             } else if (purchaseDetails.pendingCompletePurchase) {
               await _inAppPurchase.completePurchase(purchaseDetails);
-              print('complete');
 
-              add(const PaymentComplete());
+              if (purchaseDetails.status == PurchaseStatus.restored ||
+                  purchaseDetails.status == PurchaseStatus.purchased) {
+                print('complete');
+                add(const PaymentComplete());
+              }
             }
           }
         });

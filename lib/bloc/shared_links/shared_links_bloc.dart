@@ -217,7 +217,8 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           setSummaryComplete(summaryLink: event.fileName, summary: summary);
         } else {
           setSummaryError(
-              summaryLink: event.fileName, error: summary.summaryError.toString());
+              summaryLink: event.fileName,
+              error: summary.summaryError.toString());
         }
       }
     });
