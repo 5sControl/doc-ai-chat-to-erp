@@ -24,7 +24,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     on<SendNotify>((event, emit) {
       Future.delayed(const Duration(seconds: 1), () {
         NotificationService()
-            .showNotification(title: event.title, body: event.description);
+            .showNotification(title: 'Your summary is ready! Open and get useful insights.', body: event.title);
       });
     }, transformer: droppable());
   }
