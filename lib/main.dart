@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -65,7 +66,11 @@ class SummishareApp extends StatelessWidget {
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
             context.read<SubscriptionBloc>().add(const Start());
-            context.read<SharedLinksBloc>().add(const InitDailySummariesCount());
+            Timer.periodic(const Duration(minutes: 1), (timer) {
+              print(132123123123);
+              context.read<SharedLinksBloc>().add(
+                  InitDailySummariesCount(thisDay: DateTime.now()));
+            });
             return MaterialApp(
               theme: baseTheme,
               builder: (context, Widget? child) => child!,

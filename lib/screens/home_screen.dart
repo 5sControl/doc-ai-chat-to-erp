@@ -132,6 +132,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return PopScope(
       canPop: false,
       child: BlocConsumer<SharedLinksBloc, SharedLinksState>(
+        buildWhen: (previous, current) {
+          return true;
+        },
         listenWhen: (previous, current) {
           return previous.newSummaries.length != current.newSummaries.length;
         },

@@ -102,8 +102,9 @@ class AddDailySummariesCount extends SharedLinksEvent {
   List<int?> get props => [];
 }
 class InitDailySummariesCount extends SharedLinksEvent {
-  const InitDailySummariesCount();
+  final DateTime thisDay;
+  const InitDailySummariesCount({required this.thisDay});
 
   @override
-  List<int?> get props => [];
+  List<DateTime?> get props => [thisDay];
 }
