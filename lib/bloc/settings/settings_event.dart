@@ -10,3 +10,10 @@ class PassOnboarding extends SettingsEvent {
   @override
   List<Object?> get props => [];
 }
+
+class HowToShowed extends SettingsEvent {
+  const HowToShowed();
+
+  @override
+  List<Object?> get props => [];
+}

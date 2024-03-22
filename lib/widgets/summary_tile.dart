@@ -42,22 +42,6 @@ class SummaryTile extends StatefulWidget {
 
 class _SummaryTileState extends State<SummaryTile> {
   static const duration = Duration(milliseconds: 300);
-  static const List<String> loadingText = [
-    'Accepted',
-    'Downloaded',
-    'Processing',
-    'Analyzing',
-    'Connecting Model',
-    'AI Processing',
-    'Improving',
-    'Summarizing',
-    'Reviewing',
-    'Formatting',
-    'Finalizing',
-    'Delivering',
-  ];
-  int textIndex = 0;
-
   bool tapped = false;
 
   void onTapDown() {
@@ -81,20 +65,6 @@ class _SummaryTileState extends State<SummaryTile> {
     final summaryDate = summaryData.date;
     final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
     final String formattedDate = formatter.format(summaryDate);
-
-    if (summaryData.status == SummaryStatus.Loading) {
-      setState(() {
-        Timer(Duration(seconds: 3), () {
-          setState(() {
-            if (textIndex >= 11) {
-              textIndex = 0;
-            } else {
-              textIndex += 1;
-            }
-          });
-        });
-      });
-    }
 
     void onPressSharedItem() {
       context
@@ -251,37 +221,8 @@ class _SummaryTileState extends State<SummaryTile> {
                               style: const TextStyle(fontSize: 12),
                             ),
                             AnimatedCrossFade(
-                                firstChild: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        const Loader(),
-                                        IconButton(
-                                            onPressed: onPressCancel,
-                                            iconSize: 25,
-                                            visualDensity:
-                                                VisualDensity.compact,
-                                            padding: EdgeInsets.zero,
-                                            icon: const Icon(
-                                                Icons.stop_circle_outlined))
-                                      ],
-                                    ),
-                                    Text(loadingText[textIndex],
-                                            style: const TextStyle(
-                                                fontSize: 12, height: -1))
-                                        .animate()
-                                        .custom(
-                                            duration: 300.ms,
-                                            builder: (context, value, child) =>
-                                                Container(
-                                                  child:
-                                                      child, // child is the Text widget being animated
-                                                ))
-                                  ],
+                                firstChild: Loader(
+                                  onPressCancel: onPressCancel,
                                 ),
                                 secondChild: summaryData.error != null
                                     ? ErrorMessage(
@@ -363,23 +304,94 @@ class ErrorMessage extends StatelessWidget {
   }
 }
 
-class Loader extends StatelessWidget {
-  const Loader({super.key});
+class Loader extends StatefulWidget {
+  final Function() onPressCancel;
+  const Loader({super.key, required this.onPressCancel});
+
+  @override
+  State<Loader> createState() => _LoaderState();
+}
+
+class _LoaderState extends State<Loader> {
+  static const List<String> loadingText = [
+    'Accepted',
+    'Downloaded',
+    'Processing',
+    'Analyzing',
+    'Connecting Model',
+    'AI Processing',
+    'Improving',
+    'Summarizing',
+    'Reviewing',
+    'Formatting',
+    'Finalizing',
+    'Delivering',
+  ];
+  int textIndex = 0;
+  late Timer t;
+
+  void incText() {
+    setState(() {
+      if (textIndex >= 11) {
+        textIndex = 0;
+      } else {
+        textIndex = textIndex + 1;
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    t = Timer.periodic(const Duration(seconds: 2), (timer) => incText());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    t.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-        height: 10,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-            color: Colors.teal.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(10)),
-        child: const LinearProgressIndicator(
-          color: Colors.teal,
-          backgroundColor: Colors.white,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(
+              child: Container(
+                height: 10,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                    color: Colors.teal.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const LinearProgressIndicator(
+                  color: Colors.teal,
+                  backgroundColor: Colors.white,
+                ),
+              ),
+            ),
+            IconButton(
+                onPressed: widget.onPressCancel,
+                iconSize: 25,
+                visualDensity: VisualDensity.compact,
+                padding: EdgeInsets.zero,
+                icon: const Icon(Icons.stop_circle_outlined))
+          ],
         ),
-      ),
+        Text('${loadingText[textIndex]}    ',
+                style: const TextStyle(fontSize: 12, height: -1))
+            .animate()
+            .custom(
+                duration: 300.ms,
+                builder: (context, value, child) => Container(
+                      child: child, // child is the Text widget being animated
+                    ))
+      ],
     );
   }
 }

@@ -12,11 +12,13 @@ import 'package:summify/screens/modal_screens/info_screen.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/screens/summary_screen.dart';
 
+import '../bloc/settings/settings_bloc.dart';
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../models/models.dart';
 import '../services/payment.dart';
 import '../widgets/summary_tile.dart';
+import 'modal_screens/how_to_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final thisDay = formatter.format(DateTime.now());
     final limit = context.read<SharedLinksBloc>().state.dailyLimit;
     final daySummaries =
-        context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ?? 15;
+        context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ?? 0;
 
     Navigator.of(context).pushNamedAndRemoveUntil(
       '/',
@@ -150,72 +152,94 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    return PopScope(
-      canPop: false,
-      child: BlocConsumer<SharedLinksBloc, SharedLinksState>(
-        buildWhen: (previous, current) {
-          return true;
-        },
-        listenWhen: (previous, current) {
-          return previous.newSummaries.length != current.newSummaries.length;
-        },
-        listener: (context, state) {
-          if (state.newSummaries.isNotEmpty) {
-            print('open!');
-            openLoadedSummary(state: state);
-          }
-        },
-        builder: (context, sharedLinksState) {
-          final DateFormat dayFormatter = DateFormat('MM.dd.yy');
-          final thisDay = dayFormatter.format(DateTime.now());
-          final sharedLinks =
-              sharedLinksState.savedLinks.keys.toList().reversed.toList();
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-                flexibleSpace: ClipRRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      color: Colors.transparent,
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      builder: (context, state) {
+        if (state.howToShowed == false) {
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            showMaterialModalBottomSheet(
+              context: context,
+              expand: false,
+              bounce: false,
+              barrierColor: Colors.black54,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return const HowToScreen();
+              },
+            );
+            context.read<SettingsBloc>().add(const HowToShowed());
+          });
+        }
+
+        return PopScope(
+          canPop: false,
+          child: BlocConsumer<SharedLinksBloc, SharedLinksState>(
+            buildWhen: (previous, current) {
+              return true;
+            },
+            listenWhen: (previous, current) {
+              return previous.newSummaries.length !=
+                  current.newSummaries.length;
+            },
+            listener: (context, state) {
+              if (state.newSummaries.isNotEmpty) {
+                print('open!');
+                openLoadedSummary(state: state);
+              }
+            },
+            builder: (context, sharedLinksState) {
+              final DateFormat dayFormatter = DateFormat('MM.dd.yy');
+              final thisDay = dayFormatter.format(DateTime.now());
+              final sharedLinks =
+                  sharedLinksState.savedLinks.keys.toList().reversed.toList();
+              return Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                    flexibleSpace: ClipRRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        child: Container(
+                          color: Colors.transparent,
+                        ),
+                      ),
                     ),
+                    backgroundColor: Colors.transparent,
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                    title: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        summariesCounter(
+                            availableSummaries: sharedLinksState.dailyLimit,
+                            dailySummaries:
+                                sharedLinksState.dailySummariesMap[thisDay] ??
+                                    0),
+                        logo(),
+                        settingsButton(onPressInfo: onPressInfo),
+                      ],
+                    )),
+                body: Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: ListView.builder(
+                    itemCount: sharedLinksState.savedLinks.length,
+                    itemBuilder: (context, index) {
+                      return SummaryTile(
+                        sharedLink: sharedLinks[index],
+                        summaryData:
+                            sharedLinksState.savedLinks[sharedLinks[index]]!,
+                        isNew: sharedLinksState.newSummaries
+                            .contains(sharedLinks[index]),
+                        // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
+                      );
+                    },
                   ),
                 ),
-                backgroundColor: Colors.transparent,
-                automaticallyImplyLeading: false,
-                elevation: 0,
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    summariesCounter(
-                        availableSummaries: sharedLinksState.dailyLimit,
-                        dailySummaries:
-                            sharedLinksState.dailySummariesMap[thisDay] ?? 0),
-                    logo(),
-                    settingsButton(onPressInfo: onPressInfo),
-                  ],
-                )),
-            body: Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: ListView.builder(
-                itemCount: sharedLinksState.savedLinks.length,
-                itemBuilder: (context, index) {
-                  return SummaryTile(
-                    sharedLink: sharedLinks[index],
-                    summaryData:
-                        sharedLinksState.savedLinks[sharedLinks[index]]!,
-                    isNew: sharedLinksState.newSummaries
-                        .contains(sharedLinks[index]),
-                    // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-                  );
-                },
-              ),
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

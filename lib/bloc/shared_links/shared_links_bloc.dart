@@ -104,7 +104,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       final Map<String, SummaryData> summaryMap = Map.from(state.savedLinks);
       final Set<String> loadedSummariesSet = Set.from(state.newSummaries);
       loadedSummariesSet.add(summaryLink);
-      final ratedSummaries = state.ratedSummaries;
+      final Set<String> ratedSummaries = Set.from(state.ratedSummaries);
       ratedSummaries.remove(summaryLink);
 
       summaryMap.update(
@@ -217,7 +217,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
           setSummaryComplete(summaryLink: event.fileName, summary: summary);
         } else {
           setSummaryError(
-              summaryLink: event.fileName, error: summary.toString());
+              summaryLink: event.fileName, error: summary.summaryError.toString());
         }
       }
     });

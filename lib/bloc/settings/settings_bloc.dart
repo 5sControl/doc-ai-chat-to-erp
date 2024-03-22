@@ -7,9 +7,13 @@ part 'settings_state.dart';
 part 'settings_bloc.g.dart';
 
 class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(const SettingsState(onboardingPassed: false)) {
+  SettingsBloc() : super(const SettingsState(onboardingPassed: false, howToShowed: false)) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
+    });
+
+    on<HowToShowed>((event, emit) {
+      emit(state.copyWith(howToShowed: true));
     });
   }
 
