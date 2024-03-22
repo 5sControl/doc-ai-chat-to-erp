@@ -148,11 +148,9 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       final DateFormat formatter = DateFormat('MM.dd.yy');
       final thisDay = formatter.format(DateTime.now());
       final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
-      daysMap.addAll({
-        thisDay: state.dailySummariesMap[thisDay] != null
-            ? state.dailySummariesMap[thisDay]! + 1
-            : 1
-      });
+      !daysMap.containsKey(thisDay)
+          ? daysMap[thisDay] = 1
+          : daysMap.update(thisDay, (value) => value + 1);
       // state.dailySummariesMap
       //     .update(thisDay, (value) => value != null ? value + 1 : 1);
       emit(state.copyWith(dailySummariesMap: daysMap));

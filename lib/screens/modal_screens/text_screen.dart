@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/shared_links/shared_links_bloc.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../widgets/summify_button.dart';
+import '../subscription_screen.dart';
 
 class TextModalScreen extends StatefulWidget {
   const TextModalScreen({super.key});
@@ -18,14 +21,40 @@ class TextModalScreen extends StatefulWidget {
 class _TextModalScreenState extends State<TextModalScreen> {
   final TextEditingController textController = TextEditingController();
   var controllerText = '';
-  void onPressSummify() {
-    if (textController.text.isNotEmpty) {
-      context.read<SharedLinksBloc>().add(SaveText(text: textController.text));
+  // void onPressSummify() {
+  //
+  // }
 
-      if (Navigator.of(context).canPop()) {
-        Navigator.of(context).pop();
+  void onPressSummify() {
+    final DateFormat formatter = DateFormat('MM.dd.yy');
+    final thisDay = formatter.format(DateTime.now());
+    final limit = context.read<SharedLinksBloc>().state.dailyLimit;
+    final daySummaries =
+        context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ?? 15;
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (daySummaries >= limit) {
+        showCupertinoModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+          // enableDrag: false,
+          builder: (context) {
+            return const SubscriptionScreen();
+          },
+        );
+      } else if (textController.text.isNotEmpty) {
+        context
+            .read<SharedLinksBloc>()
+            .add(SaveText(text: textController.text));
+
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        }
       }
-    }
+    });
   }
 
   void onPressPaste() async {

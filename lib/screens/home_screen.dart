@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 import 'package:summify/screens/modal_screens/info_screen.dart';
+import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/screens/summary_screen.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
@@ -28,14 +29,34 @@ class _HomeScreenState extends State<HomeScreen> {
   late StreamSubscription intentMediaStreamSubscription;
 
   void saveLink(String summaryLink) async {
+    final DateFormat formatter = DateFormat('MM.dd.yy');
+    final thisDay = formatter.format(DateTime.now());
+    final limit = context.read<SharedLinksBloc>().state.dailyLimit;
+    final daySummaries =
+        context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ?? 15;
+
     Navigator.of(context).pushNamedAndRemoveUntil(
       '/',
       (route) => false,
     );
-    Future.delayed(const Duration(milliseconds: 200), () {
-      context
-          .read<SharedLinksBloc>()
-          .add(SaveSharedLink(sharedLink: summaryLink));
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (daySummaries >= limit) {
+        showCupertinoModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+          // enableDrag: false,
+          builder: (context) {
+            return const SubscriptionScreen();
+          },
+        );
+      } else {
+        context
+            .read<SharedLinksBloc>()
+            .add(SaveSharedLink(sharedLink: summaryLink));
+      }
     });
   }
 

@@ -66,6 +66,8 @@ class SummishareApp extends StatelessWidget {
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
             context.read<SubscriptionBloc>().add(const Start());
+            context.read<SharedLinksBloc>().add(
+                InitDailySummariesCount(thisDay: DateTime.now()));
             Timer.periodic(const Duration(minutes: 1), (timer) {
               print(132123123123);
               context.read<SharedLinksBloc>().add(

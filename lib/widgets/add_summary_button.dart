@@ -6,12 +6,14 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/gen/assets.gen.dart';
 
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../screens/modal_screens/text_screen.dart';
 import '../screens/modal_screens/ulr_screen.dart';
+import '../screens/subscription_screen.dart';
 
 final Map<String, String> buttons = {
   'Link': Assets.icons.url,
@@ -58,31 +60,50 @@ class AddSummaryButton extends StatelessWidget {
     }
 
     void onPressOpenFile() async {
-      if (Platform.isIOS) {
-        final XFile? file =
-            await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-        if (file != null) {
-          context.read<SharedLinksBloc>().add(SaveFile(
-                fileName: file.name,
-                filePath: file.path,
-              ));
-        }
-      }
+      final DateFormat formatter = DateFormat('MM.dd.yy');
+      final thisDay = formatter.format(DateTime.now());
+      final limit = context.read<SharedLinksBloc>().state.dailyLimit;
+      final daySummaries =
+          context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ??
+              15;
 
-      if (Platform.isAndroid) {
-        FilePickerResult? result = await FilePicker.platform.pickFiles();
+      Future.delayed(const Duration(milliseconds: 300), () async {
+        if (daySummaries >= limit) {
+          showCupertinoModalBottomSheet(
+            context: context,
+            expand: false,
+            bounce: false,
+            barrierColor: Colors.black54,
+            backgroundColor: Colors.transparent,
+            // enableDrag: false,
+            builder: (context) {
+              return const SubscriptionScreen();
+            },
+          );
+        } else if (Platform.isIOS) {
+          final XFile? file =
+              await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
+          if (file != null) {
+            context.read<SharedLinksBloc>().add(SaveFile(
+                  fileName: file.name,
+                  filePath: file.path,
+                ));
+          }
+        } else if (Platform.isAndroid) {
+          FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-        if (result != null) {
-          File file = File(result.files.single.path!);
-          String fileName = result.files.first.name;
-          context.read<SharedLinksBloc>().add(SaveFile(
-                fileName: fileName,
-                filePath: file.path,
-              ));
-        } else {
-          // User canceled the picker
+          if (result != null) {
+            File file = File(result.files.single.path!);
+            String fileName = result.files.first.name;
+            context.read<SharedLinksBloc>().add(SaveFile(
+                  fileName: fileName,
+                  filePath: file.path,
+                ));
+          } else {
+            // User canceled the picker
+          }
         }
-      }
+      });
     }
 
     void onPressButton({required String title}) {
