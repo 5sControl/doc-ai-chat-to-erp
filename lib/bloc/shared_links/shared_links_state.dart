@@ -7,7 +7,7 @@ class SharedLinksState extends Equatable {
   final Set<String> newSummaries;
   final Set<String> ratedSummaries;
   final int dailyLimit;
-  final int dailySummariesCount;
+  final Map<String, int> dailySummariesMap;
 
   const SharedLinksState({
     required this.savedLinks,
@@ -15,7 +15,7 @@ class SharedLinksState extends Equatable {
     required this.newSummaries,
     required this.ratedSummaries,
     required this.dailyLimit,
-    required this.dailySummariesCount,
+    required this.dailySummariesMap,
   });
 
   SharedLinksState copyWith({
@@ -24,7 +24,7 @@ class SharedLinksState extends Equatable {
     Set<String>? newSummaries,
     Set<String>? ratedSummaries,
     int? dailyLimit,
-    int? dailySummariesCount,
+    Map<String, int>? dailySummariesMap,
   }) {
     return SharedLinksState(
       textCounter: textCounter ?? this.textCounter,
@@ -32,13 +32,13 @@ class SharedLinksState extends Equatable {
       newSummaries: newSummaries ?? this.newSummaries,
       ratedSummaries: ratedSummaries ?? this.ratedSummaries,
       dailyLimit: dailyLimit ?? this.dailyLimit,
-      dailySummariesCount: dailySummariesCount ?? this.dailySummariesCount,
+      dailySummariesMap: dailySummariesMap ?? this.dailySummariesMap,
     );
   }
 
   @override
   List<Object> get props =>
-      [savedLinks, newSummaries, ratedSummaries, dailyLimit, textCounter, dailySummariesCount];
+      [savedLinks, newSummaries, ratedSummaries, dailyLimit, textCounter, dailySummariesMap];
 
   factory SharedLinksState.fromJson(Map<String, dynamic> json) =>
       _$SharedLinksStateFromJson(json);

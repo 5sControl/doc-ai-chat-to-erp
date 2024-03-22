@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -17,9 +16,8 @@ part 'subscription_bloc.g.dart';
 
 class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
-  // static const bool _started = false;
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  Set<String> _kProductIds = {"Weekly_Subscription"};
+  Set<String> _kProductIds = {"SummifyPremiumWeekly"};
   List<ProductDetails> _products = [];
 
   SubscriptionBloc()

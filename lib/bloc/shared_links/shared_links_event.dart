@@ -94,3 +94,16 @@ class SetDailyLimit extends SharedLinksEvent {
   @override
   List<int?> get props => [dailyLimit];
 }
+
+class AddDailySummariesCount extends SharedLinksEvent {
+  const AddDailySummariesCount();
+
+  @override
+  List<int?> get props => [];
+}
+class InitDailySummariesCount extends SharedLinksEvent {
+  const InitDailySummariesCount();
+
+  @override
+  List<int?> get props => [];
+}

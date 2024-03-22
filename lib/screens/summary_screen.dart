@@ -69,7 +69,7 @@ class SummaryScreen extends StatelessWidget {
         }
 
         void onPressDelete() {
-          Navigator.of(context).pop();
+          Navigator.of(context).popAndPushNamed('/');
           context
               .read<SharedLinksBloc>()
               .add(DeleteSharedLink(sharedLink: sharedLink));
@@ -93,10 +93,6 @@ class SummaryScreen extends StatelessWidget {
 
         return PopScope(
           canPop: false,
-          // onPopInvoked: (didPop) {
-          //   print('!@!!!!@@@');
-          //   didPop = false;
-          // },
           child: Stack(
             children: [
               const BackgroundGradient(),

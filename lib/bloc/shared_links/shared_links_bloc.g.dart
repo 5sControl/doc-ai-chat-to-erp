@@ -19,7 +19,8 @@ SharedLinksState _$SharedLinksStateFromJson(Map<String, dynamic> json) =>
           .map((e) => e as String)
           .toSet(),
       dailyLimit: json['dailyLimit'] as int,
-      dailySummariesCount: json['dailySummariesCount'] as int,
+      dailySummariesMap:
+          Map<String, int>.from(json['dailySummariesMap'] as Map),
     );
 
 Map<String, dynamic> _$SharedLinksStateToJson(SharedLinksState instance) =>
@@ -29,5 +30,5 @@ Map<String, dynamic> _$SharedLinksStateToJson(SharedLinksState instance) =>
       'newSummaries': instance.newSummaries.toList(),
       'ratedSummaries': instance.ratedSummaries.toList(),
       'dailyLimit': instance.dailyLimit,
-      'dailySummariesCount': instance.dailySummariesCount,
+      'dailySummariesMap': instance.dailySummariesMap,
     };

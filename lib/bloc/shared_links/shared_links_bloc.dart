@@ -5,6 +5,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/services/summaryApi.dart';
@@ -55,7 +56,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
               'https://elang-app-dev-zehqx.ondigitalocean.app/'
             },
             dailyLimit: 2,
-            dailySummariesCount: 0)) {
+            dailySummariesMap: const {})) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionsStatus == SubscriptionsStatus.subscribed) {
         add(const SetDailyLimit(dailyLimit: 15));
@@ -117,12 +118,11 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
                 error: null,
               ));
 
-
-
       emit(state.copyWith(
           savedLinks: summaryMap,
           newSummaries: loadedSummariesSet,
           ratedSummaries: ratedSummaries));
+      add(const AddDailySummariesCount());
     }
 
     void setSummaryError({required String summaryLink, required String error}) {
@@ -142,6 +142,28 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
 
     on<SetDailyLimit>((event, emit) {
       emit(state.copyWith(dailyLimit: event.dailyLimit));
+    });
+
+    on<AddDailySummariesCount>((event, emit) {
+      final DateFormat formatter = DateFormat('MM.dd.yy');
+      final thisDay = formatter.format(DateTime.now());
+      state.dailySummariesMap.update(thisDay, (value) => value + 1);
+      emit(state);
+    });
+
+    on<InitDailySummariesCount>((event, emit) {
+      final DateFormat formatter = DateFormat('MM.dd.yy');
+      final thisDay = formatter.format(DateTime.now());
+
+      if (!state.dailySummariesMap.containsKey(thisDay)) {
+        state.dailySummariesMap[thisDay] = 0;
+        emit(state);
+      } else if (state.dailySummariesMap.containsKey(thisDay)) {
+        // state.dailySummariesMap[thisDay] = 5;
+        // emit(state);
+        return;
+      }
+      print(state.dailySummariesMap);
     });
 
     on<SaveSharedLink>((event, emit) async {

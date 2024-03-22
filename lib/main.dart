@@ -65,6 +65,7 @@ class SummishareApp extends StatelessWidget {
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
             context.read<SubscriptionBloc>().add(const Start());
+            context.read<SharedLinksBloc>().add(const InitDailySummariesCount());
             return MaterialApp(
               theme: baseTheme,
               builder: (context, Widget? child) => child!,

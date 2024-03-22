@@ -50,7 +50,7 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
   Widget build(BuildContext context) {
     void onPressClose() {
       // context.read<SharedLinksBloc>().add(RateSummary(sharedLink: summaryLink));
-      Navigator.of(context).pop();
+      Navigator.of(context).popUntil(ModalRoute.withName("/"));
     }
 
     void onPressSubmit() {
@@ -136,11 +136,11 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Padding(
-                      padding:  EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         'Thank you for your feedback',
-                        style:
-                            TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 26, fontWeight: FontWeight.w600),
                         textAlign: TextAlign.center,
                       ),
                     ),

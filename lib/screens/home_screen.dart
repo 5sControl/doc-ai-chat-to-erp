@@ -28,7 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late StreamSubscription intentMediaStreamSubscription;
 
   void saveLink(String summaryLink) async {
-    Navigator.of(context).pushNamed('/');
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/',
+      (route) => false,
+    );
     Future.delayed(const Duration(milliseconds: 200), () {
       context
           .read<SharedLinksBloc>()
@@ -126,61 +129,69 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    return BlocConsumer<SharedLinksBloc, SharedLinksState>(
-      listenWhen: (previous, current) {
-        return previous.newSummaries.length != current.newSummaries.length;
-      },
-      listener: (context, state) {
-        if (state.newSummaries.isNotEmpty) {
-          openLoadedSummary(state: state);
-        }
-      },
-      builder: (context, sharedLinksState) {
-        final sharedLinks =
-            sharedLinksState.savedLinks.keys.toList().reversed.toList();
-        return Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-              flexibleSpace: ClipRRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: Container(
-                    color: Colors.transparent,
+    return PopScope(
+      canPop: false,
+      child: BlocConsumer<SharedLinksBloc, SharedLinksState>(
+        listenWhen: (previous, current) {
+          return previous.newSummaries.length != current.newSummaries.length;
+        },
+        listener: (context, state) {
+          if (state.newSummaries.isNotEmpty) {
+            print('open!');
+            openLoadedSummary(state: state);
+          }
+        },
+        builder: (context, sharedLinksState) {
+          final DateFormat dayFormatter = DateFormat('MM.dd.yy');
+          final thisDay = dayFormatter.format(DateTime.now());
+          final sharedLinks =
+              sharedLinksState.savedLinks.keys.toList().reversed.toList();
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+                flexibleSpace: ClipRRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      color: Colors.transparent,
+                    ),
                   ),
                 ),
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                title: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    summariesCounter(
+                        availableSummaries: sharedLinksState.dailyLimit,
+                        dailySummaries:
+                            sharedLinksState.dailySummariesMap[thisDay] ?? 0),
+                    logo(),
+                    settingsButton(onPressInfo: onPressInfo),
+                  ],
+                )),
+            body: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: ListView.builder(
+                itemCount: sharedLinksState.savedLinks.length,
+                itemBuilder: (context, index) {
+                  return SummaryTile(
+                    sharedLink: sharedLinks[index],
+                    summaryData:
+                        sharedLinksState.savedLinks[sharedLinks[index]]!,
+                    isNew: sharedLinksState.newSummaries
+                        .contains(sharedLinks[index]),
+                    // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
+                  );
+                },
               ),
-              backgroundColor: Colors.transparent,
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              title: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  summariesCounter(
-                      availableSummaries: sharedLinksState.dailyLimit,
-                      dailySummaries: sharedLinksState.dailySummariesCount),
-                  logo(),
-                  settingsButton(onPressInfo: onPressInfo),
-                ],
-              )),
-          body: Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: ListView.builder(
-              itemCount: sharedLinksState.savedLinks.length,
-              itemBuilder: (context, index) {
-                return SummaryTile(
-                  sharedLink: sharedLinks[index],
-                  summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-                  isNew: sharedLinksState.newSummaries
-                      .contains(sharedLinks[index]),
-                  // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-                );
-              },
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

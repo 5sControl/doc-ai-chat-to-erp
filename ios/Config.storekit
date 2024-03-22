@@ -83,9 +83,9 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "Weekly_Subscription",
+          "productID" : "SummifyPremiumWeekly",
           "recurringSubscriptionPeriod" : "P1W",
-          "referenceName" : "Weekly_Subscription",
+          "referenceName" : "SummifyPremiumWeekly",
           "subscriptionGroupID" : "C7697B0C",
           "type" : "RecurringSubscription"
         }

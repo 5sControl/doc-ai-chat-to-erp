@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:summify/bloc/shared_links/shared_links_bloc.dart';
 import 'package:summify/screens/home_screen.dart';
 
 import '../widgets/add_summary_button.dart';
