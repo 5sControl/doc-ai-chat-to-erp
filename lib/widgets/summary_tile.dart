@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -12,17 +13,17 @@ import '../gen/assets.gen.dart';
 import '../models/models.dart';
 import '../screens/summary_screen.dart';
 
-class Debouncer {
-  final int milliseconds;
-  Timer? _timer;
-  Debouncer({required this.milliseconds});
-  void run(VoidCallback action) {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    _timer = Timer(Duration(milliseconds: milliseconds), action);
-  }
-}
+// class Debouncer {
+//   final int milliseconds;
+//   Timer? _timer;
+//   Debouncer({required this.milliseconds});
+//   void run(VoidCallback action) {
+//     if (_timer != null) {
+//       _timer!.cancel();
+//     }
+//     _timer = Timer(Duration(milliseconds: milliseconds), action);
+//   }
+// }
 
 class SummaryTile extends StatefulWidget {
   final String sharedLink;
@@ -41,6 +42,22 @@ class SummaryTile extends StatefulWidget {
 
 class _SummaryTileState extends State<SummaryTile> {
   static const duration = Duration(milliseconds: 300);
+  static const List<String> loadingText = [
+    'Accepted',
+    'Downloaded',
+    'Processing',
+    'Analyzing',
+    'Connecting Model',
+    'AI Processing',
+    'Improving',
+    'Summarizing',
+    'Reviewing',
+    'Formatting',
+    'Finalizing',
+    'Delivering',
+  ];
+  int textIndex = 0;
+
   bool tapped = false;
 
   void onTapDown() {
@@ -64,6 +81,20 @@ class _SummaryTileState extends State<SummaryTile> {
     final summaryDate = summaryData.date;
     final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
     final String formattedDate = formatter.format(summaryDate);
+
+    if (summaryData.status == SummaryStatus.Loading) {
+      setState(() {
+        Timer(Duration(seconds: 3), () {
+          setState(() {
+            if (textIndex >= 11) {
+              textIndex = 0;
+            } else {
+              textIndex += 1;
+            }
+          });
+        });
+      });
+    }
 
     void onPressSharedItem() {
       context
@@ -239,11 +270,17 @@ class _SummaryTileState extends State<SummaryTile> {
                                                 Icons.stop_circle_outlined))
                                       ],
                                     ),
-                                    const Text(
-                                      'Loading...     ',
-                                      style:
-                                          TextStyle(fontSize: 12, height: -1),
-                                    )
+                                    Text(loadingText[textIndex],
+                                            style: const TextStyle(
+                                                fontSize: 12, height: -1))
+                                        .animate()
+                                        .custom(
+                                            duration: 300.ms,
+                                            builder: (context, value, child) =>
+                                                Container(
+                                                  child:
+                                                      child, // child is the Text widget being animated
+                                                ))
                                   ],
                                 ),
                                 secondChild: summaryData.error != null
