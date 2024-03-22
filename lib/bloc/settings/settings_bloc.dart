@@ -1,13 +1,18 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../services/notify.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
 part 'settings_bloc.g.dart';
 
 class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
-  SettingsBloc() : super(const SettingsState(onboardingPassed: false, howToShowed: false)) {
+  SettingsBloc()
+      : super(
+            const SettingsState(onboardingPassed: false, howToShowed: false)) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
     });
@@ -15,6 +20,13 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     on<HowToShowed>((event, emit) {
       emit(state.copyWith(howToShowed: true));
     });
+
+    on<SendNotify>((event, emit) {
+      Future.delayed(const Duration(seconds: 1), () {
+        NotificationService()
+            .showNotification(title: event.title, body: event.description);
+      });
+    }, transformer: droppable());
   }
 
   @override

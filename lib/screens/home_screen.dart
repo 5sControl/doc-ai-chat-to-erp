@@ -27,8 +27,9 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late StreamSubscription intentMediaStreamSubscription;
+  late AppLifecycleState _notification;
 
   void saveLink(String summaryLink) async {
     final DateFormat formatter = DateFormat('MM.dd.yy');
@@ -65,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
       (List<SharedMediaFile> value) {
@@ -108,8 +110,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    setState(() {
+      _notification = state;
+      // print(_notification);
+    });
+
+    // switch (state) {
+    //   case AppLifecycleState.paused:
+    //     print('paused');
+    //     break;
+    //   case AppLifecycleState.inactive:
+    //     print('inactive');
+    //     break;
+    //   case AppLifecycleState.resumed:
+    //     print('resumed');
+    //     break;
+    //   case AppLifecycleState.detached:
+    //     print('detached');
+    //     break;
+    //   case AppLifecycleState.hidden:
+    //     print('hidden');
+    //     break;
+    // }
+  }
+
+  @override
   void dispose() {
     intentMediaStreamSubscription.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -183,6 +214,15 @@ class _HomeScreenState extends State<HomeScreen> {
             listener: (context, state) {
               if (state.newSummaries.isNotEmpty) {
                 print('open!');
+
+                if (_notification == AppLifecycleState.paused ||
+                    _notification == AppLifecycleState.inactive ||
+                    _notification == AppLifecycleState.hidden) {
+                  context.read<SettingsBloc>().add(SendNotify(
+                      title: state.newSummaries.first,
+                      description: 'Your summary already done'));
+                }
+
                 openLoadedSummary(state: state);
               }
             },

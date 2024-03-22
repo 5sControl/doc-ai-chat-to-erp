@@ -17,3 +17,13 @@ class HowToShowed extends SettingsEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SendNotify extends SettingsEvent {
+  final String title;
+  final String description;
+
+  const SendNotify({required this.title, required this.description});
+
+  @override
+  List<String?> get props => [title, description];
+}

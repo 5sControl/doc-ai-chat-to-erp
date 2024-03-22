@@ -98,7 +98,7 @@ class SummaryApiRepository {
           'source': summaryLink,
         },
       );
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         print('Send rate');
         return SendRateStatus.Sended;
       } else {
