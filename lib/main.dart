@@ -24,7 +24,7 @@ import 'screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  NotificationService().initNotification();
+  await NotificationService().initNotification();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -39,7 +39,7 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  await HydratedBloc.storage.clear();
+  // await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 
