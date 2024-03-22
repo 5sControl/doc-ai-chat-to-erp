@@ -105,10 +105,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       ),
                     ),
                   ),
-                  PageIndicator(
-                    tabController: _tabController,
-                    currentPageIndex: _currentPageIndex,
-                  ),
+                  // PageIndicator(
+                  //   tabController: _tabController,
+                  //   currentPageIndex: _currentPageIndex,
+                  // ),
                 ],
               ),
             ),

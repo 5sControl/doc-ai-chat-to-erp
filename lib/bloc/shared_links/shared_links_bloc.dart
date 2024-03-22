@@ -61,7 +61,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       if (state.subscriptionsStatus == SubscriptionsStatus.subscribed) {
         add(const SetDailyLimit(dailyLimit: 15));
       } else {
-        add(const SetDailyLimit(dailyLimit: 2));
+        add(const SetDailyLimit(dailyLimit: 3));
       }
     });
 

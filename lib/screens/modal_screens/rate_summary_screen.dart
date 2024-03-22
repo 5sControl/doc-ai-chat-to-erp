@@ -2,11 +2,14 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:simple_animations/animation_builder/loop_animation_builder.dart';
 
 import '../../bloc/shared_links/shared_links_bloc.dart';
 import '../../gen/assets.gen.dart';
+import 'package:simple_animations/simple_animations.dart';
 
 class RateSummaryScreen extends StatefulWidget {
   final String summaryLink;
@@ -17,7 +20,7 @@ class RateSummaryScreen extends StatefulWidget {
 }
 
 class _RateSummaryScreenState extends State<RateSummaryScreen> {
-  final isRated = false;
+  bool isRated = false;
   int selectedRate = 0;
   final TextEditingController urlController = TextEditingController();
   var controllerText = '';
@@ -59,7 +62,9 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
           rate: selectedRate,
           device: Platform.isIOS ? 'Ios' : 'Android',
           comment: controllerText));
-      Navigator.of(context).pop();
+      setState(() {
+        isRated = true;
+      });
     }
 
     return BackdropFilter(
@@ -138,23 +143,42 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        'Thank you for your feedback',
+                        'We kindly appreciate\nyour feedback ',
                         style: TextStyle(
-                            fontSize: 26, fontWeight: FontWeight.w600),
+                            fontSize: 26, fontWeight: FontWeight.w500),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    SvgPicture.asset(
-                      Assets.icons.like,
-                      height: 100,
-                      width: 100,
-                      colorFilter: ColorFilter.mode(
-                          Colors.teal.shade500, BlendMode.srcIn),
-                    )
+                    // SvgPicture.asset(
+                    //   Assets.icons.headrt,
+                    //   height: 100,
+                    //   width: 100,
+                    // ).animate(
+                    //   delay: 1000.ms, // this delay only happens once at the very start
+                    //   onPlay: (controller) => controller.repeat(), // loop
+                    // ).scaleXY(delay: 500.ms),
+                    MirrorAnimationBuilder(
+                      builder: (context, value, child) {
+                        return Transform.scale(
+                          scale: value,
+                          child: SvgPicture.asset(
+                            Assets.icons.headrt,
+                            height: 100,
+                            width: 100,
+                          ),
+                        );
+                      },
+                      duration: const Duration(milliseconds: 500),
+                      tween: Tween<double>(begin: 1, end: 1.2),
+                      curve: Curves.easeIn,
+                    ),
+                    const ContinueButton()
                   ],
                 ),
               ),
               duration: const Duration(milliseconds: 600),
+              sizeCurve: Curves.easeInBack,
+              secondCurve: Curves.easeIn,
               crossFadeState: isRated
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
@@ -329,6 +353,70 @@ class RateTextField extends StatelessWidget {
                   color: Colors.black,
                   fontSize: 18,
                   fontWeight: FontWeight.w500)),
+        ));
+  }
+}
+
+class ContinueButton extends StatefulWidget {
+  // final StoreProduct? product;
+  const ContinueButton({super.key});
+
+  @override
+  State<ContinueButton> createState() => _ContinueButtonState();
+}
+
+class _ContinueButtonState extends State<ContinueButton> {
+  bool tapped = false;
+
+  static const duration = Duration(milliseconds: 150);
+  void onTapDown() {
+    setState(() {
+      tapped = true;
+    });
+  }
+
+  void onTapUp() {
+    Future.delayed(duration, () {
+      setState(() {
+        tapped = false;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    void onPressContinue() {
+      Navigator.of(context).popUntil(ModalRoute.withName("/"));
+    }
+
+    return GestureDetector(
+        onTap: onPressContinue,
+        onTapUp: (_) => onTapUp(),
+        onTapDown: (_) => onTapDown(),
+        onTapCancel: () => onTapUp(),
+        child: AnimatedScale(
+          duration: duration,
+          scale: tapped ? 0.95 : 1,
+          child: AnimatedContainer(
+            width: double.infinity,
+            duration: duration,
+            margin: const EdgeInsets.all(15),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              color: !tapped
+                  ? const Color.fromRGBO(31, 188, 183, 1)
+                  : const Color.fromRGBO(4, 49, 57, 1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Text(
+              'Continue',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ));
   }
 }
