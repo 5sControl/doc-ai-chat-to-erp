@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
@@ -16,7 +15,6 @@ import '../bloc/settings/settings_bloc.dart';
 import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../models/models.dart';
-import '../services/payment.dart';
 import '../widgets/summary_tile.dart';
 import 'modal_screens/how_to_screen.dart';
 
@@ -72,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       (List<SharedMediaFile> value) {
         if (value.isNotEmpty) {
           debugPrint(
-            'Shared:${value?.map((f) => f.path).join(',') ?? ''}',
+            'Shared:${value.map((f) => f.path).join(',')}',
           );
         }
       },
@@ -102,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       (List<SharedMediaFile> value) {
         if (value.isNotEmpty) {
           debugPrint(
-            'Shared:${value?.map((f) => f.path).join(',') ?? ''}',
+            'Shared:${value.map((f) => f.path).join(',')}',
           );
         }
       },
@@ -115,26 +113,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     setState(() {
       _notification = state;
-      // print(_notification);
     });
-
-    // switch (state) {
-    //   case AppLifecycleState.paused:
-    //     print('paused');
-    //     break;
-    //   case AppLifecycleState.inactive:
-    //     print('inactive');
-    //     break;
-    //   case AppLifecycleState.resumed:
-    //     print('resumed');
-    //     break;
-    //   case AppLifecycleState.detached:
-    //     print('detached');
-    //     break;
-    //   case AppLifecycleState.hidden:
-    //     print('hidden');
-    //     break;
-    // }
   }
 
   @override
@@ -213,8 +192,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             },
             listener: (context, state) {
               if (state.newSummaries.isNotEmpty) {
-                print('open!');
-
+                // print('open!');
                 if (_notification == AppLifecycleState.paused ||
                     _notification == AppLifecycleState.inactive ||
                     _notification == AppLifecycleState.hidden) {

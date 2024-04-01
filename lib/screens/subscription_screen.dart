@@ -25,7 +25,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      // context.read<SharedLinksBloc>().add(RateSummary(sharedLink: summaryLink));
       Navigator.of(context).pop();
     }
 
@@ -35,7 +34,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           children: [
             const BackgroundGradient(),
             Animate(
-              effects: [FadeEffect()],
+              effects: const [FadeEffect()],
               child: Scaffold(
                 extendBodyBehindAppBar: true,
                 appBar: AppBar(
@@ -145,7 +144,7 @@ class PriceBloc extends StatelessWidget {
                   '15',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 46, fontWeight: FontWeight.w500, height: 1),
+                      fontSize: 36, fontWeight: FontWeight.w500, height: 1),
                 ),
                 Text(
                   'summaries daily',
@@ -174,7 +173,7 @@ class PriceBloc extends StatelessWidget {
                       product?.price ?? '',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 46, fontWeight: FontWeight.w500, height: 1),
+                          fontSize: 36, fontWeight: FontWeight.w500, height: 1),
                     ),
                     const Text(
                       'weekly',

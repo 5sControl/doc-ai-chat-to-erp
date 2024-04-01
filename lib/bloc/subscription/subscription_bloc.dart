@@ -17,14 +17,14 @@ part 'subscription_bloc.g.dart';
 class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  Set<String> _kProductIds = {"SummifyPremiumWeekly"};
+  Set<String> kProductIds = {"SummifyPremiumWeekly"};
   List<ProductDetails> _products = [];
 
   SubscriptionBloc()
       : super(const SubscriptionState(
             subscriptionsStatus: SubscriptionsStatus.unsubscribed,
             availableProducts: [])) {
-    StreamSubscription<List<PurchaseDetails>>? _subscription;
+    StreamSubscription<List<PurchaseDetails>>? subscription;
 
     Future<void> initStoreInfo() async {
       final bool isAvailable = await _inAppPurchase.isAvailable();
@@ -41,7 +41,7 @@ class SubscriptionBloc
       }
 
       ProductDetailsResponse productDetailResponse =
-          await _inAppPurchase.queryProductDetails(_kProductIds);
+          await _inAppPurchase.queryProductDetails(kProductIds);
 
       if (productDetailResponse.error != null) {
         // _products = productDetailResponse.productDetails;
@@ -54,7 +54,7 @@ class SubscriptionBloc
       }
 
       _products = productDetailResponse.productDetails;
-      print(_products.first.id);
+      // print(_products.first.id);
       final prod = StoreProduct(
           id: _products.first.id,
           title: _products.first.title,
@@ -68,7 +68,7 @@ class SubscriptionBloc
     void _onStarted(event, Emitter emit) {
       final Stream<List<PurchaseDetails>> purchaseUpdated =
           _inAppPurchase.purchaseStream;
-      _subscription = purchaseUpdated.listen((purchaseDetailsList) {
+      subscription = purchaseUpdated.listen((purchaseDetailsList) {
         purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
           if (purchaseDetails.status == PurchaseStatus.pending) {
             // emit(PaymentPending());
@@ -89,7 +89,7 @@ class SubscriptionBloc
           }
         });
       }, onDone: () {
-        _subscription?.cancel();
+        subscription?.cancel();
       }, onError: (error) {
         // handle error.
       });
@@ -111,7 +111,7 @@ class SubscriptionBloc
 
     @override
     Future<void> close() {
-      _subscription?.cancel();
+      subscription?.cancel();
       return super.close();
     }
 

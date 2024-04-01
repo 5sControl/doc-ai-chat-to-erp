@@ -75,12 +75,21 @@
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "A549E68D",
-          "introductoryOffer" : null,
+          "introductoryOffer" : {
+            "displayPrice" : "0.99",
+            "internalID" : "D4E96BEA",
+            "paymentMode" : "none"
+          },
           "localizations" : [
             {
               "description" : "",
               "displayName" : "",
               "locale" : "en_US"
+            },
+            {
+              "description" : "фывфыв",
+              "displayName" : "фывфыв",
+              "locale" : "pl"
             }
           ],
           "productID" : "SummifyPremiumWeekly",
