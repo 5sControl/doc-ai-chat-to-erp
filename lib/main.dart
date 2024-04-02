@@ -19,6 +19,7 @@ import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/theme/baseTheme.dart';
 import 'bloc/shared_links/shared_links_bloc.dart';
+import 'bloc/summaries/summaries_bloc.dart';
 import 'firebase_options.dart';
 import 'screens/main_screen.dart';
 
@@ -62,7 +63,8 @@ class SummishareApp extends StatelessWidget {
           BlocProvider(
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
-          BlocProvider(create: (context) => SettingsBloc())
+          BlocProvider(create: (context) => SettingsBloc()),
+          BlocProvider(create: (context) => SummariesBloc())
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {

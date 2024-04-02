@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:core';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -178,13 +178,13 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
         }
         final summary = await summaryRepository.getSummaryFromLink(
             summaryLink: summaryLink);
-        if (summary.summary != null) {
-          setSummaryComplete(summaryLink: summaryLink, summary: summary);
+        if (summary?.summary != null) {
+          setSummaryComplete(summaryLink: summaryLink, summary: summary!);
           await Future.delayed(const Duration(milliseconds: 50));
         } else {
           setSummaryError(
               summaryLink: summaryLink,
-              error: summary.summaryError ?? 'Some error');
+              error: summary?.summaryError ?? 'Some error');
           await Future.delayed(const Duration(milliseconds: 50));
         }
       }
@@ -236,7 +236,7 @@ class SharedLinksBloc extends HydratedBloc<SharedLinksEvent, SharedLinksState> {
       final Set<String> loadedSummariesSet = Set.from(state.newSummaries);
       loadedSummariesSet.remove(event.sharedLink);
       emit(state.copyWith(newSummaries: loadedSummariesSet));
-    }, transformer: concurrent());
+    });
 
     on<CancelRequest>((event, emit) {
       print('CancelRequest');

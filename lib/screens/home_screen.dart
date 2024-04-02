@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
+import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/modal_screens/info_screen.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/screens/summary_screen.dart';
@@ -26,238 +27,136 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  late StreamSubscription intentMediaStreamSubscription;
-  late AppLifecycleState _notification;
+  List<SharedMediaFile>? _sharedFiles;
+  String? _sharedText;
 
-  void saveLink(String summaryLink) async {
-    final DateFormat formatter = DateFormat('MM.dd.yy');
-    final thisDay = formatter.format(DateTime.now());
-    final limit = context.read<SharedLinksBloc>().state.dailyLimit;
-    final daySummaries =
-        context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ?? 0;
-
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      '/',
-      (route) => false,
-    );
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (daySummaries >= limit) {
-        showCupertinoModalBottomSheet(
-          context: context,
-          expand: false,
-          bounce: false,
-          barrierColor: Colors.black54,
-          backgroundColor: Colors.transparent,
-          // enableDrag: false,
-          builder: (context) {
-            return const SubscriptionScreen();
-          },
-        );
-      } else {
-        context
-            .read<SharedLinksBloc>()
-            .add(SaveSharedLink(sharedLink: summaryLink));
-      }
-    });
-  }
+  late StreamSubscription _intentMediaStreamSubscription;
+  late StreamSubscription _intentTextStreamSubscription;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    intentMediaStreamSubscription =
+
+    // For sharing images coming from outside the app while the app is in the memory
+    _intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
       (List<SharedMediaFile> value) {
-        if (value.isNotEmpty) {
+        setState(() {
+          _sharedFiles = value;
           debugPrint(
-            'Shared:${value.map((f) => f.path).join(',')}',
+            'Shared:${_sharedFiles?.map((f) => f.path).join(',') ?? ''}',
           );
-        }
+        });
       },
       onError: (err) {
         debugPrint('getIntentDataStream error: $err');
       },
     );
 
-    intentMediaStreamSubscription =
+    // For sharing images coming from outside the app while the app is closed
+    ReceiveSharingIntentPlus.getInitialMedia().then(
+      (List<SharedMediaFile> value) {
+        setState(() {
+          _sharedFiles = value;
+          debugPrint(
+            'Shared:${_sharedFiles?.map((f) => f.path).join(',') ?? ''}',
+          );
+        });
+      },
+    );
+
+    // For sharing or opening urls/text coming from outside the app while the app is in the memory
+    _intentTextStreamSubscription =
         ReceiveSharingIntentPlus.getTextStream().listen(
       (String value) {
-        saveLink(value);
+        setState(() {
+          _sharedText = value;
+          debugPrint('Shared: $_sharedText');
+        });
+        context
+            .read<SummariesBloc>()
+            .add(GetSummaryFromSharedUrl(summaryUrl: value));
       },
       onError: (err) {
         debugPrint('getLinkStream error: $err');
       },
     );
 
+    // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntentPlus.getInitialText().then((String? value) {
-      if (value != null) {
-        saveLink(value);
-      }
-    });
-
-    // Get the media sharing coming from outside the app while the app is closed.
-    ReceiveSharingIntentPlus.getInitialMedia().then(
-      (List<SharedMediaFile> value) {
-        if (value.isNotEmpty) {
-          debugPrint(
-            'Shared:${value.map((f) => f.path).join(',')}',
-          );
-        }
-      },
-    );
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    setState(() {
-      _notification = state;
+      setState(() {
+        _sharedText = value;
+        debugPrint('Shared: $_sharedText');
+      });
     });
   }
 
   @override
   void dispose() {
-    intentMediaStreamSubscription.cancel();
-    WidgetsBinding.instance.removeObserver(this);
+    _intentMediaStreamSubscription.cancel();
+    _intentTextStreamSubscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    void onPressInfo() {
-      showCupertinoModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return const InfoScreen();
-        },
-      );
-    }
-
-    void openLoadedSummary({required SharedLinksState state}) {
-      final summaryLink = state.newSummaries.first;
-      final SummaryData summaryData = state.savedLinks[summaryLink]!;
-      final displayLink = summaryLink.replaceAll('https://', '');
-      final summaryDate = summaryData.date;
-      final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
-      final String formattedDate = formatter.format(summaryDate);
-      context
-          .read<SharedLinksBloc>()
-          .add(SetSummaryOpened(sharedLink: summaryLink));
-
-      Future.delayed(const Duration(milliseconds: 300), () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => SummaryScreen(
-                  summaryData: summaryData,
-                  displayLink: summaryData.title ?? displayLink,
-                  formattedDate: formattedDate,
-                  sharedLink: summaryLink)),
-        );
-      });
-    }
-
-    return BlocBuilder<SettingsBloc, SettingsState>(
-      builder: (context, state) {
-        if (state.howToShowed == false) {
-          Future.delayed(const Duration(milliseconds: 2000), () {
-            showMaterialModalBottomSheet(
-              context: context,
-              expand: false,
-              bounce: false,
-              barrierColor: Colors.black54,
-              backgroundColor: Colors.transparent,
-              builder: (context) {
-                return const HowToScreen();
-              },
-            );
-            context.read<SettingsBloc>().add(const HowToShowed());
-          });
-        }
-
-        return PopScope(
-          canPop: false,
-          child: BlocConsumer<SharedLinksBloc, SharedLinksState>(
-            buildWhen: (previous, current) {
-              return true;
-            },
-            listenWhen: (previous, current) {
-              return previous.newSummaries.length !=
-                  current.newSummaries.length;
-            },
-            listener: (context, state) {
-              if (state.newSummaries.isNotEmpty) {
-                // print('open!');
-                if (_notification == AppLifecycleState.paused ||
-                    _notification == AppLifecycleState.inactive ||
-                    _notification == AppLifecycleState.hidden) {
-                  context.read<SettingsBloc>().add(SendNotify(
-                      title: state.newSummaries.first,
-                      description: 'Your summary already done'));
-                }
-
-                openLoadedSummary(state: state);
-              }
-            },
-            builder: (context, sharedLinksState) {
-              final DateFormat dayFormatter = DateFormat('MM.dd.yy');
-              final thisDay = dayFormatter.format(DateTime.now());
-              final sharedLinks =
-                  sharedLinksState.savedLinks.keys.toList().reversed.toList();
-              return Scaffold(
-                extendBodyBehindAppBar: true,
-                appBar: AppBar(
-                    flexibleSpace: ClipRRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                        child: Container(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                    backgroundColor: Colors.transparent,
-                    automaticallyImplyLeading: false,
-                    elevation: 0,
-                    title: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        summariesCounter(
-                            availableSummaries: sharedLinksState.dailyLimit,
-                            dailySummaries:
-                                sharedLinksState.dailySummariesMap[thisDay] ??
-                                    0),
-                        logo(),
-                        settingsButton(onPressInfo: onPressInfo),
-                      ],
-                    )),
-                body: Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: ListView.builder(
-                    itemCount: sharedLinksState.savedLinks.length,
-                    itemBuilder: (context, index) {
-                      return SummaryTile(
-                        sharedLink: sharedLinks[index],
-                        summaryData:
-                            sharedLinksState.savedLinks[sharedLinks[index]]!,
-                        isNew: sharedLinksState.newSummaries
-                            .contains(sharedLinks[index]),
-                        // summaryData: sharedLinksState.savedLinks[sharedLinks[index]]!,
-                      );
-                    },
-                  ),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('ReceiveSharingIntentPlus Example'),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Shared files:',
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-              );
-            },
+              ),
+              ...?_sharedFiles?.map(
+                (f) => ListTile(
+                  title: Text(
+                    f.type.toString().replaceFirst('SharedMediaType.', ''),
+                  ),
+                  subtitle: Text(f.path),
+                ),
+              ),
+              const SizedBox(height: 100),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Shared urls/text:',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              ListTile(
+                title: Text(_sharedText ?? ''),
+              ),
+              BlocBuilder<SummariesBloc, SummariesState>(
+                builder: (context, state) {
+                  return Container(
+                    child: Column(
+                      children: state.summaries.keys
+                          .toList()
+                          .map((e) => Column(
+                        children: [
+                          Text(state.summaries[e]!.title.toString()),
+                          Text(state.summaries[e]!.status.toString()),
+                          Text(state.summaries[e]!.imageUrl.toString()),
+                        ],
+                      ))
+                          .toList(),
+                    ),
+                  );
+                },
+              )
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

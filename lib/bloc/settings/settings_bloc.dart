@@ -1,4 +1,4 @@
-import 'package:bloc_concurrency/bloc_concurrency.dart';
+// import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -26,7 +26,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
         NotificationService()
             .showNotification(title: 'Your summary is ready! Open and get useful insights.', body: event.title);
       });
-    }, transformer: droppable());
+    });
   }
 
   @override
