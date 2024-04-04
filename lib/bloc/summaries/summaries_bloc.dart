@@ -44,7 +44,7 @@ final initialSummary = SummaryData(
     summary: initialSummaryText,
     formattedDate: 'What should you know about Summify?');
 
-const throttleDuration = Duration(milliseconds: 10);
+const throttleDuration = Duration(milliseconds: 100);
 
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
@@ -78,9 +78,12 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
     on<GetSummaryFromUrl>(
       (event, emit) async {
-        startSummaryLoading(event.summaryUrl, emit);
-        await loadSummaryPreview(event.summaryUrl, emit);
-        await loadSummaryFromUrl(event.summaryUrl, emit);
+        if (state.summaries[event.summaryUrl]?.status !=
+            SummaryStatus.Loading) {
+          await startSummaryLoading(event.summaryUrl, emit);
+          await loadSummaryPreview(event.summaryUrl, emit);
+          await loadSummaryFromUrl(event.summaryUrl, emit);
+        }
       },
       transformer: throttleDroppable(throttleDuration),
     );
@@ -90,18 +93,22 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         final index = state.textCounter;
         final title = "My text ($index)";
 
-        startSummaryLoading(title, emit);
-        await loadSummaryFromText(
-            summaryTitle: title, text: event.text, emit: emit);
+        if (state.summaries[title]?.status != SummaryStatus.Loading) {
+          await startSummaryLoading(title, emit);
+          await loadSummaryFromText(
+              summaryTitle: title, text: event.text, emit: emit);
+        }
       },
       transformer: throttleDroppable(throttleDuration),
     );
 
     on<GetSummaryFromFile>(
       (event, emit) async {
-        startSummaryLoading(event.fileName, emit);
-        await loadSummaryFromFile(
-            fileName: event.fileName, filePath: event.filePath, emit: emit);
+        if (state.summaries[event.fileName]?.status != SummaryStatus.Loading) {
+          await startSummaryLoading(event.fileName, emit);
+          await loadSummaryFromFile(
+              fileName: event.fileName, filePath: event.filePath, emit: emit);
+        }
       },
       transformer: throttleDroppable(throttleDuration),
     );
@@ -156,7 +163,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     return state.toJson();
   }
 
-  void startSummaryLoading(String summaryUrl, Emitter<SummariesState> emit) {
+  Future<void> startSummaryLoading(
+      String summaryUrl, Emitter<SummariesState> emit) async {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
     final String formattedDate = formatter.format(DateTime.now());

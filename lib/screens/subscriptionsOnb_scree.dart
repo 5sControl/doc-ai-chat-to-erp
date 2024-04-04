@@ -86,9 +86,12 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Image.asset(
-                              Assets.girl.path,
-                              fit: BoxFit.cover,
+                            AspectRatio(
+                              aspectRatio: MediaQuery.of(context).size.height < 700 ? 2 : 1.5,
+                              child: Image.asset(
+                                Assets.girl.path,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             Expanded(
                                 child: Padding(
@@ -101,15 +104,13 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
+                                  const Spacer(),
                                   const Text('Need more summaries?',
                                       style: TextStyle(
                                           fontSize: 46,
                                           fontWeight: FontWeight.w700,
                                           height: 1)),
-                                  const Divider(
-                                    color: Colors.transparent,
-                                    height: 25,
-                                  ),
+                                  const Spacer(),
                                   const Text(
                                       'Maximize your productivity \nand efficiency! ',
                                       textAlign: TextAlign.start,
@@ -117,10 +118,7 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                           fontSize: 18,
                                           fontWeight: FontWeight.w500,
                                           height: 1.4)),
-                                  const Divider(
-                                    color: Colors.transparent,
-                                    height: 20,
-                                  ),
+                                  const Spacer(),
                                   const Text('15 Summaries Daily',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -128,21 +126,19 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                         fontWeight: FontWeight.w700,
                                         height: 1,
                                       )),
-                                  const Divider(
-                                    color: Colors.transparent,
-                                    height: 10,
-                                  ),
+                                  const Spacer(),
                                   PricesBloc(
                                       products: state.availableProducts,
                                       selectedSubscriptionIndex:
-                                      selectedSubscriptionIndex,
-                                      onSelectSubscription: onSelectSubscription),
+                                          selectedSubscriptionIndex,
+                                      onSelectSubscription:
+                                          onSelectSubscription),
                                 ],
                               ),
                             )),
                             SubscribeButton(
-                              product:
-                              state.availableProducts[selectedSubscriptionIndex],
+                              product: state
+                                  .availableProducts[selectedSubscriptionIndex],
                             ),
                             const TermsRestorePrivacy(),
                           ],
@@ -166,46 +162,39 @@ class PricesBloc extends StatelessWidget {
   final Function({required int index}) onSelectSubscription;
   const PricesBloc(
       {super.key,
-        required this.products,
-        required this.selectedSubscriptionIndex,
-        required this.onSelectSubscription});
+      required this.products,
+      required this.selectedSubscriptionIndex,
+      required this.onSelectSubscription});
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 2.5,
-      child: Flexible(
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SubscriptionCover(
-                onSelectSubscription: onSelectSubscription,
-                isSelected: selectedSubscriptionIndex == 0,
-                subscription: products[0],
-                index: 0,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              SubscriptionCover(
-                onSelectSubscription: onSelectSubscription,
-                isSelected: selectedSubscriptionIndex == 1,
-                subscription: products[1],
-                index: 1,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              SubscriptionCover(
-                onSelectSubscription: onSelectSubscription,
-                isSelected: selectedSubscriptionIndex == 2,
-                subscription: products[2],
-                index: 2,
-              )
-            ]),
-      ),
+    return Row(
+      children: [
+        SubscriptionCover(
+          onSelectSubscription: onSelectSubscription,
+          isSelected: selectedSubscriptionIndex == 0,
+          subscription: products[0],
+          index: 0,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        SubscriptionCover(
+          onSelectSubscription: onSelectSubscription,
+          isSelected: selectedSubscriptionIndex == 1,
+          subscription: products[1],
+          index: 1,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        SubscriptionCover(
+          onSelectSubscription: onSelectSubscription,
+          isSelected: selectedSubscriptionIndex == 2,
+          subscription: products[2],
+          index: 2,
+        ),
+      ],
     );
   }
 }
@@ -217,10 +206,10 @@ class SubscriptionCover extends StatelessWidget {
   final int index;
   const SubscriptionCover(
       {super.key,
-        required this.subscription,
-        required this.isSelected,
-        required this.onSelectSubscription,
-        required this.index});
+      required this.subscription,
+      required this.isSelected,
+      required this.onSelectSubscription,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -234,72 +223,73 @@ class SubscriptionCover extends StatelessWidget {
         subscriptionTitle = '12 \nmonths';
     }
 
-    return Flexible(
-      fit: FlexFit.loose,
-      child: GestureDetector(
-        onTap: () => onSelectSubscription(index: index),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: isSelected
-                  ? const Color.fromRGBO(31, 188, 183, 1)
-                  : Colors.white12,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.white, width: 2)),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              if (isSelected)
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: SvgPicture.asset(Assets.icons.discount),
+    return Expanded(
+      child: SizedBox(
+        height: 140,
+        child: GestureDetector(
+          onTap: () => onSelectSubscription(index: index),
+          child: Container(
+            decoration: BoxDecoration(
+                color: isSelected
+                    ? const Color.fromRGBO(31, 188, 183, 1)
+                    : Colors.white12,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.white, width: 2)),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                if (isSelected)
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: SvgPicture.asset(Assets.icons.discount),
+                  ),
+                if (isSelected)
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SvgPicture.asset(Assets.icons.checkCircle)),
+                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      subscriptionTitle,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    const Divider(
+                      color: Colors.transparent,
+                    ),
+                    Text(
+                      subscription.price,
+                      style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                          fontSize: 24,
+                          fontWeight:
+                              isSelected ? FontWeight.w700 : FontWeight.w400),
+                    ),
+                    Text(
+                      subscription.currencySymbol +
+                          (subscription.rawPrice * 2 + 0.01)
+                              .toStringAsFixed(2)
+                              .toString(),
+                      style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor:
+                              isSelected ? Colors.white : Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
                 ),
-              if (isSelected)
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(Assets.icons.checkCircle)),
-                ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    subscriptionTitle,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  const Divider(
-                    color: Colors.transparent,
-                  ),
-                  Text(
-                    subscription.price,
-                    style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
-                        fontSize: 24,
-                        fontWeight:
-                        isSelected ? FontWeight.w700 : FontWeight.w400),
-                  ),
-                  Text(
-                    subscription.currencySymbol +
-                        (subscription.rawPrice * 2 + 0.01)
-                            .toStringAsFixed(2)
-                            .toString(),
-                    style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
-                        decoration: TextDecoration.lineThrough,
-                        decorationColor:
-                        isSelected ? Colors.white : Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

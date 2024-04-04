@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
         );
       } else {
+        print('!!!!');
         context
             .read<SummariesBloc>()
             .add(GetSummaryFromUrl(summaryUrl: summaryUrl));

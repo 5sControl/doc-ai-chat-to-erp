@@ -195,7 +195,7 @@ class OnboardingScreen3 extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('Easy summarize everything',
+          child: Text('Easily summarize anything',
               style: TextStyle(
                   fontSize: 36, fontWeight: FontWeight.w700, height: 1),
               textAlign: TextAlign.start),

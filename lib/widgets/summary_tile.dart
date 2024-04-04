@@ -54,13 +54,13 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   }
 
   void onSummaryLoad({required String title}) {
-    onPressSummaryTile();
     if (_notification == AppLifecycleState.paused ||
         _notification == AppLifecycleState.inactive ||
         _notification == AppLifecycleState.hidden) {
       context.read<SettingsBloc>().add(
           SendNotify(title: title, description: 'Your summary already done'));
     }
+    onPressSummaryTile();
   }
 
   @override
