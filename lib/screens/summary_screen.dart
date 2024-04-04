@@ -8,31 +8,29 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:styled_text/tags/styled_text_tag.dart';
 import 'package:styled_text/widgets/styled_text.dart';
+import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
 import 'package:summify/widgets/share_copy_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../models/models.dart';
 import '../widgets/backgroung_gradient.dart';
 
 class SummaryScreen extends StatelessWidget {
-  final SummaryData summaryData;
-  final String displayLink;
-  final String formattedDate;
   final String sharedLink;
-  const SummaryScreen(
-      {super.key,
-      required this.summaryData,
-      required this.formattedDate,
-      required this.sharedLink,
-      required this.displayLink});
+  const SummaryScreen({
+    super.key,
+    required this.sharedLink,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SharedLinksBloc, SharedLinksState>(
+    return BlocBuilder<SummariesBloc, SummariesState>(
       builder: (context, state) {
+        final summaryData = state.summaries[sharedLink]!;
+        final displayLink =
+            summaryData.title ?? sharedLink.replaceAll('https://', '');
         final summaryText = summaryData.summary!
             .replaceFirst('Summary:', '<b>Summary:\n</b>')
             .replaceFirst('In-depth Analysis:', '<b>In-depth Analysis:\n</b>')
@@ -69,20 +67,19 @@ class SummaryScreen extends StatelessWidget {
         }
 
         void onPressDelete() {
-          Navigator.of(context).popAndPushNamed('/');
-          context
-              .read<SharedLinksBloc>()
-              .add(DeleteSharedLink(sharedLink: sharedLink));
+          Navigator.of(context).pop();
+          Future.delayed(const Duration(milliseconds: 300), () {
+            context
+                .read<SummariesBloc>()
+                .add(DeleteSummary(summaryUrl: sharedLink));
+          });
         }
 
         void onPressBack() {
           if (!state.ratedSummaries.contains(sharedLink)) {
-            context
-                .read<SharedLinksBloc>()
-                .add(SkipRateSummary(sharedLink: sharedLink));
             showRateScreen();
           } else {
-            Navigator.of(context).pushNamed('/');
+            Navigator.of(context).pop();
           }
         }
 
@@ -91,91 +88,88 @@ class SummaryScreen extends StatelessWidget {
           if (!await launchUrl(url)) {}
         }
 
-        return PopScope(
-          canPop: false,
-          child: Stack(
-            children: [
-              const BackgroundGradient(),
-              Container(color: Colors.white38),
-              Scaffold(
-                  body: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Stack(
-                    fit: StackFit.loose,
-                    children: [
-                      Positioned.fill(
-                        child: HeroImage(
-                          summaryData: summaryData,
-                        ),
+        return Stack(
+          children: [
+            const BackgroundGradient(),
+            Container(color: Colors.white38),
+            Scaffold(
+                body: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Stack(
+                  fit: StackFit.loose,
+                  children: [
+                    Positioned.fill(
+                      child: HeroImage(
+                        summaryData: summaryData,
                       ),
-                      Header(
-                        sharedLink: sharedLink,
-                        displayLink: displayLink,
-                        formattedDate: formattedDate,
-                        onPressLink: onPressLink,
-                        onPressBack: onPressBack,
-                        onPressDelete: onPressDelete,
+                    ),
+                    Header(
+                      sharedLink: sharedLink,
+                      displayLink: displayLink,
+                      formattedDate: summaryData.formattedDate,
+                      onPressLink: onPressLink,
+                      onPressBack: onPressBack,
+                      onPressDelete: onPressDelete,
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: Stack(
+                    fit: StackFit.expand,
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Animate(
+                        effects: effects,
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15, bottom: 110, top: 10),
+                            child: StyledText(
+                              text: summaryText,
+                              style: const TextStyle(fontSize: 16),
+                              tags: {
+                                'b': StyledTextTag(
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        height: 2)),
+                              },
+                            )),
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            // transformAlignment: Alignment.bottomCenter,
+                            decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [
+                                      Color.fromRGBO(223, 252, 252, 1),
+                                      Color.fromRGBO(223, 252, 252, 0),
+                                    ],
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    stops: [
+                                      0.3,
+                                      1,
+                                    ])),
+                            padding: const EdgeInsets.all(15),
+                            child: ShareAndCopyButton(
+                              sharedLink: sharedLink,
+                              summaryData: summaryData,
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ),
-                  Expanded(
-                    child: Stack(
-                      fit: StackFit.expand,
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Animate(
-                          effects: effects,
-                          child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              padding: const EdgeInsets.only(
-                                  left: 15, right: 15, bottom: 110, top: 10),
-                              child: StyledText(
-                                text: summaryText,
-                                style: const TextStyle(fontSize: 16),
-                                tags: {
-                                  'b': StyledTextTag(
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                          height: 2)),
-                                },
-                              )),
-                        ),
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              // transformAlignment: Alignment.bottomCenter,
-                              decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                      colors: [
-                                        Color.fromRGBO(223, 252, 252, 1),
-                                        Color.fromRGBO(223, 252, 252, 0),
-                                      ],
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      stops: [
-                                        0.3,
-                                        1,
-                                      ])),
-                              padding: const EdgeInsets.all(15),
-                              child: ShareAndCopyButton(
-                                sharedLink: sharedLink,
-                                summaryData: summaryData,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              )),
-            ],
-          ),
+                ),
+              ],
+            )),
+          ],
         );
       },
     );
@@ -365,7 +359,7 @@ class HeroImage extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          summaryData.imageUrl != null
+          summaryData.imageUrl != Assets.placeholderLogo.path
               ? CachedNetworkImage(
                   imageUrl: summaryData.imageUrl ?? '',
                   fit: BoxFit.cover,

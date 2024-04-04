@@ -46,34 +46,37 @@ class SummaryData extends Equatable {
   final String? title;
   final String? description;
   final String? error;
+  final String formattedDate;
 
-  const SummaryData(
-      {required this.status,
-      required this.date,
-      this.summary,
-      this.imageUrl,
-      this.title,
-      this.description,
-      this.error});
+  const SummaryData({
+    required this.status,
+    required this.date,
+    required this.formattedDate,
+    this.summary,
+    this.imageUrl,
+    this.title,
+    this.description,
+    this.error,
+  });
 
-  SummaryData copyWith({
-    SummaryStatus? status,
-    DateTime? date,
-    String? summary,
-    String? imageUrl,
-    String? title,
-    String? description,
-    String? error,
-  }) {
+  SummaryData copyWith(
+      {SummaryStatus? status,
+      DateTime? date,
+      String? summary,
+      String? imageUrl,
+      String? title,
+      String? description,
+      String? error,
+      String? formattedDate}) {
     return SummaryData(
-      status: status ?? this.status,
-      date: date ?? this.date,
-      summary: summary ?? this.summary,
-      imageUrl: imageUrl ?? this.imageUrl,
-      title: title ?? this.title,
-      description: title ?? this.title,
-      error: error ?? this.error,
-    );
+        status: status ?? this.status,
+        date: date ?? this.date,
+        summary: summary ?? this.summary,
+        imageUrl: imageUrl ?? this.imageUrl,
+        title: title ?? this.title,
+        description: title ?? this.title,
+        error: error ?? this.error,
+        formattedDate: formattedDate ?? this.formattedDate);
   }
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>

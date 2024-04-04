@@ -94,6 +94,7 @@ class SummaryApiRepository {
         },
       );
       if (response.statusCode == 200) {
+        print('Summary rated!!!');
         return SendRateStatus.Sended;
       } else {
         return SendRateStatus.Error;

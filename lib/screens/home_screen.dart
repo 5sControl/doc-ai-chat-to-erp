@@ -10,14 +10,9 @@ import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/modal_screens/info_screen.dart';
 import 'package:summify/screens/subscription_screen.dart';
-import 'package:summify/screens/summary_screen.dart';
 
-import '../bloc/settings/settings_bloc.dart';
-import '../bloc/shared_links/shared_links_bloc.dart';
 import '../gen/assets.gen.dart';
-import '../models/models.dart';
 import '../widgets/summary_tile.dart';
-import 'modal_screens/how_to_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,11 +22,35 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  List<SharedMediaFile>? _sharedFiles;
-  String? _sharedText;
-
   late StreamSubscription _intentMediaStreamSubscription;
   late StreamSubscription _intentTextStreamSubscription;
+
+  void getSummary({required String summaryUrl}) {
+    final DateFormat formatter = DateFormat('MM.dd.yy');
+    final thisDay = formatter.format(DateTime.now());
+    final limit = context.read<SummariesBloc>().state.dailyLimit;
+    final daySummaries =
+        context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (daySummaries >= limit) {
+        showCupertinoModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+          builder: (context) {
+            return const SubscriptionScreen();
+          },
+        );
+      } else {
+        context
+            .read<SummariesBloc>()
+            .add(GetSummaryFromUrl(summaryUrl: summaryUrl));
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -40,14 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     // For sharing images coming from outside the app while the app is in the memory
     _intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
-      (List<SharedMediaFile> value) {
-        setState(() {
-          _sharedFiles = value;
-          debugPrint(
-            'Shared:${_sharedFiles?.map((f) => f.path).join(',') ?? ''}',
-          );
-        });
-      },
+      (List<SharedMediaFile> value) {},
       onError: (err) {
         debugPrint('getIntentDataStream error: $err');
       },
@@ -55,27 +67,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntentPlus.getInitialMedia().then(
-      (List<SharedMediaFile> value) {
-        setState(() {
-          _sharedFiles = value;
-          debugPrint(
-            'Shared:${_sharedFiles?.map((f) => f.path).join(',') ?? ''}',
-          );
-        });
-      },
+      (List<SharedMediaFile> value) {},
     );
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentTextStreamSubscription =
         ReceiveSharingIntentPlus.getTextStream().listen(
       (String value) {
-        setState(() {
-          _sharedText = value;
-          debugPrint('Shared: $_sharedText');
-        });
-        context
-            .read<SummariesBloc>()
-            .add(GetSummaryFromSharedUrl(summaryUrl: value));
+        getSummary(summaryUrl: value);
       },
       onError: (err) {
         debugPrint('getLinkStream error: $err');
@@ -84,10 +83,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntentPlus.getInitialText().then((String? value) {
-      setState(() {
-        _sharedText = value;
-        debugPrint('Shared: $_sharedText');
-      });
+      if (value != null) {
+        getSummary(summaryUrl: value);
+      }
     });
   }
 
@@ -98,64 +96,71 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  void onPressInfo() {
+    showCupertinoModalBottomSheet(
+      context: context,
+      expand: false,
+      bounce: false,
+      barrierColor: Colors.black54,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return const InfoScreen();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('ReceiveSharingIntentPlus Example'),
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Shared files:',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              ...?_sharedFiles?.map(
-                (f) => ListTile(
-                  title: Text(
-                    f.type.toString().replaceFirst('SharedMediaType.', ''),
-                  ),
-                  subtitle: Text(f.path),
-                ),
-              ),
-              const SizedBox(height: 100),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Shared urls/text:',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-              ListTile(
-                title: Text(_sharedText ?? ''),
-              ),
-              BlocBuilder<SummariesBloc, SummariesState>(
-                builder: (context, state) {
-                  return Container(
-                    child: Column(
-                      children: state.summaries.keys
-                          .toList()
-                          .map((e) => Column(
-                        children: [
-                          Text(state.summaries[e]!.title.toString()),
-                          Text(state.summaries[e]!.status.toString()),
-                          Text(state.summaries[e]!.imageUrl.toString()),
-                        ],
-                      ))
-                          .toList(),
+    return PopScope(
+      canPop: false,
+      child: BlocBuilder<SummariesBloc, SummariesState>(
+        builder: (context, summariesState) {
+          final DateFormat dayFormatter = DateFormat('MM.dd.yy');
+          final thisDay = dayFormatter.format(DateTime.now());
+          final summaries =
+              summariesState.summaries.keys.toList().reversed.toList();
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: AppBar(
+                flexibleSpace: ClipRRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      color: Colors.transparent,
                     ),
+                  ),
+                ),
+                backgroundColor: Colors.transparent,
+                automaticallyImplyLeading: false,
+                elevation: 0,
+                title: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    summariesCounter(
+                        availableSummaries: summariesState.dailyLimit,
+                        // dailySummaries: 0),
+                        dailySummaries:
+                            summariesState.dailySummariesMap[thisDay] ?? 0),
+                    logo(),
+                    settingsButton(onPressInfo: onPressInfo),
+                  ],
+                )),
+            body: Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: ListView.builder(
+                itemCount: summariesState.summaries.length,
+                itemBuilder: (context, index) {
+                  return SummaryTile(
+                    sharedLink: summaries[index],
+                    // summaryData: summariesState.summaries[summaries[index]]!,
                   );
                 },
-              )
-            ],
-          ),
-        ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

@@ -19,6 +19,7 @@ Map<String, dynamic> _$SummaryToJson(Summary instance) => <String, dynamic>{
 SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
       status: $enumDecode(_$SummaryStatusEnumMap, json['status']),
       date: DateTime.parse(json['date'] as String),
+      formattedDate: json['formattedDate'] as String,
       summary: json['summary'] as String?,
       imageUrl: json['imageUrl'] as String?,
       title: json['title'] as String?,
@@ -35,6 +36,7 @@ Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
       'title': instance.title,
       'description': instance.description,
       'error': instance.error,
+      'formattedDate': instance.formattedDate,
     };
 
 const _$SummaryStatusEnumMap = {

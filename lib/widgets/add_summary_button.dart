@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
@@ -8,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 
-import '../bloc/shared_links/shared_links_bloc.dart';
 import '../screens/modal_screens/text_screen.dart';
 import '../screens/modal_screens/ulr_screen.dart';
 import '../screens/subscription_screen.dart';
@@ -25,11 +24,11 @@ final Map<String, String> buttons = {
 
 class AddSummaryButton extends StatelessWidget {
   const AddSummaryButton({super.key});
-  static const XTypeGroup typeGroup = XTypeGroup(
-    label: '',
-    extensions: <String>['txt', 'docx', 'pdf', 'doc', 'docx'],
-    uniformTypeIdentifiers: <String>['public.data'],
-  );
+  // static const XTypeGroup typeGroup = XTypeGroup(
+  //   label: '',
+  //   extensions: <String>['txt', 'docx', 'pdf', 'doc', 'docx'],
+  //   uniformTypeIdentifiers: <String>['public.data'],
+  // );
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +61,13 @@ class AddSummaryButton extends StatelessWidget {
     void onPressOpenFile() async {
       final DateFormat formatter = DateFormat('MM.dd.yy');
       final thisDay = formatter.format(DateTime.now());
-      final limit = context.read<SharedLinksBloc>().state.dailyLimit;
+      final limit = context.read<SummariesBloc>().state.dailyLimit;
       final daySummaries =
-          context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ??
-              15;
+          context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 15;
 
-      Future.delayed(const Duration(milliseconds: 300), () async {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+      Future.delayed(const Duration(milliseconds: 10), () async {
         if (daySummaries >= limit) {
           showCupertinoModalBottomSheet(
             context: context,
@@ -75,33 +75,16 @@ class AddSummaryButton extends StatelessWidget {
             bounce: false,
             barrierColor: Colors.black54,
             backgroundColor: Colors.transparent,
-            // enableDrag: false,
             builder: (context) {
               return const SubscriptionScreen();
             },
           );
-        } else if (Platform.isIOS) {
-          final XFile? file =
-              await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup]);
-          if (file != null) {
-            context.read<SharedLinksBloc>().add(SaveFile(
-                  fileName: file.name,
-                  filePath: file.path,
-                ));
-          }
-        } else if (Platform.isAndroid) {
-          FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-          if (result != null) {
-            File file = File(result.files.single.path!);
-            String fileName = result.files.first.name;
-            context.read<SharedLinksBloc>().add(SaveFile(
-                  fileName: fileName,
-                  filePath: file.path,
-                ));
-          } else {
-            // User canceled the picker
-          }
+        } else if (result?.paths.isNotEmpty != null) {
+          final fileName = result!.paths[0]?.split('/').last;
+          context.read<SummariesBloc>().add(GetSummaryFromFile(
+                fileName: fileName!,
+                filePath: result.paths[0]!,
+              ));
         }
       });
     }
@@ -117,10 +100,6 @@ class AddSummaryButton extends StatelessWidget {
       }
     }
 
-    // transform: Matrix4.identity()
-    //   ..setEntry(3, 2, 0.01)
-    //   ..rotateY(-0.03),
-    // alignment: Alignment.center,
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: BackdropFilter(

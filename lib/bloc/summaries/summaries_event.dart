@@ -4,77 +4,94 @@ sealed class SummariesEvent extends Equatable {
   const SummariesEvent();
 }
 
-class GetSummaryFromSharedUrl extends SummariesEvent {
+class GetSummaryFromUrl extends SummariesEvent {
   final String summaryUrl;
-  const GetSummaryFromSharedUrl({required this.summaryUrl});
+  const GetSummaryFromUrl({required this.summaryUrl});
 
   @override
   List<Object?> get props => [summaryUrl];
 }
 
-class GetSummaryFromSharedText extends SummariesEvent {
+class GetSummaryFromText extends SummariesEvent {
   final String text;
-  const GetSummaryFromSharedText({required this.text});
+  const GetSummaryFromText({required this.text});
 
   @override
   List<Object?> get props => [text];
 }
 
-class GetSummaryFromSharedFile extends SummariesEvent {
-  final SharedMediaFile summaryFile;
-  const GetSummaryFromSharedFile({required this.summaryFile});
-
-  @override
-  List<Object?> get props => [summaryFile];
-}
-
-// class GetSummaryFromUrl extends SummariesEvent {
-//   final String summaryUrl;
-//   const GetSummaryFromUrl({required this.summaryUrl});
-//
-//   @override
-//   List<Object?> get props => [summaryUrl];
-// }
-//
-class LoadSummaryFromFile extends SummariesEvent {
+class GetSummaryFromFile extends SummariesEvent {
   final String fileName;
   final String filePath;
-
-  const LoadSummaryFromFile({required this.fileName, required this.filePath});
+  const GetSummaryFromFile({required this.fileName, required this.filePath});
 
   @override
   List<Object?> get props => [fileName, filePath];
 }
 
-class LoadSummaryPreview extends SummariesEvent {
+//
+// class LoadSummaryFromText extends SummariesEvent {
+//   final String summaryTitle;
+//   final String text;
+//   const LoadSummaryFromText({required this.summaryTitle, required this.text});
+//
+//   @override
+//   List<Object?> get props => [text, summaryTitle];
+// }
+
+class DeleteSummary extends SummariesEvent {
   final String summaryUrl;
-  const LoadSummaryPreview({required this.summaryUrl});
+  const DeleteSummary({required this.summaryUrl});
 
   @override
   List<Object?> get props => [summaryUrl];
 }
 
-class StartSummaryLoading extends SummariesEvent {
+class RateSummary extends SummariesEvent {
   final String summaryUrl;
-  const StartSummaryLoading({required this.summaryUrl});
+  final int rate;
+  final String device;
+  final String comment;
+  const RateSummary({
+    required this.summaryUrl,
+    required this.rate,
+    required this.device,
+    required this.comment,
+  });
+
+  @override
+  List<Object?> get props => [summaryUrl, rate, device, comment];
+}
+
+class SkipRateSummary extends SummariesEvent {
+  final String summaryUrl;
+  const SkipRateSummary({required this.summaryUrl});
 
   @override
   List<Object?> get props => [summaryUrl];
 }
 
-class LoadSummaryFromUrl extends SummariesEvent {
-  final String summaryUrl;
-  const LoadSummaryFromUrl({required this.summaryUrl});
+class SetDailyLimit extends SummariesEvent {
+  final int dailyLimit;
+
+  const SetDailyLimit({required this.dailyLimit});
 
   @override
-  List<Object?> get props => [summaryUrl];
+  List<Object?> get props => [dailyLimit];
 }
 
-class LoadSummaryFromText extends SummariesEvent {
-  final String summaryTitle;
-  final String text;
-  const LoadSummaryFromText({required this.summaryTitle, required this.text});
+class InitDailySummariesCount extends SummariesEvent {
+  final DateTime thisDay;
+  const InitDailySummariesCount({required this.thisDay});
 
   @override
-  List<Object?> get props => [text, summaryTitle];
+  List<DateTime?> get props => [thisDay];
+}
+
+class CancelRequest extends SummariesEvent {
+  final String sharedLink;
+  const CancelRequest({required this.sharedLink});
+
+  @override
+  List<String?> get props => [sharedLink];
 }

@@ -18,7 +18,6 @@ import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/theme/baseTheme.dart';
-import 'bloc/shared_links/shared_links_bloc.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'firebase_options.dart';
 import 'screens/main_screen.dart';
@@ -57,24 +56,22 @@ class SummishareApp extends StatelessWidget {
             create: (context) => SubscriptionBloc(),
           ),
           BlocProvider(
-            create: (context) => SharedLinksBloc(
-                subscriptionBloc: context.read<SubscriptionBloc>()),
-          ),
-          BlocProvider(
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
           BlocProvider(create: (context) => SettingsBloc()),
-          BlocProvider(create: (context) => SummariesBloc())
+          BlocProvider(
+              create: (context) => SummariesBloc(
+                  subscriptionBloc: context.read<SubscriptionBloc>()))
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
             context.read<SubscriptionBloc>().add(const Start());
             context
-                .read<SharedLinksBloc>()
+                .read<SummariesBloc>()
                 .add(InitDailySummariesCount(thisDay: DateTime.now()));
             Timer.periodic(const Duration(minutes: 1), (timer) {
               context
-                  .read<SharedLinksBloc>()
+                  .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
             });
             return MaterialApp(

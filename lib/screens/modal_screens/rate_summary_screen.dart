@@ -2,12 +2,10 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:simple_animations/animation_builder/loop_animation_builder.dart';
+import 'package:summify/bloc/summaries/summaries_bloc.dart';
 
-import '../../bloc/shared_links/shared_links_bloc.dart';
 import '../../gen/assets.gen.dart';
 import 'package:simple_animations/simple_animations.dart';
 
@@ -52,13 +50,15 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      // context.read<SharedLinksBloc>().add(RateSummary(sharedLink: summaryLink));
+      context
+          .read<SummariesBloc>()
+          .add(SkipRateSummary(summaryUrl: widget.summaryLink));
       Navigator.of(context).popUntil(ModalRoute.withName("/"));
     }
 
     void onPressSubmit() {
-      context.read<SharedLinksBloc>().add(RateSummary(
-          sharedLink: widget.summaryLink,
+      context.read<SummariesBloc>().add(RateSummary(
+          summaryUrl: widget.summaryLink,
           rate: selectedRate,
           device: Platform.isIOS ? 'Ios' : 'Android',
           comment: controllerText));
