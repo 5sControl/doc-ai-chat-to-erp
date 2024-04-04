@@ -29,16 +29,6 @@ class GetSummaryFromFile extends SummariesEvent {
   List<Object?> get props => [fileName, filePath];
 }
 
-//
-// class LoadSummaryFromText extends SummariesEvent {
-//   final String summaryTitle;
-//   final String text;
-//   const LoadSummaryFromText({required this.summaryTitle, required this.text});
-//
-//   @override
-//   List<Object?> get props => [text, summaryTitle];
-// }
-
 class DeleteSummary extends SummariesEvent {
   final String summaryUrl;
   const DeleteSummary({required this.summaryUrl});

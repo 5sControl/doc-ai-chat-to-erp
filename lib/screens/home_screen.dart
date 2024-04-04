@@ -52,6 +52,34 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
   }
 
+  void getSummaryFromFile(
+      {required String filePath, required String fileName}) {
+    final DateFormat formatter = DateFormat('MM.dd.yy');
+    final thisDay = formatter.format(DateTime.now());
+    final limit = context.read<SummariesBloc>().state.dailyLimit;
+    final daySummaries =
+        context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
+
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (daySummaries >= limit) {
+        showCupertinoModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+          builder: (context) {
+            return const SubscriptionScreen();
+          },
+        );
+      } else {
+        context
+            .read<SummariesBloc>()
+            .add(GetSummaryFromFile(filePath: filePath, fileName: fileName));
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -59,7 +87,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     // For sharing images coming from outside the app while the app is in the memory
     _intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
-      (List<SharedMediaFile> value) {},
+      (List<SharedMediaFile> value) {
+        if (value.isNotEmpty) {
+          final fileName = value.first.path.split('/').last.toString();
+          final filePath = value.first.path.replaceFirst('file://', '');
+          getSummaryFromFile(filePath: filePath, fileName: fileName);
+        }
+      },
       onError: (err) {
         debugPrint('getIntentDataStream error: $err');
       },
@@ -67,7 +101,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntentPlus.getInitialMedia().then(
-      (List<SharedMediaFile> value) {},
+      (List<SharedMediaFile> value) {
+        if (value.isNotEmpty) {
+          final fileName = value.first.path.split('/').last.toString();
+          final filePath = value.first.path.replaceFirst('file://', '');
+          getSummaryFromFile(filePath: filePath, fileName: fileName);
+        }
+      },
     );
 
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
