@@ -39,7 +39,7 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  // await HydratedBloc.storage.clear();
+  await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 

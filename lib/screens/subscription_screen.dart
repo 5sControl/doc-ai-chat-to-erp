@@ -129,7 +129,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         ),
                       )),
                       SubscribeButton(
-                        product: state.availableProducts[selectedSubscriptionIndex],
+                        product:
+                            state.availableProducts[selectedSubscriptionIndex],
                       ),
                       const TermsRestorePrivacy(),
                     ],
@@ -290,83 +291,6 @@ class SubscriptionCover extends StatelessWidget {
     );
   }
 }
-
-// class PriceBloc extends StatelessWidget {
-//   final StoreProduct? product;
-//   const PriceBloc({super.key, required this.product});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: [
-//         Expanded(
-//             child: AspectRatio(
-//           aspectRatio: 1.2,
-//           child: Container(
-//             decoration: BoxDecoration(
-//                 color: Colors.white70, borderRadius: BorderRadius.circular(12)),
-//             child: const Column(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment: CrossAxisAlignment.stretch,
-//               children: [
-//                 Text(
-//                   '15',
-//                   textAlign: TextAlign.center,
-//                   style: TextStyle(
-//                       fontSize: 36, fontWeight: FontWeight.w500, height: 1),
-//                 ),
-//                 Text(
-//                   'summaries daily',
-//                   textAlign: TextAlign.center,
-//                   style: TextStyle(
-//                       fontSize: 25, fontWeight: FontWeight.w400, height: 1),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         )),
-//         const VerticalDivider(),
-//         Expanded(
-//             child: AspectRatio(
-//           aspectRatio: 1.2,
-//           child: Container(
-//               decoration: BoxDecoration(
-//                   color: Colors.white70,
-//                   borderRadius: BorderRadius.circular(12)),
-//               child: AnimatedCrossFade(
-//                 firstChild: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   crossAxisAlignment: CrossAxisAlignment.stretch,
-//                   children: [
-//                     Text(
-//                       product?.price ?? '',
-//                       textAlign: TextAlign.center,
-//                       style: const TextStyle(
-//                           fontSize: 36, fontWeight: FontWeight.w500, height: 1),
-//                     ),
-//                     const Text(
-//                       'weekly',
-//                       textAlign: TextAlign.center,
-//                       style: TextStyle(
-//                           fontSize: 25, fontWeight: FontWeight.w400, height: 1),
-//                     ),
-//                   ],
-//                 ),
-//                 secondChild: const Center(
-//                   child: CircularProgressIndicator(
-//                     color: Colors.white,
-//                   ),
-//                 ),
-//                 crossFadeState: product == null
-//                     ? CrossFadeState.showSecond
-//                     : CrossFadeState.showFirst,
-//                 duration: const Duration(milliseconds: 300),
-//               )),
-//         ))
-//       ],
-//     );
-//   }
-// }
 
 class SubscribeButton extends StatefulWidget {
   final StoreProduct? product;
