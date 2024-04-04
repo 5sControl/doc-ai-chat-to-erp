@@ -38,14 +38,13 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
         }
       },
       builder: (context, state) {
-        print(state.subscriptionsStatus);
         return BlocBuilder<SubscriptionBloc, SubscriptionState>(
           builder: (context, state) {
             return Stack(
               children: [
                 const BackgroundGradient(),
                 Animate(
-                  effects: [FadeEffect()],
+                  effects: const [FadeEffect()],
                   child: SafeArea(
                     child: Scaffold(
                       extendBodyBehindAppBar: true,
@@ -74,15 +73,12 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                         ),
                       ),
                       body: Container(
-                        // padding: EdgeInsets.only(
-                        // top: MediaQuery.of(context).padding.top,
-                        // bottom: MediaQuery.of(context).padding.bottom),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Image.asset(
-                              Assets.girla.path,
+                              Assets.girl.path,
                               fit: BoxFit.cover,
                             ),
                             Expanded(

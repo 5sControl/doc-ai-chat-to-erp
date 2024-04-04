@@ -95,6 +95,7 @@ enum SummaryStatus { Loading, Complete, Error, Rejected }
 class StoreProduct extends ProductDetails with EquatableMixin {
   StoreProduct(
       {required super.id,
+      required super.currencySymbol,
       required super.title,
       required super.description,
       required super.price,
@@ -103,7 +104,7 @@ class StoreProduct extends ProductDetails with EquatableMixin {
 
   @override
   List<Object?> get props =>
-      [id, title, description, price, title, rawPrice, currencyCode];
+      [id, title, description, price, title, rawPrice, currencyCode, currencySymbol];
 
   factory StoreProduct.fromJson(Map<String, dynamic> json) =>
       _$StoreProductFromJson(json);

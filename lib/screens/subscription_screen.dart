@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -17,6 +18,14 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  var selectedSubscriptionIndex = 1;
+
+  void onSelectSubscription({required int index}) {
+    setState(() {
+      selectedSubscriptionIndex = index;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -49,13 +58,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               padding: const MaterialStatePropertyAll(
                                   EdgeInsets.all(2)),
                               backgroundColor: MaterialStatePropertyAll(
-                                  const Color.fromRGBO(4, 49, 57, 1)
-                                      .withOpacity(0.1))),
-                          highlightColor: const Color.fromRGBO(4, 49, 57, 1)
-                              .withOpacity(0.2),
+                                  Colors.white.withOpacity(0.1))),
+                          highlightColor: Colors.white.withOpacity(0.2),
                           icon: const Icon(
                             Icons.close,
-                            color: Color.fromRGBO(4, 49, 57, 1),
+                            color: Colors.white,
                           )),
                     ],
                   ),
@@ -68,7 +75,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Image.asset(
-                        Assets.girla.path,
+                        Assets.girl.path,
                         fit: BoxFit.cover,
                       ),
                       Expanded(
@@ -102,12 +109,27 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               color: Colors.transparent,
                               height: 20,
                             ),
-                            PriceBloc(product: state.availableProducts.first),
+                            const Text('15 Summaries Daily',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 26,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1,
+                                )),
+                            const Divider(
+                              color: Colors.transparent,
+                              height: 10,
+                            ),
+                            PricesBloc(
+                                products: state.availableProducts,
+                                selectedSubscriptionIndex:
+                                    selectedSubscriptionIndex,
+                                onSelectSubscription: onSelectSubscription),
                           ],
                         ),
                       )),
                       SubscribeButton(
-                        product: state.availableProducts.first,
+                        product: state.availableProducts[selectedSubscriptionIndex],
                       ),
                       const TermsRestorePrivacy(),
                     ],
@@ -122,82 +144,229 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 }
 
-class PriceBloc extends StatelessWidget {
-  final StoreProduct? product;
-  const PriceBloc({super.key, required this.product});
+class PricesBloc extends StatelessWidget {
+  final int selectedSubscriptionIndex;
+  final List<StoreProduct> products;
+  final Function({required int index}) onSelectSubscription;
+  const PricesBloc(
+      {super.key,
+      required this.products,
+      required this.selectedSubscriptionIndex,
+      required this.onSelectSubscription});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            child: AspectRatio(
-          aspectRatio: 1.2,
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white70, borderRadius: BorderRadius.circular(12)),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  '15',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 36, fontWeight: FontWeight.w500, height: 1),
-                ),
-                Text(
-                  'summaries daily',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 25, fontWeight: FontWeight.w400, height: 1),
-                ),
-              ],
-            ),
-          ),
-        )),
-        const VerticalDivider(),
-        Expanded(
-            child: AspectRatio(
-          aspectRatio: 1.2,
-          child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.circular(12)),
-              child: AnimatedCrossFade(
-                firstChild: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      product?.price ?? '',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 36, fontWeight: FontWeight.w500, height: 1),
-                    ),
-                    const Text(
-                      'weekly',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.w400, height: 1),
-                    ),
-                  ],
-                ),
-                secondChild: const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                ),
-                crossFadeState: product == null
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                duration: const Duration(milliseconds: 300),
-              )),
-        ))
-      ],
+    return AspectRatio(
+      aspectRatio: 2.5,
+      child: Flexible(
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SubscriptionCover(
+                onSelectSubscription: onSelectSubscription,
+                isSelected: selectedSubscriptionIndex == 0,
+                subscription: products[0],
+                index: 0,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              SubscriptionCover(
+                onSelectSubscription: onSelectSubscription,
+                isSelected: selectedSubscriptionIndex == 1,
+                subscription: products[1],
+                index: 1,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              SubscriptionCover(
+                onSelectSubscription: onSelectSubscription,
+                isSelected: selectedSubscriptionIndex == 2,
+                subscription: products[2],
+                index: 2,
+              )
+            ]),
+      ),
     );
   }
 }
+
+class SubscriptionCover extends StatelessWidget {
+  final bool isSelected;
+  final StoreProduct subscription;
+  final Function({required int index}) onSelectSubscription;
+  final int index;
+  const SubscriptionCover(
+      {super.key,
+      required this.subscription,
+      required this.isSelected,
+      required this.onSelectSubscription,
+      required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    String subscriptionTitle = '';
+    switch (subscription.id) {
+      case 'SummifyPremiumWeekly':
+        subscriptionTitle = '1 \nweek';
+      case 'SummifyPremiumMonth':
+        subscriptionTitle = '1 \nmonth';
+      case 'SummifyPremiumYear':
+        subscriptionTitle = '12 \nmonths';
+    }
+
+    return Flexible(
+      fit: FlexFit.loose,
+      child: GestureDetector(
+        onTap: () => onSelectSubscription(index: index),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: isSelected
+                  ? const Color.fromRGBO(31, 188, 183, 1)
+                  : Colors.white12,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.white, width: 2)),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (isSelected)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: SvgPicture.asset(Assets.icons.discount),
+                ),
+              if (isSelected)
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: SvgPicture.asset(Assets.icons.checkCircle)),
+                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    subscriptionTitle,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  const Divider(
+                    color: Colors.transparent,
+                  ),
+                  Text(
+                    subscription.price,
+                    style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                        fontSize: 24,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w400),
+                  ),
+                  Text(
+                    subscription.currencySymbol +
+                        (subscription.rawPrice * 2 + 0.01)
+                            .toStringAsFixed(2)
+                            .toString(),
+                    style: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black,
+                        decoration: TextDecoration.lineThrough,
+                        decorationColor:
+                            isSelected ? Colors.white : Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// class PriceBloc extends StatelessWidget {
+//   final StoreProduct? product;
+//   const PriceBloc({super.key, required this.product});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       children: [
+//         Expanded(
+//             child: AspectRatio(
+//           aspectRatio: 1.2,
+//           child: Container(
+//             decoration: BoxDecoration(
+//                 color: Colors.white70, borderRadius: BorderRadius.circular(12)),
+//             child: const Column(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               crossAxisAlignment: CrossAxisAlignment.stretch,
+//               children: [
+//                 Text(
+//                   '15',
+//                   textAlign: TextAlign.center,
+//                   style: TextStyle(
+//                       fontSize: 36, fontWeight: FontWeight.w500, height: 1),
+//                 ),
+//                 Text(
+//                   'summaries daily',
+//                   textAlign: TextAlign.center,
+//                   style: TextStyle(
+//                       fontSize: 25, fontWeight: FontWeight.w400, height: 1),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         )),
+//         const VerticalDivider(),
+//         Expanded(
+//             child: AspectRatio(
+//           aspectRatio: 1.2,
+//           child: Container(
+//               decoration: BoxDecoration(
+//                   color: Colors.white70,
+//                   borderRadius: BorderRadius.circular(12)),
+//               child: AnimatedCrossFade(
+//                 firstChild: Column(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   crossAxisAlignment: CrossAxisAlignment.stretch,
+//                   children: [
+//                     Text(
+//                       product?.price ?? '',
+//                       textAlign: TextAlign.center,
+//                       style: const TextStyle(
+//                           fontSize: 36, fontWeight: FontWeight.w500, height: 1),
+//                     ),
+//                     const Text(
+//                       'weekly',
+//                       textAlign: TextAlign.center,
+//                       style: TextStyle(
+//                           fontSize: 25, fontWeight: FontWeight.w400, height: 1),
+//                     ),
+//                   ],
+//                 ),
+//                 secondChild: const Center(
+//                   child: CircularProgressIndicator(
+//                     color: Colors.white,
+//                   ),
+//                 ),
+//                 crossFadeState: product == null
+//                     ? CrossFadeState.showSecond
+//                     : CrossFadeState.showFirst,
+//                 duration: const Duration(milliseconds: 300),
+//               )),
+//         ))
+//       ],
+//     );
+//   }
+// }
 
 class SubscribeButton extends StatefulWidget {
   final StoreProduct? product;

@@ -25,6 +25,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/apple.svg
   String get apple => 'assets/icons/apple.svg';
 
+  /// File path: assets/icons/checkCircle.svg
+  String get checkCircle => 'assets/icons/checkCircle.svg';
+
   /// File path: assets/icons/clock.svg
   String get clock => 'assets/icons/clock.svg';
 
@@ -33,6 +36,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/delete.svg
   String get delete => 'assets/icons/delete.svg';
+
+  /// File path: assets/icons/discount.svg
+  String get discount => 'assets/icons/discount.svg';
 
   /// File path: assets/icons/file.svg
   String get file => 'assets/icons/file.svg';
@@ -88,9 +94,11 @@ class $AssetsIconsGen {
   /// List of all assets
   List<String> get values => [
         apple,
+        checkCircle,
         clock,
         copy,
         delete,
+        discount,
         file,
         google,
         headrt,
@@ -140,14 +148,15 @@ class Assets {
 
   static const AssetGenImage bg = AssetGenImage('assets/BG.png');
   static const $AssetsGifGen gif = $AssetsGifGen();
-  static const AssetGenImage girla = AssetGenImage('assets/girla.png');
+  static const AssetGenImage girl = AssetGenImage('assets/girl.png');
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const AssetGenImage niga = AssetGenImage('assets/niga.png');
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
   static const AssetGenImage placeholderLogo =
       AssetGenImage('assets/placeholder_logo.png');
 
   /// List of all assets
-  static List<AssetGenImage> get values => [bg, girla, placeholderLogo];
+  static List<AssetGenImage> get values => [bg, girl, niga, placeholderLogo];
 }
 
 class AssetGenImage {

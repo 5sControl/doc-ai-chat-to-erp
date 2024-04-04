@@ -17,7 +17,11 @@ part 'subscription_bloc.g.dart';
 class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  Set<String> kProductIds = {"SummifyPremiumWeekly"};
+  Set<String> kProductIds = {
+    "SummifyPremiumWeekly",
+    'SummifyPremiumMonth',
+    'SummifyPremiumYear'
+  };
   List<ProductDetails> _products = [];
 
   SubscriptionBloc()
@@ -54,15 +58,20 @@ class SubscriptionBloc
       }
 
       _products = productDetailResponse.productDetails;
-      // print(_products.first.id);
-      final prod = StoreProduct(
-          id: _products.first.id,
-          title: _products.first.title,
-          description: _products.first.description,
-          price: _products.first.price,
-          rawPrice: _products.first.rawPrice,
-          currencyCode: _products.first.currencyCode);
-      emit(state.copyWith(availableProducts: [prod]));
+      final List<StoreProduct> products = [];
+
+      _products.forEach((product) {
+        products.add(StoreProduct(
+            id: product.id,
+            currencySymbol: product.currencySymbol,
+            title: product.title,
+            description: product.description,
+            price: product.price,
+            rawPrice: product.rawPrice,
+            currencyCode: product.currencyCode));
+      });
+
+      emit(state.copyWith(availableProducts: products));
     }
 
     void _onStarted(event, Emitter emit) {

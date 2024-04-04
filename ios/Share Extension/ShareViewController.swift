@@ -18,7 +18,7 @@ class ShareViewController: SLComposeServiceViewController {
     override func isContentValid() -> Bool {
         return true
     }
-
+  
     private func loadIds() {
         // loading Share extension App Id
         let shareExtensionAppBundleIdentifier = Bundle.main.bundleIdentifier!

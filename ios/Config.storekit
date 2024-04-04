@@ -97,6 +97,60 @@
           "referenceName" : "SummifyPremiumWeekly",
           "subscriptionGroupID" : "C7697B0C",
           "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "06CB2D79",
+          "introductoryOffer" : {
+            "displayPrice" : "0.99",
+            "internalID" : "485A947E",
+            "paymentMode" : "none"
+          },
+          "localizations" : [
+            {
+              "description" : "",
+              "displayName" : "",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "SummifyPremiumYear",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "SummifyPremiumYear",
+          "subscriptionGroupID" : "C7697B0C",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "2.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "7136E5F5",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "",
+              "displayName" : "",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "SummifyPremiumMonth",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "SummifyPremiumMonth",
+          "subscriptionGroupID" : "C7697B0C",
+          "type" : "RecurringSubscription"
         }
       ]
     }
