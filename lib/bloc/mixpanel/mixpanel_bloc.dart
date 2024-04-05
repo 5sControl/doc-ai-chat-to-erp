@@ -1,11 +1,18 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:summify/bloc/settings/settings_bloc.dart';
 
 part 'mixpanel_event.dart';
 part 'mixpanel_state.dart';
 
+const subscriptionALink =
+    'https://www.figma.com/file/2Rz4IcpAXkHalZP2ivDIIi/Sumishare?type=design&node-id=901-4041&mode=dev';
+const subscriptionBLink =
+    'https://www.figma.com/file/2Rz4IcpAXkHalZP2ivDIIi/Sumishare?type=design&node-id=933-4343&mode=dev';
+
 class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
+  final SettingsBloc settingsBloc;
   late Mixpanel mixpanel;
 
   Future<void> initMixpanel() async {
@@ -15,18 +22,29 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
     );
   }
 
-  MixpanelBloc() : super(const MixpanelState()) {
+  MixpanelBloc({required this.settingsBloc}) : super(const MixpanelState()) {
     initMixpanel();
     // APP
     on<OnboardingStep>((event, emit) {
       mixpanel.track('Onboarding step', properties: {'Step': event.step});
     });
     on<PaywallShow>((event, emit) {
-      mixpanel.track('Paywall show', properties: {'Trigger': event.trigger});
+      mixpanel.track('Paywall show', properties: {
+        'Trigger': event.trigger,
+        'Test version': settingsBloc.state.abTest,
+        'Screen link': settingsBloc.state.abTest == 'A'
+            ? subscriptionALink
+            : subscriptionBLink
+      });
     });
     on<ActivateSubscription>((event, emit) {
-      mixpanel.track('Activate subscription',
-          properties: {'Subscription': event.plan});
+      mixpanel.track('Activate subscription', properties: {
+        'Subscription': event.plan,
+        'Test version': settingsBloc.state.abTest,
+        'Screen link': settingsBloc.state.abTest == 'A'
+            ? subscriptionALink
+            : subscriptionBLink
+      });
     });
     on<ClosePaywall>((event, emit) {
       mixpanel.track('Close paywall');

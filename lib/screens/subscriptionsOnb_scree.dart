@@ -9,6 +9,7 @@ import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/mixpanel/mixpanel_bloc.dart';
+import '../bloc/settings/settings_bloc.dart';
 import '../models/models.dart';
 
 class SubscriptionOnboardingScreen extends StatefulWidget {
@@ -36,6 +37,8 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final abTest = context.read<SettingsBloc>().state.abTest;
+
     void onPressClose() {
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
@@ -49,6 +52,7 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
         }
       },
       builder: (context, state) {
+        // final abTest = context.read<SettingsBloc>().state.abTest;
         return BlocBuilder<SubscriptionBloc, SubscriptionState>(
           builder: (context, state) {
             return Stack(
@@ -94,7 +98,9 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                       ? 2
                                       : 1.5,
                               child: Image.asset(
-                                Assets.girl.path,
+                                abTest == "A"
+                                    ? Assets.girl.path
+                                    : Assets.niga.path,
                                 fit: BoxFit.cover,
                               ),
                             ),

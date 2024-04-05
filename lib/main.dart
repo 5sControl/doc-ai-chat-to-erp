@@ -52,8 +52,10 @@ class SummishareApp extends StatelessWidget {
     final AuthService authService = AuthService();
     return MultiBlocProvider(
         providers: [
+          BlocProvider(create: (context) => SettingsBloc()),
           BlocProvider(
-            create: (context) => MixpanelBloc(),
+            create: (context) =>
+                MixpanelBloc(settingsBloc: context.read<SettingsBloc>()),
           ),
           BlocProvider(
             create: (context) =>
@@ -62,7 +64,6 @@ class SummishareApp extends StatelessWidget {
           BlocProvider(
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
-          BlocProvider(create: (context) => SettingsBloc()),
           BlocProvider(
               create: (context) => SummariesBloc(
                   mixpanelBloc: context.read<MixpanelBloc>(),

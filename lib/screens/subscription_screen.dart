@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
@@ -43,6 +44,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
     return BlocBuilder<SubscriptionBloc, SubscriptionState>(
       builder: (context, state) {
+
+        final abTest = context.read<SettingsBloc>().state.abTest;
+
         return Stack(
           children: [
             const BackgroundGradient(),
@@ -82,7 +86,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         aspectRatio:
                             MediaQuery.of(context).size.height < 700 ? 2 : 1.5,
                         child: Image.asset(
-                          Assets.girl.path,
+                          abTest == "A" ? Assets.girl.path :  Assets.niga.path,
                           fit: BoxFit.cover,
                         ),
                       ),
