@@ -18,7 +18,7 @@ class MainScreen extends StatelessWidget {
           body: const HomeScreen(),
           bottomNavigationBar: Padding(
             padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 10),
             child: const Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,

@@ -48,7 +48,7 @@ const throttleDuration = Duration(milliseconds: 100);
 
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
-    return droppable<E>().call(events.throttle(duration), mapper);
+    return concurrent<E>().call(events.throttle(duration), mapper);
   };
 }
 
@@ -178,6 +178,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           summary: null,
           error: null)
     });
+    print('emit loading');
     emit(state.copyWith(summaries: summaryMap));
   }
 
@@ -191,6 +192,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summariesMap = Map.from(state.summaries);
 
     summariesMap.update(summaryUrl, (value) => summaryData!);
+    print('emit preview');
     emit(state.copyWith(summaries: summariesMap));
   }
 
@@ -217,6 +219,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             .copyWith(error: 'Loading error', status: SummaryStatus.Error);
       }
     });
+    print('emit loaded summary');
     emit(state.copyWith(summaries: summaryMap));
   }
 

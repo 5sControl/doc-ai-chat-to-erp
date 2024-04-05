@@ -31,6 +31,27 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   static const duration = Duration(milliseconds: 300);
   bool tapped = false;
 
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    setState(() {
+      _notification = state;
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   void onTapDown() {
     setState(() {
       tapped = true;
@@ -61,27 +82,6 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
           SendNotify(title: title, description: 'Your summary already done'));
     }
     onPressSummaryTile();
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-
-    setState(() {
-      _notification = state;
-    });
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
   }
 
   @override

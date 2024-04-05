@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -65,7 +64,10 @@ class AddSummaryButton extends StatelessWidget {
       final daySummaries =
           context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 15;
 
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: ['pdf', 'doc', 'docs', 'rtf', 'txt', 'epub'],
+          allowMultiple: false);
 
       Future.delayed(const Duration(milliseconds: 10), () async {
         if (daySummaries >= limit) {
