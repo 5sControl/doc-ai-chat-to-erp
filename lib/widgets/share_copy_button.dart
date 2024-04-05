@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
 
+import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../models/models.dart';
 
 class ShareAndCopyButton extends StatefulWidget {
@@ -57,10 +59,12 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
         '${widget.sharedLink} \n\n ${widget.summaryData.summary}',
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
+      context.read<MixpanelBloc>().add(const ShareSummary());
     }
 
     void onPressCopy() {
       Clipboard.setData(ClipboardData(text: widget.summaryData.summary!));
+      context.read<MixpanelBloc>().add(const CopySummary());
     }
 
     return Container(

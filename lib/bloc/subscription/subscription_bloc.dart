@@ -8,6 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/models/models.dart';
 
 part 'subscription_event.dart';
@@ -17,6 +18,7 @@ part 'subscription_bloc.g.dart';
 class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
+  final MixpanelBloc mixpanelBloc;
   Set<String> kProductIds = {
     "SummifyPremiumWeekly",
     'SummifyPremiumMonth',
@@ -24,7 +26,7 @@ class SubscriptionBloc
   };
   List<ProductDetails> _products = [];
 
-  SubscriptionBloc()
+  SubscriptionBloc({required this.mixpanelBloc})
       : super(const SubscriptionState(
             subscriptionsStatus: SubscriptionsStatus.unsubscribed,
             availableProducts: [])) {
@@ -93,6 +95,18 @@ class SubscriptionBloc
                   purchaseDetails.status == PurchaseStatus.purchased) {
                 print('complete');
                 add(const PaymentComplete());
+
+                var plan = '';
+                switch (purchaseDetails.productID) {
+                  case 'SummifyPremiumYear':
+                    plan = 'year';
+                  case 'SummifyPremiumMonth':
+                    plan = 'month';
+                  case 'SummifyPremiumWeekly':
+                    plan = 'week';
+                }
+
+                mixpanelBloc.add(ActivateSubscription(plan: plan));
               }
             }
           }

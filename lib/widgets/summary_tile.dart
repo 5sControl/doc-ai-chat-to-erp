@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 
 import '../bloc/settings/settings_bloc.dart';
@@ -72,6 +73,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
       MaterialPageRoute(
           builder: (context) => SummaryScreen(sharedLink: widget.sharedLink)),
     );
+    context.read<MixpanelBloc>().add(const OpenSummary());
   }
 
   void onSummaryLoad({required String title}) {
@@ -102,9 +104,11 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
         final summaryData = state.summaries[widget.sharedLink]!;
 
         void onPressRetry() {
+          context.read<SummariesBloc>().add(GetSummaryFromUrl(
+              summaryUrl: widget.sharedLink, fromShare: false));
           context
-              .read<SummariesBloc>()
-              .add(GetSummaryFromUrl(summaryUrl: widget.sharedLink));
+              .read<MixpanelBloc>()
+              .add(SummaryUpgrade(resource: widget.sharedLink));
         }
 
         void onPressDelete() {

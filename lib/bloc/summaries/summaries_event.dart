@@ -6,10 +6,11 @@ sealed class SummariesEvent extends Equatable {
 
 class GetSummaryFromUrl extends SummariesEvent {
   final String summaryUrl;
-  const GetSummaryFromUrl({required this.summaryUrl});
+  final bool fromShare;
+  const GetSummaryFromUrl({required this.summaryUrl, required this.fromShare});
 
   @override
-  List<Object?> get props => [summaryUrl];
+  List<Object?> get props => [summaryUrl, fromShare];
 }
 
 class GetSummaryFromText extends SummariesEvent {
@@ -23,10 +24,11 @@ class GetSummaryFromText extends SummariesEvent {
 class GetSummaryFromFile extends SummariesEvent {
   final String fileName;
   final String filePath;
-  const GetSummaryFromFile({required this.fileName, required this.filePath});
+  final bool fromShare;
+  const GetSummaryFromFile({required this.fileName, required this.filePath, required this.fromShare});
 
   @override
-  List<Object?> get props => [fileName, filePath];
+  List<Object?> get props => [fileName, filePath, fromShare];
 }
 
 class DeleteSummary extends SummariesEvent {

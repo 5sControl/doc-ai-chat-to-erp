@@ -7,12 +7,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/modal_screens/info_screen.dart';
 import 'package:summify/screens/subscription_screen.dart';
 
 import '../gen/assets.gen.dart';
 import '../widgets/summary_tile.dart';
+import 'modal_screens/how_to_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,11 +47,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             return const SubscriptionScreen();
           },
         );
+        context
+            .read<MixpanelBloc>()
+            .add(LimitReached(resource: summaryUrl, registrated: false));
       } else {
-        print('!!!!');
         context
             .read<SummariesBloc>()
-            .add(GetSummaryFromUrl(summaryUrl: summaryUrl));
+            .add(GetSummaryFromUrl(summaryUrl: summaryUrl, fromShare: true));
       }
     });
   }
@@ -73,18 +78,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             return const SubscriptionScreen();
           },
         );
-      } else {
         context
-            .read<SummariesBloc>()
-            .add(GetSummaryFromFile(filePath: filePath, fileName: fileName));
+            .read<MixpanelBloc>()
+            .add(LimitReached(resource: fileName, registrated: false));
+      } else {
+        context.read<SummariesBloc>().add(GetSummaryFromFile(
+            filePath: filePath, fileName: fileName, fromShare: true));
       }
     });
   }
 
   @override
   void initState() {
-    super.initState();
-
     // For sharing images coming from outside the app while the app is in the memory
     _intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
@@ -106,7 +111,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         if (value.isNotEmpty) {
           final fileName = value.first.path.split('/').last.toString();
           final filePath = value.first.path.replaceFirst('file://', '');
-          getSummaryFromFile(filePath: filePath, fileName: fileName);
+          Future.delayed(const Duration(seconds: 1), () {
+            getSummaryFromFile(filePath: filePath, fileName: fileName);
+          });
         }
       },
     );
@@ -125,9 +132,29 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntentPlus.getInitialText().then((String? value) {
       if (value != null) {
-        getSummary(summaryUrl: value);
+        Future.delayed(const Duration(seconds: 1), () {
+          getSummary(summaryUrl: value);
+        });
       }
     });
+
+    if (context.read<SettingsBloc>().state.howToShowed == false) {
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        showMaterialModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+          builder: (context) {
+            return const HowToScreen();
+          },
+        );
+        context.read<SettingsBloc>().add(const HowToShowed());
+      });
+    }
+
+    super.initState();
   }
 
   @override

@@ -13,11 +13,12 @@ import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
 import 'package:summify/widgets/share_copy_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../models/models.dart';
 import '../widgets/backgroung_gradient.dart';
 
-class SummaryScreen extends StatelessWidget {
+class SummaryScreen extends StatefulWidget {
   final String sharedLink;
   const SummaryScreen({
     super.key,
@@ -25,12 +26,31 @@ class SummaryScreen extends StatelessWidget {
   });
 
   @override
+  State<SummaryScreen> createState() => _SummaryScreenState();
+}
+
+class _SummaryScreenState extends State<SummaryScreen> {
+  @override
+  void initState() {
+    if (context
+        .read<SummariesBloc>()
+        .state
+        .ratedSummaries
+        .contains(widget.sharedLink)) {
+      context
+          .read<MixpanelBloc>()
+          .add(ShowSummaryAgain(resource: widget.sharedLink));
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<SummariesBloc, SummariesState>(
       builder: (context, state) {
-        final summaryData = state.summaries[sharedLink]!;
+        final summaryData = state.summaries[widget.sharedLink]!;
         final displayLink =
-            summaryData.title ?? sharedLink.replaceAll('https://', '');
+            summaryData.title ?? widget.sharedLink.replaceAll('https://', '');
         final summaryText = summaryData.summary!
             .replaceFirst('Summary:', '<b>Summary:\n</b>')
             .replaceFirst('In-depth Analysis:', '<b>In-depth Analysis:\n</b>')
@@ -60,7 +80,7 @@ class SummaryScreen extends StatelessWidget {
             enableDrag: false,
             builder: (context) {
               return RateSummaryScreen(
-                summaryLink: sharedLink,
+                summaryLink: widget.sharedLink,
               );
             },
           );
@@ -71,12 +91,13 @@ class SummaryScreen extends StatelessWidget {
           Future.delayed(const Duration(milliseconds: 300), () {
             context
                 .read<SummariesBloc>()
-                .add(DeleteSummary(summaryUrl: sharedLink));
+                .add(DeleteSummary(summaryUrl: widget.sharedLink));
           });
+          context.read<MixpanelBloc>().add(const DeleteSummaryM());
         }
 
         void onPressBack() {
-          if (!state.ratedSummaries.contains(sharedLink)) {
+          if (!state.ratedSummaries.contains(widget.sharedLink)) {
             showRateScreen();
           } else {
             Navigator.of(context).pop();
@@ -84,7 +105,7 @@ class SummaryScreen extends StatelessWidget {
         }
 
         void onPressLink() async {
-          final Uri url = Uri.parse(sharedLink);
+          final Uri url = Uri.parse(widget.sharedLink);
           if (!await launchUrl(url)) {}
         }
 
@@ -106,7 +127,7 @@ class SummaryScreen extends StatelessWidget {
                       ),
                     ),
                     Header(
-                      sharedLink: sharedLink,
+                      sharedLink: widget.sharedLink,
                       displayLink: displayLink,
                       formattedDate: summaryData.formattedDate,
                       onPressLink: onPressLink,
@@ -158,7 +179,7 @@ class SummaryScreen extends StatelessWidget {
                                     ])),
                             padding: const EdgeInsets.all(15),
                             child: ShareAndCopyButton(
-                              sharedLink: sharedLink,
+                              sharedLink: widget.sharedLink,
                               summaryData: summaryData,
                             ),
                           ),

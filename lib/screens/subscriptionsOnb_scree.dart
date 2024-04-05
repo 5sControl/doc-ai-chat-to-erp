@@ -8,6 +8,7 @@ import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../models/models.dart';
 
 class SubscriptionOnboardingScreen extends StatefulWidget {
@@ -29,15 +30,16 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
 
   @override
   void initState() {
+    context.read<MixpanelBloc>().add(const PaywallShow(trigger: 'onboarding'));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      // context.read<SharedLinksBloc>().add(RateSummary(sharedLink: summaryLink));
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      context.read<MixpanelBloc>().add(const ClosePaywall());
     }
 
     return BlocConsumer<SubscriptionBloc, SubscriptionState>(
@@ -87,7 +89,10 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             AspectRatio(
-                              aspectRatio: MediaQuery.of(context).size.height < 700 ? 2 : 1.5,
+                              aspectRatio:
+                                  MediaQuery.of(context).size.height < 700
+                                      ? 2
+                                      : 1.5,
                               child: Image.asset(
                                 Assets.girl.path,
                                 fit: BoxFit.cover,

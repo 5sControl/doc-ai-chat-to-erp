@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
+import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/summaries/summaries_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../../widgets/summify_button.dart';
@@ -61,10 +62,13 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
               return const SubscriptionScreen();
             },
           );
-        } else {
           context
-              .read<SummariesBloc>()
-              .add(GetSummaryFromUrl(summaryUrl: urlController.text));
+              .read<MixpanelBloc>()
+              .add(LimitReached(resource: urlController.text, registrated: false));
+        } else if (controllerText.isNotEmpty) {
+          context.read<SummariesBloc>().add(GetSummaryFromUrl(
+              summaryUrl: urlController.text, fromShare: false));
+          Navigator.of(context).pop();
         }
       });
     }

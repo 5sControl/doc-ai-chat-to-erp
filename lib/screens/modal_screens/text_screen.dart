@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
+import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/summaries/summaries_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../../widgets/summify_button.dart';
@@ -41,7 +42,10 @@ class _TextModalScreenState extends State<TextModalScreen> {
             return const SubscriptionScreen();
           },
         );
-      } else {
+        context
+            .read<MixpanelBloc>()
+            .add(LimitReached(resource: textController.text, registrated: false));
+      } else if (controllerText.isNotEmpty) {
         context
             .read<SummariesBloc>()
             .add(GetSummaryFromText(text: textController.text));

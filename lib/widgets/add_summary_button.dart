@@ -9,6 +9,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 
+import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../screens/modal_screens/text_screen.dart';
 import '../screens/modal_screens/ulr_screen.dart';
 import '../screens/subscription_screen.dart';
@@ -23,11 +24,6 @@ final Map<String, String> buttons = {
 
 class AddSummaryButton extends StatelessWidget {
   const AddSummaryButton({super.key});
-  // static const XTypeGroup typeGroup = XTypeGroup(
-  //   label: '',
-  //   extensions: <String>['txt', 'docx', 'pdf', 'doc', 'docx'],
-  //   uniformTypeIdentifiers: <String>['public.data'],
-  // );
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +77,15 @@ class AddSummaryButton extends StatelessWidget {
               return const SubscriptionScreen();
             },
           );
+          context
+              .read<MixpanelBloc>()
+              .add(LimitReached(resource: result?.paths[0] ?? 'file', registrated: false));
         } else if (result?.paths.isNotEmpty != null) {
           final fileName = result!.paths[0]?.split('/').last;
           context.read<SummariesBloc>().add(GetSummaryFromFile(
                 fileName: fileName!,
                 filePath: result.paths[0]!,
+            fromShare: false
               ));
         }
       });
@@ -95,10 +95,13 @@ class AddSummaryButton extends StatelessWidget {
       switch (title) {
         case 'Link':
           onPressURl();
+          context.read<MixpanelBloc>().add(const SelectOption(option: 'link'));
         case 'File':
           onPressOpenFile();
+          context.read<MixpanelBloc>().add(const SelectOption(option: 'file'));
         case 'Text':
           onPressText();
+          context.read<MixpanelBloc>().add(const SelectOption(option: 'text'));
       }
     }
 

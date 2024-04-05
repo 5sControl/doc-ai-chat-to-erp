@@ -1,10 +1,9 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../gen/assets.gen.dart';
 
 class HowToScreen extends StatefulWidget {
@@ -19,6 +18,7 @@ class _HowToScreenState extends State<HowToScreen> {
 
   @override
   void initState() {
+    context.read<MixpanelBloc>().add(const ShowInstructions());
     super.initState();
     image = AssetImage(Assets.gif.howTo.path);
   }
@@ -26,6 +26,7 @@ class _HowToScreenState extends State<HowToScreen> {
   @override
   void dispose() {
     image.evict();
+    context.read<MixpanelBloc>().add(const CloseInstructions());
     super.dispose();
   }
 
@@ -35,10 +36,6 @@ class _HowToScreenState extends State<HowToScreen> {
         child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Scaffold(
-              // appBar: AppBar(
-              //   automaticallyImplyLeading: false,
-              //   title: Text('asdasdasdasdasd'),
-              // ),
               body: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Column(
@@ -61,6 +58,7 @@ class _HowToScreenState extends State<HowToScreen> {
                               visualDensity: VisualDensity.compact,
                               onPressed: () {
                                 Navigator.of(context).pop();
+                                context.read<MixpanelBloc>().add(const CloseInstructions());
                               },
                               style: ButtonStyle(
                                   padding: const MaterialStatePropertyAll(

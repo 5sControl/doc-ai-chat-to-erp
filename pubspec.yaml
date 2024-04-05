@@ -39,6 +39,7 @@ dependencies:
   simple_animations: ^5.0.2
   stream_transform: ^2.1.0
   bloc_concurrency: ^0.2.5
+  mixpanel_flutter: ^2.2.0
 
 
 dev_dependencies:

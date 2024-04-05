@@ -11,6 +11,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
@@ -49,11 +50,14 @@ class SummishareApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthService authService = AuthService();
-
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => SubscriptionBloc(),
+            create: (context) => MixpanelBloc(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                SubscriptionBloc(mixpanelBloc: context.read<MixpanelBloc>()),
           ),
           BlocProvider(
               create: (context) =>
@@ -61,6 +65,7 @@ class SummishareApp extends StatelessWidget {
           BlocProvider(create: (context) => SettingsBloc()),
           BlocProvider(
               create: (context) => SummariesBloc(
+                  mixpanelBloc: context.read<MixpanelBloc>(),
                   subscriptionBloc: context.read<SubscriptionBloc>()))
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(

@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -54,10 +55,11 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 
 class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
   final SubscriptionBloc subscriptionBloc;
+  final MixpanelBloc mixpanelBloc;
   late final StreamSubscription subscriptionBlocSubscription;
 
   final SummaryRepository summaryRepository = SummaryRepository();
-  SummariesBloc({required this.subscriptionBloc})
+  SummariesBloc({required this.subscriptionBloc, required this.mixpanelBloc})
       : super(SummariesState(
             summaries: {
               'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
@@ -82,7 +84,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             SummaryStatus.Loading) {
           await startSummaryLoading(event.summaryUrl, emit);
           await loadSummaryPreview(event.summaryUrl, emit);
-          await loadSummaryFromUrl(event.summaryUrl, emit);
+          await loadSummaryFromUrl(event.summaryUrl, event.fromShare, emit);
         }
       },
       transformer: throttleDroppable(throttleDuration),
@@ -107,7 +109,10 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         if (state.summaries[event.fileName]?.status != SummaryStatus.Loading) {
           await startSummaryLoading(event.fileName, emit);
           await loadSummaryFromFile(
-              fileName: event.fileName, filePath: event.filePath, emit: emit);
+              fileName: event.fileName,
+              filePath: event.filePath,
+              fromShare: event.fromShare,
+              emit: emit);
         }
       },
       transformer: throttleDroppable(throttleDuration),
@@ -178,7 +183,6 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           summary: null,
           error: null)
     });
-    print('emit loading');
     emit(state.copyWith(summaries: summaryMap));
   }
 
@@ -197,7 +201,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
   }
 
   Future<void> loadSummaryFromUrl(
-      String summaryUrl, Emitter<SummariesState> emit) async {
+      String summaryUrl, bool fromShare, Emitter<SummariesState> emit) async {
+    if (fromShare) {
+      mixpanelBloc.add(SummarizingStarted(resource: summaryUrl));
+    } else {
+      mixpanelBloc.add(const Summify(option: 'link'));
+    }
+
     final summary =
         await summaryRepository.getSummaryFromLink(summaryLink: summaryUrl);
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
@@ -205,21 +215,31 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     summaryMap.update(summaryUrl, (_) {
       if (summary is Summary) {
         incrementDailySummaryCount(emit);
+
+        if (fromShare) {
+          mixpanelBloc.add(SummarizingSuccess(resource: summaryUrl));
+        } else {
+          mixpanelBloc.add(const SummifySuccess(option: 'link'));
+        }
+
         return summaryData!.copyWith(
             summary: summary.summary,
             status: SummaryStatus.Complete,
             error: null);
       } else if (summary is Exception) {
+        mixpanelBloc.add(const SummifyError(option: 'link'));
+
         return summaryData!.copyWith(
             error: summary.toString().substring(11),
             summary: null,
             status: SummaryStatus.Error);
       } else {
+        mixpanelBloc.add(const SummifyError(option: 'link'));
         return summaryData!
             .copyWith(error: 'Loading error', status: SummaryStatus.Error);
       }
     });
-    print('emit loaded summary');
+
     emit(state.copyWith(summaries: summaryMap));
   }
 
@@ -236,27 +256,38 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       if (summary is Summary) {
         incrementDailySummaryCount(emit);
         emit(state.copyWith(textCounter: state.textCounter + 1));
+        mixpanelBloc.add(const SummifySuccess(option: 'text'));
         return summaryData!.copyWith(
             summary: summary.summary,
             status: SummaryStatus.Complete,
             error: null);
       } else if (summary is Exception) {
+        mixpanelBloc.add(const SummifyError(option: 'text'));
         return summaryData!.copyWith(
             error: summary.toString().substring(11),
             summary: null,
             status: SummaryStatus.Error);
       } else {
+        mixpanelBloc.add(const SummifyError(option: 'text'));
         return summaryData!
             .copyWith(error: 'Loading error', status: SummaryStatus.Error);
       }
     });
+    mixpanelBloc.add(const Summify(option: 'text'));
     emit(state.copyWith(summaries: summaryMap));
   }
 
   Future<void> loadSummaryFromFile(
       {required String fileName,
       required String filePath,
+      required bool fromShare,
       required Emitter<SummariesState> emit}) async {
+    if (fromShare) {
+      mixpanelBloc.add(SummarizingStarted(resource: fileName));
+    } else {
+      mixpanelBloc.add(const Summify(option: 'link'));
+    }
+
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     final summaryData = state.summaries[fileName];
     final summary = await summaryRepository.getSummaryFromFile(
@@ -264,26 +295,31 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     summaryMap.update(fileName, (_) {
       if (summary is Summary) {
         incrementDailySummaryCount(emit);
+        mixpanelBloc.add(const SummifySuccess(option: 'file'));
         return summaryData!.copyWith(
             summary: summary.summary,
             status: SummaryStatus.Complete,
             error: null);
       } else if (summary is Exception) {
+        mixpanelBloc.add(const SummifyError(option: 'file'));
         return summaryData!.copyWith(
             error: summary.toString().substring(11),
             summary: null,
             status: SummaryStatus.Error);
       } else {
+        mixpanelBloc.add(const SummifyError(option: 'file'));
         return summaryData!
             .copyWith(error: 'Loading error', status: SummaryStatus.Error);
       }
     });
+    mixpanelBloc.add(const Summify(option: 'file'));
     emit(state.copyWith(summaries: summaryMap));
   }
 
   void deleteSummary(String summaryUrl, Emitter<SummariesState> emit) {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.remove(summaryUrl);
+    mixpanelBloc.add(const DeleteSummaryM());
     emit(state.copyWith(summaries: summaryMap));
   }
 

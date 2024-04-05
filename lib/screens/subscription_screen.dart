@@ -9,6 +9,7 @@ import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../models/models.dart';
 
 class SubscriptionScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   void initState() {
+    context.read<MixpanelBloc>().add(const PaywallShow(trigger: 'settings'));
     super.initState();
   }
 
@@ -36,6 +38,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   Widget build(BuildContext context) {
     void onPressClose() {
       Navigator.of(context).pop();
+      context.read<MixpanelBloc>().add(const ClosePaywall());
     }
 
     return BlocBuilder<SubscriptionBloc, SubscriptionState>(
@@ -76,7 +79,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AspectRatio(
-                        aspectRatio: MediaQuery.of(context).size.height < 700 ? 2 : 1.5,
+                        aspectRatio:
+                            MediaQuery.of(context).size.height < 700 ? 2 : 1.5,
                         child: Image.asset(
                           Assets.girl.path,
                           fit: BoxFit.cover,
@@ -189,7 +193,6 @@ class PricesBloc extends StatelessWidget {
         ),
       ],
     );
-
   }
 }
 
@@ -275,7 +278,8 @@ class SubscriptionCover extends StatelessWidget {
                       style: TextStyle(
                           color: isSelected ? Colors.white : Colors.black,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor: isSelected ? Colors.white : Colors.black,
+                          decorationColor:
+                              isSelected ? Colors.white : Colors.black,
                           fontSize: 16,
                           fontWeight: FontWeight.w400),
                     ),
