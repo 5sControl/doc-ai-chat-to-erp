@@ -153,6 +153,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
   }
 
+  // <array>
+  // <dict>
+  // <key>CFBundleURLSchemes</key>
+  // <array>
+  // <string>fbA1373696193330018</string>
+  // </array>
+  // </dict>
+  // </array>
+  // <key>FacebookAppID</key>
+  // <string>A1373696193330018</string>
+  // <key>FacebookClientToken</key>
+  // <string>9234edcf2a13ecc376b25ecc771c9528</string>
+  // <key>FacebookDisplayName</key>
+  // <string>Summify</string>
+
   @override
   void dispose() {
     _intentMediaStreamSubscription.cancel();

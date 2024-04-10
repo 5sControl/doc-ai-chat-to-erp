@@ -12,9 +12,18 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>ShareMedia-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+          <string>fb1373696193330018</string>
         </array>
       </dict>
     </array>
+    <key>FacebookAutoLogAppEventsEnabled</key>
+    <true/>
+    <key>FacebookAppID</key>
+    <string>1373696193330018</string>
+    <key>FacebookClientToken</key>
+    <string>9234edcf2a13ecc376b25ecc771c9528</string>
+    <key>FacebookDisplayName</key>
+    <string>Summify</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>To upload photos, please allow permission to access your photo library.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
@@ -65,5 +74,6 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+
 </dict>
 </plist>

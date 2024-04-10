@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,9 +47,10 @@ void main() async {
 
 class SummishareApp extends StatelessWidget {
   const SummishareApp({super.key});
-
+  static final facebookAppEvents = FacebookAppEvents();
   @override
   Widget build(BuildContext context) {
+    facebookAppEvents.setAutoLogAppEventsEnabled(true);
     final AuthService authService = AuthService();
     return MultiBlocProvider(
         providers: [
@@ -58,8 +60,9 @@ class SummishareApp extends StatelessWidget {
                 MixpanelBloc(settingsBloc: context.read<SettingsBloc>()),
           ),
           BlocProvider(
-            create: (context) =>
-                SubscriptionBloc(mixpanelBloc: context.read<MixpanelBloc>()),
+            create: (context) => SubscriptionBloc(
+                mixpanelBloc: context.read<MixpanelBloc>(),
+                facebookAppEvents: facebookAppEvents),
           ),
           BlocProvider(
               create: (context) =>
