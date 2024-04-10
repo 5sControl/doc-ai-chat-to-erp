@@ -1,19 +1,18 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:summify/models/models.dart';
 
-enum SendRateStatus { Loding, Sended, Error }
+enum SendRateStatus { Loading, Sended, Error }
 
 class SummaryApiRepository {
   final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
   final String fileUrl =
       "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
   final String rateUrl = 'http://51.159.179.125:8001/api/applications/reviews/';
-  // final String linkUrl = "http://192.168.1.136:8000/application_by_summarize/";
+  // final String linkUrl = "http://192.168.1.136:8001/application_by_summarize/";
   // final String fileUrl =
-  //     "http://192.168.1.136:8000/application_by_summarize/uploadfile/";
+  //     "http://192.168.1.136:8001/application_by_summarize/uploadfile/";
 
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.json),
@@ -94,7 +93,6 @@ class SummaryApiRepository {
         },
       );
       if (response.statusCode == 200) {
-        print('Summary rated!!!');
         return SendRateStatus.Sended;
       } else {
         return SendRateStatus.Error;

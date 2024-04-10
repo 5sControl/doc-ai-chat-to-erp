@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -226,11 +228,11 @@ class SubscriptionCover extends StatelessWidget {
   Widget build(BuildContext context) {
     String subscriptionTitle = '';
     switch (subscription.id) {
-      case 'SummifyPremiumWeekly':
+      case 'SummifyPremiumWeekly' || 'summify_premium_week':
         subscriptionTitle = '1 \nweek';
-      case 'SummifyPremiumMonth':
+      case 'SummifyPremiumMonth' || 'summify_premium_month':
         subscriptionTitle = '1 \nmonth';
-      case 'SummifyPremiumYear':
+      case 'SummifyPremiumYear' || 'summify_premium_year':
         subscriptionTitle = '12 \nmonths';
     }
 
@@ -277,12 +279,14 @@ class SubscriptionCover extends StatelessWidget {
                       color: Colors.transparent,
                     ),
                     Text(
-                      subscription.price,
+                      '${subscription.currencySymbol}${subscription.rawPrice}',
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.clip,
                       style: TextStyle(
                           color: isSelected ? Colors.white : Colors.black,
-                          fontSize: 24,
+                          fontSize: 18,
                           fontWeight:
-                              isSelected ? FontWeight.w700 : FontWeight.w400),
+                          isSelected ? FontWeight.w700 : FontWeight.w400),
                     ),
                     Text(
                       subscription.currencySymbol +
@@ -397,7 +401,7 @@ class TermsRestorePrivacy extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
+        if (Platform.isIOS) Expanded(
           child: GestureDetector(
             onTap: onPressTerms,
             child: const Text(
@@ -417,7 +421,7 @@ class TermsRestorePrivacy extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
+        if (Platform.isIOS) Expanded(
           child: GestureDetector(
             onTap: onPressPrivacy,
             child: const Text(

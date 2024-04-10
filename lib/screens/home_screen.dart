@@ -104,7 +104,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugPrint('getIntentDataStream error: $err');
       },
     );
-
     // For sharing images coming from outside the app while the app is closed
     ReceiveSharingIntentPlus.getInitialMedia().then(
       (List<SharedMediaFile> value) {
@@ -117,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         }
       },
     );
-
     // For sharing or opening urls/text coming from outside the app while the app is in the memory
     _intentTextStreamSubscription =
         ReceiveSharingIntentPlus.getTextStream().listen(
@@ -128,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         debugPrint('getLinkStream error: $err');
       },
     );
-
     // For sharing or opening urls/text coming from outside the app while the app is closed
     ReceiveSharingIntentPlus.getInitialText().then((String? value) {
       if (value != null) {
@@ -153,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         context.read<SettingsBloc>().add(const HowToShowed());
       });
     }
-
     super.initState();
   }
 

@@ -19,11 +19,18 @@ class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   final MixpanelBloc mixpanelBloc;
-  Set<String> kProductIds = {
+  Set<String> appleProductIds = {
     "SummifyPremiumWeekly",
     'SummifyPremiumMonth',
     'SummifyPremiumYear'
   };
+
+  Set<String> googleProductIds = {
+    "summify_premium_week",
+    'summify_premium_month',
+    'summify_premium_year'
+  };
+
   List<ProductDetails> _products = [];
 
   SubscriptionBloc({required this.mixpanelBloc})
@@ -34,7 +41,6 @@ class SubscriptionBloc
 
     Future<void> initStoreInfo() async {
       final bool isAvailable = await _inAppPurchase.isAvailable();
-
       if (!isAvailable) {
         _products = [];
         return;
@@ -47,8 +53,8 @@ class SubscriptionBloc
       }
 
       ProductDetailsResponse productDetailResponse =
-          await _inAppPurchase.queryProductDetails(kProductIds);
-
+          await _inAppPurchase.queryProductDetails(
+              Platform.isIOS ? appleProductIds : googleProductIds);
       if (productDetailResponse.error != null) {
         // _products = productDetailResponse.productDetails;
         return;
@@ -121,11 +127,13 @@ class SubscriptionBloc
     }
 
     Future<void> _buyProduct(BuySubscription event, Emitter emit) async {
-      var paymentWrapper = SKPaymentQueueWrapper();
-      var transactions = await paymentWrapper.transactions();
-      transactions.forEach((transaction) async {
-        await paymentWrapper.finishTransaction(transaction);
-      });
+      if (Platform.isIOS) {
+        var paymentWrapper = SKPaymentQueueWrapper();
+        var transactions = await paymentWrapper.transactions();
+        transactions.forEach((transaction) async {
+          await paymentWrapper.finishTransaction(transaction);
+        });
+      }
       final PurchaseParam purchaseParam = PurchaseParam(
           productDetails: _products
               .firstWhere((product) => product.id == event.subscriptionId));

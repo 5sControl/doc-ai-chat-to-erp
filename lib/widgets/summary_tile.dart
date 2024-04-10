@@ -80,6 +80,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
     if (_notification == AppLifecycleState.paused ||
         _notification == AppLifecycleState.inactive ||
         _notification == AppLifecycleState.hidden) {
+      print('NOTIFY');
       context.read<SettingsBloc>().add(
           SendNotify(title: title, description: 'Your summary already done'));
     }
