@@ -15,8 +15,12 @@ class $AssetsGifGen {
   /// File path: assets/gif/how_to.gif
   AssetGenImage get howTo => const AssetGenImage('assets/gif/how_to.gif');
 
+  /// File path: assets/gif/how_to_android.gif
+  AssetGenImage get howToAndroid =>
+      const AssetGenImage('assets/gif/how_to_android.gif');
+
   /// List of all assets
-  List<AssetGenImage> get values => [howTo];
+  List<AssetGenImage> get values => [howTo, howToAndroid];
 }
 
 class $AssetsIconsGen {

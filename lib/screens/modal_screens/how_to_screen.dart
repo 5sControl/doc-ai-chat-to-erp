@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _HowToScreenState extends State<HowToScreen> {
   void initState() {
     context.read<MixpanelBloc>().add(const ShowInstructions());
     super.initState();
-    image = AssetImage(Assets.gif.howTo.path);
+    image = AssetImage(Platform.isIOS ? Assets.gif.howTo.path : Assets.gif.howToAndroid.path);
   }
 
   @override
