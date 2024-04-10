@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/screens/modal_screens/how_to_screen.dart';
@@ -114,10 +116,10 @@ class InfoScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Divider(
+                  if (Platform.isIOS) const Divider(
                     color: Colors.white,
                   ),
-                  InkWell(
+                  if (Platform.isIOS) InkWell(
                     onTap: onPressTerms,
                     child: const Row(
                       mainAxisSize: MainAxisSize.max,
@@ -135,10 +137,10 @@ class InfoScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Divider(
+                  if (Platform.isIOS) const Divider(
                     color: Colors.white,
                   ),
-                  InkWell(
+                  if (Platform.isIOS) InkWell(
                     onTap: onPressPrivacy,
                     child: const Row(
                       mainAxisSize: MainAxisSize.max,

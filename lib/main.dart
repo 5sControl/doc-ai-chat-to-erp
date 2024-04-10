@@ -11,6 +11,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
@@ -18,7 +19,7 @@ import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/theme/baseTheme.dart';
-import 'bloc/shared_links/shared_links_bloc.dart';
+import 'bloc/summaries/summaries_bloc.dart';
 import 'firebase_options.dart';
 import 'screens/main_screen.dart';
 
@@ -49,30 +50,34 @@ class SummishareApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthService authService = AuthService();
-
     return MultiBlocProvider(
         providers: [
+          BlocProvider(create: (context) => SettingsBloc()),
           BlocProvider(
-            create: (context) => SubscriptionBloc(),
+            create: (context) =>
+                MixpanelBloc(settingsBloc: context.read<SettingsBloc>()),
           ),
           BlocProvider(
-            create: (context) => SharedLinksBloc(
-                subscriptionBloc: context.read<SubscriptionBloc>()),
+            create: (context) =>
+                SubscriptionBloc(mixpanelBloc: context.read<MixpanelBloc>()),
           ),
           BlocProvider(
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
-          BlocProvider(create: (context) => SettingsBloc())
+          BlocProvider(
+              create: (context) => SummariesBloc(
+                  mixpanelBloc: context.read<MixpanelBloc>(),
+                  subscriptionBloc: context.read<SubscriptionBloc>()))
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
             context.read<SubscriptionBloc>().add(const Start());
             context
-                .read<SharedLinksBloc>()
+                .read<SummariesBloc>()
                 .add(InitDailySummariesCount(thisDay: DateTime.now()));
             Timer.periodic(const Duration(minutes: 1), (timer) {
               context
-                  .read<SharedLinksBloc>()
+                  .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
             });
             return MaterialApp(

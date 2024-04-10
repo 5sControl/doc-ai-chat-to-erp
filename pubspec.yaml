@@ -1,7 +1,7 @@
 name: summify
 description: "Summify Extension"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.1.0+6
+version: 1.1.1+7
 
 environment:
   sdk: '>=3.2.4 <4.0.0'
@@ -32,12 +32,13 @@ dependencies:
   styled_text: ^8.1.0
   url_launcher: ^6.2.5
   file_picker: ^6.2.0
-  bloc_concurrency: ^0.2.4
   flutter_local_notifications: ^17.0.0
   receive_sharing_intent_plus: ^1.0.1
   in_app_purchase: ^3.1.13
-  get: ^4.6.6
   simple_animations: ^5.0.2
+  stream_transform: ^2.1.0
+  bloc_concurrency: ^0.2.5
+  mixpanel_flutter: ^2.2.0
 
 
 dev_dependencies:

@@ -46,17 +46,38 @@ class SummaryData extends Equatable {
   final String? title;
   final String? description;
   final String? error;
-  // final bool? opened;
+  final String formattedDate;
 
-  const SummaryData(
-      {required this.status,
-      required this.date,
-      // this.opened,
-      this.summary,
-      this.imageUrl,
-      this.title,
-      this.description,
-      this.error});
+  const SummaryData({
+    required this.status,
+    required this.date,
+    required this.formattedDate,
+    this.summary,
+    this.imageUrl,
+    this.title,
+    this.description,
+    this.error,
+  });
+
+  SummaryData copyWith(
+      {SummaryStatus? status,
+      DateTime? date,
+      String? summary,
+      String? imageUrl,
+      String? title,
+      String? description,
+      String? error,
+      String? formattedDate}) {
+    return SummaryData(
+        status: status ?? this.status,
+        date: date ?? this.date,
+        summary: summary ?? this.summary,
+        imageUrl: imageUrl ?? this.imageUrl,
+        title: title ?? this.title,
+        description: title ?? this.title,
+        error: error ?? this.error,
+        formattedDate: formattedDate ?? this.formattedDate);
+  }
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
       _$SummaryDataFromJson(json);
@@ -74,6 +95,7 @@ enum SummaryStatus { Loading, Complete, Error, Rejected }
 class StoreProduct extends ProductDetails with EquatableMixin {
   StoreProduct(
       {required super.id,
+      required super.currencySymbol,
       required super.title,
       required super.description,
       required super.price,
@@ -82,7 +104,7 @@ class StoreProduct extends ProductDetails with EquatableMixin {
 
   @override
   List<Object?> get props =>
-      [id, title, description, price, title, rawPrice, currencyCode];
+      [id, title, description, price, title, rawPrice, currencyCode, currencySymbol];
 
   factory StoreProduct.fromJson(Map<String, dynamic> json) =>
       _$StoreProductFromJson(json);

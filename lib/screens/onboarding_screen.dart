@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
@@ -45,7 +46,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
     if (_currentPageIndex >= 3) {
       passOnboarding();
-      // Navigator.of(context).pushNamed('/');
+      context.read<MixpanelBloc>().add(OnboardingStep(step: _currentPageIndex));
       Navigator.of(context).pushNamedAndRemoveUntil(
           '/subscribe', (Route<dynamic> route) => false);
     }
@@ -195,7 +196,7 @@ class OnboardingScreen3 extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('Easy summarize everything',
+          child: Text('Easily summarize anything',
               style: TextStyle(
                   fontSize: 36, fontWeight: FontWeight.w700, height: 1),
               textAlign: TextAlign.start),

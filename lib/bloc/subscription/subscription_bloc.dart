@@ -8,6 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/models/models.dart';
 
 part 'subscription_event.dart';
@@ -17,10 +18,22 @@ part 'subscription_bloc.g.dart';
 class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  Set<String> kProductIds = {"SummifyPremiumWeekly"};
+  final MixpanelBloc mixpanelBloc;
+  Set<String> appleProductIds = {
+    "SummifyPremiumWeekly",
+    'SummifyPremiumMonth',
+    'SummifyPremiumYear'
+  };
+
+  Set<String> googleProductIds = {
+    "summify_premium_week",
+    'summify_premium_month',
+    'summify_premium_year'
+  };
+
   List<ProductDetails> _products = [];
 
-  SubscriptionBloc()
+  SubscriptionBloc({required this.mixpanelBloc})
       : super(const SubscriptionState(
             subscriptionsStatus: SubscriptionsStatus.unsubscribed,
             availableProducts: [])) {
@@ -28,7 +41,6 @@ class SubscriptionBloc
 
     Future<void> initStoreInfo() async {
       final bool isAvailable = await _inAppPurchase.isAvailable();
-
       if (!isAvailable) {
         _products = [];
         return;
@@ -41,8 +53,8 @@ class SubscriptionBloc
       }
 
       ProductDetailsResponse productDetailResponse =
-          await _inAppPurchase.queryProductDetails(kProductIds);
-
+          await _inAppPurchase.queryProductDetails(
+              Platform.isIOS ? appleProductIds : googleProductIds);
       if (productDetailResponse.error != null) {
         // _products = productDetailResponse.productDetails;
         return;
@@ -54,15 +66,20 @@ class SubscriptionBloc
       }
 
       _products = productDetailResponse.productDetails;
-      // print(_products.first.id);
-      final prod = StoreProduct(
-          id: _products.first.id,
-          title: _products.first.title,
-          description: _products.first.description,
-          price: _products.first.price,
-          rawPrice: _products.first.rawPrice,
-          currencyCode: _products.first.currencyCode);
-      emit(state.copyWith(availableProducts: [prod]));
+      final List<StoreProduct> products = [];
+
+      _products.forEach((product) {
+        products.add(StoreProduct(
+            id: product.id,
+            currencySymbol: product.currencySymbol,
+            title: product.title,
+            description: product.description,
+            price: product.price,
+            rawPrice: product.rawPrice,
+            currencyCode: product.currencyCode));
+      });
+
+      emit(state.copyWith(availableProducts: products));
     }
 
     void _onStarted(event, Emitter emit) {
@@ -84,6 +101,18 @@ class SubscriptionBloc
                   purchaseDetails.status == PurchaseStatus.purchased) {
                 print('complete');
                 add(const PaymentComplete());
+
+                var plan = '';
+                switch (purchaseDetails.productID) {
+                  case 'SummifyPremiumYear':
+                    plan = 'year';
+                  case 'SummifyPremiumMonth':
+                    plan = 'month';
+                  case 'SummifyPremiumWeekly':
+                    plan = 'week';
+                }
+
+                mixpanelBloc.add(ActivateSubscription(plan: plan));
               }
             }
           }
@@ -98,11 +127,13 @@ class SubscriptionBloc
     }
 
     Future<void> _buyProduct(BuySubscription event, Emitter emit) async {
-      var paymentWrapper = SKPaymentQueueWrapper();
-      var transactions = await paymentWrapper.transactions();
-      transactions.forEach((transaction) async {
-        await paymentWrapper.finishTransaction(transaction);
-      });
+      if (Platform.isIOS) {
+        var paymentWrapper = SKPaymentQueueWrapper();
+        var transactions = await paymentWrapper.transactions();
+        transactions.forEach((transaction) async {
+          await paymentWrapper.finishTransaction(transaction);
+        });
+      }
       final PurchaseParam purchaseParam = PurchaseParam(
           productDetails: _products
               .firstWhere((product) => product.id == event.subscriptionId));

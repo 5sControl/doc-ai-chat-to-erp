@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
-import '../../bloc/shared_links/shared_links_bloc.dart';
+import '../../bloc/mixpanel/mixpanel_bloc.dart';
+import '../../bloc/summaries/summaries_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../../widgets/summify_button.dart';
 import '../subscription_screen.dart';
@@ -45,10 +46,9 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
     void onPressSummify() {
       final DateFormat formatter = DateFormat('MM.dd.yy');
       final thisDay = formatter.format(DateTime.now());
-      final limit = context.read<SharedLinksBloc>().state.dailyLimit;
+      final limit = context.read<SummariesBloc>().state.dailyLimit;
       final daySummaries =
-          context.read<SharedLinksBloc>().state.dailySummariesMap[thisDay] ??
-              15;
+          context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
 
       Future.delayed(const Duration(milliseconds: 300), () {
         if (daySummaries >= limit) {
@@ -58,19 +58,17 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
             bounce: false,
             barrierColor: Colors.black54,
             backgroundColor: Colors.transparent,
-            // enableDrag: false,
             builder: (context) {
               return const SubscriptionScreen();
             },
           );
-        } else if (urlController.text.isNotEmpty) {
           context
-              .read<SharedLinksBloc>()
-              .add(SaveSharedLink(sharedLink: urlController.text));
-
-          if (Navigator.of(context).canPop()) {
-            Navigator.of(context).pop();
-          }
+              .read<MixpanelBloc>()
+              .add(LimitReached(resource: urlController.text, registrated: false));
+        } else if (controllerText.isNotEmpty) {
+          context.read<SummariesBloc>().add(GetSummaryFromUrl(
+              summaryUrl: urlController.text, fromShare: false));
+          Navigator.of(context).pop();
         }
       });
     }
