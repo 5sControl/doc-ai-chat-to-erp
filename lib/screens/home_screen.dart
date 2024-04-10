@@ -10,7 +10,6 @@ import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
-import 'package:summify/screens/modal_screens/info_screen.dart';
 import 'package:summify/screens/subscription_screen.dart';
 
 import '../gen/assets.gen.dart';
@@ -153,21 +152,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
   }
 
-  // <array>
-  // <dict>
-  // <key>CFBundleURLSchemes</key>
-  // <array>
-  // <string>fbA1373696193330018</string>
-  // </array>
-  // </dict>
-  // </array>
-  // <key>FacebookAppID</key>
-  // <string>A1373696193330018</string>
-  // <key>FacebookClientToken</key>
-  // <string>9234edcf2a13ecc376b25ecc771c9528</string>
-  // <key>FacebookDisplayName</key>
-  // <string>Summify</string>
-
   @override
   void dispose() {
     _intentMediaStreamSubscription.cancel();
@@ -175,17 +159,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  void onPressInfo() {
-    showCupertinoModalBottomSheet(
-      context: context,
-      expand: false,
-      bounce: false,
-      barrierColor: Colors.black54,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return const InfoScreen();
-      },
-    );
+  void onPressSettings() {
+    Navigator.of(context).pushNamed('/settings');
   }
 
   @override
@@ -223,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         dailySummaries:
                             summariesState.dailySummariesMap[thisDay] ?? 0),
                     logo(),
-                    settingsButton(onPressInfo: onPressInfo),
+                    settingsButton(onPressSettings: onPressSettings),
                   ],
                 )),
             body: Padding(
@@ -290,7 +265,7 @@ Widget logo() {
   );
 }
 
-Widget settingsButton({required Function() onPressInfo}) {
+Widget settingsButton({required Function() onPressSettings}) {
   return Expanded(
     child: Align(
       alignment: Alignment.centerRight,
@@ -299,7 +274,7 @@ Widget settingsButton({required Function() onPressInfo}) {
         width: 35,
         height: 35,
         child: IconButton(
-          onPressed: onPressInfo,
+          onPressed: onPressSettings,
           padding: EdgeInsets.zero,
           icon: SvgPicture.asset(
             Assets.icons.settings,

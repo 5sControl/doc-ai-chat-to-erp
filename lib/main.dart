@@ -16,6 +16,7 @@ import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
+import 'package:summify/screens/settings_screen.dart';
 import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
@@ -100,6 +101,10 @@ class SummishareApp extends StatelessWidget {
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionOnboardingScreen(),
+                        settings: settings);
+                  case '/settings':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const SettingsScreen(),
                         settings: settings);
                 }
                 return MaterialPageRoute(

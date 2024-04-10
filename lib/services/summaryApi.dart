@@ -6,33 +6,36 @@ import 'package:summify/models/models.dart';
 enum SendRateStatus { Loading, Sended, Error }
 
 class SummaryApiRepository {
-  final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
-  final String fileUrl =
-      "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
-  final String rateUrl = 'http://51.159.179.125:8001/api/applications/reviews/';
-  // final String linkUrl = "http://192.168.1.136:8001/application_by_summarize/";
+  // final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
   // final String fileUrl =
-  //     "http://192.168.1.136:8001/application_by_summarize/uploadfile/";
+  //     "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
+  final String rateUrl = 'http://51.159.179.125:8000/api/applications/reviews/';
+  final String linkUrl = "http://192.168.1.136:8001/application_by_summarize/";
+  final String fileUrl =
+      "http://192.168.1.136:8001/application_by_summarize/uploadfile/";
 
   final Dio _dio = Dio(
-    BaseOptions(responseType: ResponseType.json),
+    BaseOptions(responseType: ResponseType.plain),
   );
 
   Future<dynamic> getFromLink({required String summaryLink}) async {
     try {
       Response response = await _dio.post(
         linkUrl,
-        data: {
-          'url': summaryLink,
-          'context': '',
-        },
+        data: {'url': summaryLink, 'context': '', "type_summary": "long"},
       ).catchError((e) {
+        print(e);
         throw Exception('Loading error');
       });
-      return Summary.fromJson(response.data);
+
+      if (response.statusCode == 200) {
+        return Summary(summary: response.data.toString());
+      }
     } on DioException catch (e) {
+      print(e);
       return Exception(e.response?.data['detail'] ?? 'Some Error');
     } catch (error) {
+      print(error);
       return Exception('Loading error');
     }
   }
@@ -42,6 +45,7 @@ class SummaryApiRepository {
       Response response = await _dio.post(linkUrl, data: {
         'url': '',
         'context': textToSummify,
+        "type_summary": "long"
       }).catchError((e) {
         throw Exception('Loading error');
       });
@@ -64,7 +68,7 @@ class SummaryApiRepository {
 
     try {
       Response response =
-          await _dio.post(fileUrl, data: formData).catchError((e) {
+          await _dio.post(fileUrl, data: formData, ).catchError((e) {
         throw Exception('Loading error');
       });
       return Summary.fromJson(response.data);

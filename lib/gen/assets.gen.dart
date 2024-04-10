@@ -26,6 +26,9 @@ class $AssetsGifGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/crown.svg
+  String get crown => 'assets/icons/crown.svg';
+
   /// File path: assets/icons/apple.svg
   String get apple => 'assets/icons/apple.svg';
 
@@ -97,6 +100,7 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
+        crown,
         apple,
         checkCircle,
         clock,
