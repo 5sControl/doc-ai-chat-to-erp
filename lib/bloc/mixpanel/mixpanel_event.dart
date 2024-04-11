@@ -65,28 +65,30 @@ class SelectOption extends MixpanelEvent {
 class Summify extends MixpanelEvent {
   final String option;
   // Option: link, file, text
-  const Summify({required this.option});
+  final String url;
+  const Summify({required this.option, required this.url});
 
   @override
-  List<Object?> get props => [option];
+  List<Object?> get props => [option, url];
 }
 
 class SummifyError extends MixpanelEvent {
   final String option;
-  // Option: link, file, text
-  const SummifyError({required this.option});
+  final String url;
+  const SummifyError({required this.option, required this.url});
 
   @override
-  List<Object?> get props => [option];
+  List<Object?> get props => [option, url];
 }
 
 class SummifySuccess extends MixpanelEvent {
   final String option;
   // Option: link, file, text
-  const SummifySuccess({required this.option});
+  final String url;
+  const SummifySuccess({required this.option, required this.url});
 
   @override
-  List<Object?> get props => [option];
+  List<Object?> get props => [option, url];
 }
 
 class OpenSummary extends MixpanelEvent {

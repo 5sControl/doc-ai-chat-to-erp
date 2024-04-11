@@ -86,6 +86,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/phone.svg
   String get phone => 'assets/icons/phone.svg';
 
+  /// File path: assets/icons/privacy.svg
+  String get privacy => 'assets/icons/privacy.svg';
+
   /// File path: assets/icons/profile.svg
   String get profile => 'assets/icons/profile.svg';
 
@@ -103,6 +106,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/star.svg
   String get star => 'assets/icons/star.svg';
+
+  /// File path: assets/icons/terms.svg
+  String get terms => 'assets/icons/terms.svg';
 
   /// File path: assets/icons/text.svg
   String get text => 'assets/icons/text.svg';
@@ -135,12 +141,14 @@ class $AssetsIconsGen {
         notification,
         paste,
         phone,
+        privacy,
         profile,
         profileFilled,
         restore,
         settings,
         share,
         star,
+        terms,
         text,
         update,
         url

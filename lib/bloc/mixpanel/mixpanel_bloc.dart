@@ -62,7 +62,7 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
       mixpanel.track('Summify', properties: {'Option': event.option});
     });
     on<SummifyError>((event, emit) {
-      mixpanel.track('Summify error', properties: {'Option': event.option});
+      mixpanel.track('Summify error', properties: {'Option': event.option,});
     });
     on<SummifySuccess>((event, emit) {
       mixpanel.track('Summify success', properties: {'Option': event.option});

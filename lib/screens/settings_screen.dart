@@ -128,27 +128,27 @@ class SettingsScreen extends StatelessWidget {
         onTap: onPressRateApp,
       ),
       ButtonItem(
-        title: 'Leave feedback',
-        leadingIcon: Assets.icons.chat,
-        onTap: onPressFeedback,
+        title: 'Share this app',
+        leadingIcon: Assets.icons.share,
+        onTap: onPressShareApp,
       )
     ];
 
     final List<ButtonItem> supportGroup = [
       ButtonItem(
         title: 'Terms of use',
-        leadingIcon: Assets.icons.phone,
+        leadingIcon: Assets.icons.terms,
         onTap: onPressTerms,
       ),
       ButtonItem(
         title: 'Privacy policy',
-        leadingIcon: Assets.icons.star,
+        leadingIcon: Assets.icons.privacy,
         onTap: onPressPrivacy,
       ),
       ButtonItem(
-        title: 'Share this app',
+        title: 'Leave feedback',
         leadingIcon: Assets.icons.chat,
-        onTap: onPressShareApp,
+        onTap: onPressFeedback,
       )
     ];
 
@@ -157,6 +157,8 @@ class SettingsScreen extends StatelessWidget {
         const BackgroundGradient(),
         Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
             iconTheme: const IconThemeData(color: Colors.black),
             title: const Text(
               'Settings',
@@ -164,15 +166,20 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
           body: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Column(
-                children: [
-                  // PremiumBanner(),
-                  const GeneralGroup(),
-                  ButtonsGroup(title: 'Membership', items: membershipGroup),
-                  ButtonsGroup(title: 'About', items: aboutGroup),
-                  ButtonsGroup(title: 'Support', items: supportGroup),
-                ],
+              height: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    // PremiumBanner(),
+                    const GeneralGroup(),
+                    ButtonsGroup(title: 'Membership', items: membershipGroup),
+                    ButtonsGroup(title: 'About', items: aboutGroup),
+                    ButtonsGroup(title: 'Support', items: supportGroup),
+                  ],
+                ),
               )),
         ),
       ],
@@ -207,47 +214,60 @@ class GeneralGroup extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: const BoxDecoration(
-                  color: Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: SvgPicture.asset(Assets.icons.notification),
-                  ),
-                  const Flexible(
-                      fit: FlexFit.tight,
-                      child: Text(
-                        'Notification',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400),
-                      )),
-                  SizedBox(
-                    height: 20,
-                    child: Transform.scale(
-                      scale: 0.9,
-                      child: Switch(
-                        inactiveThumbColor: Colors.teal.shade900,
-                        trackOutlineColor:
-                            MaterialStatePropertyAll(Colors.teal.shade900),
-                        activeColor: Colors.white,
-                        activeTrackColor: Colors.teal.shade900,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        value: state.isNotificationsEnabled,
-                        onChanged: (value) => onTapNotifications(),
+            Material(
+              color: const Color.fromRGBO(30, 188, 183, 1),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              child: InkWell(
+                onTap: () => onTapNotifications(),
+                highlightColor: Colors.white24,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: SvgPicture.asset(
+                          Assets.icons.notification,
+                          height: 20,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn),
+                        ),
                       ),
-                    ),
-                  )
-                ],
+                      const Flexible(
+                          fit: FlexFit.tight,
+                          child: Text(
+                            'Notification',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
+                          )),
+                      SizedBox(
+                        height: 20,
+                        child: Transform.scale(
+                          scale: 0.9,
+                          child: Switch(
+                            inactiveThumbColor: Colors.teal.shade900,
+                            trackOutlineColor:
+                                MaterialStatePropertyAll(Colors.teal.shade900),
+                            activeColor: Colors.white,
+                            activeTrackColor: Colors.teal.shade900,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            value: state.isNotificationsEnabled,
+                            onChanged: (value) => onTapNotifications(),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         );
       },
