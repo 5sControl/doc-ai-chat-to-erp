@@ -11,6 +11,7 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
       onboardingPassed: json['onboardingPassed'] as bool,
       howToShowed: json['howToShowed'] as bool,
       abTest: json['abTest'] as String,
+      isNotificationsEnabled: json['isNotificationsEnabled'] as bool,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'onboardingPassed': instance.onboardingPassed,
       'howToShowed': instance.howToShowed,
       'abTest': instance.abTest,
+      'isNotificationsEnabled': instance.isNotificationsEnabled,
     };

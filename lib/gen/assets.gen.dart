@@ -92,6 +92,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/profile_filled.svg
   String get profileFilled => 'assets/icons/profile_filled.svg';
 
+  /// File path: assets/icons/restore.svg
+  String get restore => 'assets/icons/restore.svg';
+
   /// File path: assets/icons/settings.svg
   String get settings => 'assets/icons/settings.svg';
 
@@ -134,6 +137,7 @@ class $AssetsIconsGen {
         phone,
         profile,
         profileFilled,
+        restore,
         settings,
         share,
         star,

@@ -11,6 +11,7 @@ import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/subscription_screen.dart';
+import 'package:summify/widgets/premium_banner.dart';
 
 import '../gen/assets.gen.dart';
 import '../widgets/summary_tile.dart';
@@ -187,6 +188,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 backgroundColor: Colors.transparent,
                 automaticallyImplyLeading: false,
                 elevation: 0,
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(70.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: const PremiumBanner(),
+                  ),
+                ),
                 title: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

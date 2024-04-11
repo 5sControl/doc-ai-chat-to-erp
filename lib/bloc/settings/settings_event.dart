@@ -27,3 +27,11 @@ class SendNotify extends SettingsEvent {
   @override
   List<String?> get props => [title, description];
 }
+
+class ToggleNotifications extends SettingsEvent {
+
+  const ToggleNotifications();
+
+  @override
+  List<String?> get props => [];
+}
