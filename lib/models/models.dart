@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -81,7 +83,6 @@ class SummaryData extends Equatable {
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
       _$SummaryDataFromJson(json);
-
   Map<String, dynamic> toJson() => _$SummaryDataToJson(this);
 
   @override
@@ -103,8 +104,16 @@ class StoreProduct extends ProductDetails with EquatableMixin {
       required super.currencyCode});
 
   @override
-  List<Object?> get props =>
-      [id, title, description, price, title, rawPrice, currencyCode, currencySymbol];
+  List<Object?> get props => [
+        id,
+        title,
+        description,
+        price,
+        title,
+        rawPrice,
+        currencyCode,
+        currencySymbol
+      ];
 
   factory StoreProduct.fromJson(Map<String, dynamic> json) =>
       _$StoreProductFromJson(json);

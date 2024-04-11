@@ -33,18 +33,23 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   bool tapped = false;
 
   @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
     setState(() {
       _notification = state;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    if (WidgetsBinding.instance.lifecycleState != null) {
+      setState(() {
+        _notification = WidgetsBinding.instance.lifecycleState!;
+      });
+    }
   }
 
   @override

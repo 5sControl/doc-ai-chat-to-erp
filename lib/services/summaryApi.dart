@@ -49,7 +49,7 @@ class SummaryApiRepository {
       }).catchError((e) {
         throw Exception('Loading error');
       });
-      return Summary.fromJson(response.data);
+      return Summary(summary: response.data);
     } on DioException catch (e) {
       return Exception(e.response?.data['detail'] ?? 'Some Error');
     } catch (error) {
@@ -63,18 +63,26 @@ class SummaryApiRepository {
       "file": await MultipartFile.fromFile(
         filePath,
         filename: fileName,
-      )
+      ),
     });
 
     try {
-      Response response =
-          await _dio.post(fileUrl, data: formData, ).catchError((e) {
+      Response response = await _dio.post(fileUrl,
+          data: formData,
+          queryParameters: {'type_summary': 'long'}).catchError((e) {
+        // print(e);
         throw Exception('Loading error');
       });
-      return Summary.fromJson(response.data);
+
+      if (response.statusCode == 200) {
+        return Summary(summary: response.data.toString());
+      }
+      // return Summary(summary: response.data.toString());
     } on DioException catch (e) {
+      // print(e);
       return Exception(e.response?.data['detail'] ?? 'Some Error');
     } catch (error) {
+      // print(error);
       return Exception('Loading error');
     }
   }

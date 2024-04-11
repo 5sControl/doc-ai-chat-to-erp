@@ -285,7 +285,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     if (fromShare) {
       mixpanelBloc.add(SummarizingStarted(resource: fileName));
     } else {
-      mixpanelBloc.add(const Summify(option: 'link'));
+      mixpanelBloc.add(const Summify(option: 'file'));
     }
 
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);

@@ -26,11 +26,11 @@ class $AssetsGifGen {
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
-  /// File path: assets/icons/crown.svg
-  String get crown => 'assets/icons/crown.svg';
-
   /// File path: assets/icons/apple.svg
   String get apple => 'assets/icons/apple.svg';
+
+  /// File path: assets/icons/chat.svg
+  String get chat => 'assets/icons/chat.svg';
 
   /// File path: assets/icons/checkCircle.svg
   String get checkCircle => 'assets/icons/checkCircle.svg';
@@ -40,6 +40,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/copy.svg
   String get copy => 'assets/icons/copy.svg';
+
+  /// File path: assets/icons/crown.svg
+  String get crown => 'assets/icons/crown.svg';
 
   /// File path: assets/icons/delete.svg
   String get delete => 'assets/icons/delete.svg';
@@ -74,8 +77,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/no-image.svg
   String get noImage => 'assets/icons/no-image.svg';
 
+  /// File path: assets/icons/notification.svg
+  String get notification => 'assets/icons/notification.svg';
+
   /// File path: assets/icons/paste.svg
   String get paste => 'assets/icons/paste.svg';
+
+  /// File path: assets/icons/phone.svg
+  String get phone => 'assets/icons/phone.svg';
 
   /// File path: assets/icons/profile.svg
   String get profile => 'assets/icons/profile.svg';
@@ -89,6 +98,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/share.svg
   String get share => 'assets/icons/share.svg';
 
+  /// File path: assets/icons/star.svg
+  String get star => 'assets/icons/star.svg';
+
   /// File path: assets/icons/text.svg
   String get text => 'assets/icons/text.svg';
 
@@ -100,11 +112,12 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-        crown,
         apple,
+        chat,
         checkCircle,
         clock,
         copy,
+        crown,
         delete,
         discount,
         file,
@@ -116,11 +129,14 @@ class $AssetsIconsGen {
         like,
         logo,
         noImage,
+        notification,
         paste,
+        phone,
         profile,
         profileFilled,
         settings,
         share,
+        star,
         text,
         update,
         url
