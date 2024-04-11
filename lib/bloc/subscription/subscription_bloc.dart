@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,6 +20,7 @@ class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   final MixpanelBloc mixpanelBloc;
+  final FacebookAppEvents facebookAppEvents;
   Set<String> appleProductIds = {
     "SummifyPremiumWeekly",
     'SummifyPremiumMonth',
@@ -33,7 +35,8 @@ class SubscriptionBloc
 
   List<ProductDetails> _products = [];
 
-  SubscriptionBloc({required this.mixpanelBloc})
+  SubscriptionBloc(
+      {required this.mixpanelBloc, required this.facebookAppEvents})
       : super(const SubscriptionState(
             subscriptionsStatus: SubscriptionsStatus.unsubscribed,
             availableProducts: [])) {
@@ -100,6 +103,10 @@ class SubscriptionBloc
               if (purchaseDetails.status == PurchaseStatus.restored ||
                   purchaseDetails.status == PurchaseStatus.purchased) {
                 print('complete');
+                final product = _products.firstWhere(
+                    (product) => product.id == event.subscriptionId);
+                facebookAppEvents.logPurchase(
+                    amount: product.rawPrice, currency: product.currencyCode);
                 add(const PaymentComplete());
 
                 var plan = '';
