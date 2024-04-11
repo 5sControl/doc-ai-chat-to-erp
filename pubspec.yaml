@@ -40,6 +40,8 @@ dependencies:
   bloc_concurrency: ^0.2.5
   mixpanel_flutter: ^2.2.0
   facebook_app_events: ^0.19.2
+  in_app_review: ^2.0.9
+  flutter_email_sender: ^6.0.2
 
 
 dev_dependencies:

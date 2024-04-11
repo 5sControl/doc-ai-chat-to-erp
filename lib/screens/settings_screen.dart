@@ -1,32 +1,157 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/settings/settings_bloc.dart';
-import '../widgets/premium_banner.dart';
 
-// class ButtonItem {
-//   final String title;
-//   final Widget icon;
-//   final Function onTap;
-//   const ButtonItem(
-//       {required this.title, required this.icon, required this.onTap});
-// }
+class ButtonItem {
+  final String title;
+  final String leadingIcon;
+  final Widget? trailing;
+  final Function onTap;
+  const ButtonItem(
+      {required this.title,
+      required this.leadingIcon,
+      required this.onTap,
+      this.trailing});
+}
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    void onPressSubscription() {
+      showCupertinoModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return const SubscriptionScreen();
+        },
+      );
+    }
+
+    void onPressRestore() async {
+      await InAppPurchase.instance.restorePurchases();
+    }
+
+    void onPressOurApps() async {
+      final Uri url = Uri.parse(
+          'https://apps.apple.com/ru/developer/english-in-games/id1656052466');
+      if (!await launchUrl(url)) {}
+    }
+
+    void onPressRateApp() async {
+      final InAppReview inAppReview = InAppReview.instance;
+
+      if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+      }
+    }
+
+    void onPressFeedback() async {
+      final Email email = Email(
+        body: '',
+        subject: 'Hi, I want to tell you about:',
+        recipients: ['support@englishingames.com'],
+        isHTML: false,
+      );
+
+      await FlutterEmailSender.send(email);
+    }
+
+    void onPressTerms() async {
+      final Uri url = Uri.parse(
+          'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+      if (!await launchUrl(url)) {}
+    }
+
+    void onPressPrivacy() async {
+      final Uri url = Uri.parse('https://elang.app/privacy');
+      if (!await launchUrl(url)) {}
+    }
+
+    void onPressShareApp() async {
+      await Share.shareUri(Uri.parse(
+          'https://apps.apple.com/us/app/ai-text-summarizer-summify/id6478384912'));
+    }
+
+    final List<ButtonItem> membershipGroup = [
+      ButtonItem(
+          title: 'Subscription',
+          leadingIcon: Assets.icons.crown,
+          onTap: onPressSubscription,
+          trailing: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: const LinearGradient(colors: [
+                    Color.fromRGBO(254, 205, 103, 1),
+                    Color.fromRGBO(251, 171, 14, 1)
+                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              child: const Text(
+                'Upgrade',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+              ))),
+      ButtonItem(
+        title: 'Restore',
+        leadingIcon: Assets.icons.restore,
+        onTap: onPressRestore,
+      )
+    ];
+
+    final List<ButtonItem> aboutGroup = [
+      ButtonItem(
+        title: 'Our apps',
+        leadingIcon: Assets.icons.phone,
+        onTap: onPressOurApps,
+      ),
+      ButtonItem(
+        title: 'Rate app',
+        leadingIcon: Assets.icons.star,
+        onTap: onPressRateApp,
+      ),
+      ButtonItem(
+        title: 'Leave feedback',
+        leadingIcon: Assets.icons.chat,
+        onTap: onPressFeedback,
+      )
+    ];
+
+    final List<ButtonItem> supportGroup = [
+      ButtonItem(
+        title: 'Terms of use',
+        leadingIcon: Assets.icons.phone,
+        onTap: onPressTerms,
+      ),
+      ButtonItem(
+        title: 'Privacy policy',
+        leadingIcon: Assets.icons.star,
+        onTap: onPressPrivacy,
+      ),
+      ButtonItem(
+        title: 'Share this app',
+        leadingIcon: Assets.icons.chat,
+        onTap: onPressShareApp,
+      )
+    ];
+
     return Stack(
       children: [
         const BackgroundGradient(),
@@ -40,13 +165,13 @@ class SettingsScreen extends StatelessWidget {
           ),
           body: Container(
               margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: const Column(
+              child: Column(
                 children: [
-                  PremiumBanner(),
-                  GeneralGroup(),
-                  ManageGroup(),
-                  OtherGroup(),
-                  AboutGroup()
+                  // PremiumBanner(),
+                  const GeneralGroup(),
+                  ButtonsGroup(title: 'Membership', items: membershipGroup),
+                  ButtonsGroup(title: 'About', items: aboutGroup),
+                  ButtonsGroup(title: 'Support', items: supportGroup),
                 ],
               )),
         ),
@@ -109,6 +234,9 @@ class GeneralGroup extends StatelessWidget {
                     child: Transform.scale(
                       scale: 0.9,
                       child: Switch(
+                        inactiveThumbColor: Colors.teal.shade900,
+                        trackOutlineColor:
+                            MaterialStatePropertyAll(Colors.teal.shade900),
                         activeColor: Colors.white,
                         activeTrackColor: Colors.teal.shade900,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -127,519 +255,98 @@ class GeneralGroup extends StatelessWidget {
   }
 }
 
-class ManageGroup extends StatelessWidget {
-  const ManageGroup({
-    super.key,
-  });
+class ButtonsGroup extends StatelessWidget {
+  final String title;
+  final List<ButtonItem> items;
+  const ButtonsGroup({super.key, required this.title, required this.items});
 
   @override
   Widget build(BuildContext context) {
-    void onPressSubscription() {
-      showCupertinoModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return const SubscriptionScreen();
-        },
-      );
-    }
-
-    void onPressRestore() {
-
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 15, bottom: 2),
+        Padding(
+          padding: const EdgeInsets.only(top: 15, bottom: 2),
           child: Text(
-            'Membership',
+            title,
             textAlign: TextAlign.start,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
         Container(
-            padding: const EdgeInsets.symmetric(vertical: 0),
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(30, 188, 183, 1),
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Column(
-              children: [
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressSubscription,
-                    highlightColor: Colors.white24,
-                    // borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.star,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
+          padding: const EdgeInsets.symmetric(vertical: 0),
+          decoration: const BoxDecoration(
+              color: Color.fromRGBO(30, 188, 183, 1),
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          child: Column(
+            children: items
+                .map(
+                  (item) => Column(
+                    children: [
+                      Material(
+                        color: const Color.fromRGBO(30, 188, 183, 1),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                        child: InkWell(
+                          onTap: () => item.onTap(),
+                          highlightColor: Colors.white24,
+                          // borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: const BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  child: SvgPicture.asset(
+                                    item.leadingIcon,
+                                    height: 20,
+                                    colorFilter: const ColorFilter.mode(
+                                        Colors.white, BlendMode.srcIn),
+                                  ),
+                                ),
+                                Flexible(
+                                    fit: FlexFit.tight,
+                                    child: Text(
+                                      item.title,
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400),
+                                    )),
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: item.trailing ??
+                                        const Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 20,
+                                          color: Colors.white,
+                                        ))
+                              ],
                             ),
                           ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Subscription',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
+                        ),
                       ),
-                    ),
+                      if (items.indexOf(item) != items.length - 1)
+                        const Divider(
+                          height: 1,
+                          color: Colors.white,
+                        )
+                    ],
                   ),
-                ),
-                const Divider(
-                  color: Colors.white,
-                  height: 1,
-                ),
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressRestore,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.restore,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
-                            ),
-                          ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Restore',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-
-              ],
-            ))
-      ],
-    );
-  }
-}
-
-class OtherGroup extends StatelessWidget {
-  const OtherGroup({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-
-    void onPressOurApps() async {
-      final Uri url = Uri.parse(
-          'https://apps.apple.com/ru/developer/english-in-games/id1656052466');
-      if (!await launchUrl(url)) {}
-    }
-    void onPressRateApp() {}
-    void onPressFeedback() {}
-    void onPressCredits() {}
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 15, bottom: 2),
-          child: Text(
-            'About',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+                )
+                .toList(),
           ),
         ),
-        Container(
-            padding: const EdgeInsets.symmetric(vertical: 0),
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(30, 188, 183, 1),
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Column(
-              children: [
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressOurApps,
-                    highlightColor: Colors.white24,
-                    // borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.phone,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
-                            ),
-                          ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Our apps',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.white,
-                  height: 1,
-                ),
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressRateApp,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.star,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
-                            ),
-                          ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Rate app',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.white,
-                  height: 1,
-                ),
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressFeedback,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.chat,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
-                            ),
-                          ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Leave feedback',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ))
-      ],
-    );
-  }
-}
-
-class AboutGroup extends StatelessWidget {
-  const AboutGroup({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-
-    void onPressOurApps() async {
-      final Uri url = Uri.parse(
-          'https://apps.apple.com/ru/developer/english-in-games/id1656052466');
-      if (!await launchUrl(url)) {}
-    }
-    void onPressRateApp() {}
-    void onPressFeedback() {}
-    void onPressCredits() {}
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 15, bottom: 2),
-          child: Text(
-            'Support',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        Container(
-            padding: const EdgeInsets.symmetric(vertical: 0),
-            decoration: const BoxDecoration(
-                color: Color.fromRGBO(30, 188, 183, 1),
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Column(
-              children: [
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressOurApps,
-                    highlightColor: Colors.white24,
-                    // borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.phone,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
-                            ),
-                          ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Terms of use',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.white,
-                  height: 1,
-                ),
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressRateApp,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.star,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
-                            ),
-                          ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Privacy policy',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const Divider(
-                  color: Colors.white,
-                  height: 1,
-                ),
-                Material(
-                  color: const Color.fromRGBO(30, 188, 183, 1),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  child: InkWell(
-                    onTap: onPressFeedback,
-                    highlightColor: Colors.white24,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: SvgPicture.asset(
-                              Assets.icons.chat,
-                              height: 20,
-                              colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn),
-                            ),
-                          ),
-                          const Flexible(
-                              fit: FlexFit.tight,
-                              child: Text(
-                                'Share this app',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400),
-                              )),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                size: 20,
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ))
       ],
     );
   }
