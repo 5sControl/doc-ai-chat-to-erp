@@ -69,10 +69,10 @@ class _SummaryScreenState extends State<SummaryScreen>
         final String formattedDate = formatter.format(summaryData.date);
 
         final briefSummaryText =
-            getTransformedText(text: summaryData.summary.summaryShort ?? '');
+            getTransformedText(text: summaryData.shortSummary.summaryText ?? '');
 
         final deepSummaryText =
-            getTransformedText(text: summaryData.summary.summaryLong ?? '');
+            getTransformedText(text: summaryData.longSummary.summaryText ?? '');
 
         // const List<Effect<dynamic>> effects = [
         //   MoveEffect(

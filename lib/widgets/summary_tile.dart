@@ -97,9 +97,9 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return BlocConsumer<SummariesBloc, SummariesState>(
       listenWhen: (previous, current) {
-        return previous.summaries[widget.sharedLink]?.status ==
+        return previous.summaries[widget.sharedLink]?.shortSummaryStatus ==
                 SummaryStatus.loading &&
-            current.summaries[widget.sharedLink]?.status ==
+            current.summaries[widget.sharedLink]?.shortSummaryStatus ==
                 SummaryStatus.complete;
       },
       listener: (context, state) {
@@ -197,7 +197,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
-                          if (summaryData.status == SummaryStatus.complete) {
+                          if (summaryData.shortSummaryStatus == SummaryStatus.complete) {
                             onPressSummaryTile();
                           }
                         },
@@ -265,15 +265,15 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                           onPressCancel: onPressCancel,
                                         ),
                                         secondChild:
-                                            summaryData.summary.summaryError !=
+                                            summaryData.shortSummary.summaryError !=
                                                     null
                                                 ? ErrorMessage(
                                                     error: summaryData
-                                                        .summary.summaryError!,
+                                                        .shortSummary.summaryError!,
                                                     onPressRetry: onPressRetry,
                                                   )
                                                 : Container(),
-                                        crossFadeState: summaryData.status ==
+                                        crossFadeState: summaryData.shortSummaryStatus ==
                                                 SummaryStatus.loading
                                             ? CrossFadeState.showFirst
                                             : CrossFadeState.showSecond,

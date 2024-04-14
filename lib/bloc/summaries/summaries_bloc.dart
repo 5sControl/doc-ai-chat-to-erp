@@ -20,18 +20,21 @@ part 'summaries_state.dart';
 part 'summaries_bloc.g.dart';
 
 final initialSummary = SummaryData(
-  status: SummaryStatus.complete,
+  shortSummaryStatus: SummaryStatus.complete,
+  longSummaryStatus: SummaryStatus.complete,
   date: DateTime.now(),
   summaryPreview: SummaryPreview(
     title: 'Summify',
     imageUrl: Assets.placeholderLogo.path,
   ),
-  summary: const Summary(
-      summaryShort:
-          'Summify: \nYour AI-powered summarization solution. Instantly distill lengthy content into concise summaries with accuracy and efficiency, enhancing productivity and comprehension.',
-      summaryLong:
-          "What should you know about Summify?\nIn today's fast-paced world, where information overload is a common concern, the ability to quickly grasp the essence of a piece of content is invaluable. Enter Summify, a revolutionary mobile application designed to simplify and enhance the way we consume and share information.\nSummify is more than just a summarization tool; it's a comprehensive solution that offers a myriad of features to cater to diverse user needs. Let's delve into the intricacies of Summify's core functionalities:/n1. Share and Summarize from Any Resource:\nSummify's intuitive interface allows users to share content from any online resource, including webpages, articles, and blog posts. Simply copy the URL of the desired content and paste it into Summify."),
   summaryOrigin: SummaryOrigin.url,
+  shortSummary: Summary(
+    summaryText:
+        'Summify: \nYour AI-powered summarization solution. Instantly distill lengthy content into concise summaries with accuracy and efficiency, enhancing productivity and comprehension.',
+  ),
+  longSummary: Summary(
+      summaryText:
+          "What should you know about Summify?\nIn today's fast-paced world, where information overload is a common concern, the ability to quickly grasp the essence of a piece of content is invaluable. Enter Summify, a revolutionary mobile application designed to simplify and enhance the way we consume and share information.\nSummify is more than just a summarization tool; it's a comprehensive solution that offers a myriad of features to cater to diverse user needs. Let's delve into the intricacies of Summify's core functionalities:/n1. Share and Summarize from Any Resource:\nSummify's intuitive interface allows users to share content from any online resource, including webpages, articles, and blog posts. Simply copy the URL of the desired content and paste it into Summify."),
 );
 
 const throttleDuration = Duration(milliseconds: 100);
@@ -69,11 +72,15 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
     on<GetSummaryFromUrl>(
       (event, emit) async {
-        if (state.summaries[event.summaryUrl]?.status !=
+        if (state.summaries[event.summaryUrl]?.shortSummaryStatus !=
             SummaryStatus.loading) {
           await startSummaryLoading(summaryKey: event.summaryUrl, emit: emit);
           await loadSummaryPreview(summaryKey: event.summaryUrl, emit: emit);
           await loadSummaryFromUrl(
+              summaryKey: event.summaryUrl,
+              fromShare: event.fromShare,
+              emit: emit);
+          await loadLongSummaryFromUrl(
               summaryKey: event.summaryUrl,
               fromShare: event.fromShare,
               emit: emit);
@@ -98,7 +105,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
     on<GetSummaryFromFile>(
       (event, emit) async {
-        if (state.summaries[event.fileName]?.status != SummaryStatus.loading) {
+        if (state.summaries[event.fileName]?.shortSummaryStatus !=
+            SummaryStatus.loading) {
           // await startSummaryLoading(event.fileName, emit);
           // await loadSummaryFromFile(
           //     fileName: event.fileName,
@@ -167,9 +175,11 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.addAll({
       summaryKey: SummaryData(
-          status: SummaryStatus.loading,
+          shortSummaryStatus: SummaryStatus.loading,
+          longSummaryStatus: SummaryStatus.initial,
           date: DateTime.now(),
-          summary: const Summary(),
+          shortSummary: const Summary(),
+          longSummary: const Summary(),
           summaryPreview: SummaryPreview(
             imageUrl: Assets.placeholderLogo.path,
           ),
@@ -195,13 +205,36 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       required bool fromShare,
       required Emitter<SummariesState> emit}) async {
     final shortSummaryResponse = await summaryRepository.getSummaryFromLink(
+        summaryLink: summaryKey, summaryType: SummaryType.short);
+    final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
+    summaryMap.update(summaryKey, (summaryData) {
+      if (shortSummaryResponse is Summary) {
+        // incrementDailySummaryCount(emit);
+        return summaryData.copyWith(
+            shortSummary: shortSummaryResponse,
+            shortSummaryStatus: SummaryStatus.complete);
+      } else if (shortSummaryResponse is Exception) {
+        return summaryData;
+      } else {
+        return summaryData;
+      }
+    });
+    emit(state.copyWith(summaries: summaryMap));
+  }
+
+  Future<void> loadLongSummaryFromUrl(
+      {required String summaryKey,
+      required bool fromShare,
+      required Emitter<SummariesState> emit}) async {
+    final shortSummaryResponse = await summaryRepository.getSummaryFromLink(
         summaryLink: summaryKey, summaryType: SummaryType.long);
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryKey, (summaryData) {
       if (shortSummaryResponse is Summary) {
-        incrementDailySummaryCount(emit);
+        // incrementDailySummaryCount(emit);
         return summaryData.copyWith(
-            summary: shortSummaryResponse, status: SummaryStatus.complete);
+            longSummary: shortSummaryResponse,
+            longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
         return summaryData;
       } else {

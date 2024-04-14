@@ -56,7 +56,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
     void onPressShare() {
       final box = context.findRenderObject() as RenderBox?;
       Share.share(
-        '${widget.sharedLink} \n\n ${widget.summaryData.summary}',
+        '${widget.sharedLink} \n\n ${widget.summaryData.shortSummary}',
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
       context.read<MixpanelBloc>().add(const ShareSummary());
@@ -64,7 +64,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
 
     void onPressCopy() {
       Clipboard.setData(
-          ClipboardData(text: widget.summaryData.summary.summaryShort ?? ''));
+          ClipboardData(text: widget.summaryData.shortSummary.summaryText ?? ''));
       context.read<MixpanelBloc>().add(const CopySummary());
     }
 

@@ -6,7 +6,7 @@ part 'models.g.dart';
 
 enum SummaryOrigin { file, url, text }
 
-enum SummaryStatus { loading, complete, error, rejected, stopped }
+enum SummaryStatus { loading, complete, error, rejected, stopped, initial }
 
 @JsonSerializable()
 class SummaryPreview extends Equatable {
@@ -35,20 +35,17 @@ class SummaryPreview extends Equatable {
 
 @JsonSerializable()
 class Summary extends Equatable {
-  final String? summaryShort;
-  final String? summaryLong;
+  final String? summaryText;
   final String? summaryError;
 
-  const Summary({this.summaryShort, this.summaryLong, this.summaryError});
+  const Summary({this.summaryText,  this.summaryError});
 
   Summary copyWith({
-    String? summaryShort,
-    String? summaryLong,
+    String? summaryText,
     String? summaryError,
   }) {
     return Summary(
-      summaryShort: summaryShort ?? this.summaryShort,
-      summaryLong: summaryLong ?? this.summaryLong,
+      summaryText: summaryText ?? this.summaryText,
       summaryError: summaryError ?? this.summaryError,
     );
   }
@@ -59,37 +56,45 @@ class Summary extends Equatable {
   Map<String, dynamic> toJson() => _$SummaryToJson(this);
 
   @override
-  List<Object?> get props => [summaryShort, summaryLong, summaryError];
+  List<Object?> get props => [summaryText, summaryError];
 }
 
 @JsonSerializable()
 class SummaryData extends Equatable {
-  final SummaryStatus status;
+  final SummaryStatus shortSummaryStatus;
+  final SummaryStatus longSummaryStatus;
   final DateTime date;
   final SummaryOrigin summaryOrigin;
   final SummaryPreview summaryPreview;
-  final Summary summary;
+  final Summary shortSummary;
+  final Summary longSummary;
 
   const SummaryData({
-    required this.status,
+    required this.shortSummaryStatus,
+    required this.longSummaryStatus,
     required this.date,
     required this.summaryOrigin,
-    required this.summary,
+    required this.shortSummary,
+    required this.longSummary,
     required this.summaryPreview,
   });
 
   SummaryData copyWith({
-    SummaryStatus? status,
+    SummaryStatus? shortSummaryStatus,
+    SummaryStatus? longSummaryStatus,
     SummaryOrigin? summaryOrigin,
     DateTime? date,
-    Summary? summary,
+    Summary? shortSummary,
+    Summary? longSummary,
     SummaryPreview? summaryPreview,
   }) {
     return SummaryData(
-      status: status ?? this.status,
+      shortSummaryStatus: shortSummaryStatus ?? this.shortSummaryStatus,
+      longSummaryStatus: longSummaryStatus ?? this.longSummaryStatus,
       summaryOrigin: summaryOrigin ?? this.summaryOrigin,
       date: date ?? this.date,
-      summary: summary ?? this.summary,
+      shortSummary: shortSummary ?? this.shortSummary,
+      longSummary: longSummary ?? this.longSummary,
       summaryPreview: summaryPreview ?? this.summaryPreview,
     );
   }
@@ -99,8 +104,15 @@ class SummaryData extends Equatable {
   Map<String, dynamic> toJson() => _$SummaryDataToJson(this);
 
   @override
-  List<Object?> get props =>
-      [summary, status, date, summaryPreview, summaryOrigin];
+  List<Object?> get props => [
+        shortSummary,
+        longSummary,
+        shortSummaryStatus,
+        longSummaryStatus,
+        date,
+        summaryPreview,
+        summaryOrigin
+      ];
 }
 
 @JsonSerializable()

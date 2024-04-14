@@ -19,33 +19,40 @@ Map<String, dynamic> _$SummaryPreviewToJson(SummaryPreview instance) =>
     };
 
 Summary _$SummaryFromJson(Map<String, dynamic> json) => Summary(
-      summaryShort: json['summaryShort'] as String?,
-      summaryLong: json['summaryLong'] as String?,
+      summaryText: json['summaryText'] as String?,
       summaryError: json['summaryError'] as String?,
     );
 
 Map<String, dynamic> _$SummaryToJson(Summary instance) => <String, dynamic>{
-      'summaryShort': instance.summaryShort,
-      'summaryLong': instance.summaryLong,
+      'summaryText': instance.summaryText,
       'summaryError': instance.summaryError,
     };
 
 SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
-      status: $enumDecode(_$SummaryStatusEnumMap, json['status']),
+      shortSummaryStatus:
+          $enumDecode(_$SummaryStatusEnumMap, json['shortSummaryStatus']),
+      longSummaryStatus:
+          $enumDecode(_$SummaryStatusEnumMap, json['longSummaryStatus']),
       date: DateTime.parse(json['date'] as String),
       summaryOrigin: $enumDecode(_$SummaryOriginEnumMap, json['summaryOrigin']),
-      summary: Summary.fromJson(json['summary'] as Map<String, dynamic>),
+      shortSummary:
+          Summary.fromJson(json['shortSummary'] as Map<String, dynamic>),
+      longSummary:
+          Summary.fromJson(json['longSummary'] as Map<String, dynamic>),
       summaryPreview: SummaryPreview.fromJson(
           json['summaryPreview'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
     <String, dynamic>{
-      'status': _$SummaryStatusEnumMap[instance.status]!,
+      'shortSummaryStatus':
+          _$SummaryStatusEnumMap[instance.shortSummaryStatus]!,
+      'longSummaryStatus': _$SummaryStatusEnumMap[instance.longSummaryStatus]!,
       'date': instance.date.toIso8601String(),
       'summaryOrigin': _$SummaryOriginEnumMap[instance.summaryOrigin]!,
       'summaryPreview': instance.summaryPreview,
-      'summary': instance.summary,
+      'shortSummary': instance.shortSummary,
+      'longSummary': instance.longSummary,
     };
 
 const _$SummaryStatusEnumMap = {
@@ -54,6 +61,7 @@ const _$SummaryStatusEnumMap = {
   SummaryStatus.error: 'error',
   SummaryStatus.rejected: 'rejected',
   SummaryStatus.stopped: 'stopped',
+  SummaryStatus.initial: 'initial',
 };
 
 const _$SummaryOriginEnumMap = {

@@ -24,7 +24,6 @@ class SummaryApiRepository {
   Future<dynamic> getFromLink(
       {required String summaryLink, required SummaryType summaryType}) async {
     try {
-      print(summaryType.name);
       Response response = await _dio.post(
         linkUrl,
         data: {
@@ -35,14 +34,16 @@ class SummaryApiRepository {
       );
 
       if (response.statusCode == 200) {
-        return Summary(
-            summaryLong: summaryType == SummaryType.long
-                ? response.data.toString()
-                : null,
-            summaryShort: summaryType == SummaryType.short
-                ? response.data.toString()
-                : null,
-            summaryError: null);
+        // return Summary(
+        //     summaryLong: summaryType == SummaryType.long
+        //         ? response.data.toString()
+        //         : null,
+        //     summaryShort: summaryType == SummaryType.short
+        //         ? response.data.toString()
+        //         : null,
+        //     summaryError: null);
+        print(response.data);
+        return Summary(summaryText: response.data.toString());
       }
     } on DioException catch (e) {
       print(e);
