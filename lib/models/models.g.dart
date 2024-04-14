@@ -6,44 +6,60 @@ part of 'models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+SummaryPreview _$SummaryPreviewFromJson(Map<String, dynamic> json) =>
+    SummaryPreview(
+      title: json['title'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+    );
+
+Map<String, dynamic> _$SummaryPreviewToJson(SummaryPreview instance) =>
+    <String, dynamic>{
+      'imageUrl': instance.imageUrl,
+      'title': instance.title,
+    };
+
 Summary _$SummaryFromJson(Map<String, dynamic> json) => Summary(
-      summary: json['summary'] as String?,
+      summaryShort: json['summaryShort'] as String?,
+      summaryLong: json['summaryLong'] as String?,
       summaryError: json['summaryError'] as String?,
     );
 
 Map<String, dynamic> _$SummaryToJson(Summary instance) => <String, dynamic>{
-      'summary': instance.summary,
+      'summaryShort': instance.summaryShort,
+      'summaryLong': instance.summaryLong,
       'summaryError': instance.summaryError,
     };
 
 SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
       status: $enumDecode(_$SummaryStatusEnumMap, json['status']),
       date: DateTime.parse(json['date'] as String),
-      formattedDate: json['formattedDate'] as String,
-      summary: json['summary'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      title: json['title'] as String?,
-      description: json['description'] as String?,
-      error: json['error'] as String?,
+      summaryOrigin: $enumDecode(_$SummaryOriginEnumMap, json['summaryOrigin']),
+      summary: Summary.fromJson(json['summary'] as Map<String, dynamic>),
+      summaryPreview: SummaryPreview.fromJson(
+          json['summaryPreview'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
     <String, dynamic>{
       'status': _$SummaryStatusEnumMap[instance.status]!,
       'date': instance.date.toIso8601String(),
+      'summaryOrigin': _$SummaryOriginEnumMap[instance.summaryOrigin]!,
+      'summaryPreview': instance.summaryPreview,
       'summary': instance.summary,
-      'imageUrl': instance.imageUrl,
-      'title': instance.title,
-      'description': instance.description,
-      'error': instance.error,
-      'formattedDate': instance.formattedDate,
     };
 
 const _$SummaryStatusEnumMap = {
-  SummaryStatus.Loading: 'Loading',
-  SummaryStatus.Complete: 'Complete',
-  SummaryStatus.Error: 'Error',
-  SummaryStatus.Rejected: 'Rejected',
+  SummaryStatus.loading: 'loading',
+  SummaryStatus.complete: 'complete',
+  SummaryStatus.error: 'error',
+  SummaryStatus.rejected: 'rejected',
+  SummaryStatus.stopped: 'stopped',
+};
+
+const _$SummaryOriginEnumMap = {
+  SummaryOrigin.file: 'file',
+  SummaryOrigin.url: 'url',
+  SummaryOrigin.text: 'text',
 };
 
 StoreProduct _$StoreProductFromJson(Map<String, dynamic> json) => StoreProduct(

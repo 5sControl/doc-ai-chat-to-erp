@@ -5,31 +5,44 @@ import 'package:summify/models/models.dart';
 
 enum SendRateStatus { Loading, Sended, Error }
 
+enum SummaryType { long, short }
+
 class SummaryApiRepository {
   // final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
   // final String fileUrl =
   //     "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
   final String rateUrl = 'http://51.159.179.125:8000/api/applications/reviews/';
-  final String linkUrl = "http://192.168.1.136:8001/application_by_summarize/";
+  final String linkUrl =
+      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
   final String fileUrl =
-      "http://192.168.1.136:8001/application_by_summarize/uploadfile/";
+      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
 
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.plain),
   );
 
-  Future<dynamic> getFromLink({required String summaryLink}) async {
+  Future<dynamic> getFromLink(
+      {required String summaryLink, required SummaryType summaryType}) async {
     try {
+      print(summaryType.name);
       Response response = await _dio.post(
         linkUrl,
-        data: {'url': summaryLink, 'context': '', "type_summary": "long"},
-      ).catchError((e) {
-        print(e);
-        throw Exception('Loading error');
-      });
+        data: {
+          'url': summaryLink,
+          'context': '',
+          "type_summary": summaryType.name
+        },
+      );
 
       if (response.statusCode == 200) {
-        return Summary(summary: response.data.toString());
+        return Summary(
+            summaryLong: summaryType == SummaryType.long
+                ? response.data.toString()
+                : null,
+            summaryShort: summaryType == SummaryType.short
+                ? response.data.toString()
+                : null,
+            summaryError: null);
       }
     } on DioException catch (e) {
       print(e);
@@ -40,6 +53,27 @@ class SummaryApiRepository {
     }
   }
 
+  // Future<dynamic> getFromLinkNew(
+  //     {required String summaryLink, required SummaryType summaryType}) async {
+  //
+  //   try {
+  //     Response response = await _dio.post(
+  //       linkUrl,
+  //       data: {'url': summaryLink, 'context': '', "type_summary": summaryType.name},
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       // return Summary(summary: response.data.toString());
+  //     }
+  //   } on DioException catch (e) {
+  //     print(e);
+  //     return Exception(e.response?.data['detail'] ?? 'Some Error');
+  //   } catch (error) {
+  //     print(error);
+  //     return Exception('Loading error');
+  //   }
+  // }
+
   Future<dynamic> getFromText({required String textToSummify}) async {
     try {
       Response response = await _dio.post(linkUrl, data: {
@@ -49,7 +83,7 @@ class SummaryApiRepository {
       }).catchError((e) {
         throw Exception('Loading error');
       });
-      return Summary(summary: response.data);
+      // return Summary(summary: response.data);
     } on DioException catch (e) {
       return Exception(e.response?.data['detail'] ?? 'Some Error');
     } catch (error) {
@@ -75,7 +109,7 @@ class SummaryApiRepository {
       });
 
       if (response.statusCode == 200) {
-        return Summary(summary: response.data.toString());
+        // return Summary(summary: response.data.toString());
       }
       // return Summary(summary: response.data.toString());
     } on DioException catch (e) {
@@ -120,8 +154,10 @@ class SummaryApiRepository {
 class SummaryRepository {
   final SummaryApiRepository _summaryRepository = SummaryApiRepository();
 
-  Future<dynamic> getSummaryFromLink({required String summaryLink}) {
-    return _summaryRepository.getFromLink(summaryLink: summaryLink);
+  Future<dynamic> getSummaryFromLink(
+      {required String summaryLink, required SummaryType summaryType}) {
+    return _summaryRepository.getFromLink(
+        summaryLink: summaryLink, summaryType: summaryType);
   }
 
   Future<dynamic> getSummaryFromText({required String textToSummify}) {

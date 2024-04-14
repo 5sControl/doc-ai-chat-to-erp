@@ -63,12 +63,26 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
     }
 
     void onPressCopy() {
-      Clipboard.setData(ClipboardData(text: widget.summaryData.summary!));
+      Clipboard.setData(
+          ClipboardData(text: widget.summaryData.summary.summaryShort ?? ''));
       context.read<MixpanelBloc>().add(const CopySummary());
     }
 
     return Container(
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(223, 252, 252, 1),
+                Color.fromRGBO(223, 252, 252, 0),
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              stops: [
+                0.3,
+                1,
+              ])),
+      padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).padding.bottom, left: 15, right: 15),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -105,13 +119,13 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Padding(
-                            padding: const  EdgeInsets.only(left: 5),
-
-                            child:  SvgPicture.asset(
-                              Assets.icons.share,
-                              height: 24,
-                              width: 24,
-                            ),),
+                          padding: const EdgeInsets.only(left: 5),
+                          child: SvgPicture.asset(
+                            Assets.icons.share,
+                            height: 24,
+                            width: 24,
+                          ),
+                        ),
                         const Text(
                           'Share',
                           style: TextStyle(

@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 
 import '../bloc/settings/settings_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../models/models.dart';
-import '../screens/summary_screen.dart';
+import '../screens/summary_screen/summary_screen.dart';
 
 class SummaryTile extends StatefulWidget {
   final String sharedLink;
@@ -76,7 +77,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SummaryScreen(sharedLink: widget.sharedLink)),
+          builder: (context) => SummaryScreen(summaryKey: widget.sharedLink)),
     );
     context.read<MixpanelBloc>().add(const OpenSummary());
   }
@@ -97,18 +98,19 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
     return BlocConsumer<SummariesBloc, SummariesState>(
       listenWhen: (previous, current) {
         return previous.summaries[widget.sharedLink]?.status ==
-                SummaryStatus.Loading &&
+                SummaryStatus.loading &&
             current.summaries[widget.sharedLink]?.status ==
-                SummaryStatus.Complete;
+                SummaryStatus.complete;
       },
       listener: (context, state) {
         onSummaryLoad(
-            title:
-                state.summaries[widget.sharedLink]?.title ?? widget.sharedLink);
+            title: state.summaries[widget.sharedLink]?.summaryPreview.title ??
+                widget.sharedLink);
       },
       builder: (context, state) {
         final summaryData = state.summaries[widget.sharedLink]!;
-
+        final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
+        final String formattedDate = formatter.format(summaryData.date);
         void onPressRetry() {
           context.read<SummariesBloc>().add(GetSummaryFromUrl(
               summaryUrl: widget.sharedLink, fromShare: false));
@@ -195,7 +197,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
-                          if (summaryData.status == SummaryStatus.Complete) {
+                          if (summaryData.status == SummaryStatus.complete) {
                             onPressSummaryTile();
                           }
                         },
@@ -223,14 +225,16 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                         horizontal: 2, vertical: 2),
                                     child: Hero(
                                       tag: summaryData.date,
-                                      child: summaryData.imageUrl ==
-                                              Assets.placeholderLogo.path
-                                          ? Image.asset(
-                                              Assets.placeholderLogo.path)
-                                          : CachedNetworkImage(
-                                              imageUrl: summaryData.imageUrl!,
-                                              fit: BoxFit.cover,
-                                            ),
+                                      child:
+                                          summaryData.summaryPreview.imageUrl ==
+                                                  Assets.placeholderLogo.path
+                                              ? Image.asset(
+                                                  Assets.placeholderLogo.path)
+                                              : CachedNetworkImage(
+                                                  imageUrl: summaryData
+                                                      .summaryPreview.imageUrl!,
+                                                  fit: BoxFit.cover,
+                                                ),
                                     ))),
                             Expanded(
                               child: Padding(
@@ -242,7 +246,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      summaryData.title ??
+                                      summaryData.summaryPreview.title ??
                                           widget.sharedLink
                                               .replaceAll('https://', ''),
                                       overflow: TextOverflow.ellipsis,
@@ -252,7 +256,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Text(
-                                      summaryData.formattedDate,
+                                      formattedDate,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(fontSize: 12),
                                     ),
@@ -260,14 +264,17 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                         firstChild: Loader(
                                           onPressCancel: onPressCancel,
                                         ),
-                                        secondChild: summaryData.error != null
-                                            ? ErrorMessage(
-                                                error: summaryData.error!,
-                                                onPressRetry: onPressRetry,
-                                              )
-                                            : Container(),
+                                        secondChild:
+                                            summaryData.summary.summaryError !=
+                                                    null
+                                                ? ErrorMessage(
+                                                    error: summaryData
+                                                        .summary.summaryError!,
+                                                    onPressRetry: onPressRetry,
+                                                  )
+                                                : Container(),
                                         crossFadeState: summaryData.status ==
-                                                SummaryStatus.Loading
+                                                SummaryStatus.loading
                                             ? CrossFadeState.showFirst
                                             : CrossFadeState.showSecond,
                                         duration: duration)
