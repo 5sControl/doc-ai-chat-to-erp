@@ -12,6 +12,7 @@ import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/settings/settings_bloc.dart';
+import 'modal_screens/how_to_screen.dart';
 
 class ButtonItem {
   final String title;
@@ -88,6 +89,16 @@ class SettingsScreen extends StatelessWidget {
           'https://apps.apple.com/us/app/ai-text-summarizer-summify/id6478384912'));
     }
 
+    void onPressSetupShare() {
+      showMaterialModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+          builder: (context) => const HowToScreen());
+    }
+
     final List<ButtonItem> membershipGroup = [
       ButtonItem(
           title: 'Subscription',
@@ -118,9 +129,9 @@ class SettingsScreen extends StatelessWidget {
 
     final List<ButtonItem> aboutGroup = [
       ButtonItem(
-        title: 'Our apps',
-        leadingIcon: Assets.icons.phone,
-        onTap: onPressOurApps,
+        title: 'Set up share button',
+        leadingIcon: Assets.icons.play,
+        onTap: onPressSetupShare,
       ),
       ButtonItem(
         title: 'Rate app',
@@ -131,7 +142,12 @@ class SettingsScreen extends StatelessWidget {
         title: 'Share this app',
         leadingIcon: Assets.icons.share,
         onTap: onPressShareApp,
-      )
+      ),
+      ButtonItem(
+        title: 'Our apps',
+        leadingIcon: Assets.icons.phone,
+        onTap: onPressOurApps,
+      ),
     ];
 
     final List<ButtonItem> supportGroup = [
@@ -146,7 +162,7 @@ class SettingsScreen extends StatelessWidget {
         onTap: onPressPrivacy,
       ),
       ButtonItem(
-        title: 'Leave feedback',
+        title: 'Request a feature',
         leadingIcon: Assets.icons.chat,
         onTap: onPressFeedback,
       )

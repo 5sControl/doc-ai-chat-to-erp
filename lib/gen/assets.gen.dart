@@ -86,6 +86,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/phone.svg
   String get phone => 'assets/icons/phone.svg';
 
+  /// File path: assets/icons/play.svg
+  String get play => 'assets/icons/play.svg';
+
   /// File path: assets/icons/privacy.svg
   String get privacy => 'assets/icons/privacy.svg';
 
@@ -141,6 +144,7 @@ class $AssetsIconsGen {
         notification,
         paste,
         phone,
+        play,
         privacy,
         profile,
         profileFilled,

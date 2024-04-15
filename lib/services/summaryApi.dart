@@ -70,7 +70,9 @@ class SummaryApiRepository {
   }
 
   Future<dynamic> getFromFile(
-      {required String fileName, required String filePath}) async {
+      {required String fileName,
+      required String filePath,
+      required SummaryType summaryType}) async {
     FormData formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(
         filePath,
@@ -80,21 +82,14 @@ class SummaryApiRepository {
 
     try {
       Response response = await _dio.post(fileUrl,
-          data: formData,
-          queryParameters: {'type_summary': 'long'}).catchError((e) {
-        // print(e);
-        throw Exception('Loading error');
-      });
+          data: formData, queryParameters: {'type_summary': summaryType.name});
 
       if (response.statusCode == 200) {
-        // return Summary(summary: response.data.toString());
+        return Summary(summaryText: response.data.toString());
       }
-      // return Summary(summary: response.data.toString());
     } on DioException catch (e) {
-      // print(e);
       return Exception(e.response?.data['detail'] ?? 'Some Error');
     } catch (error) {
-      // print(error);
       return Exception('Loading error');
     }
   }
@@ -138,14 +133,18 @@ class SummaryRepository {
         summaryLink: summaryLink, summaryType: summaryType);
   }
 
-  Future<dynamic> getSummaryFromText({required String textToSummify, required SummaryType summaryType}) {
-    return _summaryRepository.getFromText(textToSummify: textToSummify, summaryType: summaryType);
+  Future<dynamic> getSummaryFromText(
+      {required String textToSummify, required SummaryType summaryType}) {
+    return _summaryRepository.getFromText(
+        textToSummify: textToSummify, summaryType: summaryType);
   }
 
   Future<dynamic> getSummaryFromFile(
-      {required String fileName, required String filePath}) {
+      {required String fileName,
+      required String filePath,
+      required SummaryType summaryType}) {
     return _summaryRepository.getFromFile(
-        fileName: fileName, filePath: filePath);
+        fileName: fileName, filePath: filePath, summaryType: summaryType);
   }
 
   Future<SendRateStatus> sendSummaryRate(

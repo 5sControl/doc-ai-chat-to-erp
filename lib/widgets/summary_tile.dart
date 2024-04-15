@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -265,8 +266,8 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                         firstChild: Loader(
                                           onPressCancel: onPressCancel,
                                         ),
-                                        secondChild: summaryData.longSummary
-                                                    .summaryError !=
+                                        secondChild: summaryData
+                                                    .longSummary.summaryError !=
                                                 null
                                             ? ErrorMessage(
                                                 error: summaryData
@@ -395,32 +396,21 @@ class _LoaderState extends State<Loader> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Flexible(
-              child: Container(
-                height: 10,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                    color: Colors.teal.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10)),
-                child: const LinearProgressIndicator(
-                  color: Colors.teal,
-                  backgroundColor: Colors.white,
-                ),
-              ),
+        Flexible(
+          child: Container(
+            height: 10,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                color: Colors.teal.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10)),
+            child: const LinearProgressIndicator(
+              color: Colors.teal,
+              backgroundColor: Colors.white,
             ),
-            IconButton(
-                onPressed: widget.onPressCancel,
-                iconSize: 25,
-                visualDensity: VisualDensity.compact,
-                padding: EdgeInsets.zero,
-                icon: const Icon(Icons.stop_circle_outlined))
-          ],
+          ),
         ),
         Text('${loadingText[textIndex]}    ',
-                style: const TextStyle(fontSize: 12, height: -1))
+                style: const TextStyle(fontSize: 12, height: 1))
             .animate()
             .custom(
                 duration: 300.ms,
