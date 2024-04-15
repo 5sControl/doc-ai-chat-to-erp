@@ -33,14 +33,14 @@ class SummaryApiRepository {
         },
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data.toString().isNotEmpty) {
         return Summary(summaryText: response.data.toString());
+      } else {
+        Exception('Some Error');
       }
     } on DioException catch (e) {
-      print(e);
-      return Exception(e.response?.data['detail'] ?? 'Some Error');
+      Exception(e.response?.data['detail'] ?? 'Some Error');
     } catch (error) {
-      print(error);
       return Exception('Loading error');
     }
   }

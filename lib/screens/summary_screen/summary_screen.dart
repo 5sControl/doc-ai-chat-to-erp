@@ -39,7 +39,7 @@ class _SummaryScreenState extends State<SummaryScreen>
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
     if (context
         .read<SummariesBloc>()
         .state

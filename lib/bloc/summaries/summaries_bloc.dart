@@ -186,7 +186,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final previewData = await getPreviewData(summaryKey);
     final summaryData = state.summaries[summaryKey]?.copyWith(
         summaryPreview: SummaryPreview(
-            imageUrl: previewData.image?.url, title: previewData.title));
+            imageUrl: previewData.image?.url ?? Assets.placeholderLogo.path,
+            title: previewData.title));
     final Map<String, SummaryData> summariesMap = Map.from(state.summaries);
     summariesMap.update(summaryKey, (value) => summaryData!);
     emit(state.copyWith(summaries: summariesMap));
@@ -210,9 +211,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummary: longSummaryResponse,
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
-        return summaryData;
+        return summaryData.copyWith(
+            longSummaryStatus: SummaryStatus.error,
+            shortSummaryStatus: SummaryStatus.error);
       } else {
-        return summaryData;
+        return summaryData.copyWith(
+            longSummaryStatus: SummaryStatus.error,
+            shortSummaryStatus: SummaryStatus.error);
       }
     });
     emit(state.copyWith(summaries: summaryMap));
@@ -236,9 +241,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummary: longSummaryResponse,
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
-        return summaryData;
+        return summaryData.copyWith(
+            longSummaryStatus: SummaryStatus.error,
+            shortSummaryStatus: SummaryStatus.error);
       } else {
-        return summaryData;
+        return summaryData.copyWith(
+            longSummaryStatus: SummaryStatus.error,
+            shortSummaryStatus: SummaryStatus.error);
       }
     });
     emit(state.copyWith(
@@ -264,9 +273,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummary: longSummaryResponse,
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
-        return summaryData;
+        return summaryData.copyWith(
+            longSummaryStatus: SummaryStatus.error,
+            shortSummaryStatus: SummaryStatus.error);
       } else {
-        return summaryData;
+        return summaryData.copyWith(
+            longSummaryStatus: SummaryStatus.error,
+            shortSummaryStatus: SummaryStatus.error);
       }
     });
     emit(state.copyWith(summaries: summaryMap));

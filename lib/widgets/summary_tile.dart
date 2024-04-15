@@ -227,16 +227,19 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                         horizontal: 2, vertical: 2),
                                     child: Hero(
                                       tag: summaryData.date,
-                                      child:
-                                          summaryData.summaryPreview.imageUrl ==
-                                                  Assets.placeholderLogo.path
-                                              ? Image.asset(
-                                                  Assets.placeholderLogo.path)
-                                              : CachedNetworkImage(
-                                                  imageUrl: summaryData
-                                                      .summaryPreview.imageUrl!,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                      child: summaryData.summaryPreview
+                                                      .imageUrl ==
+                                                  Assets.placeholderLogo.path ||
+                                              summaryData.summaryPreview
+                                                      .imageUrl ==
+                                                  null
+                                          ? Image.asset(
+                                              Assets.placeholderLogo.path)
+                                          : CachedNetworkImage(
+                                              imageUrl: summaryData
+                                                  .summaryPreview.imageUrl!,
+                                              fit: BoxFit.cover,
+                                            ),
                                     ))),
                             Expanded(
                               child: Padding(
@@ -266,15 +269,16 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                         firstChild: Loader(
                                           onPressCancel: onPressCancel,
                                         ),
-                                        secondChild: summaryData
-                                                    .longSummary.summaryError !=
-                                                null
-                                            ? ErrorMessage(
-                                                error: summaryData
-                                                    .longSummary.summaryError!,
-                                                onPressRetry: onPressRetry,
-                                              )
-                                            : Container(),
+                                        secondChild:
+                                            summaryData.shortSummaryStatus ==
+                                                    SummaryStatus.error
+                                                ? ErrorMessage(
+                                                    error: summaryData
+                                                        .longSummary
+                                                        .summaryError ?? 'Some error',
+                                                    onPressRetry: onPressRetry,
+                                                  )
+                                                : Container(),
                                         crossFadeState:
                                             summaryData.longSummaryStatus ==
                                                     SummaryStatus.loading
