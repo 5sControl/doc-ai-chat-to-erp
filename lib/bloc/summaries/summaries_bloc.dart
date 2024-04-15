@@ -28,11 +28,11 @@ final initialSummary = SummaryData(
     imageUrl: Assets.placeholderLogo.path,
   ),
   summaryOrigin: SummaryOrigin.url,
-  shortSummary: Summary(
+  shortSummary: const Summary(
     summaryText:
         'Summify: \nYour AI-powered summarization solution. Instantly distill lengthy content into concise summaries with accuracy and efficiency, enhancing productivity and comprehension.',
   ),
-  longSummary: Summary(
+  longSummary: const Summary(
       summaryText:
           "What should you know about Summify?\nIn today's fast-paced world, where information overload is a common concern, the ability to quickly grasp the essence of a piece of content is invaluable. Enter Summify, a revolutionary mobile application designed to simplify and enhance the way we consume and share information.\nSummify is more than just a summarization tool; it's a comprehensive solution that offers a myriad of features to cater to diverse user needs. Let's delve into the intricacies of Summify's core functionalities:/n1. Share and Summarize from Any Resource:\nSummify's intuitive interface allows users to share content from any online resource, including webpages, articles, and blog posts. Simply copy the URL of the desired content and paste it into Summify."),
 );
@@ -59,6 +59,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             ratedSummaries: const {
               'https://elang-app-dev-zehqx.ondigitalocean.app/'
             },
+            defaultSummaryType: SummaryType.short,
             dailyLimit: 3,
             dailySummariesMap: const {},
             textCounter: 1)) {
@@ -72,19 +73,12 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
     on<GetSummaryFromUrl>(
       (event, emit) async {
-        if (state.summaries[event.summaryUrl]?.shortSummaryStatus !=
-            SummaryStatus.loading) {
-          await startSummaryLoading(summaryKey: event.summaryUrl, emit: emit);
-          await loadSummaryPreview(summaryKey: event.summaryUrl, emit: emit);
-          await loadSummaryFromUrl(
-              summaryKey: event.summaryUrl,
-              fromShare: event.fromShare,
-              emit: emit);
-          await loadLongSummaryFromUrl(
-              summaryKey: event.summaryUrl,
-              fromShare: event.fromShare,
-              emit: emit);
-        }
+        await startSummaryLoading(summaryKey: event.summaryUrl, emit: emit);
+        await loadSummaryPreview(summaryKey: event.summaryUrl, emit: emit);
+        await loadSummaryFromUrl(
+            summaryKey: event.summaryUrl,
+            fromShare: event.fromShare,
+            emit: emit);
       },
       transformer: throttleDroppable(throttleDuration),
     );
@@ -94,11 +88,9 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         final index = state.textCounter;
         final title = "My text ($index)";
 
-        // if (state.summaries[title]?.status != SummaryStatus.Loading) {
-        //   await startSummaryLoading(title, emit);
-        //   await loadSummaryFromText(
-        //       summaryTitle: title, text: event.text, emit: emit);
-        // }
+        await startSummaryLoading(summaryKey: title, emit: emit);
+        await loadSummaryFromText(
+            text: event.text, summaryTitle: title, emit: emit);
       },
       transformer: throttleDroppable(throttleDuration),
     );
@@ -176,7 +168,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     summaryMap.addAll({
       summaryKey: SummaryData(
           shortSummaryStatus: SummaryStatus.loading,
-          longSummaryStatus: SummaryStatus.initial,
+          longSummaryStatus: SummaryStatus.loading,
           date: DateTime.now(),
           shortSummary: const Summary(),
           longSummary: const Summary(),
@@ -206,34 +198,16 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       required Emitter<SummariesState> emit}) async {
     final shortSummaryResponse = await summaryRepository.getSummaryFromLink(
         summaryLink: summaryKey, summaryType: SummaryType.short);
-    final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
-    summaryMap.update(summaryKey, (summaryData) {
-      if (shortSummaryResponse is Summary) {
-        // incrementDailySummaryCount(emit);
-        return summaryData.copyWith(
-            shortSummary: shortSummaryResponse,
-            shortSummaryStatus: SummaryStatus.complete);
-      } else if (shortSummaryResponse is Exception) {
-        return summaryData;
-      } else {
-        return summaryData;
-      }
-    });
-    emit(state.copyWith(summaries: summaryMap));
-  }
-
-  Future<void> loadLongSummaryFromUrl(
-      {required String summaryKey,
-      required bool fromShare,
-      required Emitter<SummariesState> emit}) async {
-    final shortSummaryResponse = await summaryRepository.getSummaryFromLink(
+    final longSummaryResponse = await summaryRepository.getSummaryFromLink(
         summaryLink: summaryKey, summaryType: SummaryType.long);
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryKey, (summaryData) {
-      if (shortSummaryResponse is Summary) {
-        // incrementDailySummaryCount(emit);
+      if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
+        incrementDailySummaryCount(emit);
         return summaryData.copyWith(
-            longSummary: shortSummaryResponse,
+            shortSummary: shortSummaryResponse,
+            shortSummaryStatus: SummaryStatus.complete,
+            longSummary: longSummaryResponse,
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
         return summaryData;
@@ -248,34 +222,26 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       {required String summaryTitle,
       required String text,
       required Emitter<SummariesState> emit}) async {
-    // final summary =
-    //     await summaryRepository.getSummaryFromText(textToSummify: text);
-    // final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
-    // final summaryData = state.summaries[summaryTitle];
-    //
-    // summaryMap.update(summaryTitle, (_) {
-    //   if (summary is Summary) {
-    //     incrementDailySummaryCount(emit);
-    //     emit(state.copyWith(textCounter: state.textCounter + 1));
-    //     mixpanelBloc.add(SummifySuccess(option: 'text', url: summaryTitle));
-    //     return summaryData!.copyWith(
-    //         summary: summary.summary,
-    //         status: SummaryStatus.Complete,
-    //         error: null);
-    //   } else if (summary is Exception) {
-    //     mixpanelBloc.add(SummifyError(option: 'text', url: summaryTitle));
-    //     return summaryData!.copyWith(
-    //         error: summary.toString().substring(11),
-    //         summary: null,
-    //         status: SummaryStatus.Error);
-    //   } else {
-    //     mixpanelBloc.add(SummifyError(option: 'text', url: summaryTitle));
-    //     return summaryData!
-    //         .copyWith(error: 'Loading error', status: SummaryStatus.Error);
-    //   }
-    // });
-    // mixpanelBloc.add(Summify(option: 'text', url: summaryTitle));
-    // emit(state.copyWith(summaries: summaryMap));
+    final shortSummaryResponse = await summaryRepository.getSummaryFromText(
+        textToSummify: text, summaryType: SummaryType.short);
+    final longSummaryResponse = await summaryRepository.getSummaryFromText(
+        textToSummify: text, summaryType: SummaryType.long);
+    final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
+    summaryMap.update(summaryTitle, (summaryData) {
+      if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
+        incrementDailySummaryCount(emit);
+        return summaryData.copyWith(
+            shortSummary: shortSummaryResponse,
+            shortSummaryStatus: SummaryStatus.complete,
+            longSummary: longSummaryResponse,
+            longSummaryStatus: SummaryStatus.complete);
+      } else if (shortSummaryResponse is Exception) {
+        return summaryData;
+      } else {
+        return summaryData;
+      }
+    });
+    emit(state.copyWith(summaries: summaryMap));
   }
 
   Future<void> loadSummaryFromFile(

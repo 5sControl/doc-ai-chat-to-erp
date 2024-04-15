@@ -27,10 +27,10 @@ final baseTheme = ThemeData(
     splashFactory: NoSplash.splashFactory,
     labelColor: Colors.black,
     labelStyle: TextStyle(
-        fontSize: 12, fontWeight: FontWeight.w400, color: Colors.black),
+        fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
     unselectedLabelColor: Colors.white,
     unselectedLabelStyle: TextStyle(
-      fontSize: 12,
+      fontSize: 14,
       fontWeight: FontWeight.w400,
     ),
     indicator: BoxDecoration(

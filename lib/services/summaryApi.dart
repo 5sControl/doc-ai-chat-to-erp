@@ -34,15 +34,6 @@ class SummaryApiRepository {
       );
 
       if (response.statusCode == 200) {
-        // return Summary(
-        //     summaryLong: summaryType == SummaryType.long
-        //         ? response.data.toString()
-        //         : null,
-        //     summaryShort: summaryType == SummaryType.short
-        //         ? response.data.toString()
-        //         : null,
-        //     summaryError: null);
-        print(response.data);
         return Summary(summaryText: response.data.toString());
       }
     } on DioException catch (e) {
@@ -54,40 +45,26 @@ class SummaryApiRepository {
     }
   }
 
-  // Future<dynamic> getFromLinkNew(
-  //     {required String summaryLink, required SummaryType summaryType}) async {
-  //
-  //   try {
-  //     Response response = await _dio.post(
-  //       linkUrl,
-  //       data: {'url': summaryLink, 'context': '', "type_summary": summaryType.name},
-  //     );
-  //
-  //     if (response.statusCode == 200) {
-  //       // return Summary(summary: response.data.toString());
-  //     }
-  //   } on DioException catch (e) {
-  //     print(e);
-  //     return Exception(e.response?.data['detail'] ?? 'Some Error');
-  //   } catch (error) {
-  //     print(error);
-  //     return Exception('Loading error');
-  //   }
-  // }
-
-  Future<dynamic> getFromText({required String textToSummify}) async {
+  Future<dynamic> getFromText(
+      {required String textToSummify, required SummaryType summaryType}) async {
     try {
-      Response response = await _dio.post(linkUrl, data: {
-        'url': '',
-        'context': textToSummify,
-        "type_summary": "long"
-      }).catchError((e) {
-        throw Exception('Loading error');
-      });
-      // return Summary(summary: response.data);
+      Response response = await _dio.post(
+        linkUrl,
+        data: {
+          'url': '',
+          'context': textToSummify,
+          "type_summary": summaryType.name
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return Summary(summaryText: response.data.toString());
+      }
     } on DioException catch (e) {
+      print(e);
       return Exception(e.response?.data['detail'] ?? 'Some Error');
     } catch (error) {
+      print(error);
       return Exception('Loading error');
     }
   }
@@ -161,8 +138,8 @@ class SummaryRepository {
         summaryLink: summaryLink, summaryType: summaryType);
   }
 
-  Future<dynamic> getSummaryFromText({required String textToSummify}) {
-    return _summaryRepository.getFromText(textToSummify: textToSummify);
+  Future<dynamic> getSummaryFromText({required String textToSummify, required SummaryType summaryType}) {
+    return _summaryRepository.getFromText(textToSummify: textToSummify, summaryType: summaryType);
   }
 
   Future<dynamic> getSummaryFromFile(

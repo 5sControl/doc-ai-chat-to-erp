@@ -58,12 +58,7 @@ class Header extends StatelessWidget {
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  shadows: [
-                    Shadow(
-                        color: Colors.black,
-                        blurRadius: 10,
-                        offset: Offset(0, 0)),
-                  ]),
+                  ),
             ),
           ),
           const Divider(color: Colors.transparent),
@@ -72,13 +67,7 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                  decoration: const BoxDecoration(boxShadow: [
-                    BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 10,
-                        blurStyle: BlurStyle.outer,
-                        offset: Offset(0, 0)),
-                  ]),
+
                   padding: const EdgeInsets.only(right: 7),
                   child: SvgPicture.asset(Assets.icons.clock)),
               Text(
@@ -87,12 +76,7 @@ class Header extends StatelessWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
-                    shadows: [
-                      Shadow(
-                          color: Colors.black,
-                          blurRadius: 10,
-                          offset: Offset(0, 0)),
-                    ]),
+                    ),
               ),
             ],
           ),
@@ -154,12 +138,7 @@ class _UrlLinkState extends State<UrlLink> {
                   fontSize: pressed ? 15 : 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
-                  shadows: const [
-                    Shadow(
-                        color: Colors.black,
-                        blurRadius: 10,
-                        offset: Offset(0, 0)),
-                  ]),
+                  ),
               child: Text(
                 widget.sharedLink,
               ),

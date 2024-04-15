@@ -17,6 +17,7 @@ import 'package:summify/widgets/share_copy_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
+import '../../models/models.dart';
 import '../../widgets/backgroung_gradient.dart';
 import 'custom_tab_bar.dart';
 import 'header.dart';
@@ -68,20 +69,11 @@ class _SummaryScreenState extends State<SummaryScreen>
         final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
         final String formattedDate = formatter.format(summaryData.date);
 
-        final briefSummaryText =
-            getTransformedText(text: summaryData.shortSummary.summaryText ?? '');
+        final briefSummaryText = getTransformedText(
+            text: summaryData.shortSummary.summaryText ?? '');
 
         final deepSummaryText =
             getTransformedText(text: summaryData.longSummary.summaryText ?? '');
-
-        // const List<Effect<dynamic>> effects = [
-        //   MoveEffect(
-        //       end: Offset(0, 0),
-        //       begin: Offset(0, 100),
-        //       curve: Curves.easeIn,
-        //       duration: Duration(milliseconds: 350)),
-        //   ShimmerEffect(delay: Duration(milliseconds: 350))
-        // ];
 
         void showRateScreen() {
           showMaterialModalBottomSheet(
@@ -157,9 +149,13 @@ class _SummaryScreenState extends State<SummaryScreen>
                           children: [
                             SummaryTextContainer(
                               summaryText: briefSummaryText,
+                              summary: summaryData.shortSummary,
+                              summaryStatus: summaryData.shortSummaryStatus,
                             ),
                             SummaryTextContainer(
                               summaryText: deepSummaryText,
+                              summary: summaryData.longSummary,
+                              summaryStatus: summaryData.longSummaryStatus,
                             ),
                           ],
                         ),
@@ -204,11 +200,19 @@ class _SummaryScreenState extends State<SummaryScreen>
 
 class SummaryTextContainer extends StatelessWidget {
   final String summaryText;
-  const SummaryTextContainer({super.key, required this.summaryText});
+  final Summary summary;
+  final SummaryStatus summaryStatus;
+  const SummaryTextContainer(
+      {super.key,
+      required this.summaryText,
+      required this.summary,
+      required this.summaryStatus});
 
   @override
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
+
+    print(summaryStatus);
 
     return Scrollbar(
       controller: scrollController,

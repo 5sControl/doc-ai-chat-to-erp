@@ -97,10 +97,10 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return BlocConsumer<SummariesBloc, SummariesState>(
       listenWhen: (previous, current) {
-        return previous.summaries[widget.sharedLink]?.shortSummaryStatus ==
+        return ((previous.summaries[widget.sharedLink]?.longSummaryStatus ==
                 SummaryStatus.loading &&
-            current.summaries[widget.sharedLink]?.shortSummaryStatus ==
-                SummaryStatus.complete;
+            current.summaries[widget.sharedLink]?.longSummaryStatus ==
+                SummaryStatus.complete));
       },
       listener: (context, state) {
         onSummaryLoad(
@@ -197,7 +197,8 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(10),
                         onTap: () {
-                          if (summaryData.shortSummaryStatus == SummaryStatus.complete) {
+                          if (summaryData.longSummaryStatus ==
+                              SummaryStatus.complete) {
                             onPressSummaryTile();
                           }
                         },
@@ -264,19 +265,20 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                         firstChild: Loader(
                                           onPressCancel: onPressCancel,
                                         ),
-                                        secondChild:
-                                            summaryData.shortSummary.summaryError !=
-                                                    null
-                                                ? ErrorMessage(
-                                                    error: summaryData
-                                                        .shortSummary.summaryError!,
-                                                    onPressRetry: onPressRetry,
-                                                  )
-                                                : Container(),
-                                        crossFadeState: summaryData.shortSummaryStatus ==
-                                                SummaryStatus.loading
-                                            ? CrossFadeState.showFirst
-                                            : CrossFadeState.showSecond,
+                                        secondChild: summaryData.longSummary
+                                                    .summaryError !=
+                                                null
+                                            ? ErrorMessage(
+                                                error: summaryData
+                                                    .longSummary.summaryError!,
+                                                onPressRetry: onPressRetry,
+                                              )
+                                            : Container(),
+                                        crossFadeState:
+                                            summaryData.longSummaryStatus ==
+                                                    SummaryStatus.loading
+                                                ? CrossFadeState.showFirst
+                                                : CrossFadeState.showSecond,
                                         duration: duration)
                                   ],
                                 ),
