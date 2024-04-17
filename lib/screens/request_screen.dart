@@ -1,10 +1,13 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/helpers/email_validator.dart';
 import 'package:summify/helpers/language_codes.dart';
 import 'package:summify/services/summaryApi.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
+
+import 'modal_screens/send_request_screen.dart';
 
 class RequestScreen extends StatefulWidget {
   const RequestScreen({super.key});
@@ -68,7 +71,25 @@ class _RequestScreenState extends State<RequestScreen> {
           message: messageController.text);
 
       print(res);
+      if (res == SendFeatureStatus.Sended) {
+        onRequestSend();
+      }
     }
+  }
+
+  void onRequestSend() {
+    showMaterialModalBottomSheet(
+      context: context,
+      expand: false,
+      bounce: false,
+      barrierColor: Colors.black54,
+      backgroundColor: Colors.transparent,
+      enableDrag: false,
+      builder: (context) {
+        return SendRequestScreen(
+        );
+      },
+    );
   }
 
   @override
@@ -159,150 +180,14 @@ class _RequestScreenState extends State<RequestScreen> {
                         required: false,
                         controller: messageController,
                       ),
-                      Spacer(),
+                      const Spacer(),
                       ConfirmButton(
                           onPressSubmit: onPressSubmit, emailError: emailError)
                     ],
                   ),
                 ),
               ),
-              // child: SingleChildScrollView(
-              //   child: Container(
-              //     // color: Colors.red,
-              //     padding: EdgeInsets.all(20.0),
-              //     child: IntrinsicHeight(
-              //       child: ConstrainedBox(
-              //         constraints: BoxConstraints(
-              //             maxHeight: MediaQuery.of(context).size.height -
-              //                 MediaQuery.of(context).padding.bottom -
-              //                 MediaQuery.of(context).padding.top),
-              //         child: Expanded(
-              //           child: Column(
-              //             crossAxisAlignment: CrossAxisAlignment.stretch,
-              //             mainAxisSize: MainAxisSize.max,
-              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //             children: [
-              //               Column(
-              //                 crossAxisAlignment: CrossAxisAlignment.stretch,
-              //                 mainAxisSize: MainAxisSize.min,
-              //                 children: options
-              //                     .map((option) => OptionContainer(
-              //                         title: option,
-              //                         selectedOptions: selectedOptions,
-              //                         onSelectOption: onSelectOption,
-              //                         onSelectLang: onSelectLang))
-              //                     .toList(),
-              //               ),
-              //               const Divider(
-              //                 color: Colors.transparent,
-              //               ),
-              //               const Text(
-              //                 'Or write us a message',
-              //                 style: TextStyle(
-              //                     fontSize: 18, fontWeight: FontWeight.w500),
-              //               ),
-              //               CustomInput(
-              //                 title: 'Name',
-              //                 placeholder: 'Enter your name',
-              //                 required: false,
-              //                 controller: nameController,
-              //               ),
-              //               CustomInput(
-              //                 title: 'Email',
-              //                 placeholder: 'Enter your email',
-              //                 required: true,
-              //                 controller: emailController,
-              //               ),
-              //               CustomInput(
-              //                 title: 'Message',
-              //                 placeholder: 'Enter your request',
-              //                 required: false,
-              //                 controller: messageController,
-              //               ),
-              //               // const Spacer(),
-              //               Divider(
-              //                 color: Colors.transparent,
-              //               ),
-              //               Spacer(),
-              //               ConfirmButton(
-              //                   onPressSubmit: onPressSubmit,
-              //                   emailError: emailError)
-              //             ],
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            )
-            // body: SingleChildScrollView(
-            //   child: ConstrainedBox(
-            //     constraints: BoxConstraints(
-            //       maxHeight: MediaQuery.of(context).size.height -
-            //           MediaQuery.of(context).padding.bottom -
-            //           MediaQuery.of(context).padding.top -
-            //           10,
-            //     ),
-            //     child: Container(
-            //       padding: EdgeInsets.only(
-            //           left: 15,
-            //           right: 15,
-            //           top: 10,
-            //           bottom: MediaQuery.of(context).padding.bottom +
-            //               MediaQuery.of(context).viewInsets.bottom +
-            //               10),
-            //       child: Column(
-            //         mainAxisSize: MainAxisSize.max,
-            //         crossAxisAlignment: CrossAxisAlignment.stretch,
-            //         children: [
-            //           Column(
-            //             crossAxisAlignment: CrossAxisAlignment.stretch,
-            //             children: options
-            //                 .map((option) => OptionContainer(
-            //                     title: option,
-            //                     selectedOptions: selectedOptions,
-            //                     onSelectOption: onSelectOption,
-            //                     onSelectLang: onSelectLang))
-            //                 .toList(),
-            //           ),
-            //           const Divider(
-            //             color: Colors.transparent,
-            //           ),
-            //           const Text(
-            //             'Or write us a message',
-            //             style:
-            //                 TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-            //           ),
-            //           CustomInput(
-            //             title: 'Name',
-            //             placeholder: 'Enter your name',
-            //             required: false,
-            //             controller: nameController,
-            //           ),
-            //           CustomInput(
-            //             title: 'Email',
-            //             placeholder: 'Enter your email',
-            //             required: true,
-            //             controller: emailController,
-            //           ),
-            //           CustomInput(
-            //             title: 'Message',
-            //             placeholder: 'Enter your request',
-            //             required: false,
-            //             controller: messageController,
-            //           ),
-            //           const Spacer(),
-            //           Divider(
-            //             color: Colors.transparent,
-            //           ),
-            //           ConfirmButton(
-            //               onPressSubmit: onPressSubmit, emailError: emailError)
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            ),
+            )),
       ],
     );
   }
