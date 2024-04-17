@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -14,6 +15,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../models/models.dart';
+import 'modal_screens/purchase_success_screen.dart';
+import 'modal_screens/send_request_screen.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -44,9 +47,28 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       context.read<MixpanelBloc>().add(const ClosePaywall());
     }
 
-    return BlocBuilder<SubscriptionBloc, SubscriptionState>(
-      builder: (context, state) {
+    void onSubscriptionsComplete() {
+      showMaterialModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        enableDrag: false,
+        builder: (context) {
+          return const PurchaseSuccessScreen();
+        },
+      );
+    }
 
+    return BlocConsumer<SubscriptionBloc, SubscriptionState>(
+      listenWhen: (previous, current) =>
+          previous.transactionStatus == TransactionStatus.idle &&
+          current.transactionStatus == TransactionStatus.complete,
+      listener: (context, state) {
+        onSubscriptionsComplete();
+      },
+      builder: (context, state) {
         final abTest = context.read<SettingsBloc>().state.abTest;
 
         return Stack(
@@ -88,7 +110,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         aspectRatio:
                             MediaQuery.of(context).size.height < 700 ? 2 : 1.5,
                         child: Image.asset(
-                          abTest == "B" ? Assets.girl.path :  Assets.niga.path,
+                          abTest == "B" ? Assets.girl.path : Assets.niga.path,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -276,7 +298,7 @@ class SubscriptionCover extends StatelessWidget {
                           color: isSelected ? Colors.white : Colors.black,
                           fontSize: 18,
                           fontWeight:
-                          isSelected ? FontWeight.w700 : FontWeight.w400),
+                              isSelected ? FontWeight.w700 : FontWeight.w400),
                     ),
                     Text(
                       subscription.currencySymbol +
@@ -391,16 +413,17 @@ class TermsRestorePrivacy extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        if (Platform.isIOS)  Expanded(
-          child: GestureDetector(
-            onTap: onPressTerms,
-            child: const Text(
-              'Terms of use',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-              textAlign: TextAlign.center,
+        if (Platform.isIOS)
+          Expanded(
+            child: GestureDetector(
+              onTap: onPressTerms,
+              child: const Text(
+                'Terms of use',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-        ),
         Expanded(
           child: GestureDetector(
             onTap: onPressRestore,
@@ -411,16 +434,17 @@ class TermsRestorePrivacy extends StatelessWidget {
             ),
           ),
         ),
-        if (Platform.isIOS)  Expanded(
-          child: GestureDetector(
-            onTap: onPressPrivacy,
-            child: const Text(
-              'Privacy policy',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-              textAlign: TextAlign.center,
+        if (Platform.isIOS)
+          Expanded(
+            child: GestureDetector(
+              onTap: onPressPrivacy,
+              child: const Text(
+                'Privacy policy',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-        ),
       ],
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/helpers/email_validator.dart';
@@ -70,9 +68,10 @@ class _RequestScreenState extends State<RequestScreen> {
           email: emailController.text,
           message: messageController.text);
 
-      print(res);
       if (res == SendFeatureStatus.Sended) {
         onRequestSend();
+      } else {
+        Navigator.of(context).popUntil(ModalRoute.withName("/settings"));
       }
     }
   }
@@ -86,8 +85,7 @@ class _RequestScreenState extends State<RequestScreen> {
       backgroundColor: Colors.transparent,
       enableDrag: false,
       builder: (context) {
-        return SendRequestScreen(
-        );
+        return const SendRequestScreen();
       },
     );
   }

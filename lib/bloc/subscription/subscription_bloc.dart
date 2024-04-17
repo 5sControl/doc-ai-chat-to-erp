@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -9,12 +10,21 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_storekit/in_app_purchase_storekit.dart';
 import 'package:in_app_purchase_storekit/store_kit_wrappers.dart';
+import 'package:stream_transform/stream_transform.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/models/models.dart';
 
 part 'subscription_event.dart';
 part 'subscription_state.dart';
 part 'subscription_bloc.g.dart';
+
+const throttleDuration = Duration(milliseconds: 200);
+
+EventTransformer<E> throttleDroppable<E>(Duration duration) {
+  return (events, mapper) {
+    return concurrent<E>().call(events.throttle(duration), mapper);
+  };
+}
 
 class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
@@ -39,7 +49,8 @@ class SubscriptionBloc
       {required this.mixpanelBloc, required this.facebookAppEvents})
       : super(const SubscriptionState(
             subscriptionsStatus: SubscriptionsStatus.unsubscribed,
-            availableProducts: [])) {
+            availableProducts: [],
+            transactionStatus: TransactionStatus.idle)) {
     StreamSubscription<List<PurchaseDetails>>? subscription;
 
     Future<void> initStoreInfo() async {
@@ -90,38 +101,30 @@ class SubscriptionBloc
           _inAppPurchase.purchaseStream;
       subscription = purchaseUpdated.listen((purchaseDetailsList) {
         purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
-          if (purchaseDetails.status == PurchaseStatus.pending) {
-            // emit(PaymentPending());
-            print('pending');
-          } else {
-            if (purchaseDetails.status == PurchaseStatus.error) {
-              // emit(PaymentError());
-              print('error');
-            } else if (purchaseDetails.pendingCompletePurchase) {
-              await _inAppPurchase.completePurchase(purchaseDetails);
-
-              if (purchaseDetails.status == PurchaseStatus.restored ||
-                  purchaseDetails.status == PurchaseStatus.purchased) {
-                print('complete');
-                final product = _products.firstWhere(
-                    (product) => product.id == event.subscriptionId);
-                facebookAppEvents.logPurchase(
-                    amount: product.rawPrice, currency: product.currencyCode);
-                add(const PaymentComplete());
-
-                var plan = '';
-                switch (purchaseDetails.productID) {
-                  case 'SummifyPremiumYear':
-                    plan = 'year';
-                  case 'SummifyPremiumMonth':
-                    plan = 'month';
-                  case 'SummifyPremiumWeekly':
-                    plan = 'week';
-                }
-
-                mixpanelBloc.add(ActivateSubscription(plan: plan));
+          switch (purchaseDetails.status) {
+            case PurchaseStatus.pending:
+              {
+                // print('pending');
               }
-            }
+            case PurchaseStatus.purchased:
+              {
+                // print('purchased');
+                add(PaymentComplete(productId: purchaseDetails.productID));
+              }
+            case PurchaseStatus.error:
+              {
+                // print('error');
+              }
+            case PurchaseStatus.restored:
+              {
+                // print('restored');
+                add(PaymentComplete(productId: purchaseDetails.productID));
+              }
+
+            case PurchaseStatus.canceled:
+              {
+                // print('canceled');
+              }
           }
         });
       }, onDone: () {
@@ -159,8 +162,21 @@ class SubscriptionBloc
 
     on<PaymentComplete>(
       (event, emit) async {
+        mixpanelBloc.add(ActivateSubscription(plan: event.productId));
         emit(
-          state.copyWith(subscriptionsStatus: SubscriptionsStatus.subscribed),
+          state.copyWith(
+              subscriptionsStatus: SubscriptionsStatus.subscribed,
+              transactionStatus: TransactionStatus.complete),
+        );
+        add(OnShowSubscriptionComplete());
+      },
+      transformer: throttleDroppable(throttleDuration),
+    );
+
+    on<OnShowSubscriptionComplete>(
+      (event, emit) async {
+        emit(
+          state.copyWith(transactionStatus: TransactionStatus.idle),
         );
       },
     );

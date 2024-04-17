@@ -13,6 +13,7 @@ import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/widgets/premium_banner.dart';
 
+import '../bloc/subscription/subscription_bloc.dart';
 import '../gen/assets.gen.dart';
 import '../widgets/summary_tile.dart';
 import 'modal_screens/how_to_screen.dart';
@@ -174,53 +175,59 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           final thisDay = dayFormatter.format(DateTime.now());
           final summaries =
               summariesState.summaries.keys.toList().reversed.toList();
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: AppBar(
-                flexibleSpace: ClipRRect(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      color: Colors.transparent,
+          return BlocBuilder<SubscriptionBloc, SubscriptionState>(
+            builder: (context, state) {
+
+              final bool isSubscribed = state.subscriptionsStatus == SubscriptionsStatus.unsubscribed;
+              return Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                    flexibleSpace: ClipRRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        child: Container(
+                          color: Colors.transparent,
+                        ),
+                      ),
                     ),
+                    backgroundColor: Colors.transparent,
+                    automaticallyImplyLeading: false,
+                    elevation: 0,
+                    bottom: isSubscribed ? PreferredSize(
+                      preferredSize: const Size.fromHeight(70.0),
+                      child:  Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: const PremiumBanner()
+                      ),
+                    ): null,
+                    title: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        summariesCounter(
+                            availableSummaries: summariesState.dailyLimit,
+                            // dailySummaries: 0),
+                            dailySummaries:
+                                summariesState.dailySummariesMap[thisDay] ?? 0),
+                        logo(),
+                        settingsButton(onPressSettings: onPressSettings),
+                      ],
+                    )),
+                body: Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: ListView.builder(
+                    itemCount: summariesState.summaries.length,
+                    itemBuilder: (context, index) {
+                      return SummaryTile(
+                        sharedLink: summaries[index],
+                        // summaryData: summariesState.summaries[summaries[index]]!,
+                      );
+                    },
                   ),
                 ),
-                backgroundColor: Colors.transparent,
-                automaticallyImplyLeading: false,
-                elevation: 0,
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(70.0),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: const PremiumBanner(),
-                  ),
-                ),
-                title: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    summariesCounter(
-                        availableSummaries: summariesState.dailyLimit,
-                        // dailySummaries: 0),
-                        dailySummaries:
-                            summariesState.dailySummariesMap[thisDay] ?? 0),
-                    logo(),
-                    settingsButton(onPressSettings: onPressSettings),
-                  ],
-                )),
-            body: Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: ListView.builder(
-                itemCount: summariesState.summaries.length,
-                itemBuilder: (context, index) {
-                  return SummaryTile(
-                    sharedLink: summaries[index],
-                    // summaryData: summariesState.summaries[summaries[index]]!,
-                  );
-                },
-              ),
-            ),
+              );
+            },
           );
         },
       ),

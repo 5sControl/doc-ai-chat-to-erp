@@ -22,7 +22,15 @@ class Start extends SubscriptionEvent {
 }
 
 class PaymentComplete extends SubscriptionEvent {
-  const PaymentComplete();
+  final String productId;
+  const PaymentComplete({required this.productId});
+
+  @override
+  List<Object?> get props => [productId];
+}
+
+class OnShowSubscriptionComplete extends SubscriptionEvent {
+  const OnShowSubscriptionComplete();
 
   @override
   List<Object?> get props => [];

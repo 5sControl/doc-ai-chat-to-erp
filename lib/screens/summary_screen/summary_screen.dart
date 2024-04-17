@@ -217,7 +217,7 @@ class SummaryTextContainer extends StatelessWidget {
         child: SelectableText.rich(
           TextSpan(
             text: summaryText,
-            style: DefaultTextStyle.of(context).style,
+            style: DefaultTextStyle.of(context).style.copyWith(fontSize: 18),
             spellOut: true,
           ),
         ),
