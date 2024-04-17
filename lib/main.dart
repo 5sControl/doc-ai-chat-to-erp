@@ -16,6 +16,7 @@ import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
+import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen.dart';
 import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/authentication.dart';
@@ -42,7 +43,7 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  await HydratedBloc.storage.clear();
+  // await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 
@@ -105,6 +106,10 @@ class SummishareApp extends StatelessWidget {
                   case '/settings':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SettingsScreen(),
+                        settings: settings);
+                    case '/request':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const RequestScreen(),
                         settings: settings);
                 }
                 return MaterialPageRoute(

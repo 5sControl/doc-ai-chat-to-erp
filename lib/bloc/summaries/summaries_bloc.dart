@@ -205,6 +205,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     summaryMap.update(summaryKey, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
         incrementDailySummaryCount(emit);
+
         return summaryData.copyWith(
             shortSummary: shortSummaryResponse,
             shortSummaryStatus: SummaryStatus.complete,
@@ -212,10 +213,26 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
         return summaryData.copyWith(
+            longSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
+            shortSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       } else {
         return summaryData.copyWith(
+            longSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
+            shortSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       }
@@ -242,10 +259,26 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
         return summaryData.copyWith(
+            longSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
+            shortSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       } else {
         return summaryData.copyWith(
+            longSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
+            shortSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       }
@@ -274,10 +307,26 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
         return summaryData.copyWith(
+            longSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
+            shortSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       } else {
         return summaryData.copyWith(
+            longSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
+            shortSummary: Summary(
+                summaryError: shortSummaryResponse
+                    .toString()
+                    .replaceAll('Exception:', '')),
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       }

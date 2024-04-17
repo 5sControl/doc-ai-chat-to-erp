@@ -1,8 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -211,9 +207,6 @@ class SummaryTextContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ScrollController scrollController = ScrollController();
-
-    print(summaryStatus);
-
     return Scrollbar(
       controller: scrollController,
       child: SingleChildScrollView(
@@ -221,14 +214,12 @@ class SummaryTextContainer extends StatelessWidget {
         padding:
             const EdgeInsets.only(top: 50, bottom: 90, left: 15, right: 15),
         physics: const AlwaysScrollableScrollPhysics(),
-        child: StyledText(
-          text: summaryText,
-          style: const TextStyle(fontSize: 16),
-          tags: {
-            'b': StyledTextTag(
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 18, height: 2)),
-          },
+        child: SelectableText.rich(
+          TextSpan(
+            text: summaryText,
+            style: DefaultTextStyle.of(context).style,
+            spellOut: true,
+          ),
         ),
       ),
     );

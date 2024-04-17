@@ -1,11 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:summify/models/models.dart';
 
 enum SendRateStatus { Loading, Sended, Error }
 
+enum SendFeatureStatus { Loading, Sended, Error }
+
 enum SummaryType { long, short }
+
+class ErrorDecode {
+  final String detail;
+  ErrorDecode({required this.detail});
+}
 
 class SummaryApiRepository {
   // final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
@@ -17,32 +25,46 @@ class SummaryApiRepository {
   final String fileUrl =
       "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
 
+  final String requestUrl =
+      'https://largely-whole-horse.ngrok-free.app/api/applications/function-reports/';
+
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.plain),
   );
 
-  Future<dynamic> getFromLink(
+  FutureOr<Object?> getFromLink(
       {required String summaryLink, required SummaryType summaryType}) async {
     try {
-      Response response = await _dio.post(
-        linkUrl,
-        data: {
-          'url': summaryLink,
-          'context': '',
-          "type_summary": summaryType.name
-        },
-      );
+      Response response = await _dio.post(linkUrl, data: {
+        'url': summaryLink,
+        'context': '',
+        "type_summary": summaryType.name
+      });
 
       if (response.statusCode == 200 && response.data.toString().isNotEmpty) {
         return Summary(summaryText: response.data.toString());
       } else {
-        Exception('Some Error');
+        Exception('Some error');
       }
     } on DioException catch (e) {
-      Exception(e.response?.data['detail'] ?? 'Some Error');
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+
+        error = ErrorDecode(
+          detail: decodedMap['detail'],
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+
+      return Exception(error.detail);
     } catch (error) {
-      return Exception('Loading error');
+      return Exception('Some error');
     }
+    return null;
   }
 
   Future<dynamic> getFromText(
@@ -61,12 +83,24 @@ class SummaryApiRepository {
         return Summary(summaryText: response.data.toString());
       }
     } on DioException catch (e) {
-      print(e);
-      return Exception(e.response?.data['detail'] ?? 'Some Error');
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+
+        error = ErrorDecode(
+          detail: decodedMap['detail'],
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+
+      return Exception(error.detail);
     } catch (error) {
-      print(error);
-      return Exception('Loading error');
+      return Exception('Some error');
     }
+    return null;
   }
 
   Future<dynamic> getFromFile(
@@ -88,10 +122,24 @@ class SummaryApiRepository {
         return Summary(summaryText: response.data.toString());
       }
     } on DioException catch (e) {
-      return Exception(e.response?.data['detail'] ?? 'Some Error');
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+
+        error = ErrorDecode(
+          detail: decodedMap['detail'],
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+
+      return Exception(error.detail);
     } catch (error) {
-      return Exception('Loading error');
+      return Exception('Some error');
     }
+    return null;
   }
 
   Future<SendRateStatus> sendRate(
@@ -117,9 +165,53 @@ class SummaryApiRepository {
         return SendRateStatus.Error;
       }
     } on DioException catch (_) {
+      print(_);
       return SendRateStatus.Error;
     } catch (error) {
+      print(error);
       return SendRateStatus.Error;
+    }
+  }
+
+  Future<SendFeatureStatus> requestAFeature({
+    required bool getMoreSummaries,
+    required bool addTranslation,
+    required bool askAQuestions,
+    required String addLang,
+    required String name,
+    required String email,
+    required String message,
+  }) async {
+    // print('More:  $getMoreSummaries');
+    // print('Add: $addTranslation');
+    // print('Ask: $askAQuestions');
+    // print('Add lang: $addLang');
+    // print('Name: $name');
+    // print('Email: $email');
+    // print('Message: $message');
+
+    try {
+      Response response = await _dio.post(
+        requestUrl,
+        data: {
+          "getMoreSummaries": getMoreSummaries,
+          "addTranslation": addTranslation,
+          "askAQuestions": askAQuestions,
+          "addLang": addLang,
+          "name": name,
+          "email": email,
+          "message": message
+        },
+      );
+      if (response.statusCode == 201) {
+        return SendFeatureStatus.Sended;
+      } else {
+        return SendFeatureStatus.Error;
+      }
+    } on DioException catch (_) {
+      return SendFeatureStatus.Error;
+    } catch (error) {
+      return SendFeatureStatus.Error;
     }
   }
 }
@@ -127,7 +219,7 @@ class SummaryApiRepository {
 class SummaryRepository {
   final SummaryApiRepository _summaryRepository = SummaryApiRepository();
 
-  Future<dynamic> getSummaryFromLink(
+  FutureOr<Object?> getSummaryFromLink(
       {required String summaryLink, required SummaryType summaryType}) {
     return _summaryRepository.getFromLink(
         summaryLink: summaryLink, summaryType: summaryType);
@@ -159,5 +251,24 @@ class SummaryRepository {
         comment: comment,
         device: device,
         rate: rate);
+  }
+
+  Future<SendFeatureStatus> sendFeature({
+    required bool getMoreSummaries,
+    required bool addTranslation,
+    required bool askAQuestions,
+    required String addLang,
+    required String name,
+    required String email,
+    required String message,
+  }) {
+    return _summaryRepository.requestAFeature(
+        getMoreSummaries: getMoreSummaries,
+        addTranslation: addTranslation,
+        askAQuestions: askAQuestions,
+        addLang: addLang,
+        name: name,
+        email: email,
+        message: message);
   }
 }

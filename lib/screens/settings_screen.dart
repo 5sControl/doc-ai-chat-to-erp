@@ -63,14 +63,15 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressFeedback() async {
-      final Email email = Email(
-        body: '',
-        subject: 'Hi, I want to tell you about:',
-        recipients: ['support@englishingames.com'],
-        isHTML: false,
-      );
-
-      await FlutterEmailSender.send(email);
+      // final Email email = Email(
+      //   body: '',
+      //   subject: 'Hi, I want to tell you about:',
+      //   recipients: ['support@englishingames.com'],
+      //   isHTML: false,
+      // );
+      //
+      // await FlutterEmailSender.send(email);
+      Navigator.of(context).pushNamed('/request');
     }
 
     void onPressTerms() async {
@@ -121,7 +122,7 @@ class SettingsScreen extends StatelessWidget {
                     fontWeight: FontWeight.w600),
               ))),
       ButtonItem(
-        title: 'Restore',
+        title: 'Restore purchase',
         leadingIcon: Assets.icons.restore,
         onTap: onPressRestore,
       )
@@ -134,7 +135,7 @@ class SettingsScreen extends StatelessWidget {
         onTap: onPressSetupShare,
       ),
       ButtonItem(
-        title: 'Rate app',
+        title: 'Rate Summify',
         leadingIcon: Assets.icons.star,
         onTap: onPressRateApp,
       ),
@@ -231,7 +232,7 @@ class GeneralGroup extends StatelessWidget {
               ),
             ),
             Material(
-              color: const Color.fromRGBO(30, 188, 183, 1),
+              color: const Color.fromRGBO(0, 186, 195, 1),
               borderRadius: const BorderRadius.all(Radius.circular(8)),
               child: InkWell(
                 onTap: () => onTapNotifications(),
@@ -255,7 +256,7 @@ class GeneralGroup extends StatelessWidget {
                       const Flexible(
                           fit: FlexFit.tight,
                           child: Text(
-                            'Notification',
+                            'Notifications',
                             textAlign: TextAlign.start,
                             style: TextStyle(
                                 color: Colors.white,
@@ -315,7 +316,7 @@ class ButtonsGroup extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 0),
           decoration: const BoxDecoration(
-              color: Color.fromRGBO(30, 188, 183, 1),
+              color: Color.fromRGBO(0, 186, 195, 1),
               borderRadius: BorderRadius.all(Radius.circular(8))),
           child: Column(
             children: items
@@ -323,7 +324,7 @@ class ButtonsGroup extends StatelessWidget {
                   (item) => Column(
                     children: [
                       Material(
-                        color: const Color.fromRGBO(30, 188, 183, 1),
+                        color: const Color.fromRGBO(0, 186, 195, 1),
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8)),
                         child: InkWell(

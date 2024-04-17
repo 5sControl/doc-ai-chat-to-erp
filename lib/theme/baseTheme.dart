@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 final baseTheme = ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: Colors.transparent,
+  primaryColor: const Color.fromRGBO(0, 186, 195, 1),
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.transparent,
     toolbarHeight: 40,

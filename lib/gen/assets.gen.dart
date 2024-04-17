@@ -32,6 +32,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/chat.svg
   String get chat => 'assets/icons/chat.svg';
 
+  /// File path: assets/icons/check.svg
+  String get check => 'assets/icons/check.svg';
+
   /// File path: assets/icons/checkCircle.svg
   String get checkCircle => 'assets/icons/checkCircle.svg';
 
@@ -126,6 +129,7 @@ class $AssetsIconsGen {
   List<String> get values => [
         apple,
         chat,
+        check,
         checkCircle,
         clock,
         copy,

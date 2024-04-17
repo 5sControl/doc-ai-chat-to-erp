@@ -178,7 +178,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                 scale: tapped ? 0.98 : 1,
                 duration: duration,
                 child: SizedBox(
-                  height: 90,
+                  height: 80,
                   child: AspectRatio(
                     aspectRatio: 3.5,
                     child: AnimatedContainer(
@@ -274,8 +274,9 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                                     SummaryStatus.error
                                                 ? ErrorMessage(
                                                     error: summaryData
-                                                        .longSummary
-                                                        .summaryError ?? 'Some error',
+                                                            .longSummary
+                                                            .summaryError ??
+                                                        'Some error',
                                                     onPressRetry: onPressRetry,
                                                   )
                                                 : Container(),
@@ -322,7 +323,7 @@ class ErrorMessage extends StatelessWidget {
           children: [
             Flexible(
                 child: Text(
-              'Summarize error: $error',
+              error,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -332,11 +333,17 @@ class ErrorMessage extends StatelessWidget {
                 tooltip: 'Retry',
                 onPressed: onPressRetry,
                 highlightColor: Colors.teal,
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.zero,
+                iconSize: 22,
+                visualDensity: VisualDensity.compact,
+                // constraints: BoxConstraints(),
+                style: const ButtonStyle(
+                  tapTargetSize:
+                      MaterialTapTargetSize.shrinkWrap, // the '2023' part
+                ),
                 icon: SvgPicture.asset(
                   Assets.icons.update,
-                  height: 25,
-                  width: 25,
+                  width: 22,
                 )),
           ],
         ),
