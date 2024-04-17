@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 final baseTheme = ThemeData(
   useMaterial3: true,
@@ -6,6 +7,7 @@ final baseTheme = ThemeData(
   primaryColor: const Color.fromRGBO(0, 186, 195, 1),
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.transparent,
+    systemOverlayStyle: SystemUiOverlayStyle.dark,
     toolbarHeight: 40,
     titleTextStyle: TextStyle(
         color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),

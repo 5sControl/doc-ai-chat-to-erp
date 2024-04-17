@@ -131,7 +131,7 @@ class SettingsScreen extends StatelessWidget {
     final List<ButtonItem> aboutGroup = [
       ButtonItem(
         title: 'Set up share button',
-        leadingIcon: Assets.icons.play,
+        leadingIcon: Assets.icons.setUp,
         onTap: onPressSetupShare,
       ),
       ButtonItem(

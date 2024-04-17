@@ -38,8 +38,7 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark
-      .copyWith(systemNavigationBarColor: Colors.teal.withOpacity(0.01)));
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }

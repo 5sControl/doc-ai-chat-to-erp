@@ -56,9 +56,9 @@ class _RequestScreenState extends State<RequestScreen> {
   void onPressSubmit() async {
     if (!emailError && emailController.value.text.isNotEmpty) {
       final res = await SummaryRepository().sendFeature(
-          getMoreSummaries: selectedOptions.contains('Get more summaries'),
-          addTranslation: selectedOptions.contains('Add translation'),
-          askAQuestions: selectedOptions.contains('AI summary question'),
+          getMoreSummaries: selectedOptions.contains('I need more summaries'),
+          addTranslation: selectedOptions.contains('Summary translation'),
+          askAQuestions: selectedOptions.contains('AI summary chat'),
           addLang: selectedOptions.contains('Add language')
               ? selectedLang
               : 'Not selected',
@@ -82,81 +82,227 @@ class _RequestScreenState extends State<RequestScreen> {
   @override
   Widget build(BuildContext context) {
     final List<String> options = [
-      'Get more summaries',
-      'Add translation',
-      'AI summary question',
+      'I need more summaries',
+      'Summary translation',
+      'AI summary chat',
       'Add language'
     ];
 
     return Stack(
+      fit: StackFit.loose,
       children: [
         const BackgroundGradient(),
         Scaffold(
-          // resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            surfaceTintColor: Colors.transparent,
-            iconTheme: const IconThemeData(color: Colors.black),
-            title: const Text(
-              'Request a feature',
-              style: TextStyle(color: Colors.black),
+            // resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              iconTheme: const IconThemeData(color: Colors.black),
+              title: const Text(
+                'Request a feature',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
-          ),
-
-          body: Container(
-            padding: EdgeInsets.only(
-                left: 15,
-                right: 15,
-                top: 10,
-                bottom: MediaQuery.of(context).padding.bottom +
-                    MediaQuery.of(context).viewInsets.bottom +
-                    10),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: options
-                      .map((option) => OptionContainer(
-                          title: option,
-                          selectedOptions: selectedOptions,
-                          onSelectOption: onSelectOption,
-                          onSelectLang: onSelectLang))
-                      .toList(),
+            // extendBody: true,
+            body: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.bottom -
+                        MediaQuery.of(context).padding.top -
+                        (MediaQuery.of(context).viewInsets.bottom / 2)),
+                child: Container(
+                  margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom + 10,
+                      left: 15,
+                      right: 15,
+                      top: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.min,
+                        children: options
+                            .map((option) => OptionContainer(
+                                title: option,
+                                selectedOptions: selectedOptions,
+                                onSelectOption: onSelectOption,
+                                onSelectLang: onSelectLang))
+                            .toList(),
+                      ),
+                      const Divider(
+                        color: Colors.transparent,
+                      ),
+                      const Text(
+                        'Or write us a message',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                      CustomInput(
+                        title: 'Name',
+                        placeholder: 'Enter your name',
+                        required: false,
+                        controller: nameController,
+                      ),
+                      CustomInput(
+                        title: 'Email',
+                        placeholder: 'Enter your email',
+                        required: true,
+                        controller: emailController,
+                      ),
+                      CustomInput(
+                        title: 'Message',
+                        placeholder: 'Enter your request',
+                        required: false,
+                        controller: messageController,
+                      ),
+                      Spacer(),
+                      ConfirmButton(
+                          onPressSubmit: onPressSubmit, emailError: emailError)
+                    ],
+                  ),
                 ),
-                const Divider(
-                  color: Colors.transparent,
-                ),
-                const Text(
-                  'Or write us a message',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-                CustomInput(
-                  title: 'Name',
-                  placeholder: 'Enter your name',
-                  required: false,
-                  controller: nameController,
-                ),
-                CustomInput(
-                  title: 'Email',
-                  placeholder: 'Enter your email',
-                  required: true,
-                  controller: emailController,
-                ),
-                CustomInput(
-                  title: 'Message',
-                  placeholder: 'Enter your request',
-                  required: false,
-                  controller: messageController,
-                ),
-                const Spacer(),
-                ConfirmButton(
-                    onPressSubmit: onPressSubmit, emailError: emailError)
-              ],
+              ),
+              // child: SingleChildScrollView(
+              //   child: Container(
+              //     // color: Colors.red,
+              //     padding: EdgeInsets.all(20.0),
+              //     child: IntrinsicHeight(
+              //       child: ConstrainedBox(
+              //         constraints: BoxConstraints(
+              //             maxHeight: MediaQuery.of(context).size.height -
+              //                 MediaQuery.of(context).padding.bottom -
+              //                 MediaQuery.of(context).padding.top),
+              //         child: Expanded(
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.stretch,
+              //             mainAxisSize: MainAxisSize.max,
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               Column(
+              //                 crossAxisAlignment: CrossAxisAlignment.stretch,
+              //                 mainAxisSize: MainAxisSize.min,
+              //                 children: options
+              //                     .map((option) => OptionContainer(
+              //                         title: option,
+              //                         selectedOptions: selectedOptions,
+              //                         onSelectOption: onSelectOption,
+              //                         onSelectLang: onSelectLang))
+              //                     .toList(),
+              //               ),
+              //               const Divider(
+              //                 color: Colors.transparent,
+              //               ),
+              //               const Text(
+              //                 'Or write us a message',
+              //                 style: TextStyle(
+              //                     fontSize: 18, fontWeight: FontWeight.w500),
+              //               ),
+              //               CustomInput(
+              //                 title: 'Name',
+              //                 placeholder: 'Enter your name',
+              //                 required: false,
+              //                 controller: nameController,
+              //               ),
+              //               CustomInput(
+              //                 title: 'Email',
+              //                 placeholder: 'Enter your email',
+              //                 required: true,
+              //                 controller: emailController,
+              //               ),
+              //               CustomInput(
+              //                 title: 'Message',
+              //                 placeholder: 'Enter your request',
+              //                 required: false,
+              //                 controller: messageController,
+              //               ),
+              //               // const Spacer(),
+              //               Divider(
+              //                 color: Colors.transparent,
+              //               ),
+              //               Spacer(),
+              //               ConfirmButton(
+              //                   onPressSubmit: onPressSubmit,
+              //                   emailError: emailError)
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            )
+            // body: SingleChildScrollView(
+            //   child: ConstrainedBox(
+            //     constraints: BoxConstraints(
+            //       maxHeight: MediaQuery.of(context).size.height -
+            //           MediaQuery.of(context).padding.bottom -
+            //           MediaQuery.of(context).padding.top -
+            //           10,
+            //     ),
+            //     child: Container(
+            //       padding: EdgeInsets.only(
+            //           left: 15,
+            //           right: 15,
+            //           top: 10,
+            //           bottom: MediaQuery.of(context).padding.bottom +
+            //               MediaQuery.of(context).viewInsets.bottom +
+            //               10),
+            //       child: Column(
+            //         mainAxisSize: MainAxisSize.max,
+            //         crossAxisAlignment: CrossAxisAlignment.stretch,
+            //         children: [
+            //           Column(
+            //             crossAxisAlignment: CrossAxisAlignment.stretch,
+            //             children: options
+            //                 .map((option) => OptionContainer(
+            //                     title: option,
+            //                     selectedOptions: selectedOptions,
+            //                     onSelectOption: onSelectOption,
+            //                     onSelectLang: onSelectLang))
+            //                 .toList(),
+            //           ),
+            //           const Divider(
+            //             color: Colors.transparent,
+            //           ),
+            //           const Text(
+            //             'Or write us a message',
+            //             style:
+            //                 TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            //           ),
+            //           CustomInput(
+            //             title: 'Name',
+            //             placeholder: 'Enter your name',
+            //             required: false,
+            //             controller: nameController,
+            //           ),
+            //           CustomInput(
+            //             title: 'Email',
+            //             placeholder: 'Enter your email',
+            //             required: true,
+            //             controller: emailController,
+            //           ),
+            //           CustomInput(
+            //             title: 'Message',
+            //             placeholder: 'Enter your request',
+            //             required: false,
+            //             controller: messageController,
+            //           ),
+            //           const Spacer(),
+            //           Divider(
+            //             color: Colors.transparent,
+            //           ),
+            //           ConfirmButton(
+            //               onPressSubmit: onPressSubmit, emailError: emailError)
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
             ),
-          ),
-        ),
       ],
     );
   }
