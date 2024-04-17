@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -9,12 +10,14 @@ part 'settings_state.dart';
 part 'settings_bloc.g.dart';
 
 class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
-  SettingsBloc()
+  final Brightness brightness;
+  SettingsBloc({required this.brightness})
       : super(SettingsState(
             onboardingPassed: false,
             howToShowed: false,
             isNotificationsEnabled: true,
             appTheme: AppTheme.auto,
+
             abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
@@ -38,7 +41,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     });
 
     on<SelectAppTheme>((event, emit) {
-      emit(state.copyWith(appTheme: event.appTheme));
+      emit(state.copyWith(appTheme: event.appTheme,));
     });
   }
 

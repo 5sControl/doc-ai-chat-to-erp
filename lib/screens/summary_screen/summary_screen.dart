@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:styled_text/tags/styled_text_tag.dart';
-import 'package:styled_text/widgets/styled_text.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
@@ -112,7 +109,7 @@ class _SummaryScreenState extends State<SummaryScreen>
         return Stack(
           children: [
             const BackgroundGradient(),
-            Container(color: Colors.white38),
+            // Container(color: Colors.white38),
             Scaffold(
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -217,7 +214,7 @@ class SummaryTextContainer extends StatelessWidget {
         child: SelectableText.rich(
           TextSpan(
             text: summaryText,
-            style: DefaultTextStyle.of(context).style.copyWith(fontSize: 18),
+            style: Theme.of(context).textTheme.bodyMedium,
             spellOut: true,
           ),
         ),

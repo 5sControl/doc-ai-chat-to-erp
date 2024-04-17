@@ -9,13 +9,15 @@ class SettingsState extends Equatable {
   final String abTest;
   final bool isNotificationsEnabled;
   final AppTheme appTheme;
+  // final ThemeMode themeMode;
 
   const SettingsState(
       {required this.onboardingPassed,
       required this.howToShowed,
       required this.abTest,
       required this.isNotificationsEnabled,
-      required this.appTheme});
+      required this.appTheme,
+      });
 
   SettingsState copyWith({
     bool? onboardingPassed,
@@ -23,6 +25,7 @@ class SettingsState extends Equatable {
     String? abTest,
     bool? isNotificationsEnabled,
     AppTheme? appTheme,
+    ThemeMode? themeMode,
   }) {
     return SettingsState(
         onboardingPassed: onboardingPassed ?? this.onboardingPassed,
@@ -30,12 +33,13 @@ class SettingsState extends Equatable {
         abTest: abTest ?? this.abTest,
         isNotificationsEnabled:
             isNotificationsEnabled ?? this.isNotificationsEnabled,
-        appTheme: appTheme ?? this.appTheme);
+        appTheme: appTheme ?? this.appTheme,
+      );
   }
 
   @override
   List<Object> get props =>
-      [onboardingPassed, howToShowed, abTest, isNotificationsEnabled, appTheme];
+      [onboardingPassed, howToShowed, abTest, isNotificationsEnabled, appTheme, ];
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
       _$SettingsStateFromJson(json);

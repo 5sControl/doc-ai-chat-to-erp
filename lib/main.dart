@@ -47,6 +47,14 @@ void main() async {
   runApp(const SummishareApp());
 }
 
+extension DarkMode on BuildContext {
+  /// is dark mode currently enabled?
+  bool get isDarkMode {
+    final brightness = MediaQuery.of(this).platformBrightness;
+    return brightness == Brightness.dark;
+  }
+}
+
 class SummishareApp extends StatelessWidget {
   const SummishareApp({super.key});
   static final facebookAppEvents = FacebookAppEvents();
@@ -54,9 +62,11 @@ class SummishareApp extends StatelessWidget {
   Widget build(BuildContext context) {
     facebookAppEvents.setAutoLogAppEventsEnabled(true);
     final AuthService authService = AuthService();
+    final brightness = MediaQuery.of(context).platformBrightness;
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => SettingsBloc()),
+          BlocProvider(
+              create: (context) => SettingsBloc(brightness: brightness)),
           BlocProvider(
             create: (context) =>
                 MixpanelBloc(settingsBloc: context.read<SettingsBloc>()),
@@ -85,33 +95,22 @@ class SummishareApp extends StatelessWidget {
                   .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
             });
-
-            var brightness = MediaQuery.of(context).platformBrightness;
-            ThemeMode themeMode = ThemeMode.dark;
-
-            switch (settingsState.appTheme) {
-              case AppTheme.auto:
-                {
-                  brightness == Brightness.dark
-                      ? themeMode = ThemeMode.dark
+            ThemeMode themeMode;
+            if (settingsState.appTheme == AppTheme.auto) {
+              themeMode =
+                  MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? ThemeMode.dark
                       : ThemeMode.light;
-                }
-
-              case AppTheme.dark:
-                {
-                  themeMode = ThemeMode.dark;
-                }
-
-              case AppTheme.light:
-                {
-                  themeMode = ThemeMode.light;
-                }
+            } else if (settingsState.appTheme == AppTheme.dark) {
+              themeMode = ThemeMode.dark;
+            } else {
+              themeMode = ThemeMode.light;
             }
 
             return MaterialApp(
               theme: lightTheme,
               darkTheme: darkTheme,
-              themeMode: themeMode ,
+              themeMode: themeMode,
               builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',

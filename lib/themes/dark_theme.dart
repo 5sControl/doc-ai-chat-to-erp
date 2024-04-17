@@ -5,6 +5,7 @@ final darkTheme = ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: Colors.transparent,
   primaryColor: const Color.fromRGBO(0, 186, 195, 1),
+  cardColor: Colors.white,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.transparent,
     systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -45,5 +46,8 @@ final darkTheme = ThemeData(
     style: ButtonStyle(
       overlayColor: MaterialStatePropertyAll(Colors.white12)
     )
+  ),
+  textTheme: const  TextTheme(
+    bodyMedium: TextStyle(fontSize: 18, color: Colors.white)
   )
 );
