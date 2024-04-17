@@ -122,6 +122,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/text.svg
   String get text => 'assets/icons/text.svg';
 
+  /// File path: assets/icons/theme.svg
+  String get theme => 'assets/icons/theme.svg';
+
   /// File path: assets/icons/update.svg
   String get update => 'assets/icons/update.svg';
 
@@ -162,6 +165,7 @@ class $AssetsIconsGen {
         star,
         terms,
         text,
+        theme,
         update,
         url
       ];
@@ -194,7 +198,8 @@ class $AssetsOnboardingGen {
 class Assets {
   Assets._();
 
-  static const AssetGenImage bg = AssetGenImage('assets/BG.png');
+  static const AssetGenImage bgDark = AssetGenImage('assets/bg_dark.png');
+  static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
   static const $AssetsGifGen gif = $AssetsGifGen();
   static const AssetGenImage girl = AssetGenImage('assets/girl.png');
   static const $AssetsIconsGen icons = $AssetsIconsGen();
@@ -204,7 +209,8 @@ class Assets {
       AssetGenImage('assets/placeholder_logo.png');
 
   /// List of all assets
-  static List<AssetGenImage> get values => [bg, girl, niga, placeholderLogo];
+  static List<AssetGenImage> get values =>
+      [bgDark, bgLight, girl, niga, placeholderLogo];
 }
 
 class AssetGenImage {

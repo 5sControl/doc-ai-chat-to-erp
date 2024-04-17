@@ -21,7 +21,8 @@ import 'package:summify/screens/settings_screen.dart';
 import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
-import 'package:summify/theme/baseTheme.dart';
+import 'package:summify/themes/dark_theme.dart';
+import 'package:summify/themes/light_theme.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'firebase_options.dart';
 import 'screens/main_screen.dart';
@@ -84,8 +85,33 @@ class SummishareApp extends StatelessWidget {
                   .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
             });
+
+            var brightness = MediaQuery.of(context).platformBrightness;
+            ThemeMode themeMode = ThemeMode.dark;
+
+            switch (settingsState.appTheme) {
+              case AppTheme.auto:
+                {
+                  brightness == Brightness.dark
+                      ? themeMode = ThemeMode.dark
+                      : ThemeMode.light;
+                }
+
+              case AppTheme.dark:
+                {
+                  themeMode = ThemeMode.dark;
+                }
+
+              case AppTheme.light:
+                {
+                  themeMode = ThemeMode.light;
+                }
+            }
+
             return MaterialApp(
-              theme: baseTheme,
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: themeMode ,
               builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',
@@ -106,7 +132,7 @@ class SummishareApp extends StatelessWidget {
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SettingsScreen(),
                         settings: settings);
-                    case '/request':
+                  case '/request':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const RequestScreen(),
                         settings: settings);

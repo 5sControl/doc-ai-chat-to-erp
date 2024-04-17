@@ -87,7 +87,6 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
     if (_notification == AppLifecycleState.paused ||
         _notification == AppLifecycleState.inactive ||
         _notification == AppLifecycleState.hidden) {
-      print('NOTIFY');
       context.read<SettingsBloc>().add(
           SendNotify(title: title, description: 'Your summary already done'));
     }
@@ -184,12 +183,6 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                     child: AnimatedContainer(
                       duration: duration,
                       decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: tapped ? Colors.black54 : Colors.black26,
-                                blurRadius: 10,
-                                blurStyle: BlurStyle.outer)
-                          ],
                           color: tapped
                               ? const Color.fromRGBO(213, 255, 252, 1.0)
                               : const Color.fromRGBO(238, 255, 254, 1),

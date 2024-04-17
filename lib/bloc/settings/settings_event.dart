@@ -29,9 +29,16 @@ class SendNotify extends SettingsEvent {
 }
 
 class ToggleNotifications extends SettingsEvent {
-
   const ToggleNotifications();
 
   @override
   List<String?> get props => [];
+}
+
+class SelectAppTheme extends SettingsEvent {
+  final AppTheme appTheme;
+  const SelectAppTheme({required this.appTheme});
+
+  @override
+  List<Object> get props => [appTheme];
 }

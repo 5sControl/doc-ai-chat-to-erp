@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-final baseTheme = ThemeData(
+final darkTheme = ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: Colors.transparent,
   primaryColor: const Color.fromRGBO(0, 186, 195, 1),

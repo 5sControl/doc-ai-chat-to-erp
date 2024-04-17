@@ -14,6 +14,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
             onboardingPassed: false,
             howToShowed: false,
             isNotificationsEnabled: true,
+            appTheme: AppTheme.auto,
             abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
@@ -34,6 +35,10 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     on<ToggleNotifications>((event, emit) {
       emit(state.copyWith(
           isNotificationsEnabled: !state.isNotificationsEnabled));
+    });
+
+    on<SelectAppTheme>((event, emit) {
+      emit(state.copyWith(appTheme: event.appTheme));
     });
   }
 
