@@ -106,6 +106,16 @@ class _SummaryScreenState extends State<SummaryScreen>
           if (!await launchUrl(url)) {}
         }
 
+        final gradientColors = Theme.of(context).brightness == Brightness.dark
+            ? const [
+                Color.fromRGBO(15, 57, 60, 0),
+                Color.fromRGBO(15, 57, 60, 1),
+              ]
+            : const [
+                Color.fromRGBO(223, 252, 252, 0),
+                Color.fromRGBO(191, 249, 249, 1),
+                Color.fromRGBO(191, 249, 249, 1),
+              ];
         return Stack(
           children: [
             const BackgroundGradient(),
@@ -156,13 +166,9 @@ class _SummaryScreenState extends State<SummaryScreen>
                           alignment: Alignment.topCenter,
                           child: Container(
                             height: 50,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                              colors: [
-                                Color.fromRGBO(223, 252, 252, 0),
-                                Color.fromRGBO(191, 249, 249, 1),
-                                Color.fromRGBO(191, 249, 249, 1),
-                              ],
+                              colors: gradientColors,
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
                             )),
@@ -191,6 +197,26 @@ class _SummaryScreenState extends State<SummaryScreen>
   }
 }
 
+class FadingEffect extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Rect rect = Rect.fromPoints(Offset(0, 0), Offset(size.width, size.height));
+    LinearGradient lg = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          //create 2 white colors, one transparent
+          Color.fromARGB(0, 255, 255, 255),
+          Color.fromARGB(255, 255, 255, 255)
+        ]);
+    Paint paint = Paint()..shader = lg.createShader(rect);
+    canvas.drawRect(rect, paint);
+  }
+
+  @override
+  bool shouldRepaint(FadingEffect linePainter) => false;
+}
+
 class SummaryTextContainer extends StatelessWidget {
   final String summaryText;
   final Summary summary;
@@ -211,12 +237,9 @@ class SummaryTextContainer extends StatelessWidget {
         padding:
             const EdgeInsets.only(top: 50, bottom: 90, left: 15, right: 15),
         physics: const AlwaysScrollableScrollPhysics(),
-        child: SelectableText.rich(
-          TextSpan(
-            text: summaryText,
-            style: Theme.of(context).textTheme.bodyMedium,
-            spellOut: true,
-          ),
+        child: SelectableText(
+          summaryText,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );

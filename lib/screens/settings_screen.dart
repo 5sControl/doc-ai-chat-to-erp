@@ -92,11 +92,15 @@ class SettingsScreen extends StatelessWidget {
           builder: (context) => const HowToScreen());
     }
 
+    void onTapNotifications() {
+      context.read<SettingsBloc>().add(const ToggleNotifications());
+    }
+
     final List<ButtonItem> generalGroup = [
       ButtonItem(
         title: 'Notifications',
         leadingIcon: Assets.icons.notification,
-        onTap: onPressSubscription,
+        onTap: onTapNotifications,
         trailing: const NotificationsSwitch(),
       ),
       ButtonItem(
@@ -183,10 +187,8 @@ class SettingsScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
-            iconTheme: const IconThemeData(color: Colors.black),
             title: const Text(
               'Settings',
-              style: TextStyle(color: Colors.black),
             ),
           ),
           body: Container(

@@ -249,14 +249,23 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                               .replaceAll('https://', ''),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600),
                                     ),
                                     Text(
                                       formattedDate,
                                       overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(fontSize: 12),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              color: Colors.black,
+                                              fontSize: 12),
                                     ),
                                     AnimatedCrossFade(
                                         firstChild: Loader(

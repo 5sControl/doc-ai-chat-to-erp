@@ -4,12 +4,14 @@ import 'package:flutter/services.dart';
 final darkTheme = ThemeData(
   useMaterial3: true,
   scaffoldBackgroundColor: Colors.transparent,
+  brightness: Brightness.dark,
   primaryColor: const Color.fromRGBO(0, 186, 195, 1),
   cardColor: Colors.white,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.transparent,
     systemOverlayStyle: SystemUiOverlayStyle.dark,
     toolbarHeight: 40,
+    actionsIconTheme: IconThemeData(color: Colors.white),
     titleTextStyle: TextStyle(
         color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
     // elevation: 10,
@@ -48,6 +50,7 @@ final darkTheme = ThemeData(
     )
   ),
   textTheme: const  TextTheme(
-    bodyMedium: TextStyle(fontSize: 18, color: Colors.white)
+    bodyMedium: TextStyle(fontSize: 18, color: Colors.white),
+    bodySmall: TextStyle(fontSize: 14, color: Colors.white),
   )
 );

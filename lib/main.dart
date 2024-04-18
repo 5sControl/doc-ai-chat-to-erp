@@ -39,20 +39,11 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
   // await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
-}
-
-extension DarkMode on BuildContext {
-  /// is dark mode currently enabled?
-  bool get isDarkMode {
-    final brightness = MediaQuery.of(this).platformBrightness;
-    return brightness == Brightness.dark;
-  }
 }
 
 class SummishareApp extends StatelessWidget {
@@ -97,16 +88,12 @@ class SummishareApp extends StatelessWidget {
             });
             ThemeMode themeMode;
             if (settingsState.appTheme == AppTheme.auto) {
-              themeMode =
-                  MediaQuery.of(context).platformBrightness == Brightness.dark
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
+              themeMode = ThemeMode.system;
             } else if (settingsState.appTheme == AppTheme.dark) {
               themeMode = ThemeMode.dark;
             } else {
               themeMode = ThemeMode.light;
             }
-
             return MaterialApp(
               theme: lightTheme,
               darkTheme: darkTheme,

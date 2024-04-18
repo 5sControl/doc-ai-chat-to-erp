@@ -10,6 +10,8 @@ class BackgroundGradient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
         return AnimatedSwitcher(
@@ -18,7 +20,7 @@ class BackgroundGradient extends StatelessWidget {
             key: Key(state.appTheme.name),
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(context.isDarkMode ? Assets.bgDark.path :  Assets.bgLight.path),
+                    image: AssetImage(Theme.of(context).brightness == Brightness.dark ? Assets.bgDark.path :  Assets.bgLight.path),
                     alignment: Alignment.topCenter,
                     fit: BoxFit.cover)),
           ),

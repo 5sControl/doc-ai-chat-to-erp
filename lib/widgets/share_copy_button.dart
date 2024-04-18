@@ -53,6 +53,16 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
 
   @override
   Widget build(BuildContext context) {
+    final gradientColors = Theme.of(context).brightness == Brightness.dark
+        ? const [
+      Color.fromRGBO(15, 57, 60, 1),
+      Color.fromRGBO(15, 57, 60, 0),
+    ]
+        : const [
+      Color.fromRGBO(223, 252, 252, 1),
+      Color.fromRGBO(223, 252, 252, 0),
+    ];
+
     void onPressShare() {
       final box = context.findRenderObject() as RenderBox?;
       Share.share(
@@ -69,18 +79,16 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
     }
 
     return Container(
-      decoration: const BoxDecoration(
+      decoration:  BoxDecoration(
           gradient: LinearGradient(
-              colors: [
-                Color.fromRGBO(223, 252, 252, 1),
-                Color.fromRGBO(223, 252, 252, 0),
-              ],
+              colors: gradientColors,
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
-              stops: [
+              stops: const [
                 0.3,
                 1,
-              ])),
+              ])
+      ),
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom, left: 15, right: 15),
       child: Row(

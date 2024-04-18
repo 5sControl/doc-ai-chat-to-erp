@@ -9,15 +9,14 @@ class SettingsState extends Equatable {
   final String abTest;
   final bool isNotificationsEnabled;
   final AppTheme appTheme;
-  // final ThemeMode themeMode;
 
-  const SettingsState(
-      {required this.onboardingPassed,
-      required this.howToShowed,
-      required this.abTest,
-      required this.isNotificationsEnabled,
-      required this.appTheme,
-      });
+  const SettingsState({
+    required this.onboardingPassed,
+    required this.howToShowed,
+    required this.abTest,
+    required this.isNotificationsEnabled,
+    required this.appTheme,
+  });
 
   SettingsState copyWith({
     bool? onboardingPassed,
@@ -28,18 +27,23 @@ class SettingsState extends Equatable {
     ThemeMode? themeMode,
   }) {
     return SettingsState(
-        onboardingPassed: onboardingPassed ?? this.onboardingPassed,
-        howToShowed: howToShowed ?? this.howToShowed,
-        abTest: abTest ?? this.abTest,
-        isNotificationsEnabled:
-            isNotificationsEnabled ?? this.isNotificationsEnabled,
-        appTheme: appTheme ?? this.appTheme,
-      );
+      onboardingPassed: onboardingPassed ?? this.onboardingPassed,
+      howToShowed: howToShowed ?? this.howToShowed,
+      abTest: abTest ?? this.abTest,
+      isNotificationsEnabled:
+          isNotificationsEnabled ?? this.isNotificationsEnabled,
+      appTheme: appTheme ?? this.appTheme,
+    );
   }
 
   @override
-  List<Object> get props =>
-      [onboardingPassed, howToShowed, abTest, isNotificationsEnabled, appTheme, ];
+  List<Object> get props => [
+        onboardingPassed,
+        howToShowed,
+        abTest,
+        isNotificationsEnabled,
+        appTheme,
+      ];
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>
       _$SettingsStateFromJson(json);

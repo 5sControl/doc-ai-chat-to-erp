@@ -112,14 +112,9 @@ class _RequestScreenState extends State<RequestScreen> {
       children: [
         const BackgroundGradient(),
         Scaffold(
-            // resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              iconTheme: const IconThemeData(color: Colors.black),
               title: const Text(
                 'Request a feature',
-                style: TextStyle(color: Colors.black),
               ),
             ),
             // extendBody: true,

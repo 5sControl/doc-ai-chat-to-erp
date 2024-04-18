@@ -4,19 +4,21 @@ import 'package:flutter/services.dart';
 final lightTheme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: Colors.transparent,
+    brightness: Brightness.light,
     primaryColor: const Color.fromRGBO(0, 186, 195, 1),
     cardColor: Colors.black,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       toolbarHeight: 40,
+      actionsIconTheme: IconThemeData(color: Colors.black),
       titleTextStyle: TextStyle(
-          color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+          color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20),
       // elevation: 10,
       shadowColor: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(
-        color: Colors.white, //change your color here
+        color: Colors.black, //change your color here
       ),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -46,4 +48,6 @@ final lightTheme = ThemeData(
         style: ButtonStyle(
             overlayColor: MaterialStatePropertyAll(Colors.white12))),
     textTheme: const TextTheme(
-        bodyMedium: TextStyle(fontSize: 18, color: Colors.black)));
+      bodyMedium: TextStyle(fontSize: 18, color: Colors.black),
+      bodySmall: TextStyle(fontSize: 14, color: Colors.black),
+    ));
