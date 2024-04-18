@@ -32,7 +32,7 @@ class CustomTabBar extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         tabAlignment: TabAlignment.fill,
         indicator: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryColorDark,
           borderRadius: BorderRadius.circular(6)
         ),
         tabs: const [

@@ -155,7 +155,7 @@ class UrlTextField extends StatelessWidget {
                   child: SvgPicture.asset(
                     Assets.icons.paste,
                     colorFilter: ColorFilter.mode(
-                        Theme.of(context).primaryColorLight, BlendMode.srcIn),
+                        Theme.of(context).primaryColorDark, BlendMode.srcIn),
                   )),
             )
           ],

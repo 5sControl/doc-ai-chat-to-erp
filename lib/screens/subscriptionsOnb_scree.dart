@@ -263,7 +263,7 @@ class SubscriptionCover extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 color: isSelected
-                    ? const Color.fromRGBO(31, 188, 183, 1)
+                    ? Theme.of(context).primaryColor
                     : Colors.white12,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(color: Colors.white, width: 2)),
@@ -289,8 +289,8 @@ class SubscriptionCover extends StatelessWidget {
                     Text(
                       subscriptionTitle,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black,
+                      style: const TextStyle(
+                          color: Colors.white,
                           fontSize: 13,
                           fontWeight: FontWeight.w500),
                     ),
@@ -302,7 +302,7 @@ class SubscriptionCover extends StatelessWidget {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.clip,
                       style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black,
+                          color: Colors.white,
                           fontSize: 18,
                           fontWeight:
                               isSelected ? FontWeight.w700 : FontWeight.w400),
@@ -312,11 +312,10 @@ class SubscriptionCover extends StatelessWidget {
                           (subscription.rawPrice * 2 + 0.01)
                               .toStringAsFixed(2)
                               .toString(),
-                      style: TextStyle(
-                          color: isSelected ? Colors.white : Colors.black,
+                      style: const TextStyle(
+                          color: Colors.white,
                           decoration: TextDecoration.lineThrough,
-                          decorationColor:
-                              isSelected ? Colors.white : Colors.black,
+                          decorationColor: Colors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w400),
                     ),
@@ -340,23 +339,6 @@ class SubscribeButton extends StatefulWidget {
 }
 
 class _SubscribeButtonState extends State<SubscribeButton> {
-  bool tapped = false;
-
-  static const duration = Duration(milliseconds: 150);
-  void onTapDown() {
-    setState(() {
-      tapped = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tapped = false;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     void onPressGoPremium() {
@@ -367,34 +349,30 @@ class _SubscribeButtonState extends State<SubscribeButton> {
       }
     }
 
-    return GestureDetector(
-        onTap: onPressGoPremium,
-        onTapUp: (_) => onTapUp(),
-        onTapDown: (_) => onTapDown(),
-        onTapCancel: () => onTapUp(),
-        child: AnimatedScale(
-          duration: duration,
-          scale: tapped ? 0.95 : 1,
-          child: AnimatedContainer(
-            duration: duration,
-            margin: const EdgeInsets.all(15),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: !tapped
-                  ? const Color.fromRGBO(31, 188, 183, 1)
-                  : const Color.fromRGBO(4, 49, 57, 1),
-              borderRadius: BorderRadius.circular(12),
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      child: Material(
+        color: Theme.of(context).primaryColor,
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: InkWell(
+          highlightColor: Colors.white24,
+          borderRadius: BorderRadius.circular(8),
+          onTap: onPressGoPremium,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: const Text(
               'Continue',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontSize: 16),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
 

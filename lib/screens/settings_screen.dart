@@ -249,10 +249,11 @@ class _ThemeButtonsState extends State<ThemeButtons> {
             children: themeItems
                 .map((themeItem) => Container(
                       width: 50,
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 2),
                       decoration: BoxDecoration(
                           color: themeItem.appTheme == state.appTheme
-                              ? Theme.of(context).canvasColor
+                              ? Theme.of(context).highlightColor
                               : Colors.white24,
                           borderRadius: BorderRadius.circular(6)),
                       child: InkWell(
@@ -262,9 +263,10 @@ class _ThemeButtonsState extends State<ThemeButtons> {
                           themeItem.title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 14,
-                            color: themeItem.appTheme == state.appTheme ? Colors.white : Colors.black
-                          ),
+                              fontSize: 14,
+                              color: themeItem.appTheme == state.appTheme
+                                  ? Colors.white
+                                  : Colors.black),
                         ),
                       ),
                     ))
@@ -292,10 +294,13 @@ class NotificationsSwitch extends StatelessWidget {
           child: Transform.scale(
             scale: 0.9,
             child: Switch(
-              inactiveThumbColor: Theme.of(context).primaryColorLight,
-              trackOutlineColor: MaterialStatePropertyAll(Theme.of(context).canvasColor),
-              activeColor: Colors.white,
-              activeTrackColor: Theme.of(context).canvasColor,
+              inactiveThumbColor:
+                  Colors.grey.shade500 ,
+              trackOutlineColor:
+                  MaterialStatePropertyAll(Theme.of(context).highlightColor),
+              activeColor: Theme.of(context).highlightColor,
+              activeTrackColor:Colors.white,
+              inactiveTrackColor:  Colors.white,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               value: state.isNotificationsEnabled,
               onChanged: (value) => onTapNotifications(),
@@ -331,7 +336,7 @@ class ButtonsGroup extends StatelessWidget {
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 0),
-          decoration:  BoxDecoration(
+          decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               borderRadius: const BorderRadius.all(Radius.circular(8))),
           child: Column(

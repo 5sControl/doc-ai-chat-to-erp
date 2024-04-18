@@ -11,10 +11,10 @@ import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 
-import '../bloc/settings/settings_bloc.dart';
-import '../gen/assets.gen.dart';
-import '../models/models.dart';
-import '../screens/summary_screen/summary_screen.dart';
+import '../../bloc/settings/settings_bloc.dart';
+import '../../gen/assets.gen.dart';
+import '../../models/models.dart';
+import '../summary_screen/summary_screen.dart';
 
 class SummaryTile extends StatefulWidget {
   final String sharedLink;
@@ -31,8 +31,6 @@ class SummaryTile extends StatefulWidget {
 
 class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   late AppLifecycleState _notification;
-  static const duration = Duration(milliseconds: 300);
-  bool tapped = false;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -58,20 +56,6 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  void onTapDown() {
-    setState(() {
-      tapped = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tapped = false;
-      });
-    });
   }
 
   void onPressSummaryTile() {
@@ -143,11 +127,10 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
             movementDuration: const Duration(milliseconds: 1000),
             dragStartBehavior: DragStartBehavior.start,
             background: Container(
-              margin: const EdgeInsets.only(
-                  left: 10, right: 10, bottom: 30, top: 20),
+              margin: const EdgeInsets.all(10),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
               decoration: BoxDecoration(
-                  color: const Color.fromRGBO(4, 49, 57, 1),
+                  color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10)),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -173,127 +156,105 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
               horizontalTitleGap: 0,
               contentPadding:
                   const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
-              title: AnimatedScale(
-                scale: tapped ? 0.98 : 1,
-                duration: duration,
-                child: SizedBox(
-                  height: 80,
-                  child: AspectRatio(
-                    aspectRatio: 3.5,
-                    child: AnimatedContainer(
-                      duration: duration,
-                      decoration: BoxDecoration(
-                          color: tapped
-                              ? const Color.fromRGBO(213, 255, 252, 1.0)
-                              : const Color.fromRGBO(238, 255, 254, 1),
-                          borderRadius: BorderRadius.circular(10)),
-                      // clipBehavior: Clip.hardEdge,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(10),
-                        onTap: () {
-                          if (summaryData.longSummaryStatus ==
-                              SummaryStatus.complete) {
-                            onPressSummaryTile();
-                          }
-                        },
-                        onTapUp: (_) {
-                          onTapUp();
-                        },
-                        onTapCancel: () {
-                          onTapUp();
-                        },
-                        onTapDown: (_) {
-                          onTapDown();
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AspectRatio(
-                                aspectRatio: 1,
-                                child: Container(
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 2),
-                                    child: Hero(
-                                      tag: summaryData.date,
-                                      child: summaryData.summaryPreview
-                                                      .imageUrl ==
-                                                  Assets.placeholderLogo.path ||
-                                              summaryData.summaryPreview
-                                                      .imageUrl ==
-                                                  null
-                                          ? Image.asset(
-                                              Assets.placeholderLogo.path)
-                                          : CachedNetworkImage(
-                                              imageUrl: summaryData
-                                                  .summaryPreview.imageUrl!,
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ))),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      summaryData.summaryPreview.title ??
-                                          widget.sharedLink
-                                              .replaceAll('https://', ''),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600),
-                                    ),
-                                    Text(
-                                      formattedDate,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                    ),
-                                    AnimatedCrossFade(
-                                        firstChild: Loader(
-                                          onPressCancel: onPressCancel,
-                                        ),
-                                        secondChild:
-                                            summaryData.shortSummaryStatus ==
-                                                    SummaryStatus.error
-                                                ? ErrorMessage(
-                                                    error: summaryData
-                                                            .longSummary
-                                                            .summaryError ??
-                                                        'Some error',
-                                                    onPressRetry: onPressRetry,
-                                                  )
-                                                : Container(),
-                                        crossFadeState:
-                                            summaryData.longSummaryStatus ==
-                                                    SummaryStatus.loading
-                                                ? CrossFadeState.showFirst
-                                                : CrossFadeState.showSecond,
-                                        duration: duration)
-                                  ],
-                                ),
+              title: SizedBox(
+                height: 80,
+                child: AspectRatio(
+                  aspectRatio: 3.5,
+                  child: Material(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    child: InkWell(
+                      splashFactory: InkSplash.splashFactory,
+                      highlightColor:
+                          Theme.of(context).canvasColor.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(10),
+                      onTap: () {
+                        if (summaryData.longSummaryStatus ==
+                            SummaryStatus.complete) {
+                          onPressSummaryTile();
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AspectRatio(
+                              aspectRatio: 1,
+                              child: Container(
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 2, vertical: 2),
+                                  child: Hero(
+                                    tag: summaryData.date,
+                                    child: summaryData
+                                                    .summaryPreview.imageUrl ==
+                                                Assets.placeholderLogo.path ||
+                                            summaryData
+                                                    .summaryPreview.imageUrl ==
+                                                null
+                                        ? Image.asset(
+                                            Assets.placeholderLogo.path)
+                                        : CachedNetworkImage(
+                                            imageUrl: summaryData
+                                                .summaryPreview.imageUrl!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ))),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 7, vertical: 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    summaryData.summaryPreview.title ??
+                                        widget.sharedLink
+                                            .replaceAll('https://', ''),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displayMedium,
+                                  ),
+                                  Text(
+                                    formattedDate,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall,
+                                  ),
+                                  AnimatedCrossFade(
+                                      firstChild: Loader(
+                                        onPressCancel: onPressCancel,
+                                      ),
+                                      secondChild:
+                                          summaryData.shortSummaryStatus ==
+                                                  SummaryStatus.error
+                                              ? ErrorMessage(
+                                                  error: summaryData.longSummary
+                                                          .summaryError ??
+                                                      'Some error',
+                                                  onPressRetry: onPressRetry,
+                                                )
+                                              : Container(),
+                                      crossFadeState:
+                                          summaryData.longSummaryStatus ==
+                                                  SummaryStatus.loading
+                                              ? CrossFadeState.showFirst
+                                              : CrossFadeState.showSecond,
+                                      duration:
+                                          const Duration(milliseconds: 500))
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

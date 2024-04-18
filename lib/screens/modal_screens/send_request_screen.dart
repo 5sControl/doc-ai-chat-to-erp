@@ -20,20 +20,22 @@ class SendRequestScreen extends StatelessWidget {
             margin: const EdgeInsets.all(15),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.circular(10)),
             child: SizedBox(
               width: double.infinity,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
                       'We kindly appreciate\nyour request ',
-                      style:
-                          TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w600,
+                          height: 1.1),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -49,7 +51,7 @@ class SendRequestScreen extends StatelessWidget {
                       );
                     },
                     duration: const Duration(milliseconds: 500),
-                    tween: Tween<double>(begin: 1, end: 1.2),
+                    tween: Tween<double>(begin: 1, end: 1.1),
                     curve: Curves.easeIn,
                   ),
                   const ContinueButton()
@@ -64,7 +66,6 @@ class SendRequestScreen extends StatelessWidget {
 }
 
 class ContinueButton extends StatefulWidget {
-  // final StoreProduct? product;
   const ContinueButton({super.key});
 
   @override
@@ -72,57 +73,35 @@ class ContinueButton extends StatefulWidget {
 }
 
 class _ContinueButtonState extends State<ContinueButton> {
-  bool tapped = false;
-
-  static const duration = Duration(milliseconds: 150);
-  void onTapDown() {
-    setState(() {
-      tapped = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tapped = false;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     void onPressContinue() {
       Navigator.of(context).popUntil(ModalRoute.withName("/settings"));
     }
 
-    return GestureDetector(
-        onTap: onPressContinue,
-        onTapUp: (_) => onTapUp(),
-        onTapDown: (_) => onTapDown(),
-        onTapCancel: () => onTapUp(),
-        child: AnimatedScale(
-          duration: duration,
-          scale: tapped ? 0.95 : 1,
-          child: AnimatedContainer(
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+      child: Material(
+        color: Theme.of(context).primaryColor,
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: InkWell(
+          highlightColor: Colors.white24,
+          borderRadius: BorderRadius.circular(8),
+          onTap: onPressContinue,
+          child: Container(
             width: double.infinity,
-            duration: duration,
-            margin: const EdgeInsets.all(15),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: !tapped
-                  ? const Color.fromRGBO(31, 188, 183, 1)
-                  : const Color.fromRGBO(4, 49, 57, 1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Text(
-              'Continue',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700),
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              'Submit',
               textAlign: TextAlign.center,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontWeight: FontWeight.w700, color: Colors.white),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

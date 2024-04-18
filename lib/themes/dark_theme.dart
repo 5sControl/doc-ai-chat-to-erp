@@ -9,6 +9,8 @@ final darkTheme = ThemeData(
     primaryColorDark: const Color.fromRGBO(25, 154, 151, 1),
     primaryColorLight: const Color.fromRGBO(227, 255, 254, 1),
     canvasColor: const Color.fromRGBO(5, 49, 57, 1),
+    highlightColor:  const Color.fromRGBO(5, 49, 57, 1),
+    hintColor:const Color.fromRGBO(227, 255, 254, 1) ,
     checkboxTheme: const CheckboxThemeData(
       side: BorderSide(
           width: 1,
@@ -96,4 +98,8 @@ final darkTheme = ThemeData(
           fontSize: 16, color: Colors.black, fontWeight: FontWeight.w400),
       labelSmall: TextStyle(
           fontSize: 14, color: Colors.black, fontWeight: FontWeight.w300),
+      displayMedium: TextStyle(
+          fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+      displaySmall: TextStyle(
+          fontSize: 12, color: Colors.white, fontWeight: FontWeight.w400),
     ));

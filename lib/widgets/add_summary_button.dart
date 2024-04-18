@@ -114,7 +114,7 @@ class AddSummaryButton extends StatelessWidget {
                 width: 5,
                 strokeAlign: BorderSide.strokeAlignCenter,
               ),
-              color: const Color.fromRGBO(0, 186, 195, 0.8),
+              color: Theme.of(context).primaryColorDark.withOpacity(0.7),
               borderRadius: BorderRadius.circular(10)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

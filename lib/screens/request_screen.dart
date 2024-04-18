@@ -291,13 +291,13 @@ class OptionContainer extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
       decoration: BoxDecoration(
-          color: Theme.of(context).primaryColorLight,
+          color: Theme.of(context).hintColor,
           borderRadius: BorderRadius.circular(8)),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           Checkbox(
-            activeColor: Theme.of(context).canvasColor,
+            activeColor: Theme.of(context).highlightColor,
             value: selectedOptions.contains(title),
             onChanged: (_) => onSelectOption(option: title),
           ),
@@ -346,23 +346,20 @@ class _LanguagesDropdownState extends State<LanguagesDropdown> {
         value: selectedLang,
         alignment: Alignment.centerRight,
         isExpanded: true,
-        dropdownColor: Theme.of(context).primaryColor.withOpacity(1),
+        dropdownColor: Theme.of(context).hintColor.withOpacity(1),
         isDense: true,
         hint: Text(selectedLang ?? 'Select language',
             textAlign: TextAlign.end,
             overflow: TextOverflow.visible,
             maxLines: 1,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-            )),
+            style: Theme.of(context).textTheme.labelSmall),
         menuMaxHeight: 300,
         padding: EdgeInsets.zero,
-        style: const TextStyle(color: Colors.white, fontSize: 14),
+        style: Theme.of(context).textTheme.labelSmall,
         // underline: Divider(),
         icon: const Icon(
           Icons.keyboard_arrow_down_rounded,
-          color: Colors.white,
+          color: Colors.black,
         ),
         items: languages.values.map((lang) {
           return DropdownMenuItem<String>(

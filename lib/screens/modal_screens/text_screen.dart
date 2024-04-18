@@ -42,9 +42,8 @@ class _TextModalScreenState extends State<TextModalScreen> {
             return const SubscriptionScreen();
           },
         );
-        context
-            .read<MixpanelBloc>()
-            .add(LimitReached(resource: textController.text, registrated: false));
+        context.read<MixpanelBloc>().add(
+            LimitReached(resource: textController.text, registrated: false));
       } else if (controllerText.isNotEmpty) {
         context
             .read<SummariesBloc>()
@@ -82,7 +81,7 @@ class _TextModalScreenState extends State<TextModalScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color.fromRGBO(227, 255, 254, 1),
+      color: Theme.of(context).canvasColor,
       child: Container(
         padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom +
@@ -93,12 +92,12 @@ class _TextModalScreenState extends State<TextModalScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const ModalHandle(),
-            const Text(
+            Text(
               'Enter Text',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
             MyTextField(controller: textController, onPressPaste: onPressPaste),
             SummifyButton(
@@ -141,13 +140,13 @@ class MyTextField extends StatelessWidget {
                 // alignment: Alignment.bottomLeft,
                 children: [
                   Container(
-                    margin: const EdgeInsets.all(10),
+                    // margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: Colors.white70,
                         border: Border.all(
-                            color: Colors.teal.withOpacity(0.5), width: 1),
+                            color: Theme.of(context).primaryColor, width: 1),
                         borderRadius: BorderRadius.circular(8)),
-                    child: TextField(
+                    child: TextFormField(
                       maxLines: null,
                       expands: true,
                       autofocus: false,
@@ -155,37 +154,23 @@ class MyTextField extends StatelessWidget {
                       keyboardType: TextInputType.multiline,
                       textAlignVertical: TextAlignVertical.top,
                       cursorWidth: 3,
-                      cursorColor: Colors.black54,
+                      cursorColor: Theme.of(context).cardColor,
                       cursorHeight: 20,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400),
+                      style: Theme.of(context).textTheme.bodyMedium,
                       decoration: InputDecoration(
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                              width: 2,
-                              color:
-                                  Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
-                        ),
-                        label: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 7),
-                          height: double.infinity,
-                          child: const Text(
-                            'Start typing or paste your text here ...',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w300),
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 0),
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        border: OutlineInputBorder(
-                            gapPadding: 10,
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide.none),
-                      ),
+                          fillColor:
+                              Theme.of(context).canvasColor.withAlpha(240),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                width: 1,
+                              )),
+                          hintText: 'Start typing or paste your text here ...',
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                  fontSize: 14, fontWeight: FontWeight.w400)),
                     ),
                   ),
                   Align(
@@ -194,11 +179,11 @@ class MyTextField extends StatelessWidget {
                       onTap: onPressPaste,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 2, vertical: 2),
+                            horizontal: 4, vertical: 3),
                         margin: const EdgeInsets.only(left: 17, bottom: 17),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
-                            color: const Color.fromRGBO(227, 255, 254, 1)),
+                            color: Theme.of(context).primaryColor),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -207,14 +192,22 @@ class MyTextField extends StatelessWidget {
                                 margin: const EdgeInsets.only(left: 7),
                                 child: SvgPicture.asset(
                                   Assets.icons.paste,
+                                  colorFilter: ColorFilter.mode(
+                                      Theme.of(context).primaryColorLight,
+                                      BlendMode.srcIn),
                                 )),
-                            const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 5),
+                            Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
                                 child: Text(
                                   'Paste',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w300),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(
+                                    color: Theme.of(context).primaryColorLight,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w400),
                                 ))
                           ],
                         ),

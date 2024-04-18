@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:summify/screens/home_screen.dart';
+import 'package:summify/screens/home_screen/home_screen.dart';
 
 import '../widgets/add_summary_button.dart';
 import '../widgets/backgroung_gradient.dart';

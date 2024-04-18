@@ -19,49 +19,17 @@ class ShareAndCopyButton extends StatefulWidget {
 }
 
 class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
-  static const duration = Duration(milliseconds: 150);
-  bool tappedShare = false;
-  bool tappedCopy = false;
-
-  void onTapDown() {
-    setState(() {
-      tappedShare = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tappedShare = false;
-      });
-    });
-  }
-
-  void onTapDownCopy() {
-    setState(() {
-      tappedCopy = true;
-    });
-  }
-
-  void onTapUpCopy() {
-    Future.delayed(duration, () {
-      setState(() {
-        tappedCopy = false;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final gradientColors = Theme.of(context).brightness == Brightness.dark
         ? const [
-      Color.fromRGBO(15, 57, 60, 1),
-      Color.fromRGBO(15, 57, 60, 0),
-    ]
+            Color.fromRGBO(15, 57, 60, 1),
+            Color.fromRGBO(15, 57, 60, 0),
+          ]
         : const [
-      Color.fromRGBO(223, 252, 252, 1),
-      Color.fromRGBO(223, 252, 252, 0),
-    ];
+            Color.fromRGBO(223, 252, 252, 1),
+            Color.fromRGBO(223, 252, 252, 0),
+          ];
 
     void onPressShare() {
       final box = context.findRenderObject() as RenderBox?;
@@ -73,22 +41,21 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
     }
 
     void onPressCopy() {
-      Clipboard.setData(
-          ClipboardData(text: widget.summaryData.shortSummary.summaryText ?? ''));
+      Clipboard.setData(ClipboardData(
+          text: widget.summaryData.shortSummary.summaryText ?? ''));
       context.read<MixpanelBloc>().add(const CopySummary());
     }
 
     return Container(
-      decoration:  BoxDecoration(
+      decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: gradientColors,
               begin: Alignment.bottomCenter,
               end: Alignment.topCenter,
               stops: const [
-                0.3,
-                1,
-              ])
-      ),
+            0.3,
+            1,
+          ])),
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom, left: 15, right: 15),
       child: Row(
@@ -98,30 +65,18 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
         children: [
           Expanded(
             flex: 1,
-            child: GestureDetector(
-              onTap: onPressShare,
-              onTapDown: (_) {
-                onTapDown();
-              },
-              onTapUp: (_) {
-                onTapUp();
-              },
-              onTapCancel: () {
-                onTapUp();
-              },
-              child: AnimatedScale(
-                alignment: Alignment.center,
-                curve: Curves.easeIn,
-                duration: duration,
-                scale: tappedShare ? 0.95 : 1,
-                child: AnimatedContainer(
-                    duration: duration,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: tappedShare
-                            ? Colors.teal
-                            : const Color.fromRGBO(4, 49, 57, 1),
-                        borderRadius: BorderRadius.circular(12)),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 0),
+              child: Material(
+                color: Theme.of(context).primaryColorDark,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: InkWell(
+                  highlightColor: Colors.white24,
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: onPressShare,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -142,61 +97,55 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
                               fontWeight: FontWeight.w600),
                         ),
                       ],
-                    )),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
-            child: GestureDetector(
-              onTap: onPressCopy,
-              onTapDown: (_) {
-                onTapDownCopy();
-              },
-              onTapUp: (_) {
-                onTapUpCopy();
-              },
-              onTapCancel: () {
-                onTapUpCopy();
-              },
-              child: AnimatedScale(
-                alignment: Alignment.center,
-                curve: Curves.easeIn,
-                duration: duration,
-                scale: tappedCopy ? 0.95 : 1,
-                child: AnimatedContainer(
-                    duration: duration,
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                        color: tappedCopy
-                            ? Colors.teal
-                            : const Color.fromRGBO(4, 49, 57, 1),
-                        borderRadius: BorderRadius.circular(12)),
+            flex: 1,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 0),
+              child: Material(
+                color: Theme.of(context).primaryColorDark,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: InkWell(
+                  highlightColor: Colors.white24,
+                  borderRadius: BorderRadius.circular(10),
+                  onTap: onPressCopy,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        SvgPicture.asset(
-                          Assets.icons.copy,
-                          height: 24,
-                          width: 24,
-                          colorFilter: const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 5),
-                          child: Text(
-                            'Copy',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: SvgPicture.asset(
+                            Assets.icons.copy,
+                            height: 24,
+                            width: 24,
                           ),
-                        )
+                        ),
+                        const Text(
+                          'Copy',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ],
-                    )),
+                    ),
+                  ),
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

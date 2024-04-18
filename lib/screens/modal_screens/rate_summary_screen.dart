@@ -76,7 +76,8 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
             margin: const EdgeInsets.all(15),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                color: Theme.of(context).canvasColor,
+                borderRadius: BorderRadius.circular(10)),
             child: AnimatedCrossFade(
               firstChild: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -92,13 +93,14 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                               padding: const MaterialStatePropertyAll(
                                   EdgeInsets.all(2)),
                               backgroundColor: MaterialStatePropertyAll(
-                                  const Color.fromRGBO(4, 49, 57, 1)
+                                  Theme.of(context)
+                                      .cardColor
                                       .withOpacity(0.1))),
-                          highlightColor: const Color.fromRGBO(4, 49, 57, 1)
-                              .withOpacity(0.2),
-                          icon: const Icon(
+                          highlightColor:
+                              Theme.of(context).cardColor.withOpacity(0.2),
+                          icon: Icon(
                             Icons.close,
-                            color: Color.fromRGBO(4, 49, 57, 1),
+                            color: Theme.of(context).cardColor,
                           )),
                     ],
                   ),
@@ -113,16 +115,13 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                     color: Colors.transparent,
                     height: 5,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
                         'It will help us to improve quality \n of the summaries',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        )),
-                  ),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      )),
                   Stars(
                     selectedRate: selectedRate,
                     onPressStar: onPressStar,
@@ -149,14 +148,6 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // SvgPicture.asset(
-                    //   Assets.icons.headrt,
-                    //   height: 100,
-                    //   width: 100,
-                    // ).animate(
-                    //   delay: 1000.ms, // this delay only happens once at the very start
-                    //   onPlay: (controller) => controller.repeat(), // loop
-                    // ).scaleXY(delay: 500.ms),
                     MirrorAnimationBuilder(
                       builder: (context, value, child) {
                         return Transform.scale(
@@ -190,75 +181,35 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
   }
 }
 
-class SubmitButton extends StatefulWidget {
+class SubmitButton extends StatelessWidget {
   final VoidCallback onPressSubmit;
   const SubmitButton({super.key, required this.onPressSubmit});
 
   @override
-  State<SubmitButton> createState() => _SubmitButtonState();
-}
-
-class _SubmitButtonState extends State<SubmitButton> {
-  bool tapped = false;
-
-  static const duration = Duration(milliseconds: 150);
-  void onTapDown() {
-    setState(() {
-      tapped = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tapped = false;
-      });
-    });
-  }
-
-  void onTap() {
-    Future.delayed(duration, () {
-      widget.onPressSubmit();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Expanded(
-          child: GestureDetector(
-            onTap: onTap,
-            onTapUp: (_) => onTapUp(),
-            onTapDown: (_) => onTapDown(),
-            onTapCancel: () => onTapUp(),
-            child: AnimatedScale(
-              duration: duration,
-              scale: tapped ? 0.95 : 1,
-              child: AnimatedContainer(
-                duration: duration,
-                margin: const EdgeInsets.only(bottom: 5),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: tapped
-                        ? const Color.fromRGBO(49, 210, 206, 1)
-                        : const Color.fromRGBO(4, 49, 57, 1)),
-                child: const Text(
-                  'Submit',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      child: Material(
+        color: Theme.of(context).primaryColor,
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: InkWell(
+          highlightColor: Colors.white24,
+          borderRadius: BorderRadius.circular(8),
+          onTap: onPressSubmit,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: const Text(
+              'Submit',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontSize: 16),
             ),
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 }
@@ -279,6 +230,7 @@ class Stars extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: rates
             .map((rate) => IconButton(
+                highlightColor: Colors.transparent,
                 onPressed: () => onPressStar(rate: rate),
                 icon: AnimatedScale(
                   duration: const Duration(milliseconds: 500),
@@ -291,9 +243,9 @@ class Stars extends StatelessWidget {
                       color: Colors.yellow,
                       size: 40,
                     ),
-                    secondChild: const Icon(
+                    secondChild: Icon(
                       Icons.star_outline_rounded,
-                      color: Colors.black54,
+                      color: Theme.of(context).cardColor.withOpacity(0.7),
                       size: 40,
                     ),
                     crossFadeState: selectedRate >= rate
@@ -316,72 +268,22 @@ class RateTextField extends StatelessWidget {
     return Container(
         margin: const EdgeInsets.only(bottom: 10),
         child: TextField(
-          textAlignVertical: TextAlignVertical.top,
           controller: controller,
           onChanged: (text) {
             controller.text = text;
           },
-          cursorWidth: 3,
-          cursorColor: Colors.black54,
           cursorHeight: 20,
-          style: const TextStyle(color: Colors.black, fontSize: 20),
-          decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                    width: 2,
-                    color: Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
-              ),
-              filled: true,
-              fillColor: Colors.teal.withOpacity(0.2),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              floatingLabelAlignment: FloatingLabelAlignment.start,
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-              label: const Padding(
-                padding: EdgeInsets.only(bottom: 0),
-                child: Text(
-                  'Leave your feedback',
-                  style: TextStyle(),
-                ),
-              ),
-              border: OutlineInputBorder(
-                  gapPadding: 10,
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none),
-              floatingLabelStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500)),
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(color: Colors.black),
+          decoration: const InputDecoration(hintText: 'Leave your feedback'),
         ));
   }
 }
 
-class ContinueButton extends StatefulWidget {
-  // final StoreProduct? product;
+class ContinueButton extends StatelessWidget {
   const ContinueButton({super.key});
-
-  @override
-  State<ContinueButton> createState() => _ContinueButtonState();
-}
-
-class _ContinueButtonState extends State<ContinueButton> {
-  bool tapped = false;
-
-  static const duration = Duration(milliseconds: 150);
-  void onTapDown() {
-    setState(() {
-      tapped = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tapped = false;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -389,34 +291,29 @@ class _ContinueButtonState extends State<ContinueButton> {
       Navigator.of(context).popUntil(ModalRoute.withName("/"));
     }
 
-    return GestureDetector(
-        onTap: onPressContinue,
-        onTapUp: (_) => onTapUp(),
-        onTapDown: (_) => onTapDown(),
-        onTapCancel: () => onTapUp(),
-        child: AnimatedScale(
-          duration: duration,
-          scale: tapped ? 0.95 : 1,
-          child: AnimatedContainer(
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      child: Material(
+        color: Theme.of(context).primaryColor,
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: InkWell(
+          highlightColor: Colors.white24,
+          borderRadius: BorderRadius.circular(8),
+          onTap: onPressContinue,
+          child: Container(
             width: double.infinity,
-            duration: duration,
-            margin: const EdgeInsets.all(15),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: !tapped
-                  ? const Color.fromRGBO(31, 188, 183, 1)
-                  : const Color.fromRGBO(4, 49, 57, 1),
-              borderRadius: BorderRadius.circular(12),
-            ),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: const Text(
-              'Continue',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700),
+              'Submit',
               textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontSize: 16),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

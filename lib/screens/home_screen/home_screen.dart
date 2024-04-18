@@ -10,13 +10,16 @@ import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
+import 'package:summify/screens/home_screen/settings_button.dart';
+import 'package:summify/screens/home_screen/summaries_counter.dart';
 import 'package:summify/screens/subscription_screen.dart';
-import 'package:summify/widgets/premium_banner.dart';
+import 'package:summify/screens/home_screen/premium_banner.dart';
 
-import '../bloc/subscription/subscription_bloc.dart';
-import '../gen/assets.gen.dart';
-import '../widgets/summary_tile.dart';
-import 'modal_screens/how_to_screen.dart';
+import '../../bloc/subscription/subscription_bloc.dart';
+import '../../gen/assets.gen.dart';
+import 'logo.dart';
+import 'summary_tile.dart';
+import '../modal_screens/how_to_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -214,7 +217,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           children: [
                             summariesCounter(
                                 availableSummaries: summariesState.dailyLimit,
-                                // dailySummaries: 0),
                                 dailySummaries:
                                     summariesState.dailySummariesMap[thisDay] ??
                                         0),
@@ -242,87 +244,5 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         },
       ),
     );
-  }
-}
-
-Widget summariesCounter(
-    {required int dailySummaries, required int availableSummaries}) {
-  return Expanded(
-    child: Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(
-            color: Colors.white70, borderRadius: BorderRadius.circular(20)),
-        child: Text(
-          '$dailySummaries / $availableSummaries',
-          style: const TextStyle(
-              fontSize: 13, color: Colors.black, fontWeight: FontWeight.w500),
-        ),
-      ),
-    ),
-  );
-}
-
-class Logo extends StatelessWidget {
-  const Logo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              Assets.icons.logo,
-              height: 25,
-              width: 25,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).cardColor, BlendMode.srcIn),
-            ),
-            Text(
-              '  Summify',
-              style:
-                  TextStyle(color: Theme.of(context).cardColor, fontSize: 17),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SettingsButton extends StatelessWidget {
-  final Function() onPressSettings;
-  const SettingsButton({super.key, required this.onPressSettings});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          padding: const EdgeInsets.all(3),
-          width: 35,
-          height: 35,
-          child: IconButton(
-            onPressed: onPressSettings,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset(
-              Assets.icons.settings,
-              height: 35,
-              width: 35,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).cardColor, BlendMode.srcIn),
-            ),
-          ),
-        ),
-      ),
-    );
-    ;
   }
 }
