@@ -1,71 +1,35 @@
 import 'package:flutter/material.dart';
 
-class SummifyButton extends StatefulWidget {
+class SummifyButton extends StatelessWidget {
   final String controllerText;
   final VoidCallback onPressSummify;
   const SummifyButton(
       {super.key, required this.onPressSummify, required this.controllerText});
 
   @override
-  State<SummifyButton> createState() => _SummifyButtonState();
-}
-
-class _SummifyButtonState extends State<SummifyButton> {
-  bool tapped = false;
-
-  static const duration = Duration(milliseconds: 150);
-  void onTapDown() {
-    setState(() {
-      tapped = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tapped = false;
-      });
-    });
-  }
-
-  void onTap() {
-    Future.delayed(duration, () {
-      widget.onPressSummify();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      onTapUp: (_) => onTapUp(),
-      onTapDown: (_) => onTapDown(),
-      onTapCancel: () => onTapUp(),
-      child: AnimatedScale(
-        duration: duration,
-        scale: tapped ? 0.95 : 1,
-        child: AnimatedContainer(
-          duration: duration,
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          margin: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: widget.controllerText.isNotEmpty
-                  ? tapped
-                      ? const Color.fromRGBO(49, 210, 206, 1)
-                      : const Color.fromRGBO(4, 49, 57, 1)
-                  : tapped
-                      ? Colors.red.shade400
-                      : const Color.fromRGBO(49, 210, 206, 1),
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: const [
-                BoxShadow(
-                    color: Colors.black26, blurRadius: 5, offset: Offset(1, 1))
-              ]),
-          child: const Text(
-            'Summify Now',
-            style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      child: Material(
+        color: Theme.of(context).primaryColor,
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        child: InkWell(
+          highlightColor: controllerText.isNotEmpty
+              ? Colors.white24
+              : Colors.red.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(8),
+          onTap: onPressSummify,
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: const Text(
+              'Submit',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  fontSize: 16),
+            ),
           ),
         ),
       ),

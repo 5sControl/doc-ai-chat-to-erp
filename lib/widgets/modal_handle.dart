@@ -10,7 +10,8 @@ class ModalHandle extends StatelessWidget {
       width: 80,
       height: 4,
       decoration: BoxDecoration(
-          color: Colors.black, borderRadius: BorderRadius.circular(10)),
+          color: Theme.of(context).cardColor,
+          borderRadius: BorderRadius.circular(10)),
     );
   }
 }

@@ -232,31 +232,11 @@ class _CustomInputState extends State<CustomInput> {
           keyboardType: widget.title == 'Email'
               ? TextInputType.emailAddress
               : TextInputType.text,
-          // onEditingComplete: () {},
           decoration: InputDecoration(
-            errorBorder: OutlineInputBorder(
-              gapPadding: 10,
-              borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(width: 2, color: Colors.red),
-            ),
-            focusedBorder: OutlineInputBorder(
-              gapPadding: 10,
-              borderRadius: BorderRadius.circular(8),
-              borderSide:
-                  BorderSide(width: 2, color: Theme.of(context).primaryColor),
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            floatingLabelAlignment: FloatingLabelAlignment.start,
-            floatingLabelBehavior: FloatingLabelBehavior.auto,
-            hintText: widget.placeholder,
-            border: OutlineInputBorder(
-                gapPadding: 10,
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none),
+            hintText: ' ${widget.placeholder}',
           ),
+          // onEditingComplete: () {},
+          style: Theme.of(context).textTheme.labelMedium,
         ),
       ],
     );
@@ -311,32 +291,22 @@ class OptionContainer extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
       decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).primaryColorLight,
           borderRadius: BorderRadius.circular(8)),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           Checkbox(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.compact,
-            side: const BorderSide(
-                width: 1,
-                style: BorderStyle.solid,
-                color: Colors.white,
-                strokeAlign: BorderSide.strokeAlignOutside),
-            overlayColor: const MaterialStatePropertyAll(Colors.white38),
-            activeColor: Colors.white,
-            checkColor: Theme.of(context).primaryColor,
+            activeColor: Theme.of(context).canvasColor,
             value: selectedOptions.contains(title),
             onChanged: (_) => onSelectOption(option: title),
           ),
           Text(
             title,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w400),
+            style: Theme.of(context).textTheme.labelMedium,
           ),
           // Spacer(),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           if (title == 'Add language')
@@ -347,7 +317,7 @@ class OptionContainer extends StatelessWidget {
                   crossFadeState: selectedOptions.contains(title)
                       ? CrossFadeState.showFirst
                       : CrossFadeState.showSecond,
-                  duration: Duration(milliseconds: 500)),
+                  duration: const Duration(milliseconds: 500)),
             )
         ],
       ),
