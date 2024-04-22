@@ -47,11 +47,15 @@ class _SummaryScreenState extends State<SummaryScreen>
         .contains(widget.summaryKey)) {
       context
           .read<MixpanelBloc>()
-          .add(ShowSummaryAgain(resource: widget.summaryKey));
+          .add(ShowSummaryAgain(url: widget.summaryKey));
     }
     _tabController.addListener(() {
       setState(() {
         activeTab = _tabController.index;
+        context.read<MixpanelBloc>().add(ReadSummary(
+            type: activeTab == 0 ? 'short' : 'long',
+            url: widget.summaryKey,
+            AB: context.read<SettingsBloc>().state.abTest));
       });
     });
     super.initState();

@@ -201,12 +201,19 @@ class SettingsScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     ButtonsGroup(title: 'Membership', items: generalGroup),
                     ButtonsGroup(title: 'Membership', items: membershipGroup),
                     ButtonsGroup(title: 'About', items: aboutGroup),
                     ButtonsGroup(title: 'Support', items: supportGroup),
+                    Text('version 1.2.0',
+                        textAlign: TextAlign.end,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(height: 2))
                   ],
                 ),
               )),

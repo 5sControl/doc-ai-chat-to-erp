@@ -263,7 +263,9 @@ class ErrorButtons extends StatelessWidget {
       context
           .read<SummariesBloc>()
           .add(GetSummaryFromUrl(summaryUrl: summaryLink, fromShare: false));
-      context.read<MixpanelBloc>().add(SummaryUpgrade(resource: summaryLink));
+      context
+          .read<MixpanelBloc>()
+          .add(SummaryUpgrade(url: summaryLink, fromShare: false));
     }
 
     void onPressReport() {
