@@ -255,6 +255,8 @@ class SubscriptionCover extends StatelessWidget {
         subscriptionTitle = '12 \nmonths';
     }
 
+    final textColor = Theme.of(context).brightness == Brightness.light ? isSelected ? Colors.white : Colors.black : Colors.white;
+
     return Expanded(
       child: SizedBox(
         height: 140,
@@ -289,8 +291,8 @@ class SubscriptionCover extends StatelessWidget {
                     Text(
                       subscriptionTitle,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: Colors.white,
+                      style:  TextStyle(
+                          color: textColor,
                           fontSize: 13,
                           fontWeight: FontWeight.w500),
                     ),
@@ -302,7 +304,7 @@ class SubscriptionCover extends StatelessWidget {
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.clip,
                       style: TextStyle(
-                          color: Colors.white,
+                          color: textColor,
                           fontSize: 18,
                           fontWeight:
                               isSelected ? FontWeight.w700 : FontWeight.w400),
@@ -312,8 +314,8 @@ class SubscriptionCover extends StatelessWidget {
                           (subscription.rawPrice * 2 + 0.01)
                               .toStringAsFixed(2)
                               .toString(),
-                      style: const TextStyle(
-                          color: Colors.white,
+                      style:  TextStyle(
+                          color: textColor,
                           decoration: TextDecoration.lineThrough,
                           decorationColor: Colors.white,
                           fontSize: 16,

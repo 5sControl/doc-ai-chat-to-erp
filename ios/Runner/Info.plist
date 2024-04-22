@@ -74,6 +74,7 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
-
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
 </dict>
 </plist>

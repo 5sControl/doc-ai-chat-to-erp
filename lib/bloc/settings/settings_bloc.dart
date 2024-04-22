@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 
 import '../../services/notify.dart';
 
@@ -29,11 +30,13 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     });
 
     on<SendNotify>((event, emit) {
-      Future.delayed(const Duration(seconds: 1), () {
-        NotificationService().showNotification(
-            title: 'Your summary is ready! Open and get useful insights.',
-            body: event.title);
-      });
+      if (state.isNotificationsEnabled) {
+        Future.delayed(const Duration(seconds: 1), () {
+          NotificationService().showNotification(
+              title: 'Your summary is ready! Open and get useful insights.',
+              body: event.title);
+        });
+      }
     });
 
     on<ToggleNotifications>((event, emit) {
@@ -41,7 +44,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
           isNotificationsEnabled: !state.isNotificationsEnabled));
     });
 
-    on<SelectAppTheme>((event, emit) {
+    on<SelectAppTheme>((event, emit) async {
       emit(state.copyWith(
         appTheme: event.appTheme,
       ));

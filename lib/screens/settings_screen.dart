@@ -6,6 +6,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -83,13 +84,16 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressSetupShare() {
-      showMaterialModalBottomSheet(
-          context: context,
-          expand: false,
-          bounce: false,
-          barrierColor: Colors.black54,
-          backgroundColor: Colors.transparent,
-          builder: (context) => const HowToScreen());
+      showCupertinoModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return const SetUpShareScreen();
+        },
+      );
     }
 
     void onTapNotifications() {
@@ -294,13 +298,12 @@ class NotificationsSwitch extends StatelessWidget {
           child: Transform.scale(
             scale: 0.9,
             child: Switch(
-              inactiveThumbColor:
-                  Colors.grey.shade500 ,
+              inactiveThumbColor: Colors.grey.shade500,
               trackOutlineColor:
                   MaterialStatePropertyAll(Theme.of(context).highlightColor),
               activeColor: Theme.of(context).highlightColor,
-              activeTrackColor:Colors.white,
-              inactiveTrackColor:  Colors.white,
+              activeTrackColor: Colors.white,
+              inactiveTrackColor: Colors.white,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               value: state.isNotificationsEnabled,
               onChanged: (value) => onTapNotifications(),

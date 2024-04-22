@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
@@ -32,7 +33,8 @@ class _SummaryScreenState extends State<SummaryScreen>
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+    final AB = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
+    _tabController = TabController(length: 2, vsync: this, initialIndex: AB);
     if (context
         .read<SummariesBloc>()
         .state

@@ -11,6 +11,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
@@ -36,12 +37,15 @@ void main() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
+
   // await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
@@ -86,6 +90,27 @@ class SummishareApp extends StatelessWidget {
                   .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
             });
+
+            void setSystemColor() async {
+              if (settingsState.appTheme == AppTheme.dark) {
+                await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+              }
+
+              if (settingsState.appTheme == AppTheme.light) {
+                await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+              }
+
+              if (settingsState.appTheme == AppTheme.auto) {
+                if (brightness == Brightness.dark) {
+                  await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+                } else {
+                  await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+                }
+              }
+            }
+
+            setSystemColor();
+
             ThemeMode themeMode;
             if (settingsState.appTheme == AppTheme.auto) {
               themeMode = ThemeMode.system;

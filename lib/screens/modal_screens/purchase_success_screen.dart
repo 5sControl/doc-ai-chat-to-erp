@@ -20,7 +20,7 @@ class PurchaseSuccessScreen extends StatelessWidget {
             margin: const EdgeInsets.all(15),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                color: Theme.of(context).canvasColor, borderRadius: BorderRadius.circular(10)),
             child: SizedBox(
               width: double.infinity,
               child: Column(

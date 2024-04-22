@@ -29,9 +29,3 @@ const _$AppThemeEnumMap = {
   AppTheme.dark: 'dark',
   AppTheme.light: 'light',
 };
-
-const _$ThemeModeEnumMap = {
-  ThemeMode.system: 'system',
-  ThemeMode.light: 'light',
-  ThemeMode.dark: 'dark',
-};
