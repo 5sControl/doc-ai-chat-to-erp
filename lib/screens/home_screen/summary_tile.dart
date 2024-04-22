@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
+import 'package:summify/screens/request_screen.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
@@ -95,13 +96,6 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
         final summaryData = state.summaries[widget.sharedLink]!;
         final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
         final String formattedDate = formatter.format(summaryData.date);
-        void onPressRetry() {
-          context.read<SummariesBloc>().add(GetSummaryFromUrl(
-              summaryUrl: widget.sharedLink, fromShare: false));
-          context
-              .read<MixpanelBloc>()
-              .add(SummaryUpgrade(resource: widget.sharedLink));
-        }
 
         void onPressDelete() {
           context
@@ -229,31 +223,20 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                         .textTheme
                                         .displaySmall,
                                   ),
-                                  AnimatedCrossFade(
-                                      firstChild: Loader(
-                                        onPressCancel: onPressCancel,
-                                      ),
-                                      secondChild:
-                                          summaryData.shortSummaryStatus ==
-                                                  SummaryStatus.error
-                                              ? ErrorMessage(
-                                                  error: summaryData.longSummary
-                                                          .summaryError ??
-                                                      'Some error',
-                                                  onPressRetry: onPressRetry,
-                                                )
-                                              : Container(),
-                                      crossFadeState:
-                                          summaryData.longSummaryStatus ==
-                                                  SummaryStatus.loading
-                                              ? CrossFadeState.showFirst
-                                              : CrossFadeState.showSecond,
-                                      duration:
-                                          const Duration(milliseconds: 500))
+                                  ErrorMessage(
+                                    summaryData: summaryData,
+                                  ),
+                                  Loader(
+                                      onPressCancel: onPressCancel,
+                                      summaryData: summaryData)
                                 ],
                               ),
                             ),
                           ),
+                          ErrorButtons(
+                            summaryLink: widget.sharedLink,
+                            summaryData: summaryData,
+                          )
                         ],
                       ),
                     ),
@@ -268,56 +251,111 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   }
 }
 
-class ErrorMessage extends StatelessWidget {
-  final String error;
-  final VoidCallback onPressRetry;
-
-  const ErrorMessage(
-      {super.key, required this.error, required this.onPressRetry});
+class ErrorButtons extends StatelessWidget {
+  final String summaryLink;
+  final SummaryData summaryData;
+  const ErrorButtons(
+      {super.key, required this.summaryData, required this.summaryLink});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    void onPressRetry() {
+      context
+          .read<SummariesBloc>()
+          .add(GetSummaryFromUrl(summaryUrl: summaryLink, fromShare: false));
+      context.read<MixpanelBloc>().add(SummaryUpgrade(resource: summaryLink));
+    }
+
+    void onPressReport() {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => const RequestScreen(),
+      ));
+    }
+
+    return AnimatedCrossFade(
+        firstChild: Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                  tooltip: 'Report a problem',
+                  onPressed: onPressReport,
+                  highlightColor: Colors.red.shade300.withOpacity(0.2),
+                  padding: EdgeInsets.zero,
+                  iconSize: 22,
+                  visualDensity: VisualDensity.compact,
+                  // constraints: BoxConstraints(),
+                  style: const ButtonStyle(
+                    tapTargetSize:
+                        MaterialTapTargetSize.shrinkWrap, // the '2023' part
+                  ),
+                  icon: SvgPicture.asset(
+                    Assets.icons.danger,
+                    width: 22,
+                  )),
+              IconButton(
+                  tooltip: 'Retry',
+                  onPressed: onPressRetry,
+                  highlightColor: Colors.teal.withOpacity(0.2),
+                  padding: EdgeInsets.zero,
+                  iconSize: 22,
+                  visualDensity: VisualDensity.compact,
+                  // constraints: BoxConstraints(),
+                  style: const ButtonStyle(
+                    tapTargetSize:
+                        MaterialTapTargetSize.shrinkWrap, // the '2023' part
+                  ),
+                  icon: SvgPicture.asset(
+                    Assets.icons.update,
+                    width: 22,
+                    colorFilter: ColorFilter.mode(
+                        Theme.of(context).cardColor, BlendMode.srcIn),
+                  )),
+            ],
+          ),
+        ),
+        secondChild: Container(),
+        crossFadeState: summaryData.longSummaryStatus == SummaryStatus.error
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 500));
+  }
+}
+
+class ErrorMessage extends StatelessWidget {
+  final SummaryData summaryData;
+
+  const ErrorMessage({super.key, required this.summaryData});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedCrossFade(
+        firstChild: Container(),
+        secondChild: Column(
           children: [
-            Flexible(
-                child: Text(
-              error,
-              maxLines: 2,
+            Text(
+              summaryData.longSummary.summaryError ?? 'Some error',
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  fontSize: 12, height: 1, color: Colors.red.shade400),
-            )),
-            IconButton(
-                tooltip: 'Retry',
-                onPressed: onPressRetry,
-                highlightColor: Colors.teal,
-                padding: EdgeInsets.zero,
-                iconSize: 22,
-                visualDensity: VisualDensity.compact,
-                // constraints: BoxConstraints(),
-                style: const ButtonStyle(
-                  tapTargetSize:
-                      MaterialTapTargetSize.shrinkWrap, // the '2023' part
-                ),
-                icon: SvgPicture.asset(
-                  Assets.icons.update,
-                  width: 22,
-                )),
+                  fontSize: 12, height: 3, color: Colors.red.shade400),
+            ),
           ],
         ),
-      ],
-    );
+        crossFadeState: summaryData.longSummaryStatus == SummaryStatus.error
+            ? CrossFadeState.showSecond
+            : CrossFadeState.showFirst,
+        duration: const Duration(milliseconds: 500));
   }
 }
 
 class Loader extends StatefulWidget {
   final Function() onPressCancel;
-  const Loader({super.key, required this.onPressCancel});
+  final SummaryData summaryData;
+  const Loader(
+      {super.key, required this.onPressCancel, required this.summaryData});
 
   @override
   State<Loader> createState() => _LoaderState();
@@ -365,33 +403,41 @@ class _LoaderState extends State<Loader> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Flexible(
-          child: Container(
-            height: 10,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-                color: Colors.teal.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(10)),
-            child: const LinearProgressIndicator(
-              color: Colors.teal,
-              backgroundColor: Colors.white,
+    return AnimatedCrossFade(
+        firstChild: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Container(
+                height: 10,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                    color: Colors.teal.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10)),
+                child: const LinearProgressIndicator(
+                  color: Colors.teal,
+                  backgroundColor: Colors.white,
+                ),
+              ),
             ),
-          ),
+            Text('${loadingText[textIndex]}    ',
+                    style: const TextStyle(fontSize: 12, height: 1))
+                .animate()
+                .custom(
+                    duration: 300.ms,
+                    builder: (context, value, child) => Container(
+                          child:
+                              child, // child is the Text widget being animated
+                        ))
+          ],
         ),
-        Text('${loadingText[textIndex]}    ',
-                style: const TextStyle(fontSize: 12, height: 1))
-            .animate()
-            .custom(
-                duration: 300.ms,
-                builder: (context, value, child) => Container(
-                      child: child, // child is the Text widget being animated
-                    ))
-      ],
-    );
+        secondChild: Container(),
+        crossFadeState:
+            widget.summaryData.longSummaryStatus == SummaryStatus.loading
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 500));
   }
 }

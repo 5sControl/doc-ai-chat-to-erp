@@ -47,6 +47,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/crown.svg
   String get crown => 'assets/icons/crown.svg';
 
+  /// File path: assets/icons/danger.svg
+  String get danger => 'assets/icons/danger.svg';
+
   /// File path: assets/icons/delete.svg
   String get delete => 'assets/icons/delete.svg';
 
@@ -140,6 +143,7 @@ class $AssetsIconsGen {
         clock,
         copy,
         crown,
+        danger,
         delete,
         discount,
         file,
