@@ -76,7 +76,7 @@ class _ContinueButtonState extends State<ContinueButton> {
   @override
   Widget build(BuildContext context) {
     void onPressContinue() {
-      Navigator.of(context).popUntil(ModalRoute.withName("/settings"));
+      Navigator.of(context).popUntil(ModalRoute.withName("/"));
     }
 
     return Container(

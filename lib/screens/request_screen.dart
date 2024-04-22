@@ -71,7 +71,7 @@ class _RequestScreenState extends State<RequestScreen> {
       if (res == SendFeatureStatus.Sended) {
         onRequestSend();
       } else {
-        Navigator.of(context).popUntil(ModalRoute.withName("/settings"));
+        Navigator.of(context).pushNamed('/');
       }
     }
   }
