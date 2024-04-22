@@ -18,6 +18,7 @@ import 'package:summify/screens/home_screen/premium_banner.dart';
 
 import '../../bloc/subscription/subscription_bloc.dart';
 import '../../gen/assets.gen.dart';
+import '../modal_screens/set_up_share_screen.dart';
 import 'logo.dart';
 import 'summary_tile.dart';
 import '../modal_screens/how_to_screen.dart';
@@ -142,14 +143,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     if (context.read<SettingsBloc>().state.howToShowed == false) {
       Future.delayed(const Duration(milliseconds: 2000), () {
-        showMaterialModalBottomSheet(
+        showCupertinoModalBottomSheet(
           context: context,
           expand: false,
           bounce: false,
           barrierColor: Colors.black54,
           backgroundColor: Colors.transparent,
           builder: (context) {
-            return const HowToScreen();
+            return const SetUpShareScreen();
           },
         );
         context.read<SettingsBloc>().add(const HowToShowed());

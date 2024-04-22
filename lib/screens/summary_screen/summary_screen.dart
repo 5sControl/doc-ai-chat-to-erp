@@ -30,10 +30,15 @@ class SummaryScreen extends StatefulWidget {
 class _SummaryScreenState extends State<SummaryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late int activeTab;
 
   @override
   void initState() {
     final AB = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
+
+    setState(() {
+      activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
+    });
     _tabController = TabController(length: 2, vsync: this, initialIndex: AB);
     if (context
         .read<SummariesBloc>()
@@ -44,6 +49,11 @@ class _SummaryScreenState extends State<SummaryScreen>
           .read<MixpanelBloc>()
           .add(ShowSummaryAgain(resource: widget.summaryKey));
     }
+    _tabController.addListener(() {
+      setState(() {
+        activeTab = _tabController.index;
+      });
+    });
     super.initState();
   }
 
@@ -188,6 +198,7 @@ class _SummaryScreenState extends State<SummaryScreen>
               ),
               extendBody: true,
               bottomNavigationBar: ShareAndCopyButton(
+                activeTab: activeTab,
                 sharedLink: widget.summaryKey,
                 summaryData: summaryData,
               ),

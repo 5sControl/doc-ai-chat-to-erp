@@ -9,10 +9,14 @@ import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../models/models.dart';
 
 class ShareAndCopyButton extends StatefulWidget {
+  final int activeTab;
   final SummaryData summaryData;
   final String sharedLink;
   const ShareAndCopyButton(
-      {super.key, required this.summaryData, required this.sharedLink});
+      {super.key,
+      required this.summaryData,
+      required this.sharedLink,
+      required this.activeTab});
 
   @override
   State<ShareAndCopyButton> createState() => _ShareAndCopyButtonState();
@@ -32,17 +36,24 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
           ];
 
     void onPressShare() {
+      final text = widget.activeTab == 0
+          ? widget.summaryData.shortSummary.summaryText
+          : widget.summaryData.longSummary.summaryText;
+
       final box = context.findRenderObject() as RenderBox?;
       Share.share(
-        '${widget.sharedLink} \n\n ${widget.summaryData.shortSummary}',
+        '${widget.sharedLink} \n\n $text',
         sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
       );
       context.read<MixpanelBloc>().add(const ShareSummary());
     }
 
     void onPressCopy() {
-      Clipboard.setData(ClipboardData(
-          text: widget.summaryData.shortSummary.summaryText ?? ''));
+      final text = widget.activeTab == 0
+          ? widget.summaryData.shortSummary.summaryText
+          : widget.summaryData.longSummary.summaryText;
+
+      Clipboard.setData(ClipboardData(text: text ?? ''));
       context.read<MixpanelBloc>().add(const CopySummary());
     }
 

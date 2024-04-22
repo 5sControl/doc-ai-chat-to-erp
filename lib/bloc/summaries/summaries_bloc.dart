@@ -54,11 +54,9 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
   SummariesBloc({required this.subscriptionBloc, required this.mixpanelBloc})
       : super(SummariesState(
             summaries: {
-              'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
+              'https://elang.app/en': initialSummary,
             },
-            ratedSummaries: const {
-              'https://elang-app-dev-zehqx.ondigitalocean.app/'
-            },
+            ratedSummaries: const {'https://elang.app/en'},
             defaultSummaryType: SummaryType.short,
             dailyLimit: 3,
             dailySummariesMap: const {},
