@@ -11,6 +11,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
@@ -21,7 +22,8 @@ import 'package:summify/screens/settings_screen.dart';
 import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
-import 'package:summify/theme/baseTheme.dart';
+import 'package:summify/themes/dark_theme.dart';
+import 'package:summify/themes/light_theme.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'firebase_options.dart';
 import 'screens/main_screen.dart';
@@ -35,13 +37,15 @@ void main() async {
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
+
   // await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
@@ -53,9 +57,11 @@ class SummishareApp extends StatelessWidget {
   Widget build(BuildContext context) {
     facebookAppEvents.setAutoLogAppEventsEnabled(true);
     final AuthService authService = AuthService();
+    final brightness = MediaQuery.of(context).platformBrightness;
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => SettingsBloc()),
+          BlocProvider(
+              create: (context) => SettingsBloc(brightness: brightness)),
           BlocProvider(
             create: (context) =>
                 MixpanelBloc(settingsBloc: context.read<SettingsBloc>()),
@@ -84,8 +90,39 @@ class SummishareApp extends StatelessWidget {
                   .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
             });
+
+            void setSystemColor() async {
+              if (settingsState.appTheme == AppTheme.dark) {
+                await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+              }
+
+              if (settingsState.appTheme == AppTheme.light) {
+                await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+              }
+
+              if (settingsState.appTheme == AppTheme.auto) {
+                if (brightness == Brightness.dark) {
+                  await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+                } else {
+                  await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+                }
+              }
+            }
+
+            setSystemColor();
+
+            ThemeMode themeMode;
+            if (settingsState.appTheme == AppTheme.auto) {
+              themeMode = ThemeMode.system;
+            } else if (settingsState.appTheme == AppTheme.dark) {
+              themeMode = ThemeMode.dark;
+            } else {
+              themeMode = ThemeMode.light;
+            }
             return MaterialApp(
-              theme: baseTheme,
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: themeMode,
               builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',
@@ -106,7 +143,7 @@ class SummishareApp extends StatelessWidget {
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SettingsScreen(),
                         settings: settings);
-                    case '/request':
+                  case '/request':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const RequestScreen(),
                         settings: settings);

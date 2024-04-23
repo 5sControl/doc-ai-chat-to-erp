@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:styled_text/tags/styled_text_tag.dart';
-import 'package:styled_text/widgets/styled_text.dart';
+import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
@@ -32,10 +30,16 @@ class SummaryScreen extends StatefulWidget {
 class _SummaryScreenState extends State<SummaryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late int activeTab;
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+    final AB = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
+
+    setState(() {
+      activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
+    });
+    _tabController = TabController(length: 2, vsync: this, initialIndex: AB);
     if (context
         .read<SummariesBloc>()
         .state
@@ -43,8 +47,17 @@ class _SummaryScreenState extends State<SummaryScreen>
         .contains(widget.summaryKey)) {
       context
           .read<MixpanelBloc>()
-          .add(ShowSummaryAgain(resource: widget.summaryKey));
+          .add(ShowSummaryAgain(url: widget.summaryKey));
     }
+    _tabController.addListener(() {
+      setState(() {
+        activeTab = _tabController.index;
+        context.read<MixpanelBloc>().add(ReadSummary(
+            type: activeTab == 0 ? 'short' : 'long',
+            url: widget.summaryKey,
+            AB: context.read<SettingsBloc>().state.abTest));
+      });
+    });
     super.initState();
   }
 
@@ -109,10 +122,20 @@ class _SummaryScreenState extends State<SummaryScreen>
           if (!await launchUrl(url)) {}
         }
 
+        final gradientColors = Theme.of(context).brightness == Brightness.dark
+            ? const [
+                Color.fromRGBO(15, 57, 60, 0),
+                Color.fromRGBO(15, 57, 60, 1),
+              ]
+            : const [
+                Color.fromRGBO(223, 252, 252, 0),
+                Color.fromRGBO(191, 249, 249, 1),
+                Color.fromRGBO(191, 249, 249, 1),
+              ];
         return Stack(
           children: [
             const BackgroundGradient(),
-            Container(color: Colors.white38),
+            // Container(color: Colors.white38),
             Scaffold(
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -159,20 +182,16 @@ class _SummaryScreenState extends State<SummaryScreen>
                           alignment: Alignment.topCenter,
                           child: Container(
                             height: 50,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                              colors: [
-                                Color.fromRGBO(223, 252, 252, 0),
-                                Color.fromRGBO(191, 249, 249, 1),
-                                Color.fromRGBO(191, 249, 249, 1),
-                              ],
+                              colors: gradientColors,
                               begin: Alignment.bottomCenter,
                               end: Alignment.topCenter,
                             )),
                             child: Align(
                               alignment: Alignment.topCenter,
                               child:
-                                  customTabBar(tabController: _tabController),
+                                  CustomTabBar(tabController: _tabController),
                             ),
                           ),
                         ),
@@ -183,6 +202,7 @@ class _SummaryScreenState extends State<SummaryScreen>
               ),
               extendBody: true,
               bottomNavigationBar: ShareAndCopyButton(
+                activeTab: activeTab,
                 sharedLink: widget.summaryKey,
                 summaryData: summaryData,
               ),
@@ -214,12 +234,9 @@ class SummaryTextContainer extends StatelessWidget {
         padding:
             const EdgeInsets.only(top: 50, bottom: 90, left: 15, right: 15),
         physics: const AlwaysScrollableScrollPhysics(),
-        child: SelectableText.rich(
-          TextSpan(
-            text: summaryText,
-            style: DefaultTextStyle.of(context).style.copyWith(fontSize: 18),
-            spellOut: true,
-          ),
+        child: SelectableText(
+          summaryText,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );

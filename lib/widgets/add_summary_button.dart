@@ -77,16 +77,14 @@ class AddSummaryButton extends StatelessWidget {
               return const SubscriptionScreen();
             },
           );
-          context
-              .read<MixpanelBloc>()
-              .add(LimitReached(resource: result?.paths[0] ?? 'file', registrated: false));
+          context.read<MixpanelBloc>().add(LimitReached(
+              resource: result?.paths[0] ?? 'file', registrated: false));
         } else if (result?.paths.isNotEmpty != null) {
           final fileName = result!.paths[0]?.split('/').last;
           context.read<SummariesBloc>().add(GetSummaryFromFile(
-                fileName: fileName!,
-                filePath: result.paths[0]!,
-            fromShare: false
-              ));
+              fileName: fileName!,
+              filePath: result.paths[0]!,
+              fromShare: false));
         }
       });
     }
@@ -116,7 +114,7 @@ class AddSummaryButton extends StatelessWidget {
                 width: 5,
                 strokeAlign: BorderSide.strokeAlignCenter,
               ),
-              color: const Color.fromRGBO(0, 186, 195, 0.8),
+              color: Theme.of(context).primaryColorDark.withOpacity(0.7),
               borderRadius: BorderRadius.circular(10)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -206,7 +204,10 @@ class _AddButtonState extends State<AddButton> {
             ),
             Text(
               widget.title,
-              style: const TextStyle(color: Colors.white),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Colors.white),
             )
           ],
         ),

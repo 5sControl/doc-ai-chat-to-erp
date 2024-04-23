@@ -47,6 +47,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/crown.svg
   String get crown => 'assets/icons/crown.svg';
 
+  /// File path: assets/icons/danger.svg
+  String get danger => 'assets/icons/danger.svg';
+
   /// File path: assets/icons/delete.svg
   String get delete => 'assets/icons/delete.svg';
 
@@ -122,6 +125,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/text.svg
   String get text => 'assets/icons/text.svg';
 
+  /// File path: assets/icons/theme.svg
+  String get theme => 'assets/icons/theme.svg';
+
   /// File path: assets/icons/update.svg
   String get update => 'assets/icons/update.svg';
 
@@ -137,6 +143,7 @@ class $AssetsIconsGen {
         clock,
         copy,
         crown,
+        danger,
         delete,
         discount,
         file,
@@ -162,6 +169,7 @@ class $AssetsIconsGen {
         star,
         terms,
         text,
+        theme,
         update,
         url
       ];
@@ -191,10 +199,33 @@ class $AssetsOnboardingGen {
       [onboardingBG, onboardingImg1, onboardingImg2, onboardingImg3];
 }
 
+class $AssetsSetUpGen {
+  const $AssetsSetUpGen();
+
+  /// File path: assets/set_up/set_up_1.png
+  AssetGenImage get setUp1 => const AssetGenImage('assets/set_up/set_up_1.png');
+
+  /// File path: assets/set_up/set_up_2.png
+  AssetGenImage get setUp2 => const AssetGenImage('assets/set_up/set_up_2.png');
+
+  /// File path: assets/set_up/set_up_3.png
+  AssetGenImage get setUp3 => const AssetGenImage('assets/set_up/set_up_3.png');
+
+  /// File path: assets/set_up/set_up_4.png
+  AssetGenImage get setUp4 => const AssetGenImage('assets/set_up/set_up_4.png');
+
+  /// File path: assets/set_up/set_up_5.png
+  AssetGenImage get setUp5 => const AssetGenImage('assets/set_up/set_up_5.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [setUp1, setUp2, setUp3, setUp4, setUp5];
+}
+
 class Assets {
   Assets._();
 
-  static const AssetGenImage bg = AssetGenImage('assets/BG.png');
+  static const AssetGenImage bgDark = AssetGenImage('assets/bg_dark.png');
+  static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
   static const $AssetsGifGen gif = $AssetsGifGen();
   static const AssetGenImage girl = AssetGenImage('assets/girl.png');
   static const $AssetsIconsGen icons = $AssetsIconsGen();
@@ -202,9 +233,11 @@ class Assets {
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
   static const AssetGenImage placeholderLogo =
       AssetGenImage('assets/placeholder_logo.png');
+  static const $AssetsSetUpGen setUp = $AssetsSetUpGen();
 
   /// List of all assets
-  static List<AssetGenImage> get values => [bg, girl, niga, placeholderLogo];
+  static List<AssetGenImage> get values =>
+      [bgDark, bgLight, girl, niga, placeholderLogo];
 }
 
 class AssetGenImage {

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
-import '../gen/assets.gen.dart';
-import '../screens/subscription_screen.dart';
+import '../../gen/assets.gen.dart';
+import '../subscription_screen.dart';
 
 class PremiumBanner extends StatelessWidget {
   const PremiumBanner({super.key});
@@ -45,20 +45,22 @@ class PremiumBanner extends StatelessWidget {
                     const ColorFilter.mode(Colors.black, BlendMode.srcIn),
               ),
             ),
-            const Flexible(
+            Flexible(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
                     'Become Super Premium',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w600,),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w600, color: Colors.black),
                   ),
                   Text(
                     'Get 15 Summaries Daily',
-                    style: TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.w600,),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -66,6 +68,7 @@ class PremiumBanner extends StatelessWidget {
             const Icon(
               Icons.arrow_forward_ios_rounded,
               size: 20,
+              color: Colors.black,
             )
           ],
         ),

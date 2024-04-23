@@ -54,11 +54,9 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
   SummariesBloc({required this.subscriptionBloc, required this.mixpanelBloc})
       : super(SummariesState(
             summaries: {
-              'https://elang-app-dev-zehqx.ondigitalocean.app/': initialSummary,
+              'https://elang.app/en': initialSummary,
             },
-            ratedSummaries: const {
-              'https://elang-app-dev-zehqx.ondigitalocean.app/'
-            },
+            ratedSummaries: const {'https://elang.app/en'},
             defaultSummaryType: SummaryType.short,
             dailyLimit: 3,
             dailySummariesMap: const {},
@@ -205,13 +203,19 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     summaryMap.update(summaryKey, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
         incrementDailySummaryCount(emit);
-
+        mixpanelBloc
+            .add(SummarizingSuccess(url: summaryKey, fromShare: fromShare));
         return summaryData.copyWith(
             shortSummary: shortSummaryResponse,
             shortSummaryStatus: SummaryStatus.complete,
             longSummary: longSummaryResponse,
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
+        mixpanelBloc.add(SummarizingError(
+            url: summaryKey,
+            fromShare: fromShare,
+            error:
+                shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse
@@ -224,6 +228,11 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       } else {
+        mixpanelBloc.add(SummarizingError(
+            url: summaryKey,
+            fromShare: fromShare,
+            error:
+                shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse
@@ -251,6 +260,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryTitle, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
+        mixpanelBloc
+            .add(const SummarizingSuccess(url: 'from text', fromShare: false));
         incrementDailySummaryCount(emit);
         return summaryData.copyWith(
             shortSummary: shortSummaryResponse,
@@ -258,6 +269,11 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummary: longSummaryResponse,
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
+        mixpanelBloc.add(SummarizingError(
+            url: 'from Text',
+            fromShare: false,
+            error:
+                shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse
@@ -270,6 +286,11 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       } else {
+        mixpanelBloc.add(SummarizingError(
+            url: 'from Text',
+            fromShare: false,
+            error:
+                shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse
@@ -299,6 +320,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(fileName, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
+        mixpanelBloc
+            .add(SummarizingSuccess(url: fileName, fromShare: fromShare));
         incrementDailySummaryCount(emit);
         return summaryData.copyWith(
             shortSummary: shortSummaryResponse,
@@ -306,6 +329,11 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummary: longSummaryResponse,
             longSummaryStatus: SummaryStatus.complete);
       } else if (shortSummaryResponse is Exception) {
+        mixpanelBloc.add(SummarizingError(
+            url: fileName,
+            fromShare: false,
+            error:
+            shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse
@@ -318,6 +346,11 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             longSummaryStatus: SummaryStatus.error,
             shortSummaryStatus: SummaryStatus.error);
       } else {
+        mixpanelBloc.add(SummarizingError(
+            url: fileName,
+            fromShare: false,
+            error:
+            shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse

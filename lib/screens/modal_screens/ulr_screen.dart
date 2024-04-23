@@ -62,9 +62,8 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
               return const SubscriptionScreen();
             },
           );
-          context
-              .read<MixpanelBloc>()
-              .add(LimitReached(resource: urlController.text, registrated: false));
+          context.read<MixpanelBloc>().add(
+              LimitReached(resource: urlController.text, registrated: false));
         } else if (controllerText.isNotEmpty) {
           context.read<SummariesBloc>().add(GetSummaryFromUrl(
               summaryUrl: urlController.text, fromShare: false));
@@ -81,7 +80,7 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
     }
 
     return Material(
-      color: const Color.fromRGBO(227, 255, 254, 1),
+      color: Theme.of(context).canvasColor,
       child: Container(
         padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom +
@@ -92,12 +91,12 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const ModalHandle(),
-            const Text(
+            Text(
               'Enter URL',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
             UrlTextField(controller: urlController, onPressPaste: onPressPaste),
             SummifyButton(
@@ -128,49 +127,24 @@ class UrlTextField extends StatelessWidget {
           children: [
             Flexible(
               child: Container(
+                height: 40,
                 decoration: const BoxDecoration(boxShadow: [
                   BoxShadow(
                       color: Colors.black12,
                       blurRadius: 5,
                       offset: Offset(1, 1))
                 ]),
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.top,
+                child: TextFormField(
                   controller: controller,
                   onChanged: (text) {
                     controller.text = text;
                   },
-                  cursorWidth: 3,
                   cursorColor: Colors.black54,
                   cursorHeight: 20,
-                  style: const TextStyle(color: Colors.black, fontSize: 20),
-                  decoration: InputDecoration(
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 2,
-                            color: Color.fromRGBO(4, 49, 57, 1)), //<-- SEE HERE
-                      ),
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 0),
-                      floatingLabelAlignment: FloatingLabelAlignment.start,
-                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                      label: const Padding(
-                        padding: EdgeInsets.only(bottom: 0),
-                        child: Text(
-                          'Paste link',
-                          style: TextStyle(),
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                          gapPadding: 10,
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide.none),
-                      floatingLabelStyle: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500)),
+                  style: Theme.of(context).textTheme.labelMedium,
+                  decoration: const InputDecoration(
+                    hintText: 'Paste link',
+                  ),
                 ),
               ),
             ),
@@ -180,6 +154,8 @@ class UrlTextField extends StatelessWidget {
                   margin: const EdgeInsets.only(left: 7),
                   child: SvgPicture.asset(
                     Assets.icons.paste,
+                    colorFilter: ColorFilter.mode(
+                        Theme.of(context).primaryColorDark, BlendMode.srcIn),
                   )),
             )
           ],

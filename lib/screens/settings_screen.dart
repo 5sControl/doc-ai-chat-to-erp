@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -19,6 +19,7 @@ class ButtonItem {
   final String leadingIcon;
   final Widget? trailing;
   final Function onTap;
+
   const ButtonItem(
       {required this.title,
       required this.leadingIcon,
@@ -63,14 +64,6 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressFeedback() async {
-      // final Email email = Email(
-      //   body: '',
-      //   subject: 'Hi, I want to tell you about:',
-      //   recipients: ['support@englishingames.com'],
-      //   isHTML: false,
-      // );
-      //
-      // await FlutterEmailSender.send(email);
       Navigator.of(context).pushNamed('/request');
     }
 
@@ -91,14 +84,36 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressSetupShare() {
-      showMaterialModalBottomSheet(
-          context: context,
-          expand: false,
-          bounce: false,
-          barrierColor: Colors.black54,
-          backgroundColor: Colors.transparent,
-          builder: (context) => const HowToScreen());
+      showCupertinoModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return const SetUpShareScreen();
+        },
+      );
     }
+
+    void onTapNotifications() {
+      context.read<SettingsBloc>().add(const ToggleNotifications());
+    }
+
+    final List<ButtonItem> generalGroup = [
+      ButtonItem(
+        title: 'Notifications',
+        leadingIcon: Assets.icons.notification,
+        onTap: onTapNotifications,
+        trailing: const NotificationsSwitch(),
+      ),
+      ButtonItem(
+        title: 'Dark mode',
+        leadingIcon: Assets.icons.theme,
+        onTap: () {},
+        trailing: ThemeButtons(),
+      ),
+    ];
 
     final List<ButtonItem> membershipGroup = [
       ButtonItem(
@@ -176,10 +191,8 @@ class SettingsScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
-            iconTheme: const IconThemeData(color: Colors.black),
             title: const Text(
               'Settings',
-              style: TextStyle(color: Colors.black),
             ),
           ),
           body: Container(
@@ -188,13 +201,19 @@ class SettingsScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    // PremiumBanner(),
-                    const GeneralGroup(),
+                    ButtonsGroup(title: 'Membership', items: generalGroup),
                     ButtonsGroup(title: 'Membership', items: membershipGroup),
                     ButtonsGroup(title: 'About', items: aboutGroup),
                     ButtonsGroup(title: 'Support', items: supportGroup),
+                    Text('version 1.2.0',
+                        textAlign: TextAlign.end,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(height: 2))
                   ],
                 ),
               )),
@@ -204,10 +223,74 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-class GeneralGroup extends StatelessWidget {
-  const GeneralGroup({
-    super.key,
-  });
+class ThemeButtons extends StatefulWidget {
+  const ThemeButtons({super.key});
+
+  @override
+  State<ThemeButtons> createState() => _ThemeButtonsState();
+}
+
+class ThemeItem {
+  final String title;
+  final AppTheme appTheme;
+  ThemeItem({required this.title, required this.appTheme});
+}
+
+class _ThemeButtonsState extends State<ThemeButtons> {
+  List<ThemeItem> themeItems = [
+    ThemeItem(title: 'Auto', appTheme: AppTheme.auto),
+    ThemeItem(title: 'On', appTheme: AppTheme.dark),
+    ThemeItem(title: 'Off', appTheme: AppTheme.light),
+  ];
+
+  void onSelectTheme({required AppTheme appTheme}) {
+    context.read<SettingsBloc>().add(SelectAppTheme(appTheme: appTheme));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      builder: (context, state) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.all(2),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: themeItems
+                .map((themeItem) => Container(
+                      width: 50,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 2),
+                      decoration: BoxDecoration(
+                          color: themeItem.appTheme == state.appTheme
+                              ? Theme.of(context).highlightColor
+                              : Colors.white24,
+                          borderRadius: BorderRadius.circular(6)),
+                      child: InkWell(
+                        onTap: () =>
+                            onSelectTheme(appTheme: themeItem.appTheme),
+                        child: Text(
+                          themeItem.title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: themeItem.appTheme == state.appTheme
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class NotificationsSwitch extends StatelessWidget {
+  const NotificationsSwitch({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -217,75 +300,22 @@ class GeneralGroup extends StatelessWidget {
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 15, bottom: 2),
-              child: Text(
-                'General',
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+        return SizedBox(
+          height: 20,
+          child: Transform.scale(
+            scale: 0.9,
+            child: Switch(
+              inactiveThumbColor: Colors.grey.shade500,
+              trackOutlineColor:
+                  MaterialStatePropertyAll(Theme.of(context).highlightColor),
+              activeColor: Theme.of(context).highlightColor,
+              activeTrackColor: Colors.white,
+              inactiveTrackColor: Colors.white,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              value: state.isNotificationsEnabled,
+              onChanged: (value) => onTapNotifications(),
             ),
-            Material(
-              color: const Color.fromRGBO(0, 186, 195, 1),
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              child: InkWell(
-                onTap: () => onTapNotifications(),
-                highlightColor: Colors.white24,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: SvgPicture.asset(
-                          Assets.icons.notification,
-                          height: 20,
-                          colorFilter: const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn),
-                        ),
-                      ),
-                      const Flexible(
-                          fit: FlexFit.tight,
-                          child: Text(
-                            'Notifications',
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400),
-                          )),
-                      SizedBox(
-                        height: 20,
-                        child: Transform.scale(
-                          scale: 0.9,
-                          child: Switch(
-                            inactiveThumbColor: Colors.teal.shade900,
-                            trackOutlineColor:
-                                MaterialStatePropertyAll(Colors.teal.shade900),
-                            activeColor: Colors.white,
-                            activeTrackColor: Colors.teal.shade900,
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            value: state.isNotificationsEnabled,
-                            onChanged: (value) => onTapNotifications(),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         );
       },
     );
@@ -295,6 +325,7 @@ class GeneralGroup extends StatelessWidget {
 class ButtonsGroup extends StatelessWidget {
   final String title;
   final List<ButtonItem> items;
+
   const ButtonsGroup({super.key, required this.title, required this.items});
 
   @override
@@ -315,16 +346,16 @@ class ButtonsGroup extends StatelessWidget {
         ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 0),
-          decoration: const BoxDecoration(
-              color: Color.fromRGBO(0, 186, 195, 1),
-              borderRadius: BorderRadius.all(Radius.circular(8))),
+          decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: const BorderRadius.all(Radius.circular(8))),
           child: Column(
             children: items
                 .map(
                   (item) => Column(
                     children: [
                       Material(
-                        color: const Color.fromRGBO(0, 186, 195, 1),
+                        color: Theme.of(context).primaryColor,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8)),
                         child: InkWell(

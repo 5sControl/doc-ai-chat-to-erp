@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 
-import 'package:summify/screens/home_screen.dart';
+import 'package:summify/screens/home_screen/home_screen.dart';
 
 import '../widgets/add_summary_button.dart';
 import '../widgets/backgroung_gradient.dart';
@@ -17,8 +18,8 @@ class MainScreen extends StatelessWidget {
           extendBody: true,
           body: const HomeScreen(),
           bottomNavigationBar: Padding(
-            padding:
-                EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 10),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + 10),
             child: const Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.end,

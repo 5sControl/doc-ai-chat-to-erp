@@ -62,34 +62,34 @@ class SelectOption extends MixpanelEvent {
   List<Object?> get props => [option];
 }
 
-class Summify extends MixpanelEvent {
-  final String option;
-  // Option: link, file, text
-  final String url;
-  const Summify({required this.option, required this.url});
+// class Summify extends MixpanelEvent {
+//   final String option;
+//   // Option: link, file, text
+//   final String url;
+//   const Summify({required this.option, required this.url});
+//
+//   @override
+//   List<Object?> get props => [option, url];
+// }
 
-  @override
-  List<Object?> get props => [option, url];
-}
+// class SummifyError extends MixpanelEvent {
+//   final String option;
+//   final String url;
+//   const SummifyError({required this.option, required this.url});
+//
+//   @override
+//   List<Object?> get props => [option, url];
+// }
 
-class SummifyError extends MixpanelEvent {
-  final String option;
-  final String url;
-  const SummifyError({required this.option, required this.url});
-
-  @override
-  List<Object?> get props => [option, url];
-}
-
-class SummifySuccess extends MixpanelEvent {
-  final String option;
-  // Option: link, file, text
-  final String url;
-  const SummifySuccess({required this.option, required this.url});
-
-  @override
-  List<Object?> get props => [option, url];
-}
+// class SummifySuccess extends MixpanelEvent {
+//   final String option;
+//   // Option: link, file, text
+//   final String url;
+//   const SummifySuccess({required this.option, required this.url});
+//
+//   @override
+//   List<Object?> get props => [option, url];
+// }
 
 class OpenSummary extends MixpanelEvent {
   const OpenSummary();
@@ -121,28 +121,39 @@ class ShareSummary extends MixpanelEvent {
 
 // EXTENSION
 
-class SummarizingStarted extends MixpanelEvent {
-  final String resource;
-  const SummarizingStarted({required this.resource});
-
-  @override
-  List<Object?> get props => [resource];
-}
+// class SummarizingStarted extends MixpanelEvent {
+//   final String resource;
+//   const SummarizingStarted({required this.resource});
+//
+//   @override
+//   List<Object?> get props => [resource];
+// }
 
 class SummarizingSuccess extends MixpanelEvent {
-  final String resource;
-  const SummarizingSuccess({required this.resource});
+  final String url;
+  final bool fromShare;
+  const SummarizingSuccess({required this.url, required this.fromShare});
 
   @override
-  List<Object?> get props => [resource];
+  List<Object?> get props => [url, fromShare];
+}
+
+class SummarizingError extends MixpanelEvent {
+  final String url;
+  final bool fromShare;
+  final String error;
+  const SummarizingError({required this.url, required this.fromShare, required this.error});
+
+  @override
+  List<Object?> get props => [url, fromShare, error];
 }
 
 class ShowSummaryAgain extends MixpanelEvent {
-  final String resource;
-  const ShowSummaryAgain({required this.resource});
+  final String url;
+  const ShowSummaryAgain({required this.url});
 
   @override
-  List<Object?> get props => [resource];
+  List<Object?> get props => [url];
 }
 
 class SummaryScroll extends MixpanelEvent {
@@ -154,11 +165,12 @@ class SummaryScroll extends MixpanelEvent {
 }
 
 class SummaryUpgrade extends MixpanelEvent {
-  final String resource;
-  const SummaryUpgrade({required this.resource});
+  final String url;
+  final bool fromShare;
+  const SummaryUpgrade({required this.url, required this.fromShare});
 
   @override
-  List<Object?> get props => [resource];
+  List<Object?> get props => [url, fromShare];
 }
 
 class LimitReached extends MixpanelEvent {
@@ -168,4 +180,14 @@ class LimitReached extends MixpanelEvent {
 
   @override
   List<Object?> get props => [resource, registrated];
+}
+
+class ReadSummary extends MixpanelEvent {
+  final String url;
+  final String type; // short / long
+  final String AB;
+  const ReadSummary({required this.type, required this.url, required this.AB});
+
+  @override
+  List<Object?> get props => [type, url, AB];
 }
