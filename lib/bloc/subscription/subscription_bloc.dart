@@ -30,7 +30,7 @@ class SubscriptionBloc
     extends HydratedBloc<SubscriptionEvent, SubscriptionState> {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   final MixpanelBloc mixpanelBloc;
-  final FacebookAppEvents facebookAppEvents;
+
   Set<String> appleProductIds = {
     "SummifyPremiumWeekly",
     'SummifyPremiumMonth',
@@ -46,7 +46,7 @@ class SubscriptionBloc
   List<ProductDetails> _products = [];
 
   SubscriptionBloc(
-      {required this.mixpanelBloc, required this.facebookAppEvents})
+      {required this.mixpanelBloc})
       : super(const SubscriptionState(
             subscriptionsStatus: SubscriptionsStatus.unsubscribed,
             availableProducts: [],

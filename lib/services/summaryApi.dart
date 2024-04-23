@@ -16,17 +16,17 @@ class ErrorDecode {
 }
 
 class SummaryApiRepository {
-  // final String linkUrl = "http://51.159.179.125:8001/application_by_summarize/";
-  // final String fileUrl =
-  //     "http://51.159.179.125:8001/application_by_summarize/uploadfile/";
-  final String rateUrl = 'http://51.159.179.125:8000/api/applications/reviews/';
-  final String linkUrl =
-      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
+  final String linkUrl = "http://51.159.179.125:8002/application_by_summarize/";
   final String fileUrl =
-      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
+      "http://51.159.179.125:8002/application_by_summarize/uploadfile/";
+  final String rateUrl = 'http://51.159.179.125:8000/api/applications/reviews/';
+  // final String linkUrl =
+  //     "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
+  // final String fileUrl =
+  //     "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
 
   final String requestUrl =
-      'https://largely-whole-horse.ngrok-free.app/api/applications/function-reports/';
+      'http://51.159.179.125:8000/api/applications/function-reports/';
 
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.plain),

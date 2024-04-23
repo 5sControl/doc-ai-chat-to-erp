@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:facebook_app_events/facebook_app_events.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +12,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-import 'package:summify/bloc/authentication/authentication_bloc.dart';
+// import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
@@ -20,20 +20,20 @@ import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen.dart';
 import 'package:summify/screens/subscriptionsOnb_scree.dart';
-import 'package:summify/services/authentication.dart';
+// import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
 import 'bloc/summaries/summaries_bloc.dart';
-import 'firebase_options.dart';
+// import 'firebase_options.dart';
 import 'screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().initNotification();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -52,11 +52,15 @@ void main() async {
 
 class SummishareApp extends StatelessWidget {
   const SummishareApp({super.key});
-  static final facebookAppEvents = FacebookAppEvents();
+
   @override
   Widget build(BuildContext context) {
-    facebookAppEvents.setAutoLogAppEventsEnabled(true);
-    final AuthService authService = AuthService();
+    if (Platform.isIOS) {
+      final facebookAppEvents = FacebookAppEvents();
+      facebookAppEvents.setAutoLogAppEventsEnabled(true);
+    }
+
+    // final AuthService authService = AuthService();
     final brightness = MediaQuery.of(context).platformBrightness;
     return MultiBlocProvider(
         providers: [
@@ -68,12 +72,12 @@ class SummishareApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => SubscriptionBloc(
-                mixpanelBloc: context.read<MixpanelBloc>(),
-                facebookAppEvents: facebookAppEvents),
+              mixpanelBloc: context.read<MixpanelBloc>(),
+            ),
           ),
-          BlocProvider(
-              create: (context) =>
-                  AuthenticationBloc(authService: authService)),
+          // BlocProvider(
+          //     create: (context) =>
+          //         AuthenticationBloc(authService: authService)),
           BlocProvider(
               create: (context) => SummariesBloc(
                   mixpanelBloc: context.read<MixpanelBloc>(),

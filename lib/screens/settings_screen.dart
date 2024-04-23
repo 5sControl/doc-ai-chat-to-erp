@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,9 +52,15 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressOurApps() async {
-      final Uri url = Uri.parse(
-          'https://apps.apple.com/ru/developer/english-in-games/id1656052466');
-      if (!await launchUrl(url)) {}
+      if (Platform.isIOS) {
+        final Uri url = Uri.parse(
+            'https://apps.apple.com/ru/developer/english-in-games/id1656052466');
+        if (!await launchUrl(url)) {}
+      } else {
+        final Uri url = Uri.parse(
+            'https://play.google.com/store/apps/dev?id=8797601455128207838&hl=ru&gl=US');
+        if (!await launchUrl(url)) {}
+      }
     }
 
     void onPressRateApp() async {
@@ -149,16 +157,18 @@ class SettingsScreen extends StatelessWidget {
         leadingIcon: Assets.icons.setUp,
         onTap: onPressSetupShare,
       ),
-      ButtonItem(
-        title: 'Rate Summify',
-        leadingIcon: Assets.icons.star,
-        onTap: onPressRateApp,
-      ),
-      ButtonItem(
-        title: 'Share this app',
-        leadingIcon: Assets.icons.share,
-        onTap: onPressShareApp,
-      ),
+      if (Platform.isIOS)
+        ButtonItem(
+          title: 'Rate Summify',
+          leadingIcon: Assets.icons.star,
+          onTap: onPressRateApp,
+        ),
+      if (Platform.isIOS)
+        ButtonItem(
+          title: 'Share this app',
+          leadingIcon: Assets.icons.share,
+          onTap: onPressShareApp,
+        ),
       ButtonItem(
         title: 'Our apps',
         leadingIcon: Assets.icons.phone,
@@ -167,11 +177,12 @@ class SettingsScreen extends StatelessWidget {
     ];
 
     final List<ButtonItem> supportGroup = [
-      ButtonItem(
-        title: 'Terms of use',
-        leadingIcon: Assets.icons.terms,
-        onTap: onPressTerms,
-      ),
+      if (Platform.isIOS)
+        ButtonItem(
+          title: 'Terms of use',
+          leadingIcon: Assets.icons.terms,
+          onTap: onPressTerms,
+        ),
       ButtonItem(
         title: 'Privacy policy',
         leadingIcon: Assets.icons.privacy,

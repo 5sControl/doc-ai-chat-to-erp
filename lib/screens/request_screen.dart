@@ -124,7 +124,7 @@ class _RequestScreenState extends State<RequestScreen> {
                     maxHeight: MediaQuery.of(context).size.height -
                         MediaQuery.of(context).padding.bottom -
                         MediaQuery.of(context).padding.top -
-                        (MediaQuery.of(context).viewInsets.bottom / 2)),
+                        (MediaQuery.of(context).viewInsets.bottom / 2) ),
                 child: Container(
                   margin: EdgeInsets.only(
                       bottom: MediaQuery.of(context).padding.bottom + 10,

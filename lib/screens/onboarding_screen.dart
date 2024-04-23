@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
@@ -47,8 +49,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     if (_currentPageIndex >= 3) {
       passOnboarding();
       context.read<MixpanelBloc>().add(OnboardingStep(step: _currentPageIndex));
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          '/subscribe', (Route<dynamic> route) => false);
+
+      if (Platform.isIOS) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            '/subscribe', (Route<dynamic> route) => false);
+      } else {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      }
     }
   }
 

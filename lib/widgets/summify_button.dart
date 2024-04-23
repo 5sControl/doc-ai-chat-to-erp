@@ -9,7 +9,7 @@ class SummifyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 15),
+      margin: const EdgeInsets.only(left: 15, right: 15, bottom: 15),
       child: Material(
         color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(8)),

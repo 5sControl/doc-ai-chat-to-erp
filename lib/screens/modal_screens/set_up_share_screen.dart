@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,28 +20,47 @@ class SetUpShareScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<InstructionStep> steps = [
-      InstructionStep(
-          step: 'Step 1',
-          image: Assets.setUp.setUp1.path,
-          description: 'Press "Share" button on the website'),
-      InstructionStep(
-          step: 'Step 2',
-          image: Assets.setUp.setUp2.path,
-          description: 'Scroll through app list and tap "More"'),
-      InstructionStep(
-          step: 'Step 3',
-          image: Assets.setUp.setUp3.path,
-          description: 'Tap "Edit" and scroll till Summify'),
-      InstructionStep(
-          step: 'Step 4',
-          image: Assets.setUp.setUp4.path,
-          description: 'Tap "Add"'),
-      InstructionStep(
-          step: 'Step 5',
-          image: Assets.setUp.setUp5.path,
-          description: 'Return to the top and tap "Done"'),
-    ];
+    final List<InstructionStep> steps = Platform.isIOS
+        ? [
+            InstructionStep(
+                step: 'Step 1',
+                image: Assets.setUp.setUp1.path,
+                description: 'Press "Share" button on the website'),
+            InstructionStep(
+                step: 'Step 2',
+                image: Assets.setUp.setUp2.path,
+                description: 'Scroll through app list and tap "More"'),
+            InstructionStep(
+                step: 'Step 3',
+                image: Assets.setUp.setUp3.path,
+                description: 'Tap "Edit" and scroll till Summify'),
+            InstructionStep(
+                step: 'Step 4',
+                image: Assets.setUp.setUp4.path,
+                description: 'Tap "Add"'),
+            InstructionStep(
+                step: 'Step 5',
+                image: Assets.setUp.setUp5.path,
+                description: 'Return to the top and tap "Done"'),
+          ]
+        : [
+            InstructionStep(
+                step: 'Step 1',
+                image: Assets.setUp.setUp1A.path,
+                description: 'Press "Share" button on the website '),
+            InstructionStep(
+                step: 'Step 2',
+                image: Assets.setUp.setUp2A.path,
+                description: 'Hold Summify icon'),
+            InstructionStep(
+                step: 'Step 3',
+                image: Assets.setUp.setUp3A.path,
+                description: 'Tap "Pin Summify"'),
+            InstructionStep(
+                step: 'Step 4',
+                image: Assets.setUp.setUp4A.path,
+                description: 'Summify is ready "Add"'),
+          ];
 
     void onPressClose() {
       Navigator.of(context).pop();
@@ -96,8 +117,8 @@ class SetUpShareScreen extends StatelessWidget {
                                   ),
                                   Flexible(
                                     child: Padding(
-                                      padding:
-                                          const EdgeInsets.symmetric(horizontal: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,

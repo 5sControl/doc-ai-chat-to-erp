@@ -27,7 +27,7 @@ final lightTheme = ThemeData(
     indicatorColor: Colors.black,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
-      systemOverlayStyle: SystemUiOverlayStyle.light,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       toolbarHeight: 40,
       actionsIconTheme: IconThemeData(color: Colors.black),
       titleTextStyle: TextStyle(

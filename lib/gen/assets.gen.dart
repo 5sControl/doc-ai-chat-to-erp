@@ -13,14 +13,14 @@ class $AssetsGifGen {
   const $AssetsGifGen();
 
   /// File path: assets/gif/how_to.gif
-  AssetGenImage get howTo => const AssetGenImage('assets/gif/how_to.gif');
-
-  /// File path: assets/gif/how_to_android.gif
-  AssetGenImage get howToAndroid =>
-      const AssetGenImage('assets/gif/how_to_android.gif');
+  // AssetGenImage get howTo => const AssetGenImage('assets/gif/how_to.gif');
+  //
+  // /// File path: assets/gif/how_to_android.gif
+  // AssetGenImage get howToAndroid =>
+  //     const AssetGenImage('assets/gif/how_to_android.gif');
 
   /// List of all assets
-  List<AssetGenImage> get values => [howTo, howToAndroid];
+  // List<AssetGenImage> get values => [howTo, howToAndroid];
 }
 
 class $AssetsIconsGen {
@@ -205,20 +205,46 @@ class $AssetsSetUpGen {
   /// File path: assets/set_up/set_up_1.png
   AssetGenImage get setUp1 => const AssetGenImage('assets/set_up/set_up_1.png');
 
+  /// File path: assets/set_up/set_up_1A.png
+  AssetGenImage get setUp1A =>
+      const AssetGenImage('assets/set_up/set_up_1A.png');
+
   /// File path: assets/set_up/set_up_2.png
   AssetGenImage get setUp2 => const AssetGenImage('assets/set_up/set_up_2.png');
+
+  /// File path: assets/set_up/set_up_2A.png
+  AssetGenImage get setUp2A =>
+      const AssetGenImage('assets/set_up/set_up_2A.png');
 
   /// File path: assets/set_up/set_up_3.png
   AssetGenImage get setUp3 => const AssetGenImage('assets/set_up/set_up_3.png');
 
+  /// File path: assets/set_up/set_up_3A.png
+  AssetGenImage get setUp3A =>
+      const AssetGenImage('assets/set_up/set_up_3A.png');
+
   /// File path: assets/set_up/set_up_4.png
   AssetGenImage get setUp4 => const AssetGenImage('assets/set_up/set_up_4.png');
+
+  /// File path: assets/set_up/set_up_4A.png
+  AssetGenImage get setUp4A =>
+      const AssetGenImage('assets/set_up/set_up_4A.png');
 
   /// File path: assets/set_up/set_up_5.png
   AssetGenImage get setUp5 => const AssetGenImage('assets/set_up/set_up_5.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [setUp1, setUp2, setUp3, setUp4, setUp5];
+  List<AssetGenImage> get values => [
+        setUp1,
+        setUp1A,
+        setUp2,
+        setUp2A,
+        setUp3,
+        setUp3A,
+        setUp4,
+        setUp4A,
+        setUp5
+      ];
 }
 
 class Assets {
