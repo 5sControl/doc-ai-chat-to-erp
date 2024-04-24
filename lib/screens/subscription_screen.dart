@@ -161,6 +161,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                 selectedSubscriptionIndex:
                                     selectedSubscriptionIndex,
                                 onSelectSubscription: onSelectSubscription),
+                            Spacer(),
+                            if (Platform.isAndroid)
+                              Text(
+                                'Cancel subscription anytime in Google Play settings',
+                                style: Theme.of(context).textTheme.bodySmall,
+                                textAlign: TextAlign.center,
+                              )
                           ],
                         ),
                       )),
