@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -226,6 +228,22 @@ class SummaryTextContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var keywords = [
+      "Summary:",
+      "Key Points:",
+      "In-depth Analysis:",
+      "Additional Context:",
+      'Supporting Evidence:',
+      "Implications or Conclusions:"
+    ];
+    String t = summaryText;
+    List<String> parts = [];
+    for (String key in keywords) {
+      t = t.replaceAll(key, '~~~$key~~~');
+    }
+    parts = t.split('~~~');
+    parts.removeWhere((element) => element == '');
+
     final ScrollController scrollController = ScrollController();
     return Scrollbar(
       controller: scrollController,
@@ -234,10 +252,19 @@ class SummaryTextContainer extends StatelessWidget {
         padding:
             const EdgeInsets.only(top: 50, bottom: 90, left: 15, right: 15),
         physics: const AlwaysScrollableScrollPhysics(),
-        child: SelectableText(
-          summaryText,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        // child: SelectableText(
+        //   summaryText,
+        //   style: Theme.of(context).textTheme.bodyMedium,
+        // ),
+        child: SelectableText.rich(TextSpan(
+            children: parts
+                .map((e) => TextSpan(
+                      text: e,
+                      style: keywords.contains(e)
+                          ? Theme.of(context).textTheme.bodyLarge
+                          : Theme.of(context).textTheme.bodyMedium,
+                    ))
+                .toList())),
       ),
     );
   }

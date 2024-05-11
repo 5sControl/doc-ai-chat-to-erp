@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 
 import 'package:summify/screens/home_screen/home_screen.dart';
 

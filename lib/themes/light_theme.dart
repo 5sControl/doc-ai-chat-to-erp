@@ -9,7 +9,7 @@ final lightTheme = ThemeData(
     primaryColorDark: const Color.fromRGBO(25, 154, 151, 1),
     primaryColorLight: const Color.fromRGBO(227, 255, 254, 1),
     canvasColor: const Color.fromRGBO(217, 255, 255, 1),
-    highlightColor:  const Color.fromRGBO(5, 49, 57, 1),
+    highlightColor: const Color.fromRGBO(5, 49, 57, 1),
     hintColor: const Color.fromRGBO(30, 188, 183, 1),
     checkboxTheme: const CheckboxThemeData(
       side: BorderSide(
@@ -92,6 +92,11 @@ final lightTheme = ThemeData(
         style: ButtonStyle(
             overlayColor: MaterialStatePropertyAll(Colors.white12))),
     textTheme: const TextTheme(
+      bodyLarge: TextStyle(
+          fontSize: 20,
+          color: Colors.black,
+          height: 2,
+          fontWeight: FontWeight.w600),
       bodyMedium: TextStyle(fontSize: 18, color: Colors.black),
       bodySmall: TextStyle(fontSize: 14, color: Colors.black),
       labelMedium: TextStyle(

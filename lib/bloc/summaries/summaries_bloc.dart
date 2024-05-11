@@ -58,14 +58,18 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             },
             ratedSummaries: const {'https://elang.app/en'},
             defaultSummaryType: SummaryType.short,
-            dailyLimit: 3,
+            dailyLimit: subscriptionBloc.state.subscriptionsStatus ==
+                    SubscriptionsStatus.subscribed
+                ? 15
+                : 2,
             dailySummariesMap: const {},
             textCounter: 1)) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionsStatus == SubscriptionsStatus.subscribed) {
         add(const SetDailyLimit(dailyLimit: 15));
       } else {
-        add(const SetDailyLimit(dailyLimit: 3));
+        add(const SetDailyLimit(dailyLimit: 2));
+        return;
       }
     });
 
@@ -126,12 +130,33 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     });
 
     on<InitDailySummariesCount>((event, emit) {
-      final DateFormat formatter = DateFormat('MM.dd.yy');
-      final thisDay = formatter.format(event.thisDay);
-      final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
-      if (!state.dailySummariesMap.containsKey(thisDay)) {
-        daysMap.addAll({thisDay: 0});
-        emit(state.copyWith(dailySummariesMap: daysMap));
+      if (subscriptionBloc.state.subscriptionsStatus ==
+          SubscriptionsStatus.subscribed) {
+        final DateFormat formatter = DateFormat('MM.dd.yy');
+        final thisDay = formatter.format(event.thisDay);
+        final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
+        if (!state.dailySummariesMap.containsKey(thisDay)) {
+          daysMap.addAll({thisDay: 0});
+          emit(state.copyWith(dailySummariesMap: daysMap));
+        }
+      } else {
+        final DateFormat formatter = DateFormat('MM.dd.yy');
+        final thisDay = formatter.format(event.thisDay);
+        if (!state.dailySummariesMap.containsKey(thisDay)) {
+          // final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
+          int unsubscribedSummariesCount = 0;
+          for (int day in state.dailySummariesMap.values) {
+            unsubscribedSummariesCount += day;
+          }
+          // daysMap.addAll({
+          //   thisDay:
+          //       unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
+          // });
+          emit(state.copyWith(dailySummariesMap: {
+            thisDay:
+                unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
+          }));
+        }
       }
     });
 
@@ -333,7 +358,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             url: fileName,
             fromShare: false,
             error:
-            shortSummaryResponse.toString().replaceAll('Exception:', '')));
+                shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse
@@ -350,7 +375,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             url: fileName,
             fromShare: false,
             error:
-            shortSummaryResponse.toString().replaceAll('Exception:', '')));
+                shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
             longSummary: Summary(
                 summaryError: shortSummaryResponse

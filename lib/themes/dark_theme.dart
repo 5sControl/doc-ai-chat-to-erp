@@ -92,6 +92,7 @@ final darkTheme = ThemeData(
         style: ButtonStyle(
             overlayColor: MaterialStatePropertyAll(Colors.white12))),
     textTheme: const TextTheme(
+      bodyLarge: TextStyle(fontSize: 20, color: Colors.white, height: 2, fontWeight: FontWeight.w600),
       bodyMedium: TextStyle(fontSize: 18, color: Colors.white),
       bodySmall: TextStyle(fontSize: 14, color: Colors.white),
       labelMedium: TextStyle(

@@ -219,7 +219,7 @@ class SettingsScreen extends StatelessWidget {
                     ButtonsGroup(title: 'Membership', items: membershipGroup),
                     ButtonsGroup(title: 'About', items: aboutGroup),
                     ButtonsGroup(title: 'Support', items: supportGroup),
-                    Text('version 1.2.0',
+                    Text('version 1.2.1',
                         textAlign: TextAlign.end,
                         style: Theme.of(context)
                             .textTheme

@@ -12,7 +12,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
-// import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscription/subscription_bloc.dart';
@@ -20,12 +19,10 @@ import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen.dart';
 import 'package:summify/screens/subscriptionsOnb_scree.dart';
-// import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
 import 'bloc/summaries/summaries_bloc.dart';
-// import 'firebase_options.dart';
 import 'screens/main_screen.dart';
 
 void main() async {
@@ -60,7 +57,6 @@ class SummishareApp extends StatelessWidget {
       facebookAppEvents.setAutoLogAppEventsEnabled(true);
     }
 
-    // final AuthService authService = AuthService();
     final brightness = MediaQuery.of(context).platformBrightness;
     return MultiBlocProvider(
         providers: [
@@ -75,9 +71,6 @@ class SummishareApp extends StatelessWidget {
               mixpanelBloc: context.read<MixpanelBloc>(),
             ),
           ),
-          // BlocProvider(
-          //     create: (context) =>
-          //         AuthenticationBloc(authService: authService)),
           BlocProvider(
               create: (context) => SummariesBloc(
                   mixpanelBloc: context.read<MixpanelBloc>(),
@@ -86,14 +79,17 @@ class SummishareApp extends StatelessWidget {
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
             context.read<SubscriptionBloc>().add(const Start());
-            context
-                .read<SummariesBloc>()
-                .add(InitDailySummariesCount(thisDay: DateTime.now()));
-            Timer.periodic(const Duration(minutes: 1), (timer) {
+            // if (context.read<SubscriptionBloc>().state.subscriptionsStatus ==
+            //     SubscriptionsStatus.subscribed) {
               context
                   .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
-            });
+              Timer.periodic(const Duration(minutes: 1), (timer) {
+                context
+                    .read<SummariesBloc>()
+                    .add(InitDailySummariesCount(thisDay: DateTime.now()));
+              });
+            // }
 
             void setSystemColor() async {
               if (settingsState.appTheme == AppTheme.dark) {
