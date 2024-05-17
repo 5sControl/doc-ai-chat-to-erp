@@ -20,10 +20,10 @@
 		ED277B022B8A9D22000725FB /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED277B012B8A9D22000725FB /* ShareViewController.swift */; };
 		ED277B052B8A9D22000725FB /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED277B032B8A9D22000725FB /* MainInterface.storyboard */; };
 		ED277B092B8A9D22000725FB /* Share Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = ED277AFF2B8A9D22000725FB /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		ED3FB6BD2BAC2DB100DE3F8C /* Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */; };
-		ED3FB6BE2BAC2DB200DE3F8C /* Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */; };
-		ED3FB6BF2BAC2DB200DE3F8C /* Config.storekit in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */; };
 		ED3FB6C12BAC329C00DE3F8C /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = ED3FB6C02BAC329C00DE3F8C /* StoreKitTestCertificate.cer */; };
+		EDB120BC2BF73AFE00D523B6 /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EDB120BB2BF73AFE00D523B6 /* StoreKitConfig.storekit */; };
+		EDB120BD2BF73BA000D523B6 /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EDB120BB2BF73AFE00D523B6 /* StoreKitConfig.storekit */; };
+		EDB120BE2BF73BA000D523B6 /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = EDB120BB2BF73AFE00D523B6 /* StoreKitConfig.storekit */; };
 		EDBCE3D12BADBD2D007C7E6D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EDBCE3D02BADBD2D007C7E6D /* PrivacyInfo.xcprivacy */; };
 		EDBCE3D22BADBD2D007C7E6D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EDBCE3D02BADBD2D007C7E6D /* PrivacyInfo.xcprivacy */; };
 		EDBCE3D32BADBD2D007C7E6D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = EDBCE3D02BADBD2D007C7E6D /* PrivacyInfo.xcprivacy */; };
@@ -106,8 +106,8 @@
 		ED277B062B8A9D22000725FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ED277B0F2B8A9D56000725FB /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		ED277B102B8A9DCB000725FB /* Share Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Share Extension.entitlements"; sourceTree = "<group>"; };
-		ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Config.storekit; sourceTree = "<group>"; };
 		ED3FB6C02BAC329C00DE3F8C /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
+		EDB120BB2BF73AFE00D523B6 /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
 		EDBCE3D02BADBD2D007C7E6D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EDC3A5F12B8B7BED001F7D7D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EDFD0EE62BAB216600222AEE /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -193,7 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				EDBCE3D02BADBD2D007C7E6D /* PrivacyInfo.xcprivacy */,
-				ED3FB6BB2BAC29B200DE3F8C /* Config.storekit */,
+				EDB120BB2BF73AFE00D523B6 /* StoreKitConfig.storekit */,
 				ED3FB6C02BAC329C00DE3F8C /* StoreKitTestCertificate.cer */,
 				EDC3A5F12B8B7BED001F7D7D /* GoogleService-Info.plist */,
 				9740EEB11CF90186004384FC /* Flutter */,
@@ -358,7 +358,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDBCE3D22BADBD2D007C7E6D /* PrivacyInfo.xcprivacy in Resources */,
-				ED3FB6BE2BAC2DB200DE3F8C /* Config.storekit in Resources */,
+				EDB120BD2BF73BA000D523B6 /* StoreKitConfig.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,7 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED3FB6BD2BAC2DB100DE3F8C /* Config.storekit in Resources */,
+				EDB120BC2BF73AFE00D523B6 /* StoreKitConfig.storekit in Resources */,
 				ED3FB6C12BAC329C00DE3F8C /* StoreKitTestCertificate.cer in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
@@ -381,8 +381,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED3FB6BF2BAC2DB200DE3F8C /* Config.storekit in Resources */,
 				ED277B052B8A9D22000725FB /* MainInterface.storyboard in Resources */,
+				EDB120BE2BF73BA000D523B6 /* StoreKitConfig.storekit in Resources */,
 				EDBCE3D32BADBD2D007C7E6D /* PrivacyInfo.xcprivacy in Resources */,
 				EDC3A5F32B8B7BED001F7D7D /* GoogleService-Info.plist in Resources */,
 			);

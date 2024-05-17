@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
@@ -48,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressRestore() async {
-      await InAppPurchase.instance.restorePurchases();
+      // await InAppPurchase.instance.restorePurchases();
     }
 
     void onPressOurApps() async {

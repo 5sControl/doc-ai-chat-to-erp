@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:facebook_app_events/facebook_app_events.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +13,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
-import 'package:summify/bloc/subscription/subscription_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen.dart';
@@ -22,6 +20,7 @@ import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
+import 'bloc/subscriptions/subscriptions_bloc.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'screens/main_screen.dart';
 
@@ -67,28 +66,29 @@ class SummishareApp extends StatelessWidget {
                 MixpanelBloc(settingsBloc: context.read<SettingsBloc>()),
           ),
           BlocProvider(
-            create: (context) => SubscriptionBloc(
+            create: (context) => SubscriptionsBloc(
               mixpanelBloc: context.read<MixpanelBloc>(),
             ),
           ),
           BlocProvider(
               create: (context) => SummariesBloc(
                   mixpanelBloc: context.read<MixpanelBloc>(),
-                  subscriptionBloc: context.read<SubscriptionBloc>()))
+                  subscriptionBloc: context.read<SubscriptionsBloc>()))
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
-            context.read<SubscriptionBloc>().add(const Start());
+            context.read<SubscriptionsBloc>().add(const InitSubscriptions());
+
             // if (context.read<SubscriptionBloc>().state.subscriptionsStatus ==
             //     SubscriptionsStatus.subscribed) {
+            context
+                .read<SummariesBloc>()
+                .add(InitDailySummariesCount(thisDay: DateTime.now()));
+            Timer.periodic(const Duration(minutes: 1), (timer) {
               context
                   .read<SummariesBloc>()
                   .add(InitDailySummariesCount(thisDay: DateTime.now()));
-              Timer.periodic(const Duration(minutes: 1), (timer) {
-                context
-                    .read<SummariesBloc>()
-                    .add(InitDailySummariesCount(thisDay: DateTime.now()));
-              });
+            });
             // }
 
             void setSystemColor() async {

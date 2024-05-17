@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
+// import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
@@ -115,34 +115,34 @@ class SummaryData extends Equatable {
       ];
 }
 
-@JsonSerializable()
-class StoreProduct extends ProductDetails with EquatableMixin {
-  StoreProduct(
-      {required super.id,
-      required super.currencySymbol,
-      required super.title,
-      required super.description,
-      required super.price,
-      required super.rawPrice,
-      required super.currencyCode});
-
-  @override
-  List<Object?> get props => [
-        id,
-        title,
-        description,
-        price,
-        title,
-        rawPrice,
-        currencyCode,
-        currencySymbol
-      ];
-
-  factory StoreProduct.fromJson(Map<String, dynamic> json) =>
-      _$StoreProductFromJson(json);
-
-  Map<String, dynamic> toJson() => _$StoreProductToJson(this);
-}
+// @JsonSerializable()
+// class StoreProduct extends ProductDetails with EquatableMixin {
+//   StoreProduct(
+//       {required super.id,
+//       required super.currencySymbol,
+//       required super.title,
+//       required super.description,
+//       required super.price,
+//       required super.rawPrice,
+//       required super.currencyCode});
+//
+//   @override
+//   List<Object?> get props => [
+//         id,
+//         title,
+//         description,
+//         price,
+//         title,
+//         rawPrice,
+//         currencyCode,
+//         currencySymbol
+//       ];
+//
+//   factory StoreProduct.fromJson(Map<String, dynamic> json) =>
+//       _$StoreProductFromJson(json);
+//
+//   Map<String, dynamic> toJson() => _$StoreProductToJson(this);
+// }
 
 class UserModel {
   final String? id;

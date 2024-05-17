@@ -10,6 +10,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
 import 'package:summify/screens/home_screen/summaries_counter.dart';
@@ -182,10 +183,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               final thisDay = dayFormatter.format(DateTime.now());
               final summaries =
                   summariesState.summaries.keys.toList().reversed.toList();
-              return BlocBuilder<SubscriptionBloc, SubscriptionState>(
+              return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
                 builder: (context, state) {
-                  final bool isSubscribed = state.subscriptionsStatus ==
-                      SubscriptionsStatus.unsubscribed;
+                  final bool isSubscribed = state.subscriptionStatus ==
+                      SubscriptionStatus.unsubscribed;
                   return Scaffold(
                     extendBodyBehindAppBar: true,
                     appBar: AppBar(

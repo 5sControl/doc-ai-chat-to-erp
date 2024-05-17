@@ -13,7 +13,7 @@ import '../../models/models.dart';
 import '../../services/summaryApi.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import '../subscription/subscription_bloc.dart';
+import '../subscriptions/subscriptions_bloc.dart';
 
 part 'summaries_event.dart';
 part 'summaries_state.dart';
@@ -46,7 +46,7 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
-  final SubscriptionBloc subscriptionBloc;
+  final SubscriptionsBloc subscriptionBloc;
   final MixpanelBloc mixpanelBloc;
   late final StreamSubscription subscriptionBlocSubscription;
 
@@ -58,14 +58,14 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             },
             ratedSummaries: const {'https://elang.app/en'},
             defaultSummaryType: SummaryType.short,
-            dailyLimit: subscriptionBloc.state.subscriptionsStatus ==
-                    SubscriptionsStatus.subscribed
+            dailyLimit: subscriptionBloc.state.subscriptionStatus ==
+                SubscriptionStatus.subscribed
                 ? 15
                 : 2,
             dailySummariesMap: const {},
             textCounter: 1)) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
-      if (state.subscriptionsStatus == SubscriptionsStatus.subscribed) {
+      if (state.subscriptionStatus == SubscriptionStatus.subscribed) {
         add(const SetDailyLimit(dailyLimit: 15));
       } else {
         add(const SetDailyLimit(dailyLimit: 2));
@@ -130,8 +130,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     });
 
     on<InitDailySummariesCount>((event, emit) {
-      if (subscriptionBloc.state.subscriptionsStatus ==
-          SubscriptionsStatus.subscribed) {
+      if (subscriptionBloc.state.subscriptionStatus ==
+          SubscriptionStatus.subscribed) {
         final DateFormat formatter = DateFormat('MM.dd.yy');
         final thisDay = formatter.format(event.thisDay);
         final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
