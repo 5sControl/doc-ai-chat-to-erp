@@ -79,6 +79,7 @@ class SummishareApp extends StatelessWidget {
           builder: (context, settingsState) {
             if (!settingsState.subscriptionsSynced) {
               context.read<SubscriptionsBloc>().add(const SyncSubscriptions());
+              context.read<SettingsBloc>().add(const SetPurchasesSync());
             }
 
             context.read<SubscriptionsBloc>().add(const InitSubscriptions());

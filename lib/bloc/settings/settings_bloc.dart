@@ -50,6 +50,10 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
         appTheme: event.appTheme,
       ));
     });
+
+    on<SetPurchasesSync>((event, emit) async {
+      emit(state.copyWith(subscriptionsSynced: true));
+    });
   }
 
   @override

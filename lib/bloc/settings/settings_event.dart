@@ -42,3 +42,11 @@ class SelectAppTheme extends SettingsEvent {
   @override
   List<Object> get props => [appTheme];
 }
+
+class SetPurchasesSync extends SettingsEvent {
+  const SetPurchasesSync();
+
+  @override
+  List<Object> get props => [];
+}
+
