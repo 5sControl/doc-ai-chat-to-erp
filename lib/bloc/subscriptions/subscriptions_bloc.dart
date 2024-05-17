@@ -24,7 +24,6 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
       if (offerings is Offerings) {
         emit(state.copyWith(availableProducts: offerings));
       }
-      print(offerings);
       add(const GetSubscriptionStatus());
     });
 
@@ -32,8 +31,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
       try {
         CustomerInfo customerInfo =
             await Purchases.purchasePackage(event.product);
-        if (customerInfo
-            .entitlements.all["Summify premium access"]!.isActive) {
+        if (customerInfo.entitlements.all["Summify premium access"]!.isActive) {
           emit(state.copyWith(
               subscriptionStatus: SubscriptionStatus.subscribed));
         }

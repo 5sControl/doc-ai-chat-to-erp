@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -67,12 +68,16 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
       //     previous.transactionStatus == TransactionStatus.idle &&
       //     current.transactionStatus == TransactionStatus.complete,
       listener: (context, state) {
-        Future.delayed(const Duration(milliseconds: 500), () {
-          onSubscriptionsComplete();
-        });
+        // Future.delayed(const Duration(milliseconds: 500), () {
+        //   onSubscriptionsComplete();
+        // });
       },
       builder: (context, state) {
         final abTest = context.read<SettingsBloc>().state.abTest;
+        List<Package> packages =
+            List.from(state.availableProducts!.current!.availablePackages);
+        packages.sort(
+            (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
         return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
           builder: (context, state) {
             return Stack(
@@ -158,19 +163,18 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                         height: 1,
                                       )),
                                   const Spacer(),
-                                  // PricesBloc(
-                                  //     products: state.availableProducts,
-                                  //     selectedSubscriptionIndex:
-                                  //         selectedSubscriptionIndex,
-                                  //     onSelectSubscription:
-                                  //         onSelectSubscription),
+                                  PricesBloc(
+                                      packages: packages,
+                                      selectedSubscriptionIndex:
+                                          selectedSubscriptionIndex,
+                                      onSelectSubscription:
+                                          onSelectSubscription),
                                 ],
                               ),
                             )),
-                            // SubscribeButton(
-                            //   product: state
-                            //       .availableProducts[selectedSubscriptionIndex],
-                            // ),
+                            SubscribeButton(
+                              package: packages[selectedSubscriptionIndex],
+                            ),
                             const TermsRestorePrivacy(),
                           ],
                         ),
@@ -189,11 +193,11 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
 
 class PricesBloc extends StatelessWidget {
   final int selectedSubscriptionIndex;
-  final List<StoreProduct> products;
+  final List<Package> packages;
   final Function({required int index}) onSelectSubscription;
   const PricesBloc(
       {super.key,
-      required this.products,
+      required this.packages,
       required this.selectedSubscriptionIndex,
       required this.onSelectSubscription});
 
@@ -204,7 +208,7 @@ class PricesBloc extends StatelessWidget {
         SubscriptionCover(
           onSelectSubscription: onSelectSubscription,
           isSelected: selectedSubscriptionIndex == 0,
-          subscription: products[0],
+          package: packages[0],
           index: 0,
         ),
         const SizedBox(
@@ -213,7 +217,7 @@ class PricesBloc extends StatelessWidget {
         SubscriptionCover(
           onSelectSubscription: onSelectSubscription,
           isSelected: selectedSubscriptionIndex == 1,
-          subscription: products[1],
+          package: packages[1],
           index: 1,
         ),
         const SizedBox(
@@ -222,7 +226,7 @@ class PricesBloc extends StatelessWidget {
         SubscriptionCover(
           onSelectSubscription: onSelectSubscription,
           isSelected: selectedSubscriptionIndex == 2,
-          subscription: products[2],
+          package: packages[2],
           index: 2,
         ),
       ],
@@ -232,12 +236,12 @@ class PricesBloc extends StatelessWidget {
 
 class SubscriptionCover extends StatelessWidget {
   final bool isSelected;
-  final StoreProduct subscription;
+  final Package package;
   final Function({required int index}) onSelectSubscription;
   final int index;
   const SubscriptionCover(
       {super.key,
-      required this.subscription,
+      required this.package,
       required this.isSelected,
       required this.onSelectSubscription,
       required this.index});
@@ -245,16 +249,26 @@ class SubscriptionCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String subscriptionTitle = '';
-    // switch (subscription.id) {
-    //   case 'SummifyPremiumWeekly' || 'summify_premium_week':
-    //     subscriptionTitle = '1 \nweek';
-    //   case 'SummifyPremiumMonth' || 'summify_premium_month':
-    //     subscriptionTitle = '1 \nmonth';
-    //   case 'SummifyPremiumYear' || 'summify_premium_year':
-    //     subscriptionTitle = '12 \nmonths';
-    // }
-    //
-    // final textColor = Theme.of(context).brightness == Brightness.light ? isSelected ? Colors.white : Colors.black : Colors.white;
+    switch (package.storeProduct.identifier) {
+      case 'SummifyPremiumWeekly' || 'summify_premium_week':
+        subscriptionTitle = '1 \nweek';
+      case 'SummifyPremiumMonth' || 'summify_premium_month':
+        subscriptionTitle = '1 \nmonth';
+      case 'SummifyPremiumYear' || 'summify_premium_year':
+        subscriptionTitle = '12 \nmonths';
+    }
+
+    final textColor = Theme.of(context).brightness == Brightness.light
+        ? isSelected
+            ? Colors.white
+            : Colors.black
+        : Colors.white;
+
+    String currency({required String code}) {
+      Locale locale = Localizations.localeOf(context);
+      var format = NumberFormat.simpleCurrency(locale: locale.toString());
+      return format.currencySymbol;
+    }
 
     return Expanded(
       child: SizedBox(
@@ -283,45 +297,42 @@ class SubscriptionCover extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: SvgPicture.asset(Assets.icons.checkCircle)),
                   ),
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   mainAxisSize: MainAxisSize.max,
-                //   children: [
-                //     Text(
-                //       subscriptionTitle,
-                //       textAlign: TextAlign.center,
-                //       style:  TextStyle(
-                //           color: textColor,
-                //           fontSize: 13,
-                //           fontWeight: FontWeight.w500),
-                //     ),
-                //     const Divider(
-                //       color: Colors.transparent,
-                //     ),
-                //     Text(
-                //       '${subscription.currencySymbol}${subscription.rawPrice}',
-                //       textAlign: TextAlign.center,
-                //       overflow: TextOverflow.clip,
-                //       style: TextStyle(
-                //           color: textColor,
-                //           fontSize: 18,
-                //           fontWeight:
-                //               isSelected ? FontWeight.w700 : FontWeight.w400),
-                //     ),
-                //     Text(
-                //       subscription.currencySymbol +
-                //           (subscription.rawPrice * 2 + 0.01)
-                //               .toStringAsFixed(2)
-                //               .toString(),
-                //       style:  TextStyle(
-                //           color: textColor,
-                //           decoration: TextDecoration.lineThrough,
-                //           decorationColor: Colors.white,
-                //           fontSize: 16,
-                //           fontWeight: FontWeight.w400),
-                //     ),
-                //   ],
-                // ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      subscriptionTitle,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: textColor,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    const Divider(
+                      color: Colors.transparent,
+                    ),
+                    Text(
+                      package.storeProduct.priceString,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                          color: textColor,
+                          fontSize: 18,
+                          fontWeight:
+                              isSelected ? FontWeight.w700 : FontWeight.w400),
+                    ),
+                    Text(
+                      '${currency(code: package.storeProduct.currencyCode)} ${(package.storeProduct.price * 2).toStringAsFixed(2)}',
+                      style: TextStyle(
+                          color: textColor,
+                          decoration: TextDecoration.lineThrough,
+                          decorationColor: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -332,8 +343,8 @@ class SubscriptionCover extends StatelessWidget {
 }
 
 class SubscribeButton extends StatefulWidget {
-  final StoreProduct? product;
-  const SubscribeButton({super.key, required this.product});
+  final Package? package;
+  const SubscribeButton({super.key, required this.package});
 
   @override
   State<SubscribeButton> createState() => _SubscribeButtonState();
@@ -343,10 +354,10 @@ class _SubscribeButtonState extends State<SubscribeButton> {
   @override
   Widget build(BuildContext context) {
     void onPressGoPremium() {
-      if (widget.product != null) {
-        // context
-        //     .read<SubscriptionBloc>()
-        //     .add(BuySubscription(subscriptionId: widget.product!.id));
+      if (widget.package != null) {
+        context
+            .read<SubscriptionsBloc>()
+            .add(MakePurchase(product: widget.package!));
       }
     }
 
@@ -363,7 +374,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: const Text(
-              'Continue',
+              'Submit',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w700,
