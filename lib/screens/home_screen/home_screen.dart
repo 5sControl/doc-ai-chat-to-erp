@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
@@ -17,12 +15,9 @@ import 'package:summify/screens/home_screen/summaries_counter.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
 
-import '../../bloc/subscription/subscription_bloc.dart';
-import '../../gen/assets.gen.dart';
 import '../modal_screens/set_up_share_screen.dart';
 import 'logo.dart';
 import 'summary_tile.dart';
-import '../modal_screens/how_to_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

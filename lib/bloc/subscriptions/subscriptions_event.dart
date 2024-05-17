@@ -11,11 +11,13 @@ class InitSubscriptions extends SubscriptionsEvent {
 }
 
 class MakePurchase extends SubscriptionsEvent {
+  final BuildContext context;
   final Package product;
-  const MakePurchase({required this.product});
+
+  const MakePurchase({required this.context, required this.product});
 
   @override
-  List<Object> get props => [product];
+  List<Object> get props => [product, context];
 }
 
 class GetSubscriptionStatus extends SubscriptionsEvent {
@@ -25,7 +27,8 @@ class GetSubscriptionStatus extends SubscriptionsEvent {
 }
 
 class RestoreSubscriptions extends SubscriptionsEvent {
-  const RestoreSubscriptions();
+  final BuildContext context;
+  const RestoreSubscriptions({required this.context});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [context];
 }

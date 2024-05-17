@@ -355,7 +355,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
       if (widget.package != null) {
         context
             .read<SubscriptionsBloc>()
-            .add(MakePurchase(product: widget.package!));
+            .add(MakePurchase(context: context, product: widget.package!));
       }
     }
 
@@ -388,54 +388,68 @@ class _SubscribeButtonState extends State<SubscribeButton> {
 
 class TermsRestorePrivacy extends StatelessWidget {
   const TermsRestorePrivacy({super.key});
-
-  void onPressTerms() async {
-    final Uri url = Uri.parse(
-        'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
-    if (!await launchUrl(url)) {}
-  }
-
-  void onPressRestore() async {
-    // await InAppPurchase.instance.restorePurchases();
-  }
-
-  void onPressPrivacy() async {
-    final Uri url = Uri.parse('https://elang.app/privacy');
-    if (!await launchUrl(url)) {}
-  }
-
   @override
   Widget build(BuildContext context) {
+    void onPressTerms() async {
+      final Uri url = Uri.parse(
+          'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+      if (!await launchUrl(url)) {}
+    }
+
+    void onPressRestore() async {
+      context.read<SubscriptionsBloc>().add(RestoreSubscriptions(context: context));
+    }
+
+    void onPressPrivacy() async {
+      final Uri url = Uri.parse('https://elang.app/privacy');
+      if (!await launchUrl(url)) {}
+    }
+
     return Row(
       children: [
         if (Platform.isIOS)
           Expanded(
-            child: GestureDetector(
-              onTap: onPressTerms,
-              child: const Text(
+            child: TextButton(
+              onPressed: onPressTerms,
+              style: const ButtonStyle(
+                  padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+              child: Text(
                 'Terms of use',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13,
+                    color: Theme.of(context).textTheme.bodyMedium!.color),
                 textAlign: TextAlign.center,
               ),
             ),
           ),
         Expanded(
-          child: GestureDetector(
-            onTap: onPressRestore,
-            child: const Text(
+          child: TextButton(
+            onPressed: onPressRestore,
+            style: const ButtonStyle(
+                padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+            child: Text(
               'Restore purchase',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+              style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13,
+                  color: Theme.of(context).textTheme.bodyMedium!.color),
               textAlign: TextAlign.center,
             ),
           ),
         ),
         if (Platform.isIOS)
           Expanded(
-            child: GestureDetector(
-              onTap: onPressPrivacy,
-              child: const Text(
+            child: TextButton(
+              onPressed: onPressPrivacy,
+              style: const ButtonStyle(
+                  padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+              child: Text(
                 'Privacy policy',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+                style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13,
+                    color: Theme.of(context).textTheme.bodyMedium!.color),
                 textAlign: TextAlign.center,
               ),
             ),

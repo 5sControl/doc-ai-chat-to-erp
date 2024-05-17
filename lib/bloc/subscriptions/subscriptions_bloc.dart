@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../helpers/purchases.dart';
+import '../../helpers/show_system_dialog.dart';
 import '../mixpanel/mixpanel_bloc.dart';
 
 part 'subscriptions_event.dart';
@@ -40,6 +42,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
         if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
           print(e);
         }
+        showSystemDialog(context: event.context, title: e.message.toString());
       }
     });
 
@@ -62,16 +65,21 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
       try {
         CustomerInfo customerInfo = await Purchases.restorePurchases();
         if (customerInfo.activeSubscriptions.isNotEmpty) {
-          print('restored');
+          showSystemDialog(
+              context: event.context,
+              title: "Your subscription successfully restored");
           emit(state.copyWith(
               subscriptionStatus: SubscriptionStatus.subscribed));
         } else {
-          print('nothing to restore');
+          showSystemDialog(
+              context: event.context,
+              title: "No available subscriptions found");
           emit(state.copyWith(
               subscriptionStatus: SubscriptionStatus.unsubscribed));
         }
       } on PlatformException catch (e) {
         // Error restoring purchases
+        print(e);
       }
     });
   }
