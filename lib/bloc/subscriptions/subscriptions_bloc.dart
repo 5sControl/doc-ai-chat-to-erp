@@ -39,9 +39,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
         }
       } on PlatformException catch (e) {
         var errorCode = PurchasesErrorHelper.getErrorCode(e);
-        if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
-          print(e);
-        }
+        print(errorCode);
         showSystemDialog(context: event.context, title: e.message.toString());
       }
     });
@@ -63,6 +61,7 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
 
     on<RestoreSubscriptions>((event, emit) async {
       try {
+        await purchasesService.syncSubscriptions();
         CustomerInfo customerInfo = await Purchases.restorePurchases();
         if (customerInfo.activeSubscriptions.isNotEmpty) {
           showSystemDialog(
@@ -79,6 +78,15 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
         }
       } on PlatformException catch (e) {
         // Error restoring purchases
+        print(e);
+      }
+    });
+
+    on<SyncSubscriptions>((event, emit) async {
+      print('sync');
+      try {
+        await purchasesService.syncSubscriptions();
+      } catch (e) {
         print(e);
       }
     });

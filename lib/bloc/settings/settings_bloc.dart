@@ -19,6 +19,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
             howToShowed: false,
             isNotificationsEnabled: true,
             appTheme: AppTheme.auto,
+            subscriptionsSynced: false,
             // themeMode: ThemeMode.system,
             abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
     on<PassOnboarding>((event, emit) {

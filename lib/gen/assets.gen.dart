@@ -9,20 +9,6 @@
 
 import 'package:flutter/widgets.dart';
 
-class $AssetsGifGen {
-  const $AssetsGifGen();
-
-  /// File path: assets/gif/how_to.gif
-  // AssetGenImage get howTo => const AssetGenImage('assets/gif/how_to.gif');
-  //
-  // /// File path: assets/gif/how_to_android.gif
-  // AssetGenImage get howToAndroid =>
-  //     const AssetGenImage('assets/gif/how_to_android.gif');
-
-  /// List of all assets
-  // List<AssetGenImage> get values => [howTo, howToAndroid];
-}
-
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -252,7 +238,6 @@ class Assets {
 
   static const AssetGenImage bgDark = AssetGenImage('assets/bg_dark.png');
   static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
-  static const $AssetsGifGen gif = $AssetsGifGen();
   static const AssetGenImage girl = AssetGenImage('assets/girl.png');
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const AssetGenImage niga = AssetGenImage('assets/niga.png');

@@ -77,10 +77,11 @@ class SummishareApp extends StatelessWidget {
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
-            context.read<SubscriptionsBloc>().add(const InitSubscriptions());
+            if (!settingsState.subscriptionsSynced) {
+              context.read<SubscriptionsBloc>().add(const SyncSubscriptions());
+            }
 
-            // if (context.read<SubscriptionBloc>().state.subscriptionsStatus ==
-            //     SubscriptionsStatus.subscribed) {
+            context.read<SubscriptionsBloc>().add(const InitSubscriptions());
             context
                 .read<SummariesBloc>()
                 .add(InitDailySummariesCount(thisDay: DateTime.now()));

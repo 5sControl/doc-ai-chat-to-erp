@@ -141,7 +141,7 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   const Spacer(),
-                                  const Text('Need more summaries?',
+                                  const Text('Maximize your productivity!',
                                       style: TextStyle(
                                           fontSize: 46,
                                           fontWeight: FontWeight.w700,

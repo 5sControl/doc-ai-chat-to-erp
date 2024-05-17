@@ -32,3 +32,10 @@ class RestoreSubscriptions extends SubscriptionsEvent {
   @override
   List<Object?> get props => [context];
 }
+
+class SyncSubscriptions extends SubscriptionsEvent {
+  const SyncSubscriptions();
+
+  @override
+  List<Object?> get props => [];
+}

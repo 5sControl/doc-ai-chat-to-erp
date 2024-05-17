@@ -13,7 +13,7 @@ import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../bloc/settings/settings_bloc.dart';
-import 'modal_screens/how_to_screen.dart';
+import '../bloc/subscriptions/subscriptions_bloc.dart';
 
 class ButtonItem {
   final String title;
@@ -47,7 +47,9 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressRestore() async {
-      // await InAppPurchase.instance.restorePurchases();
+      context
+          .read<SubscriptionsBloc>()
+          .add(RestoreSubscriptions(context: context));
     }
 
     void onPressOurApps() async {
@@ -118,7 +120,7 @@ class SettingsScreen extends StatelessWidget {
         title: 'Dark mode',
         leadingIcon: Assets.icons.theme,
         onTap: () {},
-        trailing: ThemeButtons(),
+        trailing: const ThemeButtons(),
       ),
     ];
 
@@ -214,11 +216,11 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    ButtonsGroup(title: 'Membership', items: generalGroup),
+                    ButtonsGroup(title: 'General', items: generalGroup),
                     ButtonsGroup(title: 'Membership', items: membershipGroup),
                     ButtonsGroup(title: 'About', items: aboutGroup),
                     ButtonsGroup(title: 'Support', items: supportGroup),
-                    Text('version 1.2.1',
+                    Text('version 1.2.2',
                         textAlign: TextAlign.end,
                         style: Theme.of(context)
                             .textTheme

@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class PurchasesService {
-
   Future<void> initPlatformState() async {
     await Purchases.setLogLevel(LogLevel.debug);
 
@@ -31,5 +30,10 @@ class PurchasesService {
     } on PlatformException catch (e) {
       throw Exception(e);
     }
+  }
+
+  Future<void> syncSubscriptions() async {
+    await initPlatformState();
+    await Purchases.syncPurchases();
   }
 }

@@ -69,24 +69,3 @@ const _$SummaryOriginEnumMap = {
   SummaryOrigin.url: 'url',
   SummaryOrigin.text: 'text',
 };
-
-// StoreProduct _$StoreProductFromJson(Map<String, dynamic> json) => StoreProduct(
-//       id: json['id'] as String,
-//       currencySymbol: json['currencySymbol'] as String? ?? '',
-//       title: json['title'] as String,
-//       description: json['description'] as String,
-//       price: json['price'] as String,
-//       rawPrice: (json['rawPrice'] as num).toDouble(),
-//       currencyCode: json['currencyCode'] as String,
-//     );
-//
-// Map<String, dynamic> _$StoreProductToJson(StoreProduct instance) =>
-//     <String, dynamic>{
-//       'id': instance.id,
-//       'title': instance.title,
-//       'description': instance.description,
-//       'price': instance.price,
-//       'rawPrice': instance.rawPrice,
-//       'currencyCode': instance.currencyCode,
-//       'currencySymbol': instance.currencySymbol,
-//     };
