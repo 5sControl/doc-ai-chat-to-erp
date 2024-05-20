@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/summary_screen/select_lang_dialog.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../models/models.dart';
@@ -55,7 +56,9 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
       context.read<MixpanelBloc>().add(const CopySummary());
     }
 
-    void onPressTranslate() {}
+    void onPressTranslate() async {
+      dialogBuilder(context);
+    }
 
     final List<ButtonItem> items = [
       ButtonItem(
