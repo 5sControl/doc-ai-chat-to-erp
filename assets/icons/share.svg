@@ -1,36 +1,19 @@
-<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-<!--<rect width="30" height="30" fill="#F5F5F5"/>-->
-<g id="5" clip-path="url(#clip0_0_1)">
-<!--<rect width="375" height="812" transform="translate(-182 -738)" fill="white"/>-->
-<g id="&#208;&#158;&#208;&#186;&#208;&#189;&#208;&#190;">
-<g id="Frame 427318627" opacity="0.3" clip-path="url(#clip1_0_1)">
-<!--<rect width="375" height="812" transform="translate(-182 -738)" fill="#053139"/>-->
-<!--<rect id="&#208;&#158;&#208;&#186;&#208;&#189;&#208;&#190;_2" opacity="0.2" x="-181.5" y="-737.5" width="374" height="811" fill="#B5F6FF" fill-opacity="0.1" stroke="black"/>-->
-<g id="Frame 427318648">
-<!--<rect width="375" height="812" transform="translate(-182 -738)" fill="url(#paint0_linear_0_1)"/>-->
-</g>
-</g>
-</g>
-<g id="Button">
+<!--<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--    <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 2.25C14.7051 2.25 13.25 3.70507 13.25 5.5C13.25 5.69591 13.2673 5.88776 13.3006 6.07412L8.56991 9.38558C8.54587 9.4024 8.52312 9.42038 8.50168 9.43939C7.94993 9.00747 7.25503 8.75 6.5 8.75C4.70507 8.75 3.25 10.2051 3.25 12C3.25 13.7949 4.70507 15.25 6.5 15.25C7.25503 15.25 7.94993 14.9925 8.50168 14.5606C8.52312 14.5796 8.54587 14.5976 8.56991 14.6144L13.3006 17.9259C13.2673 18.1122 13.25 18.3041 13.25 18.5C13.25 20.2949 14.7051 21.75 16.5 21.75C18.2949 21.75 19.75 20.2949 19.75 18.5C19.75 16.7051 18.2949 15.25 16.5 15.25C15.4472 15.25 14.5113 15.7506 13.9174 16.5267L9.43806 13.3911C9.63809 12.9694 9.75 12.4978 9.75 12C9.75 11.5022 9.63809 11.0306 9.43806 10.6089L13.9174 7.4733C14.5113 8.24942 15.4472 8.75 16.5 8.75C18.2949 8.75 19.75 7.29493 19.75 5.5C19.75 3.70507 18.2949 2.25 16.5 2.25ZM14.75 5.5C14.75 4.5335 15.5335 3.75 16.5 3.75C17.4665 3.75 18.25 4.5335 18.25 5.5C18.25 6.4665 17.4665 7.25 16.5 7.25C15.5335 7.25 14.75 6.4665 14.75 5.5ZM6.5 10.25C5.5335 10.25 4.75 11.0335 4.75 12C4.75 12.9665 5.5335 13.75 6.5 13.75C7.4665 13.75 8.25 12.9665 8.25 12C8.25 11.0335 7.4665 10.25 6.5 10.25ZM16.5 16.75C15.5335 16.75 14.75 17.5335 14.75 18.5C14.75 19.4665 15.5335 20.25 16.5 20.25C17.4665 20.25 18.25 19.4665 18.25 18.5C18.25 17.5335 17.4665 16.75 16.5 16.75Z" fill="#1C274C"/>-->
+<!--</svg>-->
 
-<g id="&#208;&#186;&#208;&#189;&#208;&#190;&#208;&#191;&#208;&#186;&#208;&#176;">
-<path id="secondary" d="M10.1318 7.74996L14.9652 2.91663L19.7985 7.74996" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="secondary_2" d="M14.9653 2.91663V18.625" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="primary" d="M19.7985 12.5834H22.2152C22.5356 12.5834 22.843 12.7107 23.0696 12.9373C23.2962 13.1639 23.4235 13.4712 23.4235 13.7917V24.6667C23.4235 24.9872 23.2962 25.2945 23.0696 25.5211C22.843 25.7477 22.5356 25.875 22.2152 25.875H7.71517C7.3947 25.875 7.08736 25.7477 6.86075 25.5211C6.63414 25.2945 6.50684 24.9872 6.50684 24.6667V13.7917C6.50684 13.4712 6.63414 13.1639 6.86075 12.9373C7.08736 12.7107 7.3947 12.5834 7.71517 12.5834H10.1318" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-</g>
-</g>
-<defs>
-<linearGradient id="paint0_linear_0_1" x1="9.17706e-06" y1="828.5" x2="355.5" y2="-1.00239e-05" gradientUnits="userSpaceOnUse">
-<stop stop-color="white"/>
-<stop stop-color="#E7FEFE"/>
-<stop offset="1" stop-color="#7EEFEF"/>
-</linearGradient>
-<clipPath id="clip0_0_1">
-<rect width="375" height="812" fill="white" transform="translate(-182 -738)"/>
-</clipPath>
-<clipPath id="clip1_0_1">
-<rect width="375" height="812" fill="white" transform="translate(-182 -738)"/>
-</clipPath>
-</defs>
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#000000"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+>
+    <path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8" />
+    <polyline points="16 6 12 2 8 6" />
+    <line x1="12" y1="2" x2="12" y2="15" />
 </svg>

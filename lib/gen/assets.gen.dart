@@ -114,6 +114,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/theme.svg
   String get theme => 'assets/icons/theme.svg';
 
+  /// File path: assets/icons/translate.svg
+  String get translate => 'assets/icons/translate.svg';
+
   /// File path: assets/icons/update.svg
   String get update => 'assets/icons/update.svg';
 
@@ -156,6 +159,7 @@ class $AssetsIconsGen {
         terms,
         text,
         theme,
+        translate,
         update,
         url
       ];

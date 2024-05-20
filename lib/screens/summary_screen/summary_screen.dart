@@ -9,7 +9,7 @@ import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
 import 'package:summify/screens/summary_screen/summary_hero_image.dart';
-import 'package:summify/widgets/share_copy_button.dart';
+import 'package:summify/screens/summary_screen/share_copy_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
