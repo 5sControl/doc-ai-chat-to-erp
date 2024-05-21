@@ -16,33 +16,55 @@ class SendRequestField extends StatelessWidget {
           .add(MakeQuestion(question: controller.text, summaryKey: summaryKey));
     }
 
+    final gradientColors = Theme.of(context).brightness == Brightness.dark
+        ? const [
+            Color.fromRGBO(15, 57, 60, 1),
+            Color.fromRGBO(15, 57, 60, 0),
+          ]
+        : const [
+            Color.fromRGBO(223, 252, 252, 1),
+            Color.fromRGBO(223, 252, 252, 0),
+          ];
+
     return Container(
-      margin: EdgeInsets.only(
+      decoration: BoxDecoration(
+          color: Colors.red,
+          gradient: LinearGradient(
+              colors: gradientColors,
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              stops: const [
+                0.3,
+                1,
+              ])),
+      padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom, left: 15, right: 15),
-      height: 40,
-      child: Row(
-        children: [
-          Flexible(
-            child: TextFormField(
-              controller: controller,
-              cursorColor: Colors.black54,
-              cursorHeight: 20,
-              style: Theme.of(context).textTheme.labelMedium,
-              decoration: const InputDecoration(
-                hintText: 'Paste link',
+      child: SizedBox(
+        height: 40,
+        child: Row(
+          children: [
+            Flexible(
+              child: TextFormField(
+                controller: controller,
+                cursorColor: Colors.black54,
+                cursorHeight: 20,
+                style: Theme.of(context).textTheme.labelMedium,
+                decoration: const InputDecoration(
+                  hintText: 'Paste link',
+                ),
               ),
             ),
-          ),
-          MaterialButton(
-              color: Theme.of(context).primaryColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              padding: EdgeInsets.zero,
-              minWidth: 40,
-              height: 40,
-              onPressed: onPressSendRequest,
-              child: const Icon(Icons.send_rounded))
-        ],
+            MaterialButton(
+                color: Theme.of(context).primaryColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                padding: EdgeInsets.zero,
+                minWidth: 40,
+                height: 40,
+                onPressed: onPressSendRequest,
+                child: const Icon(Icons.send_rounded))
+          ],
+        ),
       ),
     );
   }

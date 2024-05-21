@@ -16,13 +16,16 @@ class ResearchTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ResearchBloc, ResearchState>(
       builder: (context, state) {
-        return ListView(
-          padding:
-              const EdgeInsets.only(left: 15, right: 15, top: 60, bottom: 100),
-          children: state.questions[summaryKey]
-                  ?.map((question) => AnswerAndQuestionItem(question: question))
-                  .toList() ??
-              [Container()],
+        return Scrollbar(
+          child: ListView(
+            padding: const EdgeInsets.only(
+                left: 15, right: 15, top: 60, bottom: 100),
+            children: state.questions[summaryKey]
+                    ?.map(
+                        (question) => AnswerAndQuestionItem(question: question))
+                    .toList() ??
+                [Container()],
+          ),
         );
       },
     );
