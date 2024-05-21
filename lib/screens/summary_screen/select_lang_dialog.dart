@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/summaries/summaries_bloc.dart';
+
+import '../../services/summaryApi.dart';
 
 const Map<String, String> translateLanguages = {
   "ru": 'Russian',
@@ -10,17 +14,25 @@ const Map<String, String> translateLanguages = {
   "zh": "Chinese"
 };
 
-Future<void> dialogBuilder(BuildContext context) {
+Future<void> translateDialog(
+    {required BuildContext context,
+    required String summaryKey,
+    required String text}) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
-      return DialogState();
+      return DialogState(
+        summaryKey: summaryKey,
+        text: text,
+      );
     },
   );
 }
 
 class DialogState extends StatefulWidget {
-  const DialogState({super.key});
+  final String summaryKey;
+  final String text;
+  const DialogState({super.key, required this.text, required this.summaryKey});
 
   @override
   State<DialogState> createState() => _DialogStateState();
@@ -41,8 +53,12 @@ class _DialogStateState extends State<DialogState> {
       initialItem: 0,
     );
 
-    void onPressTranslate() {
-      print(selectedLang);
+    void onPressTranslate() async {
+
+      // context.read<SummariesBloc>().add(TranslateSummary(
+      //     summaryKey: widget.summaryKey,
+      //     summaryText: widget.text,
+      //     languageCode: selectedLang));
       Navigator.of(context).pop();
     }
 

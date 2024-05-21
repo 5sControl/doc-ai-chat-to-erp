@@ -25,7 +25,10 @@ class GetSummaryFromFile extends SummariesEvent {
   final String fileName;
   final String filePath;
   final bool fromShare;
-  const GetSummaryFromFile({required this.fileName, required this.filePath, required this.fromShare});
+  const GetSummaryFromFile(
+      {required this.fileName,
+      required this.filePath,
+      required this.fromShare});
 
   @override
   List<Object?> get props => [fileName, filePath, fromShare];
@@ -87,3 +90,20 @@ class CancelRequest extends SummariesEvent {
   @override
   List<String?> get props => [sharedLink];
 }
+
+// class TranslateSummary extends SummariesEvent {
+//   final String summaryKey;
+//   final String summaryText;
+//   final String languageCode;
+//   final SummaryType summaryType;
+//
+//   const TranslateSummary(
+//       {required this.summaryKey,
+//       required this.summaryText,
+//       required this.languageCode,
+//       required this.summaryType});
+//
+//   @override
+//   List<Object> get props =>
+//       [summaryKey, summaryText, languageCode, summaryType];
+// }

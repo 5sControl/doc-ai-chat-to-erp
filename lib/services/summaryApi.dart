@@ -20,13 +20,12 @@ class SummaryApiRepository {
   final String fileUrl =
       "http://51.159.179.125:8002/application_by_summarize/uploadfile/";
   final String rateUrl = 'http://51.159.179.125:8000/api/applications/reviews/';
-  // final String linkUrl =
-  //     "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
-  // final String fileUrl =
-  //     "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
 
   final String requestUrl =
       'http://51.159.179.125:8000/api/applications/function-reports/';
+
+  final String translateUrl =
+      'https://largely-whole-horse.ngrok-free.app/translator/translate-to/';
 
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.plain),
@@ -142,6 +141,37 @@ class SummaryApiRepository {
     return null;
   }
 
+  Future<String> translate(
+      {required String text, required String languageCode}) async {
+    try {
+      Response response = await _dio
+          .post(translateUrl, data: {'text': text, 'language': languageCode});
+      if (response.statusCode == 200) {
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return res['translated_text'];
+      } else {
+        throw Exception('Translation error');
+      }
+    } on DioException catch (e) {
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+
+        error = ErrorDecode(
+          detail: decodedMap['detail'],
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+
+      throw Exception(error.detail);
+    } catch (error) {
+      throw Exception('Some error');
+    }
+  }
+
   Future<SendRateStatus> sendRate(
       {required String summaryLink,
       required String summary,
@@ -182,14 +212,6 @@ class SummaryApiRepository {
     required String email,
     required String message,
   }) async {
-    // print('More:  $getMoreSummaries');
-    // print('Add: $addTranslation');
-    // print('Ask: $askAQuestions');
-    // print('Add lang: $addLang');
-    // print('Name: $name');
-    // print('Email: $email');
-    // print('Message: $message');
-
     try {
       Response response = await _dio.post(
         requestUrl,
@@ -229,6 +251,11 @@ class SummaryRepository {
       {required String textToSummify, required SummaryType summaryType}) {
     return _summaryRepository.getFromText(
         textToSummify: textToSummify, summaryType: summaryType);
+  }
+
+  Future<String> getTranslate(
+      {required String text, required String languageCode}) {
+    return _summaryRepository.translate(text: text, languageCode: languageCode);
   }
 
   Future<dynamic> getSummaryFromFile(

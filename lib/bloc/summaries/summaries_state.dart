@@ -39,6 +39,12 @@ class SummariesState extends Equatable {
   Map<String, dynamic> toJson() => _$SummariesStateToJson(this);
 
   @override
-  List<Object> get props =>
-      [summaries, ratedSummaries, dailyLimit, dailySummariesMap, textCounter, defaultSummaryType];
+  List<Object> get props => [
+        summaries,
+        ratedSummaries,
+        dailyLimit,
+        dailySummariesMap,
+        textCounter,
+        defaultSummaryType
+      ];
 }

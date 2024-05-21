@@ -69,3 +69,25 @@ const _$SummaryOriginEnumMap = {
   SummaryOrigin.url: 'url',
   SummaryOrigin.text: 'text',
 };
+
+SummaryTranslate _$SummaryTranslateFromJson(Map<String, dynamic> json) =>
+    SummaryTranslate(
+      translate: json['translate'] as String?,
+      translateStatus:
+          $enumDecode(_$TranslateStatusEnumMap, json['translateStatus']),
+      isActive: json['isActive'] as bool,
+    );
+
+Map<String, dynamic> _$SummaryTranslateToJson(SummaryTranslate instance) =>
+    <String, dynamic>{
+      'translate': instance.translate,
+      'translateStatus': _$TranslateStatusEnumMap[instance.translateStatus]!,
+      'isActive': instance.isActive,
+    };
+
+const _$TranslateStatusEnumMap = {
+  TranslateStatus.loading: 'loading',
+  TranslateStatus.complete: 'complete',
+  TranslateStatus.error: 'error',
+  TranslateStatus.initial: 'initial',
+};

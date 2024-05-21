@@ -13,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
+import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen.dart';
@@ -59,6 +60,7 @@ class SummishareApp extends StatelessWidget {
     final brightness = MediaQuery.of(context).platformBrightness;
     return MultiBlocProvider(
         providers: [
+          BlocProvider(create: (context) => TranslatesBloc()),
           BlocProvider(
               create: (context) => SettingsBloc(brightness: brightness)),
           BlocProvider(

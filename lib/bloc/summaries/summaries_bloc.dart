@@ -59,7 +59,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             ratedSummaries: const {'https://elang.app/en'},
             defaultSummaryType: SummaryType.short,
             dailyLimit: subscriptionBloc.state.subscriptionStatus ==
-                SubscriptionStatus.subscribed
+                    SubscriptionStatus.subscribed
                 ? 15
                 : 2,
             dailySummariesMap: const {},

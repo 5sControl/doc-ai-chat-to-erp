@@ -8,6 +8,9 @@ enum SummaryOrigin { file, url, text }
 
 enum SummaryStatus { loading, complete, error, rejected, stopped, initial }
 
+enum TranslateStatus { loading, complete, error, initial }
+// enum SummaryType { short, long }
+
 @JsonSerializable()
 class SummaryPreview extends Equatable {
   final String? imageUrl;
@@ -38,16 +41,16 @@ class Summary extends Equatable {
   final String? summaryText;
   final String? summaryError;
 
-  const Summary({this.summaryText,  this.summaryError});
+  const Summary({this.summaryText, this.summaryError});
 
   Summary copyWith({
     String? summaryText,
     String? summaryError,
+    SummaryTranslate? summaryTranslate,
   }) {
     return Summary(
-      summaryText: summaryText ?? this.summaryText,
-      summaryError: summaryError ?? this.summaryError,
-    );
+        summaryText: summaryText ?? this.summaryText,
+        summaryError: summaryError ?? this.summaryError);
   }
 
   factory Summary.fromJson(Map<String, dynamic> json) =>
@@ -111,38 +114,39 @@ class SummaryData extends Equatable {
         longSummaryStatus,
         date,
         summaryPreview,
-        summaryOrigin
+        summaryOrigin,
       ];
 }
 
-// @JsonSerializable()
-// class StoreProduct extends ProductDetails with EquatableMixin {
-//   StoreProduct(
-//       {required super.id,
-//       required super.currencySymbol,
-//       required super.title,
-//       required super.description,
-//       required super.price,
-//       required super.rawPrice,
-//       required super.currencyCode});
-//
-//   @override
-//   List<Object?> get props => [
-//         id,
-//         title,
-//         description,
-//         price,
-//         title,
-//         rawPrice,
-//         currencyCode,
-//         currencySymbol
-//       ];
-//
-//   factory StoreProduct.fromJson(Map<String, dynamic> json) =>
-//       _$StoreProductFromJson(json);
-//
-//   Map<String, dynamic> toJson() => _$StoreProductToJson(this);
-// }
+@JsonSerializable()
+class SummaryTranslate extends Equatable {
+  final String? translate;
+  final TranslateStatus translateStatus;
+  final bool isActive;
+  const SummaryTranslate(
+      {required this.translate,
+      required this.translateStatus,
+      required this.isActive});
+
+  SummaryTranslate copyWith({
+    String? translate,
+    TranslateStatus? translateStatus,
+    bool? isActive,
+  }) {
+    return SummaryTranslate(
+        translate: translate ?? this.translate,
+        translateStatus: translateStatus ?? this.translateStatus,
+        isActive: isActive ?? this.isActive);
+  }
+
+  factory SummaryTranslate.fromJson(Map<String, dynamic> json) =>
+      _$SummaryTranslateFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SummaryTranslateToJson(this);
+
+  @override
+  List<Object?> get props => [translate, translateStatus, isActive];
+}
 
 class UserModel {
   final String? id;
