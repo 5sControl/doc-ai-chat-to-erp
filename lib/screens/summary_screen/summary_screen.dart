@@ -7,9 +7,11 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
+import 'package:summify/screens/summary_screen/research_tab.dart';
 import 'package:summify/screens/summary_screen/send_request_field.dart';
 import 'package:summify/screens/summary_screen/summary_hero_image.dart';
 import 'package:summify/screens/summary_screen/share_copy_button.dart';
+import 'package:summify/screens/summary_screen/summary_text_container.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
@@ -192,7 +194,9 @@ class _SummaryScreenState extends State<SummaryScreen>
                                         summaryTranslate: translatesState
                                             .longTranslates[widget.summaryKey],
                                       ),
-                                      ResearchContainer(),
+                                      ResearchTab(
+                                        summaryKey: widget.summaryKey,
+                                      ),
                                     ],
                                   ),
                                   Align(
@@ -242,88 +246,5 @@ class _SummaryScreenState extends State<SummaryScreen>
         );
       },
     );
-  }
-}
-
-class SummaryTextContainer extends StatelessWidget {
-  final String summaryText;
-  final Summary summary;
-  final SummaryStatus summaryStatus;
-  final SummaryTranslate? summaryTranslate;
-
-  const SummaryTextContainer(
-      {super.key,
-      required this.summaryText,
-      required this.summary,
-      required this.summaryStatus,
-      required this.summaryTranslate});
-
-  @override
-  Widget build(BuildContext context) {
-    var keywords = [
-      "Summary:",
-      "Key Points:",
-      "In-depth Analysis:",
-      "Additional Context:",
-      'Supporting Evidence:',
-      "Implications or Conclusions:"
-    ];
-    String t = summaryText;
-    List<String> parts = [];
-    for (String key in keywords) {
-      t = t.replaceAll(key, '~~~$key~~~');
-    }
-    parts = t.split('~~~');
-    parts.removeWhere((element) => element == '');
-
-    final ScrollController scrollController = ScrollController();
-    return Scrollbar(
-      controller: scrollController,
-      child: SingleChildScrollView(
-        controller: scrollController,
-        padding:
-            const EdgeInsets.only(top: 50, bottom: 90, left: 15, right: 15),
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
-          key: Key(summaryTranslate != null && summaryTranslate!.isActive
-              ? 'short'
-              : 'long'),
-          child: Builder(
-            builder: (context) {
-              if (summaryTranslate != null && summaryTranslate!.isActive) {
-                return Animate(
-                  effects: const [FadeEffect()],
-                  child: SelectableText.rich(TextSpan(
-                      text: summaryTranslate!.translate,
-                      style: Theme.of(context).textTheme.bodyMedium)),
-                );
-              }
-
-              return Animate(
-                effects: const [FadeEffect()],
-                child: SelectableText.rich(TextSpan(
-                    children: parts
-                        .map((e) => TextSpan(
-                              text: e,
-                              style: keywords.contains(e)
-                                  ? Theme.of(context).textTheme.bodyLarge
-                                  : Theme.of(context).textTheme.bodyMedium,
-                            ))
-                        .toList())),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ResearchContainer extends StatelessWidget {
-  const ResearchContainer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

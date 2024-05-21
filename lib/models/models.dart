@@ -160,7 +160,7 @@ class ResearchQuestion extends Equatable {
   Map<String, dynamic> toJson() => _$ResearchQuestionToJson(this);
 
   @override
-  List<Object?> get props => [question, answer];
+  List<Object> get props => [question, answer];
 }
 
 enum AnswerStatus { loading, completed, error }

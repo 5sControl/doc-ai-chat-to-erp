@@ -172,6 +172,38 @@ class SummaryApiRepository {
     }
   }
 
+  Future<String> request(
+      {required String summaryUrl, required String question}) async {
+    try {
+      Response response = await _dio
+          .post(linkUrl, data: {'url': summaryUrl, 'user_query': question});
+      if (response.statusCode == 200) {
+        print(response);
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return res['translated_text'];
+      } else {
+        throw Exception('Translation error');
+      }
+    } on DioException catch (e) {
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+
+        error = ErrorDecode(
+          detail: decodedMap['detail'],
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+
+      throw Exception(error.detail);
+    } catch (error) {
+      throw Exception('Some error');
+    }
+  }
+
   Future<SendRateStatus> sendRate(
       {required String summaryLink,
       required String summary,
@@ -256,6 +288,12 @@ class SummaryRepository {
   Future<String> getTranslate(
       {required String text, required String languageCode}) {
     return _summaryRepository.translate(text: text, languageCode: languageCode);
+  }
+
+  Future<String> makeRequest(
+      {required String summaryUrl, required String question}) {
+    return _summaryRepository.request(
+        question: question, summaryUrl: summaryUrl);
   }
 
   Future<dynamic> getSummaryFromFile(
