@@ -175,12 +175,16 @@ class SummaryApiRepository {
   Future<String> request(
       {required String summaryUrl, required String question}) async {
     try {
-      Response response = await _dio
-          .post(linkUrl, data: {'url': summaryUrl, 'user_query': question});
+      Response response = await _dio.post(linkUrl, data: {
+        'url': summaryUrl,
+        'user_query': question,
+        "context": "",
+        "type_summary": "",
+      });
       if (response.statusCode == 200) {
-        print(response);
-        final res = jsonDecode(response.data) as Map<String, dynamic>;
-        return res['translated_text'];
+        // final res = jsonDecode(response.data) as Map<String, dynamic>;
+        // return res['translated_text'];
+        return response.toString();
       } else {
         throw Exception('Translation error');
       }

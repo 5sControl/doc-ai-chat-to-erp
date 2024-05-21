@@ -66,6 +66,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/logo.svg
   String get logo => 'assets/icons/logo.svg';
 
+  /// File path: assets/icons/mini_dislike.svg
+  String get miniDislike => 'assets/icons/mini_dislike.svg';
+
+  /// File path: assets/icons/mini_like.svg
+  String get miniLike => 'assets/icons/mini_like.svg';
+
   /// File path: assets/icons/no-image.svg
   String get noImage => 'assets/icons/no-image.svg';
 
@@ -143,6 +149,8 @@ class $AssetsIconsGen {
         info,
         like,
         logo,
+        miniDislike,
+        miniLike,
         noImage,
         notification,
         paste,

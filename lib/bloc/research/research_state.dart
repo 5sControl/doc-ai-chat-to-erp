@@ -14,5 +14,5 @@ class ResearchState extends Equatable {
   }
 
   @override
-  List<Object> get props => [questions, questions.values];
+  List<Object> get props => [questions];
 }
