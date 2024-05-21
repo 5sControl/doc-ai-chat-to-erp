@@ -50,3 +50,10 @@ class SetPurchasesSync extends SettingsEvent {
   List<Object> get props => [];
 }
 
+class SetTranslateLanguage extends SettingsEvent {
+  final String translateLanguage;
+  const SetTranslateLanguage({required this.translateLanguage});
+
+  @override
+  List<Object> get props => [translateLanguage];
+}

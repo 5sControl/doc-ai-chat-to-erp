@@ -16,7 +16,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
-import 'package:summify/screens/settings_screen.dart';
+import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscriptionsOnb_scree.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';

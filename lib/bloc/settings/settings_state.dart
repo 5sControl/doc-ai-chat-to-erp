@@ -10,6 +10,7 @@ class SettingsState extends Equatable {
   final bool isNotificationsEnabled;
   final AppTheme appTheme;
   final bool subscriptionsSynced;
+  final String translateLanguage;
 
   const SettingsState({
     required this.onboardingPassed,
@@ -18,6 +19,7 @@ class SettingsState extends Equatable {
     required this.isNotificationsEnabled,
     required this.appTheme,
     required this.subscriptionsSynced,
+    required this.translateLanguage,
   });
 
   SettingsState copyWith({
@@ -28,15 +30,18 @@ class SettingsState extends Equatable {
     AppTheme? appTheme,
     ThemeMode? themeMode,
     bool? subscriptionsSynced,
+    String? translateLanguage,
   }) {
     return SettingsState(
-        onboardingPassed: onboardingPassed ?? this.onboardingPassed,
-        howToShowed: howToShowed ?? this.howToShowed,
-        abTest: abTest ?? this.abTest,
-        isNotificationsEnabled:
-            isNotificationsEnabled ?? this.isNotificationsEnabled,
-        appTheme: appTheme ?? this.appTheme,
-        subscriptionsSynced: subscriptionsSynced ?? this.subscriptionsSynced);
+      onboardingPassed: onboardingPassed ?? this.onboardingPassed,
+      howToShowed: howToShowed ?? this.howToShowed,
+      abTest: abTest ?? this.abTest,
+      isNotificationsEnabled:
+          isNotificationsEnabled ?? this.isNotificationsEnabled,
+      appTheme: appTheme ?? this.appTheme,
+      subscriptionsSynced: subscriptionsSynced ?? this.subscriptionsSynced,
+      translateLanguage: translateLanguage ?? this.translateLanguage,
+    );
   }
 
   @override
@@ -46,7 +51,8 @@ class SettingsState extends Equatable {
         abTest,
         isNotificationsEnabled,
         appTheme,
-        subscriptionsSynced
+        subscriptionsSynced,
+        translateLanguage,
       ];
 
   factory SettingsState.fromJson(Map<String, dynamic> json) =>

@@ -20,7 +20,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
             isNotificationsEnabled: true,
             appTheme: AppTheme.auto,
             subscriptionsSynced: false,
-            // themeMode: ThemeMode.system,
+            translateLanguage: '',
             abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
@@ -53,6 +53,10 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
 
     on<SetPurchasesSync>((event, emit) async {
       emit(state.copyWith(subscriptionsSynced: true));
+    });
+
+    on<SetTranslateLanguage>((event, emit) {
+      emit(state.copyWith(translateLanguage: event.translateLanguage));
     });
   }
 

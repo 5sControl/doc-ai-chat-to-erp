@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:summify/bloc/summaries/summaries_bloc.dart';
-
-import '../../services/summaryApi.dart';
+import 'package:summify/bloc/settings/settings_bloc.dart';
 
 const Map<String, String> translateLanguages = {
   "ru": 'Russian',
@@ -14,25 +12,23 @@ const Map<String, String> translateLanguages = {
   "zh": "Chinese"
 };
 
-Future<void> translateDialog(
-    {required BuildContext context,
-    required String summaryKey,
-    required String text}) {
+Future<void> translateDialog({
+  required BuildContext context,
+}) {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
-      return DialogState(
-        summaryKey: summaryKey,
-        text: text,
-      );
+      return DialogState();
     },
   );
 }
 
 class DialogState extends StatefulWidget {
-  final String summaryKey;
-  final String text;
-  const DialogState({super.key, required this.text, required this.summaryKey});
+  // final String summaryKey;
+  // final String text;
+  const DialogState({
+    super.key,
+  });
 
   @override
   State<DialogState> createState() => _DialogStateState();
@@ -53,26 +49,22 @@ class _DialogStateState extends State<DialogState> {
       initialItem: 0,
     );
 
-    void onPressTranslate() async {
-
-      // context.read<SummariesBloc>().add(TranslateSummary(
-      //     summaryKey: widget.summaryKey,
-      //     summaryText: widget.text,
-      //     languageCode: selectedLang));
+    void onPressConfirm() async {
+      context
+          .read<SettingsBloc>()
+          .add(SetTranslateLanguage(translateLanguage: selectedLang));
       Navigator.of(context).pop();
     }
 
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8))),
-      insetPadding: const EdgeInsets.only(bottom: 100),
-      alignment: Alignment.bottomCenter,
-      backgroundColor: Theme.of(context).canvasColor,
+      backgroundColor: Theme.of(context).primaryColorDark,
       actionsAlignment: MainAxisAlignment.center,
       actionsPadding: const EdgeInsets.only(bottom: 10),
       titlePadding: const EdgeInsets.only(left: 15, right: 15, top: 20),
       title: Text(
-        'Select translate language',
+        'Select language',
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodyMedium,
       ),
@@ -84,8 +76,8 @@ class _DialogStateState extends State<DialogState> {
           padding: const EdgeInsets.symmetric(horizontal: 70),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
-          onPressed: onPressTranslate,
-          child: const Text('Translate'),
+          onPressed: onPressConfirm,
+          child: const Text('Confirm'),
         ),
       ],
     );

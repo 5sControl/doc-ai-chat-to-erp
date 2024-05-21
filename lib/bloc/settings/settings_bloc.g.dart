@@ -14,6 +14,7 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
       isNotificationsEnabled: json['isNotificationsEnabled'] as bool,
       appTheme: $enumDecode(_$AppThemeEnumMap, json['appTheme']),
       subscriptionsSynced: json['subscriptionsSynced'] as bool,
+      translateLanguage: json['translateLanguage'] as String,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
@@ -24,6 +25,7 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'isNotificationsEnabled': instance.isNotificationsEnabled,
       'appTheme': _$AppThemeEnumMap[instance.appTheme]!,
       'subscriptionsSynced': instance.subscriptionsSynced,
+      'translateLanguage': instance.translateLanguage,
     };
 
 const _$AppThemeEnumMap = {

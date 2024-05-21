@@ -8,12 +8,13 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
+import 'package:summify/screens/settings_screen/select_lang_dialog.dart';
 import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../bloc/settings/settings_bloc.dart';
-import '../bloc/subscriptions/subscriptions_bloc.dart';
+import '../../bloc/settings/settings_bloc.dart';
+import '../../bloc/subscriptions/subscriptions_bloc.dart';
 
 class ButtonItem {
   final String title;
@@ -116,6 +117,27 @@ class SettingsScreen extends StatelessWidget {
         onTap: onTapNotifications,
         trailing: const NotificationsSwitch(),
       ),
+      ButtonItem(
+          title: 'Translation language',
+          leadingIcon: Assets.icons.translate,
+          onTap: () => translateDialog(context: context),
+          trailing: BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              return Row(
+                children: [
+                  Text(
+                    state.translateLanguage.toUpperCase(),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                    color: Colors.white,
+                  )
+                ],
+              );
+            },
+          )),
       ButtonItem(
         title: 'Dark mode',
         leadingIcon: Assets.icons.theme,
