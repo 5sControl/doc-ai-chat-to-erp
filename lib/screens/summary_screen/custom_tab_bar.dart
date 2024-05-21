@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class CustomTabBar extends StatelessWidget {
@@ -32,17 +30,16 @@ class CustomTabBar extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         tabAlignment: TabAlignment.fill,
         indicator: BoxDecoration(
-          color: Theme.of(context).primaryColorDark,
-          borderRadius: BorderRadius.circular(6)
-        ),
+            color: Theme.of(context).primaryColorDark,
+            borderRadius: BorderRadius.circular(6)),
         tabs: const [
           Tab(
             text: "Brief",
           ),
           Tab(text: "Deep"),
+          Tab(text: "Research"),
         ],
       ),
-    );;
+    );
   }
 }
-

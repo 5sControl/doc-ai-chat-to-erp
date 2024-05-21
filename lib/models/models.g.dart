@@ -91,3 +91,41 @@ const _$TranslateStatusEnumMap = {
   TranslateStatus.error: 'error',
   TranslateStatus.initial: 'initial',
 };
+
+ResearchQuestion _$ResearchQuestionFromJson(Map<String, dynamic> json) =>
+    ResearchQuestion(
+      question: json['question'] as String,
+      answer: ResearchAnswer.fromJson(json['answer'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$ResearchQuestionToJson(ResearchQuestion instance) =>
+    <String, dynamic>{
+      'question': instance.question,
+      'answer': instance.answer,
+    };
+
+ResearchAnswer _$ResearchAnswerFromJson(Map<String, dynamic> json) =>
+    ResearchAnswer(
+      answer: json['answer'] as String?,
+      answerStatus: $enumDecode(_$AnswerStatusEnumMap, json['answerStatus']),
+      like: $enumDecode(_$LikeEnumMap, json['like']),
+    );
+
+Map<String, dynamic> _$ResearchAnswerToJson(ResearchAnswer instance) =>
+    <String, dynamic>{
+      'answer': instance.answer,
+      'answerStatus': _$AnswerStatusEnumMap[instance.answerStatus]!,
+      'like': _$LikeEnumMap[instance.like]!,
+    };
+
+const _$AnswerStatusEnumMap = {
+  AnswerStatus.loading: 'loading',
+  AnswerStatus.completed: 'completed',
+  AnswerStatus.error: 'error',
+};
+
+const _$LikeEnumMap = {
+  Like.unliked: 'unliked',
+  Like.liked: 'liked',
+  Like.disliked: 'disliked',
+};

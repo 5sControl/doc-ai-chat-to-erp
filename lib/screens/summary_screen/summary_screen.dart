@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +7,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
+import 'package:summify/screens/summary_screen/send_request_field.dart';
 import 'package:summify/screens/summary_screen/summary_hero_image.dart';
 import 'package:summify/screens/summary_screen/share_copy_button.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,7 +42,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     setState(() {
       activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
     });
-    _tabController = TabController(length: 2, vsync: this, initialIndex: AB);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: AB);
     if (context
         .read<SummariesBloc>()
         .state
@@ -148,82 +147,93 @@ class _SummaryScreenState extends State<SummaryScreen>
                     const BackgroundGradient(),
                     // Container(color: Colors.white38),
                     Scaffold(
-                      body: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Stack(
-                            fit: StackFit.loose,
-                            children: [
-                              Positioned.fill(
-                                child: SummaryHeroImage(
-                                  summaryData: summaryData,
-                                ),
-                              ),
-                              Header(
-                                sharedLink: widget.summaryKey,
-                                displayLink: displayLink,
-                                formattedDate: formattedDate,
-                                onPressLink: onPressLink,
-                                onPressBack: onPressBack,
-                                onPressDelete: onPressDelete,
-                              ),
-                            ],
-                          ),
-                          Expanded(
-                            child: Stack(
-                              fit: StackFit.expand,
+                        body: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Stack(
+                              fit: StackFit.loose,
                               children: [
-                                TabBarView(
-                                  controller: _tabController,
-                                  children: [
-                                    SummaryTextContainer(
-                                      summaryText: briefSummaryText,
-                                      summary: summaryData.shortSummary,
-                                      summaryStatus:
-                                          summaryData.shortSummaryStatus,
-                                      summaryTranslate: translatesState
-                                          .shortTranslates[widget.summaryKey],
-                                    ),
-                                    SummaryTextContainer(
-                                      summaryText: deepSummaryText,
-                                      summary: summaryData.longSummary,
-                                      summaryStatus:
-                                          summaryData.longSummaryStatus,
-                                      summaryTranslate: translatesState
-                                          .longTranslates[widget.summaryKey],
-                                    ),
-                                  ],
-                                ),
-                                Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Container(
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                      colors: gradientColors,
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                    )),
-                                    child: Align(
-                                      alignment: Alignment.topCenter,
-                                      child: CustomTabBar(
-                                          tabController: _tabController),
-                                    ),
+                                Positioned.fill(
+                                  child: SummaryHeroImage(
+                                    summaryData: summaryData,
                                   ),
+                                ),
+                                Header(
+                                  sharedLink: widget.summaryKey,
+                                  displayLink: displayLink,
+                                  formattedDate: formattedDate,
+                                  onPressLink: onPressLink,
+                                  onPressBack: onPressBack,
+                                  onPressDelete: onPressDelete,
                                 ),
                               ],
                             ),
+                            Expanded(
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  TabBarView(
+                                    controller: _tabController,
+                                    children: [
+                                      SummaryTextContainer(
+                                        summaryText: briefSummaryText,
+                                        summary: summaryData.shortSummary,
+                                        summaryStatus:
+                                            summaryData.shortSummaryStatus,
+                                        summaryTranslate: translatesState
+                                            .shortTranslates[widget.summaryKey],
+                                      ),
+                                      SummaryTextContainer(
+                                        summaryText: deepSummaryText,
+                                        summary: summaryData.longSummary,
+                                        summaryStatus:
+                                            summaryData.longSummaryStatus,
+                                        summaryTranslate: translatesState
+                                            .longTranslates[widget.summaryKey],
+                                      ),
+                                      ResearchContainer(),
+                                    ],
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                        colors: gradientColors,
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      )),
+                                      child: Align(
+                                        alignment: Alignment.topCenter,
+                                        child: CustomTabBar(
+                                            tabController: _tabController),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        extendBody: true,
+                        floatingActionButtonLocation:
+                            FloatingActionButtonLocation.centerDocked,
+                        bottomNavigationBar: AnimatedCrossFade(
+                          duration: const Duration(milliseconds: 300),
+                          firstChild: ShareAndCopyButton(
+                            activeTab: activeTab,
+                            sharedLink: widget.summaryKey,
+                            summaryData: summaryData,
                           ),
-                        ],
-                      ),
-                      extendBody: true,
-                      bottomNavigationBar: ShareAndCopyButton(
-                        activeTab: activeTab,
-                        sharedLink: widget.summaryKey,
-                        summaryData: summaryData,
-                      ),
-                    ),
+                          secondChild: SendRequestField(
+                            summaryKey: widget.summaryKey,
+                          ),
+                          crossFadeState: activeTab == 2
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                        )),
                   ],
                 );
               },
@@ -275,7 +285,9 @@ class SummaryTextContainer extends StatelessWidget {
             const EdgeInsets.only(top: 50, bottom: 90, left: 15, right: 15),
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
-          key: Key(summaryTranslate != null && summaryTranslate!.isActive ? 'short' : 'long'),
+          key: Key(summaryTranslate != null && summaryTranslate!.isActive
+              ? 'short'
+              : 'long'),
           child: Builder(
             builder: (context) {
               if (summaryTranslate != null && summaryTranslate!.isActive) {
@@ -304,5 +316,14 @@ class SummaryTextContainer extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ResearchContainer extends StatelessWidget {
+  const ResearchContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

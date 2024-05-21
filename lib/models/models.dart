@@ -148,6 +148,43 @@ class SummaryTranslate extends Equatable {
   List<Object?> get props => [translate, translateStatus, isActive];
 }
 
+@JsonSerializable()
+class ResearchQuestion extends Equatable {
+  final String question;
+  final ResearchAnswer answer;
+  const ResearchQuestion({required this.question, required this.answer});
+
+  factory ResearchQuestion.fromJson(Map<String, dynamic> json) =>
+      _$ResearchQuestionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ResearchQuestionToJson(this);
+
+  @override
+  List<Object?> get props => [question, answer];
+}
+
+enum AnswerStatus { loading, completed, error }
+
+enum Like { unliked, liked, disliked }
+
+@JsonSerializable()
+class ResearchAnswer extends Equatable {
+  final String? answer;
+  final AnswerStatus answerStatus;
+  final Like like;
+
+  const ResearchAnswer(
+      {required this.answer, required this.answerStatus, required this.like});
+
+  factory ResearchAnswer.fromJson(Map<String, dynamic> json) =>
+      _$ResearchAnswerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ResearchAnswerToJson(this);
+
+  @override
+  List<Object?> get props => [answer, answerStatus, like];
+}
+
 class UserModel {
   final String? id;
   final String? email;

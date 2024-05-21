@@ -12,6 +12,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
@@ -61,6 +62,7 @@ class SummishareApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => TranslatesBloc()),
+          BlocProvider(create: (context) => ResearchBloc()),
           BlocProvider(
               create: (context) => SettingsBloc(brightness: brightness)),
           BlocProvider(
