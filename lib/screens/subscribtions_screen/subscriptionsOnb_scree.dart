@@ -1,18 +1,12 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/subscribtions_screen/subscription_button.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/settings/settings_bloc.dart';
@@ -72,6 +66,7 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
             List.from(state.availableProducts!.current!.availablePackages);
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
+
         return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
           builder: (context, state) {
             return Stack(
@@ -100,29 +95,78 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                               decoration: BoxDecoration(
                                   color: Colors.white12,
                                   borderRadius: BorderRadius.circular(8)),
-                              child: CustomPaint(
-                                painter: RPSCustomPainter(headerH: headerH),
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    return SizedBox(
-                                      width: double.infinity,
-                                      height: constraints.maxHeight,
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height:
-                                                constraints.maxHeight * headerH,
-                                            child: const Row(
-                                              children: [
-                                                MonthTitle(),
-                                                YearTitle()
-                                              ],
-                                            ),
-                                          ),
-                                          SubscriptionBody()
-                                        ],
-                                      ),
-                                    );
+                              child: AnimatedSwitcher(
+                                duration: Duration(milliseconds: 300),
+                                key: Key(selectedSubscriptionIndex == 1
+                                    ? 'asdasd'
+                                    : 'zxczxc'),
+                                child: Builder(
+                                  builder: (context) {
+                                    if (selectedSubscriptionIndex == 1) {
+                                      return CustomPaint(
+                                        painter: PainterRight(headerH: headerH),
+                                        child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                            return SizedBox(
+                                              width: double.infinity,
+                                              height: constraints.maxHeight,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height:
+                                                        constraints.maxHeight *
+                                                            headerH,
+                                                    child: Row(
+                                                      children: [
+                                                        MonthTitle(
+                                                            onSelectSubscription:
+                                                                onSelectSubscription),
+                                                        YearTitle(
+                                                            onSelectSubscription:
+                                                                onSelectSubscription)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SubscriptionBodyYear()
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      return CustomPaint(
+                                        painter: PainterLeft(headerH: headerH),
+                                        child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                            return SizedBox(
+                                              width: double.infinity,
+                                              height: constraints.maxHeight,
+                                              child: Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height:
+                                                        constraints.maxHeight *
+                                                            headerH,
+                                                    child: Row(
+                                                      children: [
+                                                        MonthTitle(
+                                                            onSelectSubscription:
+                                                                onSelectSubscription),
+                                                        YearTitle(
+                                                            onSelectSubscription:
+                                                                onSelectSubscription)
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SubscriptionBodyYear()
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    }
                                   },
                                 ),
                               ),
@@ -134,6 +178,10 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                     ),
                   ),
                 ),
+                Positioned(
+                    bottom: MediaQuery.of(context).padding.bottom + 40,
+                    right: 20,
+                    child: SvgPicture.asset(Assets.happyBox))
               ],
             );
           },
@@ -144,59 +192,71 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
 }
 
 class MonthTitle extends StatelessWidget {
-  const MonthTitle({super.key});
+  final Function({required int index}) onSelectSubscription;
+  const MonthTitle({super.key, required this.onSelectSubscription});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
+        child: InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () => onSelectSubscription(index: 0),
+      child: Center(
         child: Text(
-      'Pay\nmonthly',
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.bodySmall,
+          'Pay\nmonthly',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ),
     ));
   }
 }
 
 class YearTitle extends StatelessWidget {
-  const YearTitle({super.key});
+  final Function({required int index}) onSelectSubscription;
+  const YearTitle({super.key, required this.onSelectSubscription});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Pay\nannually',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              gradient: const LinearGradient(colors: [
-                Color.fromRGBO(255, 238, 90, 1),
-                Color.fromRGBO(255, 208, 74, 1),
-              ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-          child: Text(
-            'Save up to 25\$',
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: Colors.black),
+        child: InkWell(
+      borderRadius: BorderRadius.circular(8),
+      onTap: () => onSelectSubscription(index: 1),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Pay\nannually',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
-        )
-      ],
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                gradient: const LinearGradient(colors: [
+                  Color.fromRGBO(255, 238, 90, 1),
+                  Color.fromRGBO(255, 208, 74, 1),
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+            child: Text(
+              'Save up to 25\$',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Colors.black),
+            ),
+          )
+        ],
+      ),
     ));
   }
 }
 
-class SubscriptionBody extends StatelessWidget {
-  const SubscriptionBody({super.key});
+class SubscriptionBodyYear extends StatelessWidget {
+  const SubscriptionBodyYear({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +264,9 @@ class SubscriptionBody extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Spacer(flex: 2,),
+          const Spacer(
+            flex: 2,
+          ),
           const Text(
             '12 months',
             textAlign: TextAlign.start,
@@ -212,7 +274,7 @@ class SubscriptionBody extends StatelessWidget {
                 TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
           ),
           const Spacer(),
-          IconsRow(),
+          const IconsRow(),
           const Spacer(),
           RichText(
               text: TextSpan(children: [
@@ -234,7 +296,9 @@ class SubscriptionBody extends StatelessWidget {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall,
           ),
-          const Spacer(flex: 2,),
+          const Spacer(
+            flex: 2,
+          ),
           const SubscriptionButton(),
           Divider(
             color: Theme.of(context).primaryColor,
@@ -318,14 +382,14 @@ class BackArrow extends StatelessWidget {
   }
 }
 
-class RPSCustomPainter extends CustomPainter {
+class PainterRight extends CustomPainter {
   final double headerH;
-  RPSCustomPainter({required this.headerH});
+  PainterRight({required this.headerH});
 
   @override
   void paint(Canvas canvas, Size size) {
     const r = 8.0;
-    Paint paint_fill_0 = Paint()
+    Paint paintFill0 = Paint()
       ..color = Colors.white12
       ..style = PaintingStyle.fill
       ..strokeWidth = size.width * 0.00
@@ -353,18 +417,73 @@ class RPSCustomPainter extends CustomPainter {
         radius: const Radius.circular(r), clockwise: true);
     path_0.close();
 
-    canvas.drawPath(path_0, paint_fill_0);
+    canvas.drawPath(path_0, paintFill0);
 
     // Layer 1
 
-    Paint paint_stroke_0 = Paint()
+    Paint paintStroke0 = Paint()
       ..color = Colors.teal
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
       ..strokeCap = StrokeCap.butt
       ..strokeJoin = StrokeJoin.round;
 
-    canvas.drawPath(path_0, paint_stroke_0);
+    canvas.drawPath(path_0, paintStroke0);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class PainterLeft extends CustomPainter {
+  final double headerH;
+  PainterLeft({required this.headerH});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const r = 8.0;
+    Paint paintFill0 = Paint()
+      ..color = Colors.white12
+      ..style = PaintingStyle.fill
+      ..strokeWidth = size.width * 0.00
+      ..strokeCap = StrokeCap.butt
+      ..strokeJoin = StrokeJoin.miter;
+
+    Path path_0 = Path();
+    path_0.moveTo(size.width * 0 + r, size.height * 0);
+    path_0.arcToPoint(Offset(size.width * 0, size.height * 0 + r),
+        radius: const Radius.circular(r), clockwise: false);
+    path_0.lineTo(size.width * 0, size.height * 1 - r);
+    path_0.arcToPoint(Offset(size.width * 0 + r, size.height),
+        radius: const Radius.circular(r), clockwise: false);
+    path_0.lineTo(size.width * 1 - r, size.height * 1);
+    path_0.arcToPoint(Offset(size.width * 1, size.height - r),
+        radius: const Radius.circular(r), clockwise: false);
+    path_0.lineTo(size.width * 1, size.height * headerH + r);
+    path_0.arcToPoint(Offset(size.width * 1 - r, size.height * headerH),
+        radius: const Radius.circular(r), clockwise: false);
+    path_0.lineTo(size.width * 0.5 + r, size.height * headerH);
+    path_0.arcToPoint(Offset(size.width * 0.5, size.height * headerH - r),
+        radius: const Radius.circular(r), clockwise: true);
+    path_0.lineTo(size.width * 0.5, size.height * 0 + r);
+    path_0.arcToPoint(Offset(size.width * 0.5 - r, size.height * 0),
+        radius: const Radius.circular(r), clockwise: false);
+    path_0.close();
+
+    canvas.drawPath(path_0, paintFill0);
+
+    // Layer 1
+
+    Paint paintStroke0 = Paint()
+      ..color = Colors.teal
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.butt
+      ..strokeJoin = StrokeJoin.round;
+
+    canvas.drawPath(path_0, paintStroke0);
   }
 
   @override

@@ -290,6 +290,7 @@ class Assets {
   static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
   static const $AssetsFlagsGen flags = $AssetsFlagsGen();
   static const AssetGenImage girl = AssetGenImage('assets/girl.png');
+  static const String happyBox = 'assets/happy_box.svg';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const AssetGenImage niga = AssetGenImage('assets/niga.png');
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
@@ -298,8 +299,8 @@ class Assets {
   static const $AssetsSetUpGen setUp = $AssetsSetUpGen();
 
   /// List of all assets
-  static List<AssetGenImage> get values =>
-      [bgDark, bgLight, girl, niga, placeholderLogo];
+  static List<dynamic> get values =>
+      [bgDark, bgLight, girl, happyBox, niga, placeholderLogo];
 }
 
 class AssetGenImage {
