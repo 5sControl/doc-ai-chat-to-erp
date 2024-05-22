@@ -11,9 +11,12 @@ class SendRequestField extends StatelessWidget {
     final TextEditingController controller = TextEditingController();
 
     void onPressSendRequest() {
-      context
-          .read<ResearchBloc>()
-          .add(MakeQuestion(question: controller.text, summaryKey: summaryKey));
+      if (controller.text.isNotEmpty) {
+        context.read<ResearchBloc>().add(
+            MakeQuestion(question: controller.text, summaryKey: summaryKey));
+
+        controller.text = '';
+      }
     }
 
     final gradientColors = Theme.of(context).brightness == Brightness.dark
@@ -38,7 +41,11 @@ class SendRequestField extends StatelessWidget {
                 1,
               ])),
       padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom, left: 15, right: 15),
+          bottom: MediaQuery.of(context).padding.bottom +
+              MediaQuery.of(context).viewInsets.bottom +
+              10,
+          left: 15,
+          right: 15),
       child: SizedBox(
         height: 40,
         child: Row(
@@ -47,10 +54,16 @@ class SendRequestField extends StatelessWidget {
               child: TextFormField(
                 controller: controller,
                 cursorColor: Colors.black54,
+                onFieldSubmitted: (_) {
+                  onPressSendRequest();
+                },
+                onTapOutside: (_) {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
                 cursorHeight: 20,
                 style: Theme.of(context).textTheme.labelMedium,
                 decoration: const InputDecoration(
-                  hintText: 'Paste link',
+                  hintText: 'Type your question about the document',
                 ),
               ),
             ),
