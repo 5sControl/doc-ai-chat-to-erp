@@ -1,14 +1,15 @@
-import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:summify/services/summaryApi.dart';
-
+import 'package:json_annotation/json_annotation.dart';
 import '../../models/models.dart';
 
 part 'research_event.dart';
+part 'research_bloc.g.dart';
 part 'research_state.dart';
 
-class ResearchBloc extends Bloc<ResearchEvent, ResearchState> {
+class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
   ResearchBloc() : super(const ResearchState(questions: {})) {
     on<MakeQuestion>((event, emit) async {
       final newQuestion = ResearchQuestion(
@@ -33,7 +34,6 @@ class ResearchBloc extends Bloc<ResearchEvent, ResearchState> {
       try {
         final answer = await SummaryRepository().makeRequest(
             summaryUrl: event.summaryKey, question: event.question);
-        print(answer.length);
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
         final List<ResearchQuestion> newList =
@@ -50,7 +50,7 @@ class ResearchBloc extends Bloc<ResearchEvent, ResearchState> {
         questions[event.summaryKey]!.last = question;
         emit(state.copyWith(questions: questions));
       }
-    });
+    }, transformer: droppable());
 
     on<LikeAnswer>((event, emit) {
       final Map<String, List<ResearchQuestion>> questions =
@@ -83,5 +83,15 @@ class ResearchBloc extends Bloc<ResearchEvent, ResearchState> {
       questions.update(event.summaryKey, (value) => [...newList]);
       emit(state.copyWith(questions: questions));
     });
+  }
+
+  @override
+  ResearchState? fromJson(Map<String, dynamic> json) {
+    return ResearchState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(ResearchState state) {
+    return state.toJson();
   }
 }

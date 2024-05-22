@@ -11,11 +11,16 @@ class SendRequestField extends StatelessWidget {
     final TextEditingController controller = TextEditingController();
 
     void onPressSendRequest() {
+      print(controller.text);
       if (controller.text.isNotEmpty) {
         context.read<ResearchBloc>().add(
             MakeQuestion(question: controller.text, summaryKey: summaryKey));
 
         controller.text = '';
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
       }
     }
 
@@ -57,9 +62,10 @@ class SendRequestField extends StatelessWidget {
                 onFieldSubmitted: (_) {
                   onPressSendRequest();
                 },
-                onTapOutside: (_) {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                },
+                // onTapOutside: (_) {
+                //
+                //   FocusScope.of(context).unfocus();
+                // },
                 cursorHeight: 20,
                 style: Theme.of(context).textTheme.labelMedium,
                 decoration: const InputDecoration(

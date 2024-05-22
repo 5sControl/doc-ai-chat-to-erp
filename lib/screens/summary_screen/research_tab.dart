@@ -9,22 +9,45 @@ import 'package:summify/models/models.dart';
 
 import '../../gen/assets.gen.dart';
 
-class ResearchTab extends StatelessWidget {
+class ResearchTab extends StatefulWidget {
   final String summaryKey;
   const ResearchTab({super.key, required this.summaryKey});
 
   @override
-  Widget build(BuildContext context) {
-    final ScrollController controller = ScrollController();
+  State<ResearchTab> createState() => _ResearchTabState();
+}
 
+class _ResearchTabState extends State<ResearchTab> {
+  final ScrollController controller = ScrollController();
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 200), () {
+      controller.animateTo(
+        controller.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 1000),
+      );
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocConsumer<ResearchBloc, ResearchState>(
       listenWhen: (previous, current) {
-        if (previous.questions[summaryKey]?.length !=
-            current.questions[summaryKey]?.length) {
+        if (previous.questions[widget.summaryKey]?.length !=
+            current.questions[widget.summaryKey]?.length) {
           return true;
         }
-        if (current.questions[summaryKey]?.last.answerStatus !=
-            previous.questions[summaryKey]?.last.answerStatus) {
+        if (current.questions[widget.summaryKey]?.last.answerStatus !=
+            previous.questions[widget.summaryKey]?.last.answerStatus) {
           return true;
         }
         return false;
@@ -45,9 +68,9 @@ class ResearchTab extends StatelessWidget {
             controller: controller,
             padding: const EdgeInsets.only(
                 left: 15, right: 15, top: 60, bottom: 100),
-            children: state.questions[summaryKey]
+            children: state.questions[widget.summaryKey]
                     ?.map((question) => AnswerAndQuestionItem(
-                        question: question, summaryKey: summaryKey))
+                        question: question, summaryKey: widget.summaryKey))
                     .toList() ??
                 [Container()],
           ),
