@@ -22,9 +22,17 @@ class SendRequestField extends StatelessWidget {
         }
 
         if (summaryData.summaryOrigin == SummaryOrigin.file) {
-
           context.read<ResearchBloc>().add(MakeQuestionFromFile(
-              question: controller.text, filePath: summaryData.filePath ?? '', summaryKey: summaryKey));
+              question: controller.text,
+              filePath: summaryData.filePath ?? '',
+              summaryKey: summaryKey));
+        }
+
+        if (summaryData.summaryOrigin == SummaryOrigin.text) {
+          context.read<ResearchBloc>().add(MakeQuestionFromText(
+              question: controller.text,
+              text: summaryData.userText ?? '',
+              summaryKey: summaryKey));
         }
 
         controller.text = '';

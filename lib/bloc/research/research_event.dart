@@ -29,10 +29,12 @@ class MakeQuestionFromFile extends ResearchEvent {
 class MakeQuestionFromText extends ResearchEvent {
   final String summaryKey;
   final String text;
-  const MakeQuestionFromText({required this.text, required this.summaryKey});
+  final String question;
+  const MakeQuestionFromText(
+      {required this.text, required this.summaryKey, required this.question});
 
   @override
-  List<Object?> get props => [summaryKey, text];
+  List<Object> get props => [summaryKey, text, question];
 }
 
 class LikeAnswer extends ResearchEvent {

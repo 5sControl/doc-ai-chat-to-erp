@@ -99,6 +99,50 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
       }
     }, transformer: droppable());
 
+    on<MakeQuestionFromText>((event, emit) async {
+      final newQuestion = ResearchQuestion(
+          question: event.question,
+          answerStatus: AnswerStatus.loading,
+          answer: null,
+          like: Like.unliked);
+
+      final Map<String, List<ResearchQuestion>> questions =
+          Map.from(state.questions);
+
+      if (state.questions.containsKey(event.summaryKey)) {
+        questions.update(event.summaryKey, (value) => [...value, newQuestion]);
+      } else {
+        questions.addAll({
+          event.summaryKey: [newQuestion]
+        });
+      }
+
+      emit(state.copyWith(questions: questions));
+
+      try {
+        final answer = await SummaryRepository().makeRequestFromText(
+            userText: event.text, question: event.question);
+        final Map<String, List<ResearchQuestion>> questions =
+            Map.from(state.questions);
+        final List<ResearchQuestion> newList =
+            List.from(state.questions[event.summaryKey]!);
+        newList.last = newQuestion.copyWith(
+            answer: answer, answerStatus: AnswerStatus.completed);
+        questions.update(event.summaryKey, (value) => newList);
+        emit(state.copyWith(questions: questions));
+      } catch (e) {
+        print(e);
+        final Map<String, List<ResearchQuestion>> questions =
+            Map.from(state.questions);
+        final List<ResearchQuestion> newList =
+            List.from(state.questions[event.summaryKey]!);
+        newList.last = newQuestion.copyWith(
+            answer: null, answerStatus: AnswerStatus.error);
+        questions.update(event.summaryKey, (value) => newList);
+        emit(state.copyWith(questions: questions));
+      }
+    }, transformer: droppable());
+
     on<LikeAnswer>((event, emit) {
       final Map<String, List<ResearchQuestion>> questions =
           Map.from(state.questions);

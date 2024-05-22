@@ -297,6 +297,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             .add(const SummarizingSuccess(url: 'from text', fromShare: false));
         incrementDailySummaryCount(emit);
         return summaryData.copyWith(
+            summaryOrigin: SummaryOrigin.text,
+            userText: text,
             shortSummary: shortSummaryResponse,
             shortSummaryStatus: SummaryStatus.complete,
             longSummary: longSummaryResponse,
@@ -308,6 +310,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             error:
                 shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
+            summaryOrigin: SummaryOrigin.text,
+            userText: text,
             longSummary: Summary(
                 summaryError: shortSummaryResponse
                     .toString()
@@ -325,6 +329,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             error:
                 shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
+            summaryOrigin: SummaryOrigin.text,
+            userText: text,
             longSummary: Summary(
                 summaryError: shortSummaryResponse
                     .toString()

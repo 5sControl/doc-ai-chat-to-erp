@@ -42,6 +42,7 @@ SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
       summaryPreview: SummaryPreview.fromJson(
           json['summaryPreview'] as Map<String, dynamic>),
       filePath: json['filePath'] as String?,
+      userText: json['userText'] as String?,
     );
 
 Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
@@ -55,6 +56,7 @@ Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
       'shortSummary': instance.shortSummary,
       'longSummary': instance.longSummary,
       'filePath': instance.filePath,
+      'userText': instance.userText,
     };
 
 const _$SummaryStatusEnumMap = {

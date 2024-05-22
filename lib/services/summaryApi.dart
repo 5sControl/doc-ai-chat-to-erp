@@ -213,6 +213,41 @@ class SummaryApiRepository {
     }
   }
 
+  Future<String> requestText(
+      {required String userText, required String question}) async {
+    try {
+      Response response = await _dio.post(researchUrl, data: {
+        'url': '',
+        'user_query': question,
+        "context": userText,
+        "type_summary": "",
+      });
+      if (response.statusCode == 200) {
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return res['answer'];
+      } else {
+        throw Exception('Translation error');
+      }
+    } on DioException catch (e) {
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+
+        error = ErrorDecode(
+          detail: decodedMap['detail'],
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+
+      throw Exception(error.detail);
+    } catch (error) {
+      throw Exception('Some error');
+    }
+  }
+
   Future<String> requestFile(
       {required String filePath, required String question}) async {
     FormData formData = FormData.fromMap({
@@ -360,6 +395,12 @@ class SummaryRepository {
       {required String summaryUrl, required String question}) {
     return _summaryRepository.request(
         question: question, summaryUrl: summaryUrl);
+  }
+
+  Future<String> makeRequestFromText(
+      {required String userText, required String question}) {
+    return _summaryRepository.requestText(
+        question: question, userText: userText);
   }
 
   Future<String> makeRequestFromFile(

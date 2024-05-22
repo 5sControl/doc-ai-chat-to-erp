@@ -72,6 +72,7 @@ class SummaryData extends Equatable {
   final Summary shortSummary;
   final Summary longSummary;
   final String? filePath;
+  final String? userText;
 
   const SummaryData(
       {required this.shortSummaryStatus,
@@ -81,27 +82,30 @@ class SummaryData extends Equatable {
       required this.shortSummary,
       required this.longSummary,
       required this.summaryPreview,
-      this.filePath});
+      this.filePath,
+      this.userText});
 
-  SummaryData copyWith(
-      {SummaryStatus? shortSummaryStatus,
-      SummaryStatus? longSummaryStatus,
-      SummaryOrigin? summaryOrigin,
-      DateTime? date,
-      Summary? shortSummary,
-      Summary? longSummary,
-      SummaryPreview? summaryPreview,
-      String? filePath}) {
+  SummaryData copyWith({
+    SummaryStatus? shortSummaryStatus,
+    SummaryStatus? longSummaryStatus,
+    SummaryOrigin? summaryOrigin,
+    DateTime? date,
+    Summary? shortSummary,
+    Summary? longSummary,
+    SummaryPreview? summaryPreview,
+    String? filePath,
+    String? userText,
+  }) {
     return SummaryData(
-      shortSummaryStatus: shortSummaryStatus ?? this.shortSummaryStatus,
-      longSummaryStatus: longSummaryStatus ?? this.longSummaryStatus,
-      summaryOrigin: summaryOrigin ?? this.summaryOrigin,
-      date: date ?? this.date,
-      shortSummary: shortSummary ?? this.shortSummary,
-      longSummary: longSummary ?? this.longSummary,
-      summaryPreview: summaryPreview ?? this.summaryPreview,
-      filePath: filePath ?? this.filePath,
-    );
+        shortSummaryStatus: shortSummaryStatus ?? this.shortSummaryStatus,
+        longSummaryStatus: longSummaryStatus ?? this.longSummaryStatus,
+        summaryOrigin: summaryOrigin ?? this.summaryOrigin,
+        date: date ?? this.date,
+        shortSummary: shortSummary ?? this.shortSummary,
+        longSummary: longSummary ?? this.longSummary,
+        summaryPreview: summaryPreview ?? this.summaryPreview,
+        filePath: filePath ?? this.filePath,
+        userText: userText ?? this.userText);
   }
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
@@ -118,6 +122,7 @@ class SummaryData extends Equatable {
         summaryPreview,
         summaryOrigin,
         filePath,
+        userText
       ];
 }
 

@@ -79,6 +79,7 @@ class _SummaryScreenState extends State<SummaryScreen>
         return BlocBuilder<SummariesBloc, SummariesState>(
           builder: (context, state) {
             final summaryData = state.summaries[widget.summaryKey]!;
+
             final displayLink = summaryData.summaryPreview.title ??
                 widget.summaryKey.replaceAll('https://', '');
 
