@@ -260,7 +260,6 @@ class SummaryApiRepository {
     try {
       Response response = await _dio.post(researchFile,
           data: formData, queryParameters: {'user_query': question});
-      print(response);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['answer'];

@@ -16,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/translates/translates_bloc.dart';
-import '../../models/models.dart';
 import '../../widgets/backgroung_gradient.dart';
 import 'custom_tab_bar.dart';
 import 'header.dart';

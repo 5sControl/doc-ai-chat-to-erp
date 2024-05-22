@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../gen/assets.gen.dart';
@@ -79,20 +80,23 @@ class Header extends StatelessWidget {
               )
             ],
           ),
-          TextButton(
-              onPressed: onPressLink,
-              child: Text(
-                displayLink,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+                onPressed: onPressLink,
+                child: Text(
+                  displayLink,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                ),
-              )),
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )),
+          ),
           const Divider(color: Colors.transparent),
           Row(
             mainAxisSize: MainAxisSize.max,

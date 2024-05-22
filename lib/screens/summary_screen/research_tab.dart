@@ -122,7 +122,6 @@ class Answer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(answerStatus);
     final width = MediaQuery.of(context).size.width * 0.7;
     final bStyle = ButtonStyle(
         padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
