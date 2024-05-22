@@ -39,6 +39,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/delete.svg
   String get delete => 'assets/icons/delete.svg';
 
+  /// File path: assets/icons/desctop.svg
+  String get desctop => 'assets/icons/desctop.svg';
+
   /// File path: assets/icons/discount.svg
   String get discount => 'assets/icons/discount.svg';
 
@@ -56,6 +59,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/home_filled.svg
   String get homeFilled => 'assets/icons/home_filled.svg';
+
+  /// File path: assets/icons/i.svg
+  String get i => 'assets/icons/i.svg';
 
   /// File path: assets/icons/info.svg
   String get info => 'assets/icons/info.svg';
@@ -117,6 +123,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/text.svg
   String get text => 'assets/icons/text.svg';
 
+  /// File path: assets/icons/text_scale.svg
+  String get textScale => 'assets/icons/text_scale.svg';
+
   /// File path: assets/icons/theme.svg
   String get theme => 'assets/icons/theme.svg';
 
@@ -140,12 +149,14 @@ class $AssetsIconsGen {
         crown,
         danger,
         delete,
+        desctop,
         discount,
         file,
         google,
         headrt,
         home,
         homeFilled,
+        i,
         info,
         like,
         logo,
@@ -166,6 +177,7 @@ class $AssetsIconsGen {
         star,
         terms,
         text,
+        textScale,
         theme,
         translate,
         update,

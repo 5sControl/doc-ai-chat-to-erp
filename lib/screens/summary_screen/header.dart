@@ -13,12 +13,12 @@ class Header extends StatelessWidget {
 
   const Header(
       {super.key,
-        required this.displayLink,
-        required this.formattedDate,
-        required this.onPressDelete,
-        required this.onPressLink,
-        required this.onPressBack,
-        required this.sharedLink});
+      required this.displayLink,
+      required this.formattedDate,
+      required this.onPressDelete,
+      required this.onPressLink,
+      required this.onPressBack,
+      required this.sharedLink});
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +40,42 @@ class Header extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back_ios_new_rounded),
                 color: Colors.white,
               ),
-              IconButton(
-                onPressed: onPressDelete,
-                icon: SvgPicture.asset(Assets.icons.delete),
-                color: Colors.white,
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: onPressDelete,
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    icon: SvgPicture.asset(
+                      Assets.icons.i,
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                    color: Colors.white,
+                  ),
+                  IconButton(
+                    onPressed: onPressDelete,
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    icon: SvgPicture.asset(
+                      Assets.icons.textScale,
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                    color: Colors.white,
+                  ),
+                  IconButton(
+                    onPressed: onPressDelete,
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    icon: SvgPicture.asset(
+                      Assets.icons.desctop,
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                    color: Colors.white,
+                  )
+                ],
               )
             ],
           ),
@@ -55,10 +87,10 @@ class Header extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.start,
               style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  ),
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
             ),
           ),
           const Divider(color: Colors.transparent),
@@ -67,16 +99,15 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-
                   padding: const EdgeInsets.only(right: 7),
                   child: SvgPicture.asset(Assets.icons.clock)),
               Text(
                 formattedDate,
                 style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    ),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -135,10 +166,10 @@ class _UrlLinkState extends State<UrlLink> {
               duration: duration,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  fontSize: pressed ? 15 : 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                  ),
+                fontSize: pressed ? 15 : 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
               child: Text(
                 widget.sharedLink,
               ),

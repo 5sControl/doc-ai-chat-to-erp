@@ -122,6 +122,7 @@ class Answer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(answerStatus);
     final width = MediaQuery.of(context).size.width * 0.7;
     final bStyle = ButtonStyle(
         padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
@@ -142,6 +143,36 @@ class Answer extends StatelessWidget {
       context
           .read<ResearchBloc>()
           .add(DislikeAnswer(summaryKey: summaryKey, answer: answer!));
+    }
+
+    if (answerStatus == AnswerStatus.error) {
+      return Animate(
+        delay: const Duration(milliseconds: 100),
+        effects: const [FadeEffect()],
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: width),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              margin: const EdgeInsets.only(bottom: 15),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(8)),
+              child: RichText(
+                text: TextSpan(text: '', children: [
+                  TextSpan(
+                    text: 'The context is to short \nfor research...',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium!
+                        .copyWith(color: Colors.red.shade900),
+                  ),
+                ]),
+              ),
+            ),
+          ),
+        ),
+      );
     }
 
     return Animate(

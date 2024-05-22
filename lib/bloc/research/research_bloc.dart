@@ -43,11 +43,16 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
         questions.update(event.summaryKey, (value) => newList);
         emit(state.copyWith(questions: questions));
       } catch (e) {
+        // final answer = await SummaryRepository().makeRequest(
+        //     summaryUrl: event.summaryKey, question: event.question);
+        print(e);
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
-        final question = newQuestion.copyWith(
-            answerStatus: AnswerStatus.error, answer: null);
-        questions[event.summaryKey]!.last = question;
+        final List<ResearchQuestion> newList =
+            List.from(state.questions[event.summaryKey]!);
+        newList.last = newQuestion.copyWith(
+            answer: null, answerStatus: AnswerStatus.error);
+        questions.update(event.summaryKey, (value) => newList);
         emit(state.copyWith(questions: questions));
       }
     }, transformer: droppable());
