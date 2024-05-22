@@ -79,7 +79,6 @@ class _SummaryScreenState extends State<SummaryScreen>
         return BlocBuilder<SummariesBloc, SummariesState>(
           builder: (context, state) {
             final summaryData = state.summaries[widget.summaryKey]!;
-
             final displayLink = summaryData.summaryPreview.title ??
                 widget.summaryKey.replaceAll('https://', '');
 
@@ -232,8 +231,8 @@ class _SummaryScreenState extends State<SummaryScreen>
                             summaryData: summaryData,
                           ),
                           secondChild: SendRequestField(
-                            summaryKey: widget.summaryKey,
-                          ),
+                              summaryKey: widget.summaryKey,
+                              summaryData: summaryData),
                           crossFadeState: activeTab == 2
                               ? CrossFadeState.showSecond
                               : CrossFadeState.showFirst,

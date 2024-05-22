@@ -2,19 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 
+import '../../models/models.dart';
+
 class SendRequestField extends StatelessWidget {
   final String summaryKey;
-  const SendRequestField({super.key, required this.summaryKey});
+  final SummaryData summaryData;
+  const SendRequestField(
+      {super.key, required this.summaryKey, required this.summaryData});
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
 
     void onPressSendRequest() {
-      print(controller.text);
       if (controller.text.isNotEmpty) {
-        context.read<ResearchBloc>().add(
-            MakeQuestion(question: controller.text, summaryKey: summaryKey));
+        if (summaryData.summaryOrigin == SummaryOrigin.url) {
+          context.read<ResearchBloc>().add(MakeQuestionFromUrl(
+              question: controller.text, summaryKey: summaryKey));
+        }
+
+        if (summaryData.summaryOrigin == SummaryOrigin.file) {
+
+          context.read<ResearchBloc>().add(MakeQuestionFromFile(
+              question: controller.text, filePath: summaryData.filePath ?? '', summaryKey: summaryKey));
+        }
 
         controller.text = '';
         FocusScopeNode currentFocus = FocusScope.of(context);

@@ -79,25 +79,28 @@ class Header extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(
-            width: double.infinity,
-            child: Text(
-              displayLink,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.start,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          TextButton(
+              onPressed: onPressLink,
+              child: Text(
+                displayLink,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              )),
           const Divider(color: Colors.transparent),
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              const SizedBox(
+                width: 10,
+              ),
               Container(
                   padding: const EdgeInsets.only(right: 7),
                   child: SvgPicture.asset(Assets.icons.clock)),
@@ -111,76 +114,76 @@ class Header extends StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Colors.transparent),
-          UrlLink(
-            sharedLink: sharedLink,
-            onPressLink: onPressLink,
-          ),
+          // const Divider(color: Colors.transparent),
+          // UrlLink(
+          //   sharedLink: sharedLink,
+          //   onPressLink: onPressLink,
+          // ),
         ],
       ),
     );
   }
 }
 
-class UrlLink extends StatefulWidget {
-  final String sharedLink;
-
-  final VoidCallback onPressLink;
-  const UrlLink(
-      {super.key, required this.sharedLink, required this.onPressLink});
-
-  @override
-  State<UrlLink> createState() => _UrlLinkState();
-}
-
-class _UrlLinkState extends State<UrlLink> {
-  static const duration = Duration(milliseconds: 150);
-  bool pressed = false;
-
-  void onTapDown() {
-    setState(() {
-      pressed = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        pressed = false;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      highlightColor: Colors.white,
-      onTapDown: (_) => onTapDown(),
-      onTapUp: (_) => onTapUp(),
-      onTapCancel: () => onTapUp(),
-      onTap: widget.onPressLink,
-      child: Row(
-        children: [
-          Flexible(
-            child: AnimatedDefaultTextStyle(
-              duration: duration,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: pressed ? 15 : 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-              child: Text(
-                widget.sharedLink,
-              ),
-            ),
-          ),
-          const Icon(
-            Icons.keyboard_arrow_right,
-            color: Colors.white,
-          )
-        ],
-      ),
-    );
-  }
-}
+// class UrlLink extends StatefulWidget {
+//   final String sharedLink;
+//
+//   final VoidCallback onPressLink;
+//   const UrlLink(
+//       {super.key, required this.sharedLink, required this.onPressLink});
+//
+//   @override
+//   State<UrlLink> createState() => _UrlLinkState();
+// }
+//
+// class _UrlLinkState extends State<UrlLink> {
+//   static const duration = Duration(milliseconds: 150);
+//   bool pressed = false;
+//
+//   void onTapDown() {
+//     setState(() {
+//       pressed = true;
+//     });
+//   }
+//
+//   void onTapUp() {
+//     Future.delayed(duration, () {
+//       setState(() {
+//         pressed = false;
+//       });
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkWell(
+//       highlightColor: Colors.white,
+//       onTapDown: (_) => onTapDown(),
+//       onTapUp: (_) => onTapUp(),
+//       onTapCancel: () => onTapUp(),
+//       onTap: widget.onPressLink,
+//       child: Row(
+//         children: [
+//           Flexible(
+//             child: AnimatedDefaultTextStyle(
+//               duration: duration,
+//               overflow: TextOverflow.ellipsis,
+//               style: TextStyle(
+//                 fontSize: pressed ? 15 : 16,
+//                 fontWeight: FontWeight.w600,
+//                 color: Colors.white,
+//               ),
+//               child: Text(
+//                 widget.sharedLink,
+//               ),
+//             ),
+//           ),
+//           const Icon(
+//             Icons.keyboard_arrow_right,
+//             color: Colors.white,
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }

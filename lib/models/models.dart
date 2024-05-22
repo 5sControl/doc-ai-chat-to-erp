@@ -71,26 +71,27 @@ class SummaryData extends Equatable {
   final SummaryPreview summaryPreview;
   final Summary shortSummary;
   final Summary longSummary;
+  final String? filePath;
 
-  const SummaryData({
-    required this.shortSummaryStatus,
-    required this.longSummaryStatus,
-    required this.date,
-    required this.summaryOrigin,
-    required this.shortSummary,
-    required this.longSummary,
-    required this.summaryPreview,
-  });
+  const SummaryData(
+      {required this.shortSummaryStatus,
+      required this.longSummaryStatus,
+      required this.date,
+      required this.summaryOrigin,
+      required this.shortSummary,
+      required this.longSummary,
+      required this.summaryPreview,
+      this.filePath});
 
-  SummaryData copyWith({
-    SummaryStatus? shortSummaryStatus,
-    SummaryStatus? longSummaryStatus,
-    SummaryOrigin? summaryOrigin,
-    DateTime? date,
-    Summary? shortSummary,
-    Summary? longSummary,
-    SummaryPreview? summaryPreview,
-  }) {
+  SummaryData copyWith(
+      {SummaryStatus? shortSummaryStatus,
+      SummaryStatus? longSummaryStatus,
+      SummaryOrigin? summaryOrigin,
+      DateTime? date,
+      Summary? shortSummary,
+      Summary? longSummary,
+      SummaryPreview? summaryPreview,
+      String? filePath}) {
     return SummaryData(
       shortSummaryStatus: shortSummaryStatus ?? this.shortSummaryStatus,
       longSummaryStatus: longSummaryStatus ?? this.longSummaryStatus,
@@ -99,6 +100,7 @@ class SummaryData extends Equatable {
       shortSummary: shortSummary ?? this.shortSummary,
       longSummary: longSummary ?? this.longSummary,
       summaryPreview: summaryPreview ?? this.summaryPreview,
+      filePath: filePath ?? this.filePath,
     );
   }
 
@@ -115,6 +117,7 @@ class SummaryData extends Equatable {
         date,
         summaryPreview,
         summaryOrigin,
+        filePath,
       ];
 }
 

@@ -30,6 +30,9 @@ class SummaryApiRepository {
   final String researchUrl =
       'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/';
 
+  final String researchFile =
+      'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/';
+
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.plain),
   );
@@ -210,6 +213,63 @@ class SummaryApiRepository {
     }
   }
 
+  Future<String> requestFile(
+      {required String filePath, required String question}) async {
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        filePath,
+        filename: filePath.split('/').last,
+      ),
+    });
+
+    try {
+      Response response = await _dio.post(researchFile,
+          data: formData, queryParameters: {'user_query': question});
+      print(response);
+      if (response.statusCode == 200) {
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return res['answer'];
+      } else {
+        throw Exception('Translation error');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception();
+    }
+
+    // try {
+    //   Response response = await _dio.post(researchUrl, data: {
+    //     'url': summaryUrl,
+    //     'user_query': question,
+    //     "context": "",
+    //     "type_summary": "",
+    //   });
+    //   if (response.statusCode == 200) {
+    //     final res = jsonDecode(response.data) as Map<String, dynamic>;
+    //     return res['answer'];
+    //   } else {
+    //     throw Exception('Translation error');
+    //   }
+    // } on DioException catch (e) {
+    //   ErrorDecode error;
+    //   try {
+    //     final decodedMap = json.decode(e.response?.data);
+    //
+    //     error = ErrorDecode(
+    //       detail: decodedMap['detail'],
+    //     );
+    //   } catch (e) {
+    //     error = ErrorDecode(
+    //       detail: 'Processing error',
+    //     );
+    //   }
+    //
+    //   throw Exception(error.detail);
+    // } catch (error) {
+    //   throw Exception('Some error');
+    // }
+  }
+
   Future<SendRateStatus> sendRate(
       {required String summaryLink,
       required String summary,
@@ -300,6 +360,12 @@ class SummaryRepository {
       {required String summaryUrl, required String question}) {
     return _summaryRepository.request(
         question: question, summaryUrl: summaryUrl);
+  }
+
+  Future<String> makeRequestFromFile(
+      {required String filePath, required String question}) {
+    return _summaryRepository.requestFile(
+        question: question, filePath: filePath);
   }
 
   Future<dynamic> getSummaryFromFile(

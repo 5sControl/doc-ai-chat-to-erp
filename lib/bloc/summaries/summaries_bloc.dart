@@ -75,7 +75,10 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
     on<GetSummaryFromUrl>(
       (event, emit) async {
-        await startSummaryLoading(summaryKey: event.summaryUrl, emit: emit);
+        await startSummaryLoading(
+            summaryKey: event.summaryUrl,
+            emit: emit,
+            summaryOrigin: SummaryOrigin.url);
         await loadSummaryPreview(summaryKey: event.summaryUrl, emit: emit);
         await loadSummaryFromUrl(
             summaryKey: event.summaryUrl,
@@ -90,7 +93,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         final index = state.textCounter;
         final title = "My text ($index)";
 
-        await startSummaryLoading(summaryKey: title, emit: emit);
+        await startSummaryLoading(
+            summaryKey: title, emit: emit, summaryOrigin: SummaryOrigin.text);
         await loadSummaryFromText(
             text: event.text, summaryTitle: title, emit: emit);
       },
@@ -101,7 +105,10 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       (event, emit) async {
         if (state.summaries[event.fileName]?.shortSummaryStatus !=
             SummaryStatus.loading) {
-          await startSummaryLoading(summaryKey: event.fileName, emit: emit);
+          await startSummaryLoading(
+              summaryKey: event.fileName,
+              emit: emit,
+              summaryOrigin: SummaryOrigin.file);
           await loadSummaryFromFile(
               fileName: event.fileName,
               filePath: event.filePath,
@@ -186,6 +193,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
   Future<void> startSummaryLoading(
       {required String summaryKey,
+      required SummaryOrigin summaryOrigin,
       required Emitter<SummariesState> emit}) async {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.addAll({
@@ -198,7 +206,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           summaryPreview: SummaryPreview(
             imageUrl: Assets.placeholderLogo.path,
           ),
-          summaryOrigin: SummaryOrigin.url)
+          summaryOrigin: summaryOrigin)
     });
     emit(state.copyWith(summaries: summaryMap));
   }
@@ -349,6 +357,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             .add(SummarizingSuccess(url: fileName, fromShare: fromShare));
         incrementDailySummaryCount(emit);
         return summaryData.copyWith(
+            filePath: filePath,
             shortSummary: shortSummaryResponse,
             shortSummaryStatus: SummaryStatus.complete,
             longSummary: longSummaryResponse,
@@ -360,6 +369,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             error:
                 shortSummaryResponse.toString().replaceAll('Exception:', '')));
         return summaryData.copyWith(
+            filePath: filePath,
             longSummary: Summary(
                 summaryError: shortSummaryResponse
                     .toString()
