@@ -61,7 +61,7 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
       builder: (context, state) {
         final abTest = context.read<SettingsBloc>().state.abTest;
 
-        const double headerH = 0.15;
+        const double headerH = 0.16;
         List<Package> packages =
             List.from(state.availableProducts!.current!.availablePackages);
         packages.sort(
@@ -93,81 +93,95 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                             child: Container(
                               margin: const EdgeInsets.all(15),
                               decoration: BoxDecoration(
-                                  color: Colors.white12,
+                                  color: Colors.white24,
                                   borderRadius: BorderRadius.circular(8)),
                               child: AnimatedSwitcher(
-                                duration: Duration(milliseconds: 300),
-                                key: Key(selectedSubscriptionIndex == 1
-                                    ? 'asdasd'
-                                    : 'zxczxc'),
-                                child: Builder(
-                                  builder: (context) {
-                                    if (selectedSubscriptionIndex == 1) {
-                                      return CustomPaint(
-                                        painter: PainterRight(headerH: headerH),
-                                        child: LayoutBuilder(
-                                          builder: (context, constraints) {
-                                            return SizedBox(
-                                              width: double.infinity,
-                                              height: constraints.maxHeight,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height:
-                                                        constraints.maxHeight *
-                                                            headerH,
-                                                    child: Row(
-                                                      children: [
-                                                        MonthTitle(
-                                                            onSelectSubscription:
-                                                                onSelectSubscription),
-                                                        YearTitle(
-                                                            onSelectSubscription:
-                                                                onSelectSubscription)
-                                                      ],
+                                duration: const Duration(milliseconds: 300),
+                                switchInCurve: Curves.easeIn,
+                                switchOutCurve: Curves.easeOut,
+                                reverseDuration:
+                                    const Duration(milliseconds: 300),
+                                transitionBuilder: (child, animation) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
+                                child: Container(
+                                  key: Key(selectedSubscriptionIndex == 1
+                                      ? 'month'
+                                      : 'year'),
+                                  child: Builder(
+                                    builder: (context) {
+                                      if (selectedSubscriptionIndex == 1) {
+                                        return CustomPaint(
+                                          painter:
+                                              PainterRight(headerH: headerH),
+                                          child: LayoutBuilder(
+                                            builder: (context, constraints) {
+                                              return SizedBox(
+                                                width: double.infinity,
+                                                height: constraints.maxHeight,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: constraints
+                                                              .maxHeight *
+                                                          headerH,
+                                                      child: Row(
+                                                        children: [
+                                                          MonthTitle(
+                                                              onSelectSubscription:
+                                                                  onSelectSubscription),
+                                                          YearTitle(
+                                                              onSelectSubscription:
+                                                                  onSelectSubscription)
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const SubscriptionBodyYear()
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    } else {
-                                      return CustomPaint(
-                                        painter: PainterLeft(headerH: headerH),
-                                        child: LayoutBuilder(
-                                          builder: (context, constraints) {
-                                            return SizedBox(
-                                              width: double.infinity,
-                                              height: constraints.maxHeight,
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(
-                                                    height:
-                                                        constraints.maxHeight *
-                                                            headerH,
-                                                    child: Row(
-                                                      children: [
-                                                        MonthTitle(
-                                                            onSelectSubscription:
-                                                                onSelectSubscription),
-                                                        YearTitle(
-                                                            onSelectSubscription:
-                                                                onSelectSubscription)
-                                                      ],
+                                                    const SubscriptionBodyYear()
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      } else {
+                                        return CustomPaint(
+                                          painter:
+                                              PainterLeft(headerH: headerH),
+                                          child: LayoutBuilder(
+                                            builder: (context, constraints) {
+                                              return SizedBox(
+                                                width: double.infinity,
+                                                height: constraints.maxHeight,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: constraints
+                                                              .maxHeight *
+                                                          headerH,
+                                                      child: Row(
+                                                        children: [
+                                                          MonthTitle(
+                                                              onSelectSubscription:
+                                                                  onSelectSubscription),
+                                                          YearTitle(
+                                                              onSelectSubscription:
+                                                                  onSelectSubscription)
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const SubscriptionBodyYear()
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  },
+                                                    const SubscriptionBodyMonth()
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -252,6 +266,65 @@ class YearTitle extends StatelessWidget {
         ],
       ),
     ));
+  }
+}
+
+class SubscriptionBodyMonth extends StatelessWidget {
+  const SubscriptionBodyMonth({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Spacer(
+            flex: 2,
+          ),
+          const Text(
+            '1 month',
+            textAlign: TextAlign.start,
+            style:
+                TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
+          ),
+          const Spacer(),
+          const IconsRow(),
+          const Spacer(),
+          RichText(
+              text: TextSpan(children: [
+            TextSpan(
+                text: '\$9.99',
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.w400,
+                    decoration: TextDecoration.lineThrough)),
+            TextSpan(
+                text: ' \$4.99/month',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(fontWeight: FontWeight.w700)),
+          ])),
+          const Spacer(),
+          Text(
+            'Access all premium features!\nCancel anytime',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const Spacer(
+            flex: 2,
+          ),
+          const SubscriptionButton(),
+          Divider(
+            color: Theme.of(context).primaryColor,
+            height: 45,
+            thickness: 2,
+            indent: 15,
+            endIndent: 15,
+          ),
+          const InfoList()
+        ],
+      ),
+    );
   }
 }
 
