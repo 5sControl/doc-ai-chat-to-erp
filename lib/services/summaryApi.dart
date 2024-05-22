@@ -27,6 +27,9 @@ class SummaryApiRepository {
   final String translateUrl =
       'https://largely-whole-horse.ngrok-free.app/translator/translate-to/';
 
+  final String researchUrl =
+      'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/';
+
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.plain),
   );
@@ -175,16 +178,15 @@ class SummaryApiRepository {
   Future<String> request(
       {required String summaryUrl, required String question}) async {
     try {
-      Response response = await _dio.post(linkUrl, data: {
+      Response response = await _dio.post(researchUrl, data: {
         'url': summaryUrl,
         'user_query': question,
         "context": "",
         "type_summary": "",
       });
       if (response.statusCode == 200) {
-        // final res = jsonDecode(response.data) as Map<String, dynamic>;
-        // return res['translated_text'];
-        return response.toString();
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return res['answer'];
       } else {
         throw Exception('Translation error');
       }

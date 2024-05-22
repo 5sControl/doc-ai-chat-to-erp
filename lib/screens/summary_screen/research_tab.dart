@@ -14,10 +14,34 @@ class ResearchTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ResearchBloc, ResearchState>(
+    final ScrollController controller = ScrollController();
+
+    return BlocConsumer<ResearchBloc, ResearchState>(
+      listenWhen: (previous, current) {
+        if (previous.questions[summaryKey]?.length !=
+            current.questions[summaryKey]?.length) {
+          return true;
+        }
+        if (current.questions[summaryKey]?.last.answerStatus !=
+            previous.questions[summaryKey]?.last.answerStatus) {
+          return true;
+        }
+        return false;
+      },
+      listener: (context, state) {
+        Future.delayed(const Duration(milliseconds: 200), () {
+          controller.animateTo(
+            controller.position.maxScrollExtent,
+            curve: Curves.easeOut,
+            duration: const Duration(milliseconds: 500),
+          );
+        });
+      },
       builder: (context, state) {
         return Scrollbar(
+          controller: controller,
           child: ListView(
+            controller: controller,
             padding: const EdgeInsets.only(
                 left: 15, right: 15, top: 60, bottom: 100),
             children: state.questions[summaryKey]
@@ -34,8 +58,10 @@ class ResearchTab extends StatelessWidget {
 
 class AnswerAndQuestionItem extends StatelessWidget {
   final ResearchQuestion question;
-
-  const AnswerAndQuestionItem({super.key, required this.question});
+  const AnswerAndQuestionItem({
+    super.key,
+    required this.question,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +119,7 @@ class Answer extends StatelessWidget {
               firstChild: Column(
                 children: [
                   Text(
-                    answer?.substring(0, 100) ?? '',
+                    answer ?? '',
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                   Row(
