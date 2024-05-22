@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,8 +46,8 @@ class ResearchTab extends StatelessWidget {
             padding: const EdgeInsets.only(
                 left: 15, right: 15, top: 60, bottom: 100),
             children: state.questions[summaryKey]
-                    ?.map(
-                        (question) => AnswerAndQuestionItem(question: question))
+                    ?.map((question) => AnswerAndQuestionItem(
+                        question: question, summaryKey: summaryKey))
                     .toList() ??
                 [Container()],
           ),
@@ -57,10 +58,12 @@ class ResearchTab extends StatelessWidget {
 }
 
 class AnswerAndQuestionItem extends StatelessWidget {
+  final String summaryKey;
   final ResearchQuestion question;
   const AnswerAndQuestionItem({
     super.key,
     required this.question,
+    required this.summaryKey,
   });
 
   @override
@@ -72,6 +75,7 @@ class AnswerAndQuestionItem extends StatelessWidget {
           question: question.question,
         ),
         Answer(
+          summaryKey: summaryKey,
           answer: question.answer,
           answerStatus: question.answerStatus,
           like: question.like,
@@ -83,13 +87,15 @@ class AnswerAndQuestionItem extends StatelessWidget {
 
 class Answer extends StatelessWidget {
   final String? answer;
+  final String summaryKey;
   final AnswerStatus answerStatus;
   final Like like;
   const Answer(
       {super.key,
       required this.answer,
       required this.answerStatus,
-      required this.like});
+      required this.like,
+      required this.summaryKey});
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +105,21 @@ class Answer extends StatelessWidget {
         overlayColor: MaterialStatePropertyAll(
             Theme.of(context).primaryColor.withOpacity(0.5)));
 
-    void onPressCopy() {}
-    void onPressLike() {}
-    void onPressDislike() {}
+    void onPressCopy() {
+      Clipboard.setData(ClipboardData(text: answer ?? ''));
+    }
+
+    void onPressLike() {
+      context
+          .read<ResearchBloc>()
+          .add(LikeAnswer(summaryKey: summaryKey, answer: answer!));
+    }
+
+    void onPressDislike() {
+      context
+          .read<ResearchBloc>()
+          .add(DislikeAnswer(summaryKey: summaryKey, answer: answer!));
+    }
 
     return Animate(
       delay: const Duration(milliseconds: 100),
@@ -142,8 +160,11 @@ class Answer extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           icon: SvgPicture.asset(
                             Assets.icons.miniLike,
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black54, BlendMode.srcIn),
+                            colorFilter: ColorFilter.mode(
+                                like == Like.liked
+                                    ? Colors.green
+                                    : Colors.black54,
+                                BlendMode.srcIn),
                           )),
                       IconButton(
                           onPressed: onPressDislike,
@@ -152,8 +173,11 @@ class Answer extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           icon: SvgPicture.asset(
                             Assets.icons.miniDislike,
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black54, BlendMode.srcIn),
+                            colorFilter: ColorFilter.mode(
+                                like == Like.disliked
+                                    ? Colors.red
+                                    : Colors.black54,
+                                BlendMode.srcIn),
                           )),
                     ],
                   ),
