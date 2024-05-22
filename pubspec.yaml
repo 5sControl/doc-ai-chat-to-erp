@@ -67,5 +67,5 @@ flutter:
     - assets/
     - assets/icons/
     - assets/onboarding/
-    - assets/gif/
     - assets/set_up/
+    - assets/flags/

@@ -1,10 +1,15 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
+
+import '../gen/assets.gen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -46,7 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
-    if (_currentPageIndex >= 3) {
+    if (_currentPageIndex >= 2) {
       passOnboarding();
       context.read<MixpanelBloc>().add(OnboardingStep(step: _currentPageIndex));
 
@@ -72,9 +77,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           const BackgroundGradient(),
           Scaffold(
+            extendBody: true,
+            resizeToAvoidBottomInset: false,
             body: Padding(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom,
+                  // bottom: MediaQuery.of(context).padding.bottom + 15,
                   left: 0,
                   right: 0,
                   top: MediaQuery.of(context).padding.top),
@@ -89,36 +96,40 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       controller: _pageViewController,
                       onPageChanged: _handlePageViewChanged,
                       children: const [
-                        OnboardingScreen1(),
+                        // OnboardingScreen1(),
                         OnboardingScreen2(),
-                        OnboardingScreen4(),
                         OnboardingScreen3(),
+                        OnboardingScreen4(),
                       ],
                     ),
                   ),
-                  GestureDetector(
-                    onTap: onPressContinue,
-                    child: Container(
-                      margin: const EdgeInsets.all(15),
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      decoration: BoxDecoration(
-                          color: const Color.fromRGBO(31, 188, 183, 1),
-                          borderRadius: BorderRadius.circular(8)),
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Continue',
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
+
                   // PageIndicator(
                   //   tabController: _tabController,
                   //   currentPageIndex: _currentPageIndex,
                   // ),
                 ],
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: GestureDetector(
+              onTap: onPressContinue,
+              child: Container(
+                height: 50,
+                margin: const EdgeInsets.all(15),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                    color: const Color.fromRGBO(31, 188, 183, 1),
+                    borderRadius: BorderRadius.circular(8)),
+                alignment: Alignment.center,
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white),
+                ),
               ),
             ),
           )
@@ -178,17 +189,24 @@ class OnboardingScreen2 extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('Click "Share" and get a summary',
-              style: TextStyle(
-                  fontSize: 36, fontWeight: FontWeight.w700, height: 1),
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Text('Goodbye information overload!',
+              style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700),
               textAlign: TextAlign.start),
         ),
         const Divider(
           color: Colors.transparent,
           height: 25,
         ),
-        Image.asset('assets/onboarding/onboardingImg1.png')
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Image.asset('assets/onboarding/onb1_1.png')),
+        SizedBox(
+          height: 10,
+        ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Image.asset('assets/onboarding/onb1.png')),
       ],
     );
   }
@@ -200,11 +218,12 @@ class OnboardingScreen3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        const Spacer(),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('Easily summarize anything',
+          child: Text('One-click “share” get summary',
               style: TextStyle(
                   fontSize: 36, fontWeight: FontWeight.w700, height: 1),
               textAlign: TextAlign.start),
@@ -213,10 +232,19 @@ class OnboardingScreen3 extends StatelessWidget {
           color: Colors.transparent,
           height: 25,
         ),
-        Image.asset('assets/onboarding/onboardingImg2.png')
+        Container(
+            margin: const EdgeInsets.only(left: 15, top: 15),
+            child: Image.asset('assets/onboarding/onb2.png'))
       ],
     );
   }
+}
+
+class LangItem {
+  final String title;
+  final String code;
+  final String icon;
+  const LangItem({required this.title, required this.icon, required this.code});
 }
 
 class OnboardingScreen4 extends StatelessWidget {
@@ -224,23 +252,92 @@ class OnboardingScreen4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('Enjoy on every browser and app',
-              style: TextStyle(
-                  fontSize: 36, fontWeight: FontWeight.w700, height: 1),
-              textAlign: TextAlign.start),
-        ),
-        const Divider(
-          color: Colors.transparent,
-          height: 25,
-        ),
-        Image.asset('assets/onboarding/onboardingImg3.png')
-      ],
+    final List<LangItem> languages = [
+      LangItem(title: 'Spanish', icon: Assets.flags.sp, code: 'sp'),
+      LangItem(title: 'French', icon: Assets.flags.fr, code: 'fr'),
+      LangItem(title: 'Chinese', icon: Assets.flags.zh, code: 'zh'),
+      LangItem(title: 'Ukrainian', icon: Assets.flags.uk, code: 'uk'),
+      LangItem(title: 'Arabic', icon: Assets.flags.ar, code: 'ar'),
+      LangItem(title: 'Russian', icon: Assets.flags.ru, code: 'ru'),
+    ];
+
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      builder: (context, state) {
+        final selectedLang = state.translateLanguage;
+
+        void onSelectLanguage({required String language}) {
+          context
+              .read<SettingsBloc>()
+              .add(SetTranslateLanguage(translateLanguage: language));
+        }
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            const Spacer(),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('Select your translation language',
+                  style: TextStyle(
+                      fontSize: 34, fontWeight: FontWeight.w700, height: 1),
+                  textAlign: TextAlign.start),
+            ),
+            const Spacer(),
+            ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              shrinkWrap: true,
+              children: languages
+                  .map((lang) => Container(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Material(
+                          color:
+                              Theme.of(context).primaryColor.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(8),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(8),
+                            onTap: () => onSelectLanguage(language: lang.code),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    color: selectedLang == lang.code
+                                        ? Theme.of(context).cardColor
+                                        : Colors.transparent,
+                                    width: 2),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    lang.icon,
+                                    width: 27,
+                                    height: 27,
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(lang.title)
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            ),
+            const SizedBox(
+              height: 100,
+            )
+            // const Divider(
+            //   color: Colors.transparent,
+            //   height: 25,
+            // ),
+            // Image.asset('assets/onboarding/onboardingImg3.png')
+          ],
+        );
+      },
     );
   }
 }

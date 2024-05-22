@@ -20,7 +20,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
             isNotificationsEnabled: true,
             appTheme: AppTheme.auto,
             subscriptionsSynced: false,
-            translateLanguage: '',
+            translateLanguage: 'sp',
             abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
@@ -70,3 +70,4 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     return state.toJson();
   }
 }
+

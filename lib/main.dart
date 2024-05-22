@@ -18,7 +18,7 @@ import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
-import 'package:summify/screens/subscriptionsOnb_scree.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptionsOnb_scree.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
@@ -44,7 +44,7 @@ void main() async {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
-  // await HydratedBloc.storage.clear();
+  await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 

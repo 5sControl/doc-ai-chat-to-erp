@@ -9,6 +9,31 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsFlagsGen {
+  const $AssetsFlagsGen();
+
+  /// File path: assets/flags/ar.svg
+  String get ar => 'assets/flags/ar.svg';
+
+  /// File path: assets/flags/fr.svg
+  String get fr => 'assets/flags/fr.svg';
+
+  /// File path: assets/flags/ru.svg
+  String get ru => 'assets/flags/ru.svg';
+
+  /// File path: assets/flags/sp.svg
+  String get sp => 'assets/flags/sp.svg';
+
+  /// File path: assets/flags/uk.svg
+  String get uk => 'assets/flags/uk.svg';
+
+  /// File path: assets/flags/zh.svg
+  String get zh => 'assets/flags/zh.svg';
+
+  /// List of all assets
+  List<String> get values => [ar, fr, ru, sp, uk, zh];
+}
+
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
@@ -23,6 +48,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/checkCircle.svg
   String get checkCircle => 'assets/icons/checkCircle.svg';
+
+  /// File path: assets/icons/chrome.svg
+  String get chrome => 'assets/icons/chrome.svg';
 
   /// File path: assets/icons/clock.svg
   String get clock => 'assets/icons/clock.svg';
@@ -117,6 +145,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/star.svg
   String get star => 'assets/icons/star.svg';
 
+  /// File path: assets/icons/summafy_mini.svg
+  String get summafyMini => 'assets/icons/summafy_mini.svg';
+
   /// File path: assets/icons/terms.svg
   String get terms => 'assets/icons/terms.svg';
 
@@ -144,6 +175,7 @@ class $AssetsIconsGen {
         chat,
         check,
         checkCircle,
+        chrome,
         clock,
         copy,
         crown,
@@ -175,6 +207,7 @@ class $AssetsIconsGen {
         settings,
         share,
         star,
+        summafyMini,
         terms,
         text,
         textScale,
@@ -188,25 +221,18 @@ class $AssetsIconsGen {
 class $AssetsOnboardingGen {
   const $AssetsOnboardingGen();
 
-  /// File path: assets/onboarding/onboardingBG.png
-  AssetGenImage get onboardingBG =>
-      const AssetGenImage('assets/onboarding/onboardingBG.png');
+  /// File path: assets/onboarding/onb1.png
+  AssetGenImage get onb1 => const AssetGenImage('assets/onboarding/onb1.png');
 
-  /// File path: assets/onboarding/onboardingImg1.png
-  AssetGenImage get onboardingImg1 =>
-      const AssetGenImage('assets/onboarding/onboardingImg1.png');
+  /// File path: assets/onboarding/onb1_1.png
+  AssetGenImage get onb11 =>
+      const AssetGenImage('assets/onboarding/onb1_1.png');
 
-  /// File path: assets/onboarding/onboardingImg2.png
-  AssetGenImage get onboardingImg2 =>
-      const AssetGenImage('assets/onboarding/onboardingImg2.png');
-
-  /// File path: assets/onboarding/onboardingImg3.png
-  AssetGenImage get onboardingImg3 =>
-      const AssetGenImage('assets/onboarding/onboardingImg3.png');
+  /// File path: assets/onboarding/onb2.png
+  AssetGenImage get onb2 => const AssetGenImage('assets/onboarding/onb2.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [onboardingBG, onboardingImg1, onboardingImg2, onboardingImg3];
+  List<AssetGenImage> get values => [onb1, onb11, onb2];
 }
 
 class $AssetsSetUpGen {
@@ -262,6 +288,7 @@ class Assets {
 
   static const AssetGenImage bgDark = AssetGenImage('assets/bg_dark.png');
   static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
+  static const $AssetsFlagsGen flags = $AssetsFlagsGen();
   static const AssetGenImage girl = AssetGenImage('assets/girl.png');
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const AssetGenImage niga = AssetGenImage('assets/niga.png');
