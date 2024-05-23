@@ -17,8 +17,15 @@ class ErrorDecode {
 
 class SummaryApiRepository {
   final String linkUrl = "http://51.159.179.125:8002/application_by_summarize/";
+  final String linkUrlDev =
+      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
+
   final String fileUrl =
       "http://51.159.179.125:8002/application_by_summarize/uploadfile/";
+
+  final String fileUrlDev =
+      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
+
   final String rateUrl = 'http://51.159.179.125:8000/api/applications/reviews/';
 
   final String requestUrl =
@@ -40,14 +47,16 @@ class SummaryApiRepository {
   FutureOr<Object?> getFromLink(
       {required String summaryLink, required SummaryType summaryType}) async {
     try {
-      Response response = await _dio.post(linkUrl, data: {
+      Response response = await _dio.post(linkUrlDev, data: {
         'url': summaryLink,
         'context': '',
         "type_summary": summaryType.name
       });
 
       if (response.statusCode == 200 && response.data.toString().isNotEmpty) {
-        return Summary(summaryText: response.data.toString());
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return Summary(
+            summaryText: res['summary'], contextLength: res['context_length']);
       } else {
         Exception('Some error');
       }
@@ -76,7 +85,7 @@ class SummaryApiRepository {
       {required String textToSummify, required SummaryType summaryType}) async {
     try {
       Response response = await _dio.post(
-        linkUrl,
+        linkUrlDev,
         data: {
           'url': '',
           'context': textToSummify,
@@ -85,7 +94,9 @@ class SummaryApiRepository {
       );
 
       if (response.statusCode == 200) {
-        return Summary(summaryText: response.data.toString());
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return Summary(
+            summaryText: res['summary'], contextLength: res['context_length']);
       }
     } on DioException catch (e) {
       ErrorDecode error;

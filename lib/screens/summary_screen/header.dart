@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/models/models.dart';
+import 'package:summify/screens/summary_screen/info_modal/info_modal.dart';
 
 import '../../gen/assets.gen.dart';
 
@@ -8,21 +10,36 @@ class Header extends StatelessWidget {
   final String displayLink;
   final String sharedLink;
   final String formattedDate;
-  final VoidCallback onPressDelete;
   final VoidCallback onPressBack;
   final VoidCallback onPressLink;
+  final SummaryData summaryData;
 
   const Header(
       {super.key,
       required this.displayLink,
       required this.formattedDate,
-      required this.onPressDelete,
       required this.onPressLink,
       required this.onPressBack,
-      required this.sharedLink});
+      required this.sharedLink,
+      required this.summaryData});
 
   @override
   Widget build(BuildContext context) {
+    void onPressInfo() {
+      showCupertinoModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return InfoModal(
+            summaryData: summaryData,
+          );
+        },
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
@@ -44,7 +61,7 @@ class Header extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: onPressDelete,
+                    onPressed: onPressInfo,
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
                     icon: SvgPicture.asset(
@@ -55,7 +72,7 @@ class Header extends StatelessWidget {
                     color: Colors.white,
                   ),
                   IconButton(
-                    onPressed: onPressDelete,
+                    onPressed: onPressInfo,
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
                     icon: SvgPicture.asset(
@@ -66,7 +83,7 @@ class Header extends StatelessWidget {
                     color: Colors.white,
                   ),
                   IconButton(
-                    onPressed: onPressDelete,
+                    onPressed: onPressInfo,
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
                     icon: SvgPicture.asset(

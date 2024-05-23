@@ -40,17 +40,17 @@ class SummaryPreview extends Equatable {
 class Summary extends Equatable {
   final String? summaryText;
   final String? summaryError;
+  final int? contextLength;
 
-  const Summary({this.summaryText, this.summaryError});
+  const Summary({this.contextLength, this.summaryText, this.summaryError});
 
-  Summary copyWith({
-    String? summaryText,
-    String? summaryError,
-    SummaryTranslate? summaryTranslate,
-  }) {
+  Summary copyWith(
+      {String? summaryText, String? summaryError, int? contextLength}) {
     return Summary(
-        summaryText: summaryText ?? this.summaryText,
-        summaryError: summaryError ?? this.summaryError);
+      summaryText: summaryText ?? this.summaryText,
+      summaryError: summaryError ?? this.summaryError,
+      contextLength: contextLength ?? this.contextLength,
+    );
   }
 
   factory Summary.fromJson(Map<String, dynamic> json) =>
@@ -59,7 +59,7 @@ class Summary extends Equatable {
   Map<String, dynamic> toJson() => _$SummaryToJson(this);
 
   @override
-  List<Object?> get props => [summaryText, summaryError];
+  List<Object?> get props => [summaryText, summaryError, contextLength];
 }
 
 @JsonSerializable()

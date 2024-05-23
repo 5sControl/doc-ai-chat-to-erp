@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -107,15 +106,6 @@ class _SummaryScreenState extends State<SummaryScreen>
               );
             }
 
-            void onPressDelete() {
-              Navigator.of(context).pop();
-              Future.delayed(const Duration(milliseconds: 300), () {
-                context
-                    .read<SummariesBloc>()
-                    .add(DeleteSummary(summaryUrl: widget.summaryKey));
-              });
-            }
-
             void onPressBack() {
               if (!state.ratedSummaries.contains(widget.summaryKey)) {
                 showRateScreen();
@@ -166,7 +156,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                                   formattedDate: formattedDate,
                                   onPressLink: onPressLink,
                                   onPressBack: onPressBack,
-                                  onPressDelete: onPressDelete,
+                                  summaryData: summaryData,
                                 ),
                               ],
                             ),
