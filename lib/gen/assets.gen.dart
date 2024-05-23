@@ -112,6 +112,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/notification.svg
   String get notification => 'assets/icons/notification.svg';
 
+  /// File path: assets/icons/one_one.svg
+  String get oneOne => 'assets/icons/one_one.svg';
+
   /// File path: assets/icons/paste.svg
   String get paste => 'assets/icons/paste.svg';
 
@@ -196,6 +199,7 @@ class $AssetsIconsGen {
         miniLike,
         noImage,
         notification,
+        oneOne,
         paste,
         phone,
         play,
@@ -288,6 +292,7 @@ class Assets {
 
   static const AssetGenImage bgDark = AssetGenImage('assets/bg_dark.png');
   static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
+  static const AssetGenImage extension = AssetGenImage('assets/extension.png');
   static const $AssetsFlagsGen flags = $AssetsFlagsGen();
   static const AssetGenImage girl = AssetGenImage('assets/girl.png');
   static const String happyBox = 'assets/happy_box.svg';
@@ -305,6 +310,7 @@ class Assets {
   static List<dynamic> get values => [
         bgDark,
         bgLight,
+        extension,
         girl,
         happyBox,
         happyBoxFloor,

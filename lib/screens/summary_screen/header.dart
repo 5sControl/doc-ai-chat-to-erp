@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/models/models.dart';
+import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 import 'package:summify/screens/summary_screen/info_modal/info_modal.dart';
 import 'package:summify/screens/summary_screen/info_modal/text_size_modal.dart';
 
@@ -54,6 +55,19 @@ class Header extends StatelessWidget {
       );
     }
 
+    void onPressDesktop() {
+      showMaterialModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return ExtensionModal();
+        },
+      );
+    }
+
     return Padding(
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
@@ -96,17 +110,17 @@ class Header extends StatelessWidget {
                     ),
                     color: Colors.white,
                   ),
-                  // IconButton(
-                  //   onPressed: onPressInfo,
-                  //   padding: EdgeInsets.zero,
-                  //   visualDensity: VisualDensity.compact,
-                  //   icon: SvgPicture.asset(
-                  //     Assets.icons.desctop,
-                  //     colorFilter:
-                  //         const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                  //   ),
-                  //   color: Colors.white,
-                  // )
+                  IconButton(
+                    onPressed: onPressDesktop,
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    icon: SvgPicture.asset(
+                      Assets.icons.desctop,
+                      colorFilter:
+                          const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                    color: Colors.white,
+                  )
                 ],
               )
             ],
