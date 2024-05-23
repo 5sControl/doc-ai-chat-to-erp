@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -66,6 +67,11 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
             List.from(state.availableProducts!.current!.availablePackages);
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
+
+        final monthlyPackage = packages.firstWhere(
+            (element) => element.packageType == PackageType.monthly);
+        final annualPackage = packages
+            .firstWhere((element) => element.packageType == PackageType.annual);
 
         return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
           builder: (context, state) {
@@ -139,7 +145,8 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                                         ],
                                                       ),
                                                     ),
-                                                    const SubscriptionBodyYear()
+                                                    SubscriptionBodyYear(
+                                                        package: annualPackage)
                                                   ],
                                                 ),
                                               );
@@ -172,7 +179,9 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                                                         ],
                                                       ),
                                                     ),
-                                                    const SubscriptionBodyMonth()
+                                                    SubscriptionBodyMonth(
+                                                      package: monthlyPackage,
+                                                    )
                                                   ],
                                                 ),
                                               );
@@ -270,10 +279,19 @@ class YearTitle extends StatelessWidget {
 }
 
 class SubscriptionBodyMonth extends StatelessWidget {
-  const SubscriptionBodyMonth({super.key});
+  final Package package;
+  const SubscriptionBodyMonth({super.key, required this.package});
 
   @override
   Widget build(BuildContext context) {
+    String currency({required String code}) {
+      Locale locale = Localizations.localeOf(context);
+      var format = NumberFormat.simpleCurrency(locale: locale.toString());
+      return format.currencySymbol;
+    }
+
+    final currencySymbol = currency(code: package.storeProduct.currencyCode);
+
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -292,13 +310,15 @@ class SubscriptionBodyMonth extends StatelessWidget {
           const Spacer(),
           RichText(
               text: TextSpan(children: [
+            // TextSpan(
+            //     text:
+            //         '$currencySymbol${(package.storeProduct.price).toStringAsFixed(2)}',
+            //     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            //         fontWeight: FontWeight.w400,
+            //         decoration: TextDecoration.lineThrough)),
             TextSpan(
-                text: '\$9.99',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.w400,
-                    decoration: TextDecoration.lineThrough)),
-            TextSpan(
-                text: ' \$4.99/month',
+                text:
+                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/month',
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
@@ -329,10 +349,19 @@ class SubscriptionBodyMonth extends StatelessWidget {
 }
 
 class SubscriptionBodyYear extends StatelessWidget {
-  const SubscriptionBodyYear({super.key});
+  final Package package;
+  const SubscriptionBodyYear({super.key, required this.package});
 
   @override
   Widget build(BuildContext context) {
+    String currency({required String code}) {
+      Locale locale = Localizations.localeOf(context);
+      var format = NumberFormat.simpleCurrency(locale: locale.toString());
+      return format.currencySymbol;
+    }
+
+    final currencySymbol = currency(code: package.storeProduct.currencyCode);
+
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -352,12 +381,14 @@ class SubscriptionBodyYear extends StatelessWidget {
           RichText(
               text: TextSpan(children: [
             TextSpan(
-                text: '\$59.99',
+                text:
+                    '$currencySymbol${(package.storeProduct.price + 25).toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.w400,
                     decoration: TextDecoration.lineThrough)),
             TextSpan(
-                text: ' \$34.99/year',
+                text:
+                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/year',
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
