@@ -10,7 +10,7 @@ import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/summaries/summaries_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../../widgets/summify_button.dart';
-import '../subscription_screen.dart';
+import '../subscribtions_screen/subscriptions_screen.dart';
 
 class UrlModalScreen extends StatefulWidget {
   const UrlModalScreen({super.key});

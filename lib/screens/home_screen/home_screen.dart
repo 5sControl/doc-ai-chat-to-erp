@@ -12,10 +12,10 @@ import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
 import 'package:summify/screens/home_screen/summaries_counter.dart';
-import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
 
 import '../modal_screens/set_up_share_screen.dart';
+import '../subscribtions_screen/subscriptions_screen.dart';
 import 'logo.dart';
 import 'summary_tile.dart';
 

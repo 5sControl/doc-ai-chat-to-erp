@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../gen/assets.gen.dart';
-import '../subscription_screen.dart';
+import '../subscribtions_screen/subscriptions_screen.dart';
 
 class PremiumBanner extends StatelessWidget {
   const PremiumBanner({super.key});

@@ -12,7 +12,7 @@ import 'package:summify/gen/assets.gen.dart';
 import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../screens/modal_screens/text_screen.dart';
 import '../screens/modal_screens/ulr_screen.dart';
-import '../screens/subscription_screen.dart';
+import '../screens/subscribtions_screen/subscriptions_screen.dart';
 
 final Map<String, String> buttons = {
   'Link': Assets.icons.url,

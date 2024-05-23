@@ -83,10 +83,14 @@ class SetUpShareScreen extends StatelessWidget {
                       onPressed: onPressClose,
                       style: ButtonStyle(
                           padding:
-                              const MaterialStatePropertyAll(EdgeInsets.all(2)),
+                              const MaterialStatePropertyAll(EdgeInsets.all(0)),
                           backgroundColor: MaterialStatePropertyAll(
-                              Colors.white.withOpacity(0.1))),
-                      highlightColor: Colors.white.withOpacity(0.2),
+                              Theme.of(context)
+                                  .iconTheme
+                                  .color!
+                                  .withOpacity(0.2))),
+                      highlightColor:
+                          Theme.of(context).iconTheme.color!.withOpacity(0.2),
                       icon: const Icon(
                         Icons.close,
                         color: Colors.white,
@@ -96,63 +100,67 @@ class SetUpShareScreen extends StatelessWidget {
             ),
             body: Padding(
               padding: const EdgeInsets.all(30),
-              child: Column(
-                children: [
-                  Text(
-                    'Set up share button',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMedium!
-                        .copyWith(fontSize: 24, height: 3),
-                  ),
-                  Column(
-                    children: steps
-                        .map((step) => Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    step.image,
-                                    width: 100,
-                                  ),
-                                  Flexible(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          Text(
-                                            step.step,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displaySmall!
-                                                .copyWith(fontSize: 14),
-                                          ),
-                                          Text(
-                                            step.description,
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .displayMedium!
-                                                .copyWith(
-                                                    fontSize: 22,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                          ),
-                                        ],
-                                      ),
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    Text(
+                      'Set up share button',
+                      style: Theme.of(context)
+                          .textTheme
+                          .displayMedium!
+                          .copyWith(fontSize: 24, height: 3),
+                    ),
+                    Column(
+                      children: steps
+                          .map((step) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      step.image,
+                                      width: 100,
                                     ),
-                                  )
-                                ],
-                              ),
-                            ))
-                        .toList(),
-                  )
-                ],
+                                    Flexible(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: [
+                                            Text(
+                                              step.step,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displaySmall!
+                                                  .copyWith(fontSize: 14),
+                                            ),
+                                            Text(
+                                              step.description,
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .displayMedium!
+                                                  .copyWith(
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ))
+                          .toList(),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

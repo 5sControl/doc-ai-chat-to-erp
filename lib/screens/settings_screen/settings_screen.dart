@@ -9,12 +9,12 @@ import 'package:share_plus/share_plus.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
 import 'package:summify/screens/settings_screen/select_lang_dialog.dart';
-import 'package:summify/screens/subscription_screen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
+import '../subscribtions_screen/subscriptions_screen.dart';
 
 class ButtonItem {
   final String title;

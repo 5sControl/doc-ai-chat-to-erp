@@ -18,7 +18,7 @@ import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
-import 'package:summify/screens/subscribtions_screen/subscriptionsOnb_scree.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
@@ -143,7 +143,7 @@ class SummishareApp extends StatelessWidget {
                         settings: settings);
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(
-                        builder: (_) => const SubscriptionOnboardingScreen(),
+                        builder: (_) => const SubscriptionScreen(),
                         settings: settings);
                   case '/settings':
                     return MaterialWithModalsPageRoute(

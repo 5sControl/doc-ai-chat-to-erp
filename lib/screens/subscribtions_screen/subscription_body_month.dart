@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/screens/subscribtions_screen/subscription_button.dart';
-import 'package:summify/screens/subscribtions_screen/subscriptionsOnb_scree.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 
 import 'info_list.dart';
 

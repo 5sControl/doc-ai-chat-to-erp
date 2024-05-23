@@ -6,26 +6,26 @@ import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 import '../modal_screens/purchase_success_screen.dart';
-import '../subscription_screen.dart';
 import 'happy_box.dart';
 import 'subscription_body_month.dart';
 import 'subscription_body_year.dart';
 
-class SubscriptionOnboardingScreen extends StatefulWidget {
-  const SubscriptionOnboardingScreen({super.key});
+class SubscriptionScreen extends StatefulWidget {
+  final bool? fromOnboarding;
+  const SubscriptionScreen({super.key, this.fromOnboarding});
 
   @override
-  State<SubscriptionOnboardingScreen> createState() =>
-      _SubscriptionScreenState();
+  State<SubscriptionScreen> createState() => _SubscriptionScreenState();
 }
 
-class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
+class _SubscriptionScreenState extends State<SubscriptionScreen> {
   var selectedSubscriptionIndex = 1;
 
   void onSelectSubscription({required int index}) {
@@ -84,11 +84,12 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                   child: SafeArea(
                     child: Scaffold(
                       appBar: AppBar(
+                        toolbarHeight: 50,
                         automaticallyImplyLeading: false,
                         actions: const [
                           BackArrow(),
                           SizedBox(
-                            width: 10,
+                            width: 5,
                           )
                         ],
                       ),
