@@ -64,7 +64,6 @@ class SummaryApiRepository {
       ErrorDecode error;
       try {
         final decodedMap = json.decode(e.response?.data);
-
         error = ErrorDecode(
           detail: decodedMap['detail'],
         );
