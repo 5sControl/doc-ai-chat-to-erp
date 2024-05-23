@@ -204,7 +204,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ),
                 ),
                 Animate(effects: const [
-                  MoveEffect(begin: Offset(100, 0), end: Offset(0, 0)),
+                  MoveEffect(
+                      begin: Offset(100, 0),
+                      end: Offset(0, 0),
+                      delay: Duration(milliseconds: 200)),
                 ], child: const HappyBox())
               ],
             );

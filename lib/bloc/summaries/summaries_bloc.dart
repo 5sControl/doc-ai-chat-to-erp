@@ -60,13 +60,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             defaultSummaryType: SummaryType.short,
             dailyLimit: subscriptionBloc.state.subscriptionStatus ==
                     SubscriptionStatus.subscribed
-                ? 15
+                ? 9999999999
                 : 2,
             dailySummariesMap: const {},
             textCounter: 1)) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionStatus == SubscriptionStatus.subscribed) {
-        add(const SetDailyLimit(dailyLimit: 15));
+        add(const SetDailyLimit(dailyLimit: 9999999999));
       } else {
         add(const SetDailyLimit(dailyLimit: 2));
         return;
