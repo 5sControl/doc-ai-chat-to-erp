@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/models/models.dart';
 
+import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
 
 class ResearchTab extends StatefulWidget {
@@ -174,85 +175,94 @@ class Answer extends StatelessWidget {
       );
     }
 
-    return Animate(
-      delay: const Duration(milliseconds: 100),
-      effects: const [FadeEffect()],
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: width),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            margin: const EdgeInsets.only(bottom: 15),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(8)),
-            child: AnimatedCrossFade(
-              firstChild: Column(
-                children: [
-                  Text(
-                    answer ?? '',
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                  Row(
+    return BlocBuilder<SettingsBloc, SettingsState>(
+      builder: (context, state) {
+        return Animate(
+          delay: const Duration(milliseconds: 100),
+          effects: const [FadeEffect()],
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: width),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                margin: const EdgeInsets.only(bottom: 15),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8)),
+                child: AnimatedCrossFade(
+                  firstChild: Column(
                     children: [
-                      IconButton(
-                          onPressed: onPressCopy,
-                          splashRadius: 10,
-                          style: bStyle,
-                          iconSize: 20,
-                          visualDensity: VisualDensity.compact,
-                          icon: SvgPicture.asset(
-                            Assets.icons.copy,
-                            colorFilter: const ColorFilter.mode(
-                                Colors.black54, BlendMode.srcIn),
-                          )),
-                      IconButton(
-                          onPressed: onPressLike,
-                          style: bStyle,
-                          iconSize: 20,
-                          visualDensity: VisualDensity.compact,
-                          icon: SvgPicture.asset(
-                            Assets.icons.miniLike,
-                            colorFilter: ColorFilter.mode(
-                                like == Like.liked
-                                    ? Colors.green
-                                    : Colors.black54,
-                                BlendMode.srcIn),
-                          )),
-                      IconButton(
-                          onPressed: onPressDislike,
-                          style: bStyle,
-                          iconSize: 20,
-                          visualDensity: VisualDensity.compact,
-                          icon: SvgPicture.asset(
-                            Assets.icons.miniDislike,
-                            colorFilter: ColorFilter.mode(
-                                like == Like.disliked
-                                    ? Colors.red
-                                    : Colors.black54,
-                                BlendMode.srcIn),
-                          )),
+                      Text(
+                        answer ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(fontSize: state.fontSize.toDouble()),
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: onPressCopy,
+                              splashRadius: 10,
+                              style: bStyle,
+                              iconSize: 20,
+                              visualDensity: VisualDensity.compact,
+                              icon: SvgPicture.asset(
+                                Assets.icons.copy,
+                                colorFilter: const ColorFilter.mode(
+                                    Colors.black54, BlendMode.srcIn),
+                              )),
+                          IconButton(
+                              onPressed: onPressLike,
+                              style: bStyle,
+                              iconSize: 20,
+                              visualDensity: VisualDensity.compact,
+                              icon: SvgPicture.asset(
+                                Assets.icons.miniLike,
+                                colorFilter: ColorFilter.mode(
+                                    like == Like.liked
+                                        ? Colors.green
+                                        : Colors.black54,
+                                    BlendMode.srcIn),
+                              )),
+                          IconButton(
+                              onPressed: onPressDislike,
+                              style: bStyle,
+                              iconSize: 20,
+                              visualDensity: VisualDensity.compact,
+                              icon: SvgPicture.asset(
+                                Assets.icons.miniDislike,
+                                colorFilter: ColorFilter.mode(
+                                    like == Like.disliked
+                                        ? Colors.red
+                                        : Colors.black54,
+                                    BlendMode.srcIn),
+                              )),
+                        ],
+                      ),
                     ],
                   ),
-                ],
-              ),
-              secondChild: Container(
-                width: 30,
-                height: 30,
-                padding: const EdgeInsets.all(5),
-                child: CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: Theme.of(context).primaryColor,
+                  secondChild: Container(
+                    width: 30,
+                    height: 30,
+                    padding: const EdgeInsets.all(5),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  duration: const Duration(milliseconds: 300),
+                  crossFadeState: answerStatus == AnswerStatus.loading
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
                 ),
               ),
-              duration: const Duration(milliseconds: 300),
-              crossFadeState: answerStatus == AnswerStatus.loading
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -264,22 +274,25 @@ class Question extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width * 0.7;
-    return Align(
-      alignment: Alignment.centerRight,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: width),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          margin: const EdgeInsets.only(bottom: 15),
-          decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorLight,
-              borderRadius: BorderRadius.circular(8)),
-          child: Text(
-            question,
-            style: Theme.of(context).textTheme.labelMedium,
-          ),
-        ),
-      ),
-    );
+    return BlocBuilder<SettingsBloc, SettingsState>(builder: (context, state) {
+      return Align(
+          alignment: Alignment.centerRight,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: width),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              margin: const EdgeInsets.only(bottom: 15),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight,
+                  borderRadius: BorderRadius.circular(8)),
+              child: Text(
+                question,
+                style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                      fontSize: state.fontSize.toDouble(),
+                    ),
+              ),
+            ),
+          ));
+    });
   }
 }

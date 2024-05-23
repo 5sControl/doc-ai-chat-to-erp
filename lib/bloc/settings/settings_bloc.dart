@@ -2,13 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:status_bar_control/status_bar_control.dart';
 
 import '../../services/notify.dart';
 
 part 'settings_event.dart';
 part 'settings_state.dart';
 part 'settings_bloc.g.dart';
+
+const fontSizes = [12, 14, 16, 18, 20, 22];
 
 class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
   final Brightness brightness;
@@ -21,6 +22,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
             appTheme: AppTheme.auto,
             subscriptionsSynced: false,
             translateLanguage: 'sp',
+            fontSize: 18,
             abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
@@ -58,6 +60,20 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     on<SetTranslateLanguage>((event, emit) {
       emit(state.copyWith(translateLanguage: event.translateLanguage));
     });
+
+    on<ScaleUpFontSize>((event, emit) {
+      if (state.fontSize != fontSizes.last) {
+        final nextSize = fontSizes[fontSizes.indexOf(state.fontSize) + 1];
+        emit(state.copyWith(fontSize: nextSize));
+      }
+    });
+
+    on<ScaleDownFontSize>((event, emit) {
+      if (state.fontSize != fontSizes.first) {
+        final nextSize = fontSizes[fontSizes.indexOf(state.fontSize) - 1];
+        emit(state.copyWith(fontSize: nextSize));
+      }
+    });
   }
 
   @override
@@ -70,4 +86,3 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
     return state.toJson();
   }
 }
-

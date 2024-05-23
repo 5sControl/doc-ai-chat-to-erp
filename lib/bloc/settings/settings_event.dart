@@ -57,3 +57,17 @@ class SetTranslateLanguage extends SettingsEvent {
   @override
   List<Object> get props => [translateLanguage];
 }
+
+class ScaleUpFontSize extends SettingsEvent {
+  const ScaleUpFontSize();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ScaleDownFontSize extends SettingsEvent {
+  const ScaleDownFontSize();
+
+  @override
+  List<Object> get props => [];
+}

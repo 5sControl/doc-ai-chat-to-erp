@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/settings/settings_bloc.dart';
 import '../../models/models.dart';
 
 class SummaryTextContainer extends StatelessWidget {
@@ -57,17 +59,21 @@ class SummaryTextContainer extends StatelessWidget {
                 );
               }
 
-              return Animate(
-                effects: const [FadeEffect()],
-                child: SelectableText.rich(TextSpan(
-                    children: parts
-                        .map((e) => TextSpan(
-                              text: e,
-                              style: keywords.contains(e)
-                                  ? Theme.of(context).textTheme.bodyLarge
-                                  : Theme.of(context).textTheme.bodyMedium,
-                            ))
-                        .toList())),
+              return BlocBuilder<SettingsBloc, SettingsState>(
+                builder: (context, state) {
+                  return Animate(
+                    effects: const [FadeEffect()],
+                    child: SelectableText.rich(TextSpan(
+                        children: parts
+                            .map((e) => TextSpan(
+                                  text: e,
+                                  style: keywords.contains(e)
+                                      ? Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: state.fontSize.toDouble() + 4)
+                                      : Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: state.fontSize.toDouble()),
+                                ))
+                            .toList())),
+                  );
+                },
               );
             },
           ),
