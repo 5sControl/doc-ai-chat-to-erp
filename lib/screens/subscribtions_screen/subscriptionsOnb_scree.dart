@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/gen/assets.gen.dart';
-import 'package:summify/screens/subscribtions_screen/subscription_button.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
@@ -14,7 +13,9 @@ import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 import '../modal_screens/purchase_success_screen.dart';
 import '../subscription_screen.dart';
-import 'info_list.dart';
+import 'happy_box.dart';
+import 'subscription_body_month.dart';
+import 'subscription_body_year.dart';
 
 class SubscriptionOnboardingScreen extends StatefulWidget {
   const SubscriptionOnboardingScreen({super.key});
@@ -201,10 +202,9 @@ class _SubscriptionScreenState extends State<SubscriptionOnboardingScreen> {
                     ),
                   ),
                 ),
-                Positioned(
-                    bottom: MediaQuery.of(context).padding.bottom + 40,
-                    right: 20,
-                    child: SvgPicture.asset(Assets.happyBox))
+                Animate(effects: const [
+                  MoveEffect(begin: Offset(100, 0), end: Offset(0, 0)),
+                ], child: const HappyBox())
               ],
             );
           },
@@ -275,146 +275,6 @@ class YearTitle extends StatelessWidget {
         ],
       ),
     ));
-  }
-}
-
-class SubscriptionBodyMonth extends StatelessWidget {
-  final Package package;
-  const SubscriptionBodyMonth({super.key, required this.package});
-
-  @override
-  Widget build(BuildContext context) {
-    String currency({required String code}) {
-      Locale locale = Localizations.localeOf(context);
-      var format = NumberFormat.simpleCurrency(locale: locale.toString());
-      return format.currencySymbol;
-    }
-
-    final currencySymbol = currency(code: package.storeProduct.currencyCode);
-
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Spacer(
-            flex: 2,
-          ),
-          const Text(
-            '1 month',
-            textAlign: TextAlign.start,
-            style:
-                TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
-          ),
-          const Spacer(),
-          const IconsRow(),
-          const Spacer(),
-          RichText(
-              text: TextSpan(children: [
-            // TextSpan(
-            //     text:
-            //         '$currencySymbol${(package.storeProduct.price).toStringAsFixed(2)}',
-            //     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-            //         fontWeight: FontWeight.w400,
-            //         decoration: TextDecoration.lineThrough)),
-            TextSpan(
-                text:
-                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/month',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.w700)),
-          ])),
-          const Spacer(),
-          Text(
-            'Access all premium features!\nCancel anytime',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const Spacer(
-            flex: 2,
-          ),
-          const SubscriptionButton(),
-          Divider(
-            color: Theme.of(context).primaryColor,
-            height: 45,
-            thickness: 2,
-            indent: 15,
-            endIndent: 15,
-          ),
-          const InfoList()
-        ],
-      ),
-    );
-  }
-}
-
-class SubscriptionBodyYear extends StatelessWidget {
-  final Package package;
-  const SubscriptionBodyYear({super.key, required this.package});
-
-  @override
-  Widget build(BuildContext context) {
-    String currency({required String code}) {
-      Locale locale = Localizations.localeOf(context);
-      var format = NumberFormat.simpleCurrency(locale: locale.toString());
-      return format.currencySymbol;
-    }
-
-    final currencySymbol = currency(code: package.storeProduct.currencyCode);
-
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Spacer(
-            flex: 2,
-          ),
-          const Text(
-            '12 months',
-            textAlign: TextAlign.start,
-            style:
-                TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
-          ),
-          const Spacer(),
-          const IconsRow(),
-          const Spacer(),
-          RichText(
-              text: TextSpan(children: [
-            TextSpan(
-                text:
-                    '$currencySymbol${(package.storeProduct.price + 25).toStringAsFixed(2)}',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.w400,
-                    decoration: TextDecoration.lineThrough)),
-            TextSpan(
-                text:
-                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/year',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.w700)),
-          ])),
-          const Spacer(),
-          Text(
-            'Access all premium features!\nCancel anytime',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const Spacer(
-            flex: 2,
-          ),
-          const SubscriptionButton(),
-          Divider(
-            color: Theme.of(context).primaryColor,
-            height: 45,
-            thickness: 2,
-            indent: 15,
-            endIndent: 15,
-          ),
-          const InfoList()
-        ],
-      ),
-    );
   }
 }
 

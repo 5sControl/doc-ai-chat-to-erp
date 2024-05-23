@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 
 class SubscriptionButton extends StatelessWidget {
-  const SubscriptionButton({super.key});
+  final Package package;
+  const SubscriptionButton({super.key, required this.package});
 
   @override
   Widget build(BuildContext context) {
+    void onPressSubscribe() {
+      context
+          .read<SubscriptionsBloc>()
+          .add(MakePurchase(context: context, product: package));
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15),
       height: 50,
@@ -18,17 +28,17 @@ class SubscriptionButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: onPressSubscribe,
           borderRadius: BorderRadius.circular(8),
           overlayColor: const MaterialStatePropertyAll(Colors.white24),
           child: Center(
               child: Text(
-                'Select',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: Colors.black, fontWeight: FontWeight.w700),
-              )),
+            'Select',
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Colors.black, fontWeight: FontWeight.w700),
+          )),
         ),
       ),
     );

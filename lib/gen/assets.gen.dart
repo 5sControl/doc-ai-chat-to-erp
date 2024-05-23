@@ -291,6 +291,9 @@ class Assets {
   static const $AssetsFlagsGen flags = $AssetsFlagsGen();
   static const AssetGenImage girl = AssetGenImage('assets/girl.png');
   static const String happyBox = 'assets/happy_box.svg';
+  static const String happyBoxFloor = 'assets/happy_box_floor.svg';
+  static const String happyBoxLeftHand = 'assets/happy_box_left_hand.svg';
+  static const String happyBoxRightHand = 'assets/happy_box_right_hand.svg';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const AssetGenImage niga = AssetGenImage('assets/niga.png');
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
@@ -299,8 +302,17 @@ class Assets {
   static const $AssetsSetUpGen setUp = $AssetsSetUpGen();
 
   /// List of all assets
-  static List<dynamic> get values =>
-      [bgDark, bgLight, girl, happyBox, niga, placeholderLogo];
+  static List<dynamic> get values => [
+        bgDark,
+        bgLight,
+        girl,
+        happyBox,
+        happyBoxFloor,
+        happyBoxLeftHand,
+        happyBoxRightHand,
+        niga,
+        placeholderLogo
+      ];
 }
 
 class AssetGenImage {
