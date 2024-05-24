@@ -65,6 +65,10 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
       setState(() {
         isRated = true;
       });
+
+      Future.delayed(const Duration(seconds: 5), () {
+        Navigator.of(context).pop();
+      });
     }
 
     return BackdropFilter(
@@ -116,7 +120,7 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                     height: 5,
                   ),
                   Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         'It will help us to improve quality \n of the summaries',
                         textAlign: TextAlign.center,

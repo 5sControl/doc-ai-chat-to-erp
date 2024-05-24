@@ -15,7 +15,7 @@ class SubscriptionBodyMonth extends StatelessWidget {
     String currency({required String code}) {
       Locale locale = Localizations.localeOf(context);
       var format = NumberFormat.simpleCurrency(locale: locale.toString());
-      return format.currencySymbol;
+      return format.simpleCurrencySymbol(code);
     }
 
     final currencySymbol = currency(code: package.storeProduct.currencyCode);
