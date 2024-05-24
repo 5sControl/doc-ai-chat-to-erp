@@ -15,6 +15,9 @@ class $AssetsFlagsGen {
   /// File path: assets/flags/ar.svg
   String get ar => 'assets/flags/ar.svg';
 
+  /// File path: assets/flags/en.svg
+  String get en => 'assets/flags/en.svg';
+
   /// File path: assets/flags/fr.svg
   String get fr => 'assets/flags/fr.svg';
 
@@ -31,7 +34,7 @@ class $AssetsFlagsGen {
   String get zh => 'assets/flags/zh.svg';
 
   /// List of all assets
-  List<String> get values => [ar, fr, ru, sp, uk, zh];
+  List<String> get values => [ar, en, fr, ru, sp, uk, zh];
 }
 
 class $AssetsIconsGen {

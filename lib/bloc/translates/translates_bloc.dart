@@ -62,6 +62,7 @@ class TranslatesBloc extends HydratedBloc<TranslatesEvent, TranslatesState> {
         try {
           final res = await SummaryRepository().getTranslate(
               text: event.summaryText, languageCode: event.languageCode);
+          print(res);
           final Map<String, SummaryTranslate> translates =
               Map.from(state.longTranslates);
           translates.update(
@@ -72,8 +73,9 @@ class TranslatesBloc extends HydratedBloc<TranslatesEvent, TranslatesState> {
                   isActive: true));
           emit(state.copyWith(longTranslates: translates));
         } catch (e) {
+          print(e);
           final Map<String, SummaryTranslate> translates =
-              Map.from(state.shortTranslates);
+              Map.from(state.longTranslates);
           translates.update(
               event.summaryKey,
               (translate) => translate.copyWith(

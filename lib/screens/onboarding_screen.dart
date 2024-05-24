@@ -253,7 +253,8 @@ class OnboardingScreen4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<LangItem> languages = [
-      LangItem(title: 'Spanish', icon: Assets.flags.sp, code: 'sp'),
+      LangItem(title: 'English', icon: Assets.flags.en, code: 'en'),
+      LangItem(title: 'Spanish', icon: Assets.flags.sp, code: 'es'),
       LangItem(title: 'French', icon: Assets.flags.fr, code: 'fr'),
       LangItem(title: 'Chinese', icon: Assets.flags.zh, code: 'zh'),
       LangItem(title: 'Ukrainian', icon: Assets.flags.uk, code: 'uk'),
@@ -285,7 +286,7 @@ class OnboardingScreen4 extends StatelessWidget {
             ),
             const Spacer(),
             ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+              padding: const EdgeInsets.only(left: 15, right: 20, bottom: 100),
               shrinkWrap: true,
               children: languages
                   .map((lang) => Container(
@@ -327,9 +328,6 @@ class OnboardingScreen4 extends StatelessWidget {
                       ))
                   .toList(),
             ),
-            const SizedBox(
-              height: 100,
-            )
             // const Divider(
             //   color: Colors.transparent,
             //   height: 25,

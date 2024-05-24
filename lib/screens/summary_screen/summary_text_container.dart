@@ -48,19 +48,22 @@ class SummaryTextContainer extends StatelessWidget {
           key: Key(summaryTranslate != null && summaryTranslate!.isActive
               ? 'short'
               : 'long'),
-          child: Builder(
-            builder: (context) {
-              if (summaryTranslate != null && summaryTranslate!.isActive) {
-                return Animate(
-                  effects: const [FadeEffect()],
-                  child: SelectableText.rich(TextSpan(
-                      text: summaryTranslate!.translate,
-                      style: Theme.of(context).textTheme.bodyMedium)),
-                );
-              }
+          child: BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              return Builder(
+                builder: (context) {
+                  if (summaryTranslate != null && summaryTranslate!.isActive) {
+                    return Animate(
+                      effects: const [FadeEffect()],
+                      child: SelectableText.rich(TextSpan(
+                          text: summaryTranslate!.translate,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(fontSize: state.fontSize.toDouble()))),
+                    );
+                  }
 
-              return BlocBuilder<SettingsBloc, SettingsState>(
-                builder: (context, state) {
                   return Animate(
                     effects: const [FadeEffect()],
                     child: SelectableText.rich(TextSpan(
@@ -68,8 +71,18 @@ class SummaryTextContainer extends StatelessWidget {
                             .map((e) => TextSpan(
                                   text: e,
                                   style: keywords.contains(e)
-                                      ? Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: state.fontSize.toDouble() + 4)
-                                      : Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: state.fontSize.toDouble()),
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                              fontSize:
+                                                  state.fontSize.toDouble() + 4)
+                                      : Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              fontSize:
+                                                  state.fontSize.toDouble()),
                                 ))
                             .toList())),
                   );

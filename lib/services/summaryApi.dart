@@ -160,6 +160,7 @@ class SummaryApiRepository {
   Future<String> translate(
       {required String text, required String languageCode}) async {
     try {
+
       Response response = await _dio
           .post(translateUrl, data: {'text': text, 'language': languageCode});
       if (response.statusCode == 200) {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 
 const Map<String, String> translateLanguages = {
+  "en": 'English',
   "ru": 'Russian',
   "fr": "French",
   "ar": "Arabic",

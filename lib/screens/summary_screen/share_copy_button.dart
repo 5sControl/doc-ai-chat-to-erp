@@ -139,9 +139,18 @@ class TranslateButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
+        if (settingsState.translateLanguage == 'en') {
+          return const SizedBox();
+        }
+
         return BlocBuilder<TranslatesBloc, TranslatesState>(
           builder: (context, translatesState) {
             final bool isShort = activeTab == 0;
+            final bool isLoading = translatesState
+                        .shortTranslates[summaryKey]?.translateStatus ==
+                    TranslateStatus.loading ||
+                translatesState.longTranslates[summaryKey]?.translateStatus ==
+                    TranslateStatus.loading;
 
             void onPressTranslate() {
               final text = isShort
@@ -149,6 +158,7 @@ class TranslateButton extends StatelessWidget {
                   : summaryData.longSummary.summaryText;
 
               if (isShort &&
+                  !isLoading &&
                   translatesState.shortTranslates[summaryKey] == null) {
                 context.read<TranslatesBloc>().add(TranslateSummary(
                     summaryKey: summaryKey,
@@ -156,12 +166,14 @@ class TranslateButton extends StatelessWidget {
                     languageCode: settingsState.translateLanguage,
                     summaryType: SummaryType.short));
               } else if (isShort &&
-                  translatesState.shortTranslates[summaryKey] != null) {
+                  translatesState.shortTranslates[summaryKey]?.translate !=
+                      null) {
                 context.read<TranslatesBloc>().add(ToggleTranslate(
                     summaryKey: summaryKey, summaryType: SummaryType.short));
               }
 
               if (!isShort &&
+                  !isLoading &&
                   translatesState.longTranslates[summaryKey] == null) {
                 context.read<TranslatesBloc>().add(TranslateSummary(
                     summaryKey: summaryKey,
@@ -169,7 +181,8 @@ class TranslateButton extends StatelessWidget {
                     languageCode: settingsState.translateLanguage,
                     summaryType: SummaryType.long));
               } else if (!isShort &&
-                  translatesState.longTranslates[summaryKey] != null) {
+                  translatesState.longTranslates[summaryKey]?.translate !=
+                      null) {
                 context.read<TranslatesBloc>().add(ToggleTranslate(
                     summaryKey: summaryKey, summaryType: SummaryType.long));
               }

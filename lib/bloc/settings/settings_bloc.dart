@@ -21,7 +21,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
             isNotificationsEnabled: true,
             appTheme: AppTheme.auto,
             subscriptionsSynced: false,
-            translateLanguage: 'sp',
+            translateLanguage: 'en',
             fontSize: 18,
             abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
     on<PassOnboarding>((event, emit) {
