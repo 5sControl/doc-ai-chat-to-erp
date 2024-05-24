@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           barrierColor: Colors.black54,
           backgroundColor: Colors.transparent,
           builder: (context) {
-            return const SubscriptionScreen();
+            return const SubscriptionScreen(fromOnboarding: true,);
           },
         );
         context
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           barrierColor: Colors.black54,
           backgroundColor: Colors.transparent,
           builder: (context) {
-            return const SubscriptionScreen();
+            return const SubscriptionScreen(fromOnboarding: true,);
           },
         );
         context

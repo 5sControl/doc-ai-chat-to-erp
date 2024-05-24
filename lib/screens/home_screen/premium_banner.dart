@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -18,7 +19,7 @@ class PremiumBanner extends StatelessWidget {
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return const SubscriptionScreen();
+          return const SubscriptionScreen(fromOnboarding: true,);
         },
       );
     }
@@ -26,7 +27,7 @@ class PremiumBanner extends StatelessWidget {
     return InkWell(
       onTap: onPressPremiumBanner,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             gradient: const LinearGradient(colors: [
@@ -55,13 +56,30 @@ class PremiumBanner extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.w600, color: Colors.black),
                   ),
-                  Text(
-                    'Get 15 Summaries Daily',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
-                  ),
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  fontSize: 14),
+                          children: [
+                        const TextSpan(text: 'Get on '),
+                        WidgetSpan(
+                            child: DecoratedBox(
+                              decoration: const BoxDecoration(boxShadow: [
+                                BoxShadow(color: Colors.black12, blurRadius: 5)
+                              ]),
+                              child: SvgPicture.asset(
+                                Assets.icons.chrome,
+                                width: 20,
+                              ),
+                            ),
+                            alignment: PlaceholderAlignment.middle),
+                        const TextSpan(text: ' for free!'),
+                      ]))
                 ],
               ),
             ),

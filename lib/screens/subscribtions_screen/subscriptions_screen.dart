@@ -86,9 +86,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       appBar: AppBar(
                         toolbarHeight: 50,
                         automaticallyImplyLeading: false,
-                        actions: const [
-                          BackArrow(),
-                          SizedBox(
+                        actions: [
+                          BackArrow(fromOnboarding: widget.fromOnboarding),
+                          const SizedBox(
                             width: 5,
                           )
                         ],
@@ -324,14 +324,19 @@ class IconsRow extends StatelessWidget {
 }
 
 class BackArrow extends StatelessWidget {
-  const BackArrow({super.key});
+  final bool? fromOnboarding;
+  const BackArrow({super.key, this.fromOnboarding});
 
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-      context.read<MixpanelBloc>().add(const ClosePaywall());
+      if (fromOnboarding == null) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+        context.read<MixpanelBloc>().add(const ClosePaywall());
+      } else {
+        Navigator.of(context).pop();
+      }
     }
 
     return IconButton(

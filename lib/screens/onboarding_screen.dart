@@ -223,7 +223,7 @@ class OnboardingScreen3 extends StatelessWidget {
         const Spacer(),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('One-click “share” get summary',
+          child: Text('One-click “share” to get summary',
               style: TextStyle(
                   fontSize: 36, fontWeight: FontWeight.w700, height: 1),
               textAlign: TextAlign.start),

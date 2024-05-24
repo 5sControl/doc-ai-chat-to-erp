@@ -74,7 +74,7 @@ class AddSummaryButton extends StatelessWidget {
             barrierColor: Colors.black54,
             backgroundColor: Colors.transparent,
             builder: (context) {
-              return const SubscriptionScreen();
+              return const SubscriptionScreen(fromOnboarding: true,);
             },
           );
           context.read<MixpanelBloc>().add(LimitReached(
