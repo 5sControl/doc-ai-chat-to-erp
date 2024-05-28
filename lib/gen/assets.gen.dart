@@ -15,11 +15,50 @@ class $AssetsFlagsGen {
   /// File path: assets/flags/ar.svg
   String get ar => 'assets/flags/ar.svg';
 
+  /// File path: assets/flags/cs.svg
+  String get cs => 'assets/flags/cs.svg';
+
+  /// File path: assets/flags/de.svg
+  String get de => 'assets/flags/de.svg';
+
+  /// File path: assets/flags/el.svg
+  String get el => 'assets/flags/el.svg';
+
   /// File path: assets/flags/en.svg
   String get en => 'assets/flags/en.svg';
 
+  /// File path: assets/flags/fa.svg
+  String get fa => 'assets/flags/fa.svg';
+
   /// File path: assets/flags/fr.svg
   String get fr => 'assets/flags/fr.svg';
+
+  /// File path: assets/flags/he.svg
+  String get he => 'assets/flags/he.svg';
+
+  /// File path: assets/flags/hi.svg
+  String get hi => 'assets/flags/hi.svg';
+
+  /// File path: assets/flags/id.svg
+  String get id => 'assets/flags/id.svg';
+
+  /// File path: assets/flags/it.svg
+  String get it => 'assets/flags/it.svg';
+
+  /// File path: assets/flags/ja.svg
+  String get ja => 'assets/flags/ja.svg';
+
+  /// File path: assets/flags/ko.svg
+  String get ko => 'assets/flags/ko.svg';
+
+  /// File path: assets/flags/nl.svg
+  String get nl => 'assets/flags/nl.svg';
+
+  /// File path: assets/flags/pt.svg
+  String get pt => 'assets/flags/pt.svg';
+
+  /// File path: assets/flags/ro.svg
+  String get ro => 'assets/flags/ro.svg';
 
   /// File path: assets/flags/ru.svg
   String get ru => 'assets/flags/ru.svg';
@@ -27,14 +66,43 @@ class $AssetsFlagsGen {
   /// File path: assets/flags/sp.svg
   String get sp => 'assets/flags/sp.svg';
 
+  /// File path: assets/flags/tr.svg
+  String get tr => 'assets/flags/tr.svg';
+
   /// File path: assets/flags/uk.svg
   String get uk => 'assets/flags/uk.svg';
+
+  /// File path: assets/flags/vi.svg
+  String get vi => 'assets/flags/vi.svg';
 
   /// File path: assets/flags/zh.svg
   String get zh => 'assets/flags/zh.svg';
 
   /// List of all assets
-  List<String> get values => [ar, en, fr, ru, sp, uk, zh];
+  List<String> get values => [
+        ar,
+        cs,
+        de,
+        el,
+        en,
+        fa,
+        fr,
+        he,
+        hi,
+        id,
+        it,
+        ja,
+        ko,
+        nl,
+        pt,
+        ro,
+        ru,
+        sp,
+        tr,
+        uk,
+        vi,
+        zh
+      ];
 }
 
 class $AssetsIconsGen {
