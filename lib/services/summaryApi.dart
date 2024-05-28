@@ -31,8 +31,11 @@ class SummaryApiRepository {
   final String requestUrl =
       'http://51.159.179.125:8000/api/applications/function-reports/';
 
-  final String translateUrl =
+  final String translateUrlDev =
       'https://largely-whole-horse.ngrok-free.app/translator/translate-to/';
+
+  final String translateUrl =
+      'http://51.159.179.125:8088/translate-to/';
 
   final String researchUrl =
       'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/';
@@ -47,7 +50,7 @@ class SummaryApiRepository {
   FutureOr<Object?> getFromLink(
       {required String summaryLink, required SummaryType summaryType}) async {
     try {
-      Response response = await _dio.post(linkUrlDev, data: {
+      Response response = await _dio.post(linkUrl, data: {
         'url': summaryLink,
         'context': '',
         "type_summary": summaryType.name
@@ -84,7 +87,7 @@ class SummaryApiRepository {
       {required String textToSummify, required SummaryType summaryType}) async {
     try {
       Response response = await _dio.post(
-        linkUrlDev,
+        linkUrl,
         data: {
           'url': '',
           'context': textToSummify,
@@ -134,7 +137,9 @@ class SummaryApiRepository {
           data: formData, queryParameters: {'type_summary': summaryType.name});
 
       if (response.statusCode == 200) {
-        return Summary(summaryText: response.data.toString());
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return Summary(
+            summaryText: res['summary'], contextLength: res['context_length']);
       }
     } on DioException catch (e) {
       ErrorDecode error;
@@ -192,7 +197,7 @@ class SummaryApiRepository {
   Future<String> request(
       {required String summaryUrl, required String question}) async {
     try {
-      Response response = await _dio.post(researchUrl, data: {
+      Response response = await _dio.post(linkUrl, data: {
         'url': summaryUrl,
         'user_query': question,
         "context": "",
@@ -227,7 +232,7 @@ class SummaryApiRepository {
   Future<String> requestText(
       {required String userText, required String question}) async {
     try {
-      Response response = await _dio.post(researchUrl, data: {
+      Response response = await _dio.post(linkUrl, data: {
         'url': '',
         'user_query': question,
         "context": userText,
@@ -269,7 +274,7 @@ class SummaryApiRepository {
     });
 
     try {
-      Response response = await _dio.post(researchFile,
+      Response response = await _dio.post(fileUrl,
           data: formData, queryParameters: {'user_query': question});
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;

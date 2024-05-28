@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 
 import '../../models/models.dart';
@@ -19,6 +20,7 @@ class SendRequestField extends StatelessWidget {
         if (summaryData.summaryOrigin == SummaryOrigin.url) {
           context.read<ResearchBloc>().add(MakeQuestionFromUrl(
               question: controller.text, summaryKey: summaryKey));
+          context.read<MixpanelBloc>().add(TrackResearchSummary(url: summaryKey));
         }
 
         if (summaryData.summaryOrigin == SummaryOrigin.file) {
@@ -26,6 +28,7 @@ class SendRequestField extends StatelessWidget {
               question: controller.text,
               filePath: summaryData.filePath ?? '',
               summaryKey: summaryKey));
+          context.read<MixpanelBloc>().add(TrackResearchSummary(url: summaryKey));
         }
 
         if (summaryData.summaryOrigin == SummaryOrigin.text) {
@@ -33,6 +36,7 @@ class SendRequestField extends StatelessWidget {
               question: controller.text,
               text: summaryData.userText ?? '',
               summaryKey: summaryKey));
+          context.read<MixpanelBloc>().add(TrackResearchSummary(url: summaryKey));
         }
 
         controller.text = '';

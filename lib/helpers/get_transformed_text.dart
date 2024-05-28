@@ -16,6 +16,7 @@
 String getTransformedText({required String text}) {
   return text
       .replaceAll('\n', '')
+      .replaceAll('   ', '')
       .replaceAll('\n\n', '\n')
       .replaceAll('\n\n\n', '\n')
       .replaceAll('.- ', '.\n- ')

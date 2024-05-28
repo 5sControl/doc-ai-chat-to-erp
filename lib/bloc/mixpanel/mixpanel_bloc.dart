@@ -139,5 +139,17 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
         'AB': event.AB
       });
     });
+
+    on<TrackResearchSummary>((event, emit) {
+      mixpanel.track('research_summary', properties: {
+        'summary_url': event.url,
+      });
+    });
+
+    on<TrackTranslateSummary>((event, emit) {
+      mixpanel.track('translate_summary', properties: {
+        'summary_url': event.url,
+      });
+    });
   }
 }

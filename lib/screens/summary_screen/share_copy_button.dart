@@ -165,6 +165,9 @@ class TranslateButton extends StatelessWidget {
                     summaryText: text!,
                     languageCode: settingsState.translateLanguage,
                     summaryType: SummaryType.short));
+                context
+                    .read<MixpanelBloc>()
+                    .add(TrackTranslateSummary(url: summaryKey));
               } else if (isShort &&
                   translatesState.shortTranslates[summaryKey]?.translate !=
                       null) {

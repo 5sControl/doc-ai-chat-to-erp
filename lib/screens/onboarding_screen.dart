@@ -243,7 +243,7 @@ class OnboardingScreen3 extends StatelessWidget {
 class LangItem {
   final String title;
   final String code;
-  final String icon;
+  final String? icon;
   const LangItem({required this.title, required this.icon, required this.code});
 }
 
@@ -256,11 +256,32 @@ class OnboardingScreen4 extends StatelessWidget {
       LangItem(title: 'English', icon: Assets.flags.en, code: 'en'),
       LangItem(title: 'Spanish', icon: Assets.flags.sp, code: 'es'),
       LangItem(title: 'French', icon: Assets.flags.fr, code: 'fr'),
-      LangItem(title: 'Chinese', icon: Assets.flags.zh, code: 'zh'),
+      LangItem(
+          title: 'Chinese (Simplified)', icon: Assets.flags.zh, code: 'zh-cn'),
+      LangItem(
+          title: 'Chinese (Traditional)', icon: Assets.flags.zh, code: 'zh-tw'),
       LangItem(title: 'Ukrainian', icon: Assets.flags.uk, code: 'uk'),
       LangItem(title: 'Arabic', icon: Assets.flags.ar, code: 'ar'),
       LangItem(title: 'Russian', icon: Assets.flags.ru, code: 'ru'),
+      LangItem(title: 'Czech', icon: null, code: 'cs'),
+      LangItem(title: 'Dutch', icon: null, code: 'nl'),
+      LangItem(title: 'German', icon: null, code: 'de'),
+      LangItem(title: 'Greek', icon: null, code: 'el'),
+      LangItem(title: 'Hebrew', icon: null, code: 'he'),
+      LangItem(title: 'Hindi', icon: null, code: 'hi'),
+      LangItem(title: 'Indonesian', icon: null, code: 'id'),
+      LangItem(title: 'Italian', icon: null, code: 'it'),
+      LangItem(title: 'Japanese', icon: null, code: 'ja'),
+      LangItem(title: 'Korean', icon: null, code: 'ko'),
+      LangItem(title: 'Korean', icon: null, code: 'ko'),
+      LangItem(title: 'Persian', icon: null, code: 'fa'),
+      LangItem(title: 'Portuguese', icon: null, code: 'pt'),
+      LangItem(title: 'Romanian', icon: null, code: 'ro'),
+      LangItem(title: 'Turkish', icon: null, code: 'tr'),
+      LangItem(title: 'Vietnamese', icon: null, code: 'vi'),
     ];
+
+    // "vi": "Vietnamese"
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
@@ -276,7 +297,10 @@ class OnboardingScreen4 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            const Spacer(),
+            // const Spacer(),
+            const SizedBox(
+              height: 20,
+            ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Text('Select your translation language',
@@ -284,49 +308,55 @@ class OnboardingScreen4 extends StatelessWidget {
                       fontSize: 34, fontWeight: FontWeight.w700, height: 1),
                   textAlign: TextAlign.start),
             ),
-            const Spacer(),
-            ListView(
-              padding: const EdgeInsets.only(left: 15, right: 20, bottom: 100),
-              shrinkWrap: true,
-              children: languages
-                  .map((lang) => Container(
-                        padding: const EdgeInsets.only(bottom: 15),
-                        child: Material(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(8),
-                          child: InkWell(
+            // const SizedBox(height: 20,),
+            // const Spacer(),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 20, bottom: 100),
+                shrinkWrap: true,
+                children: languages
+                    .map((lang) => Container(
+                          padding: const EdgeInsets.only(bottom: 15),
+                          child: Material(
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () => onSelectLanguage(language: lang.code),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    color: selectedLang == lang.code
-                                        ? Theme.of(context).cardColor
-                                        : Colors.transparent,
-                                    width: 2),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 20),
-                              child: Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    lang.icon,
-                                    width: 27,
-                                    height: 27,
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(lang.title)
-                                ],
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () =>
+                                  onSelectLanguage(language: lang.code),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: selectedLang == lang.code
+                                          ? Theme.of(context).cardColor
+                                          : Colors.transparent,
+                                      width: 2),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 20),
+                                child: Row(
+                                  children: [
+                                    if (lang.icon != null)
+                                      SvgPicture.asset(
+                                        lang.icon!,
+                                        width: 27,
+                                        height: 27,
+                                      ),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(lang.title)
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ))
-                  .toList(),
+                        ))
+                    .toList(),
+              ),
             ),
             // const Divider(
             //   color: Colors.transparent,

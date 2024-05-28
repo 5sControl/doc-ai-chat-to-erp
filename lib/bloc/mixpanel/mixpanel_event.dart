@@ -142,7 +142,8 @@ class SummarizingError extends MixpanelEvent {
   final String url;
   final bool fromShare;
   final String error;
-  const SummarizingError({required this.url, required this.fromShare, required this.error});
+  const SummarizingError(
+      {required this.url, required this.fromShare, required this.error});
 
   @override
   List<Object?> get props => [url, fromShare, error];
@@ -190,4 +191,20 @@ class ReadSummary extends MixpanelEvent {
 
   @override
   List<Object?> get props => [type, url, AB];
+}
+
+class TrackResearchSummary extends MixpanelEvent {
+  final String url;
+  const TrackResearchSummary({required this.url});
+
+  @override
+  List<Object?> get props => [url];
+}
+
+class TrackTranslateSummary extends MixpanelEvent {
+  final String url;
+  const TrackTranslateSummary({required this.url});
+
+  @override
+  List<Object?> get props => [url];
 }

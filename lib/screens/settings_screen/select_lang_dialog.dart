@@ -4,13 +4,30 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 
 const Map<String, String> translateLanguages = {
-  "en": 'English',
-  "ru": 'Russian',
-  "fr": "French",
   "ar": "Arabic",
-  "uk": "Ukrainian",
+  "zh-cn": "Chinese (Simplified)",
+  "zh-tw": "Chinese (Traditional)",
+  "cs": "Czech",
+  "nl": "Dutch",
+  "en": "English",
+  "fr": "French",
+  "de": "German",
+  "el": "Greek",
+  "he": "Hebrew",
+  "hi": "Hindi",
+  "id": "Indonesian",
+  "it": "Italian",
+  "ja": "Japanese",
+  "ko": "Korean",
+  "fa": "Persian",
+  "pl": "Polish",
+  "pt": "Portuguese",
+  "ro": "Romanian",
+  "ru": "Russian",
   "es": "Spanish",
-  "zh": "Chinese"
+  "tr": "Turkish",
+  "uk": "Ukrainian",
+  "vi": "Vietnamese"
 };
 
 Future<void> translateDialog({
@@ -94,7 +111,7 @@ class LanguagesDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 120,
       child: CupertinoPicker(
           scrollController: controller,
           diameterRatio: 1,
