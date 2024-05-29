@@ -151,5 +151,16 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
         'summary_url': event.url,
       });
     });
+
+    on<RedirectToSummifyExtension>((event, emit) {
+      mixpanel.track('open_extension_link', properties: {});
+    });
+
+    on<CopySummifyExtensionLink>((event, emit) {
+      mixpanel.track('copy_extension_link', properties: {});
+    });
+    on<OpenSummifyExtensionModal>((event, emit) {
+      mixpanel.track('open_extension_modal', properties: {});
+    });
   }
 }

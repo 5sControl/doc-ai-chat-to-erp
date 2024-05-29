@@ -266,7 +266,7 @@ class OnboardingScreen4 extends StatelessWidget {
       LangItem(title: 'Czech', icon: Assets.flags.cs, code: 'cs'),
       LangItem(title: 'Dutch', icon: Assets.flags.nl, code: 'nl'),
       LangItem(title: 'German', icon: Assets.flags.de, code: 'de'),
-      LangItem(title: 'Greek', icon:  Assets.flags.el, code: 'el'),
+      LangItem(title: 'Greek', icon: Assets.flags.el, code: 'el'),
       LangItem(title: 'Hebrew', icon: Assets.flags.he, code: 'he'),
       LangItem(title: 'Hindi', icon: Assets.flags.hi, code: 'hi'),
       LangItem(title: 'Indonesian', icon: Assets.flags.id, code: 'id'),
@@ -279,8 +279,6 @@ class OnboardingScreen4 extends StatelessWidget {
       LangItem(title: 'Turkish', icon: Assets.flags.tr, code: 'tr'),
       LangItem(title: 'Vietnamese', icon: Assets.flags.vi, code: 'vi'),
     ];
-
-    // "vi": "Vietnamese"
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
@@ -307,8 +305,6 @@ class OnboardingScreen4 extends StatelessWidget {
                       fontSize: 34, fontWeight: FontWeight.w700, height: 1),
                   textAlign: TextAlign.start),
             ),
-            // const SizedBox(height: 20,),
-            // const Spacer(),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.only(
@@ -357,11 +353,6 @@ class OnboardingScreen4 extends StatelessWidget {
                     .toList(),
               ),
             ),
-            // const Divider(
-            //   color: Colors.transparent,
-            //   height: 25,
-            // ),
-            // Image.asset('assets/onboarding/onboardingImg3.png')
           ],
         );
       },

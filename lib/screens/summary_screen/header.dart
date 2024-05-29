@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/models/models.dart';
@@ -6,6 +7,7 @@ import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 import 'package:summify/screens/summary_screen/info_modal/info_modal.dart';
 import 'package:summify/screens/summary_screen/info_modal/text_size_modal.dart';
 
+import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../gen/assets.gen.dart';
 
 class Header extends StatelessWidget {
@@ -63,9 +65,10 @@ class Header extends StatelessWidget {
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return ExtensionModal();
+          return const ExtensionModal();
         },
       );
+      context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
     }
 
     return Padding(
@@ -163,7 +166,6 @@ class Header extends StatelessWidget {
               ),
             ],
           ),
-
         ],
       ),
     );

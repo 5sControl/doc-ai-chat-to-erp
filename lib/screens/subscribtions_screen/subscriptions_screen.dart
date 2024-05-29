@@ -10,9 +10,10 @@ import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart'
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
-import '../../bloc/settings/settings_bloc.dart';
+// import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
-import '../modal_screens/purchase_success_screen.dart';
+// import '../modal_screens/purchase_success_screen.dart';
+import '../summary_screen/info_modal/extension_modal.dart';
 import 'happy_box.dart';
 import 'subscription_body_month.dart';
 import 'subscription_body_year.dart';
@@ -44,24 +45,24 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   Widget build(BuildContext context) {
     // final abTest = context.read<SettingsBloc>().state.abTest;
 
-    void onSubscriptionsComplete() {
-      showMaterialModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        enableDrag: false,
-        builder: (context) {
-          return const PurchaseSuccessScreen();
-        },
-      );
-    }
+    // void onSubscriptionsComplete() {
+    //   showMaterialModalBottomSheet(
+    //     context: context,
+    //     expand: false,
+    //     bounce: false,
+    //     barrierColor: Colors.black54,
+    //     backgroundColor: Colors.transparent,
+    //     enableDrag: false,
+    //     builder: (context) {
+    //       return const PurchaseSuccessScreen();
+    //     },
+    //   );
+    // }
 
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
       listener: (context, state) {},
       builder: (context, state) {
-        final abTest = context.read<SettingsBloc>().state.abTest;
+        // final abTest = context.read<SettingsBloc>().state.abTest;
 
         const double headerH = 0.16;
         List<Package> packages =
@@ -303,23 +304,43 @@ class IconsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-        text: TextSpan(
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(fontWeight: FontWeight.w700),
-            children: [
-          const TextSpan(text: "BUY "),
-          WidgetSpan(
-              child: SvgPicture.asset(Assets.icons.summafyMini),
-              alignment: PlaceholderAlignment.middle),
-          const TextSpan(text: " AND GET ON "),
-          WidgetSpan(
-              child: SvgPicture.asset(Assets.icons.chrome),
-              alignment: PlaceholderAlignment.middle),
-          const TextSpan(text: " FOR FREE!"),
-        ]));
+    void onPressInfo() {
+      showMaterialModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return const ExtensionModal();
+        },
+      );
+
+      context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
+    }
+
+    return TextButton(
+      onPressed: onPressInfo,
+      style: const ButtonStyle(
+          backgroundColor: MaterialStatePropertyAll(Colors.white10)),
+      child: RichText(
+          text: TextSpan(
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(fontWeight: FontWeight.w700),
+              children: [
+            const TextSpan(text: "BUY "),
+            WidgetSpan(
+                child: SvgPicture.asset(Assets.icons.summafyMini),
+                alignment: PlaceholderAlignment.middle),
+            const TextSpan(text: " AND GET ON "),
+            WidgetSpan(
+                child: SvgPicture.asset(Assets.icons.chrome),
+                alignment: PlaceholderAlignment.middle),
+            const TextSpan(text: " FOR FREE!"),
+          ])),
+    );
   }
 }
 

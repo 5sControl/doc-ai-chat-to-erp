@@ -208,3 +208,24 @@ class TrackTranslateSummary extends MixpanelEvent {
   @override
   List<Object?> get props => [url];
 }
+
+class RedirectToSummifyExtension extends MixpanelEvent {
+  const RedirectToSummifyExtension();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class CopySummifyExtensionLink extends MixpanelEvent {
+  const CopySummifyExtensionLink();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class OpenSummifyExtensionModal extends MixpanelEvent {
+  const OpenSummifyExtensionModal();
+
+  @override
+  List<Object?> get props => [];
+}

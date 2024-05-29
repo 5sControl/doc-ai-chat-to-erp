@@ -10,7 +10,17 @@ part 'research_bloc.g.dart';
 part 'research_state.dart';
 
 class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
-  ResearchBloc() : super(const ResearchState(questions: {})) {
+  ResearchBloc()
+      : super(const ResearchState(questions: {
+          'https://elang.app/en': [
+            ResearchQuestion(
+                question: 'How can I maximize efficiency with Summify?',
+                answer:
+                    "Setting up the share button in Summify's settings will allow you to easily distribute summaries to your preferred contacts or platforms as well it will simplify the process of sharing  summarizations with others.",
+                answerStatus: AnswerStatus.completed,
+                like: Like.liked)
+          ]
+        })) {
     on<MakeQuestionFromUrl>((event, emit) async {
       final newQuestion = ResearchQuestion(
           question: event.question,

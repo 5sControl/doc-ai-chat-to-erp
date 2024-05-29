@@ -1,12 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ExtensionModal extends StatelessWidget {
+class ExtensionModal extends StatefulWidget {
   const ExtensionModal({super.key});
+
+  @override
+  State<ExtensionModal> createState() => _ExtensionModalState();
+}
+
+class _ExtensionModalState extends State<ExtensionModal> {
+  bool copied = false;
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +24,26 @@ class ExtensionModal extends StatelessWidget {
       final Uri url = Uri.parse(
           'https://chromewebstore.google.com/detail/summify/necbpeagceabjjnliglmfeocgjcfimne?pli=1');
       if (!await launchUrl(url)) {}
+
+      context.read<MixpanelBloc>().add(const RedirectToSummifyExtension());
+    }
+
+    void onPressCopy() async {
+      setState(() {
+        copied = true;
+      });
+
+      Clipboard.setData(const ClipboardData(
+          text:
+              'https://chromewebstore.google.com/detail/summify/necbpeagceabjjnliglmfeocgjcfimne?pli=1'));
+
+      Future.delayed(const Duration(milliseconds: 800), () {
+        setState(() {
+          copied = false;
+        });
+      });
+
+      context.read<MixpanelBloc>().add(const CopySummifyExtensionLink());
     }
 
     return BackdropFilter(
@@ -78,12 +108,35 @@ class ExtensionModal extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Image.asset(Assets.extension.path)),
-                  MaterialButton(
-                    color: Theme.of(context).primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    onPressed: onPressAdd,
-                    child: const Text('Add Summify for your Chrome '),
+                  Row(
+                    children: [
+                      MaterialButton(
+                        color: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        onPressed: onPressAdd,
+                        child: const Text('Add Summify for your Chrome '),
+                      ),
+                      const Spacer(),
+                      MaterialButton(
+                        color: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        onPressed: onPressCopy,
+                        child: AnimatedCrossFade(
+                          firstChild: SvgPicture.asset(
+                            Assets.icons.copy,
+                            colorFilter: const ColorFilter.mode(
+                                Colors.white, BlendMode.srcIn),
+                          ),
+                          secondChild: Icon(Icons.check),
+                          duration: const Duration(milliseconds: 300),
+                          crossFadeState: copied
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 10,
