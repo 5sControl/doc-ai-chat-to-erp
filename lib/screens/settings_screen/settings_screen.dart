@@ -20,13 +20,15 @@ class ButtonItem {
   final String title;
   final String leadingIcon;
   final Widget? trailing;
+  final Gradient? background;
   final Function onTap;
 
   const ButtonItem(
       {required this.title,
       required this.leadingIcon,
       required this.onTap,
-      this.trailing});
+      this.trailing,
+      this.background});
 }
 
 class SettingsScreen extends StatelessWidget {
@@ -42,7 +44,9 @@ class SettingsScreen extends StatelessWidget {
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return const SubscriptionScreen(fromOnboarding: true,);
+          return const SubscriptionScreen(
+            fromOnboarding: true,
+          );
         },
       );
     }
@@ -126,8 +130,12 @@ class SettingsScreen extends StatelessWidget {
               return Row(
                 children: [
                   Text(
-                    state.translateLanguage.toUpperCase(),
+                    translateLanguages[state.translateLanguage]!
+                        .replaceAll('(Simplified)', '')
+                        .replaceAll('(Traditional)', ''),
                     style: Theme.of(context).textTheme.bodySmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const Icon(
                     Icons.arrow_forward_ios,
@@ -212,10 +220,13 @@ class SettingsScreen extends StatelessWidget {
         onTap: onPressPrivacy,
       ),
       ButtonItem(
-        title: 'Request a feature',
-        leadingIcon: Assets.icons.chat,
-        onTap: onPressFeedback,
-      )
+          title: 'Request a feature',
+          leadingIcon: Assets.icons.chat,
+          onTap: onPressFeedback,
+          background: const LinearGradient(colors: [
+            Color.fromRGBO(254, 205, 103, 1),
+            Color.fromRGBO(251, 171, 14, 1)
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
     ];
 
     return Stack(
@@ -398,9 +409,14 @@ class ButtonsGroup extends StatelessWidget {
                           // borderRadius: BorderRadius.circular(8),
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
+                            decoration: BoxDecoration(
+                                gradient: item.background,
+                                borderRadius: item.background != null
+                                    ? const BorderRadius.only(
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(8))
+                                    : const BorderRadius.all(
+                                        Radius.circular(8))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -410,8 +426,11 @@ class ButtonsGroup extends StatelessWidget {
                                   child: SvgPicture.asset(
                                     item.leadingIcon,
                                     height: 20,
-                                    colorFilter: const ColorFilter.mode(
-                                        Colors.white, BlendMode.srcIn),
+                                    colorFilter: ColorFilter.mode(
+                                        item.background != null
+                                            ? Colors.black
+                                            : Colors.white,
+                                        BlendMode.srcIn),
                                   ),
                                 ),
                                 Flexible(
@@ -419,8 +438,10 @@ class ButtonsGroup extends StatelessWidget {
                                     child: Text(
                                       item.title,
                                       textAlign: TextAlign.start,
-                                      style: const TextStyle(
-                                          color: Colors.white,
+                                      style: TextStyle(
+                                          color: item.background != null
+                                              ? Colors.black
+                                              : Colors.white,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400),
                                     )),
@@ -428,10 +449,12 @@ class ButtonsGroup extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10),
                                     child: item.trailing ??
-                                        const Icon(
+                                        Icon(
                                           Icons.arrow_forward_ios,
                                           size: 20,
-                                          color: Colors.white,
+                                          color: item.background != null
+                                              ? Colors.black
+                                              : Colors.white,
                                         ))
                               ],
                             ),
