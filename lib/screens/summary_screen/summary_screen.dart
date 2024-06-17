@@ -232,7 +232,8 @@ class _SummaryScreenState extends State<SummaryScreen>
                               ? CrossFadeState.showSecond
                               : CrossFadeState.showFirst,
                         )),
-                    const PremiumBlurContainer()
+                    if (summaryData.isBlocked != null && summaryData.isBlocked!)
+                      const PremiumBlurContainer()
                   ],
                 );
               },

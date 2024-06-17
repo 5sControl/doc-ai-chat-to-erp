@@ -14,22 +14,19 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
       ratedSummaries: (json['ratedSummaries'] as List<dynamic>)
           .map((e) => e as String)
           .toSet(),
-      dailyLimit: json['dailyLimit'] as int,
-      dailySummariesMap:
-          Map<String, int>.from(json['dailySummariesMap'] as Map),
       textCounter: json['textCounter'] as int,
       defaultSummaryType:
           $enumDecode(_$SummaryTypeEnumMap, json['defaultSummaryType']),
+      freeSummaries:  json['freeSummaries'] != null ? json['freeSummaries'] as int : 0,
     );
 
 Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>
     <String, dynamic>{
       'summaries': instance.summaries,
       'ratedSummaries': instance.ratedSummaries.toList(),
-      'dailyLimit': instance.dailyLimit,
-      'dailySummariesMap': instance.dailySummariesMap,
       'textCounter': instance.textCounter,
       'defaultSummaryType': _$SummaryTypeEnumMap[instance.defaultSummaryType]!,
+      'freeSummaries': instance.freeSummaries,
     };
 
 const _$SummaryTypeEnumMap = {

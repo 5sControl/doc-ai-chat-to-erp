@@ -66,23 +66,6 @@ class SkipRateSummary extends SummariesEvent {
   List<Object?> get props => [summaryUrl];
 }
 
-class SetDailyLimit extends SummariesEvent {
-  final int dailyLimit;
-
-  const SetDailyLimit({required this.dailyLimit});
-
-  @override
-  List<Object?> get props => [dailyLimit];
-}
-
-class InitDailySummariesCount extends SummariesEvent {
-  final DateTime thisDay;
-  const InitDailySummariesCount({required this.thisDay});
-
-  @override
-  List<DateTime?> get props => [thisDay];
-}
-
 class CancelRequest extends SummariesEvent {
   final String sharedLink;
   const CancelRequest({required this.sharedLink});
@@ -91,19 +74,16 @@ class CancelRequest extends SummariesEvent {
   List<String?> get props => [sharedLink];
 }
 
-// class TranslateSummary extends SummariesEvent {
-//   final String summaryKey;
-//   final String summaryText;
-//   final String languageCode;
-//   final SummaryType summaryType;
-//
-//   const TranslateSummary(
-//       {required this.summaryKey,
-//       required this.summaryText,
-//       required this.languageCode,
-//       required this.summaryType});
-//
-//   @override
-//   List<Object> get props =>
-//       [summaryKey, summaryText, languageCode, summaryType];
-// }
+class IncrementFreeSummaries extends SummariesEvent {
+  const IncrementFreeSummaries();
+
+  @override
+  List<String?> get props => [];
+}
+
+class UnlockHiddenSummaries extends SummariesEvent {
+  const UnlockHiddenSummaries();
+
+  @override
+  List<Object?> get props => [];
+}

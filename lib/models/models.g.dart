@@ -44,6 +44,7 @@ SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
       summaryPreview: SummaryPreview.fromJson(
           json['summaryPreview'] as Map<String, dynamic>),
       filePath: json['filePath'] as String?,
+      isBlocked: json['isBlocked'] as bool?,
       userText: json['userText'] as String?,
     );
 
@@ -59,6 +60,7 @@ Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
       'longSummary': instance.longSummary,
       'filePath': instance.filePath,
       'userText': instance.userText,
+      'isBlocked': instance.isBlocked,
     };
 
 const _$SummaryStatusEnumMap = {

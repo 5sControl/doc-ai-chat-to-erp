@@ -73,6 +73,7 @@ class SummaryData extends Equatable {
   final Summary longSummary;
   final String? filePath;
   final String? userText;
+  final bool? isBlocked;
 
   const SummaryData(
       {required this.shortSummaryStatus,
@@ -83,6 +84,7 @@ class SummaryData extends Equatable {
       required this.longSummary,
       required this.summaryPreview,
       this.filePath,
+      this.isBlocked,
       this.userText});
 
   SummaryData copyWith({
@@ -95,6 +97,7 @@ class SummaryData extends Equatable {
     SummaryPreview? summaryPreview,
     String? filePath,
     String? userText,
+    bool? isBlocked,
   }) {
     return SummaryData(
         shortSummaryStatus: shortSummaryStatus ?? this.shortSummaryStatus,
@@ -105,7 +108,8 @@ class SummaryData extends Equatable {
         longSummary: longSummary ?? this.longSummary,
         summaryPreview: summaryPreview ?? this.summaryPreview,
         filePath: filePath ?? this.filePath,
-        userText: userText ?? this.userText);
+        userText: userText ?? this.userText,
+        isBlocked: isBlocked ?? this.isBlocked);
   }
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
@@ -122,7 +126,8 @@ class SummaryData extends Equatable {
         summaryPreview,
         summaryOrigin,
         filePath,
-        userText
+        userText,
+        isBlocked
       ];
 }
 

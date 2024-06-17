@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
-import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
@@ -15,7 +14,6 @@ import 'package:summify/screens/home_screen/summaries_counter.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
 
 import '../modal_screens/set_up_share_screen.dart';
-import '../subscribtions_screen/subscriptions_screen.dart';
 import 'logo.dart';
 import 'summary_tile.dart';
 
@@ -31,62 +29,62 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late StreamSubscription _intentTextStreamSubscription;
 
   void getSummary({required String summaryUrl}) {
-    final DateFormat formatter = DateFormat('MM.dd.yy');
-    final thisDay = formatter.format(DateTime.now());
-    final limit = context.read<SummariesBloc>().state.dailyLimit;
-    final daySummaries =
-        context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
+    // final DateFormat formatter = DateFormat('MM.dd.yy');
+    // final thisDay = formatter.format(DateTime.now());
+    // final limit = context.read<SummariesBloc>().state.dailyLimit;
+    // final daySummaries =
+    //     context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      if (daySummaries >= limit) {
-        showCupertinoModalBottomSheet(
-          context: context,
-          expand: false,
-          bounce: false,
-          barrierColor: Colors.black54,
-          backgroundColor: Colors.transparent,
-          builder: (context) {
-            return const SubscriptionScreen(fromOnboarding: true,);
-          },
-        );
-        context
-            .read<MixpanelBloc>()
-            .add(LimitReached(resource: summaryUrl, registrated: false));
-      } else {
-        context
-            .read<SummariesBloc>()
-            .add(GetSummaryFromUrl(summaryUrl: summaryUrl, fromShare: true));
-      }
+      // if (daySummaries >= limit) {
+      //   showCupertinoModalBottomSheet(
+      //     context: context,
+      //     expand: false,
+      //     bounce: false,
+      //     barrierColor: Colors.black54,
+      //     backgroundColor: Colors.transparent,
+      //     builder: (context) {
+      //       return const SubscriptionScreen(fromOnboarding: true,);
+      //     },
+      //   );
+      //   context
+      //       .read<MixpanelBloc>()
+      //       .add(LimitReached(resource: summaryUrl, registrated: false));
+      // } else {
+      context
+          .read<SummariesBloc>()
+          .add(GetSummaryFromUrl(summaryUrl: summaryUrl, fromShare: true));
+      // }
     });
   }
 
   void getSummaryFromFile(
       {required String filePath, required String fileName}) {
-    final DateFormat formatter = DateFormat('MM.dd.yy');
-    final thisDay = formatter.format(DateTime.now());
-    final limit = context.read<SummariesBloc>().state.dailyLimit;
-    final daySummaries =
-        context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
+    // final DateFormat formatter = DateFormat('MM.dd.yy');
+    // final thisDay = formatter.format(DateTime.now());
+    // final limit = context.read<SummariesBloc>().state.dailyLimit;
+    // final daySummaries =
+    //     context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      if (daySummaries >= limit) {
-        showCupertinoModalBottomSheet(
-          context: context,
-          expand: false,
-          bounce: false,
-          barrierColor: Colors.black54,
-          backgroundColor: Colors.transparent,
-          builder: (context) {
-            return const SubscriptionScreen(fromOnboarding: true,);
-          },
-        );
-        context
-            .read<MixpanelBloc>()
-            .add(LimitReached(resource: fileName, registrated: false));
-      } else {
-        context.read<SummariesBloc>().add(GetSummaryFromFile(
-            filePath: filePath, fileName: fileName, fromShare: true));
-      }
+      // if (daySummaries >= limit) {
+      //   showCupertinoModalBottomSheet(
+      //     context: context,
+      //     expand: false,
+      //     bounce: false,
+      //     barrierColor: Colors.black54,
+      //     backgroundColor: Colors.transparent,
+      //     builder: (context) {
+      //       return const SubscriptionScreen(fromOnboarding: true,);
+      //     },
+      //   );
+      //   context
+      //       .read<MixpanelBloc>()
+      //       .add(LimitReached(resource: fileName, registrated: false));
+      // } else {
+      context.read<SummariesBloc>().add(GetSummaryFromFile(
+          filePath: filePath, fileName: fileName, fromShare: true));
+      // }
     });
   }
 
@@ -213,11 +211,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                              SummariesCounter(
-                                  availableSummaries: summariesState.dailyLimit,
-                                  dailySummaries: summariesState
-                                          .dailySummariesMap[thisDay] ??
-                                      0),
+                            SummariesCounter(
+                                availableSummaries: 2,
+                                dailySummaries: summariesState.freeSummaries),
                             const Logo(),
                             SettingsButton(onPressSettings: onPressSettings),
                           ],

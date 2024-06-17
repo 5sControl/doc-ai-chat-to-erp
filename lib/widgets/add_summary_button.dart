@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -12,7 +11,6 @@ import 'package:summify/gen/assets.gen.dart';
 import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../screens/modal_screens/text_screen.dart';
 import '../screens/modal_screens/ulr_screen.dart';
-import '../screens/subscribtions_screen/subscriptions_screen.dart';
 
 final Map<String, String> buttons = {
   'Link': Assets.icons.url,
@@ -54,11 +52,11 @@ class AddSummaryButton extends StatelessWidget {
     }
 
     void onPressOpenFile() async {
-      final DateFormat formatter = DateFormat('MM.dd.yy');
-      final thisDay = formatter.format(DateTime.now());
-      final limit = context.read<SummariesBloc>().state.dailyLimit;
-      final daySummaries =
-          context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 15;
+      // final DateFormat formatter = DateFormat('MM.dd.yy');
+      // final thisDay = formatter.format(DateTime.now());
+      // final limit = context.read<SummariesBloc>().state.dailyLimit;
+      // final daySummaries =
+      //     context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 15;
 
       FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
@@ -66,20 +64,21 @@ class AddSummaryButton extends StatelessWidget {
           allowMultiple: false);
 
       Future.delayed(const Duration(milliseconds: 10), () async {
-        if (daySummaries >= limit) {
-          showCupertinoModalBottomSheet(
-            context: context,
-            expand: false,
-            bounce: false,
-            barrierColor: Colors.black54,
-            backgroundColor: Colors.transparent,
-            builder: (context) {
-              return const SubscriptionScreen(fromOnboarding: true,);
-            },
-          );
-          context.read<MixpanelBloc>().add(LimitReached(
-              resource: result?.paths[0] ?? 'file', registrated: false));
-        } else if (result?.paths.isNotEmpty != null) {
+        // if (daySummaries >= limit) {
+        //   showCupertinoModalBottomSheet(
+        //     context: context,
+        //     expand: false,
+        //     bounce: false,
+        //     barrierColor: Colors.black54,
+        //     backgroundColor: Colors.transparent,
+        //     builder: (context) {
+        //       return const SubscriptionScreen(fromOnboarding: true,);
+        //     },
+        //   );
+        //   context.read<MixpanelBloc>().add(LimitReached(
+        //       resource: result?.paths[0] ?? 'file', registrated: false));
+        // } else
+          if (result?.paths.isNotEmpty != null) {
           final fileName = result!.paths[0]?.split('/').last;
           context.read<SummariesBloc>().add(GetSummaryFromFile(
               fileName: fileName!,

@@ -4,7 +4,6 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -56,21 +55,20 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
             summaries: {
               'https://elang.app/en': initialSummary,
             },
-            ratedSummaries: const {'https://elang.app/en'},
+            ratedSummaries: const {
+              'https://elang.app/en'
+            },
             defaultSummaryType: SummaryType.short,
-            dailyLimit: subscriptionBloc.state.subscriptionStatus ==
-                    SubscriptionStatus.subscribed
-                ? 9999999999
-                : 2,
-            dailySummariesMap: const {},
-            textCounter: 1)) {
+            textCounter: 1,
+            freeSummaries: 0)) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionStatus == SubscriptionStatus.subscribed) {
-        add(const SetDailyLimit(dailyLimit: 9999999999));
-      } else {
-        add(const SetDailyLimit(dailyLimit: 2));
-        return;
+        add(const UnlockHiddenSummaries());
       }
+      // else {
+      //   add(const SetDailyLimit(dailyLimit: 2));
+      //   return;
+      // }
     });
 
     on<GetSummaryFromUrl>(
@@ -132,40 +130,56 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       skipRateSummary(event.summaryUrl, emit);
     });
 
-    on<SetDailyLimit>((event, emit) {
-      emit(state.copyWith(dailyLimit: event.dailyLimit));
+    on<UnlockHiddenSummaries>((event, emit) {
+      final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
+      summaryMap.updateAll(
+        (key, value) {
+          return value.copyWith(isBlocked: false);
+        },
+      );
+      emit(state.copyWith(summaries: summaryMap));
     });
 
-    on<InitDailySummariesCount>((event, emit) {
-      if (subscriptionBloc.state.subscriptionStatus ==
-          SubscriptionStatus.subscribed) {
-        final DateFormat formatter = DateFormat('MM.dd.yy');
-        final thisDay = formatter.format(event.thisDay);
-        final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
-        if (!state.dailySummariesMap.containsKey(thisDay)) {
-          daysMap.addAll({thisDay: 0});
-          emit(state.copyWith(dailySummariesMap: daysMap));
-        }
-      } else {
-        final DateFormat formatter = DateFormat('MM.dd.yy');
-        final thisDay = formatter.format(event.thisDay);
-        if (!state.dailySummariesMap.containsKey(thisDay)) {
-          // final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
-          int unsubscribedSummariesCount = 0;
-          for (int day in state.dailySummariesMap.values) {
-            unsubscribedSummariesCount += day;
-          }
-          // daysMap.addAll({
-          //   thisDay:
-          //       unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
-          // });
-          emit(state.copyWith(dailySummariesMap: {
-            thisDay:
-                unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
-          }));
-        }
-      }
-    });
+    // on<SetDailyLimit>((event, emit) {
+    //   emit(state.copyWith(dailyLimit: event.dailyLimit));
+    // });
+
+    // on<InitDailySummariesCount>((event, emit) {
+    //   if (subscriptionBloc.state.subscriptionStatus ==
+    //       SubscriptionStatus.subscribed) {
+    //     final DateFormat formatter = DateFormat('MM.dd.yy');
+    //     final thisDay = formatter.format(event.thisDay);
+    //     final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
+    //     if (!state.dailySummariesMap.containsKey(thisDay)) {
+    //       daysMap.addAll({thisDay: 0});
+    //       emit(state.copyWith(dailySummariesMap: daysMap));
+    //     }
+    //   } else {
+    //     final DateFormat formatter = DateFormat('MM.dd.yy');
+    //     final thisDay = formatter.format(event.thisDay);
+    //     if (!state.dailySummariesMap.containsKey(thisDay)) {
+    //       // final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
+    //       int unsubscribedSummariesCount = 0;
+    //       for (int day in state.dailySummariesMap.values) {
+    //         unsubscribedSummariesCount += day;
+    //       }
+    //       // daysMap.addAll({
+    //       //   thisDay:
+    //       //       unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
+    //       // });
+    //       emit(state.copyWith(dailySummariesMap: {
+    //         thisDay:
+    //             unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
+    //       }));
+    //     }
+    //   }
+    // });
+
+    on<IncrementFreeSummaries>(
+      (event, emit) {
+        emit(state.copyWith(freeSummaries: state.freeSummaries + 1));
+      },
+    );
 
     on<CancelRequest>((event, emit) {
       // final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
@@ -235,10 +249,15 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryKey, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
-        incrementDailySummaryCount(emit);
+        add(const IncrementFreeSummaries());
         mixpanelBloc
             .add(SummarizingSuccess(url: summaryKey, fromShare: fromShare));
         return summaryData.copyWith(
+            isBlocked: state.freeSummaries >= 2 &&
+                    subscriptionBloc.state.subscriptionStatus ==
+                        SubscriptionStatus.unsubscribed
+                ? true
+                : false,
             shortSummary: shortSummaryResponse,
             shortSummaryStatus: SummaryStatus.complete,
             longSummary: longSummaryResponse,
@@ -295,8 +314,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
         mixpanelBloc
             .add(const SummarizingSuccess(url: 'from text', fromShare: false));
-        incrementDailySummaryCount(emit);
+        add(const IncrementFreeSummaries());
         return summaryData.copyWith(
+            isBlocked: state.freeSummaries >= 2 &&
+                    subscriptionBloc.state.subscriptionStatus ==
+                        SubscriptionStatus.unsubscribed
+                ? true
+                : false,
             summaryOrigin: SummaryOrigin.text,
             userText: text,
             shortSummary: shortSummaryResponse,
@@ -361,8 +385,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
         mixpanelBloc
             .add(SummarizingSuccess(url: fileName, fromShare: fromShare));
-        incrementDailySummaryCount(emit);
+        add(const IncrementFreeSummaries());
         return summaryData.copyWith(
+            isBlocked: state.freeSummaries >= 2 &&
+                    subscriptionBloc.state.subscriptionStatus ==
+                        SubscriptionStatus.unsubscribed
+                ? true
+                : false,
             filePath: filePath,
             shortSummary: shortSummaryResponse,
             shortSummaryStatus: SummaryStatus.complete,
@@ -438,18 +467,18 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     emit(state.copyWith(ratedSummaries: ratedSummaries));
   }
 
-  Future<void> incrementDailySummaryCount(emit) async {
-    final DateFormat dayFormatter = DateFormat('MM.dd.yy');
-    final thisDay = dayFormatter.format(DateTime.now());
-
-    final Map<String, int> newDailySummariesMap =
-        Map.from(state.dailySummariesMap);
-    if (newDailySummariesMap.containsKey(thisDay)) {
-      newDailySummariesMap.update(thisDay, (value) => value + 1);
-    } else {
-      newDailySummariesMap.addAll({thisDay: 1});
-    }
-
-    emit(state.copyWith(dailySummariesMap: newDailySummariesMap));
-  }
+  // Future<void> incrementDailySummaryCount(emit) async {
+  //   final DateFormat dayFormatter = DateFormat('MM.dd.yy');
+  //   final thisDay = dayFormatter.format(DateTime.now());
+  //
+  //   final Map<String, int> newDailySummariesMap =
+  //       Map.from(state.dailySummariesMap);
+  //   if (newDailySummariesMap.containsKey(thisDay)) {
+  //     newDailySummariesMap.update(thisDay, (value) => value + 1);
+  //   } else {
+  //     newDailySummariesMap.addAll({thisDay: 1});
+  //   }
+  //
+  //   emit(state.copyWith(dailySummariesMap: newDailySummariesMap));
+  // }
 }

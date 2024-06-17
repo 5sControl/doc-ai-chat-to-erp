@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:facebook_app_events/facebook_app_events.dart';
@@ -86,14 +85,14 @@ class SummishareApp extends StatelessWidget {
             }
 
             context.read<SubscriptionsBloc>().add(const InitSubscriptions());
-            context
-                .read<SummariesBloc>()
-                .add(InitDailySummariesCount(thisDay: DateTime.now()));
-            Timer.periodic(const Duration(minutes: 1), (timer) {
-              context
-                  .read<SummariesBloc>()
-                  .add(InitDailySummariesCount(thisDay: DateTime.now()));
-            });
+            // context
+            //     .read<SummariesBloc>()
+            //     .add(InitDailySummariesCount(thisDay: DateTime.now()));
+            // Timer.periodic(const Duration(minutes: 1), (timer) {
+            //   context
+            //       .read<SummariesBloc>()
+            //       .add(InitDailySummariesCount(thisDay: DateTime.now()));
+            // });
             // }
 
             void setSystemColor() async {
