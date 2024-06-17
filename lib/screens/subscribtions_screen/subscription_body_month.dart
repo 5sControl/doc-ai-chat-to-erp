@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/screens/subscribtions_screen/subscription_button.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 
+import '../../bloc/settings/settings_bloc.dart';
 import 'info_list.dart';
 
 class SubscriptionBodyMonth extends StatelessWidget {
@@ -19,6 +21,7 @@ class SubscriptionBodyMonth extends StatelessWidget {
     }
 
     final currencySymbol = currency(code: package.storeProduct.currencyCode);
+    final abTest = context.read<SettingsBloc>().state.abTest;
 
     return Expanded(
       child: Column(
@@ -34,7 +37,9 @@ class SubscriptionBodyMonth extends StatelessWidget {
                 TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
           ),
           const Spacer(),
+          if (abTest == 'A')
           const IconsRow(),
+          if (abTest == 'A')
           const Spacer(),
           RichText(
               text: TextSpan(children: [
@@ -65,8 +70,9 @@ class SubscriptionBodyMonth extends StatelessWidget {
             package: package,
           ),
           Divider(
-            color: Theme.of(context).primaryColor,
-            height: 45,
+            // color: Theme.of(context).primaryColor,
+            color: Colors.transparent,
+            height: 15,
             thickness: 2,
             indent: 15,
             endIndent: 15,

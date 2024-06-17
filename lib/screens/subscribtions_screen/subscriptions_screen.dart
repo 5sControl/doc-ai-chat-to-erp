@@ -13,6 +13,7 @@ import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 // import '../../bloc/settings/settings_bloc.dart';
+import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 // import '../modal_screens/purchase_success_screen.dart';
 import '../summary_screen/info_modal/extension_modal.dart';
@@ -64,7 +65,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
       listener: (context, state) {},
       builder: (context, state) {
-        // final abTest = context.read<SettingsBloc>().state.abTest;
+        final abTest = context.read<SettingsBloc>().state.abTest;
 
         const double headerH = 0.16;
         List<Package> packages =
@@ -233,7 +234,7 @@ class MonthTitle extends StatelessWidget {
       onTap: () => onSelectSubscription(index: 0),
       child: Center(
         child: Text(
-          'Pay\nmonthly',
+          'Pay monthly',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodySmall,
         ),
@@ -256,7 +257,7 @@ class YearTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Pay\nannually',
+            'Pay annually',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall,
           ),
@@ -267,16 +268,17 @@ class YearTitle extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                gradient: const LinearGradient(colors: [
-                  Color.fromRGBO(255, 238, 90, 1),
-                  Color.fromRGBO(255, 208, 74, 1),
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+                // gradient: const LinearGradient(colors: [
+                //   Color.fromRGBO(255, 238, 90, 1),
+                //   Color.fromRGBO(255, 208, 74, 1),
+                // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
+            ),
             child: Text(
               'Save up to 25\$',
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
-                  .copyWith(color: Colors.black),
+                  // .copyWith(color: Colors.black),
             ),
           )
         ],
@@ -321,27 +323,41 @@ class IconsRow extends StatelessWidget {
       context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
     }
 
-    return TextButton(
-      onPressed: onPressInfo,
-      style: const ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll(Colors.white10)),
-      child: RichText(
-          text: TextSpan(
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(fontWeight: FontWeight.w700),
-              children: [
-            const TextSpan(text: "BUY "),
-            WidgetSpan(
-                child: SvgPicture.asset(Assets.icons.summafyMini),
-                alignment: PlaceholderAlignment.middle),
-            const TextSpan(text: " AND GET ON "),
-            WidgetSpan(
-                child: SvgPicture.asset(Assets.icons.chrome),
-                alignment: PlaceholderAlignment.middle),
-            const TextSpan(text: " FOR FREE!"),
-          ])),
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10)]),
+      child: TextButton(
+        onPressed: onPressInfo,
+        style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.white)),
+        child: RichText(
+            text: TextSpan(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    letterSpacing: 0,
+                    color: Colors.black),
+                children: [
+              const TextSpan(text: "BUY "),
+              WidgetSpan(
+                  child: SvgPicture.asset(Assets.icons.summafyMini),
+                  alignment: PlaceholderAlignment.middle),
+              const TextSpan(text: " AND GET ON "),
+              WidgetSpan(
+                  child: SvgPicture.asset(Assets.icons.chrome),
+                  alignment: PlaceholderAlignment.middle),
+              const TextSpan(text: " FOR FREE!"),
+            ])),
+      )
+          .animate(
+            autoPlay: true,
+            onPlay: (controller) => controller.repeat(),
+          )
+          .shimmer(
+              color: Colors.white,
+              duration: const Duration(milliseconds: 1500),
+              delay: const Duration(seconds: 1)),
     );
   }
 }

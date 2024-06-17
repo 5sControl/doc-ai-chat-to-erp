@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -19,7 +20,9 @@ class PremiumBanner extends StatelessWidget {
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return const SubscriptionScreen(fromOnboarding: true,);
+          return const SubscriptionScreen(
+            fromOnboarding: true,
+          );
         },
       );
     }
@@ -90,7 +93,15 @@ class PremiumBanner extends StatelessWidget {
             )
           ],
         ),
-      ),
+      )
+          .animate(
+            autoPlay: true,
+            onPlay: (controller) => controller.repeat(),
+          )
+          .shimmer(
+              color: Colors.white.withOpacity(0.75),
+              duration: const Duration(milliseconds: 1500),
+              delay: const Duration(seconds: 1)),
     );
   }
 }
