@@ -71,7 +71,8 @@ class Header extends StatelessWidget {
       context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
     }
 
-    return Padding(
+    return Container(
+      height: 250,
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
           left: 15,

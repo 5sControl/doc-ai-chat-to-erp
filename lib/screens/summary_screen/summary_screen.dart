@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
@@ -15,7 +18,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/translates/translates_bloc.dart';
+import '../../gen/assets.gen.dart';
 import '../../widgets/backgroung_gradient.dart';
+import '../subscribtions_screen/subscriptions_screen.dart';
 import 'custom_tab_bar.dart';
 import 'header.dart';
 
@@ -162,7 +167,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                             ),
                             Expanded(
                               child: Stack(
-                                fit: StackFit.expand,
+                                fit: StackFit.loose,
                                 children: [
                                   TabBarView(
                                     controller: _tabController,
@@ -191,7 +196,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                                   Align(
                                     alignment: Alignment.topCenter,
                                     child: Container(
-                                      height: 50,
+                                      height: 64,
                                       decoration: BoxDecoration(
                                           gradient: LinearGradient(
                                         colors: gradientColors,
@@ -227,6 +232,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                               ? CrossFadeState.showSecond
                               : CrossFadeState.showFirst,
                         )),
+                    const PremiumBlurContainer()
                   ],
                 );
               },
@@ -234,6 +240,96 @@ class _SummaryScreenState extends State<SummaryScreen>
           },
         );
       },
+    );
+  }
+}
+
+class PremiumBlurContainer extends StatelessWidget {
+  const PremiumBlurContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    void onPressPremium() {
+      showCupertinoModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return const SubscriptionScreen(
+            fromOnboarding: true,
+          );
+        },
+      );
+    }
+
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+          height: MediaQuery.of(context).size.height -
+              265 -
+              MediaQuery.of(context).padding.bottom,
+          width: double.infinity,
+          margin: EdgeInsets.only(
+              left: 15,
+              right: 15,
+              bottom: MediaQuery.of(context).padding.bottom),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                child: Container(
+                  decoration: const BoxDecoration(color: Colors.black26),
+                  child: Center(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        gradient: const LinearGradient(
+                            colors: [
+                              Color.fromRGBO(255, 238, 90, 1),
+                              Color.fromRGBO(255, 208, 74, 1),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.transparent,
+                        child: InkWell(
+                            radius: 4,
+                            highlightColor: Colors.white54,
+                            borderRadius: BorderRadius.circular(4),
+                            onTap: onPressPremium,
+                            child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 5),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      Assets.icons.crown,
+                                      height: 34,
+                                      width: 34,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    const Text(
+                                      'Upgrade to Super Premium',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ))),
+                      ),
+                    ),
+                  ),
+                ),
+              ))),
     );
   }
 }
