@@ -3,13 +3,15 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../../models/models.dart';
 import '../../services/summaryApi.dart';
+import '../mixpanel/mixpanel_bloc.dart';
 
 part 'translates_event.dart';
 part 'translates_state.dart';
 part 'translates_bloc.g.dart';
 
 class TranslatesBloc extends HydratedBloc<TranslatesEvent, TranslatesState> {
-  TranslatesBloc()
+  final MixpanelBloc mixpanelBloc;
+  TranslatesBloc({required this.mixpanelBloc})
       : super(const TranslatesState(longTranslates: {}, shortTranslates: {})) {
     on<TranslateSummary>((event, emit) async {
       if (event.summaryType == SummaryType.short) {
@@ -38,6 +40,8 @@ class TranslatesBloc extends HydratedBloc<TranslatesEvent, TranslatesState> {
                   isActive: true));
           emit(state.copyWith(shortTranslates: translates));
         } catch (e) {
+          mixpanelBloc.add(TrackTranslateSummary(
+              url: event.summaryKey, error: e.toString()));
           final Map<String, SummaryTranslate> translates =
               Map.from(state.shortTranslates);
           translates.update(
@@ -73,7 +77,8 @@ class TranslatesBloc extends HydratedBloc<TranslatesEvent, TranslatesState> {
                   isActive: true));
           emit(state.copyWith(longTranslates: translates));
         } catch (e) {
-          print(e);
+          mixpanelBloc.add(TrackTranslateSummary(
+              url: event.summaryKey, error: e.toString()));
           final Map<String, SummaryTranslate> translates =
               Map.from(state.longTranslates);
           translates.update(

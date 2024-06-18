@@ -31,6 +31,7 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
     on<PaywallShow>((event, emit) {
       mixpanel.track('Paywall show', properties: {
         'Trigger': event.trigger,
+        "Screen": event.screen,
         'Test version': settingsBloc.state.abTest,
         'Screen link': settingsBloc.state.abTest == 'A'
             ? subscriptionALink
@@ -58,17 +59,7 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
     on<SelectOption>((event, emit) {
       mixpanel.track('Select option', properties: {'Option': event.option});
     });
-    // on<Summify>((event, emit) {
-    //   mixpanel.track('Summify', properties: {'Option': event.option});
-    // });
-    // on<SummifyError>((event, emit) {
-    //   mixpanel.track('Summify error', properties: {
-    //     'Option': event.option,
-    //   });
-    // });
-    // on<SummifySuccess>((event, emit) {
-    //   mixpanel.track('Summify success', properties: {'Option': event.option});
-    // });
+
     on<OpenSummary>((event, emit) {
       mixpanel.track('Open summary');
     });

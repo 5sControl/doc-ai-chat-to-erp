@@ -22,6 +22,7 @@ class PremiumBanner extends StatelessWidget {
         builder: (context) {
           return const SubscriptionScreen(
             fromOnboarding: true,
+            triggerScreen: 'Home',
           );
         },
       );

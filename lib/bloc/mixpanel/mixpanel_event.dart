@@ -16,8 +16,12 @@ class OnboardingStep extends MixpanelEvent {
 
 class PaywallShow extends MixpanelEvent {
   // Trigger: onboarding/settings
+  final String screen;
   final String trigger;
-  const PaywallShow({required this.trigger});
+  const PaywallShow({
+    required this.trigger,
+    required this.screen,
+  });
 
   @override
   List<Object?> get props => [trigger];
@@ -195,7 +199,8 @@ class ReadSummary extends MixpanelEvent {
 
 class TrackResearchSummary extends MixpanelEvent {
   final String url;
-  const TrackResearchSummary({required this.url});
+  final String? error;
+  const TrackResearchSummary({this.error, required this.url});
 
   @override
   List<Object?> get props => [url];
@@ -203,7 +208,8 @@ class TrackResearchSummary extends MixpanelEvent {
 
 class TrackTranslateSummary extends MixpanelEvent {
   final String url;
-  const TrackTranslateSummary({required this.url});
+  final String? error;
+  const TrackTranslateSummary({this.error, required this.url});
 
   @override
   List<Object?> get props => [url];

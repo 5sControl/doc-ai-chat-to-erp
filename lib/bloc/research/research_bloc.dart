@@ -4,13 +4,15 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:summify/services/summaryApi.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../../models/models.dart';
+import '../mixpanel/mixpanel_bloc.dart';
 
 part 'research_event.dart';
 part 'research_bloc.g.dart';
 part 'research_state.dart';
 
 class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
-  ResearchBloc()
+  final MixpanelBloc mixpanelBloc;
+  ResearchBloc({required this.mixpanelBloc})
       : super(const ResearchState(questions: {
           'https://elang.app/en': [
             ResearchQuestion(
@@ -53,7 +55,8 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
         questions.update(event.summaryKey, (value) => newList);
         emit(state.copyWith(questions: questions));
       } catch (e) {
-        print(e);
+        mixpanelBloc.add(
+            TrackResearchSummary(url: event.summaryKey, error: e.toString()));
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
         final List<ResearchQuestion> newList =
@@ -97,7 +100,8 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
         questions.update(event.summaryKey, (value) => newList);
         emit(state.copyWith(questions: questions));
       } catch (e) {
-        print(e);
+        mixpanelBloc.add(
+            TrackResearchSummary(url: event.summaryKey, error: e.toString()));
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
         final List<ResearchQuestion> newList =
@@ -141,7 +145,8 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
         questions.update(event.summaryKey, (value) => newList);
         emit(state.copyWith(questions: questions));
       } catch (e) {
-        print(e);
+        mixpanelBloc.add(
+            TrackResearchSummary(url: event.summaryKey, error: e.toString()));
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
         final List<ResearchQuestion> newList =

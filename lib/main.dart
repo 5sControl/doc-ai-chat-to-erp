@@ -57,24 +57,27 @@ class SummishareApp extends StatelessWidget {
     }
 
     final brightness = MediaQuery.of(context).platformBrightness;
+    final settingsBloc = SettingsBloc(brightness: brightness);
+    final mixpanelBloc = MixpanelBloc(settingsBloc: settingsBloc);
+
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (context) => TranslatesBloc()),
-          BlocProvider(create: (context) => ResearchBloc()),
           BlocProvider(
-              create: (context) => SettingsBloc(brightness: brightness)),
+              create: (context) => TranslatesBloc(mixpanelBloc: mixpanelBloc)),
           BlocProvider(
-            create: (context) =>
-                MixpanelBloc(settingsBloc: context.read<SettingsBloc>()),
+              create: (context) => ResearchBloc(mixpanelBloc: mixpanelBloc)),
+          BlocProvider(create: (context) => settingsBloc),
+          BlocProvider(
+            create: (context) => mixpanelBloc,
           ),
           BlocProvider(
             create: (context) => SubscriptionsBloc(
-              mixpanelBloc: context.read<MixpanelBloc>(),
+              mixpanelBloc: mixpanelBloc,
             ),
           ),
           BlocProvider(
               create: (context) => SummariesBloc(
-                  mixpanelBloc: context.read<MixpanelBloc>(),
+                  mixpanelBloc: mixpanelBloc,
                   subscriptionBloc: context.read<SubscriptionsBloc>()))
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
@@ -85,15 +88,6 @@ class SummishareApp extends StatelessWidget {
             }
 
             context.read<SubscriptionsBloc>().add(const InitSubscriptions());
-            // context
-            //     .read<SummariesBloc>()
-            //     .add(InitDailySummariesCount(thisDay: DateTime.now()));
-            // Timer.periodic(const Duration(minutes: 1), (timer) {
-            //   context
-            //       .read<SummariesBloc>()
-            //       .add(InitDailySummariesCount(thisDay: DateTime.now()));
-            // });
-            // }
 
             void setSystemColor() async {
               if (settingsState.appTheme == AppTheme.dark) {
@@ -141,7 +135,9 @@ class SummishareApp extends StatelessWidget {
                         settings: settings);
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(
-                        builder: (_) => const SubscriptionScreen(),
+                        builder: (_) => const SubscriptionScreen(
+                              triggerScreen: 'Home',
+                            ),
                         settings: settings);
                   case '/settings':
                     return MaterialWithModalsPageRoute(

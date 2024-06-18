@@ -14,6 +14,7 @@ import 'package:summify/screens/settings_screen/select_lang_dialog.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 import '../subscribtions_screen/subscriptions_screen.dart';
@@ -49,6 +50,7 @@ class SettingsScreen extends StatelessWidget {
         builder: (context) {
           return const SubscriptionScreen(
             fromOnboarding: true,
+            triggerScreen: 'Settings',
           );
         },
       );
@@ -128,6 +130,7 @@ class SettingsScreen extends StatelessWidget {
           return const ExtensionModal();
         },
       );
+      context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
     }
 
     final List<ButtonItem> mainGroup = [

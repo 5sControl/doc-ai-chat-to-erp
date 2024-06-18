@@ -23,7 +23,9 @@ import 'subscription_body_year.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   final bool? fromOnboarding;
-  const SubscriptionScreen({super.key, this.fromOnboarding});
+  final String triggerScreen;
+  const SubscriptionScreen(
+      {super.key, this.fromOnboarding, required this.triggerScreen});
 
   @override
   State<SubscriptionScreen> createState() => _SubscriptionScreenState();
@@ -40,7 +42,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   void initState() {
-    context.read<MixpanelBloc>().add(const PaywallShow(trigger: 'onboarding'));
+    context
+        .read<MixpanelBloc>()
+        .add(PaywallShow(trigger: 'onboarding', screen: widget.triggerScreen));
     super.initState();
   }
 
@@ -267,19 +271,16 @@ class YearTitle extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                // gradient: const LinearGradient(colors: [
-                //   Color.fromRGBO(255, 238, 90, 1),
-                //   Color.fromRGBO(255, 208, 74, 1),
-                // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
+              borderRadius: BorderRadius.circular(4),
+              // gradient: const LinearGradient(colors: [
+              //   Color.fromRGBO(255, 238, 90, 1),
+              //   Color.fromRGBO(255, 208, 74, 1),
+              // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
             ),
-            child: Text(
-              'Save up to 25\$',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  // .copyWith(color: Colors.black),
-            ),
+            child: Text('Save up to 25\$',
+                style: Theme.of(context).textTheme.bodySmall!
+                // .copyWith(color: Colors.black),
+                ),
           )
         ],
       ),
