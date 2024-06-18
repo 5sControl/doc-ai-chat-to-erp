@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -15,6 +17,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 import '../subscribtions_screen/subscriptions_screen.dart';
+import '../summary_screen/info_modal/extension_modal.dart';
 
 class ButtonItem {
   final String title;
@@ -114,13 +117,79 @@ class SettingsScreen extends StatelessWidget {
       context.read<SettingsBloc>().add(const ToggleNotifications());
     }
 
-    final List<ButtonItem> generalGroup = [
+    void onPressChrome() {
+      showMaterialModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return const ExtensionModal();
+        },
+      );
+    }
+
+    final List<ButtonItem> mainGroup = [
       ButtonItem(
-        title: 'Notifications',
-        leadingIcon: Assets.icons.notification,
-        onTap: onTapNotifications,
-        trailing: const NotificationsSwitch(),
+          title: 'Subscription',
+          leadingIcon: Assets.icons.crown,
+          onTap: onPressSubscription,
+          trailing: Container(
+              width: 85,
+              margin: const EdgeInsets.only(left: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  gradient: const LinearGradient(colors: [
+                    Color.fromRGBO(255, 238, 90, 1),
+                    Color.fromRGBO(255, 208, 74, 1)
+                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              child: const Text(
+                'Upgrade',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
+              ))),
+      ButtonItem(
+        title: 'Add Summify for Chrome',
+        leadingIcon: Assets.icons.chromeMini,
+        trailing: Container(
+            width: 85,
+            margin: const EdgeInsets.only(left: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                gradient: const LinearGradient(colors: [
+                  Color.fromRGBO(255, 238, 90, 1),
+                  Color.fromRGBO(255, 208, 74, 1)
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            child: const Text(
+              'Free',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500),
+            )),
+        onTap: onPressChrome,
       ),
+      ButtonItem(
+        title: 'Request a feature',
+        leadingIcon: Assets.icons.chat,
+        onTap: onPressFeedback,
+      ),
+      if (Platform.isIOS)
+        ButtonItem(
+          title: 'Rate Summify',
+          leadingIcon: Assets.icons.star,
+          onTap: onPressRateApp,
+        ),
+    ];
+
+    final List<ButtonItem> generalGroup = [
       ButtonItem(
           title: 'Translation language',
           leadingIcon: Assets.icons.translate,
@@ -133,7 +202,10 @@ class SettingsScreen extends StatelessWidget {
                     translateLanguages[state.translateLanguage]!
                         .replaceAll('(Simplified)', '')
                         .replaceAll('(Traditional)', ''),
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.white),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -147,39 +219,17 @@ class SettingsScreen extends StatelessWidget {
             },
           )),
       ButtonItem(
+        title: 'Notifications',
+        leadingIcon: Assets.icons.notification,
+        onTap: onTapNotifications,
+        trailing: const NotificationsSwitch(),
+      ),
+      ButtonItem(
         title: 'Dark mode',
         leadingIcon: Assets.icons.theme,
         onTap: () {},
         trailing: const ThemeButtons(),
       ),
-    ];
-
-    final List<ButtonItem> membershipGroup = [
-      ButtonItem(
-          title: 'Subscription',
-          leadingIcon: Assets.icons.crown,
-          onTap: onPressSubscription,
-          trailing: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromRGBO(254, 205, 103, 1),
-                    Color.fromRGBO(251, 171, 14, 1)
-                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-              child: const Text(
-                'Upgrade',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600),
-              ))),
-      ButtonItem(
-        title: 'Restore purchase',
-        leadingIcon: Assets.icons.restore,
-        onTap: onPressRestore,
-      )
     ];
 
     final List<ButtonItem> aboutGroup = [
@@ -188,12 +238,6 @@ class SettingsScreen extends StatelessWidget {
         leadingIcon: Assets.icons.setUp,
         onTap: onPressSetupShare,
       ),
-      if (Platform.isIOS)
-        ButtonItem(
-          title: 'Rate Summify',
-          leadingIcon: Assets.icons.star,
-          onTap: onPressRateApp,
-        ),
       if (Platform.isIOS)
         ButtonItem(
           title: 'Share this app',
@@ -220,13 +264,10 @@ class SettingsScreen extends StatelessWidget {
         onTap: onPressPrivacy,
       ),
       ButtonItem(
-          title: 'Request a feature',
-          leadingIcon: Assets.icons.chat,
-          onTap: onPressFeedback,
-          background: const LinearGradient(colors: [
-            Color.fromRGBO(254, 205, 103, 1),
-            Color.fromRGBO(251, 171, 14, 1)
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+        title: 'Restore purchase',
+        leadingIcon: Assets.icons.restore,
+        onTap: onPressRestore,
+      )
     ];
 
     return Stack(
@@ -249,8 +290,12 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.max,
                   children: [
+                    MainGroup(
+                      items: mainGroup,
+                    ),
+                    const SizedBox(height: 15,),
                     ButtonsGroup(title: 'General', items: generalGroup),
-                    ButtonsGroup(title: 'Membership', items: membershipGroup),
+                    // ButtonsGroup(title: 'Membership', items: membershipGroup),
                     ButtonsGroup(title: 'About', items: aboutGroup),
                     ButtonsGroup(title: 'Support', items: supportGroup),
                     Text('version 1.3.0',
@@ -367,28 +412,17 @@ class NotificationsSwitch extends StatelessWidget {
   }
 }
 
-class ButtonsGroup extends StatelessWidget {
-  final String title;
+class MainGroup extends StatelessWidget {
+  // final String title;
   final List<ButtonItem> items;
 
-  const ButtonsGroup({super.key, required this.title, required this.items});
+  const MainGroup({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 15, bottom: 2),
-          child: Text(
-            title,
-            textAlign: TextAlign.start,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 0),
           decoration: BoxDecoration(
@@ -472,6 +506,152 @@ class ButtonsGroup extends StatelessWidget {
                 .toList(),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class ButtonsGroup extends StatefulWidget {
+  final String title;
+  final List<ButtonItem> items;
+
+  const ButtonsGroup({super.key, required this.title, required this.items});
+
+  @override
+  State<ButtonsGroup> createState() => _ButtonsGroupState();
+}
+
+class _ButtonsGroupState extends State<ButtonsGroup> {
+  bool isOpen = false;
+
+  void onToggleOpen() {
+    setState(() {
+      isOpen = !isOpen;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AnimatedContainer(
+          duration: Duration(milliseconds: 300),
+            padding:  EdgeInsets.only(bottom: 0),
+            child: Row(
+              children: [
+                Text(
+                  widget.title,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    color: Theme.of(context).textTheme.bodyMedium!.color,
+                    style: const ButtonStyle(
+                        iconSize: MaterialStatePropertyAll(20)),
+                    onPressed: onToggleOpen,
+                    icon: Transform.rotate(
+                        angle: !isOpen ? -pi : -pi / 2,
+                        child: const Icon(Icons.arrow_back_ios_rounded)))
+              ],
+            )),
+        AnimatedCrossFade(
+            firstChild: Container(
+              margin: const EdgeInsets.only(bottom: 15),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(8))),
+              child: Column(
+                children: widget.items
+                    .map(
+                      (item) => Column(
+                        children: [
+                          Material(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            child: InkWell(
+                              onTap: () => item.onTap(),
+                              highlightColor: Colors.white24,
+                              // borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                    gradient: item.background,
+                                    borderRadius: item.background != null
+                                        ? const BorderRadius.only(
+                                            bottomLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8))
+                                        : const BorderRadius.all(
+                                            Radius.circular(8))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: SvgPicture.asset(
+                                        item.leadingIcon,
+                                        height: 20,
+                                        colorFilter: ColorFilter.mode(
+                                            item.background != null
+                                                ? Colors.black
+                                                : Colors.white,
+                                            BlendMode.srcIn),
+                                      ),
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          item.title,
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: item.background != null
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400),
+                                        )),
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: item.trailing ??
+                                            Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20,
+                                              color: item.background != null
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                            ))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (widget.items.indexOf(item) !=
+                              widget.items.length - 1)
+                            const Divider(
+                              height: 1,
+                              color: Colors.white,
+                            )
+                        ],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            secondChild: Container(),
+            crossFadeState:
+                isOpen ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            duration: Duration(milliseconds: 300)),
       ],
     );
   }

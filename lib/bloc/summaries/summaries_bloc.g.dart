@@ -17,7 +17,7 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
       textCounter: json['textCounter'] as int,
       defaultSummaryType:
           $enumDecode(_$SummaryTypeEnumMap, json['defaultSummaryType']),
-      freeSummaries:  json['freeSummaries'] != null ? json['freeSummaries'] as int : 0,
+      freeSummaries: json['freeSummaries'] as int,
     );
 
 Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>

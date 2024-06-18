@@ -123,6 +123,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/chrome.svg
   String get chrome => 'assets/icons/chrome.svg';
 
+  /// File path: assets/icons/chrome_mini.svg
+  String get chromeMini => 'assets/icons/chrome_mini.svg';
+
   /// File path: assets/icons/clock.svg
   String get clock => 'assets/icons/clock.svg';
 
@@ -250,6 +253,7 @@ class $AssetsIconsGen {
         check,
         checkCircle,
         chrome,
+        chromeMini,
         clock,
         copy,
         crown,

@@ -300,7 +300,7 @@ class OnboardingScreen4 extends StatelessWidget {
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text('Select your translation language',
+              child: Text('Translate summarization to',
                   style: TextStyle(
                       fontSize: 34, fontWeight: FontWeight.w700, height: 1),
                   textAlign: TextAlign.start),

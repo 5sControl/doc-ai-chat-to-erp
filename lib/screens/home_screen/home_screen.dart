@@ -213,7 +213,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           children: [
                             SummariesCounter(
                                 availableSummaries: 2,
-                                dailySummaries: summariesState.freeSummaries),
+                                dailySummaries:
+                                    summariesState.freeSummaries >= 2
+                                        ? 2
+                                        : summariesState.freeSummaries),
                             const Logo(),
                             SettingsButton(onPressSettings: onPressSettings),
                           ],

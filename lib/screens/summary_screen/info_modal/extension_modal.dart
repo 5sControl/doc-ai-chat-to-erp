@@ -22,8 +22,8 @@ class _ExtensionModalState extends State<ExtensionModal> {
   Widget build(BuildContext context) {
     void onPressAdd() async {
       final Uri url = Uri.parse(
-          'https://chromewebstore.google.com/detail/summify/necbpeagceabjjnliglmfeocgjcfimne?pli=1');
-      if (!await launchUrl(url)) {}
+          'https://chromewebstore.google.com/detail/necbpeagceabjjnliglmfeocgjcfimne');
+      if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView)) {}
 
       context.read<MixpanelBloc>().add(const RedirectToSummifyExtension());
     }
@@ -98,7 +98,15 @@ class _ExtensionModalState extends State<ExtensionModal> {
                                 alignment: PlaceholderAlignment.middle),
                             const TextSpan(text: " AND GET ON "),
                             WidgetSpan(
-                                child: SvgPicture.asset(Assets.icons.desctop),
+                                child: SvgPicture.asset(
+                                  Assets.icons.desctop,
+                                  colorFilter: ColorFilter.mode(
+                                      Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .color!,
+                                      BlendMode.srcIn),
+                                ),
                                 alignment: PlaceholderAlignment.middle),
                             const TextSpan(text: " FOR FREE!"),
                           ])),
