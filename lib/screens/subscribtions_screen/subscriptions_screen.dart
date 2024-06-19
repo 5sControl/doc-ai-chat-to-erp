@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,10 +10,7 @@ import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart'
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
-// import '../../bloc/settings/settings_bloc.dart';
-import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
-// import '../modal_screens/purchase_success_screen.dart';
 import '../summary_screen/info_modal/extension_modal.dart';
 import 'happy_box.dart';
 import 'subscription_body_month.dart';
@@ -66,6 +60,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     //     },
     //   );
     // }
+
+    void showSuccessScreen() {
+      showMaterialModalBottomSheet(
+          context: context,
+          expand: false,
+          bounce: false,
+          barrierColor: Colors.black54,
+          backgroundColor: Colors.transparent,
+          enableDrag: false,
+          builder: (context) {
+            return const PurchaseSuccessScreen();
+          });
+    }
 
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
       listener: (context, state) {},
@@ -212,20 +219,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                   ),
                 ),
-                IconButton(
-                    onPressed: () {
-                      showMaterialModalBottomSheet(
-                          context: context,
-                          expand: false,
-                          bounce: false,
-                          barrierColor: Colors.black54,
-                          backgroundColor: Colors.transparent,
-                          enableDrag: false,
-                          builder: (context) {
-                        return const PurchaseSuccessScreen();
-                      });
-                    },
-                    icon: Icon(Icons.add)),
                 Animate(effects: const [
                   MoveEffect(
                       begin: Offset(100, 0),

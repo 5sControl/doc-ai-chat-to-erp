@@ -1,11 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../helpers/purchases.dart';
 import '../../helpers/show_system_dialog.dart';
+import '../../screens/modal_screens/purchase_success_screen.dart';
 import '../mixpanel/mixpanel_bloc.dart';
 
 part 'subscriptions_event.dart';
@@ -36,6 +39,19 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
         if (customerInfo.entitlements.all["Summify premium access"]!.isActive) {
           emit(state.copyWith(
               subscriptionStatus: SubscriptionStatus.subscribed));
+
+          if (event.context.mounted) {
+            showMaterialModalBottomSheet(
+                context: event.context,
+                expand: false,
+                bounce: false,
+                barrierColor: Colors.black54,
+                backgroundColor: Colors.transparent,
+                enableDrag: false,
+                builder: (context) {
+                  return const PurchaseSuccessScreen();
+                });
+          }
         }
       } on PlatformException catch (e) {
         // var errorCode = PurchasesErrorHelper.getErrorCode(e);
