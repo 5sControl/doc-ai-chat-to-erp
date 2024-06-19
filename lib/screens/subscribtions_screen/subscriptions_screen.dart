@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
 import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
@@ -69,7 +70,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
       listener: (context, state) {},
       builder: (context, state) {
-        final abTest = context.read<SettingsBloc>().state.abTest;
+        // final abTest = context.read<SettingsBloc>().state.abTest;
 
         const double headerH = 0.16;
         List<Package> packages =
@@ -211,6 +212,20 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                   ),
                 ),
+                IconButton(
+                    onPressed: () {
+                      showMaterialModalBottomSheet(
+                          context: context,
+                          expand: false,
+                          bounce: false,
+                          barrierColor: Colors.black54,
+                          backgroundColor: Colors.transparent,
+                          enableDrag: false,
+                          builder: (context) {
+                        return const PurchaseSuccessScreen();
+                      });
+                    },
+                    icon: Icon(Icons.add)),
                 Animate(effects: const [
                   MoveEffect(
                       begin: Offset(100, 0),

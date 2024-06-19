@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:simple_animations/animation_builder/mirror_animation_builder.dart';
+import 'package:summify/screens/subscribtions_screen/happy_box.dart';
 
 import '../../gen/assets.gen.dart';
 
@@ -13,48 +13,150 @@ class PurchaseSuccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
-      child: Scaffold(
-        body: Center(
-          child: Container(
+      child: Center(
+        child: Container(
+          width: double.infinity,
+          margin: const EdgeInsets.all(15),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+              color: Theme.of(context).canvasColor,
+              borderRadius: BorderRadius.circular(10)),
+          child: SizedBox(
             width: double.infinity,
-            margin: const EdgeInsets.all(15),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor, borderRadius: BorderRadius.circular(10)),
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Thank's for your subscription"  ,
-                      style:
-                      TextStyle(fontSize: 26, fontWeight: FontWeight.w500),
-                      textAlign: TextAlign.center,
+            child: Stack(
+              fit: StackFit.loose,
+              children: [
+                const Positioned(top: 0, right: 0, child: BackArrow()),
+                Positioned(
+                    top: -35,
+                    left: -30,
+                    width: 120,
+                    height: 200,
+                    child: Transform.flip(
+                        flipX: true,
+                        child: Transform.scale(scale: 0.7, child: HappyBox()))),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  MirrorAnimationBuilder(
-                    builder: (context, value, child) {
-                      return Transform.scale(
-                        scale: value,
-                        child: SvgPicture.asset(
-                          Assets.icons.headrt,
-                          height: 100,
-                          width: 100,
+                    Text(
+                      'You are the best!',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(fontSize: 20),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    RichText(
+                        text: TextSpan(
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontSize: 26),
+                            children: [
+                          const TextSpan(text: 'Get '),
+                          WidgetSpan(
+                              child: SvgPicture.asset(Assets.icons.chrome),
+                              alignment: PlaceholderAlignment.middle),
+                          const TextSpan(text: ' version for free!'),
+                        ])),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Material(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Theme.of(context).primaryColor,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(8),
+                              onTap: () {},
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      Assets.icons.copy,
+                                      colorFilter: const ColorFilter.mode(
+                                          Colors.white, BlendMode.srcIn),
+                                    ),
+                                    Text(
+                                      ' Copy link',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      );
-                    },
-                    duration: const Duration(milliseconds: 500),
-                    tween: Tween<double>(begin: 1, end: 1.2),
-                    curve: Curves.easeIn,
-                  ),
-                  const ContinueButton()
-                ],
-              ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: Container(
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                gradient: const LinearGradient(
+                                    colors: [
+                                      Color.fromRGBO(255, 238, 90, 1),
+                                      Color.fromRGBO(255, 208, 74, 1),
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter)),
+                            child: Material(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.transparent,
+                              child: InkWell(
+                                overlayColor: const MaterialStatePropertyAll(
+                                    Colors.white),
+                                onTap: () {},
+                                child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Text(
+                                      'Collect your gift',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16),
+                                    )),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -63,68 +165,27 @@ class PurchaseSuccessScreen extends StatelessWidget {
   }
 }
 
-class ContinueButton extends StatefulWidget {
-  // final StoreProduct? product;
-  const ContinueButton({super.key});
-
-  @override
-  State<ContinueButton> createState() => _ContinueButtonState();
-}
-
-class _ContinueButtonState extends State<ContinueButton> {
-  bool tapped = false;
-
-  static const duration = Duration(milliseconds: 150);
-  void onTapDown() {
-    setState(() {
-      tapped = true;
-    });
-  }
-
-  void onTapUp() {
-    Future.delayed(duration, () {
-      setState(() {
-        tapped = false;
-      });
-    });
-  }
+class BackArrow extends StatelessWidget {
+  const BackArrow({super.key});
 
   @override
   Widget build(BuildContext context) {
-    void onPressContinue() {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-
+    void onPressClose() {
+      Navigator.of(context).pop();
     }
 
-    return GestureDetector(
-        onTap: onPressContinue,
-        onTapUp: (_) => onTapUp(),
-        onTapDown: (_) => onTapDown(),
-        onTapCancel: () => onTapUp(),
-        child: AnimatedScale(
-          duration: duration,
-          scale: tapped ? 0.95 : 1,
-          child: AnimatedContainer(
-            width: double.infinity,
-            duration: duration,
-            margin: const EdgeInsets.all(15),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: !tapped
-                  ? const Color.fromRGBO(31, 188, 183, 1)
-                  : const Color.fromRGBO(4, 49, 57, 1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Text(
-              'Continue',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700),
-              textAlign: TextAlign.center,
-            ),
-          ),
+    return IconButton(
+        visualDensity: VisualDensity.compact,
+        onPressed: onPressClose,
+        style: ButtonStyle(
+            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+            backgroundColor: MaterialStatePropertyAll(
+                Theme.of(context).iconTheme.color!.withOpacity(0.1))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+        icon: const Icon(
+          Icons.close,
+          size: 20,
+          color: Colors.white,
         ));
   }
 }

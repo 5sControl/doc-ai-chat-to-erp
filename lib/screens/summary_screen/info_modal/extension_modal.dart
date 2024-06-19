@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+// import 'package:webview_flutter/webview_flutter.dart';
 
 class ExtensionModal extends StatefulWidget {
   const ExtensionModal({super.key});
@@ -20,46 +19,46 @@ class ExtensionModal extends StatefulWidget {
 class _ExtensionModalState extends State<ExtensionModal> {
   bool copied = false;
   bool isOpenLink = false;
-  late WebViewController controller;
+  // late WebViewController controller;
 
   // void scrollToTop() async {
   //   await controller.loadRequest(Uri.parse('https://elang.app/summify'));
   //   // await controller.runJavaScript("window.scrollTo({top: 3325, behavior: 'smooth'});");
   // }
 
-  @override
-  void initState() {
-    controller = WebViewController()
-      // ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      // ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) async {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {
-            // scrollToTop();
-          },
-          onPageFinished: (String url) async {
-            if (url.contains('elang.app/summify')) {
-              await controller.runJavaScript(
-                  "window.scrollTo({top: 3430, behavior: 'smooth'});");
-            }
-          },
-          onHttpError: (HttpResponseError error) {},
-          onWebResourceError: (WebResourceError error) {},
-          onNavigationRequest: (NavigationRequest request) {
-            // if (request.url.startsWith('https://www.youtube.com/')) {
-            //   return NavigationDecision.prevent;
-            // }
-            return NavigationDecision.navigate;
-          },
-        ),
-      );
-    controller.loadRequest(Uri.parse('https://elang.app/summify'));
-    // scrollToTop();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   controller = WebViewController()
+  //     // ..setJavaScriptMode(JavaScriptMode.unrestricted)
+  //     // ..setBackgroundColor(const Color(0x00000000))
+  //     ..setNavigationDelegate(
+  //       NavigationDelegate(
+  //         onProgress: (int progress) async {
+  //           // Update loading bar.
+  //         },
+  //         onPageStarted: (String url) {
+  //           // scrollToTop();
+  //         },
+  //         onPageFinished: (String url) async {
+  //           if (url.contains('elang.app/summify')) {
+  //             await controller.runJavaScript(
+  //                 "window.scrollTo({top: 3430, behavior: 'smooth'});");
+  //           }
+  //         },
+  //         onHttpError: (HttpResponseError error) {},
+  //         onWebResourceError: (WebResourceError error) {},
+  //         onNavigationRequest: (NavigationRequest request) {
+  //           // if (request.url.startsWith('https://www.youtube.com/')) {
+  //           //   return NavigationDecision.prevent;
+  //           // }
+  //           return NavigationDecision.navigate;
+  //         },
+  //       ),
+  //     );
+  //   controller.loadRequest(Uri.parse('https://elang.app/summify'));
+  //   // scrollToTop();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -117,10 +116,10 @@ class _ExtensionModalState extends State<ExtensionModal> {
                     secondChild: Center(
                       child: Container(
                         // width: 300,
-                        height: MediaQuery.of(context).size.height - 200,
-                        child: WebViewWidget(
-                          controller: controller,
-                        ),
+                        // height: MediaQuery.of(context).size.height - 200,
+                        // child: WebViewWidget(
+                        //   controller: controller,
+                        // ),
                       ),
                     ),
                     duration: Duration(milliseconds: 400),

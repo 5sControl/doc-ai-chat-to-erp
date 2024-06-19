@@ -210,7 +210,7 @@ class SettingsScreen extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                   Icon(
+                  Icon(
                     Icons.arrow_forward_ios,
                     size: 20,
                     color: Theme.of(context).textTheme.bodySmall!.color!,
