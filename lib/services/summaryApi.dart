@@ -34,14 +34,16 @@ class SummaryApiRepository {
   final String translateUrlDev =
       'https://largely-whole-horse.ngrok-free.app/translator/translate-to/';
 
-  final String translateUrl =
-      'http://51.159.179.125:8088/translate-to/';
+  final String translateUrl = 'http://51.159.179.125:8088/translate-to/';
 
   final String researchUrl =
       'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/';
 
   final String researchFile =
       'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/';
+
+  final String sendEmailUrl =
+      'https://easy4learn.com/django-api/applications/email/';
 
   final Dio _dio = Dio(
     BaseOptions(responseType: ResponseType.plain),
@@ -165,7 +167,6 @@ class SummaryApiRepository {
   Future<String> translate(
       {required String text, required String languageCode}) async {
     try {
-
       Response response = await _dio
           .post(translateUrl, data: {'text': text, 'language': languageCode});
       if (response.statusCode == 200) {
@@ -384,6 +385,28 @@ class SummaryApiRepository {
       return SendFeatureStatus.Error;
     }
   }
+
+  Future<void> sendEmail({
+    required String email,
+  }) async {
+    try {
+      Response response = await _dio.post(
+        sendEmailUrl,
+        data: {
+          "email": email,
+        },
+      );
+      if (response.statusCode == 201) {
+        print(response.data);
+      } else {
+        print(response.data);
+      }
+    } on DioException catch (_) {
+      return print(_);
+    } catch (error) {
+      return print(error);
+    }
+  }
 }
 
 class SummaryRepository {
@@ -463,5 +486,9 @@ class SummaryRepository {
         name: name,
         email: email,
         message: message);
+  }
+
+  Future<void> sendEmailForPremium({required String email}) {
+    return _summaryRepository.sendEmail(email: email);
   }
 }

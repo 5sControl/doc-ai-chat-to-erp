@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../helpers/email_validator.dart';
+import '../../../services/summaryApi.dart';
+import '../../modal_screens/purchase_success_screen.dart';
 // import 'package:webview_flutter/webview_flutter.dart';
 
 class ExtensionModal extends StatefulWidget {
@@ -19,57 +24,46 @@ class ExtensionModal extends StatefulWidget {
 class _ExtensionModalState extends State<ExtensionModal> {
   bool copied = false;
   bool isOpenLink = false;
-  // late WebViewController controller;
+  bool emailError = false;
+  final emailController = TextEditingController();
 
-  // void scrollToTop() async {
-  //   await controller.loadRequest(Uri.parse('https://elang.app/summify'));
-  //   // await controller.runJavaScript("window.scrollTo({top: 3325, behavior: 'smooth'});");
-  // }
+  @override
+  void initState() {
+    emailController.addListener(() {
+      if (validateEmail(emailController.value.text) == null) {
+        setState(() {
+          emailError = false;
+        });
+      } else {
+        setState(() {
+          emailError = true;
+        });
+      }
+    });
+    super.initState();
+  }
 
-  // @override
-  // void initState() {
-  //   controller = WebViewController()
-  //     // ..setJavaScriptMode(JavaScriptMode.unrestricted)
-  //     // ..setBackgroundColor(const Color(0x00000000))
-  //     ..setNavigationDelegate(
-  //       NavigationDelegate(
-  //         onProgress: (int progress) async {
-  //           // Update loading bar.
-  //         },
-  //         onPageStarted: (String url) {
-  //           // scrollToTop();
-  //         },
-  //         onPageFinished: (String url) async {
-  //           if (url.contains('elang.app/summify')) {
-  //             await controller.runJavaScript(
-  //                 "window.scrollTo({top: 3430, behavior: 'smooth'});");
-  //           }
-  //         },
-  //         onHttpError: (HttpResponseError error) {},
-  //         onWebResourceError: (WebResourceError error) {},
-  //         onNavigationRequest: (NavigationRequest request) {
-  //           // if (request.url.startsWith('https://www.youtube.com/')) {
-  //           //   return NavigationDecision.prevent;
-  //           // }
-  //           return NavigationDecision.navigate;
-  //         },
-  //       ),
-  //     );
-  //   controller.loadRequest(Uri.parse('https://elang.app/summify'));
-  //   // scrollToTop();
-  //   super.initState();
-  // }
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     void onPressAdd() async {
-      final Uri url = Uri.parse(
-          'https://chromewebstore.google.com/detail/summify/necbpeagceabjjnliglmfeocgjcfimne');
-      if (!await launchUrl(url, mode: LaunchMode.inAppBrowserView)) {}
-
-      context.read<MixpanelBloc>().add(const RedirectToSummifyExtension());
-      // setState(() {
-      //   isOpenLink = !isOpenLink;
+      // Navigator.of(context).pop();
+      // Future.delayed(Duration(milliseconds: 100), () {
+      //   showMaterialModalBottomSheet(
+      //       context: context,
+      //       expand: false,
+      //       bounce: false,
+      //       barrierColor: Colors.black54,
+      //       backgroundColor: Colors.transparent,
+      //       enableDrag: false,
+      //       builder: (context) {
+      //         return const PurchaseSuccessScreen();
+      //       });
       // });
     }
 
@@ -78,7 +72,9 @@ class _ExtensionModalState extends State<ExtensionModal> {
         copied = true;
       });
 
-      Clipboard.setData(const ClipboardData(text: 'https://elang.app/summify'));
+      Clipboard.setData(const ClipboardData(
+          text:
+              'https://chromewebstore.google.com/detail/summify/necbpeagceabjjnliglmfeocgjcfimne'));
 
       Future.delayed(const Duration(milliseconds: 800), () {
         setState(() {
@@ -88,9 +84,16 @@ class _ExtensionModalState extends State<ExtensionModal> {
 
       context.read<MixpanelBloc>().add(const CopySummifyExtensionLink());
     }
-    // final
-    //   ..loadRequest(Uri.parse('https://elang.app/summify'));
-    //
+
+    void onPressGift() async {
+      if (!emailError && emailController.value.text.isNotEmpty) {
+        await SummaryApiRepository()
+            .sendEmail(email: emailController.value.text);
+        if (context.mounted) {
+          Navigator.of(context).pushNamed('/');
+        }
+      }
+    }
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
@@ -115,12 +118,12 @@ class _ExtensionModalState extends State<ExtensionModal> {
                   AnimatedCrossFade(
                     secondChild: Center(
                       child: Container(
-                        // width: 300,
-                        // height: MediaQuery.of(context).size.height - 200,
-                        // child: WebViewWidget(
-                        //   controller: controller,
-                        // ),
-                      ),
+                          // width: 300,
+                          // height: MediaQuery.of(context).size.height - 200,
+                          // child: WebViewWidget(
+                          //   controller: controller,
+                          // ),
+                          ),
                     ),
                     duration: Duration(milliseconds: 400),
                     crossFadeState: isOpenLink
@@ -175,37 +178,122 @@ class _ExtensionModalState extends State<ExtensionModal> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Image.asset(Assets.extension.path)),
+                        // Padding(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 10),
+                        //     child: Image.asset(Assets.extension.path)),
+                        // Row(
+                        //   children: [
+                        //     MaterialButton(
+                        //       color: Theme.of(context).primaryColor,
+                        //       shape: RoundedRectangleBorder(
+                        //           borderRadius: BorderRadius.circular(8)),
+                        //       onPressed: onPressAdd,
+                        //       child: const Text('Add Summify for your Chrome '),
+                        //     ),
+                        //     const Spacer(),
+                        //     MaterialButton(
+                        //       color: Theme.of(context).primaryColor,
+                        //       shape: RoundedRectangleBorder(
+                        //           borderRadius: BorderRadius.circular(8)),
+                        //       onPressed: onPressCopy,
+                        //       child: AnimatedCrossFade(
+                        //         firstChild: SvgPicture.asset(
+                        //           Assets.icons.copy,
+                        //           colorFilter: const ColorFilter.mode(
+                        //               Colors.white, BlendMode.srcIn),
+                        //         ),
+                        //         secondChild: Icon(Icons.check),
+                        //         duration: const Duration(milliseconds: 300),
+                        //         crossFadeState: copied
+                        //             ? CrossFadeState.showSecond
+                        //             : CrossFadeState.showFirst,
+                        //       ),
+                        //     )
+                        //   ],
+                        // ),
+                        EmailField(emailController: emailController),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
-                            MaterialButton(
-                              color: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              onPressed: onPressAdd,
-                              child: const Text('Add Summify for your Chrome '),
-                            ),
-                            const Spacer(),
-                            MaterialButton(
-                              color: Theme.of(context).primaryColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              onPressed: onPressCopy,
-                              child: AnimatedCrossFade(
-                                firstChild: SvgPicture.asset(
-                                  Assets.icons.copy,
-                                  colorFilter: const ColorFilter.mode(
-                                      Colors.white, BlendMode.srcIn),
+                            Expanded(
+                              child: Material(
+                                borderRadius: BorderRadius.circular(8),
+                                color: Theme.of(context).primaryColor,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(8),
+                                  onTap: onPressCopy,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          Assets.icons.copy,
+                                          colorFilter: const ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
+                                        ),
+                                        Text(
+                                          ' Copy link',
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                        )
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                secondChild: Icon(Icons.check),
-                                duration: const Duration(milliseconds: 300),
-                                crossFadeState: copied
-                                    ? CrossFadeState.showSecond
-                                    : CrossFadeState.showFirst,
                               ),
-                            )
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: Container(
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    gradient: const LinearGradient(
+                                        colors: [
+                                          Color.fromRGBO(255, 238, 90, 1),
+                                          Color.fromRGBO(255, 208, 74, 1),
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter)),
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    overlayColor:
+                                        const MaterialStatePropertyAll(
+                                            Colors.white),
+                                    onTap: onPressGift,
+                                    child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        child: Text(
+                                          'Send link',
+                                          textAlign: TextAlign.center,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 16),
+                                        )),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -220,6 +308,26 @@ class _ExtensionModalState extends State<ExtensionModal> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class EmailField extends StatelessWidget {
+  final TextEditingController emailController;
+  const EmailField({super.key, required this.emailController});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: emailController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: validateEmail,
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.emailAddress,
+      decoration: const InputDecoration(
+          hintText: ' Enter your email', fillColor: Colors.white),
+      // onEditingComplete: () {},
+      style: Theme.of(context).textTheme.labelMedium,
     );
   }
 }

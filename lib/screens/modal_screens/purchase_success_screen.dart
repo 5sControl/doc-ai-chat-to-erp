@@ -1,11 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:summify/screens/subscribtions_screen/happy_box.dart';
 
+import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../../helpers/email_validator.dart';
+import '../../services/summaryApi.dart';
 
 class PurchaseSuccessScreen extends StatefulWidget {
   const PurchaseSuccessScreen({super.key});
@@ -43,12 +47,20 @@ class _PurchaseSuccessScreenState extends State<PurchaseSuccessScreen> {
   @override
   Widget build(BuildContext context) {
     void onPressCopy() {
-      print('copy');
+      Clipboard.setData(const ClipboardData(
+          text:
+              'https://chromewebstore.google.com/detail/summify/necbpeagceabjjnliglmfeocgjcfimne'));
+
+      context.read<MixpanelBloc>().add(const CopySummifyExtensionLink());
     }
 
     void onPressGift() async {
       if (!emailError && emailController.value.text.isNotEmpty) {
-        print('!!!!');
+        await SummaryApiRepository()
+            .sendEmail(email: emailController.value.text);
+        if (context.mounted) {
+          Navigator.of(context).pushNamed('/');
+        }
       }
     }
 
@@ -221,9 +233,7 @@ class EmailField extends StatelessWidget {
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
       decoration: const InputDecoration(
-        hintText: ' Enter your email',
-        fillColor: Colors.white
-      ),
+          hintText: ' Enter your email', fillColor: Colors.white),
       // onEditingComplete: () {},
       style: Theme.of(context).textTheme.labelMedium,
     );
