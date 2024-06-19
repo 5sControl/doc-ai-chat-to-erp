@@ -126,6 +126,7 @@ class SettingsScreen extends StatelessWidget {
         bounce: false,
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
+        enableDrag: false,
         builder: (context) {
           return const ExtensionModal();
         },
@@ -205,17 +206,14 @@ class SettingsScreen extends StatelessWidget {
                     translateLanguages[state.translateLanguage]!
                         .replaceAll('(Simplified)', '')
                         .replaceAll('(Traditional)', ''),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodySmall!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const Icon(
+                   Icon(
                     Icons.arrow_forward_ios,
                     size: 20,
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodySmall!.color!,
                   )
                 ],
               );
@@ -296,17 +294,19 @@ class SettingsScreen extends StatelessWidget {
                     MainGroup(
                       items: mainGroup,
                     ),
-                    const SizedBox(height: 15,),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     ButtonsGroup(title: 'General', items: generalGroup),
                     // ButtonsGroup(title: 'Membership', items: membershipGroup),
                     ButtonsGroup(title: 'About', items: aboutGroup),
                     ButtonsGroup(title: 'Support', items: supportGroup),
-                    Text('version 1.3.0',
+                    Text('version 1.4.0',
                         textAlign: TextAlign.end,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
-                            .copyWith(height: 2))
+                            .copyWith(height: 1))
                   ],
                 ),
               )),
@@ -464,9 +464,10 @@ class MainGroup extends StatelessWidget {
                                     item.leadingIcon,
                                     height: 20,
                                     colorFilter: ColorFilter.mode(
-                                        item.background != null
-                                            ? Colors.black
-                                            : Colors.white,
+                                        Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .color!,
                                         BlendMode.srcIn),
                                   ),
                                 ),
@@ -476,9 +477,10 @@ class MainGroup extends StatelessWidget {
                                       item.title,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          color: item.background != null
-                                              ? Colors.black
-                                              : Colors.white,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .color,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400),
                                     )),
@@ -489,9 +491,10 @@ class MainGroup extends StatelessWidget {
                                         Icon(
                                           Icons.arrow_forward_ios,
                                           size: 20,
-                                          color: item.background != null
-                                              ? Colors.black
-                                              : Colors.white,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .color,
                                         ))
                               ],
                             ),
@@ -499,9 +502,13 @@ class MainGroup extends StatelessWidget {
                         ),
                       ),
                       if (items.indexOf(item) != items.length - 1)
-                        const Divider(
+                        Divider(
                           height: 1,
-                          color: Colors.white,
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .color!
+                              .withOpacity(0.5),
                         )
                     ],
                   ),
@@ -525,7 +532,7 @@ class ButtonsGroup extends StatefulWidget {
 }
 
 class _ButtonsGroupState extends State<ButtonsGroup> {
-  bool isOpen = false;
+  bool isOpen = true;
 
   void onToggleOpen() {
     setState(() {
@@ -539,8 +546,8 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-            padding:  EdgeInsets.only(bottom: 0),
+            duration: Duration(milliseconds: 300),
+            padding: EdgeInsets.only(bottom: 0),
             child: Row(
               children: [
                 Text(
@@ -552,23 +559,24 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
                   ),
                 ),
                 const Spacer(),
-                IconButton(
-                    visualDensity: VisualDensity.compact,
-                    padding: EdgeInsets.zero,
-                    color: Theme.of(context).textTheme.bodyMedium!.color,
-                    style: const ButtonStyle(
-                        iconSize: MaterialStatePropertyAll(20)),
-                    onPressed: onToggleOpen,
-                    icon: Transform.rotate(
-                        angle: !isOpen ? -pi : -pi / 2,
-                        child: const Icon(Icons.arrow_back_ios_rounded)))
+                // IconButton(
+                //     visualDensity: VisualDensity.compact,
+                //     padding: EdgeInsets.zero,
+                //     color: Theme.of(context).textTheme.bodyMedium!.color,
+                //     style: const ButtonStyle(
+                //         iconSize: MaterialStatePropertyAll(20)),
+                //     onPressed: onToggleOpen,
+                //     icon: Transform.rotate(
+                //         angle: !isOpen ? -pi : -pi / 2,
+                //         child: const Icon(Icons.arrow_back_ios_rounded)))
               ],
             )),
         AnimatedCrossFade(
             firstChild: Container(
+              clipBehavior: Clip.hardEdge,
               margin: const EdgeInsets.only(bottom: 15),
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColor.withOpacity(0.2),
                   borderRadius: const BorderRadius.all(Radius.circular(8))),
               child: Column(
                 children: widget.items
@@ -576,7 +584,8 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
                       (item) => Column(
                         children: [
                           Material(
-                            color: Theme.of(context).primaryColor,
+                            color:
+                                Theme.of(context).primaryColor.withOpacity(0),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
                             child: InkWell(
@@ -605,9 +614,10 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
                                         item.leadingIcon,
                                         height: 20,
                                         colorFilter: ColorFilter.mode(
-                                            item.background != null
-                                                ? Colors.black
-                                                : Colors.white,
+                                            Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!
+                                                .color!,
                                             BlendMode.srcIn),
                                       ),
                                     ),
@@ -616,12 +626,12 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
                                         child: Text(
                                           item.title,
                                           textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: item.background != null
-                                                  ? Colors.black
-                                                  : Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400),
                                         )),
                                     Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -630,9 +640,10 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
                                             Icon(
                                               Icons.arrow_forward_ios,
                                               size: 20,
-                                              color: item.background != null
-                                                  ? Colors.black
-                                                  : Colors.white,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .color,
                                             ))
                                   ],
                                 ),
@@ -641,9 +652,13 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
                           ),
                           if (widget.items.indexOf(item) !=
                               widget.items.length - 1)
-                            const Divider(
+                            Divider(
                               height: 1,
-                              color: Colors.white,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .color!
+                                  .withOpacity(0.5),
                             )
                         ],
                       ),

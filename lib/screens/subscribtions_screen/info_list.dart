@@ -28,6 +28,7 @@ class InfoList extends StatelessWidget {
           bounce: false,
           barrierColor: Colors.black54,
           backgroundColor: Colors.transparent,
+          enableDrag: false,
           builder: (context) {
             return const ExtensionModal();
           });
