@@ -5,12 +5,53 @@ import 'package:flutter_svg/svg.dart';
 import 'package:summify/screens/subscribtions_screen/happy_box.dart';
 
 import '../../gen/assets.gen.dart';
+import '../../helpers/email_validator.dart';
 
-class PurchaseSuccessScreen extends StatelessWidget {
+class PurchaseSuccessScreen extends StatefulWidget {
   const PurchaseSuccessScreen({super.key});
 
   @override
+  State<PurchaseSuccessScreen> createState() => _PurchaseSuccessScreenState();
+}
+
+class _PurchaseSuccessScreenState extends State<PurchaseSuccessScreen> {
+  bool emailError = false;
+  final emailController = TextEditingController();
+
+  @override
+  void initState() {
+    emailController.addListener(() {
+      if (validateEmail(emailController.value.text) == null) {
+        setState(() {
+          emailError = false;
+        });
+      } else {
+        setState(() {
+          emailError = true;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    void onPressCopy() {
+      print('copy');
+    }
+
+    void onPressGift() async {
+      if (!emailError && emailController.value.text.isNotEmpty) {
+        print('!!!!');
+      }
+    }
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
       child: Center(
@@ -43,7 +84,7 @@ class PurchaseSuccessScreen extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      'You are the best!',
+                      '   You are the best!',
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -68,7 +109,9 @@ class PurchaseSuccessScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextField(),
+                    EmailField(
+                      emailController: emailController,
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -80,7 +123,7 @@ class PurchaseSuccessScreen extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(8),
-                              onTap: () {},
+                              onTap: onPressCopy,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 10),
@@ -130,7 +173,7 @@ class PurchaseSuccessScreen extends StatelessWidget {
                               child: InkWell(
                                 overlayColor: const MaterialStatePropertyAll(
                                     Colors.white),
-                                onTap: () {},
+                                onTap: onPressGift,
                                 child: Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10),
@@ -161,6 +204,28 @@ class PurchaseSuccessScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class EmailField extends StatelessWidget {
+  final TextEditingController emailController;
+  const EmailField({super.key, required this.emailController});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: emailController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+
+      validator: validateEmail,
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        hintText: ' Enter your email',
+      ),
+      // onEditingComplete: () {},
+      style: Theme.of(context).textTheme.labelMedium,
     );
   }
 }
