@@ -217,12 +217,12 @@ class EmailField extends StatelessWidget {
     return TextFormField(
       controller: emailController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-
       validator: validateEmail,
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: ' Enter your email',
+        fillColor: Colors.white
       ),
       // onEditingComplete: () {},
       style: Theme.of(context).textTheme.labelMedium,
