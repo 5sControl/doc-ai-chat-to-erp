@@ -209,3 +209,18 @@ class UserModel {
     this.displayName,
   });
 }
+
+class LibraryDocument extends Equatable {
+  final String title;
+  final String annotation;
+  final String summary;
+  final String img;
+  const LibraryDocument(
+      {required this.title,
+      required this.annotation,
+      required this.summary,
+      required this.img});
+
+  @override
+  List<Object?> get props => [title, annotation, summary, img];
+}

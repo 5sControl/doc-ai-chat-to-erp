@@ -297,6 +297,44 @@ class $AssetsIconsGen {
       ];
 }
 
+class $AssetsLibraryGen {
+  const $AssetsLibraryGen();
+
+  /// File path: assets/library/a13Things.jpeg
+  AssetGenImage get a13Things =>
+      const AssetGenImage('assets/library/a13Things.jpeg');
+
+  /// File path: assets/library/atomicHabits.jpeg
+  AssetGenImage get atomicHabits =>
+      const AssetGenImage('assets/library/atomicHabits.jpeg');
+
+  /// File path: assets/library/doTheWork.jpeg
+  AssetGenImage get doTheWork =>
+      const AssetGenImage('assets/library/doTheWork.jpeg');
+
+  /// File path: assets/library/extremeProductivity.jpeg
+  AssetGenImage get extremeProductivity =>
+      const AssetGenImage('assets/library/extremeProductivity.jpeg');
+
+  /// File path: assets/library/notGivingAFuck.jpeg
+  AssetGenImage get notGivingAFuck =>
+      const AssetGenImage('assets/library/notGivingAFuck.jpeg');
+
+  /// File path: assets/library/unlimited_memory.jpeg
+  AssetGenImage get unlimitedMemory =>
+      const AssetGenImage('assets/library/unlimited_memory.jpeg');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+        a13Things,
+        atomicHabits,
+        doTheWork,
+        extremeProductivity,
+        notGivingAFuck,
+        unlimitedMemory
+      ];
+}
+
 class $AssetsOnboardingGen {
   const $AssetsOnboardingGen();
 
@@ -375,6 +413,7 @@ class Assets {
   static const String happyBoxLeftHand = 'assets/happy_box_left_hand.svg';
   static const String happyBoxRightHand = 'assets/happy_box_right_hand.svg';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsLibraryGen library = $AssetsLibraryGen();
   static const AssetGenImage niga = AssetGenImage('assets/niga.png');
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
   static const AssetGenImage placeholderLogo =
