@@ -86,7 +86,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
         final monthlyPackage = packages.firstWhere(
-            (element) => element.packageType == PackageType.monthly);
+            (element) => element.packageType == PackageType.weekly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
 
@@ -133,7 +133,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                 },
                                 child: Container(
                                   key: Key(selectedSubscriptionIndex == 1
-                                      ? 'month'
+                                      ? 'week'
                                       : 'year'),
                                   child: Builder(
                                     builder: (context) {
@@ -154,7 +154,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                           headerH,
                                                       child: Row(
                                                         children: [
-                                                          MonthTitle(
+                                                          WeekTitle(
                                                               onSelectSubscription:
                                                                   onSelectSubscription),
                                                           YearTitle(
@@ -188,7 +188,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                           headerH,
                                                       child: Row(
                                                         children: [
-                                                          MonthTitle(
+                                                          WeekTitle(
                                                               onSelectSubscription:
                                                                   onSelectSubscription),
                                                           YearTitle(
@@ -234,9 +234,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 }
 
-class MonthTitle extends StatelessWidget {
+class WeekTitle extends StatelessWidget {
   final Function({required int index}) onSelectSubscription;
-  const MonthTitle({super.key, required this.onSelectSubscription});
+  const WeekTitle({super.key, required this.onSelectSubscription});
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +246,7 @@ class MonthTitle extends StatelessWidget {
       onTap: () => onSelectSubscription(index: 0),
       child: Center(
         child: Text(
-          'Pay monthly',
+          'Pay weekly',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodySmall,
         ),
@@ -254,6 +254,27 @@ class MonthTitle extends StatelessWidget {
     ));
   }
 }
+
+// class MonthTitle extends StatelessWidget {
+//   final Function({required int index}) onSelectSubscription;
+//   const MonthTitle({super.key, required this.onSelectSubscription});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//         child: InkWell(
+//       borderRadius: BorderRadius.circular(8),
+//       onTap: () => onSelectSubscription(index: 0),
+//       child: Center(
+//         child: Text(
+//           'Pay monthly',
+//           textAlign: TextAlign.center,
+//           style: Theme.of(context).textTheme.bodySmall,
+//         ),
+//       ),
+//     ));
+//   }
+// }
 
 class YearTitle extends StatelessWidget {
   final Function({required int index}) onSelectSubscription;
@@ -285,7 +306,7 @@ class YearTitle extends StatelessWidget {
               //   Color.fromRGBO(255, 208, 74, 1),
               // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
             ),
-            child: Text('Save up to 25\$',
+            child: Text('Save up to 29\$',
                 style: Theme.of(context).textTheme.bodySmall!
                 // .copyWith(color: Colors.black),
                 ),

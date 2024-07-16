@@ -31,7 +31,7 @@ class SubscriptionBodyMonth extends StatelessWidget {
             flex: 2,
           ),
           const Text(
-            '1 month',
+            '1 week',
             textAlign: TextAlign.start,
             style:
                 TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
@@ -51,7 +51,7 @@ class SubscriptionBodyMonth extends StatelessWidget {
             //         decoration: TextDecoration.lineThrough)),
             TextSpan(
                 text:
-                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/month',
+                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/week',
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
