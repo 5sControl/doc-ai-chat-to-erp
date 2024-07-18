@@ -356,6 +356,7 @@ class SummaryApiRepository {
     required bool getMoreSummaries,
     required bool addTranslation,
     required bool askAQuestions,
+    required bool readBook,
     required String addLang,
     required String name,
     required String email,
@@ -368,6 +369,7 @@ class SummaryApiRepository {
           "getMoreSummaries": getMoreSummaries,
           "addTranslation": addTranslation,
           "askAQuestions": askAQuestions,
+          "readBook": readBook,
           "addLang": addLang,
           "name": name,
           "email": email,
@@ -473,6 +475,7 @@ class SummaryRepository {
     required bool getMoreSummaries,
     required bool addTranslation,
     required bool askAQuestions,
+    required bool readBook,
     required String addLang,
     required String name,
     required String email,
@@ -482,10 +485,11 @@ class SummaryRepository {
         getMoreSummaries: getMoreSummaries,
         addTranslation: addTranslation,
         askAQuestions: askAQuestions,
+        readBook: readBook,
         addLang: addLang,
         name: name,
         email: email,
-        message: message);
+        message: message,);
   }
 
   Future<void> sendEmailForPremium({required String email}) {

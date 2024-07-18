@@ -9,6 +9,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/screens/summary_screen/research_tab.dart';
 import 'package:summify/screens/summary_screen/send_request_field.dart';
 import 'package:summify/screens/summary_screen/summary_hero_image.dart';
@@ -258,7 +259,7 @@ class PremiumBlurContainer extends StatelessWidget {
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return const SubscriptionScreen(
+          return const SubscriptionScreenLimit(
             fromOnboarding: true,
             triggerScreen: 'Summary_Screen',
           );

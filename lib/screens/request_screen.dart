@@ -60,6 +60,7 @@ class _RequestScreenState extends State<RequestScreen> {
           getMoreSummaries: selectedOptions.contains('I need more summaries'),
           addTranslation: selectedOptions.contains('Summary translation'),
           askAQuestions: selectedOptions.contains('AI summary chat'),
+          readBook: selectedOptions.contains('Read my book'),
           addLang: selectedOptions.contains('Add language')
               ? selectedLang
               : 'Not selected',
@@ -104,6 +105,7 @@ class _RequestScreenState extends State<RequestScreen> {
       'I need more summaries',
       'Summary translation',
       'AI summary chat',
+      'Read my book',
       'Add language'
     ];
 

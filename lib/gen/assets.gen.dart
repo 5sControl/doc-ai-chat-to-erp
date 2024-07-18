@@ -308,6 +308,10 @@ class $AssetsLibraryGen {
   AssetGenImage get atomicHabits =>
       const AssetGenImage('assets/library/atomicHabits.jpeg');
 
+  /// File path: assets/library/designingYourLife.jpeg
+  AssetGenImage get designingYourLife =>
+      const AssetGenImage('assets/library/designingYourLife.jpeg');
+
   /// File path: assets/library/doTheWork.jpeg
   AssetGenImage get doTheWork =>
       const AssetGenImage('assets/library/doTheWork.jpeg');
@@ -316,22 +320,93 @@ class $AssetsLibraryGen {
   AssetGenImage get extremeProductivity =>
       const AssetGenImage('assets/library/extremeProductivity.jpeg');
 
+  /// File path: assets/library/gettingComfy.jpeg
+  AssetGenImage get gettingComfy =>
+      const AssetGenImage('assets/library/gettingComfy.jpeg');
+
+  /// File path: assets/library/goodVibes.jpeg
+  AssetGenImage get goodVibes =>
+      const AssetGenImage('assets/library/goodVibes.jpeg');
+
+  /// File path: assets/library/howSuccessful.jpeg
+  AssetGenImage get howSuccessful =>
+      const AssetGenImage('assets/library/howSuccessful.jpeg');
+
+  /// File path: assets/library/howToBe.jpeg
+  AssetGenImage get howToBe =>
+      const AssetGenImage('assets/library/howToBe.jpeg');
+
+  /// File path: assets/library/learnOrDie.jpeg
+  AssetGenImage get learnOrDie =>
+      const AssetGenImage('assets/library/learnOrDie.jpeg');
+
+  /// File path: assets/library/maximizeYourPotential.jpeg
+  AssetGenImage get maximizeYourPotential =>
+      const AssetGenImage('assets/library/maximizeYourPotential.jpeg');
+
   /// File path: assets/library/notGivingAFuck.jpeg
   AssetGenImage get notGivingAFuck =>
       const AssetGenImage('assets/library/notGivingAFuck.jpeg');
+
+  /// File path: assets/library/startSomethingThatMatters.jpeg
+  AssetGenImage get startSomethingThatMatters =>
+      const AssetGenImage('assets/library/startSomethingThatMatters.jpeg');
+
+  /// File path: assets/library/successAndLuck.jpeg
+  AssetGenImage get successAndLuck =>
+      const AssetGenImage('assets/library/successAndLuck.jpeg');
+
+  /// File path: assets/library/the7Habits.jpeg
+  AssetGenImage get the7Habits =>
+      const AssetGenImage('assets/library/the7Habits.jpeg');
+
+  /// File path: assets/library/theCharge.jpeg
+  AssetGenImage get theCharge =>
+      const AssetGenImage('assets/library/theCharge.jpeg');
 
   /// File path: assets/library/unlimited_memory.jpeg
   AssetGenImage get unlimitedMemory =>
       const AssetGenImage('assets/library/unlimited_memory.jpeg');
 
+  /// File path: assets/library/whatColorIs.jpeg
+  AssetGenImage get whatColorIs =>
+      const AssetGenImage('assets/library/whatColorIs.jpeg');
+
+  /// File path: assets/library/whatGotYouHere.jpeg
+  AssetGenImage get whatGotYouHere =>
+      const AssetGenImage('assets/library/whatGotYouHere.jpeg');
+
+  /// File path: assets/library/whereverYouGo.jpeg
+  AssetGenImage get whereverYouGo =>
+      const AssetGenImage('assets/library/whereverYouGo.jpeg');
+
+  /// File path: assets/library/worksWellWithOthers.jpeg
+  AssetGenImage get worksWellWithOthers =>
+      const AssetGenImage('assets/library/worksWellWithOthers.jpeg');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         a13Things,
         atomicHabits,
+        designingYourLife,
         doTheWork,
         extremeProductivity,
+        gettingComfy,
+        goodVibes,
+        howSuccessful,
+        howToBe,
+        learnOrDie,
+        maximizeYourPotential,
         notGivingAFuck,
-        unlimitedMemory
+        startSomethingThatMatters,
+        successAndLuck,
+        the7Habits,
+        theCharge,
+        unlimitedMemory,
+        whatColorIs,
+        whatGotYouHere,
+        whereverYouGo,
+        worksWellWithOthers
       ];
 }
 
@@ -419,6 +494,10 @@ class Assets {
   static const AssetGenImage placeholderLogo =
       AssetGenImage('assets/placeholder_logo.png');
   static const $AssetsSetUpGen setUp = $AssetsSetUpGen();
+  static const AssetGenImage subscriptionMen =
+      AssetGenImage('assets/subscription_men.png');
+  static const AssetGenImage subscriptionWoman =
+      AssetGenImage('assets/subscription_woman.png');
 
   /// List of all assets
   static List<dynamic> get values => [
@@ -431,7 +510,9 @@ class Assets {
         happyBoxLeftHand,
         happyBoxRightHand,
         niga,
-        placeholderLogo
+        placeholderLogo,
+        subscriptionMen,
+        subscriptionWoman
       ];
 }
 
