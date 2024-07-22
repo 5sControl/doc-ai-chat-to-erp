@@ -3,16 +3,20 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
+import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
 import 'package:summify/screens/home_screen/summaries_counter.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
 import 'package:summify/screens/library_document_screen/library_document_screen.dart';
+import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 
 import '../../bloc/library/library_bloc.dart';
 import '../modal_screens/set_up_share_screen.dart';
@@ -167,6 +171,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     Navigator.of(context).pushNamed('/settings');
   }
 
+  void onPressDesktop() {
+    showMaterialModalBottomSheet(
+      context: context,
+      expand: false,
+      bounce: false,
+      barrierColor: Colors.black54,
+      backgroundColor: Colors.transparent,
+      enableDrag: false,
+      builder: (context) {
+        return const ExtensionModal();
+      },
+    );
+    context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -223,12 +242,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SummariesCounter(
-                                  availableSummaries: 2,
-                                  dailySummaries:
-                                      summariesState.freeSummaries >= 2
-                                          ? 2
-                                          : summariesState.freeSummaries),
+                              // SummariesCounter(
+                              //     availableSummaries: 2,
+                              //     dailySummaries:
+                              //         summariesState.freeSummaries >= 2
+                              //             ? 2
+                              //             : summariesState.freeSummaries),
+                              IconButton(
+                                onPressed: onPressDesktop,
+                                padding: const EdgeInsets.only(right: 70),
+                                visualDensity: VisualDensity.compact,
+                                icon: SvgPicture.asset(
+                                  Assets.icons.desctop,
+                                  colorFilter: const ColorFilter.mode(
+                                      Colors.white, BlendMode.srcIn),
+                                ),
+                                color: Colors.white,
+                              ),
                               const Logo(),
                               SettingsButton(onPressSettings: onPressSettings),
                             ],
@@ -288,11 +318,12 @@ class LibraryDocumentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     void onPressDocument() {
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        return LibraryDocumentScreen(libraryDocument: libraryDocument);
-      },));
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return LibraryDocumentScreen(libraryDocument: libraryDocument);
+        },
+      ));
     }
 
     return ListTile(

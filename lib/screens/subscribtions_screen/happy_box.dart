@@ -10,8 +10,8 @@ class HappyBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const dur = Duration(milliseconds: 200);
-    const w = 130.0;
-    const h = 130.0;
+    const w = 120.0;
+    const h = 120.0;
 
     return Stack(
       children: [

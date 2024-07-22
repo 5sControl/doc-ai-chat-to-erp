@@ -15,6 +15,9 @@ import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
+import 'package:summify/screens/auth/auth_screen.dart';
+import 'package:summify/screens/auth/registration_screen.dart';
+import 'package:summify/screens/auth/reset_password_screen.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
@@ -131,6 +134,7 @@ class SummishareApp extends StatelessWidget {
                   case '/':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const MainScreen(), settings: settings);
+                        //builder: (_) => const ResetPasswordScreen(), settings: settings);
                   case '/onboarding':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const OnboardingScreen(),
