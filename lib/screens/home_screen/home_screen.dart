@@ -255,9 +255,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 icon: SvgPicture.asset(
                                   Assets.icons.desctop,
                                   colorFilter: const ColorFilter.mode(
-                                      Colors.white, BlendMode.srcIn),
+                                      Colors.black, BlendMode.srcIn),
                                 ),
-                                color: Colors.white,
+                                //color: Colors.white,
                               ),
                               const Logo(),
                               SettingsButton(onPressSettings: onPressSettings),

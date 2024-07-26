@@ -119,6 +119,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                           const Human(),
                           const Title(),
                           const SubTitle(),
+                          const SizedBox(height: 45,),
                           const Text1(),
                           // Expanded(
                           //   child: Container(
@@ -221,8 +222,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                           //   ),
                           // ),
                           //const TermsRestorePrivacy()
-                          const SizedBox(height: 65,),
+                          const SizedBox(height: 15,),
                           PricesBloc(packages: packages, selectedSubscriptionIndex: selectedSubscriptionIndex, onSelectSubscription: onSelectSubscription),
+                          const SizedBox(height: 20,),
                           SubscribeButton(package: packages[selectedSubscriptionIndex],)
                         ],
                       ),

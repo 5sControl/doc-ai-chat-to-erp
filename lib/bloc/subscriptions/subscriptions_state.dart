@@ -21,3 +21,5 @@ class SubscriptionsState extends Equatable {
   @override
   List<Object?> get props => [availableProducts, subscriptionStatus];
 }
+
+
