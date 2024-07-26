@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:facebook_app_events/facebook_app_events.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
+import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/library/library_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
@@ -22,6 +25,7 @@ import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
+import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
@@ -32,9 +36,9 @@ import 'screens/main_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().initNotification();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -59,7 +63,8 @@ class SummishareApp extends StatelessWidget {
       final facebookAppEvents = FacebookAppEvents();
       facebookAppEvents.setAutoLogAppEventsEnabled(true);
     }
-
+    
+    final AuthService authService = AuthService();
     final brightness = MediaQuery.of(context).platformBrightness;
     final settingsBloc = SettingsBloc(brightness: brightness);
     final mixpanelBloc = MixpanelBloc(settingsBloc: settingsBloc);
@@ -83,7 +88,9 @@ class SummishareApp extends StatelessWidget {
           BlocProvider(
               create: (context) => SummariesBloc(
                   mixpanelBloc: mixpanelBloc,
-                  subscriptionBloc: context.read<SubscriptionsBloc>()))
+                  subscriptionBloc: context.read<SubscriptionsBloc>())),
+          BlocProvider(
+            create: (context) => AuthenticationBloc(authService: authService)),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
@@ -126,18 +133,22 @@ class SummishareApp extends StatelessWidget {
               theme: lightTheme,
               darkTheme: darkTheme,
               themeMode: themeMode,
-              builder: (context, Widget? child) => child!,
+              //builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',
-              onGenerateRoute: (RouteSettings settings) {
+              onGenerateRoute: (settings) {
                 switch (settings.name) {
                   case '/':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const MainScreen(), settings: settings);
-                        //builder: (_) => const ResetPasswordScreen(), settings: settings);
+                        //builder: (_) => const AuthScreen(), settings: settings);
                   case '/onboarding':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const OnboardingScreen(),
+                        settings: settings);
+                  case '/login':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const AuthScreen(),
                         settings: settings);
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(

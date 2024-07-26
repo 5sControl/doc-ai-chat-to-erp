@@ -141,6 +141,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/delete.svg
   String get delete => 'assets/icons/delete.svg';
 
+  /// File path: assets/icons/delete_account.svg
+  String get deleteAccount => 'assets/icons/delete_account.svg';
+
   /// File path: assets/icons/desctop.svg
   String get desctop => 'assets/icons/desctop.svg';
 
@@ -171,8 +174,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/like.svg
   String get like => 'assets/icons/like.svg';
 
+  /// File path: assets/icons/login.svg
+  String get login => 'assets/icons/login.svg';
+
   /// File path: assets/icons/logo.svg
   String get logo => 'assets/icons/logo.svg';
+
+  /// File path: assets/icons/logout.svg
+  String get logout => 'assets/icons/logout.svg';
 
   /// File path: assets/icons/mini_dislike.svg
   String get miniDislike => 'assets/icons/mini_dislike.svg';
@@ -259,6 +268,7 @@ class $AssetsIconsGen {
         crown,
         danger,
         delete,
+        deleteAccount,
         desctop,
         discount,
         file,
@@ -269,7 +279,9 @@ class $AssetsIconsGen {
         i,
         info,
         like,
+        login,
         logo,
+        logout,
         miniDislike,
         miniLike,
         noImage,

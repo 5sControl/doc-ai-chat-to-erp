@@ -1,8 +1,14 @@
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:summify/helpers/show_error_toast.dart';
+import 'package:summify/helpers/show_success_toast.dart';
+import 'package:summify/screens/auth/registration_screen.dart';
+import 'package:summify/screens/auth/reset_password_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
@@ -16,25 +22,42 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
+    String email = '';
+    String password = '';
+
+
+  @override
+  void initState() {
+    emailController.addListener(() {
+      setState(() {
+        email = emailController.text;
+      });
+    });
+
+    passwordController.addListener(() {
+      setState(() {
+        password = passwordController.text;
+      });
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
-    void onPressSignUp() {
+    void onPressLogin() {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        context
+            .read<AuthenticationBloc>()
+            .add(SignInUserWithEmail(email: email, password: password));
+      }
+    }
+    
+    void onPressSignOut() {
       BlocProvider.of<AuthenticationBloc>(context).add(
-        SignInUserWithEmail(
-          emailController.text.trim(),
-          passwordController.text.trim(),
-        ),
+        SignOut(),
       );
     }
-    //
-    // void onPressSignOut() {
-    //   BlocProvider.of<AuthenticationBloc>(context).add(
-    //     SignOut(),
-    //   );
-    // }
 
     void onPressGoogle() {
       BlocProvider.of<AuthenticationBloc>(context).add(
@@ -48,181 +71,243 @@ class _AuthScreenState extends State<AuthScreen> {
       );
     }
 
-    return Stack(children: [
-      const BackgroundGradient(),
-      Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.black,
-              size: 24,
+    void onPressRegister() {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return const RegistrationScreen();
+        },
+      ));
+    }
+
+    void onPressForgot() {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return const ResetPasswordScreen();
+        },
+      ));
+    }
+
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state){
+        if (state is AuthenticationSuccessState) {
+          //showSuccessToast(context: context, title: 'Successfully logged in');
+          //Future.delayed(const Duration(milliseconds: 100), () {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/', (Route<dynamic> route) => false);
+          //});
+        }
+
+        if (state is AuthenticationFailureState) {
+          showErrorToast(context: context, error: state.errorMessage);
+        }
+      },
+      builder: (context, state){
+      return Stack(children: [
+        const BackgroundGradient(),
+        Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.black,
+                size: 24,
+              ),
+              onPressed: (){Navigator.of(context).pop();}
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Skip',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ))
-          ],
-        ),
-        body: Container(
-          margin: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom + 18),
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 56,
-                  ),
-                  Text(
-                    'Hello!',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        height: 1.2,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    'Fill in to get started',
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        height: 1.2,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 40,),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Divider(
-                    color: Colors.transparent,
-                    height: 20,
-                  ),
-                  EmailInput(controller: emailController),
-                  const Divider(
-                    color: Colors.transparent,
-                    height: 20,
-                  ),
-                  PasswordInput(controller: passwordController),
-                ],
-              ),
-              const SizedBox(height: 20,),
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: const Text(
-                  'Forgot password?',
-                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
-                  textAlign: TextAlign.right,
-                ),
-              ),
-              const SizedBox(height: 20,),
-              SignUpButton(
-                onPress: onPressSignUp,
-              ),
-              // const SizedBox(
-              //   width: double.infinity,
-              //   child: Text(
-              //     'Already have an account? Sign in',
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // ),
-              const SizedBox(height: 20,),
-              const DividerRow(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Row(children: [
-                    InkWell(
-                      onTap: onPressGoogle,
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 30, top: 10, right: 30, bottom: 10),
-                        decoration: BoxDecoration(
-                            color: Color.fromRGBO(234, 245, 246, 0.298),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                        child: SvgPicture.asset('assets/icons/google.svg'),
-                      ),
-                    ),
-                    const SizedBox(width: 20,),
-                    InkWell(
-                      onTap: onPressApple,
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            left: 30, top: 10, right: 30, bottom: 10),
-                        decoration: BoxDecoration(
-                          color: Color.fromRGBO(234, 245, 246, 0.298),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                        child: SvgPicture.asset('assets/icons/apple.svg', color: Colors.black,),
-                      ),
-                    ),
-                  ],)
-                  
-                ],
-              ),
-              Expanded(
-                child: Container()
-              ),
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Don\'t have an account? ',
+            
+            actions: [
+              TextButton(
+                  onPressed: () {Navigator.of(context)
+              .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+              },
+                  child: const Text(
+                    'Skip',
                     style: TextStyle(color: Colors.black, fontSize: 18),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Register Now',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = (){
-                            print('Register');
-                          }
-                      )
-                    ]
-                  ),
-                ),
-              )
-              // const SizedBox(
-              //   width: double.infinity,
-              //   child: Text(
-              //     'Don\'t have an account?',
-              //     textAlign: TextAlign.center,
-              //     style: TextStyle(color: Colors.black),
-              //   ),
-              // ),
+                  ))
             ],
           ),
+          body: Container(
+            margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + 18),
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 56,
+                    ),
+                    Text(
+                      'Hello!',
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 32,
+                          height: 1.2,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      'Fill in to get started',
+                      maxLines: 2,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 32,
+                          height: 1.2,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Divider(
+                      color: Colors.transparent,
+                      height: 20,
+                    ),
+                    EmailInput(controller: emailController),
+                    const Divider(
+                      color: Colors.transparent,
+                      height: 20,
+                    ),
+                    PasswordInput(controller: passwordController),
+                  ],
+                ),
+                const SizedBox(height: 20,),
+                InkWell(
+                  onTap: onPressForgot,
+                  child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    child: const Text(
+                      'Forgot password?',
+                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20,),
+                SignUpButton(
+                  onPress: onPressLogin,
+                ),
+                // const SizedBox(
+                //   width: double.infinity,
+                //   child: Text(
+                //     'Already have an account? Sign in',
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(color: Colors.white),
+                //   ),
+                // ),
+                const SizedBox(height: 20,),
+                const DividerRow(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(children: [
+                      InkWell(
+                        onTap: onPressGoogle,
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 30, top: 10, right: 30, bottom: 10),
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(234, 245, 246, 0.298),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10))),
+                          child: SvgPicture.asset('assets/icons/google.svg'),
+                        ),
+                      ),
+                      const SizedBox(width: 20,),
+                      InkWell(
+                        onTap: onPressApple,
+                        child: Container(
+                          padding: const EdgeInsets.only(
+                              left: 30, top: 10, right: 30, bottom: 10),
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(234, 245, 246, 0.298),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10))),
+                          child: SvgPicture.asset('assets/icons/apple.svg', color: Colors.black,),
+                        ),
+                      ),
+                    ],)
+                    
+                  ],
+                ),
+                Expanded(
+                  child: Container()
+                ),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Don\'t have an account? ',
+                      style: TextStyle(color: Colors.black, fontSize: 18),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Register Now',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = 
+                              onPressRegister
+                            
+                        )
+                      ]
+                    ),
+                  ),
+                )
+                // const SizedBox(
+                //   width: double.infinity,
+                //   child: Text(
+                //     'Don\'t have an account?',
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(color: Colors.black),
+                //   ),
+                // ),
+              ],
+            ),
+          ),
         ),
-      ),
-    ]);
+        AnimatedSwitcher(
+              duration: const Duration(milliseconds: 800),
+              reverseDuration: const Duration(milliseconds: 800),
+              switchInCurve: Curves.easeIn,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (child, animation) {
+                return ScaleTransition(
+                  scale: animation,
+                  child: child,
+                );
+              },
+              child: Builder(
+                builder: (context) {
+                  if (state is AuthenticationLoadingState) {
+                    return BackdropFilter(
+                      filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
+                      child: Container(),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+            )
+      ]
+      );
+      }
+    );
   }
 }
 
@@ -288,9 +373,19 @@ class _PasswordInputState extends State<PasswordInput> {
     });
   }
 
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password cannot be empty';
+    } else if (value.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    // Add more validation criteria if needed
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       //textAlignVertical: TextAlignVertical.top,
       cursorWidth: 3,
       cursorColor: Colors.black54,
@@ -331,6 +426,7 @@ class _PasswordInputState extends State<PasswordInput> {
               // height: -2,
               fontSize: 18,
               fontWeight: FontWeight.w500)),
+              validator: _validatePassword,
     );
   }
 }

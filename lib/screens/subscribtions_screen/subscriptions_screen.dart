@@ -401,7 +401,7 @@ class BackArrow extends StatelessWidget {
     void onPressClose() {
       if (fromOnboarding == null) {
         Navigator.of(context)
-            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+            .pushNamed('/login');
         context.read<MixpanelBloc>().add(const ClosePaywall());
       } else {
         Navigator.of(context).pop();

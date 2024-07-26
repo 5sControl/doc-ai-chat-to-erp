@@ -2,6 +2,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/helpers/show_error_toast.dart';
+import 'package:summify/helpers/show_success_toast.dart';
+import 'package:summify/screens/auth/auth_dialog.dart';
+import 'package:summify/screens/auth/registration_screen.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../../bloc/authentication/authentication_bloc.dart';
@@ -14,21 +19,40 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  @override
-  Widget build(BuildContext context) {
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController confirmPasswordController = TextEditingController();
 
-    void onPressSignUp() {
-      BlocProvider.of<AuthenticationBloc>(context).add(
-        SignInUserWithEmail(
-          passwordController.text.trim(),
-          confirmPasswordController.text.trim(),
-        ),
-      );
+  final TextEditingController emailController = TextEditingController();
+
+  @override
+    void dispose() {
+      emailController.dispose();
+      super.dispose();
     }
 
-    return Stack(children: [
+  @override
+  Widget build(BuildContext context) {
+    void onPressRegister() {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return const RegistrationScreen();
+        },
+      ));
+    }
+    //final TextEditingController passwordController = TextEditingController();
+    //final TextEditingController confirmPasswordController =
+    //    TextEditingController();
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is RestorePasswordSuccess) {
+          showSuccessToast(context: context, title: 'Email sent');
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.of(context).pop();
+          });
+        }
+        if (state is RestorePasswordError) {
+          showErrorToast(context: context, error: state.errorMessage);
+        }
+      },
+      child: Stack(children: [
       const BackgroundGradient(),
       Scaffold(
         resizeToAvoidBottomInset: true,
@@ -45,8 +69,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             },
           ),
         ),
-        body: Stack(
-          children: [Container(
+        body: Stack(children: [
+          Container(
             margin: EdgeInsets.only(
                 bottom: MediaQuery.of(context).padding.bottom + 18),
             padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -62,28 +86,34 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     SizedBox(
                       height: 56,
                     ),
-                    Text(
-                      'Reset password',
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 32,
-                          height: 1.2,
-                          fontWeight: FontWeight.w700),
+                    // Text(
+                    //   'Reset password',
+                    //   maxLines: 2,
+                    //   textAlign: TextAlign.start,
+                    //   style: TextStyle(
+                    //       color: Colors.black,
+                    //       fontSize: 32,
+                    //       height: 1.2,
+                    //       fontWeight: FontWeight.w700),
+                    // ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    Center(
+                      child: Text(
+                        'We will send you an email\nto reset your password',
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            height: 1.2,
+                            fontWeight: FontWeight.w300),
+                      ),
                     ),
-                    SizedBox(height: 10,),
-                    Text(
-                      'Enter your new password',
-                      maxLines: 2,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 32,
-                          height: 1.2,
-                          fontWeight: FontWeight.w300),
-                    ),
-                    SizedBox(height: 25,)
+                    SizedBox(
+                      height: 25,
+                    )
                   ],
                 ),
                 Column(
@@ -94,22 +124,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       color: Colors.transparent,
                       height: 20,
                     ),
-                    PasswordInput(controller: passwordController),
-                    const Divider(
-                      color: Colors.transparent,
-                      height: 20,
-                    ),
-                    ConfirmPasswordInput(controller: confirmPasswordController),
+                    PasswordInput(controller: emailController),
+                    
                   ],
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                
-                SignUpButton(
-                  onPress: onPressSignUp,
-                ),
-                
+                ConfirmButton(controller: emailController),
                 Expanded(child: Container()),
                 Center(
                   child: RichText(
@@ -124,23 +146,52 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 fontWeight: FontWeight.w600,
                               ),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  print('Register');
-                                })
+                                ..onTap = onPressRegister)
                         ]),
                   ),
                 )
               ],
             ),
           ),
-    
-          ]
-        ),
+        ]),
       ),
-    ]);
+    ])
+    );
   }
 }
 
+class ConfirmButton extends StatelessWidget {
+  final TextEditingController controller;
+  const ConfirmButton({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    void onPressConfirm() {
+      context
+          .read<AuthenticationBloc>()
+          .add(SendResetEmail(email: controller.text));
+    }
+
+    return SizedBox(
+      width: double.infinity,
+      child: TextButton(
+        style: ButtonStyle(
+            //adding: const MaterialStatePropertyAll(
+            //    EdgeInsets.symmetric(vertical: 14)),
+            backgroundColor:
+                WidgetStatePropertyAll(Theme.of(context).primaryColor)),
+        onPressed: onPressConfirm,
+        child: Text(
+          'Confirm',
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium!
+              .copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
 
 class PasswordInput extends StatefulWidget {
   final TextEditingController controller;
@@ -151,19 +202,6 @@ class PasswordInput extends StatefulWidget {
 }
 
 class _PasswordInputState extends State<PasswordInput> {
-  late bool _passwordVisible;
-
-  @override
-  void initState() {
-    super.initState();
-    _passwordVisible = false;
-  }
-
-  void onPressEye() {
-    setState(() {
-      _passwordVisible = !_passwordVisible;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +212,6 @@ class _PasswordInputState extends State<PasswordInput> {
       cursorHeight: 20,
       style: const TextStyle(color: Colors.black, fontSize: 18),
       controller: widget.controller,
-      obscureText: !_passwordVisible,
       enableSuggestions: false,
       autocorrect: false,
       decoration: InputDecoration(
@@ -184,20 +221,11 @@ class _PasswordInputState extends State<PasswordInput> {
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           label: Text(
-            'Password',
+            'Enter your email',
             style: TextStyle(
                 color: Theme.of(context).textTheme.bodySmall!.color,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
-          ),
-          suffixIcon: IconButton(
-            icon: Icon(
-                _passwordVisible ? Icons.visibility : Icons.visibility_off),
-            onPressed: () {
-              setState(() {
-                onPressEye();
-              });
-            },
           ),
           border: OutlineInputBorder(
               gapPadding: 10,
@@ -221,19 +249,6 @@ class ConfirmPasswordInput extends StatefulWidget {
 }
 
 class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
-  late bool _passwordVisible;
-
-  @override
-  void initState() {
-    super.initState();
-    _passwordVisible = false;
-  }
-
-  void onPressEye() {
-    setState(() {
-      _passwordVisible = !_passwordVisible;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +259,6 @@ class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
       cursorHeight: 20,
       style: const TextStyle(color: Colors.black, fontSize: 18),
       controller: widget.controller,
-      obscureText: !_passwordVisible,
       enableSuggestions: false,
       autocorrect: false,
       decoration: InputDecoration(
@@ -260,15 +274,15 @@ class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
-          suffixIcon: IconButton(
-            icon: Icon(
-                _passwordVisible ? Icons.visibility : Icons.visibility_off),
-            onPressed: () {
-              setState(() {
-                onPressEye();
-              });
-            },
-          ),
+          // suffixIcon: IconButton(
+          //   icon: Icon(
+          //       _passwordVisible ? Icons.visibility : Icons.visibility_off),
+          //   onPressed: () {
+          //     setState(() {
+          //       onPressEye();
+          //     });
+          //   },
+          // ),
           border: OutlineInputBorder(
               gapPadding: 10,
               borderRadius: BorderRadius.circular(10),
@@ -288,36 +302,14 @@ class SignUpButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: (){
-        showDialog(
-          context: context, 
-          builder: (BuildContext context) { 
-            return AlertDialog(
-              title: Center(child: Text('Password changed')),
-              content: Text('You can log in with new password'),
-              actions: [
-                TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('Log in'))
-              ],
-            );
-           }
-                
-        );
+    return AuthDialog(
+      title: 'Password changed',
+      subTitle: 'You can log in with\nnew password',
+      textButton: 'Log in',
+      onTap: () {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
       },
-      child: Container(
-        alignment: Alignment.center,
-        // height: 50,
-        padding: const EdgeInsets.symmetric(vertical: 18),
-        width: double.infinity,
-        decoration: BoxDecoration(
-            color: Colors.teal.shade300,
-            borderRadius: BorderRadius.circular(8)),
-        child: const Text(
-          'Login in',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-      ),
     );
   }
 }

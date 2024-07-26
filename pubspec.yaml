@@ -44,6 +44,7 @@ dependencies:
   status_bar_control: ^3.2.1
   purchases_flutter: ^6.29.1
   flutter_dialogs: ^3.0.0
+  toastification: ^2.1.0
 
 dev_dependencies:
   flutter_test:
