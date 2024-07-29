@@ -5,6 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/bloc/offers/offers_state.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
 import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
@@ -75,8 +77,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
           });
     }
 
-    
-
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -88,10 +88,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
-        final monthlyPackage = packages.firstWhere(
-            (element) => element.packageType == PackageType.weekly);
+        final monthlyPackage = packages
+            .firstWhere((element) => element.packageType == PackageType.weekly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
+
+        List<Color?> colors = [
+          Colors.yellow,
+          null,
+          null,
+          Colors.yellow,
+          null,
+          null,
+        ];
 
         return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
           builder: (context, state) {
@@ -101,166 +110,187 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                 Animate(
                   effects: const [FadeEffect()],
                   child: SafeArea(
-                    child: Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: Colors.yellow,
-                        toolbarHeight: 50,
-                        automaticallyImplyLeading: false,
-                        actions: [
-                          BackArrow(fromOnboarding: widget.fromOnboarding),
-                          const SizedBox(
-                            width: 5,
-                          )
-                        ],
-                      ),
-                      body: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const Human(),
-                          const Title(),
-                          const SubTitle(),
-                          const SizedBox(height: 45,),
-                          const Text1(),
-                          // Expanded(
-                          //   child: Container(
-                          //     margin: const EdgeInsets.all(15),
-                          //     decoration: BoxDecoration(
-                          //         color: Colors.white24,
-                          //         borderRadius: BorderRadius.circular(8)),
-                          //     child: AnimatedSwitcher(
-                          //       duration: const Duration(milliseconds: 300),
-                          //       switchInCurve: Curves.easeIn,
-                          //       switchOutCurve: Curves.easeOut,
-                          //       reverseDuration:
-                          //           const Duration(milliseconds: 300),
-                          //       transitionBuilder: (child, animation) {
-                          //         return FadeTransition(
-                          //           opacity: animation,
-                          //           child: child,
-                          //         );
-                          //       },
-                          //       child: Container(
-                          //         key: Key(selectedSubscriptionIndex == 1
-                          //             ? 'week'
-                          //             : 'year'),
-                          //         child: Builder(
-                          //           builder: (context) {
-                          //             if (selectedSubscriptionIndex == 1) {
-                          //               return CustomPaint(
-                          //                 painter:
-                          //                     PainterRight(headerH: headerH),
-                          //                 child: LayoutBuilder(
-                          //                   builder: (context, constraints) {
-                          //                     return SizedBox(
-                          //                       width: double.infinity,
-                          //                       height: constraints.maxHeight,
-                          //                       child: Column(
-                          //                         children: [
-                          //                           SizedBox(
-                          //                             height: constraints
-                          //                                     .maxHeight *
-                          //                                 headerH,
-                          //                             child: Row(
-                          //                               children: [
-                          //                                 WeekTitle(
-                          //                                     onSelectSubscription:
-                          //                                         onSelectSubscription),
-                          //                                 YearTitle(
-                          //                                     onSelectSubscription:
-                          //                                         onSelectSubscription)
-                          //                               ],
-                          //                             ),
-                          //                           ),
-                          //                           SubscriptionBodyYear(
-                          //                               package: annualPackage)
-                          //                         ],
-                          //                       ),
-                          //                     );
-                          //                   },
-                          //                 ),
-                          //               );
-                          //             } else {
-                          //               return CustomPaint(
-                          //                 painter:
-                          //                     PainterLeft(headerH: headerH),
-                          //                 child: LayoutBuilder(
-                          //                   builder: (context, constraints) {
-                          //                     return SizedBox(
-                          //                       width: double.infinity,
-                          //                       height: constraints.maxHeight,
-                          //                       child: Column(
-                          //                         children: [
-                          //                           SizedBox(
-                          //                             height: constraints
-                          //                                     .maxHeight *
-                          //                                 headerH,
-                          //                             child: Row(
-                          //                               children: [
-                          //                                 WeekTitle(
-                          //                                     onSelectSubscription:
-                          //                                         onSelectSubscription),
-                          //                                 YearTitle(
-                          //                                     onSelectSubscription:
-                          //                                         onSelectSubscription)
-                          //                               ],
-                          //                             ),
-                          //                           ),
-                          //                           SubscriptionBodyMonth(
-                          //                             package: monthlyPackage,
-                          //                           )
-                          //                         ],
-                          //                       ),
-                          //                     );
-                          //                   },
-                          //                 ),
-                          //               );
-                          //             }
-                          //           },
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                          //const TermsRestorePrivacy()
-                          const SizedBox(height: 15,),
-                          PricesBloc(packages: packages, selectedSubscriptionIndex: selectedSubscriptionIndex, onSelectSubscription: onSelectSubscription),
-                          const SizedBox(height: 20,),
-                          SubscribeButton(package: packages[selectedSubscriptionIndex],)
-                        ],
-                      ),
-                      
-                      // floatingActionButtonLocation:
-                      // FloatingActionButtonLocation.centerDocked,
-                      // floatingActionButton: GestureDetector(
-                      //   onTap: () { context
-                      //     .read<SubscriptionsBloc>()
-                      //     .add(MakePurchase(context: context, product: annualPackage));},
-                      //   child: Container(
-                      //     height: 50,
-                      //     margin: const EdgeInsets.all(15),
-                      //     padding: const EdgeInsets.symmetric(vertical: 10),
-                      //     decoration: BoxDecoration(
-                      //         color: const Color.fromRGBO(31, 188, 183, 1),
-                      //         borderRadius: BorderRadius.circular(8)),
-                      //     alignment: Alignment.center,
-                      //     child: const Text(
-                      //       'Go Premium',
-                      //       style: TextStyle(
-                      //           fontSize: 18,
-                      //           fontWeight: FontWeight.w700,
-                      //           color: Colors.white),
-                      //     ),
-                      //   ),
-                      // ),
-                    ),
+                    child: BlocBuilder<OffersBloc, OffersState>(
+                        builder: (context, state) {
+                      return Scaffold(
+                        appBar: AppBar(
+                          backgroundColor: colors[state.screenIndex],
+                          toolbarHeight: 50,
+                          automaticallyImplyLeading: false,
+                          actions: [
+                            BackArrow(fromOnboarding: widget.fromOnboarding),
+                            const SizedBox(
+                              width: 5,
+                            )
+                          ],
+                        ),
+                        body: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const Human(),
+                            state.screenIndex == 1 || state.screenIndex == 2 ?
+                            SizedBox(height: 20,) : Container(),
+                            const Title(),
+                            
+                            const SubTitle(),
+                            state.screenIndex < 3 ? 
+                            const SizedBox(
+                              height: 60,
+                            ) :
+                            const SizedBox(
+                              height: 35,
+                            ),
+                            state.screenIndex < 3 ?
+                            const Text1()
+                             : Container(),
+                            
+                            // Expanded(
+                            //   child: Container(
+                            //     margin: const EdgeInsets.all(15),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white24,
+                            //         borderRadius: BorderRadius.circular(8)),
+                            //     child: AnimatedSwitcher(
+                            //       duration: const Duration(milliseconds: 300),
+                            //       switchInCurve: Curves.easeIn,
+                            //       switchOutCurve: Curves.easeOut,
+                            //       reverseDuration:
+                            //           const Duration(milliseconds: 300),
+                            //       transitionBuilder: (child, animation) {
+                            //         return FadeTransition(
+                            //           opacity: animation,
+                            //           child: child,
+                            //         );
+                            //       },
+                            //       child: Container(
+                            //         key: Key(selectedSubscriptionIndex == 1
+                            //             ? 'week'
+                            //             : 'year'),
+                            //         child: Builder(
+                            //           builder: (context) {
+                            //             if (selectedSubscriptionIndex == 1) {
+                            //               return CustomPaint(
+                            //                 painter:
+                            //                     PainterRight(headerH: headerH),
+                            //                 child: LayoutBuilder(
+                            //                   builder: (context, constraints) {
+                            //                     return SizedBox(
+                            //                       width: double.infinity,
+                            //                       height: constraints.maxHeight,
+                            //                       child: Column(
+                            //                         children: [
+                            //                           SizedBox(
+                            //                             height: constraints
+                            //                                     .maxHeight *
+                            //                                 headerH,
+                            //                             child: Row(
+                            //                               children: [
+                            //                                 WeekTitle(
+                            //                                     onSelectSubscription:
+                            //                                         onSelectSubscription),
+                            //                                 YearTitle(
+                            //                                     onSelectSubscription:
+                            //                                         onSelectSubscription)
+                            //                               ],
+                            //                             ),
+                            //                           ),
+                            //                           SubscriptionBodyYear(
+                            //                               package: annualPackage)
+                            //                         ],
+                            //                       ),
+                            //                     );
+                            //                   },
+                            //                 ),
+                            //               );
+                            //             } else {
+                            //               return CustomPaint(
+                            //                 painter:
+                            //                     PainterLeft(headerH: headerH),
+                            //                 child: LayoutBuilder(
+                            //                   builder: (context, constraints) {
+                            //                     return SizedBox(
+                            //                       width: double.infinity,
+                            //                       height: constraints.maxHeight,
+                            //                       child: Column(
+                            //                         children: [
+                            //                           SizedBox(
+                            //                             height: constraints
+                            //                                     .maxHeight *
+                            //                                 headerH,
+                            //                             child: Row(
+                            //                               children: [
+                            //                                 WeekTitle(
+                            //                                     onSelectSubscription:
+                            //                                         onSelectSubscription),
+                            //                                 YearTitle(
+                            //                                     onSelectSubscription:
+                            //                                         onSelectSubscription)
+                            //                               ],
+                            //                             ),
+                            //                           ),
+                            //                           SubscriptionBodyMonth(
+                            //                             package: monthlyPackage,
+                            //                           )
+                            //                         ],
+                            //                       ),
+                            //                     );
+                            //                   },
+                            //                 ),
+                            //               );
+                            //             }
+                            //           },
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            //const TermsRestorePrivacy()
+                            state.screenIndex < 3 ?
+                            const SizedBox(
+                              height: 15,
+                            ) : Container(),
+                            PricesBloc(
+                                packages: packages,
+                                selectedSubscriptionIndex:
+                                    selectedSubscriptionIndex,
+                                onSelectSubscription: onSelectSubscription),
+                            state.screenIndex < 3 ?
+                            const SizedBox(
+                              height: 20,
+                            ) : Container(),
+                            SubscribeButton(
+                              package: packages[selectedSubscriptionIndex],
+                            )
+                          ],
+                        ),
+
+                        // floatingActionButtonLocation:
+                        // FloatingActionButtonLocation.centerDocked,
+                        // floatingActionButton: GestureDetector(
+                        //   onTap: () { context
+                        //     .read<SubscriptionsBloc>()
+                        //     .add(MakePurchase(context: context, product: annualPackage));},
+                        //   child: Container(
+                        //     height: 50,
+                        //     margin: const EdgeInsets.all(15),
+                        //     padding: const EdgeInsets.symmetric(vertical: 10),
+                        //     decoration: BoxDecoration(
+                        //         color: const Color.fromRGBO(31, 188, 183, 1),
+                        //         borderRadius: BorderRadius.circular(8)),
+                        //     alignment: Alignment.center,
+                        //     child: const Text(
+                        //       'Go Premium',
+                        //       style: TextStyle(
+                        //           fontSize: 18,
+                        //           fontWeight: FontWeight.w700,
+                        //           color: Colors.white),
+                        //     ),
+                        //   ),
+                        // ),
+                      );
+                    }),
                   ),
                 ),
-                // Animate(effects: const [
-                //   MoveEffect(
-                //       begin: Offset(100, 0),
-                //       end: Offset(0, 0),
-                //       delay: Duration(milliseconds: 200)),
-                // ], child: const HappyBox())
               ],
             );
           },
@@ -358,18 +388,36 @@ class Human extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.yellow,
-      child:  Padding(
-        //padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        padding: const EdgeInsets.only(left: 30, right: 30),
-        child: Image.asset(
-                Assets.subscriptionWoman.path,
-                width: 200,
-                height: 200,
-              ),
-      ),
-    );
+    final List<String> screenTexts = [
+      Assets.subscriptionWoman.path,
+      Assets.subscriptionWoman.path,
+      Assets.subscriptionMen.path,
+      Assets.subscriptionWoman.path,
+      Assets.subscriptionWoman.path,
+      Assets.subscriptionMen.path,
+    ];
+    List<Color?> colors = [
+      Colors.yellow,
+      null,
+      null,
+      Colors.yellow,
+      null,
+      null,
+    ];
+    return BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
+      return Container(
+        color: colors[state.screenIndex],
+        child: Padding(
+          //padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          padding: const EdgeInsets.only(left: 30, right: 30),
+          child: Image.asset(
+            screenTexts[state.screenIndex],
+            width: 200,
+            height: 250,
+          ),
+        ),
+      );
+    });
   }
 }
 
@@ -378,17 +426,54 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> screenTexts = [
+      'Need more summaries?',
+      'Maximize your productivity!',
+      'Out of Summaries?',
+      'Need more summaries?',
+      'Maximize your productivity!',
+      'Out of Summaries?',
+    ];
     return Container(
-      child: const Padding(
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Text(
-          'Need more summaries?',
-          textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 45, fontWeight: FontWeight.w700, height: 1),
-        ),
+        child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
+          return Text(
+            screenTexts[state.screenIndex],
+            textAlign: TextAlign.start,
+            style:
+                TextStyle(fontSize: 50, fontWeight: FontWeight.w700, height: 1),
+          );
+        }),
       ),
     );
   }
+}
+
+Widget buildRichText(String text, {bool isLink = false}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: RichText(
+      text: TextSpan(
+        children: [
+          WidgetSpan(
+            child: Icon(Icons.check_circle, color: Colors.teal, size: 20),
+          ),
+          WidgetSpan(
+              child: SizedBox(width: 8)), // Add space between icon and text
+          TextSpan(
+            text: text,
+            style: TextStyle(
+              color: Colors.white,
+              decoration:
+                  isLink ? TextDecoration.underline : TextDecoration.none,
+              fontSize: 18,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class SubTitle extends StatelessWidget {
@@ -396,14 +481,33 @@ class SubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> screenTexts = [
+      'Maximize your productivity\nand efficiency!',
+      '',
+      'Get more in no time!',
+    ];
     return Container(
-      child: const Padding(
+      child: Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-        child: Text(
-          'Maximize your productivity and efficienty!',
-          textAlign: TextAlign.start,
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, height: 1),
-        ),
+        child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
+          return state.screenIndex < 3
+              ? Text(
+                  screenTexts[state.screenIndex],
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.w600, height: 1.2),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    buildRichText('Unlimited Summaries'),
+                    buildRichText('Document Research'),
+                    buildRichText('Brief and Deep Summary'),
+                    buildRichText('Translation'),
+                    buildRichText('Add to Chrome for FREE', isLink: true),
+                  ],
+                );
+        }),
       ),
     );
   }
@@ -414,22 +518,31 @@ class Text1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> screenTexts = [
+      '15 Deep Summaries Daily',
+      '15 Deep Summaries Daily',
+      '15 Deep Summaries Daily',
+      '',
+      '',
+      '',
+    ];
     return Container(
-      child: const Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: Center(
-          child: Text(
-            '15 Deep Summaries Daily',
-            textAlign: TextAlign.start,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700, height: 1),
-          ),
-        ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 7),
+        child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
+          return Center(
+            child: Text(
+              screenTexts[state.screenIndex],
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  fontSize: 22, fontWeight: FontWeight.w700, height: 1),
+            ),
+          );
+        }),
       ),
     );
   }
 }
-
-
 
 class IconsRow extends StatelessWidget {
   const IconsRow({super.key});
@@ -458,7 +571,7 @@ class IconsRow extends StatelessWidget {
       child: TextButton(
         onPressed: onPressInfo,
         style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(Colors.white)),
+            backgroundColor: WidgetStatePropertyAll(Colors.white)),
         child: RichText(
             text: TextSpan(
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -644,33 +757,36 @@ class PricesBloc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SubscriptionCover(
-          onSelectSubscription: onSelectSubscription,
-          isSelected: selectedSubscriptionIndex == 0,
-          package: packages[0],
-          index: 0,
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        SubscriptionCover(
-          onSelectSubscription: onSelectSubscription,
-          isSelected: selectedSubscriptionIndex == 2,
-          package: packages[2],
-          index: 2,
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        SubscriptionCover(
-          onSelectSubscription: onSelectSubscription,
-          isSelected: selectedSubscriptionIndex == 1,
-          package: packages[1],
-          index: 1,
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(left: 15, right: 15),
+      child: Row(
+        children: [
+          SubscriptionCover(
+            onSelectSubscription: onSelectSubscription,
+            isSelected: selectedSubscriptionIndex == 0,
+            package: packages[0],
+            index: 0,
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          SubscriptionCover(
+            onSelectSubscription: onSelectSubscription,
+            isSelected: selectedSubscriptionIndex == 2,
+            package: packages[2],
+            index: 2,
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          SubscriptionCover(
+            onSelectSubscription: onSelectSubscription,
+            isSelected: selectedSubscriptionIndex == 1,
+            package: packages[1],
+            index: 1,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -738,41 +854,44 @@ class SubscriptionCover extends StatelessWidget {
                         padding: const EdgeInsets.all(10),
                         child: SvgPicture.asset(Assets.icons.checkCircle)),
                   ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      subscriptionTitle,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: textColor,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
-                    Text(
-                      package.storeProduct.priceString,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(
-                          color: textColor,
-                          fontSize: 18,
-                          fontWeight:
-                              isSelected ? FontWeight.w700 : FontWeight.w400),
-                    ),
-                    Text(
-                      '${currency(code: package.storeProduct.currencyCode)} ${(package.storeProduct.price * 2).toStringAsFixed(2)}',
-                      style: TextStyle(
-                          color: textColor,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        subscriptionTitle,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: textColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      const Divider(
+                        color: Colors.transparent,
+                      ),
+                      Text(
+                        package.storeProduct.priceString,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                            color: textColor,
+                            fontSize: 26,
+                            fontWeight:
+                                isSelected ? FontWeight.w700 : FontWeight.w400),
+                      ),
+                      Text(
+                        '${currency(code: package.storeProduct.currencyCode)} ${(package.storeProduct.price * 2).toStringAsFixed(2)}',
+                        style: TextStyle(
+                            color: textColor,
+                            decoration: TextDecoration.lineThrough,
+                            decorationColor: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -782,6 +901,7 @@ class SubscriptionCover extends StatelessWidget {
     );
   }
 }
+
 //
 class SubscribeButton extends StatefulWidget {
   final Package? package;

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'firebase_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +92,7 @@ class SummishareApp extends StatelessWidget {
                   subscriptionBloc: context.read<SubscriptionsBloc>())),
           BlocProvider(
             create: (context) => AuthenticationBloc(authService: authService)),
+            BlocProvider(create: (context) => OffersBloc()),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {

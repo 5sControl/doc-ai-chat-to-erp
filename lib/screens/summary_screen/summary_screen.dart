@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/bloc/offers/offers_event.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
@@ -252,6 +254,7 @@ class PremiumBlurContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressPremium() {
+      context.read<OffersBloc>().add(NextScreenEvent());
       showCupertinoModalBottomSheet(
         context: context,
         expand: false,
