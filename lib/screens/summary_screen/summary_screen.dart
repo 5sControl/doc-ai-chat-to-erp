@@ -118,7 +118,8 @@ class _SummaryScreenState extends State<SummaryScreen>
               if (!state.ratedSummaries.contains(widget.summaryKey)) {
                 showRateScreen();
               } else {
-                Navigator.of(context).pop();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+            '/bundle', (Route<dynamic> route) => false);
               }
             }
 

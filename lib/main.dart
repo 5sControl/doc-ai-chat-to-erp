@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -155,6 +156,12 @@ class SummishareApp extends StatelessWidget {
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionScreen(
+                              triggerScreen: 'Home',
+                            ),
+                        settings: settings);
+                  case '/bundle':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const BundleScreen(
                               triggerScreen: 'Home',
                             ),
                         settings: settings);

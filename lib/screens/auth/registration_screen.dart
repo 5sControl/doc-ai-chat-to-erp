@@ -115,7 +115,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             actions: [
               TextButton(
                   onPressed: () {Navigator.of(context).pushNamed(
-            '/');},
+            '/bundle');},
                   child: const Text(
                     'Skip',
                     style: TextStyle(color: Colors.black, fontSize: 18),

@@ -246,6 +246,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/theme.svg
   String get theme => 'assets/icons/theme.svg';
 
+  /// File path: assets/icons/transcriptor1.svg
+  String get transcriptor1 => 'assets/icons/transcriptor1.svg';
+
+  /// File path: assets/icons/transcriptor2.svg
+  String get transcriptor2 => 'assets/icons/transcriptor2.svg';
+
   /// File path: assets/icons/translate.svg
   String get translate => 'assets/icons/translate.svg';
 
@@ -303,6 +309,8 @@ class $AssetsIconsGen {
         text,
         textScale,
         theme,
+        transcriptor1,
+        transcriptor2,
         translate,
         update,
         url
@@ -510,6 +518,8 @@ class Assets {
       AssetGenImage('assets/subscription_men.png');
   static const AssetGenImage subscriptionWoman =
       AssetGenImage('assets/subscription_woman.png');
+  static const AssetGenImage subscriptionWoman1 =
+      AssetGenImage('assets/subscription_woman_1.png');
 
   /// List of all assets
   static List<dynamic> get values => [
@@ -524,7 +534,8 @@ class Assets {
         niga,
         placeholderLogo,
         subscriptionMen,
-        subscriptionWoman
+        subscriptionWoman,
+        subscriptionWoman1
       ];
 }
 

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:stream_transform/stream_transform.dart';
+import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 
 import '../../models/models.dart';
 import '../../services/authentication.dart';

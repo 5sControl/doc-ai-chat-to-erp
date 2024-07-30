@@ -93,14 +93,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
 
-        List<Color?> colors = [
-          Colors.yellow,
-          null,
-          null,
-          Colors.yellow,
-          null,
-          null,
-        ];
+        // List<Color?> colors = [
+        //   Color.fromARGB(255, 255, 199, 59),
+        //   null,
+        //   null,
+        //   Color.fromARGB(255, 255, 199, 59),
+        //   null,
+        //   null,
+        // ];
 
         return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
           builder: (context, state) {
@@ -114,36 +114,46 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                         builder: (context, state) {
                       return Scaffold(
                         appBar: AppBar(
-                          backgroundColor: colors[state.screenIndex],
-                          toolbarHeight: 50,
+                          //backgroundColor: colors[state.screenIndex],
+                          toolbarHeight: 295,
+                          //toolbarOpacity: 20,
                           automaticallyImplyLeading: false,
-                          actions: [
-                            BackArrow(fromOnboarding: widget.fromOnboarding),
-                            const SizedBox(
-                              width: 5,
-                            )
-                          ],
+                          flexibleSpace: Stack(
+                            children: [
+                              Human(),
+                              Positioned(
+                                  top: 10,
+                                  right: 10,
+                                  child: BackArrow(
+                                      fromOnboarding: widget.fromOnboarding))
+                            ],
+                          ),
+                          actions: [],
                         ),
                         body: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const Human(),
-                            state.screenIndex == 1 || state.screenIndex == 2 ?
-                            SizedBox(height: 20,) : Container(),
+                            //const Human(),
+                            state.screenIndex == 1 || state.screenIndex == 2
+                                ? SizedBox(
+                                    height: 20,
+                                  )
+                                : Container(),
+                            state.screenIndex == 1 ? SizedBox(
+                                    height: 20,
+                                  ) : Container(),
                             const Title(),
-                            
+
                             const SubTitle(),
-                            state.screenIndex < 3 ? 
-                            const SizedBox(
-                              height: 60,
-                            ) :
-                            const SizedBox(
-                              height: 35,
-                            ),
-                            state.screenIndex < 3 ?
-                            const Text1()
-                             : Container(),
-                            
+                            state.screenIndex < 3 && state.screenIndex != 1
+                                ? const SizedBox(
+                                    height: 50,
+                                  )
+                                : const SizedBox(
+                                    height: 35,
+                                  ),
+                            state.screenIndex < 3 ? const Text1() : Container(),
+
                             // Expanded(
                             //   child: Container(
                             //     margin: const EdgeInsets.all(15),
@@ -245,19 +255,23 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                             //   ),
                             // ),
                             //const TermsRestorePrivacy()
-                            state.screenIndex < 3 ?
-                            const SizedBox(
-                              height: 15,
-                            ) : Container(),
+                            state.screenIndex < 3
+                                ? const SizedBox(
+                                    height: 15,
+                                  )
+                                : Container(),
                             PricesBloc(
                                 packages: packages,
                                 selectedSubscriptionIndex:
                                     selectedSubscriptionIndex,
                                 onSelectSubscription: onSelectSubscription),
-                            state.screenIndex < 3 ?
-                            const SizedBox(
-                              height: 20,
-                            ) : Container(),
+                            state.screenIndex < 3
+                                ? const SizedBox(
+                                    height: 20,
+                                  )
+                                : const SizedBox(
+                                    height: 6,
+                                  ),
                             SubscribeButton(
                               package: packages[selectedSubscriptionIndex],
                             )
@@ -389,32 +403,29 @@ class Human extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> screenTexts = [
-      Assets.subscriptionWoman.path,
+      Assets.subscriptionWoman1.path,
       Assets.subscriptionWoman.path,
       Assets.subscriptionMen.path,
-      Assets.subscriptionWoman.path,
+      Assets.subscriptionWoman1.path,
       Assets.subscriptionWoman.path,
       Assets.subscriptionMen.path,
     ];
-    List<Color?> colors = [
-      Colors.yellow,
-      null,
-      null,
-      Colors.yellow,
-      null,
-      null,
-    ];
+    // List<Color?> colors = [
+    //   Color.fromARGB(255, 255, 199, 59),
+    //   null,
+    //   null,
+    //   Color.fromARGB(255, 255, 199, 59),
+    //   null,
+    //   null,
+    // ];
     return BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
       return Container(
-        color: colors[state.screenIndex],
-        child: Padding(
-          //padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          padding: const EdgeInsets.only(left: 30, right: 30),
-          child: Image.asset(
-            screenTexts[state.screenIndex],
-            width: 200,
-            height: 250,
-          ),
+        //color: colors[state.screenIndex],
+        child: Image.asset(
+          screenTexts[state.screenIndex],
+          width: double.infinity,
+          height: 295,
+          fit: BoxFit.cover,
         ),
       );
     });
@@ -441,8 +452,8 @@ class Title extends StatelessWidget {
           return Text(
             screenTexts[state.screenIndex],
             textAlign: TextAlign.start,
-            style:
-                TextStyle(fontSize: 50, fontWeight: FontWeight.w700, height: 1),
+            style:state.screenIndex < 3 ?
+                TextStyle(fontSize: 54, fontWeight: FontWeight.w700, height: 1) : TextStyle(fontSize: 50, fontWeight: FontWeight.w700, height: 1),
           );
         }),
       ),
@@ -450,7 +461,7 @@ class Title extends StatelessWidget {
   }
 }
 
-Widget buildRichText(String text, {bool isLink = false}) {
+Widget buildRichText(BuildContext context, String text, {bool isLink = false}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
     child: RichText(
@@ -464,7 +475,9 @@ Widget buildRichText(String text, {bool isLink = false}) {
           TextSpan(
             text: text,
             style: TextStyle(
-              color: Colors.white,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black
+                  : Colors.white,
               decoration:
                   isLink ? TextDecoration.underline : TextDecoration.none,
               fontSize: 18,
@@ -491,20 +504,23 @@ class SubTitle extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16.0, right: 16.0),
         child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
           return state.screenIndex < 3
-              ? Text(
-                  screenTexts[state.screenIndex],
+              ? Text.rich(
+                  TextSpan(
+                    text: screenTexts[state.screenIndex],
+                    style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w600, height: 1.4),
+                  ),
                   textAlign: TextAlign.start,
-                  style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.w600, height: 1.2),
                 )
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildRichText('Unlimited Summaries'),
-                    buildRichText('Document Research'),
-                    buildRichText('Brief and Deep Summary'),
-                    buildRichText('Translation'),
-                    buildRichText('Add to Chrome for FREE', isLink: true),
+                    buildRichText(context, 'Unlimited Summaries'),
+                    buildRichText(context, 'Document Research'),
+                    buildRichText(context, 'Brief and Deep Summary'),
+                    buildRichText(context, 'Translation'),
+                    buildRichText(context, 'Add to Chrome for FREE',
+                        isLink: true),
                   ],
                 );
         }),
@@ -535,7 +551,7 @@ class Text1 extends StatelessWidget {
               screenTexts[state.screenIndex],
               textAlign: TextAlign.start,
               style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.w700, height: 1),
+                  fontSize: 24, fontWeight: FontWeight.w700, height: 1),
             ),
           );
         }),
@@ -838,7 +854,11 @@ class SubscriptionCover extends StatelessWidget {
                     ? Theme.of(context).primaryColor
                     : Colors.white12,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.white, width: 2)),
+                border: Border.all(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).hintColor
+                        : Colors.white,
+                    width: 2)),
             child: Stack(
               fit: StackFit.expand,
               children: [
