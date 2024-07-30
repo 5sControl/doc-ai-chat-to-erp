@@ -203,8 +203,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   final bool isSubscribed = state.subscriptionStatus ==
                       SubscriptionStatus.unsubscribed;
                   return DefaultTabController(
-                    initialIndex: 1,
-                    length: 2,
+                    initialIndex: 0,
+                    length: 1,
                     child: Scaffold(
                       extendBodyBehindAppBar: true,
                       appBar: AppBar(
@@ -225,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           bottom: PreferredSize(
                             preferredSize: Size(
                                 MediaQuery.of(context).size.width,
-                                isSubscribed ? 100.0 : 70),
+                                isSubscribed ? 70.0 : 70),
                             child: Column(
                               children: [
                                 if (isSubscribed)
@@ -233,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10),
                                       child: const PremiumBanner()),
-                                const HomeTabs(),
+                                //const HomeTabs(),
                               ],
                             ),
                           ),
@@ -277,26 +277,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               },
                             ),
                           ),
-                          BlocBuilder<LibraryBloc, LibraryState>(
-                            builder: (context, libraryState) {
-                              final List<String> items =
-                                  libraryState.libraryDocuments.keys.toList();
-
-                              return Container(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: ListView.builder(
-                                  itemCount: items.length,
-                                  itemBuilder: (context, index) {
-                                    return LibraryDocumentTile(
-                                      libraryDocument: libraryState
-                                          .libraryDocuments[items[index]]!,
-                                    );
-                                    return Container();
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+                          // BlocBuilder<LibraryBloc, LibraryState>(
+                          //   builder: (context, libraryState) {
+                          //     final List<String> items =
+                          //         libraryState.libraryDocuments.keys.toList();
+                          //         return Container();
+                          //     // return Container(
+                          //     //   padding: const EdgeInsets.only(top: 10),
+                          //     //   child: ListView.builder(
+                          //     //     itemCount: items.length,
+                          //     //     itemBuilder: (context, index) {
+                          //     //       return LibraryDocumentTile(
+                          //     //         libraryDocument: libraryState
+                          //     //             .libraryDocuments[items[index]]!,
+                          //     //       );
+                          //     //       return Container();
+                          //     //     },
+                          //     //   ),
+                          //     // );
+                          //   },
+                          // ),
                         ],
                       ),
                     ),
