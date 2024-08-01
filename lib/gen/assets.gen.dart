@@ -207,6 +207,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/play.svg
   String get play => 'assets/icons/play.svg';
 
+  /// File path: assets/icons/present.svg
+  String get present => 'assets/icons/present.svg';
+
   /// File path: assets/icons/privacy.svg
   String get privacy => 'assets/icons/privacy.svg';
 
@@ -296,6 +299,7 @@ class $AssetsIconsGen {
         paste,
         phone,
         play,
+        present,
         privacy,
         profile,
         profileFilled,

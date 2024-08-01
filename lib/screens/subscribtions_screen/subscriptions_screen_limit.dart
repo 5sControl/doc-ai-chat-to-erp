@@ -115,7 +115,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                       return Scaffold(
                         appBar: AppBar(
                           //backgroundColor: colors[state.screenIndex],
-                          toolbarHeight: 295,
+                          toolbarHeight: 235,
                           //toolbarOpacity: 20,
                           automaticallyImplyLeading: false,
                           flexibleSpace: Stack(
@@ -150,7 +150,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                     height: 50,
                                   )
                                 : const SizedBox(
-                                    height: 35,
+                                    height: 25,
                                   ),
                             state.screenIndex < 3 ? const Text1() : Container(),
 
@@ -270,7 +270,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                     height: 20,
                                   )
                                 : const SizedBox(
-                                    height: 6,
+                                    height: 0,
                                   ),
                             SubscribeButton(
                               package: packages[selectedSubscriptionIndex],
@@ -453,7 +453,7 @@ class Title extends StatelessWidget {
             screenTexts[state.screenIndex],
             textAlign: TextAlign.start,
             style:state.screenIndex < 3 ?
-                TextStyle(fontSize: 54, fontWeight: FontWeight.w700, height: 1) : TextStyle(fontSize: 50, fontWeight: FontWeight.w700, height: 1),
+                TextStyle(fontSize: 46, fontWeight: FontWeight.w700, height: 1) : TextStyle(fontSize: 48, fontWeight: FontWeight.w700, height: 1),
           );
         }),
       ),

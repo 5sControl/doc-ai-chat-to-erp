@@ -6,11 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:stream_transform/stream_transform.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
 import 'package:summify/screens/subscribtions_screen/happy_box.dart';
 import 'package:summify/screens/subscribtions_screen/subscription_body_month.dart';
 import 'package:summify/screens/subscribtions_screen/subscription_body_year.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
@@ -29,7 +31,9 @@ class BundleScreen extends StatefulWidget {
   State<BundleScreen> createState() => _BundleScreenState();
 }
 
-class _BundleScreenState extends State<BundleScreen> {
+class _BundleScreenState extends State<BundleScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   var selectedSubscriptionIndex = 1;
 
   void onSelectSubscription({required int index}) {
@@ -43,7 +47,14 @@ class _BundleScreenState extends State<BundleScreen> {
     context
         .read<MixpanelBloc>()
         .add(PaywallShow(trigger: 'onboarding', screen: widget.triggerScreen));
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -103,39 +114,102 @@ class _BundleScreenState extends State<BundleScreen> {
                   child: SafeArea(
                     child: Scaffold(
                       appBar: AppBar(
-                        toolbarHeight: 50,
-                        automaticallyImplyLeading: false,
-                        title: SwitcherWidget(),
-                        centerTitle: true,
-                        actions: [
-                          BackArrow(fromOnboarding: widget.fromOnboarding),
-                          const SizedBox(
-                            width: 10,
-                          )
-                        ],
+                         toolbarHeight: 10,
+                        // automaticallyImplyLeading: false,
+                        // title: SwitcherWidget(),
+                        // centerTitle: true,
+                        bottom: TabBar(
+                          padding: EdgeInsets.only(left: 65, right: 65),
+                          controller: _tabController,
+                          tabs: [
+                            Tab(
+                              text: 'Bundle',
+                            ),
+                            Tab(
+                              text: 'Unlimited',
+                            )
+                          ],
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                          color: Colors.teal.shade300,
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: Colors.black,
+                          labelStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          unselectedLabelStyle: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                          labelPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                          indicatorSize: TabBarIndicatorSize.tab,
+                        ),
+                        // actions: [
+                        //   BackArrow(fromOnboarding: widget.fromOnboarding),
+                        //   const SizedBox(
+                        //     width: 10,
+                        //   )
+                        // ],
                       ),
-                      body: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //body: BundleScreen1(packages: packages, selectedSubscriptionIndex: selectedSubscriptionIndex),
+                      body: TabBarView(
+                        controller: _tabController,
                         children: [
-                          Title(),
-                          Body(),
-                          SizedBox(height: 15,),
-                          Body1(),
-                          SizedBox(height: 15,),
-                          PricesBloc(packages: packages, selectedSubscriptionIndex: selectedSubscriptionIndex, onSelectSubscription: onSelectSubscription,),
-                          SubscribeButton(package: packages[selectedSubscriptionIndex],),
-                         
-                          TermsRestorePrivacy()
+                          BundleScreen1(
+                              packages: packages,
+                              selectedSubscriptionIndex:
+                                  selectedSubscriptionIndex),
+                          SubscriptionScreen(triggerScreen: '')
                         ],
                       ),
                     ),
                   ),
+                ),
+                Positioned(
+                  top: 50, right: 10,
+                  child: BackArrow(fromOnboarding: widget.fromOnboarding),
                 ),
               ],
             );
           },
         );
       },
+    );
+  }
+}
+
+class BundleScreen1 extends StatelessWidget {
+  const BundleScreen1({
+    super.key,
+    required this.packages,
+    required this.selectedSubscriptionIndex,
+  });
+
+  final List<Package> packages;
+  final int selectedSubscriptionIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Title(),
+        Body(),
+        SizedBox(
+          height: 15,
+        ),
+        Body1(),
+        SizedBox(
+          height: 15,
+        ),
+        //PricesBloc(packages: packages, selectedSubscriptionIndex: selectedSubscriptionIndex, onSelectSubscription: onSelectSubscription,),
+        SubscribeButton(
+          package: packages[selectedSubscriptionIndex],
+        ),
+
+        TermsRestorePrivacy()
+      ],
     );
   }
 }
@@ -206,7 +280,10 @@ class Body extends StatelessWidget {
                   SvgPicture.asset(
                     Assets.icons.transcriptor1,
                   ),
-                  Text('Transcriptor', style: TextStyle( fontWeight: FontWeight.w500),),
+                  Text(
+                    'Transcriptor',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
                 ],
               ),
               SizedBox(
@@ -223,7 +300,10 @@ class Body extends StatelessWidget {
                     Assets.icons.summafyMini,
                     height: 75,
                   ),
-                  Text('Summify', style: TextStyle( fontWeight: FontWeight.w500),),
+                  Text(
+                    'Summify',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
                 ],
               ),
             ],
@@ -244,12 +324,16 @@ class Body1 extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
-          SizedBox(height: 20,),
+          SizedBox(
+            height: 20,
+          ),
           Text(
             'GET FOR FREE',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
           ),
-          SizedBox(height: 5,),
+          SizedBox(
+            height: 5,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -258,8 +342,15 @@ class Body1 extends StatelessWidget {
                   SvgPicture.asset(
                     Assets.icons.transcriptor2,
                   ),
-                  SizedBox(height: 3,),
-                  Text('Transcriptor', style: TextStyle(decoration: TextDecoration.underline, fontWeight: FontWeight.w500),),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Text(
+                    'Transcriptor',
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ],
               ),
               SizedBox(
@@ -279,26 +370,42 @@ class Body1 extends StatelessWidget {
                   ),
                   Text(
                     'Summify',
-                    style: TextStyle(decoration: TextDecoration.underline, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('on', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),), 
-              SizedBox(width: 15,),
+              Text(
+                'on',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(
+                width: 15,
+              ),
               SvgPicture.asset(
-                    Assets.icons.chrome,
-                  ),
-              SizedBox(width: 15,),
-              Text('Version', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),)
-              ],
+                Assets.icons.chrome,
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              Text(
+                'Version',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
+              )
+            ],
           ),
-          SizedBox(height: 15,)
+          SizedBox(
+            height: 15,
+          )
         ],
       ),
     );
@@ -325,7 +432,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
     }
 
     return Container(
-      margin: const EdgeInsets.only( left: 15, right: 15, top: 15, bottom: 10),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
       child: Material(
         color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -442,11 +549,10 @@ class Title extends StatefulWidget {
 }
 
 class _TitleState extends State<Title> {
-
   final List<List<String>> wordPairs = [
     ['Unlock Limitless', 'Possibilities'],
-      ['Endless Possibilities', 'with 50% Off'],
-      ['Unlock the Power', 'of Unlimited'],
+    ['Endless Possibilities', 'with 50% Off'],
+    ['Unlock the Power', 'of Unlimited'],
   ];
 
   List<String> displayedPair = ["", ""];
@@ -471,25 +577,29 @@ class _TitleState extends State<Title> {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: RichText(
         textAlign: TextAlign.center,
-        text: TextSpan(
-          children: [TextSpan(
-           text: '${displayedPair[0]}\n',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, height: 1, color: Colors.black),
+        text: TextSpan(children: [
+          TextSpan(
+            text: '${displayedPair[0]}\n',
+            style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                height: 1,
+                color: Colors.black),
           ),
           TextSpan(
-                text: '${displayedPair[1]}',
-                style: TextStyle(
-                  fontSize: 28,
-                  color: displayedPair[1] == 'with 50% Off' ? Colors.teal : Colors.black,
-                  fontWeight: FontWeight.bold,
-                ))
-          ]
-        ),
+              text: '${displayedPair[1]}',
+              style: TextStyle(
+                fontSize: 28,
+                color: displayedPair[1] == 'with 50% Off'
+                    ? Colors.teal
+                    : Colors.black,
+                fontWeight: FontWeight.bold,
+              ))
+        ]),
       ),
     );
   }

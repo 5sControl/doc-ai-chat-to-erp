@@ -135,17 +135,31 @@ class BackArrow extends StatelessWidget {
     }
 
     return IconButton(
-        visualDensity: VisualDensity.compact,
-        onPressed: onPressClose,
-        style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
-            backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0.2))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
-        icon: Icon(
-          Icons.close,
-          size: 20,
-          color: Theme.of(context).iconTheme.color,
-        ));
+      visualDensity: VisualDensity.compact,
+      onPressed: onPressClose,
+      //style: ButtonStyle(
+        //padding: const WidgetStatePropertyAll(EdgeInsets.all(0)),
+        //backgroundColor: MaterialStatePropertyAll(
+        // Theme.of(context).iconTheme.color!.withOpacity(0.1))),
+      //),
+      highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+      icon: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Theme.of(context).iconTheme.color!,
+            width: 1.5,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4.0), // Adjust the padding as needed
+          child: Icon(
+            Icons.close,
+            size: 20,
+            color: Theme.of(context).iconTheme.color,
+          ),
+        ),
+      ),
+    );
   }
 }

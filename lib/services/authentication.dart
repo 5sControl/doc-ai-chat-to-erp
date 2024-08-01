@@ -25,7 +25,7 @@ class AuthService {
     return digest.toString();
   }
 
-Future<UserModel> signUpUser({
+  Future<UserModel> signUpUser({
     required String name,
     required String email,
     required String password,

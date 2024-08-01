@@ -56,7 +56,7 @@ class PremiumBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Become Super Premium',
+                    'Break free from limits!',
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.w600, color: Colors.black),
                   ),
@@ -70,7 +70,7 @@ class PremiumBanner extends StatelessWidget {
                                   color: Colors.black,
                                   fontSize: 14),
                           children: [
-                        const TextSpan(text: 'Get on '),
+                        const TextSpan(text: 'Free bonus for chrome '),
                         WidgetSpan(
                             child: DecoratedBox(
                               decoration: const BoxDecoration(boxShadow: [
@@ -82,7 +82,7 @@ class PremiumBanner extends StatelessWidget {
                               ),
                             ),
                             alignment: PlaceholderAlignment.middle),
-                        const TextSpan(text: ' for free!'),
+                        //const TextSpan(text: ' for free!'),
                       ]))
                 ],
               ),

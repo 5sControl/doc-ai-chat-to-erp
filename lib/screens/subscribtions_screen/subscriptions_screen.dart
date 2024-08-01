@@ -100,14 +100,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   child: SafeArea(
                     child: Scaffold(
                       appBar: AppBar(
-                        toolbarHeight: 50,
+                        toolbarHeight: 0,
                         automaticallyImplyLeading: false,
-                        actions: [
-                          BackArrow(fromOnboarding: widget.fromOnboarding),
-                          const SizedBox(
-                            width: 5,
-                          )
-                        ],
+                        //actions: [
+                        //  BackArrow(fromOnboarding: widget.fromOnboarding),
+                        //  const SizedBox(
+                        //    width: 5,
+                         // )
+                        //],
                       ),
                       body: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,

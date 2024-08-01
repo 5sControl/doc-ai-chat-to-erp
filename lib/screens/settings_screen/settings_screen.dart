@@ -44,7 +44,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
-    String displayName = user?.displayName ?? 'No display name';
+    String displayName = user?.email ?? 'No display name';
     void onPressSubscription() {
       showCupertinoModalBottomSheet(
         context: context,
@@ -270,6 +270,25 @@ class SettingsScreen extends StatelessWidget {
 
     final List<ButtonItem> mainGroup = [
       ButtonItem(
+          title: 'App Bundle',
+          leadingIcon: Assets.icons.present,
+          onTap: onPressSubscription,
+          trailing: Container(
+              width: 85,
+              margin: const EdgeInsets.only(left: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Color.fromRGBO(90, 255, 245, 1)),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              child: const Text(
+                'New',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
+              ))),
+      ButtonItem(
           title: 'Subscription',
           leadingIcon: Assets.icons.crown,
           onTap: onPressSubscription,
@@ -410,18 +429,19 @@ class SettingsScreen extends StatelessWidget {
           title: 'Log out',
           leadingIcon: Assets.icons.logout,
           onTap: () {
-            showAuthDialog(
-                context,
-                'Are you sure that you\nwant to delete your account?',
-                'Please note that all your documents will\nalso be deleted!',
-                'Yes, log out');
+            showAuthDialog(context, 'Are you sure you\nwant to log out?',
+                'Come back soon, we\'ll be\nwaiting for you!', 'Yes, log out');
+            
           }),
       ButtonItem(
           title: 'Delete account',
           leadingIcon: Assets.icons.deleteAccount,
           onTap: () {
-            showAuthDialog(context, 'Are you sure you\nwant to log out?',
-                'Come back soon, we\'ll be\nwaiting for you!', 'Yes, delete');
+            showAuthDialog(
+                context,
+                'Are you sure that you\nwant to delete your account?',
+                'Please note that all your documents will\nalso be deleted!',
+                'Yes, delete');
           })
     ];
     return BlocBuilder<AuthenticationBloc, AuthenticationState>(

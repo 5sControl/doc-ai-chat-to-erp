@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/summary_screen/info_modal/text_size_modal.dart';
 
 import '../../widgets/backgroung_gradient.dart';
 
@@ -25,15 +26,15 @@ class SetUpShareScreen extends StatelessWidget {
             InstructionStep(
                 step: 'Step 1',
                 image: Assets.setUp.setUp1.path,
-                description: 'Press "Share" button on the website'),
+                description: 'Press "Share" button\non the website'),
             InstructionStep(
                 step: 'Step 2',
                 image: Assets.setUp.setUp2.path,
-                description: 'Scroll through app list and tap "More"'),
+                description: 'Scroll through app\nlist and tap "More"'),
             InstructionStep(
                 step: 'Step 3',
                 image: Assets.setUp.setUp3.path,
-                description: 'Tap "Edit" and scroll till Summify'),
+                description: 'Tap "Edit" and scroll\ntill Summify'),
             InstructionStep(
                 step: 'Step 4',
                 image: Assets.setUp.setUp4.path,
@@ -41,7 +42,7 @@ class SetUpShareScreen extends StatelessWidget {
             InstructionStep(
                 step: 'Step 5',
                 image: Assets.setUp.setUp5.path,
-                description: 'Return to the top and tap "Done"'),
+                description: 'Return to the top\nand tap "Done"'),
           ]
         : [
             InstructionStep(
@@ -75,26 +76,27 @@ class SetUpShareScreen extends StatelessWidget {
             extendBodyBehindAppBar: true,
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              flexibleSpace: Row(
+              flexibleSpace: const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                      visualDensity: VisualDensity.compact,
-                      onPressed: onPressClose,
-                      style: ButtonStyle(
-                          padding:
-                              const MaterialStatePropertyAll(EdgeInsets.all(0)),
-                          backgroundColor: MaterialStatePropertyAll(
-                              Theme.of(context)
-                                  .iconTheme
-                                  .color!
-                                  .withOpacity(0.2))),
-                      highlightColor:
-                          Theme.of(context).iconTheme.color!.withOpacity(0.2),
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      )),
+                  BackArrow(),
+                  // IconButton(
+                  //     visualDensity: VisualDensity.compact,
+                  //     onPressed: onPressClose,
+                  //     style: ButtonStyle(
+                  //         padding:
+                  //             const MaterialStatePropertyAll(EdgeInsets.all(0)),
+                  //         backgroundColor: MaterialStatePropertyAll(
+                  //             Theme.of(context)
+                  //                 .iconTheme
+                  //                 .color!
+                  //                 .withOpacity(0.2))),
+                  //     highlightColor:
+                  //         Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                  //     icon: const Icon(
+                  //       Icons.close,
+                  //       color: Colors.white,
+                  //     )),
                 ],
               ),
             ),
@@ -109,13 +111,13 @@ class SetUpShareScreen extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .displayMedium!
-                          .copyWith(fontSize: 24, height: 3),
+                          .copyWith(fontSize: 32, height: 3),
                     ),
                     Column(
                       children: steps
                           .map((step) => Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                    const EdgeInsets.symmetric(vertical: 15),
                                 child: Row(
                                   children: [
                                     Image.asset(
@@ -125,7 +127,7 @@ class SetUpShareScreen extends StatelessWidget {
                                     Flexible(
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 15),
+                                            horizontal: 15, vertical: 10),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.stretch,
@@ -136,7 +138,7 @@ class SetUpShareScreen extends StatelessWidget {
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .displaySmall!
-                                                  .copyWith(fontSize: 14),
+                                                  .copyWith(fontSize: 16),
                                             ),
                                             Text(
                                               step.description,
@@ -153,12 +155,13 @@ class SetUpShareScreen extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ))
                           .toList(),
                     )
+                    
                   ],
                 ),
               ),

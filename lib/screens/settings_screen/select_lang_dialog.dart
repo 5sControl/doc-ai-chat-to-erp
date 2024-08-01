@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
+import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/summary_screen/info_modal/text_size_modal.dart';
+import 'package:summify/widgets/backgroung_gradient.dart';
 
 const Map<String, String> translateLanguages = {
   "ar": "Arabic",
@@ -74,30 +77,67 @@ class _DialogStateState extends State<DialogState> {
       Navigator.of(context).pop();
     }
 
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8))),
-      backgroundColor: Theme.of(context).primaryColorDark,
-      actionsAlignment: MainAxisAlignment.center,
-      actionsPadding: const EdgeInsets.only(bottom: 10),
-      titlePadding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-      title: Text(
-        'Select language',
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyMedium,
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      content:
-          LanguagesDropDown(controller: controller, onSelectLang: onSelectLang),
-      actions: <Widget>[
-        MaterialButton(
-          color: Theme.of(context).primaryColor,
-          padding: const EdgeInsets.symmetric(horizontal: 70),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8))),
-          onPressed: onPressConfirm,
-          child: const Text('Confirm'),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        padding: const EdgeInsets.all(16.0), // Add padding if needed
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(Theme.of(context).brightness == Brightness.dark
+                  ? Assets.bgDark.path
+                  : Assets.bgLight.path),
+              alignment: Alignment.topCenter,
+              fit: BoxFit.cover),
+          //color: Theme.of(context).primaryColorDark,
+          borderRadius: BorderRadius.circular(8.0),
         ),
-      ],
+        child: Stack(
+          children: [
+            Positioned(
+              top: 0.0,
+              right: 0.0,
+              child: BackArrow(),
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 20),
+                Text(
+                  'Select Language',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w400,
+                      ),
+                ),
+                //const SizedBox(height: 20),
+                LanguagesDropDown(
+                    controller: controller, onSelectLang: onSelectLang),
+                const SizedBox(height: 10),
+                Center(
+                  child: MaterialButton(
+                    color: Theme.of(context).primaryColor,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 100, vertical: 12),
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                    onPressed: onPressConfirm,
+                    child: const Text(
+                      'Select',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -111,7 +151,7 @@ class LanguagesDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120,
+      height: 130,
       child: CupertinoPicker(
           scrollController: controller,
           diameterRatio: 1,

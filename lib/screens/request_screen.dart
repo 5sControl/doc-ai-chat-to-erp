@@ -355,7 +355,7 @@ class _LanguagesDropdownState extends State<LanguagesDropdown> {
             overflow: TextOverflow.visible,
             maxLines: 1,
             style: Theme.of(context).textTheme.labelSmall),
-        menuMaxHeight: 300,
+        menuMaxHeight: 100,
         padding: EdgeInsets.zero,
         style: Theme.of(context).textTheme.labelSmall,
         // underline: Divider(),
