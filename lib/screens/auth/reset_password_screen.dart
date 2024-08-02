@@ -61,7 +61,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios_new,
-              color: Colors.black,
               size: 24,
             ),
             onPressed: () {
@@ -105,7 +104,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         maxLines: 2,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.black,
                             fontSize: 24,
                             height: 1.2,
                             fontWeight: FontWeight.w300),
@@ -137,12 +135,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   child: RichText(
                     text: TextSpan(
                         text: 'Don\'t have an account? ',
-                        style: TextStyle(color: Colors.black, fontSize: 18),
+                        style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 18),
                         children: <TextSpan>[
                           TextSpan(
                               text: 'Register Now',
                               style: TextStyle(
-                                color: Colors.black,
+                                
                                 fontWeight: FontWeight.w600,
                               ),
                               recognizer: TapGestureRecognizer()
@@ -210,7 +208,7 @@ class _PasswordInputState extends State<PasswordInput> {
       cursorWidth: 3,
       cursorColor: Colors.black54,
       cursorHeight: 20,
-      style: const TextStyle(color: Colors.black, fontSize: 18),
+      style: const TextStyle(color: Colors.black,fontSize: 18),
       controller: widget.controller,
       enableSuggestions: false,
       autocorrect: false,
@@ -223,7 +221,7 @@ class _PasswordInputState extends State<PasswordInput> {
           label: Text(
             'Enter your email',
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
@@ -232,7 +230,7 @@ class _PasswordInputState extends State<PasswordInput> {
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide.none),
           floatingLabelStyle: const TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               // height: -2,
               fontSize: 18,
               fontWeight: FontWeight.w500)),

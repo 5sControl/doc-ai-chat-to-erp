@@ -134,7 +134,7 @@ class _BundleScreenState extends State<BundleScreen>
                           color: Colors.teal.shade300,
                           ),
                           labelColor: Colors.white,
-                          unselectedLabelColor: Colors.black,
+                          unselectedLabelColor:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
                           labelStyle: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
@@ -321,7 +321,7 @@ class Body1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
-      color: Colors.white,
+      color: Colors.white.withOpacity(0.5),
       child: Column(
         children: [
           SizedBox(
@@ -588,7 +588,8 @@ class _TitleState extends State<Title> {
                 fontSize: 28,
                 fontWeight: FontWeight.w700,
                 height: 1,
-                color: Colors.black),
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+                ),
           ),
           TextSpan(
               text: '${displayedPair[1]}',
@@ -596,7 +597,7 @@ class _TitleState extends State<Title> {
                 fontSize: 28,
                 color: displayedPair[1] == 'with 50% Off'
                     ? Colors.teal
-                    : Colors.black,
+                    : Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
                 fontWeight: FontWeight.bold,
               ))
         ]),

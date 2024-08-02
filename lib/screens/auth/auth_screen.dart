@@ -111,7 +111,7 @@ class _AuthScreenState extends State<AuthScreen> {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back_ios_new,
-                color: Colors.black,
+                
                 size: 24,
               ),
               onPressed: (){Navigator.of(context).pop();}
@@ -124,7 +124,7 @@ class _AuthScreenState extends State<AuthScreen> {
               },
                   child: const Text(
                     'Skip',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(fontSize: 18),
                   ))
             ],
           ),
@@ -150,7 +150,6 @@ class _AuthScreenState extends State<AuthScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          color: Colors.black,
                           fontSize: 32,
                           height: 1.2,
                           fontWeight: FontWeight.w700),
@@ -160,7 +159,6 @@ class _AuthScreenState extends State<AuthScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          color: Colors.black,
                           fontSize: 32,
                           height: 1.2,
                           fontWeight: FontWeight.w700),
@@ -192,7 +190,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: const Text(
                       'Forgot password?',
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
+                      style: TextStyle(fontWeight: FontWeight.w400),
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -251,12 +249,11 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: 'Don\'t have an account? ',
-                      style: TextStyle(color: Colors.black, fontSize: 18),
+                      style: TextStyle( color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 18),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Register Now',
                           style: TextStyle(
-                            color: Colors.black,
                             fontWeight: FontWeight.w600,
                           ),
                           recognizer: TapGestureRecognizer()
@@ -321,7 +318,6 @@ class EmailInput extends StatelessWidget {
       textAlignVertical: TextAlignVertical.top,
       controller: controller,
       cursorWidth: 3,
-      cursorColor: Colors.black54,
       cursorHeight: 20,
       style: const TextStyle(color: Colors.black, fontSize: 18),
       decoration: InputDecoration(
@@ -333,7 +329,7 @@ class EmailInput extends StatelessWidget {
           label: Text(
             'Email Address',
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
@@ -388,7 +384,6 @@ class _PasswordInputState extends State<PasswordInput> {
     return TextFormField(
       //textAlignVertical: TextAlignVertical.top,
       cursorWidth: 3,
-      cursorColor: Colors.black54,
       cursorHeight: 20,
       style: const TextStyle(color: Colors.black, fontSize: 18),
       controller: widget.controller,
@@ -404,7 +399,7 @@ class _PasswordInputState extends State<PasswordInput> {
           label: Text(
             'Password',
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
@@ -422,7 +417,6 @@ class _PasswordInputState extends State<PasswordInput> {
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide.none),
           floatingLabelStyle: const TextStyle(
-              color: Colors.white,
               // height: -2,
               fontSize: 18,
               fontWeight: FontWeight.w500)),
@@ -482,7 +476,6 @@ class DividerRow extends StatelessWidget {
             child: Text(
               'Or Login with',
               style: TextStyle(
-                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             ),

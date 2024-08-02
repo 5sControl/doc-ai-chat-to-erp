@@ -44,44 +44,45 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
   };
 }
 
+// summaries_bloc.dart
+
 class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
   final SubscriptionsBloc subscriptionBloc;
   final MixpanelBloc mixpanelBloc;
   late final StreamSubscription subscriptionBlocSubscription;
-
   final SummaryRepository summaryRepository = SummaryRepository();
+
   SummariesBloc({required this.subscriptionBloc, required this.mixpanelBloc})
       : super(SummariesState(
-            summaries: {
-              'https://elang.app/en': initialSummary,
-            },
-            ratedSummaries: const {
-              'https://elang.app/en'
-            },
-            defaultSummaryType: SummaryType.short,
-            textCounter: 1,
-            freeSummaries: 0)) {
+          summaries: {
+            'https://elang.app/en': initialSummary,
+          },
+          ratedSummaries: const {
+            'https://elang.app/en'
+          },
+          defaultSummaryType: SummaryType.short,
+          textCounter: 1,
+          freeSummaries: 0,
+        )) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionStatus == SubscriptionStatus.subscribed) {
         add(const UnlockHiddenSummaries());
       }
-      // else {
-      //   add(const SetDailyLimit(dailyLimit: 2));
-      //   return;
-      // }
     });
 
     on<GetSummaryFromUrl>(
       (event, emit) async {
-        await startSummaryLoading(
-            summaryKey: event.summaryUrl,
-            emit: emit,
-            summaryOrigin: SummaryOrigin.url);
-        await loadSummaryPreview(summaryKey: event.summaryUrl, emit: emit);
-        await loadSummaryFromUrl(
-            summaryKey: event.summaryUrl,
-            fromShare: event.fromShare,
-            emit: emit);
+        await _startSummaryLoading(
+          summaryKey: event.summaryUrl,
+          emit: emit,
+          summaryOrigin: SummaryOrigin.url,
+        );
+        await _loadSummaryPreview(summaryKey: event.summaryUrl, emit: emit);
+        await _loadSummaryFromUrl(
+          summaryKey: event.summaryUrl,
+          fromShare: event.fromShare,
+          emit: emit,
+        );
       },
       transformer: throttleDroppable(throttleDuration),
     );
@@ -91,10 +92,16 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         final index = state.textCounter;
         final title = "My text ($index)";
 
-        await startSummaryLoading(
-            summaryKey: title, emit: emit, summaryOrigin: SummaryOrigin.text);
-        await loadSummaryFromText(
-            text: event.text, summaryTitle: title, emit: emit);
+        await _startSummaryLoading(
+          summaryKey: title,
+          emit: emit,
+          summaryOrigin: SummaryOrigin.text,
+        );
+        await _loadSummaryFromText(
+          text: event.text,
+          summaryTitle: title,
+          emit: emit,
+        );
       },
       transformer: throttleDroppable(throttleDuration),
     );
@@ -103,31 +110,33 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       (event, emit) async {
         if (state.summaries[event.fileName]?.shortSummaryStatus !=
             SummaryStatus.loading) {
-          await startSummaryLoading(
-              summaryKey: event.fileName,
-              emit: emit,
-              summaryOrigin: SummaryOrigin.file);
-          await loadSummaryFromFile(
-              fileName: event.fileName,
-              filePath: event.filePath,
-              fromShare: event.fromShare,
-              emit: emit);
+          await _startSummaryLoading(
+            summaryKey: event.fileName,
+            emit: emit,
+            summaryOrigin: SummaryOrigin.file,
+          );
+          await _loadSummaryFromFile(
+            fileName: event.fileName,
+            filePath: event.filePath,
+            fromShare: event.fromShare,
+            emit: emit,
+          );
         }
       },
       transformer: throttleDroppable(throttleDuration),
     );
 
     on<DeleteSummary>((event, emit) {
-      deleteSummary(event.summaryUrl, emit);
+      _deleteSummary(event.summaryUrl, emit);
       mixpanelBloc.add(const DeleteSummaryM());
     });
 
     on<RateSummary>((event, emit) async {
-      await rateSummary(event, emit);
+      await _rateSummary(event, emit);
     });
 
     on<SkipRateSummary>((event, emit) {
-      skipRateSummary(event.summaryUrl, emit);
+      _skipRateSummary(event.summaryUrl, emit);
     });
 
     on<UnlockHiddenSummaries>((event, emit) {
@@ -140,41 +149,6 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       emit(state.copyWith(summaries: summaryMap));
     });
 
-    // on<SetDailyLimit>((event, emit) {
-    //   emit(state.copyWith(dailyLimit: event.dailyLimit));
-    // });
-
-    // on<InitDailySummariesCount>((event, emit) {
-    //   if (subscriptionBloc.state.subscriptionStatus ==
-    //       SubscriptionStatus.subscribed) {
-    //     final DateFormat formatter = DateFormat('MM.dd.yy');
-    //     final thisDay = formatter.format(event.thisDay);
-    //     final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
-    //     if (!state.dailySummariesMap.containsKey(thisDay)) {
-    //       daysMap.addAll({thisDay: 0});
-    //       emit(state.copyWith(dailySummariesMap: daysMap));
-    //     }
-    //   } else {
-    //     final DateFormat formatter = DateFormat('MM.dd.yy');
-    //     final thisDay = formatter.format(event.thisDay);
-    //     if (!state.dailySummariesMap.containsKey(thisDay)) {
-    //       // final Map<String, int> daysMap = Map.from(state.dailySummariesMap);
-    //       int unsubscribedSummariesCount = 0;
-    //       for (int day in state.dailySummariesMap.values) {
-    //         unsubscribedSummariesCount += day;
-    //       }
-    //       // daysMap.addAll({
-    //       //   thisDay:
-    //       //       unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
-    //       // });
-    //       emit(state.copyWith(dailySummariesMap: {
-    //         thisDay:
-    //             unsubscribedSummariesCount >= 2 ? 2 : unsubscribedSummariesCount
-    //       }));
-    //     }
-    //   }
-    // });
-
     on<IncrementFreeSummaries>(
       (event, emit) {
         emit(state.copyWith(freeSummaries: state.freeSummaries + 1));
@@ -182,16 +156,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     );
 
     on<CancelRequest>((event, emit) {
-      // final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
-      // // summaryMap.forEach((key, value) {
-      // //   if (value.status == SummaryStatus.Loading) {
-      // summaryMap.update(event.sharedLink, (summary) {
-      //   return summary.copyWith(
-      //       status: SummaryStatus.error, summary: Summary(),);
-      // });
-      // // }
-      // // });
-      // emit(state.copyWith(summaries: summaryMap));
+      // Implement cancel request logic if needed
     });
   }
 
@@ -205,280 +170,314 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     return state.toJson();
   }
 
-  Future<void> startSummaryLoading(
-      {required String summaryKey,
-      required SummaryOrigin summaryOrigin,
-      required Emitter<SummariesState> emit}) async {
+  Future<void> _startSummaryLoading({
+    required String summaryKey,
+    required SummaryOrigin summaryOrigin,
+    required Emitter<SummariesState> emit,
+  }) async {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
-    summaryMap.addAll({
-      summaryKey: SummaryData(
-          shortSummaryStatus: SummaryStatus.loading,
-          longSummaryStatus: SummaryStatus.loading,
-          date: DateTime.now(),
-          shortSummary: const Summary(),
-          longSummary: const Summary(),
-          summaryPreview: SummaryPreview(
-            imageUrl: Assets.placeholderLogo.path,
-          ),
-          summaryOrigin: summaryOrigin)
-    });
+    summaryMap[summaryKey] = SummaryData(
+      shortSummaryStatus: SummaryStatus.loading,
+      longSummaryStatus: SummaryStatus.loading,
+      date: DateTime.now(),
+      shortSummary: const Summary(),
+      longSummary: const Summary(),
+      summaryPreview: SummaryPreview(
+        imageUrl: Assets.placeholderLogo.path,
+      ),
+      summaryOrigin: summaryOrigin,
+    );
     emit(state.copyWith(summaries: summaryMap));
   }
 
-  Future<void> loadSummaryPreview(
-      {required String summaryKey,
-      required Emitter<SummariesState> emit}) async {
+  Future<void> _loadSummaryPreview({
+    required String summaryKey,
+    required Emitter<SummariesState> emit,
+  }) async {
     final previewData = await getPreviewData(summaryKey);
     final summaryData = state.summaries[summaryKey]?.copyWith(
-        summaryPreview: SummaryPreview(
-            imageUrl: previewData.image?.url ?? Assets.placeholderLogo.path,
-            title: previewData.title));
+      summaryPreview: SummaryPreview(
+        imageUrl: previewData.image?.url ?? Assets.placeholderLogo.path,
+        title: previewData.title,
+      ),
+    );
     final Map<String, SummaryData> summariesMap = Map.from(state.summaries);
     summariesMap.update(summaryKey, (value) => summaryData!);
     emit(state.copyWith(summaries: summariesMap));
   }
 
-  Future<void> loadSummaryFromUrl(
-      {required String summaryKey,
-      required bool fromShare,
-      required Emitter<SummariesState> emit}) async {
+  Future<void> _loadSummaryFromUrl({
+    required String summaryKey,
+    required bool fromShare,
+    required Emitter<SummariesState> emit,
+  }) async {
     final shortSummaryResponse = await summaryRepository.getSummaryFromLink(
-        summaryLink: summaryKey, summaryType: SummaryType.short);
+      summaryLink: summaryKey,
+      summaryType: SummaryType.short,
+    );
     final longSummaryResponse = await summaryRepository.getSummaryFromLink(
-        summaryLink: summaryKey, summaryType: SummaryType.long);
+      summaryLink: summaryKey,
+      summaryType: SummaryType.long,
+    );
+
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryKey, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
         add(const IncrementFreeSummaries());
-        mixpanelBloc
-            .add(SummarizingSuccess(url: summaryKey, fromShare: fromShare));
+        mixpanelBloc.add(
+          SummarizingSuccess(url: summaryKey, fromShare: fromShare),
+        );
         return summaryData.copyWith(
-            isBlocked: state.freeSummaries >= 2 &&
-                    subscriptionBloc.state.subscriptionStatus ==
-                        SubscriptionStatus.unsubscribed
-                ? true
-                : false,
-            shortSummary: shortSummaryResponse,
-            shortSummaryStatus: SummaryStatus.complete,
-            longSummary: longSummaryResponse,
-            longSummaryStatus: SummaryStatus.complete);
+          isBlocked: state.freeSummaries >= 2 &&
+                  subscriptionBloc.state.subscriptionStatus ==
+                      SubscriptionStatus.unsubscribed
+              ? true
+              : false,
+          shortSummary: shortSummaryResponse,
+          shortSummaryStatus: SummaryStatus.complete,
+          longSummary: longSummaryResponse,
+          longSummaryStatus: SummaryStatus.complete,
+        );
       } else if (shortSummaryResponse is Exception) {
         mixpanelBloc.add(SummarizingError(
-            url: summaryKey,
-            fromShare: fromShare,
-            error:
-                shortSummaryResponse.toString().replaceAll('Exception:', '')));
+          url: summaryKey,
+          fromShare: fromShare,
+          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
+        ));
         return summaryData.copyWith(
-            longSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            shortSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            longSummaryStatus: SummaryStatus.error,
-            shortSummaryStatus: SummaryStatus.error);
+          longSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          shortSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          longSummaryStatus: SummaryStatus.error,
+          shortSummaryStatus: SummaryStatus.error,
+        );
       } else {
         mixpanelBloc.add(SummarizingError(
-            url: summaryKey,
-            fromShare: fromShare,
-            error:
-                shortSummaryResponse.toString().replaceAll('Exception:', '')));
+          url: summaryKey,
+          fromShare: fromShare,
+          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
+        ));
         return summaryData.copyWith(
-            longSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            shortSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            longSummaryStatus: SummaryStatus.error,
-            shortSummaryStatus: SummaryStatus.error);
+          longSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          shortSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          longSummaryStatus: SummaryStatus.error,
+          shortSummaryStatus: SummaryStatus.error,
+        );
       }
     });
     emit(state.copyWith(summaries: summaryMap));
   }
 
-  Future<void> loadSummaryFromText(
-      {required String summaryTitle,
-      required String text,
-      required Emitter<SummariesState> emit}) async {
+  Future<void> _loadSummaryFromText({
+    required String summaryTitle,
+    required String text,
+    required Emitter<SummariesState> emit,
+  }) async {
     final shortSummaryResponse = await summaryRepository.getSummaryFromText(
-        textToSummify: text, summaryType: SummaryType.short);
+      textToSummify: text,
+      summaryType: SummaryType.short,
+    );
     final longSummaryResponse = await summaryRepository.getSummaryFromText(
-        textToSummify: text, summaryType: SummaryType.long);
+      textToSummify: text,
+      summaryType: SummaryType.long,
+    );
+
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryTitle, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
-        mixpanelBloc
-            .add(const SummarizingSuccess(url: 'from text', fromShare: false));
+        mixpanelBloc.add(
+          const SummarizingSuccess(url: 'from text', fromShare: false),
+        );
         add(const IncrementFreeSummaries());
         return summaryData.copyWith(
-            isBlocked: state.freeSummaries >= 2 &&
-                    subscriptionBloc.state.subscriptionStatus ==
-                        SubscriptionStatus.unsubscribed
-                ? true
-                : false,
-            summaryOrigin: SummaryOrigin.text,
-            userText: text,
-            shortSummary: shortSummaryResponse,
-            shortSummaryStatus: SummaryStatus.complete,
-            longSummary: longSummaryResponse,
-            longSummaryStatus: SummaryStatus.complete);
+          isBlocked: state.freeSummaries >= 2 &&
+                  subscriptionBloc.state.subscriptionStatus ==
+                      SubscriptionStatus.unsubscribed
+              ? true
+              : false,
+          summaryOrigin: SummaryOrigin.text,
+          userText: text,
+          shortSummary: shortSummaryResponse,
+          shortSummaryStatus: SummaryStatus.complete,
+          longSummary: longSummaryResponse,
+          longSummaryStatus: SummaryStatus.complete,
+        );
       } else if (shortSummaryResponse is Exception) {
         mixpanelBloc.add(SummarizingError(
-            url: 'from Text',
-            fromShare: false,
-            error:
-                shortSummaryResponse.toString().replaceAll('Exception:', '')));
+          url: 'from Text',
+          fromShare: false,
+          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
+        ));
         return summaryData.copyWith(
-            summaryOrigin: SummaryOrigin.text,
-            userText: text,
-            longSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            shortSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            longSummaryStatus: SummaryStatus.error,
-            shortSummaryStatus: SummaryStatus.error);
+          summaryOrigin: SummaryOrigin.text,
+          userText: text,
+          longSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          shortSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          longSummaryStatus: SummaryStatus.error,
+          shortSummaryStatus: SummaryStatus.error,
+        );
       } else {
         mixpanelBloc.add(SummarizingError(
-            url: 'from Text',
-            fromShare: false,
-            error:
-                shortSummaryResponse.toString().replaceAll('Exception:', '')));
+          url: 'from Text',
+          fromShare: false,
+          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
+        ));
         return summaryData.copyWith(
-            summaryOrigin: SummaryOrigin.text,
-            userText: text,
-            longSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            shortSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            longSummaryStatus: SummaryStatus.error,
-            shortSummaryStatus: SummaryStatus.error);
+          summaryOrigin: SummaryOrigin.text,
+          userText: text,
+          longSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          shortSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          longSummaryStatus: SummaryStatus.error,
+          shortSummaryStatus: SummaryStatus.error,
+        );
       }
     });
     emit(state.copyWith(
-        summaries: summaryMap, textCounter: state.textCounter + 1));
+      summaries: summaryMap,
+      textCounter: state.textCounter + 1,
+    ));
   }
 
-  Future<void> loadSummaryFromFile(
-      {required String fileName,
-      required String filePath,
-      required bool fromShare,
-      required Emitter<SummariesState> emit}) async {
+  Future<void> _loadSummaryFromFile({
+    required String fileName,
+    required String filePath,
+    required bool fromShare,
+    required Emitter<SummariesState> emit,
+  }) async {
     final shortSummaryResponse = await summaryRepository.getSummaryFromFile(
-        fileName: fileName, filePath: filePath, summaryType: SummaryType.short);
+      fileName: fileName,
+      filePath: filePath,
+      summaryType: SummaryType.short,
+    );
     final longSummaryResponse = await summaryRepository.getSummaryFromFile(
-        fileName: fileName, filePath: filePath, summaryType: SummaryType.long);
+      fileName: fileName,
+      filePath: filePath,
+      summaryType: SummaryType.long,
+    );
+
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(fileName, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
-        mixpanelBloc
-            .add(SummarizingSuccess(url: fileName, fromShare: fromShare));
+        mixpanelBloc.add(
+          SummarizingSuccess(url: fileName, fromShare: fromShare),
+        );
         add(const IncrementFreeSummaries());
         return summaryData.copyWith(
-            isBlocked: state.freeSummaries >= 2 &&
-                    subscriptionBloc.state.subscriptionStatus ==
-                        SubscriptionStatus.unsubscribed
-                ? true
-                : false,
-            filePath: filePath,
-            shortSummary: shortSummaryResponse,
-            shortSummaryStatus: SummaryStatus.complete,
-            longSummary: longSummaryResponse,
-            longSummaryStatus: SummaryStatus.complete);
+          isBlocked: state.freeSummaries >= 2 &&
+                  subscriptionBloc.state.subscriptionStatus ==
+                      SubscriptionStatus.unsubscribed
+              ? true
+              : false,
+          filePath: filePath,
+          shortSummary: shortSummaryResponse,
+          shortSummaryStatus: SummaryStatus.complete,
+          longSummary: longSummaryResponse,
+          longSummaryStatus: SummaryStatus.complete,
+        );
       } else if (shortSummaryResponse is Exception) {
         mixpanelBloc.add(SummarizingError(
-            url: fileName,
-            fromShare: false,
-            error:
-                shortSummaryResponse.toString().replaceAll('Exception:', '')));
+          url: fileName,
+          fromShare: false,
+          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
+        ));
         return summaryData.copyWith(
-            filePath: filePath,
-            longSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            shortSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            longSummaryStatus: SummaryStatus.error,
-            shortSummaryStatus: SummaryStatus.error);
+          filePath: filePath,
+          longSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          shortSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          longSummaryStatus: SummaryStatus.error,
+          shortSummaryStatus: SummaryStatus.error,
+        );
       } else {
         mixpanelBloc.add(SummarizingError(
-            url: fileName,
-            fromShare: false,
-            error:
-                shortSummaryResponse.toString().replaceAll('Exception:', '')));
+          url: fileName,
+          fromShare: false,
+          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
+        ));
         return summaryData.copyWith(
-            longSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            shortSummary: Summary(
-                summaryError: shortSummaryResponse
-                    .toString()
-                    .replaceAll('Exception:', '')),
-            longSummaryStatus: SummaryStatus.error,
-            shortSummaryStatus: SummaryStatus.error);
+          longSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          shortSummary: Summary(
+            summaryError: shortSummaryResponse
+                .toString()
+                .replaceAll('Exception:', ''),
+          ),
+          longSummaryStatus: SummaryStatus.error,
+          shortSummaryStatus: SummaryStatus.error,
+        );
       }
     });
     emit(state.copyWith(summaries: summaryMap));
   }
 
-  void deleteSummary(String summaryUrl, Emitter<SummariesState> emit) {
+  void _deleteSummary(String summaryUrl, Emitter<SummariesState> emit) {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.remove(summaryUrl);
-    mixpanelBloc.add(const DeleteSummaryM());
     emit(state.copyWith(summaries: summaryMap));
   }
 
-  Future<void> rateSummary(
+  Future<void> _rateSummary(
       RateSummary event, Emitter<SummariesState> emit) async {
     final Set<String> ratedSummaries = Set.from(state.ratedSummaries);
     ratedSummaries.add(event.summaryUrl);
 
     await summaryRepository.sendSummaryRate(
-        summaryLink: event.summaryUrl,
-        summary: state.summaries[event.summaryUrl]?.shortSummary.summaryText ??
-            state.summaries[event.summaryUrl]?.longSummary.summaryText ??
-            '',
-        rate: event.rate,
-        device: event.device,
-        comment: event.comment);
+      summaryLink: event.summaryUrl,
+      summary: state.summaries[event.summaryUrl]?.shortSummary.summaryText ??
+          state.summaries[event.summaryUrl]?.longSummary.summaryText ??
+          '',
+      rate: event.rate,
+      device: event.device,
+      comment: event.comment,
+    );
 
     emit(state.copyWith(ratedSummaries: ratedSummaries));
   }
 
-  void skipRateSummary(String summaryUrl, Emitter<SummariesState> emit) {
+  void _skipRateSummary(String summaryUrl, Emitter<SummariesState> emit) {
     final Set<String> ratedSummaries = Set.from(state.ratedSummaries);
     ratedSummaries.add(summaryUrl);
     emit(state.copyWith(ratedSummaries: ratedSummaries));
   }
-
-  // Future<void> incrementDailySummaryCount(emit) async {
-  //   final DateFormat dayFormatter = DateFormat('MM.dd.yy');
-  //   final thisDay = dayFormatter.format(DateTime.now());
-  //
-  //   final Map<String, int> newDailySummariesMap =
-  //       Map.from(state.dailySummariesMap);
-  //   if (newDailySummariesMap.containsKey(thisDay)) {
-  //     newDailySummariesMap.update(thisDay, (value) => value + 1);
-  //   } else {
-  //     newDailySummariesMap.addAll({thisDay: 1});
-  //   }
-  //
-  //   emit(state.copyWith(dailySummariesMap: newDailySummariesMap));
-  // }
 }

@@ -444,11 +444,15 @@ class $AssetsOnboardingGen {
   AssetGenImage get onb11 =>
       const AssetGenImage('assets/onboarding/onb1_1.png');
 
+  /// File path: assets/onboarding/onb1_1_dark.png
+  AssetGenImage get onb11Dark =>
+      const AssetGenImage('assets/onboarding/onb1_1_dark.png');
+
   /// File path: assets/onboarding/onb2.png
   AssetGenImage get onb2 => const AssetGenImage('assets/onboarding/onb2.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [onb1, onb11, onb2];
+  List<AssetGenImage> get values => [onb1, onb11, onb11Dark, onb2];
 }
 
 class $AssetsSetUpGen {

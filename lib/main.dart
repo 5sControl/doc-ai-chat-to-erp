@@ -91,9 +91,11 @@ class SummishareApp extends StatelessWidget {
               create: (context) => SummariesBloc(
                   mixpanelBloc: mixpanelBloc,
                   subscriptionBloc: context.read<SubscriptionsBloc>())),
+          
           BlocProvider(
             create: (context) => AuthenticationBloc(authService: authService)),
             BlocProvider(create: (context) => OffersBloc()),
+            
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {

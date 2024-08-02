@@ -35,6 +35,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late StreamSubscription _intentMediaStreamSubscription;
   late StreamSubscription _intentTextStreamSubscription;
 
+  final TextEditingController _searchController = TextEditingController();
+  List<String> _filteredSummaries = [];
+  List<String> _allSummaries = []; // To keep track of all summaries
+  Map<String, String> _titleToLinkMap = {};
+
   void getSummary({required String summaryUrl}) {
     // final DateFormat formatter = DateFormat('MM.dd.yy');
     // final thisDay = formatter.format(DateTime.now());
@@ -97,6 +102,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    // _allSummaries = context
+    //     .read<SummariesBloc>()
+    //     .state
+    //     .summaries
+    //     .keys
+    //     .toList()
+    //     .reversed
+    //     .toList();
+    // _filteredSummaries = _allSummaries;
+    // print(_allSummaries);
     // For sharing images coming from outside the app while the app is in the memory
     _intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
@@ -164,7 +179,47 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void dispose() {
     _intentMediaStreamSubscription.cancel();
     _intentTextStreamSubscription.cancel();
+    _searchController.dispose();
     super.dispose();
+  }
+  // //MATCHES IN ALL TITLE
+  // void _filterSummaries(String query) {
+  //   setState(() {
+  //     // If the query is empty, reset the filtered list to all summaries
+  //     if (query.trim().isEmpty) {
+  //       _filteredSummaries = _allSummaries;
+  //       return;
+  //     }
+
+  //     // Convert query to lowercase for case-insensitive matching
+  //     String lowerQuery = query.trim().toLowerCase();
+
+  //     // Filter summaries where the title contains the query as a substring
+  //     _filteredSummaries = _allSummaries.where((title) {
+  //       // Convert title to lowercase
+  //       return title.toLowerCase().contains(lowerQuery);
+  //     }).toList();
+  //   });
+  // }
+
+  // MATCHES AT THE START OF THE TITLE
+  void _filterSummaries(String query) {
+    setState(() {
+      // If the query is empty, reset the filtered list to all summaries
+      if (query.trim().isEmpty) {
+        _filteredSummaries = _allSummaries;
+        return;
+      }
+
+      // Convert query to lowercase for case-insensitive matching
+      String lowerQuery = query.trim().toLowerCase();
+
+      // Filter summaries where the title starts with the query
+      _filteredSummaries = _allSummaries.where((title) {
+        // Convert title to lowercase
+        return title.toLowerCase().startsWith(lowerQuery);
+      }).toList();
+    });
   }
 
   void onPressSettings() {
@@ -194,10 +249,23 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         builder: (context, settingsState) {
           return BlocBuilder<SummariesBloc, SummariesState>(
             builder: (context, summariesState) {
+              _allSummaries = [];
+              _titleToLinkMap = {};
+              summariesState.summaries.forEach((link, summaryData) {
+                final title = summaryData.summaryPreview.title ?? '';
+                _allSummaries.add(title);
+                _titleToLinkMap[title] = link;
+              });
+
+              // Initialize _filteredSummaries if needed
+              if (_filteredSummaries.isEmpty ||
+                  _searchController.text.isEmpty) {
+                _filteredSummaries = _allSummaries;
+              }
               // final DateFormat dayFormatter = DateFormat('MM.dd.yy');
               // final thisDay = dayFormatter.format(DateTime.now());
-              final summaries =
-                  summariesState.summaries.keys.toList().reversed.toList();
+              //final summaries =
+              //    summariesState.summaries.keys.toList().reversed.toList();
               return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
                 builder: (context, state) {
                   final bool isSubscribed = state.subscriptionStatus ==
@@ -225,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           bottom: PreferredSize(
                             preferredSize: Size(
                                 MediaQuery.of(context).size.width,
-                                isSubscribed ? 70.0 : 70),
+                                isSubscribed ? 140.0 : 100),
                             child: Column(
                               children: [
                                 if (isSubscribed)
@@ -233,6 +301,38 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10),
                                       child: const PremiumBanner()),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  child: Container(
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          8), // Rounded corners
+                                    ),
+                                    child: TextField(
+                                      controller: _searchController,
+                                      decoration: const InputDecoration(
+                                        fillColor:
+                                            Color.fromRGBO(187, 247, 247, 1),
+                                        hintText: 'Search',
+                                        prefixIcon: Icon(
+                                          Icons.search,
+                                          size: 20,
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 8),
+                                      ),
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 16),
+                                      onChanged:
+                                          _filterSummaries, // Correct function assignment
+                                    ),
+                                  ),
+                                ),
                                 //const HomeTabs(),
                               ],
                             ),
@@ -254,8 +354,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 visualDensity: VisualDensity.compact,
                                 icon: SvgPicture.asset(
                                   Assets.icons.desctop,
-                                  colorFilter: const ColorFilter.mode(
-                                      Colors.black, BlendMode.srcIn),
+                                  colorFilter: ColorFilter.mode(
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black,
+                                      BlendMode.srcIn),
                                 ),
                                 //color: Colors.white,
                               ),
@@ -268,13 +372,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: ListView.builder(
-                              itemCount: summariesState.summaries.length,
+                              itemCount: _filteredSummaries.length,
                               itemBuilder: (context, index) {
+                                final title = _filteredSummaries[index];
+                                final link = _titleToLinkMap[title];
+
+                                // Pass the link to SummaryTileah
                                 return SummaryTile(
-                                  sharedLink: summaries[index],
-                                  // summaryData: summariesState.summaries[summaries[index]]!,
+                                  sharedLink: link!,
                                 );
                               },
+                              // itemCount: _filteredSummaries
+                              //     .length, // Use the filtered list
+                              // itemBuilder: (context, index) {
+                              //   return SummaryTile(
+                              //     sharedLink: _filteredSummaries[
+                              //         index], // Use the filtered list
+                              //   );
+                              // },
                             ),
                           ),
                           // BlocBuilder<LibraryBloc, LibraryState>(

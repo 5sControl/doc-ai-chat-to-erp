@@ -200,7 +200,7 @@ class OnboardingScreen2 extends StatelessWidget {
         ),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Image.asset('assets/onboarding/onb1_1.png')),
+            child:Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb1_1_dark.png') : Image.asset('assets/onboarding/onb1_1.png')),
         SizedBox(
           height: 10,
         ),
@@ -234,7 +234,7 @@ class OnboardingScreen3 extends StatelessWidget {
         ),
         Container(
             margin: const EdgeInsets.only(left: 15, top: 15),
-            child: Image.asset('assets/onboarding/onb2.png'))
+            child: Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb2_dark.png') : Image.asset('assets/onboarding/onb2.png')),
       ],
     );
   }

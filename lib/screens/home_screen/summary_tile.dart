@@ -93,9 +93,9 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                 widget.sharedLink);
       },
       builder: (context, state) {
-        final summaryData = state.summaries[widget.sharedLink]!;
+        final summaryData = state.summaries[widget.sharedLink];
         final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
-        final String formattedDate = formatter.format(summaryData.date);
+        final String formattedDate = formatter.format(summaryData!.date);
 
         void onPressDelete() {
           context
@@ -425,7 +425,7 @@ class _LoaderState extends State<Loader> {
               ),
             ),
             Text('${loadingText[textIndex]}    ',
-                    style: const TextStyle(fontSize: 12, height: 1))
+                    style: const TextStyle(fontSize: 12, height: 3))
                 .animate()
                 .custom(
                     duration: 300.ms,

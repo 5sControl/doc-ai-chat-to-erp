@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/bloc/offers/offers_event.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 
 import '../../gen/assets.gen.dart';
 import '../subscribtions_screen/subscriptions_screen.dart';
@@ -13,6 +17,7 @@ class PremiumBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressPremiumBanner() {
+      context.read<OffersBloc>().add(NextScreenEvent());
       showCupertinoModalBottomSheet(
         context: context,
         expand: false,
@@ -20,7 +25,7 @@ class PremiumBanner extends StatelessWidget {
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return const SubscriptionScreen(
+          return const SubscriptionScreenLimit(
             fromOnboarding: true,
             triggerScreen: 'Home',
           );

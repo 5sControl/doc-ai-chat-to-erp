@@ -12,6 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/auth/auth_dialog.dart';
+import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
 import 'package:summify/screens/settings_screen/select_lang_dialog.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
@@ -53,7 +54,7 @@ class SettingsScreen extends StatelessWidget {
         barrierColor: Colors.black54,
         backgroundColor: Colors.transparent,
         builder: (context) {
-          return const SubscriptionScreen(
+          return const BundleScreen(
             fromOnboarding: true,
             triggerScreen: 'Settings',
           );
@@ -225,7 +226,6 @@ class SettingsScreen extends StatelessWidget {
                           child: Text(
                             buttonText,
                             style: TextStyle(
-                              color: Colors.black,
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
                             ),

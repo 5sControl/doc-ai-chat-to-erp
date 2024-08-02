@@ -105,7 +105,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             leading: IconButton(
               icon: Icon(
                 Icons.arrow_back_ios_new,
-                color: Colors.black,
                 size: 24,
               ),
               onPressed: () {
@@ -118,7 +117,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             '/bundle');},
                   child: const Text(
                     'Skip',
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    style: TextStyle(fontSize: 18),
                   ))
             ],
           ),
@@ -138,14 +137,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(
-                        height: 36,
+                        height: 26,
                       ),
                       const Text(
                         'Register and get',
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            color: Colors.black,
                             fontSize: 32,
                             height: 1.2,
                             fontWeight: FontWeight.w700),
@@ -156,7 +154,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           //maxLines: 2,
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              color: Colors.black,
                               fontSize: 32,
                               //height: 1.2,
                               fontWeight: FontWeight.w700),
@@ -195,7 +192,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            color: Colors.black,
                             fontSize: 32,
                             height: 1.2,
                             fontWeight: FontWeight.w700),
@@ -283,12 +279,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     child: RichText(
                       text: TextSpan(
                           text: 'Don\'t have an account? ',
-                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 18),
                           children: <TextSpan>[
                             TextSpan(
                                 text: 'Login Now',
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 recognizer: TapGestureRecognizer()
@@ -367,7 +363,7 @@ class NameInput extends StatelessWidget {
           label: Text(
             'Name',
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
@@ -376,7 +372,7 @@ class NameInput extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide.none),
           floatingLabelStyle: const TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               // height: -2,
               fontSize: 18,
               fontWeight: FontWeight.w500)),
@@ -406,7 +402,7 @@ class EmailInput extends StatelessWidget {
           label: Text(
             'Email Address',
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
@@ -467,7 +463,7 @@ class _PasswordInputState extends State<PasswordInput> {
           label: Text(
             'Password',
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
@@ -537,7 +533,7 @@ class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
           label: Text(
             'Confirm password',
             style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: Colors.black,
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
@@ -614,7 +610,6 @@ class DividerRow extends StatelessWidget {
             child: Text(
               'Or Login with',
               style: TextStyle(
-                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             ),
