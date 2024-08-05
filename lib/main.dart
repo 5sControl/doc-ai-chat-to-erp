@@ -65,7 +65,7 @@ class SummishareApp extends StatelessWidget {
       final facebookAppEvents = FacebookAppEvents();
       facebookAppEvents.setAutoLogAppEventsEnabled(true);
     }
-    
+
     final AuthService authService = AuthService();
     final brightness = MediaQuery.of(context).platformBrightness;
     final settingsBloc = SettingsBloc(brightness: brightness);
@@ -91,11 +91,10 @@ class SummishareApp extends StatelessWidget {
               create: (context) => SummariesBloc(
                   mixpanelBloc: mixpanelBloc,
                   subscriptionBloc: context.read<SubscriptionsBloc>())),
-          
           BlocProvider(
-            create: (context) => AuthenticationBloc(authService: authService)),
-            BlocProvider(create: (context) => OffersBloc()),
-            
+              create: (context) =>
+                  AuthenticationBloc(authService: authService)),
+          BlocProvider(create: (context) => OffersBloc()),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
@@ -106,7 +105,7 @@ class SummishareApp extends StatelessWidget {
 
             context.read<SubscriptionsBloc>().add(const InitSubscriptions());
 
-            void setSystemColor() async {
+            Future<void> setSystemColor() async {
               if (settingsState.appTheme == AppTheme.dark) {
                 await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
               }
@@ -146,19 +145,18 @@ class SummishareApp extends StatelessWidget {
                   case '/':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const MainScreen(), settings: settings);
-                        //builder: (_) => const AuthScreen(), settings: settings);
+                  //builder: (_) => const AuthScreen(), settings: settings);
                   case '/onboarding':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const OnboardingScreen(),
                         settings: settings);
                   case '/login':
                     return MaterialWithModalsPageRoute(
-                        builder: (_) => const AuthScreen(),
-                        settings: settings);
+                        builder: (_) =>const AuthScreen(), settings: settings);
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionScreen(
-                              triggerScreen: 'Home',
+                              triggerScreen: 'Home', showBackArrow: true,
                             ),
                         settings: settings);
                   case '/bundle':

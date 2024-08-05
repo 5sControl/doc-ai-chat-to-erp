@@ -10,11 +10,14 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/bloc/offers/offers_event.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/auth/auth_dialog.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
 import 'package:summify/screens/settings_screen/select_lang_dialog.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -47,6 +50,24 @@ class SettingsScreen extends StatelessWidget {
     User? user = FirebaseAuth.instance.currentUser;
     String displayName = user?.email ?? 'No display name';
     void onPressSubscription() {
+      context.read<OffersBloc>().add(NextScreenEvent());
+      showCupertinoModalBottomSheet(
+        context: context,
+        expand: false,
+        bounce: false,
+        barrierColor: Colors.black54,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return const SubscriptionScreenLimit(
+            fromOnboarding: true,
+            triggerScreen: 'Settings',
+          );
+        },
+      );
+    }
+
+    void onPressSubscription1() {
+      context.read<OffersBloc>().add(NextScreenEvent());
       showCupertinoModalBottomSheet(
         context: context,
         expand: false,
@@ -272,7 +293,7 @@ class SettingsScreen extends StatelessWidget {
       ButtonItem(
           title: 'App Bundle',
           leadingIcon: Assets.icons.present,
-          onTap: onPressSubscription,
+          onTap: onPressSubscription1,
           trailing: Container(
               width: 85,
               margin: const EdgeInsets.only(left: 10),

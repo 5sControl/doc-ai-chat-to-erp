@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -273,146 +275,153 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   return DefaultTabController(
                     initialIndex: 0,
                     length: 1,
-                    child: Scaffold(
-                      extendBodyBehindAppBar: true,
-                      appBar: AppBar(
-                          flexibleSpace: ClipRRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                  sigmaX: 8,
-                                  sigmaY: 8,
-                                  tileMode: TileMode.mirror),
-                              child: Container(
-                                color: Colors.transparent,
+                    child: GestureDetector(
+                      onTap: () {
+                        // Dismiss the keyboard when tapped outside
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: Scaffold(
+                        extendBodyBehindAppBar: true,
+                        appBar: AppBar(
+                            flexibleSpace: ClipRRect(
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(
+                                    sigmaX: 8,
+                                    sigmaY: 8,
+                                    tileMode: TileMode.mirror),
+                                child: Container(
+                                  color: Colors.transparent,
+                                ),
                               ),
                             ),
-                          ),
-                          backgroundColor: Colors.transparent,
-                          automaticallyImplyLeading: false,
-                          elevation: 0,
-                          bottom: PreferredSize(
-                            preferredSize: Size(
-                                MediaQuery.of(context).size.width,
-                                isSubscribed ? 140.0 : 100),
-                            child: Column(
-                              children: [
-                                if (isSubscribed)
-                                  Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: const PremiumBanner()),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  child: Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          8), // Rounded corners
-                                    ),
-                                    child: TextField(
-                                      controller: _searchController,
-                                      decoration: const InputDecoration(
-                                        fillColor:
-                                            Color.fromRGBO(187, 247, 247, 1),
-                                        hintText: 'Search',
-                                        prefixIcon: Icon(
-                                          Icons.search,
-                                          size: 20,
-                                        ),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 0, horizontal: 8),
+                            backgroundColor: Colors.transparent,
+                            automaticallyImplyLeading: false,
+                            elevation: 0,
+                            bottom: PreferredSize(
+                              preferredSize: Size(
+                                  MediaQuery.of(context).size.width,
+                                  isSubscribed ? 140.0 : 100),
+                              child: Column(
+                                children: [
+                                  if (isSubscribed)
+                                    Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: const PremiumBanner()),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            8), // Rounded corners
                                       ),
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                      onChanged:
-                                          _filterSummaries, // Correct function assignment
+                                      child: TextField(
+                                        controller: _searchController,
+                                        decoration: const InputDecoration(
+                                          fillColor:
+                                              Color.fromRGBO(187, 247, 247, 1),
+                                          hintText: 'Search',
+                                          prefixIcon: Icon(
+                                            Icons.search,
+                                            size: 20,
+                                          ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 8),
+                                        ),
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                        onChanged:
+                                            _filterSummaries, // Correct function assignment
+                                      ),
                                     ),
                                   ),
-                                ),
-                                //const HomeTabs(),
-                              ],
-                            ),
-                          ),
-                          title: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              // SummariesCounter(
-                              //     availableSummaries: 2,
-                              //     dailySummaries:
-                              //         summariesState.freeSummaries >= 2
-                              //             ? 2
-                              //             : summariesState.freeSummaries),
-                              IconButton(
-                                onPressed: onPressDesktop,
-                                padding: const EdgeInsets.only(right: 70),
-                                visualDensity: VisualDensity.compact,
-                                icon: SvgPicture.asset(
-                                  Assets.icons.desctop,
-                                  colorFilter: ColorFilter.mode(
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.white
-                                          : Colors.black,
-                                      BlendMode.srcIn),
-                                ),
-                                //color: Colors.white,
+                                  //const HomeTabs(),
+                                ],
                               ),
-                              const Logo(),
-                              SettingsButton(onPressSettings: onPressSettings),
-                            ],
-                          )),
-                      body: TabBarView(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: ListView.builder(
-                              itemCount: _filteredSummaries.length,
-                              itemBuilder: (context, index) {
-                                final title = _filteredSummaries[index];
-                                final link = _titleToLinkMap[title];
-
-                                // Pass the link to SummaryTileah
-                                return SummaryTile(
-                                  sharedLink: link!,
-                                );
-                              },
-                              // itemCount: _filteredSummaries
-                              //     .length, // Use the filtered list
-                              // itemBuilder: (context, index) {
-                              //   return SummaryTile(
-                              //     sharedLink: _filteredSummaries[
-                              //         index], // Use the filtered list
-                              //   );
-                              // },
                             ),
-                          ),
-                          // BlocBuilder<LibraryBloc, LibraryState>(
-                          //   builder: (context, libraryState) {
-                          //     final List<String> items =
-                          //         libraryState.libraryDocuments.keys.toList();
-                          //         return Container();
-                          //     // return Container(
-                          //     //   padding: const EdgeInsets.only(top: 10),
-                          //     //   child: ListView.builder(
-                          //     //     itemCount: items.length,
-                          //     //     itemBuilder: (context, index) {
-                          //     //       return LibraryDocumentTile(
-                          //     //         libraryDocument: libraryState
-                          //     //             .libraryDocuments[items[index]]!,
-                          //     //       );
-                          //     //       return Container();
-                          //     //     },
-                          //     //   ),
-                          //     // );
-                          //   },
-                          // ),
-                        ],
+                            title: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // SummariesCounter(
+                                //     availableSummaries: 2,
+                                //     dailySummaries:
+                                //         summariesState.freeSummaries >= 2
+                                //             ? 2
+                                //             : summariesState.freeSummaries),
+                                IconButton(
+                                  onPressed: onPressDesktop,
+                                  padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.2),
+                                  visualDensity: VisualDensity.compact,
+                                  icon: SvgPicture.asset(
+                                    Assets.icons.desctop,
+                                    colorFilter: ColorFilter.mode(
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black,
+                                        BlendMode.srcIn),
+                                  ),
+                                  //color: Colors.white,
+                                ),
+                                const Logo(),
+                                SettingsButton(
+                                    onPressSettings: onPressSettings),
+                              ],
+                            )),
+                        body: TabBarView(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: ListView.builder(
+                                itemCount: _filteredSummaries.length,
+                                itemBuilder: (context, index) {
+                                  final title = _filteredSummaries[index];
+                                  final link = _titleToLinkMap[title];
+
+                                  // Pass the link to SummaryTileah
+                                  return SummaryTile(
+                                    sharedLink: link!,
+                                  );
+                                },
+                                // itemCount: _filteredSummaries
+                                //     .length, // Use the filtered list
+                                // itemBuilder: (context, index) {
+                                //   return SummaryTile(
+                                //     sharedLink: _filteredSummaries[
+                                //         index], // Use the filtered list
+                                //   );
+                                // },
+                              ),
+                            ),
+                            // BlocBuilder<LibraryBloc, LibraryState>(
+                            //   builder: (context, libraryState) {
+                            //     final List<String> items =
+                            //         libraryState.libraryDocuments.keys.toList();
+                            //         return Container();
+                            //     // return Container(
+                            //     //   padding: const EdgeInsets.only(top: 10),
+                            //     //   child: ListView.builder(
+                            //     //     itemCount: items.length,
+                            //     //     itemBuilder: (context, index) {
+                            //     //       return LibraryDocumentTile(
+                            //     //         libraryDocument: libraryState
+                            //     //             .libraryDocuments[items[index]]!,
+                            //     //       );
+                            //     //       return Container();
+                            //     //     },
+                            //     //   ),
+                            //     // );
+                            //   },
+                            // ),
+                          ],
+                        ),
                       ),
                     ),
                   );

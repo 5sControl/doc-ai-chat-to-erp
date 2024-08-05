@@ -19,8 +19,9 @@ import 'subscription_body_year.dart';
 class SubscriptionScreen extends StatefulWidget {
   final bool? fromOnboarding;
   final String triggerScreen;
+  final bool showBackArrow;
   const SubscriptionScreen(
-      {super.key, this.fromOnboarding, required this.triggerScreen});
+      {super.key, this.fromOnboarding, required this.triggerScreen, required this.showBackArrow});
 
   @override
   State<SubscriptionScreen> createState() => _SubscriptionScreenState();
@@ -85,8 +86,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
-        final monthlyPackage = packages.firstWhere(
-            (element) => element.packageType == PackageType.weekly);
+        final monthlyPackage = packages
+            .firstWhere((element) => element.packageType == PackageType.weekly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
 
@@ -98,16 +99,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 Animate(
                   effects: const [FadeEffect()],
                   child: SafeArea(
-                    child: Scaffold(
+                    child: Scaffold( 
                       appBar: AppBar(
-                        toolbarHeight: 0,
+                        toolbarHeight:widget.showBackArrow ? 40 : 0,
                         automaticallyImplyLeading: false,
-                        //actions: [
-                        //  BackArrow(fromOnboarding: widget.fromOnboarding),
-                        //  const SizedBox(
-                        //    width: 5,
-                         // )
-                        //],
+                        actions: [
+                          if(widget.showBackArrow) 
+                          BackArrow(fromOnboarding: widget.fromOnboarding),
+                          const SizedBox(
+                            width: 10,
+                          )
+                        ],
                       ),
                       body: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -400,27 +402,31 @@ class BackArrow extends StatelessWidget {
   Widget build(BuildContext context) {
     void onPressClose() {
       if (fromOnboarding == null) {
-        Navigator.of(context)
-            .pushNamed('/login');
+        Navigator.of(context).pushNamed('/login');
         context.read<MixpanelBloc>().add(const ClosePaywall());
       } else {
         Navigator.of(context).pop();
       }
     }
 
-    return IconButton(
-        visualDensity: VisualDensity.compact,
-        onPressed: onPressClose,
-        style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
-            backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0.2))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
-        icon: Icon(
-          Icons.close,
-          size: 20,
-          color: Theme.of(context).iconTheme.color,
-        ));
+    return Container(
+      width: 32,
+      height: 32,
+      decoration: BoxDecoration(
+        border: Border.all(width: 1),
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+          visualDensity: VisualDensity.compact,
+          onPressed: onPressClose,
+          icon: Icon(
+            Icons.close,
+            size: 16,
+            color: Theme.of(context).iconTheme.color,
+          )),padding: EdgeInsets.zero,  // Remove default padding
+          constraints: BoxConstraints(maxHeight: 32,
+          maxWidth: 32,),  // Remove default constraints
+    );
   }
 }
 

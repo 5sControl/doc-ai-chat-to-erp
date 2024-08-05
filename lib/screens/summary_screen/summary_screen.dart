@@ -278,10 +278,10 @@ class PremiumBlurContainer extends StatelessWidget {
               265 -
               MediaQuery.of(context).padding.bottom,
           width: double.infinity,
-          margin: EdgeInsets.only(
-              left: 15,
-              right: 15,
-              bottom: MediaQuery.of(context).padding.bottom),
+          //margin: //EdgeInsets.only(
+              //left: 15,
+              //right: 15,
+              //bottom: MediaQuery.of(context).padding.bottom),
           child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: BackdropFilter(
@@ -310,7 +310,7 @@ class PremiumBlurContainer extends StatelessWidget {
                             onTap: onPressPremium,
                             child: Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
+                                    horizontal: 30, vertical: 8),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -324,12 +324,12 @@ class PremiumBlurContainer extends StatelessWidget {
                                       width: 10,
                                     ),
                                     const Text(
-                                      'Upgrade to Super Premium',
+                                      'Break through the limits',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,
-                                          fontWeight: FontWeight.w600),
+                                          fontWeight: FontWeight.w700),
                                     ),
                                   ],
                                 ))),

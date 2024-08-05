@@ -52,27 +52,27 @@ PODS:
     - Flutter
   - file_selector_ios (0.0.1):
     - Flutter
-  - Firebase/Auth (10.22.0):
+  - Firebase/Auth (10.25.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 10.22.0)
-  - Firebase/CoreOnly (10.22.0):
-    - FirebaseCore (= 10.22.0)
-  - firebase_auth (4.17.8):
-    - Firebase/Auth (= 10.22.0)
+    - FirebaseAuth (~> 10.25.0)
+  - Firebase/CoreOnly (10.25.0):
+    - FirebaseCore (= 10.25.0)
+  - firebase_auth (4.20.0):
+    - Firebase/Auth (= 10.25.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.27.0):
-    - Firebase/CoreOnly (= 10.22.0)
+  - firebase_core (2.32.0):
+    - Firebase/CoreOnly (= 10.25.0)
     - Flutter
   - FirebaseAppCheckInterop (10.29.0)
-  - FirebaseAuth (10.22.0):
+  - FirebaseAuth (10.25.0):
     - FirebaseAppCheckInterop (~> 10.17)
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
     - RecaptchaInterop (~> 100.0)
-  - FirebaseCore (10.22.0):
+  - FirebaseCore (10.25.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.12)
     - GoogleUtilities/Logger (~> 7.12)
@@ -135,20 +135,23 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.4.0)
-  - purchases_flutter (6.29.1):
+  - purchases_flutter (6.30.2):
     - Flutter
-    - PurchasesHybridCommon (= 10.6.2)
-  - PurchasesHybridCommon (10.6.2):
-    - RevenueCat (= 4.41.2)
+    - PurchasesHybridCommon (= 11.1.0)
+  - PurchasesHybridCommon (11.1.0):
+    - RevenueCat (= 4.43.2)
   - RecaptchaInterop (100.0.0)
   - receive_sharing_intent_plus (1.0.1):
     - Flutter
-  - RevenueCat (4.41.2)
+  - RevenueCat (4.43.2)
   - SDWebImage (5.19.4):
     - SDWebImage/Core (= 5.19.4)
   - SDWebImage/Core (5.19.4)
   - share_plus (0.0.1):
     - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
   - sign_in_with_apple (0.0.1):
     - Flutter
   - sqflite (0.0.3):
@@ -176,6 +179,7 @@ DEPENDENCIES:
   - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - receive_sharing_intent_plus (from `.symlinks/plugins/receive_sharing_intent_plus/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
   - status_bar_control (from `.symlinks/plugins/status_bar_control/ios`)
@@ -238,6 +242,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/receive_sharing_intent_plus/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sign_in_with_apple:
     :path: ".symlinks/plugins/sign_in_with_apple/ios"
   sqflite:
@@ -257,16 +263,16 @@ SPEC CHECKSUMS:
   FBSDKCoreKit: a5f384db2e9ee84e98494fed8f983d2bd79accff
   FBSDKCoreKit_Basics: d35c775aaf243a2d731dfae7be3a74b1987285ab
   file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
-  file_selector_ios: b6a6c6667913d571590169ef946afbafe3b52688
-  Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
-  firebase_auth: 4cf9d126dc9629a77dbcbd23723e903d8277ff5a
-  firebase_core: 100945864b4aedce3cfef0c62ab864858bf013cf
+  file_selector_ios: f0670c1064a8c8450e38145d8043160105d0b97c
+  Firebase: 0312a2352584f782ea56f66d91606891d4607f06
+  firebase_auth: 5719ddc9f654b813405899480e84971bd8e61235
+  firebase_core: a626d00494efa398e7c54f25f1454a64c8abf197
   FirebaseAppCheckInterop: 6a1757cfd4067d8e00fccd14fcc1b8fd78cfac07
-  FirebaseAuth: bbe4c68f958504ba9e54aee181adbdf5b664fbc6
-  FirebaseCore: 0326ec9b05fbed8f8716cddbf0e36894a13837f7
+  FirebaseAuth: c0f93dcc570c9da2bffb576969d793e95c344fbb
+  FirebaseCore: 7ec4d0484817f12c3373955bc87762d96842d483
   FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
+  flutter_email_sender: 10a22605f92809a11ef52b2f412db806c6082d40
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
@@ -276,20 +282,21 @@ SPEC CHECKSUMS:
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   mixpanel_flutter: ed1e5eaea382cbbaf655d20e23478211727ee011
-  path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  purchases_flutter: bf69ca1b3f9895bdc790f99b5895069ab0758cc5
-  PurchasesHybridCommon: 120cdca2b40fb5947a51b75e121da4f2cde0a137
+  purchases_flutter: 42d5544e7730ea89a88cc2f008b7c700fd147052
+  PurchasesHybridCommon: 4022d5944cb30ec44ba5159e42aa161fe0e30175
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   receive_sharing_intent_plus: f02db0a23c17f7aeef8de465cb2d8705a46143a6
-  RevenueCat: 0250867579677899de94f96ad9be342be865560f
+  RevenueCat: 3d934653b7e8b09af88fd47e9e84cfaf5d0a89ba
   SDWebImage: 066c47b573f408f18caa467d71deace7c0f8280d
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
   status_bar_control: 7c84146799e6a076315cc1550f78ef53aae3e446
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
-  url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
 PODFILE CHECKSUM: e5df2ca811a54d5a45e82b55800ff8151ecc7921
 

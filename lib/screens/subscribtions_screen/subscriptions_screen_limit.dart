@@ -147,10 +147,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                             const SubTitle(),
                             state.screenIndex < 3 && state.screenIndex != 1
                                 ? const SizedBox(
-                                    height: 50,
+                                    height: 35,
                                   )
                                 : const SizedBox(
-                                    height: 25,
+                                    height: 10,
                                   ),
                             state.screenIndex < 3 ? const Text1() : Container(),
 
@@ -845,7 +845,7 @@ class SubscriptionCover extends StatelessWidget {
 
     return Expanded(
       child: SizedBox(
-        height: 140,
+        height: 150,
         child: GestureDetector(
           onTap: () => onSelectSubscription(index: index),
           child: Container(
@@ -875,7 +875,7 @@ class SubscriptionCover extends StatelessWidget {
                         child: SvgPicture.asset(Assets.icons.checkCircle)),
                   ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  padding: const EdgeInsets.only(top: 6, bottom: 6),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
@@ -897,7 +897,7 @@ class SubscriptionCover extends StatelessWidget {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: textColor,
-                            fontSize: 26,
+                            fontSize: 22,
                             fontWeight:
                                 isSelected ? FontWeight.w700 : FontWeight.w400),
                       ),

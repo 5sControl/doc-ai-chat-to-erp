@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
       if (Platform.isIOS) {
         Navigator.of(context).pushNamedAndRemoveUntil(
-            '/bundle', (Route<dynamic> route) => false);
+            '/subscribe', (Route<dynamic> route) => false);
       } else {
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
@@ -73,67 +73,71 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: Stack(
-        children: [
-          const BackgroundGradient(),
-          Scaffold(
-            extendBody: true,
-            resizeToAvoidBottomInset: false,
-            body: Padding(
-              padding: EdgeInsets.only(
-                  // bottom: MediaQuery.of(context).padding.bottom + 15,
-                  left: 0,
-                  right: 0,
-                  top: MediaQuery.of(context).padding.top),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: PageView(
-                      physics: const ClampingScrollPhysics(),
-                      controller: _pageViewController,
-                      onPageChanged: _handlePageViewChanged,
-                      children: const [
-                        // OnboardingScreen1(),
-                        OnboardingScreen2(),
-                        OnboardingScreen3(),
-                        OnboardingScreen4(),
-                      ],
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            const BackgroundGradient(),
+            Scaffold(
+              extendBody: true,
+              resizeToAvoidBottomInset: false,
+              body: Padding(
+                padding: EdgeInsets.only(
+                    // bottom: MediaQuery.of(context).padding.bottom + 15,
+                    left: 0,
+                    right: 0,
+                    top: MediaQuery.of(context).padding.top),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: PageView(
+                        physics: const ClampingScrollPhysics(),
+                        controller: _pageViewController,
+                        onPageChanged: _handlePageViewChanged,
+                        children: const [
+                          // OnboardingScreen1(),
+                          OnboardingScreen2(),
+                          OnboardingScreen3(),
+                          OnboardingScreen4(),
+                        ],
+                      ),
                     ),
-                  ),
-
-                  // PageIndicator(
-                  //   tabController: _tabController,
-                  //   currentPageIndex: _currentPageIndex,
-                  // ),
-                ],
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: GestureDetector(
-              onTap: onPressContinue,
-              child: Container(
-                height: 50,
-                margin: const EdgeInsets.all(15),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                    color: const Color.fromRGBO(31, 188, 183, 1),
-                    borderRadius: BorderRadius.circular(8)),
-                alignment: Alignment.center,
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
+        
+                    // PageIndicator(
+                    //   tabController: _tabController,
+                    //   currentPageIndex: _currentPageIndex,
+                    // ),
+                  ],
                 ),
               ),
-            ),
-          )
-        ],
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: GestureDetector(
+                onTap: onPressContinue,
+                child: Container(
+                  height: 50,
+                  margin: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                      color: const Color.fromRGBO(31, 188, 183, 1),
+                      borderRadius: BorderRadius.circular(8)),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

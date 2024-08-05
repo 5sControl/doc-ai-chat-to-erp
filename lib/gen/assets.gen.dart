@@ -207,6 +207,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/play.svg
   String get play => 'assets/icons/play.svg';
 
+  /// File path: assets/icons/plus.svg
+  String get plus => 'assets/icons/plus.svg';
+
   /// File path: assets/icons/present.svg
   String get present => 'assets/icons/present.svg';
 
@@ -215,6 +218,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/profile.svg
   String get profile => 'assets/icons/profile.svg';
+
+  /// File path: assets/icons/profile_circle.svg
+  String get profileCircle => 'assets/icons/profile_circle.svg';
 
   /// File path: assets/icons/profile_filled.svg
   String get profileFilled => 'assets/icons/profile_filled.svg';
@@ -236,6 +242,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/summafy_mini.svg
   String get summafyMini => 'assets/icons/summafy_mini.svg';
+
+  /// File path: assets/icons/summify_logo.svg
+  String get summifyLogo => 'assets/icons/summify_logo.svg';
 
   /// File path: assets/icons/terms.svg
   String get terms => 'assets/icons/terms.svg';
@@ -299,9 +308,11 @@ class $AssetsIconsGen {
         paste,
         phone,
         play,
+        plus,
         present,
         privacy,
         profile,
+        profileCircle,
         profileFilled,
         restore,
         setUp,
@@ -309,6 +320,7 @@ class $AssetsIconsGen {
         share,
         star,
         summafyMini,
+        summifyLogo,
         terms,
         text,
         textScale,
@@ -451,8 +463,12 @@ class $AssetsOnboardingGen {
   /// File path: assets/onboarding/onb2.png
   AssetGenImage get onb2 => const AssetGenImage('assets/onboarding/onb2.png');
 
+  /// File path: assets/onboarding/onb2_dark.png
+  AssetGenImage get onb2Dark =>
+      const AssetGenImage('assets/onboarding/onb2_dark.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [onb1, onb11, onb11Dark, onb2];
+  List<AssetGenImage> get values => [onb1, onb11, onb11Dark, onb2, onb2Dark];
 }
 
 class $AssetsSetUpGen {

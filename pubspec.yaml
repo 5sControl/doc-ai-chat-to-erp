@@ -1,7 +1,7 @@
 name: summify
 description: "Summify Extension"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.4.2+2
+version: 1.4.2+3
 
 environment:
   sdk: '>=3.2.4 <4.0.0'
@@ -45,6 +45,8 @@ dependencies:
   purchases_flutter: ^6.29.1
   flutter_dialogs: ^3.0.0
   toastification: ^2.1.0
+  sizer: ^2.0.15
+  device_preview: ^1.2.0
 
 dev_dependencies:
   flutter_test:

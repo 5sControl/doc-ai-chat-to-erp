@@ -406,7 +406,7 @@ class _LoaderState extends State<Loader> {
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
-        firstChild: Column(
+        firstChild: Row(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -424,6 +424,7 @@ class _LoaderState extends State<Loader> {
                 ),
               ),
             ),
+            const SizedBox(width: 10,),
             Text('${loadingText[textIndex]}    ',
                     style: const TextStyle(fontSize: 12, height: 3))
                 .animate()
