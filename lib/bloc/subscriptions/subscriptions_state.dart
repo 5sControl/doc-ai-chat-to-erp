@@ -1,6 +1,6 @@
 part of 'subscriptions_bloc.dart';
 
-enum SubscriptionStatus { subscribed, unsubscribed }
+enum SubscriptionStatus { subscribed, unsubscribed, bundleSubscribed }
 
 class SubscriptionsState extends Equatable {
   final SubscriptionStatus subscriptionStatus;

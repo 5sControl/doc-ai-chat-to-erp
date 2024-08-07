@@ -333,25 +333,38 @@ class EmailField extends StatelessWidget {
 }
 
 class BackArrow extends StatelessWidget {
-  const BackArrow({super.key});
+  final bool? fromOnboarding;
+  const BackArrow({super.key, this.fromOnboarding});
 
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      Navigator.of(context).pop();
+      if (fromOnboarding != null) {
+        Navigator.of(context).pushNamed('/');
+        context.read<MixpanelBloc>().add(const ClosePaywall());
+      } else {
+        Navigator.of(context).pop();
+      }
     }
 
     return IconButton(
         visualDensity: VisualDensity.compact,
         onPressed: onPressClose,
         style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.black),
+              ),
+            ),
             backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0.2))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
         icon: Icon(
           Icons.close,
-          size: 20,
+          size: 18,
           color: Theme.of(context).iconTheme.color,
         ));
   }

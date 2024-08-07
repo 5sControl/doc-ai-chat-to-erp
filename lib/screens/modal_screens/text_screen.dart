@@ -94,7 +94,7 @@ class _TextModalScreenState extends State<TextModalScreen> {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
-                  .copyWith(fontWeight: FontWeight.w600),
+                  .copyWith(fontWeight: FontWeight.w600,),
             ),
             MyTextField(controller: textController, onPressPaste: onPressPaste),
             SummifyButton(
@@ -141,7 +141,7 @@ class MyTextField extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.white70,
                         border: Border.all(
-                            color: Theme.of(context).primaryColor, width: 1),
+                            color: Theme.of(context).primaryColor, width: 0.5),
                         borderRadius: BorderRadius.circular(8)),
                     child: TextFormField(
                       maxLines: null,
@@ -156,7 +156,7 @@ class MyTextField extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyMedium,
                       decoration: InputDecoration(
                           fillColor:
-                              Theme.of(context).canvasColor.withAlpha(240),
+                              Color.fromRGBO(242, 255, 255, 1),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: const BorderSide(

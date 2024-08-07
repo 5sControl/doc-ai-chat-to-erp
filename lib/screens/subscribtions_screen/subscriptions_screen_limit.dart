@@ -89,7 +89,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
         final monthlyPackage = packages
-            .firstWhere((element) => element.packageType == PackageType.weekly);
+            .firstWhere((element) => element.packageType == PackageType.monthly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
 
@@ -115,7 +115,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                       return Scaffold(
                         appBar: AppBar(
                           //backgroundColor: colors[state.screenIndex],
-                          toolbarHeight: 235,
+                          toolbarHeight:MediaQuery.of(context).size.shortestSide < 600 ? 235 : 635,
                           //toolbarOpacity: 20,
                           automaticallyImplyLeading: false,
                           flexibleSpace: Stack(
@@ -424,7 +424,6 @@ class Human extends StatelessWidget {
         child: Image.asset(
           screenTexts[state.screenIndex],
           width: double.infinity,
-          height: 295,
           fit: BoxFit.cover,
         ),
       );
@@ -437,6 +436,7 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final List<String> screenTexts = [
       'Need more summaries?',
       'Maximize your productivity!',
@@ -453,7 +453,7 @@ class Title extends StatelessWidget {
             screenTexts[state.screenIndex],
             textAlign: TextAlign.start,
             style:state.screenIndex < 3 ?
-                TextStyle(fontSize: 46, fontWeight: FontWeight.w700, height: 1) : TextStyle(fontSize: 48, fontWeight: FontWeight.w700, height: 1),
+                TextStyle(fontSize: isTablet ? 56 : 46, fontWeight: FontWeight.w700, height: 1) : TextStyle(fontSize: 48, fontWeight: FontWeight.w700, height: 1),
           );
         }),
       ),
@@ -462,6 +462,8 @@ class Title extends StatelessWidget {
 }
 
 Widget buildRichText(BuildContext context, String text, {bool isLink = false}) {
+
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
     child: RichText(
@@ -480,7 +482,7 @@ Widget buildRichText(BuildContext context, String text, {bool isLink = false}) {
                   : Colors.white,
               decoration:
                   isLink ? TextDecoration.underline : TextDecoration.none,
-              fontSize: 18,
+              fontSize:isTablet ? 24 : 18,
             ),
           ),
         ],
@@ -494,6 +496,8 @@ class SubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final List<String> screenTexts = [
       'Maximize your productivity\nand efficiency!',
       '',
@@ -508,7 +512,7 @@ class SubTitle extends StatelessWidget {
                   TextSpan(
                     text: screenTexts[state.screenIndex],
                     style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w600, height: 1.4),
+                        fontSize:isTablet ? 36 : 20, fontWeight: FontWeight.w600, height: 1.4),
                   ),
                   textAlign: TextAlign.start,
                 )
@@ -534,6 +538,8 @@ class Text1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final List<String> screenTexts = [
       '15 Deep Summaries Daily',
       '15 Deep Summaries Daily',
@@ -551,7 +557,7 @@ class Text1 extends StatelessWidget {
               screenTexts[state.screenIndex],
               textAlign: TextAlign.start,
               style: TextStyle(
-                  fontSize: 24, fontWeight: FontWeight.w700, height: 1),
+                  fontSize:isTablet ? 36 : 24, fontWeight: FontWeight.w700, height: 1),
             ),
           );
         }),
@@ -626,9 +632,8 @@ class BackArrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      if (fromOnboarding == null) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      if (fromOnboarding != null) {
+        Navigator.of(context).pushNamed('/');
         context.read<MixpanelBloc>().add(const ClosePaywall());
       } else {
         Navigator.of(context).pop();
@@ -639,13 +644,20 @@ class BackArrow extends StatelessWidget {
         visualDensity: VisualDensity.compact,
         onPressed: onPressClose,
         style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.black),
+              ),
+            ),
             backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0.2))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
         icon: Icon(
           Icons.close,
-          size: 20,
+          size: 18,
           color: Theme.of(context).iconTheme.color,
         ));
   }
@@ -821,6 +833,8 @@ class SubscriptionCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     String subscriptionTitle = '';
     switch (package.storeProduct.identifier) {
       case 'SummifyPremiumWeekly' || 'summify_premium_week':
@@ -845,7 +859,7 @@ class SubscriptionCover extends StatelessWidget {
 
     return Expanded(
       child: SizedBox(
-        height: 150,
+        height: isTablet ? 180 : 150,
         child: GestureDetector(
           onTap: () => onSelectSubscription(index: index),
           child: Container(
@@ -885,7 +899,7 @@ class SubscriptionCover extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: textColor,
-                            fontSize: 15,
+                            fontSize:isTablet ? 18 : 15,
                             fontWeight: FontWeight.w500),
                       ),
                       const Divider(
@@ -897,7 +911,7 @@ class SubscriptionCover extends StatelessWidget {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: textColor,
-                            fontSize: 22,
+                            fontSize: isTablet ? 28 : 24,
                             fontWeight:
                                 isSelected ? FontWeight.w700 : FontWeight.w400),
                       ),
@@ -907,7 +921,7 @@ class SubscriptionCover extends StatelessWidget {
                             color: textColor,
                             decoration: TextDecoration.lineThrough,
                             decorationColor: Colors.white,
-                            fontSize: 16,
+                            fontSize:isTablet ? 20 : 16,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -934,6 +948,8 @@ class SubscribeButton extends StatefulWidget {
 class _SubscribeButtonState extends State<SubscribeButton> {
   @override
   Widget build(BuildContext context) {
+
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     void onPressGoPremium() {
       if (widget.package != null) {
         context
@@ -953,7 +969,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
           onTap: onPressGoPremium,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: EdgeInsets.symmetric(vertical: isTablet ? 18 : 10),
             child: const Text(
               'Go Premium',
               textAlign: TextAlign.center,

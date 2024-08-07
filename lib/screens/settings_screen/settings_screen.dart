@@ -51,35 +51,49 @@ class SettingsScreen extends StatelessWidget {
     String displayName = user?.email ?? 'No display name';
     void onPressSubscription() {
       context.read<OffersBloc>().add(NextScreenEvent());
-      showCupertinoModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return const SubscriptionScreenLimit(
-            fromOnboarding: true,
-            triggerScreen: 'Settings',
-          );
-        },
+      // showCupertinoModalBottomSheet(
+      //   context: context,
+      //   expand: false,
+      //   bounce: false,
+      //   barrierColor: Colors.black54,
+      //   backgroundColor: Colors.transparent,
+      //   builder: (context) {
+      //     return const SubscriptionScreenLimit(
+      //       fromOnboarding: true,
+      //       triggerScreen: 'Settings',
+      //     );
+      //   },
+      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const SubscriptionScreenLimit(
+                  triggerScreen: 'Settings',
+                )),
       );
     }
 
     void onPressSubscription1() {
       context.read<OffersBloc>().add(NextScreenEvent());
-      showCupertinoModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return const BundleScreen(
-            fromOnboarding: true,
-            triggerScreen: 'Settings',
-          );
-        },
+      // showCupertinoModalBottomSheet(
+      //   context: context,
+      //   expand: false,
+      //   bounce: false,
+      //   barrierColor: Colors.black54,
+      //   backgroundColor: Colors.transparent,
+      //   builder: (context) {
+      //     return const BundleScreen(
+      //       fromOnboarding: true,
+      //       triggerScreen: 'Settings',
+      //     );
+      //   },
+      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const BundleScreen(
+                  triggerScreen: 'Settings',
+                )),
       );
     }
 
@@ -130,15 +144,20 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressSetupShare() {
-      showCupertinoModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return const SetUpShareScreen();
-        },
+      // showCupertinoModalBottomSheet(
+      //   context: context,
+      //   expand: false,
+      //   bounce: false,
+      //   barrierColor: Colors.black54,
+      //   backgroundColor: Colors.transparent,
+      //   builder: (context) {
+      //     return const SetUpShareScreen();
+      //   },
+      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const SetUpShareScreen()),
       );
     }
 
@@ -185,16 +204,7 @@ class SettingsScreen extends StatelessWidget {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.black),
                           ),
-                          child: IconButton(
-                            padding: EdgeInsets.all(0),
-                            icon: const Icon(
-                              Icons.close_rounded,
-                              size: 15,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
+                          child: BackArrow()
                         ),
                       ),
                     ],
@@ -228,11 +238,13 @@ class SettingsScreen extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          if(buttonText == 'Yes, log out') {
+                          if (buttonText == 'Yes, log out') {
                             context.read<AuthenticationBloc>().add(SignOut());
                             Navigator.of(context).pop();
-                          } else if(buttonText == 'Yes, delete'){
-                            context.read<AuthenticationBloc>().add(DeleteUser());
+                          } else if (buttonText == 'Yes, delete') {
+                            context
+                                .read<AuthenticationBloc>()
+                                .add(DeleteUser());
                             Navigator.of(context).pop();
                           }
                         },
@@ -452,7 +464,6 @@ class SettingsScreen extends StatelessWidget {
           onTap: () {
             showAuthDialog(context, 'Are you sure you\nwant to log out?',
                 'Come back soon, we\'ll be\nwaiting for you!', 'Yes, log out');
-            
           }),
       ButtonItem(
           title: 'Delete account',
@@ -568,10 +579,9 @@ class SettingsScreen extends StatelessWidget {
                                       } else {
                                         return InkWell(
                                           onTap: () {
-                                            Navigator.of(context)
-                                                .pushNamed(
-                                                    '/login',
-                                                     );
+                                            Navigator.of(context).pushNamed(
+                                              '/login',
+                                            );
                                           },
                                           child: Row(
                                             mainAxisAlignment:
@@ -604,7 +614,7 @@ class SettingsScreen extends StatelessWidget {
                                                             .textTheme
                                                             .bodySmall!
                                                             .color,
-                                                        fontSize: 16,
+                                                        fontSize: 15,
                                                         fontWeight:
                                                             FontWeight.w400),
                                                   ),
@@ -658,12 +668,12 @@ class SettingsScreen extends StatelessWidget {
                               return Container();
                             }
                           }),
-                      // Text('version 1.4.0',
-                      //     textAlign: TextAlign.end,
-                      //     style: Theme.of(context)
-                      //         .textTheme
-                      //         .bodySmall!
-                      //         .copyWith(height: 1))
+                      Text('version 1.4.0',
+                          textAlign: TextAlign.end,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(height: 1))
                     ],
                   ),
                 )),
@@ -671,6 +681,44 @@ class SettingsScreen extends StatelessWidget {
         ],
       );
     });
+  }
+}
+
+class BackArrow extends StatelessWidget {
+  final bool? fromOnboarding;
+  const BackArrow({super.key, this.fromOnboarding});
+
+  @override
+  Widget build(BuildContext context) {
+    void onPressClose() {
+      if (fromOnboarding != null) {
+        Navigator.of(context).pushNamed('/');
+        context.read<MixpanelBloc>().add(const ClosePaywall());
+      } else {
+        Navigator.of(context).pop();
+      }
+    }
+
+    return IconButton(
+        visualDensity: VisualDensity.compact,
+        onPressed: onPressClose,
+        style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.black),
+              ),
+            ),
+            backgroundColor: MaterialStatePropertyAll(
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
+        icon: Icon(
+          Icons.close,
+          size: 18,
+          color: Theme.of(context).iconTheme.color,
+        ));
   }
 }
 

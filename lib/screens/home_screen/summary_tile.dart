@@ -156,7 +156,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                   aspectRatio: 3.5,
                   child: Material(
                     borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    color: Color.fromRGBO(187, 247, 247, 1),
                     child: InkWell(
                       splashFactory: InkSplash.splashFactory,
                       highlightColor:
@@ -206,22 +206,27 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    summaryData.summaryPreview.title ??
-                                        widget.sharedLink
-                                            .replaceAll('https://', ''),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displayMedium,
+                                  Container(
+                                    width: MediaQuery.of(context).size.shortestSide < 550 ? double.infinity : 700,
+                                    child: Text(
+                                      summaryData.summaryPreview.title ??
+                                          widget.sharedLink
+                                              .replaceAll('https://', ''),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayMedium?.copyWith(color: Colors.black),  
+                                          
+                                    ),
                                   ),
+                                  SizedBox(height:3,),
                                   Text(
                                     formattedDate,
                                     overflow: TextOverflow.ellipsis,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .displaySmall,
+                                        .displaySmall?.copyWith(color: Colors.black), 
                                   ),
                                   ErrorMessage(
                                     summaryData: summaryData,
@@ -426,7 +431,7 @@ class _LoaderState extends State<Loader> {
             ),
             const SizedBox(width: 10,),
             Text('${loadingText[textIndex]}    ',
-                    style: const TextStyle(fontSize: 12, height: 3))
+                    style: const TextStyle(fontSize: 12, height: 3, color: Colors.black))
                 .animate()
                 .custom(
                     duration: 300.ms,

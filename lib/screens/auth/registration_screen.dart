@@ -1,6 +1,7 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -115,9 +116,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               TextButton(
                   onPressed: () {Navigator.of(context).pushNamed(
             '/bundle');},
-                  child: const Text(
+                  child: Text(
                     'Skip',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 16, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                   ))
             ],
           ),
@@ -144,23 +145,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontSize: 32,
+                            fontSize: 30,
                             height: 1.2,
                             fontWeight: FontWeight.w700),
                       ),
-                      Stack(children: [
+                      Row(children: [
                         const Text(
-                          '2 free',
+                          '2 free ',
                           //maxLines: 2,
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: 32,
+                              fontSize: 30,
                               //height: 1.2,
                               fontWeight: FontWeight.w700),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 5),
                           //width: double.infinity,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
@@ -182,7 +181,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   .copyWith(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 28),
+                                      fontSize: 30),
                             )),
                           ),
                         ),
@@ -192,7 +191,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         maxLines: 2,
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontSize: 32,
+                            fontSize: 30,
                             height: 1.2,
                             fontWeight: FontWeight.w700),
                       ),
@@ -274,12 +273,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       )
                     ],
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(height: 30,),
                   Center(
                     child: RichText(
                       text: TextSpan(
-                          text: 'Don\'t have an account? ',
-                          style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 18),
+                          text: 'Already have an account? ',
+                          style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 15),
                           children: <TextSpan>[
                             TextSpan(
                                 text: 'Login Now',
@@ -303,10 +302,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ],
               ),
             ),
-            Animate(effects: const [
+            Animate(effects: [
               MoveEffect(
-                  begin: Offset(10, 10),
-                  end: Offset(10, -530),
+                begin: Offset(10, 10),
+                  end: MediaQuery.of(context).size.shortestSide < 550 ? Offset(10, -530) : Offset(10, -1100),
                   delay: Duration(milliseconds: 200)),
             ], child: const HappyBox()),
             AnimatedSwitcher(
@@ -364,7 +363,7 @@ class NameInput extends StatelessWidget {
             'Name',
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(
@@ -403,7 +402,7 @@ class EmailInput extends StatelessWidget {
             'Email Address',
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(
@@ -464,7 +463,7 @@ class _PasswordInputState extends State<PasswordInput> {
             'Password',
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.w400),
           ),
           suffixIcon: IconButton(
@@ -534,7 +533,7 @@ class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
             'Confirm password',
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.w400),
           ),
           suffixIcon: IconButton(

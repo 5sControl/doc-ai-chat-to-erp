@@ -305,7 +305,7 @@ class OptionContainer extends StatelessWidget {
           ),
           Text(
             title,
-            style: Theme.of(context).textTheme.labelMedium,
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
           ),
           // Spacer(),
           const SizedBox(

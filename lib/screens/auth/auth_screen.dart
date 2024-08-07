@@ -122,9 +122,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   onPressed: () {Navigator.of(context)
               .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
               },
-                  child: const Text(
+                  child: Text(
                     'Skip',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(fontSize: 16, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                   ))
             ],
           ),
@@ -150,7 +150,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 30,
                           height: 1.2,
                           fontWeight: FontWeight.w700),
                     ),
@@ -159,7 +159,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 30,
                           height: 1.2,
                           fontWeight: FontWeight.w700),
                     ),
@@ -190,7 +190,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     child: const Text(
                       'Forgot password?',
-                      style: TextStyle(fontWeight: FontWeight.w400),
+                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -249,7 +249,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: RichText(
                     text: TextSpan(
                       text: 'Don\'t have an account? ',
-                      style: TextStyle( color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 18),
+                      style: TextStyle( color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 15),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Register Now',
@@ -330,7 +330,7 @@ class EmailInput extends StatelessWidget {
             'Email Address',
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(
@@ -400,7 +400,7 @@ class _PasswordInputState extends State<PasswordInput> {
             'Password',
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.w400),
           ),
           suffixIcon: IconButton(
@@ -439,12 +439,12 @@ class SignUpButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 18),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Colors.teal.shade300,
+            color: Color.fromRGBO(0, 186, 195, 1),
             borderRadius: BorderRadius.circular(8)),
         child: const Text(
           'Login in',
           style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
     );
@@ -477,7 +477,7 @@ class DividerRow extends StatelessWidget {
               'Or Login with',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18),
+                  fontSize: 14),
             ),
           ),
           Expanded(

@@ -300,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             bottom: PreferredSize(
                               preferredSize: Size(
                                   MediaQuery.of(context).size.width,
-                                  isSubscribed ? 140.0 : 100),
+                                  isSubscribed ? 140.0 : 70),
                               child: Column(
                                 children: [
                                   if (isSubscribed)

@@ -222,7 +222,7 @@ class _PasswordInputState extends State<PasswordInput> {
             'Enter your email',
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 14,
                 fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(

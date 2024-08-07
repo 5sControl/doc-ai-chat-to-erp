@@ -47,6 +47,7 @@ dependencies:
   toastification: ^2.1.0
   sizer: ^2.0.15
   device_preview: ^1.2.0
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

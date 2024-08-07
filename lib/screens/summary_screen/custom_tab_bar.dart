@@ -18,7 +18,7 @@ class CustomTabBar extends StatelessWidget {
         labelColor: Colors.white,
         automaticIndicatorColorAdjustment: false,
         mouseCursor: null,
-        overlayColor: const MaterialStatePropertyAll(Colors.transparent),
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         enableFeedback: false,
         padding: EdgeInsets.zero,
         splashFactory: NoSplash.splashFactory,

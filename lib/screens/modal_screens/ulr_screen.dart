@@ -125,13 +125,14 @@ class UrlTextField extends StatelessWidget {
           children: [
             Flexible(
               child: Container(
+                //color: Colors.white,
                 height: 40,
-                decoration: const BoxDecoration(boxShadow: [
-                  BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 5,
-                      offset: Offset(1, 1))
-                ]),
+                // decoration: const BoxDecoration(boxShadow: [
+                //   BoxShadow(
+                //       color: Colors.black12,
+                //       blurRadius: 5,
+                //       offset: Offset(1, 1))
+                // ]),
                 child: TextFormField(
                   controller: controller,
                   onChanged: (text) {
@@ -153,7 +154,7 @@ class UrlTextField extends StatelessWidget {
                   child: SvgPicture.asset(
                     Assets.icons.paste,
                     colorFilter: ColorFilter.mode(
-                        Theme.of(context).primaryColorDark, BlendMode.srcIn),
+                        Color.fromRGBO(0, 186, 195, 1), BlendMode.srcIn),
                   )),
             )
           ],

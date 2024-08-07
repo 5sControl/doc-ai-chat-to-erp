@@ -79,7 +79,7 @@ class SetUpShareScreen extends StatelessWidget {
               flexibleSpace: const Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  BackArrow(),
+                  Padding(padding: const EdgeInsets.only(right: 6.0, top: 50), child: BackArrow()),
                   // IconButton(
                   //     visualDensity: VisualDensity.compact,
                   //     onPressed: onPressClose,
@@ -106,6 +106,7 @@ class SetUpShareScreen extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
+                    SizedBox(height: 30,),
                     Text(
                       'Set up share button',
                       style: Theme.of(context)

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,7 +102,7 @@ class _BundleScreenState extends State<BundleScreen>
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
         final monthlyPackage = packages
-            .firstWhere((element) => element.packageType == PackageType.weekly);
+            .firstWhere((element) => element.packageType == PackageType.monthly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
 
@@ -143,9 +144,9 @@ class _BundleScreenState extends State<BundleScreen>
                               splashFactory: NoSplash.splashFactory,
                               unselectedLabelColor: Colors.black,
                               dividerColor: Colors.transparent,
-                              labelPadding: const EdgeInsets.symmetric(
-                                horizontal: 1,
-                              ),
+                              // labelPadding: const EdgeInsets.symmetric(
+                              //   horizontal: 1,
+                              // ),
                               indicatorSize: TabBarIndicatorSize.tab,
                               tabAlignment: TabAlignment.fill,
                               indicator: BoxDecoration(
@@ -216,7 +217,7 @@ class _BundleScreenState extends State<BundleScreen>
                   ),
                 ),
                 Positioned(
-                  top: 35,
+                  top: (85),
                   right: 10,
                   child: BackArrow(fromOnboarding: widget.fromOnboarding),
                 ),
@@ -243,17 +244,19 @@ class BundleScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Title(),
+        SizedBox(height: isTablet ? 15 : 0,),
         Body(),
         SizedBox(
-          height: 15,
+          height: isTablet ? 40 : 15,
         ),
         Body1(),
         SizedBox(
-          height: 15,
+          height: isTablet ? 50 : 15,
         ),
         PricesBloc(
           packages: packages,
@@ -261,12 +264,15 @@ class BundleScreen1 extends StatelessWidget {
           onSelectSubscription: onSelectSubscription,
         ),
         SizedBox(
-          height: 5,
+          height:isTablet ? 20 : 5,
         ),
         SubscribeButton(
           package: packages[selectedSubscriptionIndex],
         ),
-        TermsRestorePrivacy()
+        SizedBox(
+          height:isTablet ? 10 : 0,
+        ),
+        //TermsRestorePrivacy()
       ],
     );
   }
@@ -318,15 +324,17 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
       child: Column(
         children: [
           Center(
             child: Text(
               'BUY',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize:isTablet ? 34 : 26, fontWeight: FontWeight.bold),
             ),
           ),
+          SizedBox(height: isTablet ? 20 : 0,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -337,7 +345,7 @@ class Body extends StatelessWidget {
                   ),
                   Text(
                     'Transcriptor',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize:isTablet ? 20 : 16),
                   ),
                 ],
               ),
@@ -359,7 +367,7 @@ class Body extends StatelessWidget {
                   ),
                   Text(
                     'Summify',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize:isTablet ? 20 : 16),
                   ),
                 ],
               ),
@@ -376,8 +384,10 @@ class Body1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
+      height: isTablet ? 340 : 215,
+      margin: EdgeInsets.only(left: 15, right: 15,),
       //color: Colors.white.withOpacity(0.6),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
@@ -385,15 +395,15 @@ class Body1 extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: 4,
+            height:isTablet ? 40 : 4,
           ),
           Text(
             'GET FOR FREE',
             style: TextStyle(
-                color: Colors.black, fontSize: 26, fontWeight: FontWeight.w700),
+                color: Colors.black, fontSize: isTablet ? 34 : 26, fontWeight: FontWeight.w700),
           ),
           SizedBox(
-            height: 5,
+            height:isTablet ? 20 : 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -409,7 +419,7 @@ class Body1 extends StatelessWidget {
                   Text(
                     'Transcriptor',
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize:isTablet ? 20:  16,
                         color: Colors.black,
                         decoration: TextDecoration.underline,
                         decorationColor: Colors.black,
@@ -440,7 +450,7 @@ class Body1 extends StatelessWidget {
                   Text(
                     'Summify',
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize:isTablet ? 20: 16,
                         color: Colors.black,
                         decoration: TextDecoration.underline,
                         decorationColor: Colors.black,
@@ -451,7 +461,7 @@ class Body1 extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 5,
+            height:isTablet ? 20 : 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -655,15 +665,16 @@ class _TitleState extends State<Title> {
 
   @override
   Widget build(BuildContext context) {
+     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: RichText(
+      child: AutoSizeText.rich(
         textAlign: TextAlign.center,
-        text: TextSpan(children: [
+        TextSpan(children: [
           TextSpan(
             text: '${displayedPair[0]}\n',
             style: TextStyle(
-                fontSize: 28,
+                fontSize: isTablet ? 56 : 28,
                 fontWeight: FontWeight.w700,
                 height: 1,
                 color: Theme.of(context).brightness == Brightness.dark
@@ -673,7 +684,7 @@ class _TitleState extends State<Title> {
           TextSpan(
               text: '${displayedPair[1]}',
               style: TextStyle(
-                fontSize: displayedPair[1] == 'with 50% Off' ? 36 : 28,
+                fontSize: displayedPair[1] == 'with 50% Off' ? isTablet ? 64 : 36 : isTablet ? 56 : 28,
                 color: displayedPair[1] == 'with 50% Off'
                     ? Color.fromRGBO(0, 186, 195, 1)
                     : Theme.of(context).brightness == Brightness.dark
@@ -731,7 +742,7 @@ class IconsRow extends StatelessWidget {
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.chrome),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(text: " FOR FREE!"),
+              const TextSpan(text: " FOR FREE!",),
             ])),
       )
           .animate(
@@ -766,7 +777,7 @@ class BackArrow extends StatelessWidget {
         onPressed: onPressClose,
         style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
-            minimumSize: MaterialStateProperty.all<Size>(Size(35, 35)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
@@ -778,7 +789,7 @@ class BackArrow extends StatelessWidget {
         highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
         icon: Icon(
           Icons.close,
-          size: 20,
+          size: 18,
           color: Theme.of(context).iconTheme.color,
         ));
   }
@@ -1031,7 +1042,7 @@ class SubscriptionCover extends StatelessWidget {
                         style: TextStyle(
                             color: textColor,
                             decoration: TextDecoration.lineThrough,
-                            decorationColor: Colors.white,
+                            decorationColor: textColor,
                             fontSize: 16,
                             fontWeight: FontWeight.w400),
                       ),

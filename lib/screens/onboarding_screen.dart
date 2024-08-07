@@ -123,7 +123,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                   margin: const EdgeInsets.all(15),
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                      color: const Color.fromRGBO(31, 188, 183, 1),
+                      color: const Color.fromRGBO(0, 186, 195, 1),
                       borderRadius: BorderRadius.circular(8)),
                   alignment: Alignment.center,
                   child: const Text(
@@ -318,8 +318,8 @@ class OnboardingScreen4 extends StatelessWidget {
                     .map((lang) => Container(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.2),
+                            //color:
+                            //    Theme.of(context).primaryColor.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(8),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(8),
@@ -330,7 +330,7 @@ class OnboardingScreen4 extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
                                       color: selectedLang == lang.code
-                                          ? Theme.of(context).cardColor
+                                          ? Color.fromRGBO(0, 186, 195, 1)
                                           : Colors.transparent,
                                       width: 2),
                                 ),

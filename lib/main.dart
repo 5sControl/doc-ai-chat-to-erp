@@ -4,6 +4,7 @@ import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'firebase_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +146,6 @@ class SummishareApp extends StatelessWidget {
                   case '/':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const MainScreen(), settings: settings);
-                  //builder: (_) => const AuthScreen(), settings: settings);
                   case '/onboarding':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const OnboardingScreen(),
@@ -157,6 +157,12 @@ class SummishareApp extends StatelessWidget {
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionScreen(
                               triggerScreen: 'Home', showBackArrow: true,
+                            ),
+                        settings: settings);
+                        case '/subscribeLimit':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const SubscriptionScreenLimit(
+                              triggerScreen: 'Home',
                             ),
                         settings: settings);
                   case '/bundle':
