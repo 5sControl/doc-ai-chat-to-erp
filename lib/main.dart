@@ -162,13 +162,13 @@ class SummishareApp extends StatelessWidget {
                         case '/subscribeLimit':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionScreenLimit(
-                              triggerScreen: 'Home',
+                              triggerScreen: 'Home', fromSettings: false,
                             ),
                         settings: settings);
                   case '/bundle':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const BundleScreen(
-                              triggerScreen: 'Home',
+                              triggerScreen: 'Home', fromOnboarding: true,
                             ),
                         settings: settings);
                   case '/settings':

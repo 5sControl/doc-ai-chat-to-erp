@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
       if (Platform.isIOS) {
         Navigator.of(context).pushNamedAndRemoveUntil(
-            '/subscribe', (Route<dynamic> route) => false);
+            '/bundle', (Route<dynamic> route) => false);
       } else {
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);

@@ -27,6 +27,47 @@ class PaywallShow extends MixpanelEvent {
   List<Object?> get props => [trigger];
 }
 
+class SubScreenLimShow extends MixpanelEvent {
+  // Trigger: onboarding/settings
+  final String screen;
+  final String trigger;
+  const SubScreenLimShow({
+    required this.trigger,
+    required this.screen,
+  });
+
+  @override
+  List<Object?> get props => [trigger, screen];
+}
+
+class BundleScreenLimShow extends MixpanelEvent {
+  // Trigger: onboarding/settings
+  final String screen;
+  final String trigger;
+  const BundleScreenLimShow({
+    required this.trigger,
+    required this.screen,
+  });
+
+  @override
+  List<Object?> get props => [trigger, screen];
+}
+
+class BundleScreenLim1Show extends MixpanelEvent {
+  // Trigger: onboarding/settings
+  final String screen;
+  final String trigger;
+  const BundleScreenLim1Show({
+    required this.trigger,
+    required this.screen,
+  });
+
+  @override
+  List<Object?> get props => [trigger, screen];
+}
+
+
+
 class ActivateSubscription extends MixpanelEvent {
   final String plan;
   // Subscription: week, month, year

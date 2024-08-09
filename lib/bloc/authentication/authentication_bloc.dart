@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
  import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
@@ -44,6 +45,7 @@ class AuthenticationBloc
             name: event.name, email: event.email, password: event.password);
         if (res is UserModel) {
           emit(AuthenticationSuccessState(user: res));
+          LogInResult result = await Purchases.logIn(res.id!);
         }
       } catch (e) {
         emit(AuthenticationFailureState(

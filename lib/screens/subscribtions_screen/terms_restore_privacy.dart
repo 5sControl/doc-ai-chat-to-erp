@@ -31,8 +31,7 @@ class TermsRestorePrivacy extends StatelessWidget {
           Expanded(
             child: TextButton(
               onPressed: onPressTerms,
-              style: const ButtonStyle(
-                  padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+              
               child: Text(
                 'Terms of use',
                 style: TextStyle(
@@ -47,7 +46,7 @@ class TermsRestorePrivacy extends StatelessWidget {
           child: TextButton(
             onPressed: onPressRestore,
             style: const ButtonStyle(
-                padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero)),
             child: Text(
               'Restore purchase',
               style: TextStyle(
@@ -62,8 +61,6 @@ class TermsRestorePrivacy extends StatelessWidget {
           Expanded(
             child: TextButton(
               onPressed: onPressPrivacy,
-              style: const ButtonStyle(
-                  padding: MaterialStatePropertyAll(EdgeInsets.zero)),
               child: Text(
                 'Privacy policy',
                 style: TextStyle(

@@ -160,19 +160,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
 
     if (context.read<SettingsBloc>().state.howToShowed == false) {
-      Future.delayed(const Duration(milliseconds: 2000), () {
-        showCupertinoModalBottomSheet(
-          context: context,
-          expand: false,
-          bounce: false,
-          barrierColor: Colors.black54,
-          backgroundColor: Colors.transparent,
-          builder: (context) {
-            return const SetUpShareScreen();
-          },
-        );
-        context.read<SettingsBloc>().add(const HowToShowed());
-      });
+      // Future.delayed(const Duration(milliseconds: 2000), () {
+      //   showCupertinoModalBottomSheet(
+      //     context: context,
+      //     expand: false,
+      //     bounce: false,
+      //     barrierColor: Colors.black54,
+      //     backgroundColor: Colors.transparent,
+      //     builder: (context) {
+      //       return const SetUpShareScreen();
+      //     },
+      //   );
+      //   context.read<SettingsBloc>().add(const HowToShowed());
+      // });
+
     }
     super.initState();
   }

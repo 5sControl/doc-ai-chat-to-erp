@@ -9,6 +9,7 @@ import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'package:summify/bloc/offers/offers_state.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
@@ -22,8 +23,12 @@ import 'subscription_body_year.dart';
 class SubscriptionScreenLimit extends StatefulWidget {
   final bool? fromOnboarding;
   final String triggerScreen;
+  final bool fromSettings;
   const SubscriptionScreenLimit(
-      {super.key, this.fromOnboarding, required this.triggerScreen});
+      {super.key,
+      this.fromOnboarding,
+      required this.triggerScreen,
+      required this.fromSettings});
 
   @override
   State<SubscriptionScreenLimit> createState() => _SubscriptionScreenState();
@@ -40,9 +45,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
 
   @override
   void initState() {
-    context
-        .read<MixpanelBloc>()
-        .add(PaywallShow(trigger: 'onboarding', screen: widget.triggerScreen));
     super.initState();
   }
 
@@ -88,8 +90,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
-        final monthlyPackage = packages
-            .firstWhere((element) => element.packageType == PackageType.monthly);
+        final monthlyPackage = packages.firstWhere(
+            (element) => element.packageType == PackageType.monthly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
 
@@ -112,196 +114,114 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                   child: SafeArea(
                     child: BlocBuilder<OffersBloc, OffersState>(
                         builder: (context, state) {
-                      return Scaffold(
-                        appBar: AppBar(
-                          //backgroundColor: colors[state.screenIndex],
-                          toolbarHeight:MediaQuery.of(context).size.shortestSide < 600 ? 235 : 635,
-                          //toolbarOpacity: 20,
-                          automaticallyImplyLeading: false,
-                          flexibleSpace: Stack(
-                            children: [
-                              Human(),
-                              Positioned(
-                                  top: 10,
-                                  right: 10,
-                                  child: BackArrow(
-                                      fromOnboarding: widget.fromOnboarding))
-                            ],
-                          ),
-                          actions: [],
-                        ),
-                        body: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            //const Human(),
-                            state.screenIndex == 1 || state.screenIndex == 2
-                                ? SizedBox(
-                                    height: 20,
-                                  )
-                                : Container(),
-                            state.screenIndex == 1 ? SizedBox(
-                                    height: 20,
-                                  ) : Container(),
-                            const Title(),
-
-                            const SubTitle(),
-                            state.screenIndex < 3 && state.screenIndex != 1
-                                ? const SizedBox(
-                                    height: 35,
-                                  )
-                                : const SizedBox(
-                                    height: 10,
-                                  ),
-                            state.screenIndex < 3 ? const Text1() : Container(),
-
-                            // Expanded(
-                            //   child: Container(
-                            //     margin: const EdgeInsets.all(15),
-                            //     decoration: BoxDecoration(
-                            //         color: Colors.white24,
-                            //         borderRadius: BorderRadius.circular(8)),
-                            //     child: AnimatedSwitcher(
-                            //       duration: const Duration(milliseconds: 300),
-                            //       switchInCurve: Curves.easeIn,
-                            //       switchOutCurve: Curves.easeOut,
-                            //       reverseDuration:
-                            //           const Duration(milliseconds: 300),
-                            //       transitionBuilder: (child, animation) {
-                            //         return FadeTransition(
-                            //           opacity: animation,
-                            //           child: child,
-                            //         );
-                            //       },
-                            //       child: Container(
-                            //         key: Key(selectedSubscriptionIndex == 1
-                            //             ? 'week'
-                            //             : 'year'),
-                            //         child: Builder(
-                            //           builder: (context) {
-                            //             if (selectedSubscriptionIndex == 1) {
-                            //               return CustomPaint(
-                            //                 painter:
-                            //                     PainterRight(headerH: headerH),
-                            //                 child: LayoutBuilder(
-                            //                   builder: (context, constraints) {
-                            //                     return SizedBox(
-                            //                       width: double.infinity,
-                            //                       height: constraints.maxHeight,
-                            //                       child: Column(
-                            //                         children: [
-                            //                           SizedBox(
-                            //                             height: constraints
-                            //                                     .maxHeight *
-                            //                                 headerH,
-                            //                             child: Row(
-                            //                               children: [
-                            //                                 WeekTitle(
-                            //                                     onSelectSubscription:
-                            //                                         onSelectSubscription),
-                            //                                 YearTitle(
-                            //                                     onSelectSubscription:
-                            //                                         onSelectSubscription)
-                            //                               ],
-                            //                             ),
-                            //                           ),
-                            //                           SubscriptionBodyYear(
-                            //                               package: annualPackage)
-                            //                         ],
-                            //                       ),
-                            //                     );
-                            //                   },
-                            //                 ),
-                            //               );
-                            //             } else {
-                            //               return CustomPaint(
-                            //                 painter:
-                            //                     PainterLeft(headerH: headerH),
-                            //                 child: LayoutBuilder(
-                            //                   builder: (context, constraints) {
-                            //                     return SizedBox(
-                            //                       width: double.infinity,
-                            //                       height: constraints.maxHeight,
-                            //                       child: Column(
-                            //                         children: [
-                            //                           SizedBox(
-                            //                             height: constraints
-                            //                                     .maxHeight *
-                            //                                 headerH,
-                            //                             child: Row(
-                            //                               children: [
-                            //                                 WeekTitle(
-                            //                                     onSelectSubscription:
-                            //                                         onSelectSubscription),
-                            //                                 YearTitle(
-                            //                                     onSelectSubscription:
-                            //                                         onSelectSubscription)
-                            //                               ],
-                            //                             ),
-                            //                           ),
-                            //                           SubscriptionBodyMonth(
-                            //                             package: monthlyPackage,
-                            //                           )
-                            //                         ],
-                            //                       ),
-                            //                     );
-                            //                   },
-                            //                 ),
-                            //               );
-                            //             }
-                            //           },
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            //const TermsRestorePrivacy()
-                            state.screenIndex < 3
-                                ? const SizedBox(
-                                    height: 15,
-                                  )
-                                : Container(),
-                            PricesBloc(
-                                packages: packages,
-                                selectedSubscriptionIndex:
-                                    selectedSubscriptionIndex,
-                                onSelectSubscription: onSelectSubscription),
-                            state.screenIndex < 3
-                                ? const SizedBox(
-                                    height: 20,
-                                  )
-                                : const SizedBox(
-                                    height: 0,
-                                  ),
-                            SubscribeButton(
-                              package: packages[selectedSubscriptionIndex],
+                      if (widget.fromSettings) {
+                        context.read<MixpanelBloc>().add(SubScreenLimShow(
+                            trigger: 'Settings',
+                            screen: 'Offer screen ${state.screenIndex} '));
+                      }
+                      if (!widget.fromSettings) {
+                        context.read<MixpanelBloc>().add(SubScreenLimShow(
+                            trigger: 'Not from Settings',
+                            screen: 'Offer screen ${state.screenIndex} '));
+                      }
+                      return state.screenIndex == 4
+                          ? SubscriptionScreen(
+                              triggerScreen: 'Home',
+                              showBackArrow: widget.fromSettings,
                             )
-                          ],
-                        ),
+                          : Scaffold(
+                              appBar: AppBar(
+                                //backgroundColor: Colors.black,
+                                toolbarHeight:
+                                    MediaQuery.of(context).size.shortestSide <
+                                            600
+                                        ? widget.fromSettings
+                                            ? 235
+                                            : 195
+                                        : 635,
+                                //toolbarOpacity: 20,
+                                automaticallyImplyLeading: false,
+                                flexibleSpace: Stack(
+                                  children: [
+                                    Human(),
+                                    widget.fromSettings
+                                        ? Positioned(
+                                            top: 10,
+                                            right: 10,
+                                            child: BackArrow(
+                                                fromOnboarding:
+                                                    widget.fromOnboarding))
+                                        : Container()
+                                  ],
+                                ),
+                                actions: [],
+                              ),
+                              body: Stack(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      //const Human(),
+                                      state.screenIndex == 1 ||
+                                              state.screenIndex == 2
+                                          ? SizedBox(
+                                              height: 40,
+                                            )
+                                          : Container(),
+                                      state.screenIndex == 1
+                                          ? SizedBox(
+                                              height: 20,
+                                            )
+                                          : Container(),
+                                      const Title(),
 
-                        // floatingActionButtonLocation:
-                        // FloatingActionButtonLocation.centerDocked,
-                        // floatingActionButton: GestureDetector(
-                        //   onTap: () { context
-                        //     .read<SubscriptionsBloc>()
-                        //     .add(MakePurchase(context: context, product: annualPackage));},
-                        //   child: Container(
-                        //     height: 50,
-                        //     margin: const EdgeInsets.all(15),
-                        //     padding: const EdgeInsets.symmetric(vertical: 10),
-                        //     decoration: BoxDecoration(
-                        //         color: const Color.fromRGBO(31, 188, 183, 1),
-                        //         borderRadius: BorderRadius.circular(8)),
-                        //     alignment: Alignment.center,
-                        //     child: const Text(
-                        //       'Go Premium',
-                        //       style: TextStyle(
-                        //           fontSize: 18,
-                        //           fontWeight: FontWeight.w700,
-                        //           color: Colors.white),
-                        //     ),
-                        //   ),
-                        // ),
-                      );
+                                      const SubTitle(),
+                                      state.screenIndex < 3 &&
+                                              state.screenIndex != 1
+                                          ? const SizedBox(
+                                              height: 35,
+                                            )
+                                          : SizedBox(
+                                              height: 10,
+                                            ),
+
+                                      Spacer(),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            state.screenIndex < 3
+                                                ? const Text1()
+                                                : Container(),
+                                            //const TermsRestorePrivacy()
+                                            state.screenIndex < 3
+                                                ? const SizedBox(
+                                                    height: 15,
+                                                  )
+                                                : Container(),
+                                            PricesBloc(
+                                              packages: packages,
+                                              selectedSubscriptionIndex:
+                                                  selectedSubscriptionIndex,
+                                              onSelectSubscription:
+                                                  onSelectSubscription,
+                                              fromSettings: widget.fromSettings,
+                                            ),
+                                            SubscribeButton(
+                                              package: packages[
+                                                  selectedSubscriptionIndex],
+                                            ),
+                                            const TermsRestorePrivacy()
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
                     }),
                   ),
                 ),
@@ -314,26 +234,26 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
   }
 }
 
-class WeekTitle extends StatelessWidget {
-  final Function({required int index}) onSelectSubscription;
-  const WeekTitle({super.key, required this.onSelectSubscription});
+// class WeekTitle extends StatelessWidget {
+//   final Function({required int index}) onSelectSubscription;
+//   const WeekTitle({super.key, required this.onSelectSubscription});
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () => onSelectSubscription(index: 0),
-      child: Center(
-        child: Text(
-          'Pay weekly',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ),
-    ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//         child: InkWell(
+//       borderRadius: BorderRadius.circular(8),
+//       onTap: () => onSelectSubscription(index: 0),
+//       child: Center(
+//         child: Text(
+//           'Pay weekly',
+//           textAlign: TextAlign.center,
+//           style: Theme.of(context).textTheme.bodySmall,
+//         ),
+//       ),
+//     ));
+//   }
+// }
 
 // class MonthTitle extends StatelessWidget {
 //   final Function({required int index}) onSelectSubscription;
@@ -356,46 +276,46 @@ class WeekTitle extends StatelessWidget {
 //   }
 // }
 
-class YearTitle extends StatelessWidget {
-  final Function({required int index}) onSelectSubscription;
-  const YearTitle({super.key, required this.onSelectSubscription});
+// class YearTitle extends StatelessWidget {
+//   final Function({required int index}) onSelectSubscription;
+//   const YearTitle({super.key, required this.onSelectSubscription});
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () => onSelectSubscription(index: 1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Pay annually',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              // gradient: const LinearGradient(colors: [
-              //   Color.fromRGBO(255, 238, 90, 1),
-              //   Color.fromRGBO(255, 208, 74, 1),
-              // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-            ),
-            child: Text('Save up to 29\$',
-                style: Theme.of(context).textTheme.bodySmall!
-                // .copyWith(color: Colors.black),
-                ),
-          )
-        ],
-      ),
-    ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//         child: InkWell(
+//       borderRadius: BorderRadius.circular(8),
+//       onTap: () => onSelectSubscription(index: 1),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Text(
+//             'Pay annually',
+//             textAlign: TextAlign.center,
+//             style: Theme.of(context).textTheme.bodySmall,
+//           ),
+//           const SizedBox(
+//             height: 5,
+//           ),
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(4),
+//               // gradient: const LinearGradient(colors: [
+//               //   Color.fromRGBO(255, 238, 90, 1),
+//               //   Color.fromRGBO(255, 208, 74, 1),
+//               // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
+//             ),
+//             child: Text('Save up to 29\$',
+//                 style: Theme.of(context).textTheme.bodySmall!
+//                 // .copyWith(color: Colors.black),
+//                 ),
+//           )
+//         ],
+//       ),
+//     ));
+//   }
+// }
 
 class Human extends StatelessWidget {
   const Human({super.key});
@@ -404,11 +324,19 @@ class Human extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> screenTexts = [
       Assets.subscriptionWoman1.path,
-      Assets.subscriptionWoman.path,
-      Assets.subscriptionMen.path,
+      Theme.of(context).brightness == Brightness.dark
+          ? Assets.subscriptionWoman.path
+          : Assets.subscriptionWomanLight.path,
+      Theme.of(context).brightness == Brightness.dark
+          ? Assets.subscriptionMen.path
+          : Assets.subscriptionMenLight.path,
       Assets.subscriptionWoman1.path,
-      Assets.subscriptionWoman.path,
-      Assets.subscriptionMen.path,
+      Theme.of(context).brightness == Brightness.dark
+          ? Assets.subscriptionWoman.path
+          : Assets.subscriptionWomanLight.path,
+      Theme.of(context).brightness == Brightness.dark
+          ? Assets.subscriptionMen.path
+          : Assets.subscriptionMenLight.path,
     ];
     // List<Color?> colors = [
     //   Color.fromARGB(255, 255, 199, 59),
@@ -436,7 +364,7 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final List<String> screenTexts = [
       'Need more summaries?',
       'Maximize your productivity!',
@@ -447,13 +375,18 @@ class Title extends StatelessWidget {
     ];
     return Container(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16.0, top: 4, bottom: 4),
         child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
           return Text(
             screenTexts[state.screenIndex],
             textAlign: TextAlign.start,
-            style:state.screenIndex < 3 ?
-                TextStyle(fontSize: isTablet ? 56 : 46, fontWeight: FontWeight.w700, height: 1) : TextStyle(fontSize: 48, fontWeight: FontWeight.w700, height: 1),
+            style: state.screenIndex < 3
+                ? TextStyle(
+                    fontSize: isTablet ? 56 : 46,
+                    fontWeight: FontWeight.w700,
+                    height: 1)
+                : TextStyle(
+                    fontSize: 48, fontWeight: FontWeight.w700, height: 1),
           );
         }),
       ),
@@ -462,10 +395,9 @@ class Title extends StatelessWidget {
 }
 
 Widget buildRichText(BuildContext context, String text, {bool isLink = false}) {
-
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+  bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    padding: const EdgeInsets.symmetric(vertical: 3.0),
     child: RichText(
       text: TextSpan(
         children: [
@@ -482,7 +414,7 @@ Widget buildRichText(BuildContext context, String text, {bool isLink = false}) {
                   : Colors.white,
               decoration:
                   isLink ? TextDecoration.underline : TextDecoration.none,
-              fontSize:isTablet ? 24 : 18,
+              fontSize: isTablet ? 24 : 18,
             ),
           ),
         ],
@@ -496,8 +428,7 @@ class SubTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final List<String> screenTexts = [
       'Maximize your productivity\nand efficiency!',
       '',
@@ -505,14 +436,19 @@ class SubTitle extends StatelessWidget {
     ];
     return Container(
       child: Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+        ),
         child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
           return state.screenIndex < 3
               ? Text.rich(
                   TextSpan(
                     text: screenTexts[state.screenIndex],
                     style: TextStyle(
-                        fontSize:isTablet ? 36 : 20, fontWeight: FontWeight.w600, height: 1.4),
+                        fontSize: isTablet ? 36 : 16,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4),
                   ),
                   textAlign: TextAlign.start,
                 )
@@ -538,8 +474,7 @@ class Text1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final List<String> screenTexts = [
       '15 Deep Summaries Daily',
       '15 Deep Summaries Daily',
@@ -557,7 +492,9 @@ class Text1 extends StatelessWidget {
               screenTexts[state.screenIndex],
               textAlign: TextAlign.start,
               style: TextStyle(
-                  fontSize:isTablet ? 36 : 24, fontWeight: FontWeight.w700, height: 1),
+                  fontSize: isTablet ? 36 : 24,
+                  fontWeight: FontWeight.w700,
+                  height: 1),
             ),
           );
         }),
@@ -777,11 +714,13 @@ class PricesBloc extends StatelessWidget {
   final int selectedSubscriptionIndex;
   final List<Package> packages;
   final Function({required int index}) onSelectSubscription;
+  final bool fromSettings;
   const PricesBloc(
       {super.key,
       required this.packages,
       required this.selectedSubscriptionIndex,
-      required this.onSelectSubscription});
+      required this.onSelectSubscription,
+      required this.fromSettings});
 
   @override
   Widget build(BuildContext context) {
@@ -794,6 +733,7 @@ class PricesBloc extends StatelessWidget {
             isSelected: selectedSubscriptionIndex == 0,
             package: packages[0],
             index: 0,
+            fromSettings: fromSettings,
           ),
           const SizedBox(
             width: 5,
@@ -803,6 +743,7 @@ class PricesBloc extends StatelessWidget {
             isSelected: selectedSubscriptionIndex == 2,
             package: packages[2],
             index: 2,
+            fromSettings: fromSettings,
           ),
           const SizedBox(
             width: 5,
@@ -812,6 +753,7 @@ class PricesBloc extends StatelessWidget {
             isSelected: selectedSubscriptionIndex == 1,
             package: packages[1],
             index: 1,
+            fromSettings: fromSettings,
           ),
         ],
       ),
@@ -824,17 +766,18 @@ class SubscriptionCover extends StatelessWidget {
   final Package package;
   final Function({required int index}) onSelectSubscription;
   final int index;
+  final bool fromSettings;
   const SubscriptionCover(
       {super.key,
       required this.package,
       required this.isSelected,
       required this.onSelectSubscription,
-      required this.index});
+      required this.index,
+      required this.fromSettings});
 
   @override
   Widget build(BuildContext context) {
-
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     String subscriptionTitle = '';
     switch (package.storeProduct.identifier) {
       case 'SummifyPremiumWeekly' || 'summify_premium_week':
@@ -859,7 +802,11 @@ class SubscriptionCover extends StatelessWidget {
 
     return Expanded(
       child: SizedBox(
-        height: isTablet ? 180 : 150,
+        height: isTablet
+            ? 180
+            : fromSettings
+                ? 150
+                : 120,
         child: GestureDetector(
           onTap: () => onSelectSubscription(index: index),
           child: Container(
@@ -899,12 +846,14 @@ class SubscriptionCover extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: textColor,
-                            fontSize:isTablet ? 18 : 15,
+                            fontSize: isTablet ? 18 : 15,
                             fontWeight: FontWeight.w500),
                       ),
-                      const Divider(
-                        color: Colors.transparent,
-                      ),
+                      fromSettings
+                          ? const Divider(
+                              color: Colors.transparent,
+                            )
+                          : Container(),
                       Text(
                         package.storeProduct.priceString,
                         textAlign: TextAlign.center,
@@ -921,7 +870,7 @@ class SubscriptionCover extends StatelessWidget {
                             color: textColor,
                             decoration: TextDecoration.lineThrough,
                             decorationColor: Colors.white,
-                            fontSize:isTablet ? 20 : 16,
+                            fontSize: isTablet ? 20 : 16,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -948,8 +897,7 @@ class SubscribeButton extends StatefulWidget {
 class _SubscribeButtonState extends State<SubscribeButton> {
   @override
   Widget build(BuildContext context) {
-
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     void onPressGoPremium() {
       if (widget.package != null) {
         context
@@ -959,7 +907,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
     }
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Material(
         color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(8)),

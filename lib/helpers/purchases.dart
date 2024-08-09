@@ -1,9 +1,14 @@
 import 'dart:io' show Platform;
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
+
+
 class PurchasesService {
+  User? user = FirebaseAuth.instance.currentUser;
   Future<void> initPlatformState() async {
     await Purchases.setLogLevel(LogLevel.debug);
 
@@ -16,7 +21,7 @@ class PurchasesService {
           PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');
     }
 
-    await Purchases.configure(configuration);
+    await Purchases.configure(configuration..appUserID = user?.uid);
   }
 
   Future<Offerings?> getProducts() async {

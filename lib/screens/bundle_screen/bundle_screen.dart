@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,13 +9,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:stream_transform/stream_transform.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/bloc/offers/offers_state.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/auth/auth_screen.dart';
 import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
-import 'package:summify/screens/subscribtions_screen/happy_box.dart';
-import 'package:summify/screens/subscribtions_screen/subscription_body_month.dart';
-import 'package:summify/screens/subscribtions_screen/subscription_body_year.dart';
-import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
@@ -26,8 +25,9 @@ import '../summary_screen/info_modal/extension_modal.dart';
 class BundleScreen extends StatefulWidget {
   final bool? fromOnboarding;
   final String triggerScreen;
+  final bool? fromSettings;
   const BundleScreen(
-      {super.key, this.fromOnboarding, required this.triggerScreen});
+      {super.key, this.fromOnboarding, required this.triggerScreen, this.fromSettings});
 
   @override
   State<BundleScreen> createState() => _BundleScreenState();
@@ -57,6 +57,10 @@ class _BundleScreenState extends State<BundleScreen>
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  int getSelectedTabIndex() {
+    return _tabController.index;
   }
 
   @override
@@ -96,132 +100,141 @@ class _BundleScreenState extends State<BundleScreen>
         // final abTest = context.read<SettingsBloc>().state.abTest;
 
         const double headerH = 0.16;
-        List<Package> packages =
-            List.from(state.availableProducts!.current!.availablePackages);
+        List<Package> packages = List.from(state.availableProducts!
+            .all['Summify bundle access']!.availablePackages);
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
-        final monthlyPackage = packages
-            .firstWhere((element) => element.packageType == PackageType.monthly);
+        final monthlyPackage = packages.firstWhere(
+            (element) => element.packageType == PackageType.monthly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
+            
 
         return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
           builder: (context, state) {
-            return Stack(
-              children: [
-                const BackgroundGradient(),
-                Animate(
-                  effects: const [FadeEffect()],
-                  child: SafeArea(
-                    child: Scaffold(
-                      appBar: AppBar(
-                        toolbarHeight: 10,
-                        // automaticallyImplyLeading: false,
-                        // title: SwitcherWidget(),
-                        // centerTitle: true,
-                        bottom: PreferredSize(
-                          preferredSize: Size.fromHeight(
-                              70.0), // Adjust the height as needed
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16),
-                            padding: const EdgeInsets.all(1.5),
-                            height: 40,
-                            width: 240,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: TabBar(
-                              controller: _tabController,
-                              // isScrollable: true,
-                              labelColor: Colors.white,
-                              automaticIndicatorColorAdjustment: false,
-                              mouseCursor: null,
-                              overlayColor: const MaterialStatePropertyAll(
-                                  Colors.transparent),
-                              enableFeedback: false,
-                              padding: EdgeInsets.zero,
-                              splashFactory: NoSplash.splashFactory,
-                              unselectedLabelColor: Colors.black,
-                              dividerColor: Colors.transparent,
-                              // labelPadding: const EdgeInsets.symmetric(
-                              //   horizontal: 1,
-                              // ),
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              tabAlignment: TabAlignment.fill,
-                              indicator: BoxDecoration(
-                                  color: Color.fromRGBO(0, 186, 195, 1),
-                                  borderRadius: BorderRadius.circular(6)),
-                              tabs: [
-                                Tab(
-                                  text: 'Bundle',
+            return BlocBuilder<OffersBloc, OffersState>(
+              builder: (context, state) {
+                // final selectedIndex = getSelectedTabIndex();
+                return Stack(
+                  children: [
+                    const BackgroundGradient(),
+                    Animate(
+                      effects: const [FadeEffect()],
+                      child: SafeArea(
+                        child: Scaffold(
+                          appBar: AppBar(
+                            toolbarHeight: 10,
+                            // backgroundColor:selectedIndex == 1 || (state.screenIndex == 0 || state.screenIndex == 3) ? Colors.yellow : Colors.transparent,
+                            // automaticallyImplyLeading: false,
+                            // title: SwitcherWidget(),
+                            // centerTitle: true,
+                            bottom: PreferredSize(
+                              preferredSize: const Size.fromHeight(
+                                  70.0), // Adjust the height as needed
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.all(1.5),
+                                height: 40,
+                                width: 240,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: TabBar(
+                                  controller: _tabController,
+                                  // isScrollable: true,
+                                  labelColor: Colors.white,
+                                  automaticIndicatorColorAdjustment: false,
+                                  mouseCursor: null,
+                                  overlayColor: const MaterialStatePropertyAll(
+                                      Colors.transparent),
+                                  enableFeedback: false,
+                                  padding: EdgeInsets.zero,
+                                  splashFactory: NoSplash.splashFactory,
+                                  unselectedLabelColor: Colors.black,
+                                  dividerColor: Colors.transparent,
+                                  // labelPadding: const EdgeInsets.symmetric(
+                                  //   horizontal: 1,
+                                  // ),
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  tabAlignment: TabAlignment.fill,
+                                  indicator: BoxDecoration(
+                                      color: const Color.fromRGBO(0, 186, 195, 1),
+                                      borderRadius: BorderRadius.circular(6)),
+                                  tabs: const [
+                                    Tab(
+                                      text: 'Bundle',
+                                    ),
+                                    Tab(
+                                      text: 'Unlimited',
+                                    )
+                                  ],
                                 ),
-                                Tab(
-                                  text: 'Unlimited',
-                                )
-                              ],
+                              ),
                             ),
+                            // TabBar(
+                            //   padding: EdgeInsets.only(left: 65, right: 65),
+                            //   controller: _tabController,
+                            //   tabs: [
+                            //     Tab(
+                            //       text: 'Bundle',
+                            //     ),
+                            //     Tab(
+                            //       text: 'Unlimited',
+                            //     )
+                            //   ],
+                            //   indicator: BoxDecoration(
+                            //     borderRadius: BorderRadius.circular(12.0),
+                            //   color: Colors.teal.shade300,
+                            //   ),
+                            //   labelColor: Colors.white,
+                            //   unselectedLabelColor:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                            //   labelStyle: TextStyle(
+                            //     fontSize: 16.0,
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            //   unselectedLabelStyle: TextStyle(
+                            //     fontSize: 16.0,
+                            //   ),
+                            //   labelPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                            //   indicatorSize: TabBarIndicatorSize.tab,
+                            // ),
+                            ///////////////////////
+                            // actions: [
+                            //   BackArrow(fromOnboarding: widget.fromOnboarding),
+                            //   const SizedBox(
+                            //     width: 10,
+                            //   )
+                            // ],
+                          ),
+                          //body: BundleScreen1(packages: packages, selectedSubscriptionIndex: selectedSubscriptionIndex),
+                          body: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              BundleScreen1(
+                                fromOnboarding: widget.fromOnboarding,
+                                  packages: packages,
+                                  selectedSubscriptionIndex:
+                                      selectedSubscriptionIndex,
+                                  onSelectSubscription: onSelectSubscription),
+                              // SubscriptionScreen(
+                              //   triggerScreen: '',
+                              //   showBackArrow: false,
+                              // )
+                              const SubscriptionScreenLimit(triggerScreen: 'Home', fromSettings: false,)
+                            ],
                           ),
                         ),
-                        // TabBar(
-                        //   padding: EdgeInsets.only(left: 65, right: 65),
-                        //   controller: _tabController,
-                        //   tabs: [
-                        //     Tab(
-                        //       text: 'Bundle',
-                        //     ),
-                        //     Tab(
-                        //       text: 'Unlimited',
-                        //     )
-                        //   ],
-                        //   indicator: BoxDecoration(
-                        //     borderRadius: BorderRadius.circular(12.0),
-                        //   color: Colors.teal.shade300,
-                        //   ),
-                        //   labelColor: Colors.white,
-                        //   unselectedLabelColor:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
-                        //   labelStyle: TextStyle(
-                        //     fontSize: 16.0,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        //   unselectedLabelStyle: TextStyle(
-                        //     fontSize: 16.0,
-                        //   ),
-                        //   labelPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                        //   indicatorSize: TabBarIndicatorSize.tab,
-                        // ),
-                        ///////////////////////
-                        // actions: [
-                        //   BackArrow(fromOnboarding: widget.fromOnboarding),
-                        //   const SizedBox(
-                        //     width: 10,
-                        //   )
-                        // ],
-                      ),
-                      //body: BundleScreen1(packages: packages, selectedSubscriptionIndex: selectedSubscriptionIndex),
-                      body: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          BundleScreen1(
-                              packages: packages,
-                              selectedSubscriptionIndex:
-                                  selectedSubscriptionIndex,
-                              onSelectSubscription: onSelectSubscription),
-                          SubscriptionScreen(
-                            triggerScreen: '',
-                            showBackArrow: false,
-                          )
-                        ],
                       ),
                     ),
-                  ),
-                ),
-                Positioned(
-                  top: (85),
-                  right: 10,
-                  child: BackArrow(fromOnboarding: widget.fromOnboarding),
-                ),
-              ],
+                    Positioned(
+                      top: 85,
+                      right: 10,
+                      child: BackArrow(fromOnboarding: widget.fromOnboarding),
+                    ),
+                  ],
+                );
+              }
             );
           },
         );
@@ -236,27 +249,32 @@ class BundleScreen1 extends StatelessWidget {
     required this.packages,
     required this.selectedSubscriptionIndex,
     required this.onSelectSubscription,
+    this.fromOnboarding,
   });
 
+  final bool? fromOnboarding;
   final List<Package> packages;
   final int selectedSubscriptionIndex;
   final Function({required int index}) onSelectSubscription;
 
   @override
   Widget build(BuildContext context) {
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Title(),
-        SizedBox(height: isTablet ? 15 : 0,),
-        Body(),
+        Title(fromOnboarding: fromOnboarding,),
         SizedBox(
-          height: isTablet ? 40 : 15,
+          height: isTablet ? 15 : 0,
         ),
-        Body1(),
+        const Body(),
         SizedBox(
-          height: isTablet ? 50 : 15,
+          height: isTablet ? 40 : 5,
+        ),
+        const Body1(),
+        SizedBox(
+          height: isTablet ? 50 : 10,
         ),
         PricesBloc(
           packages: packages,
@@ -264,15 +282,15 @@ class BundleScreen1 extends StatelessWidget {
           onSelectSubscription: onSelectSubscription,
         ),
         SizedBox(
-          height:isTablet ? 20 : 5,
+          height: isTablet ? 20 : 0,
         ),
         SubscribeButton(
           package: packages[selectedSubscriptionIndex],
         ),
         SizedBox(
-          height:isTablet ? 10 : 0,
+          height: isTablet ? 10 : 0,
         ),
-        //TermsRestorePrivacy()
+        const TermsRestorePrivacy()
       ],
     );
   }
@@ -296,16 +314,6 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
         fillColor: Colors.teal.shade300,
         selectedColor: Colors.white,
         color: Colors.black,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text('Bundle'),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text('Unlimited'),
-          ),
-        ],
         isSelected: isSelected,
         onPressed: (int index) {
           setState(() {
@@ -314,6 +322,16 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
             }
           });
         },
+        children: const [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text('Bundle'),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Text('Unlimited'),
+          ),
+        ],
       ),
     );
   }
@@ -324,17 +342,20 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
       child: Column(
         children: [
           Center(
             child: Text(
               'BUY',
-              style: TextStyle(fontSize:isTablet ? 34 : 26, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: isTablet ? 34 : 26, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: isTablet ? 20 : 0,),
+          SizedBox(
+            height: isTablet ? 20 : 0,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -345,18 +366,20 @@ class Body extends StatelessWidget {
                   ),
                   Text(
                     'Transcriptor',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize:isTablet ? 20 : 16),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: isTablet ? 20 : 16),
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 width: 20,
               ),
               SvgPicture.asset(
                 Assets.icons.plus,
                 height: 36,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 35,
               ),
               Column(
@@ -367,7 +390,9 @@ class Body extends StatelessWidget {
                   ),
                   Text(
                     'Summify',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize:isTablet ? 20 : 16),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: isTablet ? 20 : 16),
                   ),
                 ],
               ),
@@ -384,26 +409,31 @@ class Body1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
-      height: isTablet ? 340 : 215,
-      margin: EdgeInsets.only(left: 15, right: 15,),
+      height: isTablet ? 340 : 210,
+      margin: const EdgeInsets.only(
+        left: 15,
+        right: 15,
+      ),
       //color: Colors.white.withOpacity(0.6),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Color.fromRGBO(227, 255, 254, 1)),
+          color: const Color.fromRGBO(227, 255, 254, 1)),
       child: Column(
         children: [
           SizedBox(
-            height:isTablet ? 40 : 4,
+            height: isTablet ? 40 : 4,
           ),
           Text(
             'GET FOR FREE',
             style: TextStyle(
-                color: Colors.black, fontSize: isTablet ? 34 : 26, fontWeight: FontWeight.w700),
+                color: Colors.black,
+                fontSize: isTablet ? 34 : 26,
+                fontWeight: FontWeight.w700),
           ),
           SizedBox(
-            height:isTablet ? 20 : 5,
+            height: isTablet ? 20 : 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -413,13 +443,13 @@ class Body1 extends StatelessWidget {
                   SvgPicture.asset(
                     Assets.icons.transcriptor2,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
                     'Transcriptor',
                     style: TextStyle(
-                        fontSize:isTablet ? 20:  16,
+                        fontSize: isTablet ? 20 : 16,
                         color: Colors.black,
                         decoration: TextDecoration.underline,
                         decorationColor: Colors.black,
@@ -427,14 +457,14 @@ class Body1 extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 width: 30,
               ),
               SvgPicture.asset(
                 Assets.icons.plus,
                 height: 36,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 35,
               ),
               Column(
@@ -444,13 +474,13 @@ class Body1 extends StatelessWidget {
                     height: 75,
                     color: Colors.black87,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
                     'Summify',
                     style: TextStyle(
-                        fontSize:isTablet ? 20: 16,
+                        fontSize: isTablet ? 20 : 16,
                         color: Colors.black,
                         decoration: TextDecoration.underline,
                         decorationColor: Colors.black,
@@ -461,28 +491,28 @@ class Body1 extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height:isTablet ? 20 : 5,
+            height: isTablet ? 20 : 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'on',
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 26,
                     fontWeight: FontWeight.w700),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 15,
               ),
               SvgPicture.asset(
                 Assets.icons.chrome,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 15,
               ),
-              Text(
+              const Text(
                 'Version',
                 style: TextStyle(
                     color: Colors.black,
@@ -491,7 +521,7 @@ class Body1 extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           )
         ],
@@ -511,12 +541,20 @@ class SubscribeButton extends StatefulWidget {
 class _SubscribeButtonState extends State<SubscribeButton> {
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     void onPressGoPremium() {
       if (widget.package != null) {
         context
             .read<SubscriptionsBloc>()
             .add(MakePurchase(context: context, product: widget.package!));
       }
+    }
+
+    void onPressGoPremiumNotAuth() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AuthScreen()),
+      );
     }
 
     return Container(
@@ -527,7 +565,9 @@ class _SubscribeButtonState extends State<SubscribeButton> {
         child: InkWell(
           highlightColor: Colors.white24,
           borderRadius: BorderRadius.circular(8),
-          onTap: onPressGoPremium,
+          onTap: _auth.currentUser != null
+              ? onPressGoPremium
+              : onPressGoPremiumNotAuth,
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 14),
@@ -546,26 +586,26 @@ class _SubscribeButtonState extends State<SubscribeButton> {
   }
 }
 
-class WeekTitle extends StatelessWidget {
-  final Function({required int index}) onSelectSubscription;
-  const WeekTitle({super.key, required this.onSelectSubscription});
+// class WeekTitle extends StatelessWidget {
+//   final Function({required int index}) onSelectSubscription;
+//   const WeekTitle({super.key, required this.onSelectSubscription});
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () => onSelectSubscription(index: 0),
-      child: Center(
-        child: Text(
-          'Pay weekly',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ),
-    ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//         child: InkWell(
+//       borderRadius: BorderRadius.circular(8),
+//       onTap: () => onSelectSubscription(index: 0),
+//       child: Center(
+//         child: Text(
+//           'Pay weekly',
+//           textAlign: TextAlign.center,
+//           style: Theme.of(context).textTheme.bodySmall,
+//         ),
+//       ),
+//     ));
+//   }
+// }
 
 // class MonthTitle extends StatelessWidget {
 //   final Function({required int index}) onSelectSubscription;
@@ -588,49 +628,50 @@ class WeekTitle extends StatelessWidget {
 //   }
 // }
 
-class YearTitle extends StatelessWidget {
-  final Function({required int index}) onSelectSubscription;
-  const YearTitle({super.key, required this.onSelectSubscription});
+// class YearTitle extends StatelessWidget {
+//   final Function({required int index}) onSelectSubscription;
+//   const YearTitle({super.key, required this.onSelectSubscription});
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () => onSelectSubscription(index: 1),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Pay annually',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              // gradient: const LinearGradient(colors: [
-              //   Color.fromRGBO(255, 238, 90, 1),
-              //   Color.fromRGBO(255, 208, 74, 1),
-              // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-            ),
-            child: Text('Save up to 29\$',
-                style: Theme.of(context).textTheme.bodySmall!
-                // .copyWith(color: Colors.black),
-                ),
-          )
-        ],
-      ),
-    ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//         child: InkWell(
+//       borderRadius: BorderRadius.circular(8),
+//       onTap: () => onSelectSubscription(index: 1),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Text(
+//             'Pay annually',
+//             textAlign: TextAlign.center,
+//             style: Theme.of(context).textTheme.bodySmall,
+//           ),
+//           const SizedBox(
+//             height: 5,
+//           ),
+//           Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(4),
+//               // gradient: const LinearGradient(colors: [
+//               //   Color.fromRGBO(255, 238, 90, 1),
+//               //   Color.fromRGBO(255, 208, 74, 1),
+//               // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
+//             ),
+//             child: Text('Save up to 29\$',
+//                 style: Theme.of(context).textTheme.bodySmall!
+//                 // .copyWith(color: Colors.black),
+//                 ),
+//           )
+//         ],
+//       ),
+//     ));
+//   }
+// }
 
 class Title extends StatefulWidget {
-  const Title({super.key});
+  final bool? fromOnboarding;
+  const Title({super.key, this.fromOnboarding});
 
   @override
   State<Title> createState() => _TitleState();
@@ -644,10 +685,11 @@ class _TitleState extends State<Title> {
   ];
 
   List<String> displayedPair = ["", ""];
+  int index = 0;
 
   List<String> getRandomPair() {
     final random = Random();
-    int index = random.nextInt(wordPairs.length);
+    index = random.nextInt(wordPairs.length);
     return wordPairs[index];
   }
 
@@ -655,6 +697,15 @@ class _TitleState extends State<Title> {
   void initState() {
     super.initState();
     displayedPair = getRandomPair();
+    if(widget.fromOnboarding == null){
+    context
+        .read<MixpanelBloc>()
+        .add(BundleScreenLimShow(trigger: 'Settings', screen: 'Offer screen $index'));}
+        else if (widget.fromOnboarding != null){
+          context
+        .read<MixpanelBloc>()
+        .add(BundleScreenLim1Show(trigger: 'Onboarding', screen: 'Offer screen $index'));
+        }
   }
 
   void refreshPair() {
@@ -665,9 +716,9 @@ class _TitleState extends State<Title> {
 
   @override
   Widget build(BuildContext context) {
-     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: AutoSizeText.rich(
         textAlign: TextAlign.center,
         TextSpan(children: [
@@ -684,9 +735,15 @@ class _TitleState extends State<Title> {
           TextSpan(
               text: '${displayedPair[1]}',
               style: TextStyle(
-                fontSize: displayedPair[1] == 'with 50% Off' ? isTablet ? 64 : 36 : isTablet ? 56 : 28,
+                fontSize: displayedPair[1] == 'with 50% Off'
+                    ? isTablet
+                        ? 64
+                        : 36
+                    : isTablet
+                        ? 56
+                        : 28,
                 color: displayedPair[1] == 'with 50% Off'
-                    ? Color.fromRGBO(0, 186, 195, 1)
+                    ? const Color.fromRGBO(0, 186, 195, 1)
                     : Theme.of(context).brightness == Brightness.dark
                         ? Colors.white
                         : Colors.black,
@@ -742,7 +799,9 @@ class IconsRow extends StatelessWidget {
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.chrome),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(text: " FOR FREE!",),
+              const TextSpan(
+                text: " FOR FREE!",
+              ),
             ])),
       )
           .animate(
@@ -764,8 +823,8 @@ class BackArrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      if (fromOnboarding == null) {
-        Navigator.of(context).pushNamed('/');
+      if (fromOnboarding != null) {
+        Navigator.of(context).pushNamed('/login');
         context.read<MixpanelBloc>().add(const ClosePaywall());
       } else {
         Navigator.of(context).pop();
@@ -776,12 +835,12 @@ class BackArrow extends StatelessWidget {
         visualDensity: VisualDensity.compact,
         onPressed: onPressClose,
         style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
-            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(const Size(33, 33)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.black),
+                side: const BorderSide(color: Colors.black),
               ),
             ),
             backgroundColor: MaterialStatePropertyAll(
@@ -918,7 +977,7 @@ class PricesBloc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 15,
         right: 15,
       ),
@@ -961,9 +1020,9 @@ class SubscriptionCover extends StatelessWidget {
   Widget build(BuildContext context) {
     String subscriptionTitle = '';
     switch (package.storeProduct.identifier) {
-      case 'SummifyPremiumWeekly' || 'summify_premium_week':
+      case 'SummifyMonthlyBundleSubscription' || 'summify_bundle_week':
         subscriptionTitle = '1 month';
-      case 'SummifyPremiumMonth' || 'summify_premium_month':
+      case 'SummifyAnnualBundleSubscription' || 'summify_bundle_month':
         subscriptionTitle = '12 months';
     }
 

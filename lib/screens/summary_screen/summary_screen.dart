@@ -265,7 +265,7 @@ class PremiumBlurContainer extends StatelessWidget {
         builder: (context) {
           return const SubscriptionScreenLimit(
             fromOnboarding: true,
-            triggerScreen: 'Summary_Screen',
+            triggerScreen: 'Summary_Screen', fromSettings: false,
           );
         },
       );

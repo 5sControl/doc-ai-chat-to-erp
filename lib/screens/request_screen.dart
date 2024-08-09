@@ -57,10 +57,10 @@ class _RequestScreenState extends State<RequestScreen> {
   void onPressSubmit() async {
     if (!emailError && emailController.value.text.isNotEmpty) {
       final res = await SummaryRepository().sendFeature(
-          getMoreSummaries: selectedOptions.contains('I need more summaries'),
-          addTranslation: selectedOptions.contains('Summary translation'),
-          askAQuestions: selectedOptions.contains('AI summary chat'),
-          readBook: selectedOptions.contains('Read my book'),
+          getMoreSummaries: selectedOptions.contains('Secure summarization'),
+          addTranslation: selectedOptions.contains('Read my book'),
+          askAQuestions: selectedOptions.contains('Speech to text feature'),
+          readBook: selectedOptions.contains('Text to speach feature'),
           addLang: selectedOptions.contains('Add language')
               ? selectedLang
               : 'Not selected',
@@ -102,10 +102,10 @@ class _RequestScreenState extends State<RequestScreen> {
   @override
   Widget build(BuildContext context) {
     final List<String> options = [
-      'I need more summaries',
-      'Summary translation',
-      'AI summary chat',
+      'Secure summarization',
       'Read my book',
+      'Speech to text feature',
+      'Text to speach feature',
       'Add language'
     ];
 

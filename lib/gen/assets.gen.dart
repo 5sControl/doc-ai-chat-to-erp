@@ -540,10 +540,14 @@ class Assets {
   static const $AssetsSetUpGen setUp = $AssetsSetUpGen();
   static const AssetGenImage subscriptionMen =
       AssetGenImage('assets/subscription_men.png');
+  static const AssetGenImage subscriptionMenLight =
+      AssetGenImage('assets/subscription_men_light.png');
   static const AssetGenImage subscriptionWoman =
       AssetGenImage('assets/subscription_woman.png');
   static const AssetGenImage subscriptionWoman1 =
       AssetGenImage('assets/subscription_woman_1.png');
+  static const AssetGenImage subscriptionWomanLight =
+      AssetGenImage('assets/subscription_woman_light.png');
 
   /// List of all assets
   static List<dynamic> get values => [
@@ -558,8 +562,10 @@ class Assets {
         niga,
         placeholderLogo,
         subscriptionMen,
+        subscriptionMenLight,
         subscriptionWoman,
-        subscriptionWoman1
+        subscriptionWoman1,
+        subscriptionWomanLight
       ];
 }
 

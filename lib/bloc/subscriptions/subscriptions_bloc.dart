@@ -36,7 +36,24 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
       try {
         CustomerInfo customerInfo =
             await Purchases.purchasePackage(event.product);
-        if (customerInfo.entitlements.all["Summify premium access"]!.isActive) {
+        if (customerInfo.entitlements.all["Summify premium access"]?.isActive ?? false) {
+          emit(state.copyWith(
+              subscriptionStatus: SubscriptionStatus.subscribed));
+
+          if (event.context.mounted) {
+            showMaterialModalBottomSheet(
+                context: event.context,
+                expand: false,
+                bounce: false,
+                barrierColor: Colors.black54,
+                backgroundColor: Colors.transparent,
+                enableDrag: false,
+                builder: (context) {
+                  return const PurchaseSuccessScreen();
+                });
+          }
+        }
+        else if (customerInfo.entitlements.all["Summify bundle access"]?.isActive ?? false) {
           emit(state.copyWith(
               subscriptionStatus: SubscriptionStatus.subscribed));
 

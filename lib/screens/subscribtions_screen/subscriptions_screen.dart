@@ -105,7 +105,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         automaticallyImplyLeading: false,
                         actions: [
                           if(widget.showBackArrow) 
-                          BackArrow(fromOnboarding: widget.fromOnboarding),
+                          BackArrow(fromOnboarding: widget.showBackArrow),
                           const SizedBox(
                             width: 10,
                           )

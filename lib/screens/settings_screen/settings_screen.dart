@@ -68,7 +68,7 @@ class SettingsScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) => const SubscriptionScreenLimit(
-                  triggerScreen: 'Settings',
+                  triggerScreen: 'Settings', fromSettings: true,
                 )),
       );
     }
@@ -92,7 +92,7 @@ class SettingsScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) => const BundleScreen(
-                  triggerScreen: 'Settings',
+                  triggerScreen: 'Settings', fromSettings: true,
                 )),
       );
     }
@@ -668,7 +668,7 @@ class SettingsScreen extends StatelessWidget {
                               return Container();
                             }
                           }),
-                      Text('version 1.4.0',
+                      Text('version 1.4.2',
                           textAlign: TextAlign.end,
                           style: Theme.of(context)
                               .textTheme
