@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -13,16 +11,10 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
-import 'package:summify/models/models.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
-import 'package:summify/screens/home_screen/summaries_counter.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
-import 'package:summify/screens/library_document_screen/library_document_screen.dart';
 import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 
-import '../../bloc/library/library_bloc.dart';
-import '../modal_screens/set_up_share_screen.dart';
-import 'home_tabs.dart';
 import 'logo.dart';
 import 'summary_tile.dart';
 
@@ -38,16 +30,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late StreamSubscription _intentTextStreamSubscription;
 
   final TextEditingController _searchController = TextEditingController();
-  List<String> _filteredSummaries = [];
-  List<String> _allSummaries = []; // To keep track of all summaries
   Map<String, String> _titleToLinkMap = {};
 
   void getSummary({required String summaryUrl}) {
-    // final DateFormat formatter = DateFormat('MM.dd.yy');
-    // final thisDay = formatter.format(DateTime.now());
-    // final limit = context.read<SummariesBloc>().state.dailyLimit;
-    // final daySummaries =
-    //     context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
+
 
     Future.delayed(const Duration(milliseconds: 300), () {
       // if (daySummaries >= limit) {
@@ -81,21 +67,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     //     context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      // if (daySummaries >= limit) {
-      //   showCupertinoModalBottomSheet(
-      //     context: context,
-      //     expand: false,
-      //     bounce: false,
-      //     barrierColor: Colors.black54,
-      //     backgroundColor: Colors.transparent,
-      //     builder: (context) {
-      //       return const SubscriptionScreen(fromOnboarding: true,);
-      //     },
-      //   );
-      //   context
-      //       .read<MixpanelBloc>()
-      //       .add(LimitReached(resource: fileName, registrated: false));
-      // } else {
       context.read<SummariesBloc>().add(GetSummaryFromFile(
           filePath: filePath, fileName: fileName, fromShare: true));
       // }
@@ -173,7 +144,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       //   );
       //   context.read<SettingsBloc>().add(const HowToShowed());
       // });
-
     }
     super.initState();
   }
@@ -185,7 +155,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _searchController.dispose();
     super.dispose();
   }
-  // //MATCHES IN ALL TITLE
+  
+  // MATCHES AT THE START OF THE TITLE
   // void _filterSummaries(String query) {
   //   setState(() {
   //     // If the query is empty, reset the filtered list to all summaries
@@ -197,33 +168,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   //     // Convert query to lowercase for case-insensitive matching
   //     String lowerQuery = query.trim().toLowerCase();
 
-  //     // Filter summaries where the title contains the query as a substring
+  //     // Filter summaries where the title starts with the query
   //     _filteredSummaries = _allSummaries.where((title) {
   //       // Convert title to lowercase
-  //       return title.toLowerCase().contains(lowerQuery);
+  //       return title.toLowerCase().startsWith(lowerQuery);
   //     }).toList();
   //   });
   // }
-
-  // MATCHES AT THE START OF THE TITLE
-  void _filterSummaries(String query) {
-    setState(() {
-      // If the query is empty, reset the filtered list to all summaries
-      if (query.trim().isEmpty) {
-        _filteredSummaries = _allSummaries;
-        return;
-      }
-
-      // Convert query to lowercase for case-insensitive matching
-      String lowerQuery = query.trim().toLowerCase();
-
-      // Filter summaries where the title starts with the query
-      _filteredSummaries = _allSummaries.where((title) {
-        // Convert title to lowercase
-        return title.toLowerCase().startsWith(lowerQuery);
-      }).toList();
-    });
-  }
 
   void onPressSettings() {
     Navigator.of(context).pushNamed('/settings');
@@ -252,27 +203,36 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         builder: (context, settingsState) {
           return BlocBuilder<SummariesBloc, SummariesState>(
             builder: (context, summariesState) {
-              _allSummaries = [];
-              _titleToLinkMap = {};
-              summariesState.summaries.forEach((link, summaryData) {
-                final title = summaryData.summaryPreview.title ?? '';
-                _allSummaries.add(title);
-                _titleToLinkMap[title] = link;
-              });
+
+              final sumsKeys = summariesState.summaries.keys.toList();
+
+              final filtered = [];
+
+    
+
+              // _allSummaries = [];
+              // _titleToLinkMap = {};
+              // summariesState.summaries.forEach((link, summaryData) {
+              //   final title = summaryData.summaryPreview.title ?? '';
+              //   _allSummaries.add(title);
+              //   _titleToLinkMap[title] = link;
+              // });
 
               // Initialize _filteredSummaries if needed
-              if (_filteredSummaries.isEmpty ||
-                  _searchController.text.isEmpty) {
-                _filteredSummaries = _allSummaries;
-              }
+              // if (_filteredSummaries.isEmpty ||
+              //     _searchController.text.isEmpty) {
+              //   _filteredSummaries = _allSummaries;
+              // }
               // final DateFormat dayFormatter = DateFormat('MM.dd.yy');
               // final thisDay = dayFormatter.format(DateTime.now());
               //final summaries =
               //    summariesState.summaries.keys.toList().reversed.toList();
               return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
+                buildWhen: (previous, current) =>
+                   previous.subscriptionStatus != current.subscriptionStatus,
                 builder: (context, state) {
-                  final bool isSubscribed = state.subscriptionStatus ==
-                      SubscriptionStatus.unsubscribed;
+                  final isSubscribed = state.subscriptionStatus ==
+                      SubscriptionStatus.subscribed;
                   return DefaultTabController(
                     initialIndex: 0,
                     length: 1,
@@ -301,46 +261,49 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             bottom: PreferredSize(
                               preferredSize: Size(
                                   MediaQuery.of(context).size.width,
-                                  isSubscribed ? 140.0 : 70),
+                                  // !isSubscribed ? 140.0 : 70),
+                                  !isSubscribed ? 80.0 : 0),
                               child: Column(
                                 children: [
-                                  if (isSubscribed)
-                                    Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: const PremiumBanner()),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            8), // Rounded corners
-                                      ),
-                                      child: TextField(
-                                        controller: _searchController,
-                                        decoration: const InputDecoration(
-                                          fillColor:
-                                              Color.fromRGBO(187, 247, 247, 1),
-                                          hintText: 'Search',
-                                          prefixIcon: Icon(
-                                            Icons.search,
-                                            size: 20,
-                                          ),
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 0, horizontal: 8),
-                                        ),
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16),
-                                        onChanged:
-                                            _filterSummaries, // Correct function assignment
-                                      ),
-                                    ),
-                                  ),
+                                  !isSubscribed
+                                      ? Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: const PremiumBanner(),
+                                        )
+                                      : const SizedBox(),
+                                  // const SizedBox(
+                                  //   height: 15,
+                                  // ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       horizontal: 10, vertical: 5),
+                                  //   child: Container(
+                                  //     height: 40,
+                                  //     decoration: BoxDecoration(
+                                  //       borderRadius: BorderRadius.circular(
+                                  //           8), // Rounded corners
+                                  //     ),
+                                  //     child: TextField(
+                                  //       controller: _searchController,
+                                  //       decoration: const InputDecoration(
+                                  //         fillColor:
+                                  //             Color.fromRGBO(187, 247, 247, 1),
+                                  //         hintText: 'Search',
+                                  //         prefixIcon: Icon(
+                                  //           Icons.search,
+                                  //           size: 20,
+                                  //         ),
+                                  //         contentPadding: EdgeInsets.symmetric(
+                                  //             vertical: 0, horizontal: 8),
+                                  //       ),
+                                  //       style: TextStyle(
+                                  //           color: Colors.black, fontSize: 16),
+                                  //       // onChanged:
+                                  //       //     _filterSummaries, // Correct function assignment
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   //const HomeTabs(),
                                 ],
                               ),
@@ -358,7 +321,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 //             : summariesState.freeSummaries),
                                 IconButton(
                                   onPressed: onPressDesktop,
-                                  padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.2),
+                                  padding: EdgeInsets.only(
+                                      right: MediaQuery.of(context).size.width *
+                                          0.2),
                                   visualDensity: VisualDensity.compact,
                                   icon: SvgPicture.asset(
                                     Assets.icons.desctop,
@@ -381,14 +346,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: ListView.builder(
-                                itemCount: _filteredSummaries.length,
+                                itemCount: sumsKeys.length,
+
                                 itemBuilder: (context, index) {
-                                  final title = _filteredSummaries[index];
-                                  final link = _titleToLinkMap[title];
+                                  // final title = _filteredSummaries[index];
+                                  final link = sumsKeys[index];
 
                                   // Pass the link to SummaryTileah
                                   return SummaryTile(
-                                    sharedLink: link!,
+                                    sharedLink: link,
                                   );
                                 },
                                 // itemCount: _filteredSummaries
@@ -436,89 +402,89 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 }
 
-class LibraryDocumentTile extends StatelessWidget {
-  final LibraryDocument libraryDocument;
+// class LibraryDocumentTile extends StatelessWidget {
+//   final LibraryDocument libraryDocument;
 
-  const LibraryDocumentTile({super.key, required this.libraryDocument});
+//   const LibraryDocumentTile({super.key, required this.libraryDocument});
 
-  @override
-  Widget build(BuildContext context) {
-    void onPressDocument() {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) {
-          return LibraryDocumentScreen(libraryDocument: libraryDocument);
-        },
-      ));
-    }
+//   @override
+//   Widget build(BuildContext context) {
+//     void onPressDocument() {
+//       Navigator.of(context).push(MaterialPageRoute(
+//         builder: (context) {
+//           return LibraryDocumentScreen(libraryDocument: libraryDocument);
+//         },
+//       ));
+//     }
 
-    return ListTile(
-      leading: null,
-      trailing: null,
-      minVerticalPadding: 0,
-      minLeadingWidth: 0,
-      horizontalTitleGap: 0,
-      contentPadding:
-          const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
-      title: SizedBox(
-        height: 80,
-        child: AspectRatio(
-          aspectRatio: 3.5,
-          child: Material(
-            borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).primaryColor.withOpacity(0.2),
-            child: InkWell(
-              splashFactory: InkSplash.splashFactory,
-              highlightColor: Theme.of(context).canvasColor.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(10),
-              onTap: onPressDocument,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                      aspectRatio: 1,
-                      child: Container(
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 2, vertical: 2),
-                          child: Hero(
-                            tag: libraryDocument.title,
-                            child: Image.asset(
-                              libraryDocument.img,
-                              fit: BoxFit.cover,
-                            ),
-                          ))),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 7, vertical: 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            libraryDocument.title,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMedium!
-                                .copyWith(fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//     return ListTile(
+//       leading: null,
+//       trailing: null,
+//       minVerticalPadding: 0,
+//       minLeadingWidth: 0,
+//       horizontalTitleGap: 0,
+//       contentPadding:
+//           const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
+//       title: SizedBox(
+//         height: 80,
+//         child: AspectRatio(
+//           aspectRatio: 3.5,
+//           child: Material(
+//             borderRadius: BorderRadius.circular(10),
+//             color: Theme.of(context).primaryColor.withOpacity(0.2),
+//             child: InkWell(
+//               splashFactory: InkSplash.splashFactory,
+//               highlightColor: Theme.of(context).canvasColor.withOpacity(0.3),
+//               borderRadius: BorderRadius.circular(10),
+//               onTap: onPressDocument,
+//               child: Row(
+//                 mainAxisSize: MainAxisSize.min,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   AspectRatio(
+//                       aspectRatio: 1,
+//                       child: Container(
+//                           clipBehavior: Clip.hardEdge,
+//                           decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(10),
+//                           ),
+//                           margin: const EdgeInsets.symmetric(
+//                               horizontal: 2, vertical: 2),
+//                           child: Hero(
+//                             tag: libraryDocument.title,
+//                             child: Image.asset(
+//                               libraryDocument.img,
+//                               fit: BoxFit.cover,
+//                             ),
+//                           ))),
+//                   Expanded(
+//                     child: Padding(
+//                       padding: const EdgeInsets.symmetric(
+//                           horizontal: 7, vertical: 0),
+//                       child: Column(
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         mainAxisSize: MainAxisSize.max,
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//                           Text(
+//                             libraryDocument.title,
+//                             overflow: TextOverflow.ellipsis,
+//                             maxLines: 1,
+//                             style: Theme.of(context)
+//                                 .textTheme
+//                                 .displayMedium!
+//                                 .copyWith(fontWeight: FontWeight.w400),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,8 +7,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'package:summify/bloc/offers/offers_event.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
+import 'package:summify/screens/bundle_screen/bundle_screen.dart';
+import 'package:summify/screens/home_screen/home_screen.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/screens/summary_screen/research_tab.dart';
@@ -115,11 +117,15 @@ class _SummaryScreenState extends State<SummaryScreen>
             }
 
             void onPressBack() {
+                final subscriptionStatus = BlocProvider.of<SubscriptionsBloc>(context).state.subscriptionStatus;
               if (!state.ratedSummaries.contains(widget.summaryKey)) {
                 showRateScreen();
               } else {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-            '/bundle', (Route<dynamic> route) => false);
+                subscriptionStatus != SubscriptionStatus.subscribed ? Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BundleScreen(
+                          triggerScreen: 'Summary',
+                          fromSummary: true,
+                        ))) :   Navigator.of(context).pop();
               }
             }
 
@@ -256,18 +262,24 @@ class PremiumBlurContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     void onPressPremium() {
       context.read<OffersBloc>().add(NextScreenEvent());
-      showCupertinoModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return const SubscriptionScreenLimit(
-            fromOnboarding: true,
-            triggerScreen: 'Summary_Screen', fromSettings: false,
-          );
-        },
+      // showCupertinoModalBottomSheet(
+      //   context: context,
+      //   expand: false,
+      //   bounce: false,
+      //   barrierColor: Colors.black54,
+      //   backgroundColor: Colors.transparent,
+      //   builder: (context) {
+      //     return const SubscriptionScreenLimit(
+      //       fromOnboarding: true,
+      //       triggerScreen: 'Summary_Screen',
+      //       fromSettings: false,
+      //     );
+      //   },
+      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SubscriptionScreenLimit(triggerScreen: 'Summary', fromSettings: true)),
       );
     }
 
@@ -275,13 +287,13 @@ class PremiumBlurContainer extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Container(
           height: MediaQuery.of(context).size.height -
-              265 -
+              240 -
               MediaQuery.of(context).padding.bottom,
           width: double.infinity,
           //margin: //EdgeInsets.only(
-              //left: 15,
-              //right: 15,
-              //bottom: MediaQuery.of(context).padding.bottom),
+          //left: 15,
+          //right: 15,
+          //bottom: MediaQuery.of(context).padding.bottom),
           child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: BackdropFilter(

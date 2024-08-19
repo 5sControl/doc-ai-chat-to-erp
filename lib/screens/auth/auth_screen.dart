@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/helpers/show_error_toast.dart';
 import 'package:summify/helpers/show_success_toast.dart';
 import 'package:summify/screens/auth/registration_screen.dart';
@@ -92,8 +93,9 @@ class _AuthScreenState extends State<AuthScreen> {
         if (state is AuthenticationSuccessState) {
           //showSuccessToast(context: context, title: 'Successfully logged in');
           //Future.delayed(const Duration(milliseconds: 100), () {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            '/', (Route<dynamic> route) => false);
+          //context.read<SubscriptionsBloc>().add(const GetSubscriptionStatus());
+          Navigator.of(context).pushNamed(
+            '/');
           //});
         }
 
@@ -109,7 +111,7 @@ class _AuthScreenState extends State<AuthScreen> {
           appBar: AppBar(
             elevation: 0,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios_new,
                 
                 size: 24,
@@ -218,10 +220,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         child: Container(
                           padding: const EdgeInsets.only(
                               left: 30, top: 10, right: 30, bottom: 10),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: Color.fromRGBO(234, 245, 246, 0.298),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
+                                  BorderRadius.all(Radius.circular(10))),
                           child: SvgPicture.asset('assets/icons/google.svg'),
                         ),
                       ),
@@ -231,10 +233,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         child: Container(
                           padding: const EdgeInsets.only(
                               left: 30, top: 10, right: 30, bottom: 10),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Color.fromRGBO(234, 245, 246, 0.298),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
+                                  BorderRadius.all(Radius.circular(10))),
                           child: SvgPicture.asset('assets/icons/apple.svg', color: Colors.black,),
                         ),
                       ),
@@ -253,7 +255,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Register Now',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
                           recognizer: TapGestureRecognizer()
@@ -326,7 +328,7 @@ class EmailInput extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
-          label: Text(
+          label: const Text(
             'Email Address',
             style: TextStyle(
                 color: Colors.black,
@@ -396,7 +398,7 @@ class _PasswordInputState extends State<PasswordInput> {
               const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
-          label: Text(
+          label: const Text(
             'Password',
             style: TextStyle(
                 color: Colors.black,
@@ -439,7 +441,7 @@ class SignUpButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 18),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Color.fromRGBO(0, 186, 195, 1),
+            color: const Color.fromRGBO(0, 186, 195, 1),
             borderRadius: BorderRadius.circular(8)),
         child: const Text(
           'Login in',

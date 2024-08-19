@@ -123,189 +123,191 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ],
           ),
           body: Stack(children: [
-            Container(
-              margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).padding.bottom + 18),
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        height: 26,
-                      ),
-                      const Text(
-                        'Register and get',
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 30,
-                            height: 1.2,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      Row(children: [
+            SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom + 18),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 26,
+                        ),
                         const Text(
-                          '2 free ',
-                          //maxLines: 2,
+                          'Register and get',
+                          maxLines: 2,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               fontSize: 30,
-                              //height: 1.2,
+                              height: 1.2,
                               fontWeight: FontWeight.w700),
                         ),
-                        Container(
-                          //width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              gradient: const LinearGradient(
-                                  colors: [
-                                    Color.fromRGBO(255, 238, 90, 1),
-                                    Color.fromRGBO(255, 208, 74, 1),
-                                  ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter)),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: Center(
-                                child: Text(
-                              'Unlimited',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 30),
-                            )),
+                        Row(children: [
+                          const Text(
+                            '2 free ',
+                            //maxLines: 2,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 30,
+                                //height: 1.2,
+                                fontWeight: FontWeight.w700),
                           ),
-                        ),
-                      ]),
-                      const Text(
-                        'summarizations',
-                        maxLines: 2,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 30,
-                            height: 1.2,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      NameInput(controller: nameController),
-                      const Divider(
-                        color: Colors.transparent,
-                        height: 20,
-                      ),
-                      EmailInput(controller: emailController),
-                      const Divider(
-                        color: Colors.transparent,
-                        height: 20,
-                      ),
-                      PasswordInput(controller: passwordController),
-                      const Divider(
-                        color: Colors.transparent,
-                        height: 20,
-                      ),
-                      ConfirmPasswordInput(
-                          controller: confirmPasswordController),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SignUpButton(
-                    onPress: onPressRegister,
-                  ),
-                  // const SizedBox(
-                  //   height: 5,
-                  // ),
-                  const DividerRow(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: onPressGoogle,
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                  left: 30, top: 10, right: 30, bottom: 10),
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(234, 245, 246, 0.298),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10))),
-                              child:
-                                  SvgPicture.asset('assets/icons/google.svg'),
+                          Container(
+                            //width: double.infinity,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                gradient: const LinearGradient(
+                                    colors: [
+                                      Color.fromRGBO(255, 238, 90, 1),
+                                      Color.fromRGBO(255, 208, 74, 1),
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter)),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Center(
+                                  child: Text(
+                                'Unlimited',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 30),
+                              )),
                             ),
                           ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          InkWell(
-                            onTap: onPressApple,
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                  left: 30, top: 10, right: 30, bottom: 10),
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(234, 245, 246, 0.298),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10))),
-                              child: SvgPicture.asset(
-                                'assets/icons/apple.svg',
-                                color: Colors.black,
+                        ]),
+                        const Text(
+                          'summarizations',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 30,
+                              height: 1.2,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        NameInput(controller: nameController),
+                        const Divider(
+                          color: Colors.transparent,
+                          height: 20,
+                        ),
+                        EmailInput(controller: emailController),
+                        const Divider(
+                          color: Colors.transparent,
+                          height: 20,
+                        ),
+                        PasswordInput(controller: passwordController),
+                        const Divider(
+                          color: Colors.transparent,
+                          height: 20,
+                        ),
+                        ConfirmPasswordInput(
+                            controller: confirmPasswordController),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SignUpButton(
+                      onPress: onPressRegister,
+                    ),
+                    // const SizedBox(
+                    //   height: 5,
+                    // ),
+                    const DividerRow(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: onPressGoogle,
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    left: 30, top: 10, right: 30, bottom: 10),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(234, 245, 246, 0.298),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10))),
+                                child:
+                                    SvgPicture.asset('assets/icons/google.svg'),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 30,),
-                  Center(
-                    child: RichText(
-                      text: TextSpan(
-                          text: 'Already have an account? ',
-                          style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 15),
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: 'Login Now',
-                                style: TextStyle(
-                                  color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            InkWell(
+                              onTap: onPressApple,
+                              child: Container(
+                                padding: const EdgeInsets.only(
+                                    left: 30, top: 10, right: 30, bottom: 10),
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(234, 245, 246, 0.298),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(10))),
+                                child: SvgPicture.asset(
+                                  'assets/icons/apple.svg',
+                                  color: Colors.black,
                                 ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap =() {Navigator.of(context).pop();})
-                          ]),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                  )
-                  // const SizedBox(
-                  //   width: double.infinity,
-                  //   child: Text(
-                  //     'Don\'t have an account?',
-                  //     textAlign: TextAlign.center,
-                  //     style: TextStyle(color: Colors.black),
-                  //   ),
-                  // ),
-                ],
+                    SizedBox(height: 30,),
+                    Center(
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Already have an account? ',
+                            style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 15),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: 'Login Now',
+                                  style: TextStyle(
+                                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap =() {Navigator.of(context).pop();})
+                            ]),
+                      ),
+                    )
+                    // const SizedBox(
+                    //   width: double.infinity,
+                    //   child: Text(
+                    //     'Don\'t have an account?',
+                    //     textAlign: TextAlign.center,
+                    //     style: TextStyle(color: Colors.black),
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
             ),
             Animate(effects: [
               MoveEffect(
                 begin: Offset(10, 10),
-                  end: MediaQuery.of(context).size.shortestSide < 550 ? Offset(10, -530) : Offset(10, -1100),
+                  end: MediaQuery.of(context).size.shortestSide < 550 ? Offset(10, -570) : Offset(10, -1100),
                   delay: Duration(milliseconds: 200)),
             ], child: const HappyBox()),
             AnimatedSwitcher(

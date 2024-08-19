@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -84,38 +85,55 @@ class AuthService {
   }
 
   Future<UserModel?> signInWithGoogle() async {
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      // Optional clientId
+      // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+      scopes: <String>[
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ],
+    );
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    OAuthCredential credential;
     try {
-      credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-    } catch (e) {
-      throw Exception('canceled');
-    }
-
-    try {
-      final UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-      final User? firebaseUser = userCredential.user;
-      if (firebaseUser != null) {
-        return UserModel(
-          id: firebaseUser.uid,
-          email: firebaseUser.email ?? '',
-          displayName: firebaseUser.displayName ?? '',
-        );
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null){
+        return null;
       }
-    } on FirebaseAuthException catch (e) {
-      print(e.toString());
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser.authentication;
+
+      OAuthCredential credential;
+      try {
+        credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
+      } catch (e) {
+        throw Exception('canceled');
+      }
+
+      try {
+        final UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(credential);
+        final User? firebaseUser = userCredential.user;
+        if (firebaseUser != null) {
+          return UserModel(
+            id: firebaseUser.uid,
+            email: firebaseUser.email ?? '',
+            displayName: firebaseUser.displayName ?? '',
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        print(e.toString());
+      } catch (e) {
+        print(e);
+      }
+    } on PlatformException catch (e) {
+      print('error caught: $e');
     } catch (e) {
-      print(e);
+      print('error caught: $e');
     }
     return null;
   }

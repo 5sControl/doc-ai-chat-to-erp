@@ -20,7 +20,7 @@ class PurchasesService {
       configuration =
           PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');
     }
-
+    
     await Purchases.configure(configuration..appUserID = user?.uid);
   }
 

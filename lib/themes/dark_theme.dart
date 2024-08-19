@@ -10,7 +10,7 @@ final darkTheme = ThemeData(
     primaryColorLight: const Color.fromRGBO(227, 255, 254, 1),
     canvasColor: const Color.fromRGBO(5, 49, 57, 1),
     highlightColor:  const Color.fromRGBO(5, 49, 57, 1),
-    hintColor:const Color.fromRGBO(227, 255, 254, 1) ,
+    hintColor:Color.fromRGBO(0, 186, 195, 1),
     checkboxTheme: const CheckboxThemeData(
       side: BorderSide(
           width: 1,

@@ -35,7 +35,7 @@ class SubscriptionScreenLimit extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
-  var selectedSubscriptionIndex = 1;
+  var selectedSubscriptionIndex = 2;
 
   void onSelectSubscription({required int index}) {
     setState(() {
@@ -90,10 +90,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
-        final monthlyPackage = packages.firstWhere(
-            (element) => element.packageType == PackageType.monthly);
-        final annualPackage = packages
-            .firstWhere((element) => element.packageType == PackageType.annual);
+        // final monthlyPackage = packages.firstWhere(
+        //     (element) => element.packageType == PackageType.annual);
+        // final annualPackage = packages
+        //     .firstWhere((element) => element.packageType == PackageType.annual);
 
         // List<Color?> colors = [
         //   Color.fromARGB(255, 255, 199, 59),
@@ -782,10 +782,10 @@ class SubscriptionCover extends StatelessWidget {
     switch (package.storeProduct.identifier) {
       case 'SummifyPremiumWeekly' || 'summify_premium_week':
         subscriptionTitle = '1 \nweek';
-      case 'SummifyPremiumMonth' || 'summify_premium_month':
-        subscriptionTitle = '1 \nmonth';
       case 'SummifyPremiumYear' || 'summify_premium_year':
         subscriptionTitle = '12 \nmonths';
+      case 'SummifyPremiumMonth' || 'summify_premium_month':
+        subscriptionTitle = '1 \nmonth';
     }
 
     final textColor = Theme.of(context).brightness == Brightness.light

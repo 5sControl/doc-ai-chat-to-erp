@@ -1,6 +1,7 @@
 part of 'subscriptions_bloc.dart';
 
 enum SubscriptionStatus { subscribed, unsubscribed }
+enum PurchasesStatus { initial, loading, loaded, failure }
 
 class SubscriptionsState extends Equatable {
   final SubscriptionStatus subscriptionStatus;
@@ -21,5 +22,13 @@ class SubscriptionsState extends Equatable {
   @override
   List<Object?> get props => [availableProducts, subscriptionStatus];
 }
+
+final class SubscriptionsStateLoading extends SubscriptionsState {
+  const SubscriptionsStateLoading({
+    required super.availableProducts,
+    required super.subscriptionStatus,
+  });
+}
+
 
 

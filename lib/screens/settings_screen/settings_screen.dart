@@ -240,6 +240,7 @@ class SettingsScreen extends StatelessWidget {
                         onTap: () {
                           if (buttonText == 'Yes, log out') {
                             context.read<AuthenticationBloc>().add(SignOut());
+                            context.read<SubscriptionsBloc>().add(GetSubscriptionStatus());
                             Navigator.of(context).pop();
                           } else if (buttonText == 'Yes, delete') {
                             context
@@ -476,7 +477,11 @@ class SettingsScreen extends StatelessWidget {
                 'Yes, delete');
           })
     ];
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+    return BlocConsumer<AuthenticationBloc, AuthenticationState>(
+      listenWhen: (_, current) => current is AuthenticationSuccessState,
+      listener: (context, state){
+        context.read<SubscriptionsBloc>().add(const GetSubscriptionStatus());
+      },
         builder: (context, state) {
       return Stack(
         children: [

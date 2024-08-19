@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/request_screen.dart';
 
@@ -37,9 +38,9 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    setState(() {
-      _notification = state;
-    });
+  setState(() {
+    _notification = state;
+  });
   }
 
   @override
@@ -151,7 +152,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
               contentPadding:
                   const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
               title: SizedBox(
-                height: 80,
+                height: 85,
                 child: AspectRatio(
                   aspectRatio: 3.5,
                   child: Material(
@@ -411,7 +412,7 @@ class _LoaderState extends State<Loader> {
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
-        firstChild: Row(
+        firstChild: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -45,7 +45,7 @@ class AuthenticationBloc
             name: event.name, email: event.email, password: event.password);
         if (res is UserModel) {
           emit(AuthenticationSuccessState(user: res));
-          LogInResult result = await Purchases.logIn(res.id!);
+          await Purchases.logIn(res.id!);
         }
       } catch (e) {
         emit(AuthenticationFailureState(
@@ -60,6 +60,7 @@ class AuthenticationBloc
             await authService.signInUserWithEmail(event.email, event.password);
         if (res is UserModel) {
           emit(AuthenticationSuccessState(user: res));
+          await Purchases.logIn(res.id!);
         }
       } catch (e) {
         emit(AuthenticationFailureState(
@@ -73,6 +74,7 @@ class AuthenticationBloc
         final UserModel? user = await authService.signInWithGoogle();
         if (user != null) {
           emit(AuthenticationSuccessState(user: user));
+          await Purchases.logIn(user.id!);
         } else {
           emit(const AuthenticationFailureState(errorMessage: 'Some error'));
         }
@@ -91,6 +93,7 @@ class AuthenticationBloc
         final UserModel? user = await authService.signInWithApple();
         if (user != null) {
           emit(AuthenticationSuccessState(user: user));
+          LogInResult result = await Purchases.logIn(user.id!);
         } else {
           emit(const AuthenticationFailureState(errorMessage: 'Some error'));
         }
@@ -110,6 +113,7 @@ class AuthenticationBloc
       try {
         authService.signOutUser();
         emit(AuthenticationInitial());
+        await Purchases.logOut();
       } catch (e) {
         emit(AuthenticationInitial());
       }
@@ -135,6 +139,7 @@ class AuthenticationBloc
         authService.deleteUser();
         emit(const DeleteUserState());
         emit(AuthenticationInitial());
+        await Purchases.logOut();
       } catch (e) {
         emit(const DeleteUserState());
         emit(AuthenticationInitial());

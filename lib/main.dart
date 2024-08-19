@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/helpers/purchases.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'firebase_options.dart';
@@ -22,8 +23,6 @@ import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/screens/auth/auth_screen.dart';
-import 'package:summify/screens/auth/registration_screen.dart';
-import 'package:summify/screens/auth/reset_password_screen.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
@@ -42,6 +41,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  final purchasesService = PurchasesService();
+  await purchasesService.initPlatformState();
+  
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -53,7 +56,7 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  // await HydratedBloc.storage.clear();
+  //await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 

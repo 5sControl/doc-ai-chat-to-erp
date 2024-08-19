@@ -20,27 +20,8 @@ class _TextModalScreenState extends State<TextModalScreen> {
   var controllerText = '';
 
   void onPressSummify() {
-    // final DateFormat formatter = DateFormat('MM.dd.yy');
-    // final thisDay = formatter.format(DateTime.now());
-    // final limit = context.read<SummariesBloc>().state.dailyLimit;
-    // final daySummaries =
-    //     context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 0;
 
     Future.delayed(const Duration(milliseconds: 300), () {
-      // if (daySummaries >= limit) {
-      //   showCupertinoModalBottomSheet(
-      //     context: context,
-      //     expand: false,
-      //     bounce: false,
-      //     barrierColor: Colors.black54,
-      //     backgroundColor: Colors.transparent,
-      //     builder: (context) {
-      //       return const SubscriptionScreen(fromOnboarding: true,);
-      //     },
-      //   );
-      //   context.read<MixpanelBloc>().add(
-      //       LimitReached(resource: textController.text, registrated: false));
-      // } else
         if (controllerText.isNotEmpty) {
         context
             .read<SummariesBloc>()
@@ -151,9 +132,9 @@ class MyTextField extends StatelessWidget {
                       keyboardType: TextInputType.multiline,
                       textAlignVertical: TextAlignVertical.top,
                       cursorWidth: 3,
-                      cursorColor: Theme.of(context).cardColor,
+                      cursorColor: Colors.black,
                       cursorHeight: 20,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black),
                       decoration: InputDecoration(
                           fillColor:
                               Color.fromRGBO(242, 255, 255, 1),
@@ -167,7 +148,7 @@ class MyTextField extends StatelessWidget {
                               .textTheme
                               .bodyMedium!
                               .copyWith(
-                                  fontSize: 14, fontWeight: FontWeight.w400)),
+                                  fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black)),
                     ),
                   ),
                   Align(
