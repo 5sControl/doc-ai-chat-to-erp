@@ -13,7 +13,7 @@
         <array>
           <string>ShareMedia-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
           <string>fb1373696193330018</string>
-			<string>com.googleusercontent.apps.905111238498-1l4fom9c69i5vlutiuras65vnbgsd1qf</string> <!-- Added URL scheme for Google Sign-In -->
+			<string>com.googleusercontent.apps.1006377902393-4mdvnniglhbajbd832q3k0k9hb8kg9jo</string> <!-- Added URL scheme for Google Sign-In -->
         </array>
       </dict>
     </array>

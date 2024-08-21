@@ -3,8 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 
-final postUrl = 'https://dev.elang.app/api/v1/users/subscriptions';
-final getSubBundleInfo = 'https://dev.elang.app/api/v1/users/subscriptions?app=com.englishingames.summiShare&bundle=Premium%20Bundle%202';
+const postUrlDev = 'https://dev.elang.app/api/v1/users/subscriptions';
+const postUrlProd = 'https://easy4learn.com/api/v1/users/subscriptions';
+
+const getSubBundleInfoDev = 'https://dev.elang.app/api/v1/users/subscriptions?app=com.englishingames.summiShare&bundle=Premium%20Bundle%202';
+const getSubBundleInfoProd = 'https://easy4learn.com/api/v1/users/subscriptions?app=com.englishingames.summiShare&bundle=Premium%20Bundle%202';
+
  
 class BundleService {
   final _dio = Dio();
@@ -36,7 +40,7 @@ class BundleService {
     try {
       final token = await FirebaseAuth.instance.currentUser?.getIdToken();
       final response = await _dio.get(
-        getSubBundleInfo,
+        getSubBundleInfoProd,
         options: Options(
           headers: {
             'Authorization': 'bearer $token',
@@ -58,23 +62,20 @@ class BundleService {
       } else {
        return null;
       }
-    } catch (_) {
-      return null;;
+    } catch (e) {
+      return null;
     }
   }
  
   Future<void> createSubscription(Map<String, String> subscriptionData) async {
     final token = await FirebaseAuth.instance.currentUser?.getIdToken();
     try {
-      final res = await _dio.post(postUrl,
+      await _dio.post(postUrlProd,
           data: subscriptionData,
           options: Options(headers: {
             'Authorization': 'bearer $token',
           })); 
-      debugPrint(res.statusCode.toString());
     } catch (e) {
-
-      debugPrint(e.toString());
       throw Exception('Unexpected error: $e');
     }
   }

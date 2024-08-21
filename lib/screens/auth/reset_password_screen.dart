@@ -37,9 +37,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         },
       ));
     }
-    //final TextEditingController passwordController = TextEditingController();
-    //final TextEditingController confirmPasswordController =
-    //    TextEditingController();
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is RestorePasswordSuccess) {
@@ -59,7 +56,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         appBar: AppBar(
           elevation: 0,
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios_new,
               size: 24,
             ),
@@ -74,30 +71,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 bottom: MediaQuery.of(context).padding.bottom + 18),
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              //mainAxisSize: MainAxisSize.max,
+              //crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  //mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       height: 56,
                     ),
-                    // Text(
-                    //   'Reset password',
-                    //   maxLines: 2,
-                    //   textAlign: TextAlign.start,
-                    //   style: TextStyle(
-                    //       color: Colors.black,
-                    //       fontSize: 32,
-                    //       height: 1.2,
-                    //       fontWeight: FontWeight.w700),
-                    // ),
-                    // SizedBox(
-                    //   height: 10,
-                    // ),
                     Center(
                       child: Text(
                         'We will send you an email\nto reset your password',
@@ -135,12 +119,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   child: RichText(
                     text: TextSpan(
                         text: 'Don\'t have an account? ',
-                        style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 18),
+                        style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 15),
                         children: <TextSpan>[
                           TextSpan(
                               text: 'Register Now',
-                              style: TextStyle(
-                                
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                               ),
                               recognizer: TapGestureRecognizer()
@@ -170,21 +153,20 @@ class ConfirmButton extends StatelessWidget {
           .add(SendResetEmail(email: controller.text));
     }
 
-    return SizedBox(
-      width: double.infinity,
-      child: TextButton(
-        style: ButtonStyle(
-            //adding: const MaterialStatePropertyAll(
-            //    EdgeInsets.symmetric(vertical: 14)),
-            backgroundColor:
-                WidgetStatePropertyAll(Theme.of(context).primaryColor)),
-        onPressed: onPressConfirm,
-        child: Text(
+    return InkWell(
+      onTap: onPressConfirm,
+      child: Container(
+        alignment: Alignment.center,
+         height: 50,
+        //padding: const EdgeInsets.symmetric(vertical: 18),
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: const Color.fromRGBO(0, 186, 195, 1),
+            borderRadius: BorderRadius.circular(8)),
+        child: const Text(
           'Confirm',
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(color: Colors.white),
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
     );
@@ -218,7 +200,7 @@ class _PasswordInputState extends State<PasswordInput> {
               const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
-          label: Text(
+          label: const Text(
             'Enter your email',
             style: TextStyle(
                 color: Colors.black,
@@ -272,22 +254,12 @@ class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
                 fontSize: 18,
                 fontWeight: FontWeight.w400),
           ),
-          // suffixIcon: IconButton(
-          //   icon: Icon(
-          //       _passwordVisible ? Icons.visibility : Icons.visibility_off),
-          //   onPressed: () {
-          //     setState(() {
-          //       onPressEye();
-          //     });
-          //   },
-          // ),
           border: OutlineInputBorder(
               gapPadding: 10,
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide.none),
           floatingLabelStyle: const TextStyle(
               color: Colors.white,
-              // height: -2,
               fontSize: 18,
               fontWeight: FontWeight.w500)),
     );

@@ -102,7 +102,6 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
           }
         }
       } on PlatformException catch (e) {
-        // var errorCode = PurchasesErrorHelper.getErrorCode(e);
         if (event.context.mounted) {
           showSystemDialog(context: event.context, title: e.message.toString());
         }

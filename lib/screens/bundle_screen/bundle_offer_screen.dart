@@ -98,7 +98,7 @@ class Body extends StatelessWidget {
                     Assets.icons.transcriptor1,
                   ),
                   Text(
-                    'SpeachScribe',
+                    'SpeechScribe',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: isTablet ? 20 : 16),
@@ -180,7 +180,7 @@ class Body1 extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    'SpeachScribe',
+                    'SpeechScribe',
                     style: TextStyle(
                         fontSize: isTablet ? 20 : 16,
                         color: Colors.black,
@@ -275,7 +275,7 @@ class _TitleState extends State<Title> {
   final List<List<String>> wordPairs = [
     ['Unlock Limitless', 'Possibilities'],
     ['Endless Possibilities', 'with 50% Off'],
-    ['Unlock the Power', 'of Unlimited'],
+    ['Get 4 Unlimited Apps', 'with 50% Off'],
   ];
 
   List<String> displayedPair = ["", ""];
@@ -336,7 +336,7 @@ class _TitleState extends State<Title> {
                     : isTablet
                         ? 56
                         : 28,
-                color: displayedPair[1] == 'with 50% Off'
+                color: displayedPair[1] == 'with 50% Off' 
                     ? const Color.fromRGBO(0, 186, 195, 1)
                     : Theme.of(context).brightness == Brightness.dark
                         ? Colors.white
@@ -435,9 +435,7 @@ class SubscriptionCover extends StatelessWidget {
                     : Colors.white12,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Theme.of(context).hintColor
-                        : Colors.white,
+                    color: Colors.white,
                     width: 2)),
             child: Stack(
               fit: StackFit.expand,

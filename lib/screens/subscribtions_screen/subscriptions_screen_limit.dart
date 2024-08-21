@@ -163,10 +163,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       //const Human(),
-                                      state.screenIndex == 1 ||
-                                              state.screenIndex == 2
+                                      state.screenIndex == 0 ||
+                                              state.screenIndex == 1 || state.screenIndex == 2
                                           ? SizedBox(
-                                              height: 40,
+                                              height: 36,
                                             )
                                           : Container(),
                                       state.screenIndex == 1
@@ -233,89 +233,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
     );
   }
 }
-
-// class WeekTitle extends StatelessWidget {
-//   final Function({required int index}) onSelectSubscription;
-//   const WeekTitle({super.key, required this.onSelectSubscription});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//         child: InkWell(
-//       borderRadius: BorderRadius.circular(8),
-//       onTap: () => onSelectSubscription(index: 0),
-//       child: Center(
-//         child: Text(
-//           'Pay weekly',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.bodySmall,
-//         ),
-//       ),
-//     ));
-//   }
-// }
-
-// class MonthTitle extends StatelessWidget {
-//   final Function({required int index}) onSelectSubscription;
-//   const MonthTitle({super.key, required this.onSelectSubscription});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//         child: InkWell(
-//       borderRadius: BorderRadius.circular(8),
-//       onTap: () => onSelectSubscription(index: 0),
-//       child: Center(
-//         child: Text(
-//           'Pay monthly',
-//           textAlign: TextAlign.center,
-//           style: Theme.of(context).textTheme.bodySmall,
-//         ),
-//       ),
-//     ));
-//   }
-// }
-
-// class YearTitle extends StatelessWidget {
-//   final Function({required int index}) onSelectSubscription;
-//   const YearTitle({super.key, required this.onSelectSubscription});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Expanded(
-//         child: InkWell(
-//       borderRadius: BorderRadius.circular(8),
-//       onTap: () => onSelectSubscription(index: 1),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Text(
-//             'Pay annually',
-//             textAlign: TextAlign.center,
-//             style: Theme.of(context).textTheme.bodySmall,
-//           ),
-//           const SizedBox(
-//             height: 5,
-//           ),
-//           Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(4),
-//               // gradient: const LinearGradient(colors: [
-//               //   Color.fromRGBO(255, 238, 90, 1),
-//               //   Color.fromRGBO(255, 208, 74, 1),
-//               // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
-//             ),
-//             child: Text('Save up to 29\$',
-//                 style: Theme.of(context).textTheme.bodySmall!
-//                 // .copyWith(color: Colors.black),
-//                 ),
-//           )
-//         ],
-//       ),
-//     ));
-//   }
-// }
 
 class Human extends StatelessWidget {
   const Human({super.key});
@@ -816,9 +733,7 @@ class SubscriptionCover extends StatelessWidget {
                     : Colors.white12,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                    color: Theme.of(context).brightness == Brightness.light
-                        ? Theme.of(context).hintColor
-                        : Colors.white,
+                    color: Colors.white,
                     width: 2)),
             child: Stack(
               fit: StackFit.expand,

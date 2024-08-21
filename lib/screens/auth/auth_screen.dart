@@ -437,8 +437,8 @@ class SignUpButton extends StatelessWidget {
       onTap: onPress,
       child: Container(
         alignment: Alignment.center,
-        // height: 50,
-        padding: const EdgeInsets.symmetric(vertical: 18),
+         height: 50,
+        //padding: const EdgeInsets.symmetric(vertical: 18),
         width: double.infinity,
         decoration: BoxDecoration(
             color: const Color.fromRGBO(0, 186, 195, 1),

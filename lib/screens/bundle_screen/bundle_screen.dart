@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,58 +125,78 @@ class _BundleScreenState extends State<BundleScreen>
                                 toolbarHeight: 10,
                                 bottom: PreferredSize(
                                   preferredSize: const Size.fromHeight(70.0),
-                                  child: Row(
+                                  child: Stack(
+                                    alignment: Alignment.center,
                                     children: [
-                                      const Spacer(),
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 16),
-                                        padding: const EdgeInsets.all(1.5),
-                                        height: 40,
-                                        width: 240,
-                                        decoration: BoxDecoration(
+                                      // Centered TabBar
+                                      Center(
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          padding: const EdgeInsets.all(1.5),
+                                          height: 40,
+                                          width: 240,
+                                          decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: TabBar(
-                                          controller: _tabController,
-                                          // isScrollable: true,
-                                          labelColor: Colors.white,
-                                          automaticIndicatorColorAdjustment:
-                                              false,
-                                          mouseCursor: null,
-                                          overlayColor:
-                                              const MaterialStatePropertyAll(
-                                                  Colors.transparent),
-                                          enableFeedback: false,
-                                          padding: EdgeInsets.zero,
-                                          splashFactory: NoSplash.splashFactory,
-                                          unselectedLabelColor: Colors.black,
-                                          dividerColor: Colors.transparent,
-                                          indicatorSize:
-                                              TabBarIndicatorSize.tab,
-                                          tabAlignment: TabAlignment.fill,
-                                          indicator: BoxDecoration(
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: TabBar(
+                                            controller: _tabController,
+                                            labelColor: Colors.white,
+                                            automaticIndicatorColorAdjustment:
+                                                false,
+                                            mouseCursor: null,
+                                            overlayColor:
+                                                const MaterialStatePropertyAll(
+                                                    Colors.transparent),
+                                            enableFeedback: false,
+                                            padding: EdgeInsets.zero,
+                                            splashFactory:
+                                                NoSplash.splashFactory,
+                                            unselectedLabelColor: Colors.black,
+                                            dividerColor: Colors.transparent,
+                                            indicatorSize:
+                                                TabBarIndicatorSize.tab,
+                                            tabAlignment: TabAlignment.fill,
+                                            indicator: BoxDecoration(
                                               color: const Color.fromRGBO(
                                                   0, 186, 195, 1),
                                               borderRadius:
-                                                  BorderRadius.circular(6)),
-                                          tabs: const [
-                                            Tab(
-                                              text: 'Bundle',
+                                                  BorderRadius.circular(6),
                                             ),
-                                            Tab(
-                                              text: 'Unlimited',
-                                            )
-                                          ],
+                                            tabs: const [
+                                              Tab(
+                                                text: 'Bundle',
+                                              ),
+                                              Tab(
+                                                text: 'Unlimited',
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 35,
-                                      ),
-                                      BackArrow(
-                                        fromOnboarding: widget.fromOnboarding,
-                                        fromSummary: widget.fromSummary,
+                                      Positioned(
+                                        right: 14,
+                                        top: 16,
+                                        bottom: 16,
+                                        child: Container(
+                                            width: 22,
+                                            height: 22,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: Theme.of(context)
+                                                    .iconTheme
+                                                    .color!,
+                                                width: 1.5,
+                                              ),
+                                            ),
+                                            child: BackArrow(
+                                              fromOnboarding:
+                                                  widget.fromOnboarding,
+                                              fromSummary: widget.fromSummary,
+                                            )),
                                       ),
                                     ],
                                   ),
@@ -334,28 +353,17 @@ class BackArrow extends StatelessWidget {
     }
 
     return IconButton(
-        visualDensity: VisualDensity.compact,
-        onPressed: onPressClose,
-        style: ButtonStyle(
-            padding:
-                MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
-            minimumSize: MaterialStateProperty.all<Size>(const Size(33, 33)),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black),
-              ),
-            ),
-            backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
-        icon: Icon(
-          Icons.close,
-          size: 18,
-          color: Theme.of(context).iconTheme.color,
-        ));
+      visualDensity: VisualDensity.compact,
+      onPressed: onPressClose,
+      iconSize: 22, // Size of the icon
+      icon: Icon(
+        Icons.close,
+        size: 18,
+        color: Theme.of(context).iconTheme.color,
+      ),
+      padding: EdgeInsets.zero, // Remove padding to ensure circular shape
+      constraints: BoxConstraints(), // Remove default constraints
+      splashRadius: 18, // Match splash radius to the circle
+    );
   }
 }

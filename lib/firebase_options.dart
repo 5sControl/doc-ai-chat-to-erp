@@ -59,13 +59,15 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD8IPLPWGcdDiGhr1NsFLBZvyzKoiEA8JY',
-    appId: '1:905111238498:ios:502bfef9a4085191bfde3b',
-    messagingSenderId: '905111238498',
-    projectId: 'elang-extension-dev',
-    databaseURL: 'https://elang-extension-dev-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'elang-extension-dev.appspot.com',
-    iosClientId: '905111238498-1l4fom9c69i5vlutiuras65vnbgsd1qf.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDyYcP1OKozHwEKT9zCYoF3ydnxwpuiXsE',
+    appId: '1:1006377902393:ios:fd582328a6ff1a26d308e8',
+    messagingSenderId: '1006377902393',
+    projectId: 'elang-extension-prod',
+    databaseURL: 'https://elang-extension-prod-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'elang-extension-prod.appspot.com',
+    androidClientId: '1006377902393-28mq8so8ls5uj5qqkn1g2qjfl7o4c0dm.apps.googleusercontent.com',
+    iosClientId: '1006377902393-4mdvnniglhbajbd832q3k0k9hb8kg9jo.apps.googleusercontent.com',
     iosBundleId: 'com.englishingames.summiShare',
   );
+
 }
