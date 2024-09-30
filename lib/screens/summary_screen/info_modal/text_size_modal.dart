@@ -146,11 +146,11 @@ class BackArrow extends StatelessWidget {
         onPressed: onPressClose,
         style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
-            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(30, 30)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.black),
+                side: BorderSide(color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
               ),
             ),
             backgroundColor: MaterialStatePropertyAll(

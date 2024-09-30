@@ -30,11 +30,12 @@ class SubscriptionBodyYear extends StatelessWidget {
           const Spacer(
             flex: 2,
           ),
-          const Text(
+         Text(
             '12 months',
             textAlign: TextAlign.start,
             style:
-                TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
+                TextStyle(fontSize:MediaQuery.of(context).size.shortestSide <
+                                            600 ? 36 : 56, fontWeight: FontWeight.w400, height: 1),
           ),
           const Spacer(),
           if (abTest == 'A')
@@ -47,6 +48,8 @@ class SubscriptionBodyYear extends StatelessWidget {
                 text:
                     '$currencySymbol${(package.storeProduct.price + 25).toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 24 : 44,
                     fontWeight: FontWeight.w400,
                     decoration: TextDecoration.lineThrough)),
             TextSpan(
@@ -55,13 +58,15 @@ class SubscriptionBodyYear extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.w700)),
+                    .copyWith(fontWeight: FontWeight.w700, fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 24 : 44,)),
           ])),
           const Spacer(),
           Text(
             'Access all premium features!\nCancel anytime',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 14 : 24,),
           ),
           const Spacer(
             flex: 2,

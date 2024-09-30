@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/summaries/summaries_bloc.dart';
@@ -20,12 +21,12 @@ class _TextModalScreenState extends State<TextModalScreen> {
   var controllerText = '';
 
   void onPressSummify() {
-
     Future.delayed(const Duration(milliseconds: 300), () {
-        if (controllerText.isNotEmpty) {
+      if (controllerText.isNotEmpty) {
         context
             .read<SummariesBloc>()
             .add(GetSummaryFromText(text: textController.text));
+        context.read<MixpanelBloc>().add(Summify(option: 'text'));
         Navigator.of(context).pop();
       }
     });
@@ -72,10 +73,9 @@ class _TextModalScreenState extends State<TextModalScreen> {
             const ModalHandle(),
             Text(
               'Enter Text',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(fontWeight: FontWeight.w600,),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
             MyTextField(controller: textController, onPressPaste: onPressPaste),
             SummifyButton(
@@ -134,10 +134,12 @@ class MyTextField extends StatelessWidget {
                       cursorWidth: 3,
                       cursorColor: Colors.black,
                       cursorHeight: 20,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.black),
                       decoration: InputDecoration(
-                          fillColor:
-                              Color.fromRGBO(242, 255, 255, 1),
+                          fillColor: Color.fromRGBO(242, 255, 255, 1),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: const BorderSide(
@@ -148,7 +150,9 @@ class MyTextField extends StatelessWidget {
                               .textTheme
                               .bodyMedium!
                               .copyWith(
-                                  fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black)),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black)),
                     ),
                   ),
                   Align(
@@ -183,7 +187,8 @@ class MyTextField extends StatelessWidget {
                                       .textTheme
                                       .labelMedium!
                                       .copyWith(
-                                    color: Theme.of(context).primaryColorLight,
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
                                           fontSize: 17,
                                           fontWeight: FontWeight.w400),
                                 ))

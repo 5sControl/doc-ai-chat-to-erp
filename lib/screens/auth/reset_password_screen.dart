@@ -72,7 +72,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Column(
               //mainAxisSize: MainAxisSize.max,
-              //crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Column(
                   //mainAxisSize: MainAxisSize.min,
@@ -82,16 +82,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     SizedBox(
                       height: 56,
                     ),
-                    Center(
-                      child: Text(
-                        'We will send you an email\nto reset your password',
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 24,
-                            height: 1.2,
-                            fontWeight: FontWeight.w300),
-                      ),
+                    Text(
+                      'We will send you an email\nto reset your password',
+                      maxLines: 2,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 30,
+                          height: 1.2,
+                          fontWeight: FontWeight.w700)
                     ),
                     SizedBox(
                       height: 25,

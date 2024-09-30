@@ -250,7 +250,8 @@ class WeekTitle extends StatelessWidget {
         child: Text(
           'Pay weekly',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall,
+          style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
+                                            600 ? 13 : 24),
         ),
       ),
     ));
@@ -294,7 +295,8 @@ class YearTitle extends StatelessWidget {
           Text(
             'Pay annually',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
+                                            600 ? 13 : 24),
           ),
           const SizedBox(
             height: 5,
@@ -309,7 +311,8 @@ class YearTitle extends StatelessWidget {
               // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
             ),
             child: Text('Save up to 29\$',
-                style: Theme.of(context).textTheme.bodySmall!
+                style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
+                                            600 ? 13 : 24),
                 // .copyWith(color: Colors.black),
                 ),
           )
@@ -324,12 +327,13 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Text(
         'Be smart with your time!',
-        textAlign: TextAlign.start,
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, height: 1),
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 28 : 56, fontWeight: FontWeight.w700, height: 1),
       ),
     );
   }
@@ -409,24 +413,26 @@ class BackArrow extends StatelessWidget {
       }
     }
 
-    return Container(
-      width: 32,
-      height: 32,
-      decoration: BoxDecoration(
-        border: Border.all(width: 1),
-        shape: BoxShape.circle,
-      ),
-      child: IconButton(
-          visualDensity: VisualDensity.compact,
-          onPressed: onPressClose,
-          icon: Icon(
-            Icons.close,
-            size: 16,
-            color: Theme.of(context).iconTheme.color,
-          )),padding: EdgeInsets.zero,  // Remove default padding
-          constraints: BoxConstraints(maxHeight: 32,
-          maxWidth: 32,),  // Remove default constraints
-    );
+    return IconButton(
+        visualDensity: VisualDensity.compact,
+        onPressed: onPressClose,
+        style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color:Theme.of(context).brightness == Brightness.dark? Colors.white : Colors.black),
+              ),
+            ),
+            backgroundColor: MaterialStatePropertyAll(
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
+        icon: Icon(
+          Icons.close,
+          size: 18,
+          color: Theme.of(context).iconTheme.color,
+        ));
   }
 }
 

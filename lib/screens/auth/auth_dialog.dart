@@ -34,7 +34,7 @@ class AuthDialog extends StatelessWidget {
                         height: 22, 
                         decoration: BoxDecoration( 
                           shape: BoxShape.circle, 
-                          border: Border.all(color: Colors.black), 
+                          border: Border.all(color: Colors.black,), 
                         ), 
                         child: IconButton( 
                           padding: EdgeInsets.all(0), 
@@ -99,7 +99,7 @@ class AuthDialog extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 18),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Colors.teal.shade300,
+            color: Theme.of(context).primaryColor,
             borderRadius: BorderRadius.circular(8)),
         child: const Text(
           'Login in',

@@ -228,6 +228,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/restore.svg
   String get restore => 'assets/icons/restore.svg';
 
+  /// File path: assets/icons/send.svg
+  String get send => 'assets/icons/send.svg';
+
   /// File path: assets/icons/set_up.svg
   String get setUp => 'assets/icons/set_up.svg';
 
@@ -315,6 +318,7 @@ class $AssetsIconsGen {
         profileCircle,
         profileFilled,
         restore,
+        send,
         setUp,
         settings,
         share,

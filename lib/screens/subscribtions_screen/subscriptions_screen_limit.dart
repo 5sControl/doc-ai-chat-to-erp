@@ -108,7 +108,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
           builder: (context, state) {
             return Stack(
               children: [
-                const BackgroundGradient(),
+                widget.fromSettings ? const BackgroundGradient() : Container(),
                 Animate(
                   effects: const [FadeEffect()],
                   child: SafeArea(
@@ -136,14 +136,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                     MediaQuery.of(context).size.shortestSide <
                                             600
                                         ? widget.fromSettings
-                                            ? 235
-                                            : 195
-                                        : 635,
+                                            ? 50
+                                            : 15
+                                        : 50,
                                 //toolbarOpacity: 20,
                                 automaticallyImplyLeading: false,
                                 flexibleSpace: Stack(
                                   children: [
-                                    Human(),
+                                    //widget.fromSettings ? Human() : Container(),
                                     widget.fromSettings
                                         ? Positioned(
                                             top: 10,
@@ -154,38 +154,47 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                         : Container()
                                   ],
                                 ),
-                                actions: [],
                               ),
                               body: Stack(
                                 children: [
                                   Column(
+                                    mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      //const Human(),
-                                      state.screenIndex == 0 ||
-                                              state.screenIndex == 1 || state.screenIndex == 2
+                                      const Human(),
+                                      widget.fromSettings &&
+                                              (state.screenIndex == 0 ||
+                                                  state.screenIndex == 1 ||
+                                                  state.screenIndex == 2 ||
+                                                  state.screenIndex == 3 ||
+                                                  state.screenIndex == 5)
                                           ? SizedBox(
-                                              height: 36,
+                                              height: 0,
                                             )
-                                          : Container(),
+                                          : SizedBox(height: 10,),
                                       state.screenIndex == 1
                                           ? SizedBox(
                                               height: 20,
                                             )
                                           : Container(),
                                       const Title(),
-
+                                      state.screenIndex == 5 ||
+                                              state.screenIndex == 0 ||
+                                              state.screenIndex == 2
+                                          ? SizedBox(
+                                              height: 10,
+                                            )
+                                          : Container(),
                                       const SubTitle(),
                                       state.screenIndex < 3 &&
                                               state.screenIndex != 1
                                           ? const SizedBox(
-                                              height: 35,
+                                              height: 0,
                                             )
                                           : SizedBox(
-                                              height: 10,
+                                              height: 5,
                                             ),
-
                                       Spacer(),
                                       Align(
                                         alignment: Alignment.bottomCenter,
@@ -240,14 +249,18 @@ class Human extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> screenTexts = [
-      Assets.subscriptionWoman1.path,
+      Theme.of(context).brightness == Brightness.dark
+          ? Assets.subscriptionWoman.path
+          : Assets.subscriptionWomanLight.path,
       Theme.of(context).brightness == Brightness.dark
           ? Assets.subscriptionWoman.path
           : Assets.subscriptionWomanLight.path,
       Theme.of(context).brightness == Brightness.dark
           ? Assets.subscriptionMen.path
           : Assets.subscriptionMenLight.path,
-      Assets.subscriptionWoman1.path,
+      Theme.of(context).brightness == Brightness.dark
+          ? Assets.subscriptionWoman.path
+          : Assets.subscriptionWomanLight.path,
       Theme.of(context).brightness == Brightness.dark
           ? Assets.subscriptionWoman.path
           : Assets.subscriptionWomanLight.path,
@@ -292,18 +305,21 @@ class Title extends StatelessWidget {
     ];
     return Container(
       child: Padding(
-        padding: const EdgeInsets.only(left: 16.0, top: 4, bottom: 4),
+        padding: const EdgeInsets.only(left: 16.0, top: 0, bottom: 4),
         child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
-          return Text(
-            screenTexts[state.screenIndex],
-            textAlign: TextAlign.start,
-            style: state.screenIndex < 3
-                ? TextStyle(
-                    fontSize: isTablet ? 56 : 46,
-                    fontWeight: FontWeight.w700,
-                    height: 1)
-                : TextStyle(
-                    fontSize: 48, fontWeight: FontWeight.w700, height: 1),
+          return Container(
+            alignment: Alignment.topLeft,
+            child: Text(
+              screenTexts[state.screenIndex],
+              textAlign: TextAlign.start,
+              style: state.screenIndex < 3
+                  ? TextStyle(
+                      fontSize: isTablet ? 56 : 40,
+                      fontWeight: FontWeight.w700,
+                      height: 1)
+                  : TextStyle(
+                      fontSize: 35, fontWeight: FontWeight.w700, height: 1),
+            ),
           );
         }),
       ),
@@ -312,29 +328,48 @@ class Title extends StatelessWidget {
 }
 
 Widget buildRichText(BuildContext context, String text, {bool isLink = false}) {
+  void onPressDesktop() {
+    showMaterialModalBottomSheet(
+      context: context,
+      expand: false,
+      bounce: false,
+      barrierColor: Colors.black54,
+      backgroundColor: Colors.transparent,
+      enableDrag: false,
+      builder: (context) {
+        return const ExtensionModal();
+      },
+    );
+    context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
+  }
+
   bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 3.0),
-    child: RichText(
-      text: TextSpan(
-        children: [
-          WidgetSpan(
-            child: Icon(Icons.check_circle, color: Colors.teal, size: 20),
-          ),
-          WidgetSpan(
-              child: SizedBox(width: 8)), // Add space between icon and text
-          TextSpan(
-            text: text,
-            style: TextStyle(
-              color: Theme.of(context).brightness == Brightness.light
-                  ? Colors.black
-                  : Colors.white,
-              decoration:
-                  isLink ? TextDecoration.underline : TextDecoration.none,
-              fontSize: isTablet ? 24 : 18,
+    padding: const EdgeInsets.symmetric(vertical: 2.0),
+    child: GestureDetector(
+      onTap: isLink ? onPressDesktop : null,
+      child: RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              child: Icon(Icons.check_circle,
+                  color: Color.fromRGBO(0, 186, 195, 1), size: 20),
             ),
-          ),
-        ],
+            WidgetSpan(
+                child: SizedBox(width: 8)), // Add space between icon and text
+            TextSpan(
+              text: text,
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black
+                    : Colors.white,
+                decoration:
+                    isLink ? TextDecoration.underline : TextDecoration.none,
+                fontSize: isTablet ? 24 : 18,
+              ),
+            ),
+          ],
+        ),
       ),
     ),
   );
@@ -363,8 +398,8 @@ class SubTitle extends StatelessWidget {
                   TextSpan(
                     text: screenTexts[state.screenIndex],
                     style: TextStyle(
-                        fontSize: isTablet ? 36 : 16,
-                        fontWeight: FontWeight.w600,
+                        fontSize: isTablet ? 36 : 18,
+                        fontWeight: FontWeight.w500,
                         height: 1.4),
                   ),
                   textAlign: TextAlign.start,
@@ -409,9 +444,9 @@ class Text1 extends StatelessWidget {
               screenTexts[state.screenIndex],
               textAlign: TextAlign.start,
               style: TextStyle(
-                  fontSize: isTablet ? 36 : 24,
+                  fontSize: isTablet ? 36 : 22,
                   fontWeight: FontWeight.w700,
-                  height: 1),
+                  height: 0.8),
             ),
           );
         }),
@@ -503,7 +538,10 @@ class BackArrow extends StatelessWidget {
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.black),
+                side: BorderSide(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black),
               ),
             ),
             backgroundColor: MaterialStatePropertyAll(
@@ -723,7 +761,7 @@ class SubscriptionCover extends StatelessWidget {
             ? 180
             : fromSettings
                 ? 150
-                : 120,
+                : 124,
         child: GestureDetector(
           onTap: () => onSelectSubscription(index: index),
           child: Container(
@@ -732,9 +770,7 @@ class SubscriptionCover extends StatelessWidget {
                     ? Theme.of(context).primaryColor
                     : Colors.white12,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                    color: Colors.white,
-                    width: 2)),
+                border: Border.all(color: Colors.white, width: 2)),
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -775,7 +811,7 @@ class SubscriptionCover extends StatelessWidget {
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: textColor,
-                            fontSize: isTablet ? 28 : 24,
+                            fontSize: isTablet ? 28 : 16,
                             fontWeight:
                                 isSelected ? FontWeight.w700 : FontWeight.w400),
                       ),
@@ -784,7 +820,12 @@ class SubscriptionCover extends StatelessWidget {
                         style: TextStyle(
                             color: textColor,
                             decoration: TextDecoration.lineThrough,
-                            decorationColor: Colors.white,
+                            decorationColor:
+                                Theme.of(context).brightness == Brightness.light
+                                    ? isSelected
+                                        ? Colors.white
+                                        : Colors.black
+                                    : Colors.white,
                             fontSize: isTablet ? 20 : 16,
                             fontWeight: FontWeight.w400),
                       ),
@@ -818,11 +859,14 @@ class _SubscribeButtonState extends State<SubscribeButton> {
         context
             .read<SubscriptionsBloc>()
             .add(MakePurchase(context: context, product: widget.package!));
+        context
+            .read<MixpanelBloc>()
+            .add(ActivateSubscription(plan: widget.package!.packageType.name));
       }
     }
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      margin: const EdgeInsets.only(right: 10, left: 10, top: 10),
       child: Material(
         color: Theme.of(context).primaryColor,
         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -834,7 +878,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: isTablet ? 18 : 10),
             child: const Text(
-              'Go Premium',
+              'Go Unlimited',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w700,

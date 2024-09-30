@@ -60,7 +60,7 @@ class _RequestScreenState extends State<RequestScreen> {
           getMoreSummaries: selectedOptions.contains('Secure summarization'),
           addTranslation: selectedOptions.contains('Read my book'),
           askAQuestions: selectedOptions.contains('Speech to text feature'),
-          readBook: selectedOptions.contains('Text to speach feature'),
+          readBook: selectedOptions.contains('Text to speech feature'),
           addLang: selectedOptions.contains('Add language')
               ? selectedLang
               : 'Not selected',
@@ -105,7 +105,7 @@ class _RequestScreenState extends State<RequestScreen> {
       'Secure summarization',
       'Read my book',
       'Speech to text feature',
-      'Text to speach feature',
+      'Text to speech feature',
       'Add language'
     ];
 
@@ -254,7 +254,7 @@ class ConfirmButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).hintColor,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: InkWell(
         highlightColor:

@@ -157,7 +157,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                   aspectRatio: 3.5,
                   child: Material(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromRGBO(187, 247, 247, 1),
+                    color: const Color.fromRGBO(187, 247, 247, 1),
                     child: InkWell(
                       splashFactory: InkSplash.splashFactory,
                       highlightColor:
@@ -232,6 +232,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                   ErrorMessage(
                                     summaryData: summaryData,
                                   ),
+                                  SizedBox(height:5,),
                                   Loader(
                                       onPressCancel: onPressCancel,
                                       summaryData: summaryData)
@@ -249,6 +250,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                   ),
                 ),
               ),
+              
             ),
           );
         });
@@ -419,7 +421,7 @@ class _LoaderState extends State<Loader> {
           children: [
             Flexible(
               child: Container(
-                height: 10,
+                height: 7,
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                     color: Colors.teal.withOpacity(0.2),
@@ -432,7 +434,7 @@ class _LoaderState extends State<Loader> {
             ),
             const SizedBox(width: 10,),
             Text('${loadingText[textIndex]}    ',
-                    style: const TextStyle(fontSize: 12, height: 3, color: Colors.black))
+                    style: const TextStyle(fontSize: 12, height: 2, color: Colors.black))
                 .animate()
                 .custom(
                     duration: 300.ms,

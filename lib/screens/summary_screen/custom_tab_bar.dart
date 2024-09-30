@@ -13,6 +13,7 @@ class CustomTabBar extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(8)),
       child: TabBar(
+        //indicatorColor: Color.fromRGBO(0, 186, 195, 1),
         controller: tabController,
         // isScrollable: true,
         labelColor: Colors.white,
@@ -30,7 +31,7 @@ class CustomTabBar extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         tabAlignment: TabAlignment.fill,
         indicator: BoxDecoration(
-            color: Theme.of(context).primaryColorDark,
+            color: Color.fromRGBO(0, 186, 195, 1),
             borderRadius: BorderRadius.circular(6)),
         tabs: const [
           Tab(

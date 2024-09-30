@@ -67,13 +67,14 @@ class InfoList extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium!
-                            .copyWith(fontWeight: FontWeight.w400),
+                            .copyWith(fontWeight: FontWeight.w400, fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 18 : 24,),
                       ),
                     ],
                   ),
                 ))
             .toList(),
-        if (abTest != 'A')
+        //if (abTest != 'A')
           Row(
             children: [
               const SizedBox(
@@ -101,6 +102,8 @@ class InfoList extends StatelessWidget {
                   'Add to Chrome for FREE',
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontWeight: FontWeight.w400,
+                      fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 18 : 24,
                       decoration: TextDecoration.underline),
                 ),
               ),

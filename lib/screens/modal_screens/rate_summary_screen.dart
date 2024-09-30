@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 
 import '../../gen/assets.gen.dart';
@@ -90,22 +91,7 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconButton(
-                          visualDensity: VisualDensity.compact,
-                          onPressed: onPressClose,
-                          style: ButtonStyle(
-                              padding: const MaterialStatePropertyAll(
-                                  EdgeInsets.all(2)),
-                              backgroundColor: MaterialStatePropertyAll(
-                                  Theme.of(context)
-                                      .cardColor
-                                      .withOpacity(0.1))),
-                          highlightColor:
-                              Theme.of(context).cardColor.withOpacity(0.2),
-                          icon: Icon(
-                            Icons.close,
-                            color: Theme.of(context).cardColor,
-                          )),
+                      BackArrow(summaryLink: widget.summaryLink,),
                     ],
                   ),
                   const Text(
@@ -182,6 +168,43 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
         ),
       ),
     );
+  }
+}
+
+class BackArrow extends StatelessWidget {
+  final bool? fromOnboarding;
+  final String? summaryLink;
+  const BackArrow({super.key, this.fromOnboarding, this.summaryLink});
+
+  @override
+  Widget build(BuildContext context) {
+    void onPressClose() {
+      context
+          .read<SummariesBloc>()
+          .add(SkipRateSummary(summaryUrl: summaryLink!));
+      Navigator.of(context).popUntil(ModalRoute.withName("/"));
+    }
+
+    return IconButton(
+        visualDensity: VisualDensity.compact,
+        onPressed: onPressClose,
+        style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(30, 30)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+              ),
+            ),
+            backgroundColor: MaterialStatePropertyAll(
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
+        icon: Icon(
+          Icons.close,
+          size: 18,
+          color: Theme.of(context).iconTheme.color,
+        ));
   }
 }
 

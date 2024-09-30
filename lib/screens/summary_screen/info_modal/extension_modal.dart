@@ -100,14 +100,16 @@ class _ExtensionModalState extends State<ExtensionModal> {
       child: Scaffold(
         body: Center(
           child: Container(
-            width: double.infinity,
+            width:MediaQuery.of(context).size.shortestSide <
+                                            600 ?double.infinity : 343,
             margin: const EdgeInsets.all(15),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
                 borderRadius: BorderRadius.circular(10)),
             child: SizedBox(
-              width: double.infinity,
+              width:MediaQuery.of(context).size.shortestSide <
+                                           600 ?double.infinity : 343,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -356,7 +358,7 @@ class BackArrow extends StatelessWidget {
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.black),
+                side: BorderSide(color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
               ),
             ),
             backgroundColor: MaterialStatePropertyAll(

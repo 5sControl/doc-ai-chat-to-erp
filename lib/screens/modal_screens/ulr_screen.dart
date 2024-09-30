@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/summaries/summaries_bloc.dart';
@@ -65,6 +66,7 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
           if (controllerText.isNotEmpty) {
           context.read<SummariesBloc>().add(GetSummaryFromUrl(
               summaryUrl: urlController.text, fromShare: false));
+              context.read<MixpanelBloc>().add(Summify(option: 'link'));
           Navigator.of(context).pop();
         }
       });

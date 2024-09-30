@@ -11,6 +11,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/models/models.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
 import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
@@ -30,11 +31,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late StreamSubscription _intentTextStreamSubscription;
 
   final TextEditingController _searchController = TextEditingController();
-  Map<String, String> _titleToLinkMap = {};
+  List<SummaryData> _allSummaries = [];
+  List<SummaryData> _filteredSummaries = [];
 
   void getSummary({required String summaryUrl}) {
-
-
     Future.delayed(const Duration(milliseconds: 300), () {
       // if (daySummaries >= limit) {
       //   showCupertinoModalBottomSheet(
@@ -69,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     Future.delayed(const Duration(milliseconds: 300), () {
       context.read<SummariesBloc>().add(GetSummaryFromFile(
           filePath: filePath, fileName: fileName, fromShare: true));
+      context.read<MixpanelBloc>().add(Summify(option: 'file'));
       // }
     });
   }
@@ -145,6 +146,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       //   context.read<SettingsBloc>().add(const HowToShowed());
       // });
     }
+    _allSummaries =
+        context.read<SummariesBloc>().state.summaries.values.toList();
+    _filteredSummaries = _allSummaries;
+
+    _searchController.addListener(() {
+      _filterSummaries(_searchController.text);
+    });
     super.initState();
   }
 
@@ -155,7 +163,29 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     _searchController.dispose();
     super.dispose();
   }
-  
+
+  void _filterSummaries(String query) {
+    setState(() {
+      // If the query is empty, reset the filtered list to all summaries
+      if (query.trim().isEmpty) {
+        _filteredSummaries = _allSummaries;
+        return;
+      }
+
+      // Convert query to lowercase for case-insensitive matching
+      String lowerQuery = query.trim().toLowerCase();
+
+      // Filter summaries where the title contains the query
+      _filteredSummaries = _allSummaries.where((summaryData) {
+        return summaryData.summaryPreview.title
+                ?.toLowerCase()
+                .contains(lowerQuery) ??
+            false;
+      }).toList();
+      print(_filteredSummaries);
+    });
+  }
+
   // MATCHES AT THE START OF THE TITLE
   // void _filterSummaries(String query) {
   //   setState(() {
@@ -195,6 +225,59 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
   }
 
+  void _renameSummary(SummaryData summaryData) async {
+  final TextEditingController _renameController = TextEditingController(text: summaryData.summaryPreview.title);
+
+  final newTitle = await showDialog<String>(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Rename Title'),
+        content: TextField(
+          controller: _renameController,
+          decoration: InputDecoration(hintText: 'Enter new title'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog without returning anything
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(_renameController.text); // Return the new title
+            },
+            child: Text('Rename'),
+          ),
+        ],
+      );
+    },
+  );
+
+  // If newTitle is not null or empty, proceed with renaming
+  if (newTitle != null && newTitle.trim().isNotEmpty) {
+    _updateSummaryTitle(summaryData, newTitle);
+  }
+}
+void _updateSummaryTitle(SummaryData summaryData, String newTitle) {
+  setState(() {
+    // Update the title in the summaryPreview
+    final updatedSummary = summaryData.copyWith(
+      summaryPreview: summaryData.summaryPreview.copyWith(
+        title: newTitle,
+      ),
+    );
+
+    // Update the corresponding summary in the list
+    final index = _allSummaries.indexOf(summaryData);
+    if (index != -1) {
+      _allSummaries[index] = updatedSummary;
+      _filterSummaries(_searchController.text); // Refresh the filtered list if needed
+    }
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -203,13 +286,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         builder: (context, settingsState) {
           return BlocBuilder<SummariesBloc, SummariesState>(
             builder: (context, summariesState) {
-
-              final sumsKeys = summariesState.summaries.keys.toList();
-
-              final filtered = [];
-
-    
-
+              //final sumsKeys = summariesState.summaries.keys.toList();
+              _allSummaries = summariesState.summaries.values.toList();
+              _filteredSummaries = _searchController.text.isEmpty
+                  ? _allSummaries
+                  : _filteredSummaries;
               // _allSummaries = [];
               // _titleToLinkMap = {};
               // summariesState.summaries.forEach((link, summaryData) {
@@ -228,11 +309,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               //final summaries =
               //    summariesState.summaries.keys.toList().reversed.toList();
               return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
-                buildWhen: (previous, current) =>
-                   previous.subscriptionStatus != current.subscriptionStatus,
+                //buildWhen: (previous, current) =>
+                //   previous.subscriptionStatus != current.subscriptionStatus,
                 builder: (context, state) {
-                  final isSubscribed = state.subscriptionStatus ==
-                      SubscriptionStatus.subscribed;
+                  final isSubscribed =
+                      state.subscriptionStatus == SubscriptionStatus.subscribed;
                   return DefaultTabController(
                     initialIndex: 0,
                     length: 1,
@@ -262,48 +343,49 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               preferredSize: Size(
                                   MediaQuery.of(context).size.width,
                                   // !isSubscribed ? 140.0 : 70),
-                                  !isSubscribed ? 80.0 : 0),
+                                  !isSubscribed ? 140.0 : 0),
                               child: Column(
                                 children: [
                                   !isSubscribed
                                       ? Container(
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 10),
-                                          child: const PremiumBanner(),
+                                          child: state
+                                                  is SubscriptionsStateLoading
+                                              ? const CircularProgressIndicator()
+                                              : const PremiumBanner(),
                                         )
                                       : const SizedBox(),
-                                  // const SizedBox(
-                                  //   height: 15,
-                                  // ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.symmetric(
-                                  //       horizontal: 10, vertical: 5),
-                                  //   child: Container(
-                                  //     height: 40,
-                                  //     decoration: BoxDecoration(
-                                  //       borderRadius: BorderRadius.circular(
-                                  //           8), // Rounded corners
-                                  //     ),
-                                  //     child: TextField(
-                                  //       controller: _searchController,
-                                  //       decoration: const InputDecoration(
-                                  //         fillColor:
-                                  //             Color.fromRGBO(187, 247, 247, 1),
-                                  //         hintText: 'Search',
-                                  //         prefixIcon: Icon(
-                                  //           Icons.search,
-                                  //           size: 20,
-                                  //         ),
-                                  //         contentPadding: EdgeInsets.symmetric(
-                                  //             vertical: 0, horizontal: 8),
-                                  //       ),
-                                  //       style: TextStyle(
-                                  //           color: Colors.black, fontSize: 16),
-                                  //       // onChanged:
-                                  //       //     _filterSummaries, // Correct function assignment
-                                  //     ),
-                                  //   ),
-                                  // ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            8), // Rounded corners
+                                      ),
+                                      child: TextField(
+                                        controller: _searchController,
+                                        decoration: const InputDecoration(
+                                          fillColor:
+                                              Color.fromRGBO(187, 247, 247, 1),
+                                          hintText: 'Search',
+                                          prefixIcon: Icon(
+                                            Icons.search,
+                                            size: 20,
+                                          ),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 0, horizontal: 8),
+                                        ),
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
                                   //const HomeTabs(),
                                 ],
                               ),
@@ -346,12 +428,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: ListView.builder(
-                                itemCount: sumsKeys.length,
+                                itemCount: _filteredSummaries.length,
 
                                 itemBuilder: (context, index) {
                                   // final title = _filteredSummaries[index];
-                                  final link = sumsKeys[index];
-
+                                  //final link = _filteredSummaries[index];
+                                  final summaryData = _filteredSummaries[index];
+                                  final link = summariesState.summaries.entries
+                                      .firstWhere(
+                                          (entry) => entry.value == summaryData)
+                                      .key;
                                   // Pass the link to SummaryTileah
                                   return SummaryTile(
                                     sharedLink: link,

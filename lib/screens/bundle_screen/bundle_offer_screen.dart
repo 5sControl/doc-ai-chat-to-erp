@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/models/package_wrapper.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/auth/auth_screen.dart';
 import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
+import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 
 class BundleScreen1 extends StatelessWidget {
   const BundleScreen1({
@@ -76,26 +78,28 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    return Container(
-      child: Column(
-        children: [
-          Center(
-            child: Text(
-              'BUY',
-              style: TextStyle(
-                  fontSize: isTablet ? 34 : 26, fontWeight: FontWeight.bold),
-            ),
+    return Column(
+      children: [
+        Center(
+          child: Text(
+            'BUY',
+            style: TextStyle(
+                fontSize: isTablet ? 34 : 26, fontWeight: FontWeight.bold),
           ),
-          SizedBox(
-            height: isTablet ? 20 : 0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
+        ),
+        SizedBox(
+          height: isTablet ? 20 : 0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          //crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
                 children: [
                   SvgPicture.asset(
                     Assets.icons.transcriptor1,
+                    height: 68,
                   ),
                   Text(
                     'SpeechScribe',
@@ -105,21 +109,24 @@ class Body extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(
-                width: 20,
-              ),
-              SvgPicture.asset(
-                Assets.icons.plus,
-                height: 36,
-              ),
-              const SizedBox(
-                width: 35,
-              ),
-              Column(
+            ),
+            // const SizedBox(
+            //   width: 20,
+            // ),
+            SvgPicture.asset(
+              Assets.icons.plus,
+              height: 36,
+              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+            ),
+            // const SizedBox(
+            //   width: 35,
+            // ),
+            Expanded(
+              child: Column(
                 children: [
                   SvgPicture.asset(
                     Assets.icons.summifyLogo,
-                    //height: 75,
+                    height: 68,
                   ),
                   Text(
                     'Summify',
@@ -129,10 +136,10 @@ class Body extends StatelessWidget {
                   ),
                 ],
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -142,6 +149,20 @@ class Body1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onPressDesktop() {
+    showMaterialModalBottomSheet(
+      context: context,
+      expand: false,
+      bounce: false,
+      barrierColor: Colors.black54,
+      backgroundColor: Colors.transparent,
+      enableDrag: false,
+      builder: (context) {
+        return const ExtensionModal();
+      },
+    );
+    context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
+  }
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
       height: isTablet ? 340 : 210,
@@ -171,55 +192,65 @@ class Body1 extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  SvgPicture.asset(
-                    Assets.icons.transcriptor2,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'SpeechScribe',
-                    style: TextStyle(
-                        fontSize: isTablet ? 20 : 16,
-                        color: Colors.black,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.black,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      Assets.icons.transcriptor2,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    InkWell(
+                      onTap: onPressDesktop,
+                      child: Text(
+                        'SpeechScribe',
+                        style: TextStyle(
+                            fontSize: isTablet ? 20 : 16,
+                            color: Colors.black,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
-                width: 30,
+                width: 10,
               ),
               SvgPicture.asset(
                 Assets.icons.plus,
                 height: 36,
               ),
               const SizedBox(
-                width: 35,
+                width: 10,
               ),
-              Column(
-                children: [
-                  SvgPicture.asset(
-                    Assets.icons.logo,
-                    height: 75,
-                    color: Colors.black87,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'Summify',
-                    style: TextStyle(
-                        fontSize: isTablet ? 20 : 16,
-                        color: Colors.black,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.black,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      Assets.icons.logo,
+                      height: 75,
+                      color: Colors.black87,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    InkWell(
+                      onTap: onPressDesktop,
+                      child: Text(
+                        'Summify',
+                        style: TextStyle(
+                            fontSize: isTablet ? 20 : 16,
+                            color: Colors.black,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -431,7 +462,7 @@ class SubscriptionCover extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 color: isSelected
-                    ? Theme.of(context).primaryColor
+                    ? Color.fromRGBO(0, 186, 195, 1)
                     : Colors.white12,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
@@ -530,7 +561,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
     return Container(
       margin: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 0),
       child: Material(
-        color: Theme.of(context).primaryColor,
+        color: Color.fromRGBO(0, 186, 195, 1),
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         child: InkWell(
           highlightColor: Colors.white24,

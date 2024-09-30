@@ -34,8 +34,13 @@ class BundleScreen extends StatefulWidget {
 
 class _BundleScreenState extends State<BundleScreen>
     with SingleTickerProviderStateMixin {
+     bool showSubscriptionScreenLimit = false;
   late TabController _tabController;
   var selectedSubscriptionIndex = 1;
+  Color appBarColor = Colors.transparent; // Default color for the first tab
+  bool isUnlimited = false;
+  bool isYellow = false;
+  OffersState? currentOffersState;
 
   void onSelectSubscription({required int index}) {
     setState(() {
@@ -45,21 +50,62 @@ class _BundleScreenState extends State<BundleScreen>
 
   @override
   void initState() {
+    super.initState();
     context
         .read<MixpanelBloc>()
         .add(PaywallShow(trigger: 'onboarding', screen: widget.triggerScreen));
-    _tabController = TabController(length: 2, vsync: this);
-    super.initState();
+    _tabController = TabController(
+      length: 2,
+      vsync: this,
+      initialIndex: widget.fromOnboarding == true ? 1 : 0,
+    );
+    _updateState();
+    _tabController.addListener(() {
+      setState(() {
+        _updateState(); // Update state on tab change
+      });
+    });
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        showSubscriptionScreenLimit = true;
+      });
+    });
+    // isYellow = currentOffersState?.screenIndex == 3 ||
+    //             currentOffersState?.screenIndex == 0
+    //         ? true
+    //         : false;
+    //     isUnlimited = _tabController.index == 0
+    //         ? false
+    //         : currentOffersState?.screenIndex == 4
+    //             ? false
+    //             : true;
+    // _tabController.addListener(() {
+    //   setState(() {
+    //     // Update the AppBar color based on the current tab index
+    //     _updateState();
+
+    //   });
+    // });
+  }
+
+  void _updateState() {
+    if (currentOffersState != null) {
+      isYellow = currentOffersState?.screenIndex == 3 ||
+          currentOffersState?.screenIndex == 0;
+
+      isUnlimited =
+          _tabController.index != 0 && currentOffersState?.screenIndex != 4;
+
+      appBarColor = _tabController.index == 0
+          ? Colors.transparent
+          : (isYellow ? Color.fromRGBO(255, 240, 90, 1) : Colors.transparent);
+    }
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  int getSelectedTabIndex() {
-    return _tabController.index;
   }
 
   @override
@@ -112,6 +158,8 @@ class _BundleScreenState extends State<BundleScreen>
           builder: (context, state) {
             return BlocBuilder<OffersBloc, OffersState>(
                 builder: (context, state) {
+              currentOffersState = state;
+              _updateState();
               return state is SubscriptionsStateLoading
                   ? const CircularProgressIndicator()
                   : Stack(
@@ -122,26 +170,45 @@ class _BundleScreenState extends State<BundleScreen>
                           child: SafeArea(
                             child: Scaffold(
                               appBar: AppBar(
-                                toolbarHeight: 10,
-                                bottom: PreferredSize(
-                                  preferredSize: const Size.fromHeight(70.0),
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      // Centered TabBar
-                                      Center(
+                                toolbarHeight: 60,
+                                automaticallyImplyLeading: false,
+                                //backgroundColor: appBarColor,
+                                flexibleSpace: Stack(
+                                  alignment: Alignment.topCenter,
+                                  children: [
+                                    // Positioned(
+                                    //   top: isYellow
+                                    //       ? 0
+                                    //       : 55, // Align it to the top of the AppBar
+                                    //   left: 0,
+                                    //   right: 0,
+                                    //   bottom: 0,
+                                    //   child:
+                                    //       Container(),
+                                    // ),
+                                    Positioned(
+                                      top: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: Center(
                                         child: Container(
                                           margin: const EdgeInsets.symmetric(
                                               vertical: 16),
                                           padding: const EdgeInsets.all(1.5),
                                           height: 40,
-                                          width: 240,
+                                          width: 229,
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                           ),
                                           child: TabBar(
+                                            labelStyle: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 17),
+                                            unselectedLabelStyle: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 17),
                                             controller: _tabController,
                                             labelColor: Colors.white,
                                             automaticIndicatorColorAdjustment:
@@ -154,11 +221,12 @@ class _BundleScreenState extends State<BundleScreen>
                                             padding: EdgeInsets.zero,
                                             splashFactory:
                                                 NoSplash.splashFactory,
-                                            unselectedLabelColor: Colors.black,
+                                            unselectedLabelColor:
+                                                Colors.black,
                                             dividerColor: Colors.transparent,
                                             indicatorSize:
                                                 TabBarIndicatorSize.tab,
-                                            tabAlignment: TabAlignment.fill,
+                                            //tabAlignment: TabAlignment.fill,
                                             indicator: BoxDecoration(
                                               color: const Color.fromRGBO(
                                                   0, 186, 195, 1),
@@ -167,39 +235,45 @@ class _BundleScreenState extends State<BundleScreen>
                                             ),
                                             tabs: const [
                                               Tab(
-                                                text: 'Bundle',
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text('Bundle'),
+                                                ),
                                               ),
                                               Tab(
-                                                text: 'Unlimited',
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text('Unlimited'),
+                                                ),
                                               )
                                             ],
                                           ),
                                         ),
                                       ),
-                                      Positioned(
-                                        right: 14,
-                                        top: 16,
-                                        bottom: 16,
-                                        child: Container(
-                                            width: 22,
-                                            height: 22,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Theme.of(context)
-                                                    .iconTheme
-                                                    .color!,
-                                                width: 1.5,
-                                              ),
+                                    ),
+                                    Positioned(
+                                      right: 14,
+                                      top: 25,
+                                      //bottom: ,
+                                      child: Container(
+                                          width: 22,
+                                          height: 22,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: Theme.of(context)
+                                                  .iconTheme
+                                                  .color!,
+                                              width: 1.5,
                                             ),
-                                            child: BackArrow(
-                                              fromOnboarding:
-                                                  widget.fromOnboarding,
-                                              fromSummary: widget.fromSummary,
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+                                          ),
+                                          child: BackArrow(
+                                            fromOnboarding:
+                                                widget.fromOnboarding,
+                                            fromSummary: widget.fromSummary,
+                                          )),
+                                    ),
+                                  ],
                                 ),
                               ),
                               body: TabBarView(

@@ -5,7 +5,7 @@ final darkTheme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: Colors.transparent,
     brightness: Brightness.dark,
-    primaryColor: const Color.fromRGBO(30, 188, 183, 1),
+    primaryColor: const Color.fromRGBO(0, 186, 195, 1),
     primaryColorDark: const Color.fromRGBO(25, 154, 151, 1),
     primaryColorLight: const Color.fromRGBO(227, 255, 254, 1),
     canvasColor: const Color.fromRGBO(5, 49, 57, 1),

@@ -82,8 +82,9 @@ class _DialogStateState extends State<DialogState> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        padding: const EdgeInsets.all(16.0), // Add padding if needed
+        width:MediaQuery.of(context).size.shortestSide <
+                                            600 ? MediaQuery.of(context).size.width : 343,
+        padding: const EdgeInsets.only(top: 5, bottom: 5,), // Add padding if needed
         decoration: BoxDecoration(
           image: DecorationImage(
               image: AssetImage(Theme.of(context).brightness == Brightness.dark
@@ -98,7 +99,7 @@ class _DialogStateState extends State<DialogState> {
           children: [
             Positioned(
               top: 0.0,
-              right: 0.0,
+              right: 5.0,
               child: BackArrow(),
             ),
             Column(

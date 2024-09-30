@@ -68,7 +68,8 @@ class SettingsScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) => const SubscriptionScreenLimit(
-                  triggerScreen: 'Settings', fromSettings: true,
+                  triggerScreen: 'Settings',
+                  fromSettings: true,
                 )),
       );
     }
@@ -92,7 +93,8 @@ class SettingsScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
             builder: (context) => const BundleScreen(
-                  triggerScreen: 'Settings', fromSettings: true,
+                  triggerScreen: 'Settings',
+                  fromSettings: true,
                 )),
       );
     }
@@ -156,8 +158,7 @@ class SettingsScreen extends StatelessWidget {
       // );
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => const SetUpShareScreen()),
+        MaterialPageRoute(builder: (context) => const SetUpShareScreen()),
       );
     }
 
@@ -188,26 +189,33 @@ class SettingsScreen extends StatelessWidget {
           return Dialog(
             insetPadding: EdgeInsets.all(0),
             child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color:Theme.of(context).brightness == Brightness.dark ? Color.fromRGBO(5, 49, 57, 1) : Color.fromRGBO(227, 255, 254, 1),
+              ),
               width: MediaQuery.of(context).size.width - 20,
               height: 230,
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 15, top: 15),
-                        child: Container(
-                          width: 22,
-                          height: 22,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black),
-                          ),
-                          child: BackArrow()
-                        ),
-                      ),
-                    ],
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     Padding(
+                  //       padding: EdgeInsets.only(right: 15, top: 15),
+                  //       child: Container(
+                  //         width: 22,
+                  //         height: 22,
+                  //         decoration: BoxDecoration(
+                  //           shape: BoxShape.circle,
+                  //           border: Border.all(color: Colors.black),
+                  //         ),
+                  //         child: BackArrow()
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  SizedBox(
+                    height: 30,
                   ),
                   Text(
                     title,
@@ -226,7 +234,7 @@ class SettingsScreen extends StatelessWidget {
                         subTitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 15),
+                            fontWeight: FontWeight.w300, fontSize: 15, color: Theme.of(context).brightness == Brightness.dark ? Color.fromRGBO(132, 134, 152, 1) : null),
                       ),
                     ),
                   ),
@@ -240,7 +248,9 @@ class SettingsScreen extends StatelessWidget {
                         onTap: () {
                           if (buttonText == 'Yes, log out') {
                             context.read<AuthenticationBloc>().add(SignOut());
-                            context.read<SubscriptionsBloc>().add(GetSubscriptionStatus());
+                            context
+                                .read<SubscriptionsBloc>()
+                                .add(GetSubscriptionStatus());
                             Navigator.of(context).pop();
                           } else if (buttonText == 'Yes, delete') {
                             context
@@ -252,11 +262,12 @@ class SettingsScreen extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          width: MediaQuery.of(context).size.width / 2.5,
+                          width: MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                  color: Colors.teal.shade300, width: 3)),
+                                  color: Theme.of(context).primaryColor,
+                                  width: 3)),
                           child: Text(
                             buttonText,
                             style: TextStyle(
@@ -276,9 +287,9 @@ class SettingsScreen extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          width: MediaQuery.of(context).size.width / 2.5,
+                          width: MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
-                            color: Colors.teal.shade300,
+                            color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -478,214 +489,229 @@ class SettingsScreen extends StatelessWidget {
           })
     ];
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-      listenWhen: (_, current) => current is AuthenticationSuccessState,
-      listener: (context, state){
-        context.read<SubscriptionsBloc>().add(const GetSubscriptionStatus());
-      },
+        listenWhen: (_, current) => current is AuthenticationSuccessState,
+        listener: (context, state) {
+          context.read<SubscriptionsBloc>().add(const GetSubscriptionStatus());
+        },
         builder: (context, state) {
-      return Stack(
-        children: [
-          const BackgroundGradient(),
-          Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              surfaceTintColor: Colors.transparent,
-              title: const Text(
-                'Profile',
-              ),
-            ),
-            body: Container(
-                height: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        // profile
-                        padding: const EdgeInsets.symmetric(vertical: 0),
-                        decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.2),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8))),
-                        child: Column(
-                          children: [
-                            Material(
-                              color:
-                                  Theme.of(context).primaryColor.withOpacity(0),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(8)),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: StreamBuilder<User?>(
-                                    stream: FirebaseAuth.instance
-                                        .authStateChanges(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return CircularProgressIndicator();
-                                      } else if (snapshot.hasData) {
-                                        return Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
-                                              child: SvgPicture.asset(
-                                                Assets.icons.profile,
-                                                height: 35,
-                                                colorFilter: ColorFilter.mode(
-                                                    Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .color!,
-                                                    BlendMode.srcIn),
-                                              ),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+          return Stack(
+            children: [
+              const BackgroundGradient(),
+              Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.transparent,
+                  surfaceTintColor: Colors.transparent,
+                  title: const Text(
+                    'Profile',
+                  ),
+                ),
+                body: Container(
+                    height: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Container(
+                            // profile
+                            padding: const EdgeInsets.symmetric(vertical: 0),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.2),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8))),
+                            child: Column(
+                              children: [
+                                Material(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    child: StreamBuilder<User?>(
+                                        stream: FirebaseAuth.instance
+                                            .authStateChanges(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator();
+                                          } else if (snapshot.hasData) {
+                                            return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  'Hello!',
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .color,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 15),
+                                                  child: SvgPicture.asset(
+                                                    Assets.icons.profile,
+                                                    height: 35,
+                                                    colorFilter:
+                                                        ColorFilter.mode(
+                                                            Theme.of(context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .color!,
+                                                            BlendMode.srcIn),
+                                                  ),
                                                 ),
-                                                Text(
-                                                  displayName,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .color,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Hello!',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall!
+                                                                  .color,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                    Text(
+                                                      displayName,
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall!
+                                                                  .color,
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
-                                            ),
-                                          ],
-                                        );
-                                      } else {
-                                        return InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).pushNamed(
-                                              '/login',
                                             );
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 15),
-                                                child: SvgPicture.asset(
-                                                  Assets.icons.login,
-                                                  height: 35,
-                                                  colorFilter: ColorFilter.mode(
-                                                      Theme.of(context)
-                                                          .textTheme
-                                                          .bodySmall!
-                                                          .color!,
-                                                      BlendMode.srcIn),
-                                                ),
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                          } else {
+                                            return InkWell(
+                                              onTap: () {
+                                                Navigator.of(context).pushNamed(
+                                                  '/login',
+                                                );
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    'Never loose your data!',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall!
-                                                            .color,
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w400),
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 15),
+                                                    child: SvgPicture.asset(
+                                                      Assets.icons.login,
+                                                      height: 35,
+                                                      colorFilter:
+                                                          ColorFilter.mode(
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodySmall!
+                                                                  .color!,
+                                                              BlendMode.srcIn),
+                                                    ),
                                                   ),
-                                                  Text(
-                                                    'Log in',
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodySmall!
-                                                            .color,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w600),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'Never loose your data!',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .color,
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
+                                                      Text(
+                                                        'Log in',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodySmall!
+                                                                .color,
+                                                            fontSize: 20,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                            ],
-                                          ),
-                                        );
-                                      }
-                                    }),
-                              ),
+                                            );
+                                          }
+                                        }),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          MainGroup(
+                            items: mainGroup,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          ButtonsGroup(title: 'General', items: generalGroup),
+                          // ButtonsGroup(title: 'Membership', items: membershipGroup),
+                          ButtonsGroup(title: 'About', items: aboutGroup),
+                          ButtonsGroup(title: 'Support', items: supportGroup),
+                          StreamBuilder<User?>(
+                              stream: FirebaseAuth.instance.authStateChanges(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.connectionState !=
+                                        ConnectionState.waiting) {
+                                  return ButtonsGroupAuth(
+                                    items: authGroup,
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }),
+                          Text('version 1.4.3',
+                              textAlign: TextAlign.end,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(height: 1))
+                        ],
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      MainGroup(
-                        items: mainGroup,
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      ButtonsGroup(title: 'General', items: generalGroup),
-                      // ButtonsGroup(title: 'Membership', items: membershipGroup),
-                      ButtonsGroup(title: 'About', items: aboutGroup),
-                      ButtonsGroup(title: 'Support', items: supportGroup),
-                      StreamBuilder<User?>(
-                          stream: FirebaseAuth.instance.authStateChanges(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData &&
-                                snapshot.connectionState !=
-                                    ConnectionState.waiting) {
-                              return ButtonsGroupAuth(
-                                items: authGroup,
-                              );
-                            } else {
-                              return Container();
-                            }
-                          }),
-                      Text('version 1.4.2',
-                          textAlign: TextAlign.end,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(height: 1))
-                    ],
-                  ),
-                )),
-          ),
-        ],
-      );
-    });
+                    )),
+              ),
+            ],
+          );
+        });
   }
 }
 

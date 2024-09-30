@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/summary_screen/info_modal/text_size_modal.dart';
 
@@ -16,8 +18,20 @@ class InstructionStep {
       {required this.image, required this.description, required this.step});
 }
 
-class SetUpShareScreen extends StatelessWidget {
+class SetUpShareScreen extends StatefulWidget {
   const SetUpShareScreen({super.key});
+
+  @override
+  State<SetUpShareScreen> createState() => _SetUpShareScreenState();
+}
+
+class _SetUpShareScreenState extends State<SetUpShareScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<MixpanelBloc>().add(const ShowInstructions());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +79,7 @@ class SetUpShareScreen extends StatelessWidget {
 
     void onPressClose() {
       Navigator.of(context).pop();
+      context.read<MixpanelBloc>().add(const CloseInstructions());
     }
 
     return Stack(
@@ -76,10 +91,44 @@ class SetUpShareScreen extends StatelessWidget {
             extendBodyBehindAppBar: true,
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              flexibleSpace: const Row(
+              flexibleSpace: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Padding(padding: const EdgeInsets.only(right: 6.0, top: 50), child: BackArrow()),
+                  Padding(
+                      padding: EdgeInsets.only(right: 6.0, top: 50),
+                      child: IconButton(
+                          visualDensity: VisualDensity.compact,
+                          onPressed: onPressClose,
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.all<EdgeInsets>(
+                                  EdgeInsets.all(0)),
+                              minimumSize:
+                                  MaterialStateProperty.all<Size>(Size(30, 30)),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  side: BorderSide(
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                              ),
+                              backgroundColor: MaterialStatePropertyAll(
+                                  Theme.of(context)
+                                      .iconTheme
+                                      .color!
+                                      .withOpacity(0))),
+                          highlightColor: Theme.of(context)
+                              .iconTheme
+                              .color!
+                              .withOpacity(0.3),
+                          icon: Icon(
+                            Icons.close,
+                            size: 18,
+                            color: Theme.of(context).iconTheme.color,
+                          ))),
                   // IconButton(
                   //     visualDensity: VisualDensity.compact,
                   //     onPressed: onPressClose,
@@ -106,7 +155,9 @@ class SetUpShareScreen extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    SizedBox(height: 30,),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Text(
                       'Set up share button',
                       style: Theme.of(context)
@@ -162,7 +213,6 @@ class SetUpShareScreen extends StatelessWidget {
                               ))
                           .toList(),
                     )
-                    
                   ],
                 ),
               ),
