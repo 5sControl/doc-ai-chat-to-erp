@@ -89,8 +89,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         // },
         listener: (context, state) {
       if (state is AuthenticationSuccessState) {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            '/', (Route<dynamic> route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
       }
       if (state is AuthenticationFailureState) {
         print('asdasd');
@@ -114,15 +114,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             actions: [
               TextButton(
-                  onPressed: () {Navigator.of(context).pushNamed(
-            '/bundle');},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/bundle');
+                  },
                   child: Text(
                     'Skip',
-                    style: TextStyle(fontSize: 16, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : Colors.black),
                   ))
             ],
           ),
           body: Stack(children: [
+            Positioned(
+                right: 0,
+                top: MediaQuery.of(context).size.shortestSide < 600 ? 30 : 50,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.shortestSide < 600
+                      ? 150
+                      : 220,
+                  width: MediaQuery.of(context).size.shortestSide < 600
+                      ? 150
+                      : 220,
+                  child: HappyBox(),
+                )),
             SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.only(
@@ -141,22 +158,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         const SizedBox(
                           height: 26,
                         ),
-                        const Text(
+                        Text(
                           'Register and get',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: 30,
+                              fontSize:
+                                  MediaQuery.of(context).size.shortestSide < 600
+                                      ? 30
+                                      : 56,
                               height: 1.2,
                               fontWeight: FontWeight.w700),
                         ),
                         Row(children: [
-                          const Text(
+                          Text(
                             '2 free ',
                             //maxLines: 2,
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                                fontSize: 30,
+                                fontSize:
+                                    MediaQuery.of(context).size.shortestSide <
+                                            600
+                                        ? 30
+                                        : 56,
                                 //height: 1.2,
                                 fontWeight: FontWeight.w700),
                           ),
@@ -180,24 +204,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     .textTheme
                                     .bodyMedium!
                                     .copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 30),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .shortestSide <
+                                              600
+                                          ? 30
+                                          : 56,
+                                    ),
                               )),
                             ),
                           ),
                         ]),
-                        const Text(
+                        Text(
                           'summarizations',
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: 30,
+                              fontSize:
+                                  MediaQuery.of(context).size.shortestSide < 600
+                                      ? 30
+                                      : 56,
                               height: 1.2,
                               fontWeight: FontWeight.w700),
                         ),
                       ],
                     ),
+
                     const SizedBox(
                       height: 20,
                     ),
@@ -274,21 +308,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         )
                       ],
                     ),
-                    SizedBox(height: 30,),
+                    SizedBox(
+                      height: 30,
+                    ),
                     Center(
                       child: RichText(
                         text: TextSpan(
                             text: 'Already have an account? ',
-                            style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 15),
+                            style: TextStyle(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontSize: 15),
                             children: <TextSpan>[
                               TextSpan(
                                   text: 'Login Now',
                                   style: TextStyle(
-                                    color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontWeight: FontWeight.w600,
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap =() {Navigator.of(context).pop();})
+                                    ..onTap = () {
+                                      Navigator.of(context).pop();
+                                    })
                             ]),
                       ),
                     )
@@ -304,12 +350,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
             ),
-            Animate(effects: [
-              MoveEffect(
-                begin: Offset(10, 10),
-                  end: MediaQuery.of(context).size.shortestSide < 550 ? Offset(10, -570) : Offset(10, -1100),
-                  delay: Duration(milliseconds: 200)),
-            ], child: const HappyBox()),
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 800),
               reverseDuration: const Duration(milliseconds: 800),
@@ -334,8 +374,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 },
               ),
             )
-          ]
-          ),
+          ]),
         ),
       ]);
     });
@@ -364,9 +403,7 @@ class NameInput extends StatelessWidget {
           label: Text(
             'Name',
             style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w400),
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(
               gapPadding: 10,
@@ -403,9 +440,7 @@ class EmailInput extends StatelessWidget {
           label: Text(
             'Email Address',
             style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w400),
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(
               gapPadding: 10,
@@ -464,9 +499,7 @@ class _PasswordInputState extends State<PasswordInput> {
           label: Text(
             'Password',
             style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w400),
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           suffixIcon: IconButton(
             icon: Icon(
@@ -534,9 +567,7 @@ class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
           label: Text(
             'Confirm password',
             style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w400),
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           suffixIcon: IconButton(
             icon: Icon(
@@ -610,9 +641,7 @@ class DividerRow extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               'Or Login with',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
           Expanded(

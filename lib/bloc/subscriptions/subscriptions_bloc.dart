@@ -44,15 +44,21 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     final PurchasesService purchasesService = PurchasesService();
 
     on<InitSubscriptions>((event, emit) async {
-      emit(SubscriptionsStateLoading(
-          availableProducts: state.availableProducts,
-          subscriptionStatus: state.subscriptionStatus));
-      await purchasesService.initPlatformState();
-      final offerings = await purchasesService.getProducts();
-      if (offerings is Offerings) {
-        emit(state.copyWith(availableProducts: offerings));
+      // Only initialize if we don't already have available products
+      if (state.availableProducts == null) {
+        emit(SubscriptionsStateLoading(
+            availableProducts: state.availableProducts,
+            subscriptionStatus: state.subscriptionStatus));
+
+        await purchasesService.initPlatformState();
+        final offerings = await purchasesService.getProducts();
+
+        if (offerings is Offerings) {
+          emit(state.copyWith(availableProducts: offerings));
+        }
+
+        add(const GetSubscriptionStatus());
       }
-      add(const GetSubscriptionStatus());
     });
 
     on<MakePurchase>((event, emit) async {

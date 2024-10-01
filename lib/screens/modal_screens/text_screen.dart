@@ -98,6 +98,7 @@ class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
+    final deviceHeight = MediaQuery.of(context).size.height;
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
         child: Container(
@@ -106,7 +107,7 @@ class MyTextField extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minHeight: 50,
-              maxHeight: deviceWidth - 100,
+              maxHeight: deviceHeight - 200,
             ),
             child: Container(
               height: deviceWidth,

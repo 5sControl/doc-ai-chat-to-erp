@@ -39,17 +39,20 @@ class BundleScreen1 extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          SizedBox(
+            height: isTablet ? 40 : 0,
+          ),
           Title(fromOnboarding: fromOnboarding,),
           SizedBox(
-            height: isTablet ? 15 : 0,
+            height: isTablet ? 60 : 0,
           ),
           const Body(),
           SizedBox(
-            height: isTablet ? 40 : 5,
+            height: isTablet ? 55 : 5,
           ),
           const Body1(),
           SizedBox(
-            height: isTablet ? 50 : 13,
+            height: isTablet ? 60 : 13,
           ),
           PricesBloc(
             packages: packages,
@@ -88,7 +91,7 @@ class Body extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: isTablet ? 20 : 0,
+          height: isTablet ? 30 : 0,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +102,7 @@ class Body extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     Assets.icons.transcriptor1,
-                    height: 68,
+                    height: isTablet ? 88 : 68,
                   ),
                   Text(
                     'SpeechScribe',
@@ -115,7 +118,7 @@ class Body extends StatelessWidget {
             // ),
             SvgPicture.asset(
               Assets.icons.plus,
-              height: 36,
+              height: isTablet? 50 : 36,
               color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
             ),
             // const SizedBox(
@@ -126,7 +129,7 @@ class Body extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     Assets.icons.summifyLogo,
-                    height: 68,
+                    height: isTablet ? 88 : 68,
                   ),
                   Text(
                     'Summify',
@@ -165,7 +168,7 @@ class Body1 extends StatelessWidget {
   }
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
-      height: isTablet ? 340 : 210,
+      height: isTablet ? 380 : 210,
       margin: const EdgeInsets.only(
         left: 15,
         right: 15,
@@ -177,7 +180,7 @@ class Body1 extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: isTablet ? 40 : 4,
+            height: isTablet ? 50 : 4,
           ),
           Text(
             'GET FOR FREE',
@@ -187,7 +190,7 @@ class Body1 extends StatelessWidget {
                 fontWeight: FontWeight.w700),
           ),
           SizedBox(
-            height: isTablet ? 20 : 5,
+            height: isTablet ? 30 : 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -197,6 +200,7 @@ class Body1 extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       Assets.icons.transcriptor2,
+                      height: isTablet ? 88 : 68,
                     ),
                     const SizedBox(
                       height: 5,
@@ -221,7 +225,7 @@ class Body1 extends StatelessWidget {
               ),
               SvgPicture.asset(
                 Assets.icons.plus,
-                height: 36,
+                 height: isTablet? 50 : 36,
               ),
               const SizedBox(
                 width: 10,
@@ -231,7 +235,7 @@ class Body1 extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       Assets.icons.logo,
-                      height: 75,
+                      height: isTablet ? 88 : 75,
                       color: Colors.black87,
                     ),
                     const SizedBox(
@@ -255,7 +259,7 @@ class Body1 extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: isTablet ? 20 : 5,
+            height: isTablet ? 30 : 5,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -456,7 +460,7 @@ class SubscriptionCover extends StatelessWidget {
 
     return Expanded(
       child: SizedBox(
-        height: 110,
+        height:MediaQuery.of(context).size.shortestSide >= 600 ? 150 : 110,
         child: GestureDetector(
           onTap: () => onSelectSubscription(index: index),
           child: Container(
@@ -480,7 +484,7 @@ class SubscriptionCover extends StatelessWidget {
                   Align(
                     alignment: Alignment.topRight,
                     child: Padding(
-                        padding: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(5),
                         child: SvgPicture.asset(Assets.icons.checkCircle)),
                   ),
                 Padding(

@@ -177,7 +177,9 @@ class _RequestScreenState extends State<RequestScreen> {
                       ),
                       const Spacer(),
                       ConfirmButton(
-                          onPressSubmit: onPressSubmit, emailError: emailError)
+                          onPressSubmit: onPressSubmit, emailError: emailError),
+                      SizedBox(height:MediaQuery.of(context).size.shortestSide <
+                                            600 ? 0 : 30,)
                     ],
                   ),
                 ),

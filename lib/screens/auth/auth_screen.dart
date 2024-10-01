@@ -139,7 +139,7 @@ class _AuthScreenState extends State<AuthScreen> {
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Column(
+               Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +152,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          fontSize: 30,
+                          fontSize:MediaQuery.of(context).size.shortestSide <
+                                            600 ? 30 : 56,
                           height: 1.2,
                           fontWeight: FontWeight.w700),
                     ),
@@ -161,7 +162,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
-                          fontSize: 30,
+                          fontSize:MediaQuery.of(context).size.shortestSide <
+                                            600 ? 30 : 56,
                           height: 1.2,
                           fontWeight: FontWeight.w700),
                     ),

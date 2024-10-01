@@ -170,7 +170,7 @@ class _BundleScreenState extends State<BundleScreen>
                           child: SafeArea(
                             child: Scaffold(
                               appBar: AppBar(
-                                toolbarHeight: 60,
+                                toolbarHeight:MediaQuery.of(context).size.shortestSide >= 600 ? 80 : 60,
                                 automaticallyImplyLeading: false,
                                 //backgroundColor: appBarColor,
                                 flexibleSpace: Stack(

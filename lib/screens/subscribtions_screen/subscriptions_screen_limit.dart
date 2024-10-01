@@ -140,6 +140,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                             : 15
                                         : 50,
                                 //toolbarOpacity: 20,
+                                elevation: 0,
                                 automaticallyImplyLeading: false,
                                 flexibleSpace: Stack(
                                   children: [
@@ -170,7 +171,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                                   state.screenIndex == 3 ||
                                                   state.screenIndex == 5)
                                           ? SizedBox(
-                                              height: 0,
+                                            height:MediaQuery.of(context).size.shortestSide >= 600 ? 50 : 0,
                                             )
                                           : SizedBox(height: 10,),
                                       state.screenIndex == 1
@@ -185,7 +186,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                           ? SizedBox(
                                               height: 10,
                                             )
-                                          : Container(),
+                                          : Container(height:MediaQuery.of(context).size.shortestSide >= 600 ? 7 : 0,),
                                       const SubTitle(),
                                       state.screenIndex < 3 &&
                                               state.screenIndex != 1
@@ -277,13 +278,17 @@ class Human extends StatelessWidget {
     //   null,
     // ];
     return BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
-      return Container(
-        //color: colors[state.screenIndex],
-        child: Image.asset(
-          screenTexts[state.screenIndex],
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
+      return OrientationBuilder(
+         builder: (context, orientation) {
+          return Center(
+            //color: colors[state.screenIndex],
+            child: Image.asset(
+              screenTexts[state.screenIndex],
+              width:MediaQuery.of(context).orientation == Orientation.portrait ? double.infinity : 400,
+              fit: BoxFit.cover,
+            ),
+          );
+        }
       );
     });
   }
@@ -318,7 +323,7 @@ class Title extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                       height: 1)
                   : TextStyle(
-                      fontSize: 35, fontWeight: FontWeight.w700, height: 1),
+                      fontSize: 35, fontWeight: FontWeight.w700, height: 0.8),
             ),
           );
         }),
@@ -345,7 +350,7 @@ Widget buildRichText(BuildContext context, String text, {bool isLink = false}) {
 
   bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
   return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 2.0),
+    padding: const EdgeInsets.symmetric(vertical: 1.5),
     child: GestureDetector(
       onTap: isLink ? onPressDesktop : null,
       child: RichText(
@@ -437,7 +442,7 @@ class Text1 extends StatelessWidget {
     ];
     return Container(
       child: Padding(
-        padding: const EdgeInsets.only(top: 7),
+        padding: const EdgeInsets.only(top: 6),
         child: BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
           return Center(
             child: Text(
@@ -760,8 +765,8 @@ class SubscriptionCover extends StatelessWidget {
         height: isTablet
             ? 180
             : fromSettings
-                ? 150
-                : 124,
+                ? 148
+                : 122,
         child: GestureDetector(
           onTap: () => onSelectSubscription(index: index),
           child: Container(
@@ -797,7 +802,7 @@ class SubscriptionCover extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: textColor,
-                            fontSize: isTablet ? 18 : 15,
+                            fontSize: isTablet ? 18 : 14,
                             fontWeight: FontWeight.w500),
                       ),
                       fromSettings

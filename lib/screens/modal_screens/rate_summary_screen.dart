@@ -77,7 +77,8 @@ class _RateSummaryScreenState extends State<RateSummaryScreen> {
       child: Scaffold(
         body: Center(
           child: Container(
-            width: double.infinity,
+            width:MediaQuery.of(context).size.shortestSide <
+                                            600 ? double.infinity : 480,
             margin: const EdgeInsets.all(15),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(

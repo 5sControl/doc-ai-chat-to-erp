@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
-import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/request_screen.dart';
 
@@ -20,7 +18,6 @@ import '../summary_screen/summary_screen.dart';
 
 class SummaryTile extends StatefulWidget {
   final String sharedLink;
-  // final bool isNew;
 
   const SummaryTile({
     super.key,

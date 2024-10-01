@@ -226,57 +226,62 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   void _renameSummary(SummaryData summaryData) async {
-  final TextEditingController _renameController = TextEditingController(text: summaryData.summaryPreview.title);
+    final TextEditingController _renameController =
+        TextEditingController(text: summaryData.summaryPreview.title);
 
-  final newTitle = await showDialog<String>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text('Rename Title'),
-        content: TextField(
-          controller: _renameController,
-          decoration: InputDecoration(hintText: 'Enter new title'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog without returning anything
-            },
-            child: Text('Cancel'),
+    final newTitle = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Rename Title'),
+          content: TextField(
+            controller: _renameController,
+            decoration: InputDecoration(hintText: 'Enter new title'),
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(_renameController.text); // Return the new title
-            },
-            child: Text('Rename'),
-          ),
-        ],
-      );
-    },
-  );
-
-  // If newTitle is not null or empty, proceed with renaming
-  if (newTitle != null && newTitle.trim().isNotEmpty) {
-    _updateSummaryTitle(summaryData, newTitle);
-  }
-}
-void _updateSummaryTitle(SummaryData summaryData, String newTitle) {
-  setState(() {
-    // Update the title in the summaryPreview
-    final updatedSummary = summaryData.copyWith(
-      summaryPreview: summaryData.summaryPreview.copyWith(
-        title: newTitle,
-      ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(); // Close the dialog without returning anything
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(_renameController.text); // Return the new title
+              },
+              child: Text('Rename'),
+            ),
+          ],
+        );
+      },
     );
 
-    // Update the corresponding summary in the list
-    final index = _allSummaries.indexOf(summaryData);
-    if (index != -1) {
-      _allSummaries[index] = updatedSummary;
-      _filterSummaries(_searchController.text); // Refresh the filtered list if needed
+    // If newTitle is not null or empty, proceed with renaming
+    if (newTitle != null && newTitle.trim().isNotEmpty) {
+      _updateSummaryTitle(summaryData, newTitle);
     }
-  });
-}
+  }
+
+  void _updateSummaryTitle(SummaryData summaryData, String newTitle) {
+    setState(() {
+      // Update the title in the summaryPreview
+      final updatedSummary = summaryData.copyWith(
+        summaryPreview: summaryData.summaryPreview.copyWith(
+          title: newTitle,
+        ),
+      );
+
+      // Update the corresponding summary in the list
+      final index = _allSummaries.indexOf(summaryData);
+      if (index != -1) {
+        _allSummaries[index] = updatedSummary;
+        _filterSummaries(
+            _searchController.text); // Refresh the filtered list if needed
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -342,8 +347,7 @@ void _updateSummaryTitle(SummaryData summaryData, String newTitle) {
                             bottom: PreferredSize(
                               preferredSize: Size(
                                   MediaQuery.of(context).size.width,
-                                  // !isSubscribed ? 140.0 : 70),
-                                  !isSubscribed ? 140.0 : 0),
+                                  !isSubscribed ? 140.0 : 70),
                               child: Column(
                                 children: [
                                   !isSubscribed

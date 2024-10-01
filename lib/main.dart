@@ -44,7 +44,7 @@ void main() async {
 
   final purchasesService = PurchasesService();
   await purchasesService.initPlatformState();
-  
+
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -56,7 +56,7 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  //await HydratedBloc.storage.clear(); 
+  //await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 
@@ -155,23 +155,26 @@ class SummishareApp extends StatelessWidget {
                         settings: settings);
                   case '/login':
                     return MaterialWithModalsPageRoute(
-                        builder: (_) =>const AuthScreen(), settings: settings);
+                        builder: (_) => const AuthScreen(), settings: settings);
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionScreen(
-                              triggerScreen: 'Home', showBackArrow: true,
+                              triggerScreen: 'Home',
+                              showBackArrow: true,
                             ),
                         settings: settings);
-                        case '/subscribeLimit':
+                  case '/subscribeLimit':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionScreenLimit(
-                              triggerScreen: 'Home', fromSettings: false,
+                              triggerScreen: 'Home',
+                              fromSettings: false,
                             ),
                         settings: settings);
                   case '/bundle':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const BundleScreen(
-                              triggerScreen: 'Home', fromOnboarding: true,
+                              triggerScreen: 'Home',
+                              fromOnboarding: true,
                             ),
                         settings: settings);
                   case '/settings':

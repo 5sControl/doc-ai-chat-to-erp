@@ -95,7 +95,11 @@ class _SetUpShareScreenState extends State<SetUpShareScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                      padding: EdgeInsets.only(right: 6.0, top: 50),
+                      padding: EdgeInsets.only(
+                          right: 6.0,
+                          top: MediaQuery.of(context).size.shortestSide >= 600
+                              ? 30
+                              : 50),
                       child: IconButton(
                           visualDensity: VisualDensity.compact,
                           onPressed: onPressClose,
@@ -165,53 +169,67 @@ class _SetUpShareScreenState extends State<SetUpShareScreen> {
                           .displayMedium!
                           .copyWith(fontSize: 32, height: 3),
                     ),
-                    Column(
-                      children: steps
-                          .map((step) => Padding(
+                    Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize
+                            .min, // Ensures the column size is minimal based on its children
+                        crossAxisAlignment: CrossAxisAlignment
+                            .center, // Center-aligns the entire column horizontally
+                        children: steps
+                            .map(
+                              (step) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 15),
                                 child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center, // Aligns image and text vertically
                                   children: [
-                                    Image.asset(
-                                      step.image,
-                                      width: 100,
-                                    ),
-                                    Flexible(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 10),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: [
-                                            Text(
-                                              step.step,
-                                              textAlign: TextAlign.start,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .displaySmall!
-                                                  .copyWith(fontSize: 16),
-                                            ),
-                                            Text(
-                                              step.description,
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .displayMedium!
-                                                  .copyWith(
-                                                      fontSize: 22,
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                            ),
-                                          ],
+                                    Column(
+                                      children: [
+                                        Image.asset(
+                                          step.image,
+                                          width:
+                                              100, // Consistent width for all images
                                         ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                        width:
+                                            15), // Adds consistent spacing between image and text
+                                    Flexible(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start, // Aligns text to the start
+                                        children: [
+                                          Text(
+                                            step.step,
+                                            textAlign: TextAlign.start,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .displaySmall!
+                                                .copyWith(fontSize: 16),
+                                          ),
+                                          Text(
+                                            step.description,
+                                            maxLines: 2,
+                                            textAlign: TextAlign.start,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .displayMedium!
+                                                .copyWith(
+                                                    fontSize: 22,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
-                              ))
-                          .toList(),
+                              ),
+                            )
+                            .toList(),
+                      ),
                     )
                   ],
                 ),
