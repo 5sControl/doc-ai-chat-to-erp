@@ -16,9 +16,6 @@ import 'package:summify/widgets/backgroung_gradient.dart';
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 import '../summary_screen/info_modal/extension_modal.dart';
-import 'happy_box.dart';
-import 'subscription_body_month.dart';
-import 'subscription_body_year.dart';
 
 class SubscriptionScreenLimit extends StatefulWidget {
   final bool? fromOnboarding;

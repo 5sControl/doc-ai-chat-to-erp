@@ -26,7 +26,7 @@ class _TextModalScreenState extends State<TextModalScreen> {
         context
             .read<SummariesBloc>()
             .add(GetSummaryFromText(text: textController.text));
-        context.read<MixpanelBloc>().add(Summify(option: 'text'));
+        context.read<MixpanelBloc>().add(const Summify(option: 'text'));
         Navigator.of(context).pop();
       }
     });

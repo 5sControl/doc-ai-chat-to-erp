@@ -73,6 +73,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     on<GetSummaryFromUrl>(
       (event, emit) async {
         await _startSummaryLoading(
+          summaryTitle: event.summaryUrl,
           summaryKey: event.summaryUrl,
           emit: emit,
           summaryOrigin: SummaryOrigin.url,
@@ -93,6 +94,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         final title = "My text ($index)";
 
         await _startSummaryLoading(
+          summaryTitle: title,
           summaryKey: title,
           emit: emit,
           summaryOrigin: SummaryOrigin.text,
@@ -111,6 +113,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         if (state.summaries[event.fileName]?.shortSummaryStatus !=
             SummaryStatus.loading) {
           await _startSummaryLoading(
+            summaryTitle: event.fileName,
             summaryKey: event.fileName,
             emit: emit,
             summaryOrigin: SummaryOrigin.file,
@@ -172,6 +175,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
   Future<void> _startSummaryLoading({
     required String summaryKey,
+    required String summaryTitle,
     required SummaryOrigin summaryOrigin,
     required Emitter<SummariesState> emit,
   }) async {
@@ -183,6 +187,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       shortSummary: const Summary(),
       longSummary: const Summary(),
       summaryPreview: SummaryPreview(
+        title: summaryTitle,
         imageUrl: Assets.placeholderLogo.path,
       ),
       summaryOrigin: summaryOrigin,
