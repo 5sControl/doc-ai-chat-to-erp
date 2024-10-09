@@ -180,10 +180,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         print(summaryData.summaryPreview.title);
         return summaryData.summaryPreview.title
                 ?.toLowerCase()
-                .contains(lowerQuery) ?? 
+                .contains(lowerQuery) ??
             false;
       }).toList();
-      
     });
   }
 
@@ -317,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                       ),
                                       child: TextField(
                                         controller: _searchController,
-                                        decoration: const InputDecoration(
+                                        decoration: InputDecoration(
                                           fillColor:
                                               Color.fromRGBO(187, 247, 247, 1),
                                           hintText: 'Search',
@@ -325,6 +324,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                             Icons.search,
                                             size: 20,
                                           ),
+                                          suffixIcon: _searchController
+                                                  .text.isEmpty
+                                              ? null
+                                              : IconButton(
+                                                  icon: Icon(Icons.clear, size: 20,),
+                                                  onPressed: () {
+                                                    _searchController.clear();
+                                                    setState(
+                                                        () {}); // Update the UI
+                                                  },
+                                                ),
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 0, horizontal: 8),
                                         ),

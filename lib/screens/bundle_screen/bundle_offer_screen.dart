@@ -40,19 +40,19 @@ class BundleScreen1 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
-            height: isTablet ? 40 : 0,
+            height: isTablet ? 10 : 0,
           ),
           Title(fromOnboarding: fromOnboarding,),
           SizedBox(
-            height: isTablet ? 60 : 0,
+            height: isTablet ? 10 : 0,
           ),
           const Body(),
           SizedBox(
-            height: isTablet ? 55 : 5,
+            height: isTablet ? 40 : 5,
           ),
           const Body1(),
           SizedBox(
-            height: isTablet ? 60 : 13,
+            height: isTablet ? 30 : 13,
           ),
           PricesBloc(
             packages: packages,
@@ -168,7 +168,7 @@ class Body1 extends StatelessWidget {
   }
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     return Container(
-      height: isTablet ? 380 : 210,
+      height: isTablet ? 300 : 210,
       margin: const EdgeInsets.only(
         left: 15,
         right: 15,
@@ -180,7 +180,7 @@ class Body1 extends StatelessWidget {
       child: Column(
         children: [
           SizedBox(
-            height: isTablet ? 50 : 4,
+            height: isTablet ? 10 : 4,
           ),
           Text(
             'GET FOR FREE',
@@ -354,7 +354,7 @@ class _TitleState extends State<Title> {
           TextSpan(
             text: '${displayedPair[0]}\n',
             style: TextStyle(
-                fontSize: isTablet ? 56 : 28,
+                fontSize: isTablet ? 40 : 28,
                 fontWeight: FontWeight.w700,
                 height: 1,
                 color: Theme.of(context).brightness == Brightness.dark
@@ -366,10 +366,10 @@ class _TitleState extends State<Title> {
               style: TextStyle(
                 fontSize: displayedPair[1] == 'with 50% Off'
                     ? isTablet
-                        ? 64
+                        ? 55
                         : 36
                     : isTablet
-                        ? 56
+                        ? 40
                         : 28,
                 color: displayedPair[1] == 'with 50% Off' 
                     ? const Color.fromRGBO(0, 186, 195, 1)

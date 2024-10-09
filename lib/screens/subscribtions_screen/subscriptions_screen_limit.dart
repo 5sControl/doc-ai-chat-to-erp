@@ -103,137 +103,164 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
 
         return BlocBuilder<SubscriptionsBloc, SubscriptionsState>(
           builder: (context, state) {
-            return Stack(
-              children: [
-                widget.fromSettings ? const BackgroundGradient() : Container(),
-                Animate(
-                  effects: const [FadeEffect()],
-                  child: SafeArea(
-                    child: BlocBuilder<OffersBloc, OffersState>(
-                        builder: (context, state) {
-                      if (widget.fromSettings) {
-                        context.read<MixpanelBloc>().add(SubScreenLimShow(
-                            trigger: 'Settings',
-                            screen: 'Offer screen ${state.screenIndex} '));
-                      }
-                      if (!widget.fromSettings) {
-                        context.read<MixpanelBloc>().add(SubScreenLimShow(
-                            trigger: 'Not from Settings',
-                            screen: 'Offer screen ${state.screenIndex} '));
-                      }
-                      return state.screenIndex == 4
-                          ? SubscriptionScreen(
-                              triggerScreen: 'Home',
-                              showBackArrow: widget.fromSettings,
-                            )
-                          : Scaffold(
-                              appBar: AppBar(
-                                //backgroundColor: Colors.black,
-                                toolbarHeight:
-                                    MediaQuery.of(context).size.shortestSide <
-                                            600
-                                        ? widget.fromSettings
-                                            ? 50
-                                            : 15
-                                        : 50,
-                                //toolbarOpacity: 20,
-                                elevation: 0,
-                                automaticallyImplyLeading: false,
-                                flexibleSpace: Stack(
-                                  children: [
-                                    //widget.fromSettings ? Human() : Container(),
-                                    widget.fromSettings
-                                        ? Positioned(
-                                            top: 10,
-                                            right: 10,
-                                            child: BackArrow(
-                                                fromOnboarding:
-                                                    widget.fromOnboarding))
-                                        : Container()
-                                  ],
-                                ),
-                              ),
-                              body: Stack(
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Human(),
-                                      widget.fromSettings &&
-                                              (state.screenIndex == 0 ||
-                                                  state.screenIndex == 1 ||
-                                                  state.screenIndex == 2 ||
-                                                  state.screenIndex == 3 ||
-                                                  state.screenIndex == 5)
-                                          ? SizedBox(
-                                            height:MediaQuery.of(context).size.shortestSide >= 600 ? 50 : 0,
-                                            )
-                                          : SizedBox(height: 10,),
-                                      state.screenIndex == 1
-                                          ? SizedBox(
-                                              height: 20,
-                                            )
-                                          : Container(),
-                                      const Title(),
-                                      state.screenIndex == 5 ||
-                                              state.screenIndex == 0 ||
-                                              state.screenIndex == 2
-                                          ? SizedBox(
-                                              height: 10,
-                                            )
-                                          : Container(height:MediaQuery.of(context).size.shortestSide >= 600 ? 7 : 0,),
-                                      const SubTitle(),
-                                      state.screenIndex < 3 &&
-                                              state.screenIndex != 1
-                                          ? const SizedBox(
-                                              height: 0,
-                                            )
-                                          : SizedBox(
-                                              height: 5,
-                                            ),
-                                      Spacer(),
-                                      Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Column(
+            return state is SubscriptionsStateLoading
+                ? CircularProgressIndicator()
+                : Stack(
+                    children: [
+                      widget.fromSettings
+                          ? const BackgroundGradient()
+                          : Container(),
+                      Animate(
+                        effects: const [FadeEffect()],
+                        child: SafeArea(
+                          child: BlocBuilder<OffersBloc, OffersState>(
+                              builder: (context, state) {
+                            if (widget.fromSettings) {
+                              context.read<MixpanelBloc>().add(SubScreenLimShow(
+                                  trigger: 'Settings',
+                                  screen:
+                                      'Offer screen ${state.screenIndex} '));
+                            }
+                            if (!widget.fromSettings) {
+                              context.read<MixpanelBloc>().add(SubScreenLimShow(
+                                  trigger: 'Not from Settings',
+                                  screen:
+                                      'Offer screen ${state.screenIndex} '));
+                            }
+                            return state.screenIndex == 4
+                                ? SubscriptionScreen(
+                                    triggerScreen: 'Home',
+                                    showBackArrow: widget.fromSettings,
+                                  )
+                                : Scaffold(
+                                    appBar: AppBar(
+                                      //backgroundColor: Colors.black,
+                                      toolbarHeight: MediaQuery.of(context)
+                                                  .size
+                                                  .shortestSide <
+                                              600
+                                          ? widget.fromSettings
+                                              ? 50
+                                              : 15
+                                          : 50,
+                                      //toolbarOpacity: 20,
+                                      elevation: 0,
+                                      automaticallyImplyLeading: false,
+                                      flexibleSpace: Stack(
+                                        children: [
+                                          //widget.fromSettings ? Human() : Container(),
+                                          widget.fromSettings
+                                              ? Positioned(
+                                                  top: 10,
+                                                  right: 10,
+                                                  child: BackArrow(
+                                                      fromOnboarding: widget
+                                                          .fromOnboarding))
+                                              : Container()
+                                        ],
+                                      ),
+                                    ),
+                                    body: Stack(
+                                      children: [
+                                        Column(
                                           mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            state.screenIndex < 3
-                                                ? const Text1()
-                                                : Container(),
-                                            //const TermsRestorePrivacy()
-                                            state.screenIndex < 3
-                                                ? const SizedBox(
-                                                    height: 15,
+                                            const Human(),
+                                            widget.fromSettings &&
+                                                    (state.screenIndex == 0 ||
+                                                        state.screenIndex ==
+                                                            1 ||
+                                                        state.screenIndex ==
+                                                            2 ||
+                                                        state.screenIndex ==
+                                                            3 ||
+                                                        state.screenIndex == 5)
+                                                ? SizedBox(
+                                                    height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .shortestSide >=
+                                                            600
+                                                        ? 50
+                                                        : 0,
+                                                  )
+                                                : SizedBox(
+                                                    height: 10,
+                                                  ),
+                                            state.screenIndex == 1
+                                                ? SizedBox(
+                                                    height: 20,
                                                   )
                                                 : Container(),
-                                            PricesBloc(
-                                              packages: packages,
-                                              selectedSubscriptionIndex:
-                                                  selectedSubscriptionIndex,
-                                              onSelectSubscription:
-                                                  onSelectSubscription,
-                                              fromSettings: widget.fromSettings,
+                                            const Title(),
+                                            state.screenIndex == 5 ||
+                                                    state.screenIndex == 0 ||
+                                                    state.screenIndex == 2
+                                                ? SizedBox(
+                                                    height: 10,
+                                                  )
+                                                : Container(
+                                                    height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .shortestSide >=
+                                                            600
+                                                        ? 7
+                                                        : 0,
+                                                  ),
+                                            const SubTitle(),
+                                            state.screenIndex < 3 &&
+                                                    state.screenIndex != 1
+                                                ? const SizedBox(
+                                                    height: 0,
+                                                  )
+                                                : SizedBox(
+                                                    height: 5,
+                                                  ),
+                                            Spacer(),
+                                            Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  state.screenIndex < 3
+                                                      ? const Text1()
+                                                      : Container(),
+                                                  //const TermsRestorePrivacy()
+                                                  state.screenIndex < 3
+                                                      ? const SizedBox(
+                                                          height: 15,
+                                                        )
+                                                      : Container(),
+                                                  PricesBloc(
+                                                    packages: packages,
+                                                    selectedSubscriptionIndex:
+                                                        selectedSubscriptionIndex,
+                                                    onSelectSubscription:
+                                                        onSelectSubscription,
+                                                    fromSettings:
+                                                        widget.fromSettings,
+                                                  ),
+                                                  SubscribeButton(
+                                                    package: packages[
+                                                        selectedSubscriptionIndex],
+                                                  ),
+                                                  const TermsRestorePrivacy()
+                                                ],
+                                              ),
                                             ),
-                                            SubscribeButton(
-                                              package: packages[
-                                                  selectedSubscriptionIndex],
-                                            ),
-                                            const TermsRestorePrivacy()
                                           ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                    }),
-                  ),
-                ),
-              ],
-            );
+                                      ],
+                                    ),
+                                  );
+                          }),
+                        ),
+                      ),
+                    ],
+                  );
           },
         );
       },
@@ -275,18 +302,20 @@ class Human extends StatelessWidget {
     //   null,
     // ];
     return BlocBuilder<OffersBloc, OffersState>(builder: (context, state) {
-      return OrientationBuilder(
-         builder: (context, orientation) {
-          return Center(
-            //color: colors[state.screenIndex],
-            child: Image.asset(
-              screenTexts[state.screenIndex],
-              width:MediaQuery.of(context).orientation == Orientation.portrait ? double.infinity : 400,
-              fit: BoxFit.cover,
-            ),
-          );
-        }
-      );
+      return OrientationBuilder(builder: (context, orientation) {
+        return Center(
+          //color: colors[state.screenIndex],
+          child: Image.asset(
+            screenTexts[state.screenIndex],
+            width: MediaQuery.of(context).orientation == Orientation.portrait
+                ? MediaQuery.of(context).size.shortestSide >= 600
+                    ? 600
+                    : double.infinity
+                : 400,
+            fit: BoxFit.cover,
+          ),
+        );
+      });
     });
   }
 }
@@ -316,7 +345,7 @@ class Title extends StatelessWidget {
               textAlign: TextAlign.start,
               style: state.screenIndex < 3
                   ? TextStyle(
-                      fontSize: isTablet ? 56 : 40,
+                      fontSize: isTablet ? 50 : 40,
                       fontWeight: FontWeight.w700,
                       height: 1)
                   : TextStyle(

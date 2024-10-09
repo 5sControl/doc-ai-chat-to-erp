@@ -179,7 +179,7 @@ class _RequestScreenState extends State<RequestScreen> {
                       ConfirmButton(
                           onPressSubmit: onPressSubmit, emailError: emailError),
                       SizedBox(height:MediaQuery.of(context).size.shortestSide <
-                                            600 ? 0 : 30,)
+                                            600 ? 10 : 40,)
                     ],
                   ),
                 ),

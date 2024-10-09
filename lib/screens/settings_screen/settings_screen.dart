@@ -193,8 +193,10 @@ class SettingsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color:Theme.of(context).brightness == Brightness.dark ? Color.fromRGBO(5, 49, 57, 1) : Color.fromRGBO(227, 255, 254, 1),
               ),
-              width: MediaQuery.of(context).size.width - 20,
-              height: 230,
+              width:MediaQuery.of(context).size.shortestSide >
+                                            600 ?  343 : MediaQuery.of(context).size.width - 20,
+              height:MediaQuery.of(context).size.shortestSide >
+                                            600 ? 250 : 230,
               child: Column(
                 children: [
                   // Row(
@@ -262,7 +264,8 @@ class SettingsScreen extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          width: MediaQuery.of(context).size.width / 2.3,
+                          width:MediaQuery.of(context).size.shortestSide >
+                                            600 ?  343/2.3 : MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
@@ -287,7 +290,8 @@ class SettingsScreen extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          width: MediaQuery.of(context).size.width / 2.3,
+                          width:MediaQuery.of(context).size.shortestSide >
+                                            600 ?  343/2.3 : MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(12),
@@ -319,7 +323,7 @@ class SettingsScreen extends StatelessWidget {
           leadingIcon: Assets.icons.present,
           onTap: onPressSubscription1,
           trailing: Container(
-              width: 85,
+              width: 90,
               margin: const EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
@@ -329,7 +333,7 @@ class SettingsScreen extends StatelessWidget {
                 'New',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: Colors.black,
                     fontWeight: FontWeight.w500),
               ))),
@@ -338,7 +342,7 @@ class SettingsScreen extends StatelessWidget {
           leadingIcon: Assets.icons.crown,
           onTap: onPressSubscription,
           trailing: Container(
-              width: 85,
+              width: 90,
               margin: const EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
@@ -351,7 +355,7 @@ class SettingsScreen extends StatelessWidget {
                 'Upgrade',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: Colors.black,
                     fontWeight: FontWeight.w500),
               ))),
@@ -359,7 +363,7 @@ class SettingsScreen extends StatelessWidget {
         title: 'Add Summify for Chrome',
         leadingIcon: Assets.icons.chromeMini,
         trailing: Container(
-            width: 85,
+            width: 90,
             margin: const EdgeInsets.only(left: 10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
@@ -372,7 +376,7 @@ class SettingsScreen extends StatelessWidget {
               'Free',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   color: Colors.black,
                   fontWeight: FontWeight.w500),
             )),
@@ -541,7 +545,7 @@ class SettingsScreen extends StatelessWidget {
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return CircularProgressIndicator();
+                                            return const CircularProgressIndicator();
                                           } else if (snapshot.hasData) {
                                             return Row(
                                               mainAxisAlignment:
@@ -632,7 +636,7 @@ class SettingsScreen extends StatelessWidget {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        'Never loose your data!',
+                                                        'Never lose your data!',
                                                         textAlign:
                                                             TextAlign.start,
                                                         style: TextStyle(

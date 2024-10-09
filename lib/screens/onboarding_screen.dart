@@ -202,7 +202,9 @@ class OnboardingScreen2 extends StatelessWidget {
         ),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child:Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb1_1_dark.png') : Image.asset('assets/onboarding/onb1_1.png')),
+            child:Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb1_1_dark.png', height:MediaQuery.of(context).size.shortestSide >
+                                            600 ? 200 : MediaQuery.of(context).size.height,) : Image.asset('assets/onboarding/onb1_1.png', height: MediaQuery.of(context).size.shortestSide >
+                                            600 ? 200 : MediaQuery.of(context).size.height,)),
         SizedBox(
           height: 10,
         ),
@@ -220,9 +222,9 @@ class OnboardingScreen3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Spacer(),
+        //const Spacer(),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text('One-click “share” to get summary',
@@ -230,13 +232,15 @@ class OnboardingScreen3 extends StatelessWidget {
                   fontSize: 36, fontWeight: FontWeight.w700, height: 1),
               textAlign: TextAlign.start),
         ),
-        const Divider(
-          color: Colors.transparent,
-          height: 25,
-        ),
+        // const Divider(
+        //   color: Colors.transparent,
+        //   height: 25,
+        // ),
         Container(
-            margin: const EdgeInsets.only(left: 15, top: 15),
-            child: Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb2_dark.png') : Image.asset('assets/onboarding/onb2.png')),
+            margin: const EdgeInsets.only(left: 15, top:0),
+            child: Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb2_dark.png', height: MediaQuery.of(context).size.shortestSide >
+                                            600 ? MediaQuery.of(context).size.height - 20: MediaQuery.of(context).size.height,) : Image.asset('assets/onboarding/onb2.png', height: MediaQuery.of(context).size.shortestSide >
+                                            600 ? 1000 : MediaQuery.of(context).size.height,)),
       ],
     );
   }

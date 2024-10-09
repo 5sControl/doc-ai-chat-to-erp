@@ -205,10 +205,10 @@ class _BundleScreenState extends State<BundleScreen>
                                           child: TabBar(
                                             labelStyle: TextStyle(
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: 17),
+                                                fontSize: 16),
                                             unselectedLabelStyle: TextStyle(
                                                 fontWeight: FontWeight.w400,
-                                                fontSize: 17),
+                                                fontSize: 16),
                                             controller: _tabController,
                                             labelColor: Colors.white,
                                             automaticIndicatorColorAdjustment:

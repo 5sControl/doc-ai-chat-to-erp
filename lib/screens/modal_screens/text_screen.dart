@@ -107,7 +107,7 @@ class MyTextField extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(
               minHeight: 50,
-              maxHeight: deviceHeight - 200,
+              maxHeight: deviceHeight - 600,
             ),
             child: Container(
               height: deviceWidth,
