@@ -86,29 +86,22 @@ class AuthService {
 
   Future<UserModel?> signInWithGoogle() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
-      // Optional clientId
-      // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
       scopes: <String>[
         'email',
         'https://www.googleapis.com/auth/contacts.readonly',
       ],
     );
-    // Trigger the authentication flow
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null){
+      if (googleUser == null) {
         return null;
       }
-
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser.authentication;
-
+      final googleAuth = await googleUser.authentication;
       OAuthCredential credential;
       try {
         credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth?.accessToken,
-          idToken: googleAuth?.idToken,
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
         );
       } catch (e) {
         throw Exception('canceled');
@@ -122,7 +115,6 @@ class AuthService {
           return UserModel(
             id: firebaseUser.uid,
             email: firebaseUser.email ?? '',
-            displayName: firebaseUser.displayName ?? '',
           );
         }
       } on FirebaseAuthException catch (e) {

@@ -203,8 +203,8 @@ class OnboardingScreen2 extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child:Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb1_1_dark.png', height:MediaQuery.of(context).size.shortestSide >
-                                            600 ? 200 : MediaQuery.of(context).size.height,) : Image.asset('assets/onboarding/onb1_1.png', height: MediaQuery.of(context).size.shortestSide >
-                                            600 ? 200 : MediaQuery.of(context).size.height,)),
+                                            600 ? 200 : 200) : Image.asset('assets/onboarding/onb1_1.png', height: MediaQuery.of(context).size.shortestSide >
+                                            600 ? 200 : 200)),
         SizedBox(
           height: 10,
         ),
@@ -225,6 +225,10 @@ class OnboardingScreen3 extends StatelessWidget {
       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         //const Spacer(),
+        const Divider(
+          color: Colors.transparent,
+          height: 25,
+        ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text('One-click “share” to get summary',
