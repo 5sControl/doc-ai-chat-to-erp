@@ -13,7 +13,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
 import 'package:path_provider/path_provider.dart';
 import 'package:status_bar_control/status_bar_control.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
@@ -56,7 +55,7 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  await HydratedBloc.storage.clear();
+  //await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 

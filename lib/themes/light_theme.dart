@@ -18,10 +18,10 @@ final lightTheme = ThemeData(
           color: Colors.white,
           strokeAlign: BorderSide.strokeAlignOutside),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      fillColor: MaterialStatePropertyAll(Colors.transparent),
+      fillColor: WidgetStatePropertyAll(Colors.transparent),
       visualDensity: VisualDensity.compact,
-      overlayColor: MaterialStatePropertyAll(Colors.white38),
-      checkColor: MaterialStatePropertyAll(Colors.white),
+      overlayColor: WidgetStatePropertyAll(Colors.white38),
+      checkColor: WidgetStatePropertyAll(Colors.white),
     ),
     cardColor: Colors.black,
     indicatorColor: Colors.black,
@@ -45,8 +45,8 @@ final lightTheme = ThemeData(
         elevation: 10,
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 25)),
-    floatingActionButtonTheme:
-        const FloatingActionButtonThemeData(backgroundColor: Color.fromRGBO(0, 186, 195, 1)),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Color.fromRGBO(0, 186, 195, 1)),
     tabBarTheme: const TabBarTheme(
       splashFactory: NoSplash.splashFactory,
       labelColor: Colors.black,
@@ -71,8 +71,8 @@ final lightTheme = ThemeData(
       focusedBorder: OutlineInputBorder(
         gapPadding: 10,
         borderRadius: BorderRadius.circular(8),
-        borderSide:
-            const BorderSide(width: 2, color: const Color.fromRGBO(0, 186, 195, 1)),
+        borderSide: const BorderSide(
+            width: 2, color: Color.fromRGBO(0, 186, 195, 1)),
       ),
       filled: true,
       fillColor: const Color.fromRGBO(227, 255, 254, 1),
@@ -90,7 +90,7 @@ final lightTheme = ThemeData(
     ),
     iconButtonTheme: const IconButtonThemeData(
         style: ButtonStyle(
-            overlayColor: MaterialStatePropertyAll(Colors.white12))),
+            overlayColor: WidgetStatePropertyAll(Colors.white12))),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(
           fontSize: 20,

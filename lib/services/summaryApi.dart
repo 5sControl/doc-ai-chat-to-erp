@@ -16,20 +16,20 @@ class ErrorDecode {
 }
 
 class SummaryApiRepository {
-  final String linkUrl = "https://crucial-heron-vastly.ngrok-free.app/summarizer/application_by_summarize/";
+  final String linkUrl = "https://ai.5scontrol.com/ai-summarizer/application_by_summarize/";
   final String linkUrlDev =
       "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
 
   final String fileUrl =
-      "https://crucial-heron-vastly.ngrok-free.app/summarizer/application_by_summarize/uploadfile/";
+      "https://ai.5scontrol.com/ai-summarizer/application_by_summarize/uploadfile/";
 
   final String fileUrlDev =
       "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
 
-  final String rateUrl = 'https://crucial-heron-vastly.ngrok-free.app/django-api/applications/reviews/';
+  final String rateUrl = 'https://ai.5scontrol.com/ai-summarizer/django-api/applications/reviews/';
 
   final String requestUrl =
-      'https://crucial-heron-vastly.ngrok-free.app/django-api/applications/function-reports/';
+      'https://ai.5scontrol.com/django-api/applications/function-reports/';
 
   final String translateUrlDev =
       'https://largely-whole-horse.ngrok-free.app/translator/translate-to/';
@@ -37,7 +37,7 @@ class SummaryApiRepository {
   final String translateUrl = 'https://crucial-heron-vastly.ngrok-free.app/ai-translator/translate-to/';
 
   final String researchUrl =
-      'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/';
+      'https://ai.5scontrol.com/fastapi/application_by_summarize/';
 
   final String researchFile =
       'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/';
