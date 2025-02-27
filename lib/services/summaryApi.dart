@@ -12,35 +12,28 @@ enum SummaryType { long, short }
 
 class ErrorDecode {
   final String detail;
+
   ErrorDecode({required this.detail});
 }
 
 class SummaryApiRepository {
-  final String linkUrl = "https://ai.5scontrol.com/ai-summarizer/application_by_summarize/";
-  final String linkUrlDev =
-      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
+  final String linkUrl =
+      "https://ai.5scontrol.com/summarizer/application_by_summarize/";
 
   final String fileUrl =
-      "https://ai.5scontrol.com/ai-summarizer/application_by_summarize/uploadfile/";
+      "https://ai.5scontrol.com/summarizer/application_by_summarize/uploadfile/";
 
-  final String fileUrlDev =
-      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
-
-  final String rateUrl = 'https://ai.5scontrol.com/ai-summarizer/django-api/applications/reviews/';
+  final String rateUrl =
+      'https://ai.5scontrol.com/ai-summarizer/django-api/applications/reviews/';
 
   final String requestUrl =
       'https://ai.5scontrol.com/django-api/applications/function-reports/';
 
-  final String translateUrlDev =
-      'https://largely-whole-horse.ngrok-free.app/translator/translate-to/';
-
-  final String translateUrl = 'https://crucial-heron-vastly.ngrok-free.app/ai-translator/translate-to/';
+  final String translateUrl =
+      'https://ai.5scontrol.com/ai-translator/ai-translator/translate-to/';
 
   final String researchUrl =
       'https://ai.5scontrol.com/fastapi/application_by_summarize/';
-
-  final String researchFile =
-      'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/';
 
   final String sendEmailUrl =
       'https://easy4learn.com/django-api/applications/email/';
@@ -482,14 +475,15 @@ class SummaryRepository {
     required String message,
   }) {
     return _summaryRepository.requestAFeature(
-        getMoreSummaries: getMoreSummaries,
-        addTranslation: addTranslation,
-        askAQuestions: askAQuestions,
-        readBook: readBook,
-        addLang: addLang,
-        name: name,
-        email: email,
-        message: message,);
+      getMoreSummaries: getMoreSummaries,
+      addTranslation: addTranslation,
+      askAQuestions: askAQuestions,
+      readBook: readBook,
+      addLang: addLang,
+      name: name,
+      email: email,
+      message: message,
+    );
   }
 
   Future<void> sendEmailForPremium({required String email}) {

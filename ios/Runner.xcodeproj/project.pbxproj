@@ -194,9 +194,9 @@
 			children = (
 				EDBCE3D02BADBD2D007C7E6D /* PrivacyInfo.xcprivacy */,
 				EDB120BB2BF73AFE00D523B6 /* StoreKitConfig.storekit */,
+				9740EEB11CF90186004384FC /* Flutter */,
 				ED3FB6C02BAC329C00DE3F8C /* StoreKitTestCertificate.cer */,
 				EDC3A5F12B8B7BED001F7D7D /* GoogleService-Info.plist */,
-				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				ED277B002B8A9D22000725FB /* Share Extension */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -666,7 +666,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.englishingames.summiShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -855,7 +855,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.englishingames.summiShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -889,7 +889,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.englishingames.summiShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
