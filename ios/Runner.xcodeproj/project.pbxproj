@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0475D68E2DB05A4200C8773A /* SwiftReceiveSharingIntentPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0475D68D2DB05A4100C8773A /* SwiftReceiveSharingIntentPlugin.swift */; };
-		0475D6912DB060DF00C8773A /* ReceiveSharingIntentPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0475D6902DB060DF00C8773A /* ReceiveSharingIntentPlugin.m */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -75,10 +73,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0475D68D2DB05A4100C8773A /* SwiftReceiveSharingIntentPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftReceiveSharingIntentPlugin.swift; sourceTree = "<group>"; };
-		0475D68F2DB060DF00C8773A /* ReceiveSharingIntentPlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReceiveSharingIntentPlugin.h; sourceTree = "<group>"; };
-		0475D6902DB060DF00C8773A /* ReceiveSharingIntentPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReceiveSharingIntentPlugin.m; sourceTree = "<group>"; };
-		0475D6922DB060E900C8773A /* Share Extension-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Share Extension-Bridging-Header.h"; sourceTree = "<group>"; };
 		0C60E0C1EE94A704570668AE /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		0DE0E26B860CFB91E47A375B /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
@@ -232,14 +226,10 @@
 		ED277B002B8A9D22000725FB /* Share Extension */ = {
 			isa = PBXGroup;
 			children = (
-				0475D68F2DB060DF00C8773A /* ReceiveSharingIntentPlugin.h */,
-				0475D6902DB060DF00C8773A /* ReceiveSharingIntentPlugin.m */,
-				0475D68D2DB05A4100C8773A /* SwiftReceiveSharingIntentPlugin.swift */,
 				ED277B102B8A9DCB000725FB /* Share Extension.entitlements */,
 				ED277B012B8A9D22000725FB /* ShareViewController.swift */,
 				ED277B032B8A9D22000725FB /* MainInterface.storyboard */,
 				ED277B062B8A9D22000725FB /* Info.plist */,
-				0475D6922DB060E900C8773A /* Share Extension-Bridging-Header.h */,
 			);
 			path = "Share Extension";
 			sourceTree = "<group>";
@@ -453,13 +443,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -474,13 +460,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -534,8 +516,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED277B022B8A9D22000725FB /* ShareViewController.swift in Sources */,
-				0475D68E2DB05A4200C8773A /* SwiftReceiveSharingIntentPlugin.swift in Sources */,
-				0475D6912DB060DF00C8773A /* ReceiveSharingIntentPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
