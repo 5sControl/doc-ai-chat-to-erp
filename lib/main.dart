@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'package:summify/helpers/purchases.dart';
@@ -44,9 +43,12 @@ void main() async {
   final purchasesService = PurchasesService();
   await purchasesService.initPlatformState();
 
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: await getApplicationDocumentsDirectory(),
+  final storage = await HydratedStorage.build(
+    storageDirectory: HydratedStorageDirectory(
+      (await getApplicationDocumentsDirectory()).path,
+    ),
   );
+  HydratedBloc.storage = storage;
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -64,10 +66,10 @@ class SummishareApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      final facebookAppEvents = FacebookAppEvents();
-      facebookAppEvents.setAutoLogAppEventsEnabled(true);
-    }
+    // if (Platform.isIOS) {
+    //   final facebookAppEvents = FacebookAppEvents();
+    //   facebookAppEvents.setAutoLogAppEventsEnabled(true);
+    // }
 
     final AuthService authService = AuthService();
     final brightness = MediaQuery.of(context).platformBrightness;
