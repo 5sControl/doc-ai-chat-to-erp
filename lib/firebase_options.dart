@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -68,6 +65,16 @@ class DefaultFirebaseOptions {
     androidClientId: '1006377902393-28mq8so8ls5uj5qqkn1g2qjfl7o4c0dm.apps.googleusercontent.com',
     iosClientId: '1006377902393-4mdvnniglhbajbd832q3k0k9hb8kg9jo.apps.googleusercontent.com',
     iosBundleId: 'com.englishingames.summiShare',
+  );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDt8L4ejTE4DzDhVfoBCEc1N1xeltSokaw',
+    appId: '1:1006377902393:web:b01e2a5cb6649010d308e8',
+    messagingSenderId: '1006377902393',
+    projectId: 'elang-extension-prod',
+    authDomain: 'elang-extension-prod.firebaseapp.com',
+    storageBucket: 'elang-extension-prod.appspot.com',
+    measurementId: 'G-7MFPYDPL5V',
   );
 
 }

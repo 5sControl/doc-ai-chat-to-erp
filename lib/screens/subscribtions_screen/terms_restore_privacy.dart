@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TermsRestorePrivacy extends StatelessWidget {
   const TermsRestorePrivacy({super.key});
@@ -27,7 +28,7 @@ class TermsRestorePrivacy extends StatelessWidget {
 
     return Row(
       children: [
-        if (Platform.isIOS)
+        if (!kIsWeb && Platform.isIOS)
           Expanded(
             child: TextButton(
               onPressed: onPressTerms,
@@ -57,7 +58,7 @@ class TermsRestorePrivacy extends StatelessWidget {
             ),
           ),
         ),
-        if (Platform.isIOS)
+        if (!kIsWeb && Platform.isIOS)
           Expanded(
             child: TextButton(
               onPressed: onPressPrivacy,

@@ -32,6 +32,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.1006377902393-4mdvnniglhbajbd832q3k0k9hb8kg9jo</string>
+				<string>summiShare</string>
 			</array>
 		</dict>
 	</array>

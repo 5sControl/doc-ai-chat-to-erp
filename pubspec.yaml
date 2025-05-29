@@ -11,7 +11,6 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flutter_bloc: ^9.1.0
-  hydrated_bloc: ^10.0.0
   equatable: ^2.0.5
   path_provider: ^2.1.2
   dio: ^5.4.1
@@ -45,6 +44,7 @@ dependencies:
   flutter_dialogs: ^3.0.0
   toastification: ^3.0.2
   auto_size_text: ^3.0.0
+  hydrated_bloc: ^10.0.0
 
 dev_dependencies:
   flutter_test:

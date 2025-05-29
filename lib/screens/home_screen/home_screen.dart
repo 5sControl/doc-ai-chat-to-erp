@@ -87,6 +87,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     // _filteredSummaries = _allSummaries;
     // print(_allSummaries);
     // For sharing images coming from outside the app while the app is in the memory
+
+    // late StreamSubscription _intentTextStreamSubscription;
+    //
+    // _intentTextStreamSubscription =
+    //     ReceiveSharingIntent.instance.getTextStream().listen((String value) {
+    //       print("🔥 Получен текст из другого приложения: $value");
+    //       getSummary(summaryUrl: value); // например
+    //     });
+    //
+    // // Также можешь прочитать "начальное значение"
+    // ReceiveSharingIntent.instance.getInitialText().then((String? value) {
+    //   if (value != null) {
+    //     getSummary(summaryUrl: value);
+    //   }
+    // });
+
     _intentMediaStreamSubscription =
         ReceiveSharingIntentPlus.getMediaStream().listen(
       (List<SharedMediaFile> value) {

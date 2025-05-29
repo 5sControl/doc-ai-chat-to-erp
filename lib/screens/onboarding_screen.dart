@@ -8,6 +8,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../gen/assets.gen.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -53,7 +54,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       passOnboarding();
       context.read<MixpanelBloc>().add(OnboardingStep(step: _currentPageIndex));
 
-      if (Platform.isIOS) {
+      if (!kIsWeb && Platform.isIOS) {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/bundle', (Route<dynamic> route) => false);
       } else {

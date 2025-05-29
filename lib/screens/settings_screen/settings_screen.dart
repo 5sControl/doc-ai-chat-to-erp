@@ -26,6 +26,7 @@ import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 import '../subscribtions_screen/subscriptions_screen.dart';
 import '../summary_screen/info_modal/extension_modal.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ButtonItem {
   final String title;
@@ -106,7 +107,7 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressOurApps() async {
-      if (Platform.isIOS) {
+      if (!kIsWeb && Platform.isIOS) {
         final Uri url = Uri.parse(
             'https://apps.apple.com/ru/developer/english-in-games/id1656052466');
         if (!await launchUrl(url)) {}
@@ -387,7 +388,7 @@ class SettingsScreen extends StatelessWidget {
         leadingIcon: Assets.icons.chat,
         onTap: onPressFeedback,
       ),
-      if (Platform.isIOS)
+      if (!kIsWeb && Platform.isIOS)
         ButtonItem(
           title: 'Rate Summify',
           leadingIcon: Assets.icons.star,
@@ -441,7 +442,7 @@ class SettingsScreen extends StatelessWidget {
         leadingIcon: Assets.icons.setUp,
         onTap: onPressSetupShare,
       ),
-      if (Platform.isIOS)
+      if (!kIsWeb && Platform.isIOS)
         ButtonItem(
           title: 'Share this app',
           leadingIcon: Assets.icons.share,
@@ -455,7 +456,7 @@ class SettingsScreen extends StatelessWidget {
     ];
 
     final List<ButtonItem> supportGroup = [
-      if (Platform.isIOS)
+      if (!kIsWeb && Platform.isIOS)
         ButtonItem(
           title: 'Terms of use',
           leadingIcon: Assets.icons.terms,

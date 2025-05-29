@@ -32,10 +32,16 @@ import 'package:summify/themes/light_theme.dart';
 import 'bloc/subscriptions/subscriptions_bloc.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'screens/main_screen.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().initNotification();
+
+  if (kIsWeb){
+    runApp(const SummishareApp());
+  }
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -54,7 +60,7 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  if (Platform.isAndroid) {
+  if (!kIsWeb && Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
   //await HydratedBloc.storage.clear();
