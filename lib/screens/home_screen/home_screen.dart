@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:receive_sharing_intent_plus/receive_sharing_intent_plus.dart';
+// import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
@@ -27,8 +27,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
-  late StreamSubscription _intentMediaStreamSubscription;
-  late StreamSubscription _intentTextStreamSubscription;
+  // late StreamSubscription _intentMediaStreamSubscription;
+  // late StreamSubscription _intentTextStreamSubscription;
 
   final TextEditingController _searchController = TextEditingController();
   List<SummaryData> _allSummaries = [];
@@ -103,49 +103,58 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     //   }
     // });
 
-    _intentMediaStreamSubscription =
-        ReceiveSharingIntentPlus.getMediaStream().listen(
-      (List<SharedMediaFile> value) {
-        if (value.isNotEmpty) {
-          final fileName = value.first.path.split('/').last.toString();
-          final filePath = value.first.path.replaceFirst('file://', '');
-          getSummaryFromFile(filePath: filePath, fileName: fileName);
-        }
-      },
-      onError: (err) {
-        debugPrint('getIntentDataStream error: $err');
-      },
-    );
-    // For sharing images coming from outside the app while the app is closed
-    ReceiveSharingIntentPlus.getInitialMedia().then(
-      (List<SharedMediaFile> value) {
-        if (value.isNotEmpty) {
-          final fileName = value.first.path.split('/').last.toString();
-          final filePath = value.first.path.replaceFirst('file://', '');
-          Future.delayed(const Duration(seconds: 1), () {
-            getSummaryFromFile(filePath: filePath, fileName: fileName);
-          });
-        }
-      },
-    );
-    // For sharing or opening urls/text coming from outside the app while the app is in the memory
-    _intentTextStreamSubscription =
-        ReceiveSharingIntentPlus.getTextStream().listen(
-      (String value) {
-        getSummary(summaryUrl: value);
-      },
-      onError: (err) {
-        debugPrint('getLinkStream error: $err');
-      },
-    );
-    // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntentPlus.getInitialText().then((String? value) {
-      if (value != null) {
-        Future.delayed(const Duration(seconds: 1), () {
-          getSummary(summaryUrl: value);
-        });
-      }
-    });
+//Объяснение почему
+// 	•	Google (Android) и Apple (iOS) с Android 13/iOS 16 ужесточили политику по интентам и запретили большинство вариантов передачи “простого текста” между приложениями (особенно на фоне безопасности).
+// 	•	Большинство новых пакетов поддерживают только файлы (media/document sharing).
+// Как это работает в других приложениях (пример Telegram, WhatsApp, и т.д.)
+// 	•	Когда делишься “текстом”, приложение получает “text/plain”.
+// 	•	Когда делишься “файлом” (даже .txt), приложение получает файл, но это не считается “текстом” в интенте.
+
+    // _intentMediaStreamSubscription =
+    //     ReceiveSharingIntent.instance.getMediaStream().listen(
+    //   (List<SharedMediaFile> value) {
+    //     if (value.isNotEmpty) {
+    //       final fileName = value.first.path.split('/').last.toString();
+    //       final filePath = value.first.path.replaceFirst('file://', '');
+    //       getSummaryFromFile(filePath: filePath, fileName: fileName);
+    //     }
+    //   },
+    //   onError: (err) {
+    //     debugPrint('getIntentDataStream error: $err');
+    //   },
+    // );
+    // // For sharing images coming from outside the app while the app is closed
+    // ReceiveSharingIntent.instance.getInitialMedia().then(
+    //   (List<SharedMediaFile> value) {
+    //     if (value.isNotEmpty) {
+    //       final fileName = value.first.path.split('/').last.toString();
+    //       final filePath = value.first.path.replaceFirst('file://', '');
+    //       Future.delayed(const Duration(seconds: 1), () {
+    //         getSummaryFromFile(filePath: filePath, fileName: fileName);
+    //       });
+    //     }
+    //   },
+    // );
+
+    // // For sharing or opening urls/text coming from outside the app while the app is in the memory
+    // _intentTextStreamSubscription =
+    //     ReceiveSharingIntent.instance.getTextStreamLegacy().listen(
+    //   (String value) {
+    //     getSummary(summaryUrl: value);
+    //   },
+    //   onError: (err) {
+    //     debugPrint('getLinkStream error: $err');
+    //   },
+    // );
+    //
+    // // For sharing or opening urls/text coming from outside the app while the app is closed
+    // ReceiveSharingIntent.instance.getInitialTextLegacy().then((String? value) {
+    //   if (value != null) {
+    //     Future.delayed(const Duration(seconds: 1), () {
+    //       getSummary(summaryUrl: value);
+    //     });
+    //   }
+    // });
 
     if (context.read<SettingsBloc>().state.howToShowed == false) {
       // Future.delayed(const Duration(milliseconds: 2000), () {
@@ -174,8 +183,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    _intentMediaStreamSubscription.cancel();
-    _intentTextStreamSubscription.cancel();
+    // _intentMediaStreamSubscription.cancel();
+    // _intentTextStreamSubscription.cancel();
     _searchController.dispose();
     super.dispose();
   }

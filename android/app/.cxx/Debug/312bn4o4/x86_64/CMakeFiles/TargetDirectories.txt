@@ -1,0 +1,2 @@
+/Users/mac/easably/g/SummifyFlutter/android/app/.cxx/Debug/312bn4o4/x86_64/CMakeFiles/edit_cache.dir
+/Users/mac/easably/g/SummifyFlutter/android/app/.cxx/Debug/312bn4o4/x86_64/CMakeFiles/rebuild_cache.dir

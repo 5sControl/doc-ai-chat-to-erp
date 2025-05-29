@@ -15,7 +15,7 @@ class PurchasesService {
 
       late PurchasesConfiguration configuration;
       if (!kIsWeb && Platform.isAndroid) {
-        configuration = PurchasesConfiguration('');
+        configuration = PurchasesConfiguration('goog_ugQdxFfTdHeYrhnJzuBXhYIUtQM');
       } else if (!kIsWeb && Platform.isIOS) {
         configuration =
             PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');

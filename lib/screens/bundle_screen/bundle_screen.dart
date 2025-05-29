@@ -144,8 +144,33 @@ class _BundleScreenState extends State<BundleScreen>
       builder: (context, state) {
         // final abTest = context.read<SettingsBloc>().state.abTest;
 
-        List<Package> packages = List.from(state.availableProducts!
-            .all['Summify bundle access']!.availablePackages);
+        if (state.availableProducts == null ||
+            state.availableProducts!.all['Summify bundle access'] == null ||
+            state.availableProducts!.all['Summify bundle access']!.availablePackages.isEmpty) {
+          Future.microtask(() {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: Text('Ошибка'),
+                content: Text('Нет доступных подписок'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Ок'),
+                  ),
+                ],
+              ),
+            );
+          });
+          return Container();
+        }
+
+        List<Package> packages = List.from(
+          state.availableProducts!.all['Summify bundle access']!.availablePackages,
+        );
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 

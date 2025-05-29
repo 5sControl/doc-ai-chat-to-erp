@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:status_bar_control/status_bar_control.dart';
+// import 'package:status_bar_control/status_bar_control.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/library/library_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
@@ -117,21 +117,21 @@ class SummishareApp extends StatelessWidget {
             context.read<SubscriptionsBloc>().add(const InitSubscriptions());
 
             Future<void> setSystemColor() async {
-              if (settingsState.appTheme == AppTheme.dark) {
-                await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
-              }
-
-              if (settingsState.appTheme == AppTheme.light) {
-                await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
-              }
-
-              if (settingsState.appTheme == AppTheme.auto) {
-                if (brightness == Brightness.dark) {
-                  await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
-                } else {
-                  await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
-                }
-              }
+              // if (settingsState.appTheme == AppTheme.dark) {
+              //   await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+              // }
+              //
+              // if (settingsState.appTheme == AppTheme.light) {
+              //   await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+              // }
+              //
+              // if (settingsState.appTheme == AppTheme.auto) {
+              //   if (brightness == Brightness.dark) {
+              //     await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+              //   } else {
+              //     await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+              //   }
+              // }
             }
 
             setSystemColor();
