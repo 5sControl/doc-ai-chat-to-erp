@@ -47,7 +47,7 @@ final lightTheme = ThemeData(
         unselectedIconTheme: IconThemeData(size: 25)),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Color.fromRGBO(0, 186, 195, 1)),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       splashFactory: NoSplash.splashFactory,
       labelColor: Colors.black,
       labelStyle: TextStyle(
@@ -71,8 +71,8 @@ final lightTheme = ThemeData(
       focusedBorder: OutlineInputBorder(
         gapPadding: 10,
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(
-            width: 2, color: Color.fromRGBO(0, 186, 195, 1)),
+        borderSide:
+            const BorderSide(width: 2, color: Color.fromRGBO(0, 186, 195, 1)),
       ),
       filled: true,
       fillColor: const Color.fromRGBO(227, 255, 254, 1),
@@ -89,8 +89,8 @@ final lightTheme = ThemeData(
           borderSide: BorderSide.none),
     ),
     iconButtonTheme: const IconButtonThemeData(
-        style: ButtonStyle(
-            overlayColor: WidgetStatePropertyAll(Colors.white12))),
+        style:
+            ButtonStyle(overlayColor: WidgetStatePropertyAll(Colors.white12))),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(
           fontSize: 20,
