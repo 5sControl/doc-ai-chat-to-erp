@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -19,7 +18,6 @@ import '../summary_screen/summary_screen.dart';
 
 class SummaryTile extends StatefulWidget {
   final String sharedLink;
-  // final bool isNew;
 
   const SummaryTile({
     super.key,
@@ -37,9 +35,9 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    setState(() {
-      _notification = state;
-    });
+  setState(() {
+    _notification = state;
+  });
   }
 
   @override
@@ -93,9 +91,9 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                 widget.sharedLink);
       },
       builder: (context, state) {
-        final summaryData = state.summaries[widget.sharedLink]!;
+        final summaryData = state.summaries[widget.sharedLink];
         final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
-        final String formattedDate = formatter.format(summaryData.date);
+        final String formattedDate = formatter.format(summaryData!.date);
 
         void onPressDelete() {
           context
@@ -151,12 +149,12 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
               contentPadding:
                   const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
               title: SizedBox(
-                height: 80,
+                height: 85,
                 child: AspectRatio(
                   aspectRatio: 3.5,
                   child: Material(
                     borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).primaryColor.withOpacity(0.2),
+                    color: const Color.fromRGBO(187, 247, 247, 1),
                     child: InkWell(
                       splashFactory: InkSplash.splashFactory,
                       highlightColor:
@@ -206,26 +204,32 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    summaryData.summaryPreview.title ??
-                                        widget.sharedLink
-                                            .replaceAll('https://', ''),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .displayMedium,
+                                  Container(
+                                    width: MediaQuery.of(context).size.shortestSide < 550 ? double.infinity : 700,
+                                    child: Text(
+                                      summaryData.summaryPreview.title ??
+                                          widget.sharedLink
+                                              .replaceAll('https://', ''),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayMedium?.copyWith(color: Colors.black),  
+                                          
+                                    ),
                                   ),
+                                  SizedBox(height:3,),
                                   Text(
                                     formattedDate,
                                     overflow: TextOverflow.ellipsis,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .displaySmall,
+                                        .displaySmall?.copyWith(color: Colors.black), 
                                   ),
                                   ErrorMessage(
                                     summaryData: summaryData,
                                   ),
+                                  SizedBox(height:5,),
                                   Loader(
                                       onPressCancel: onPressCancel,
                                       summaryData: summaryData)
@@ -243,6 +247,7 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                   ),
                 ),
               ),
+              
             ),
           );
         });
@@ -413,7 +418,7 @@ class _LoaderState extends State<Loader> {
           children: [
             Flexible(
               child: Container(
-                height: 10,
+                height: 7,
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                     color: Colors.teal.withOpacity(0.2),
@@ -424,8 +429,9 @@ class _LoaderState extends State<Loader> {
                 ),
               ),
             ),
+            const SizedBox(width: 10,),
             Text('${loadingText[textIndex]}    ',
-                    style: const TextStyle(fontSize: 12, height: 1))
+                    style: const TextStyle(fontSize: 12, height: 2, color: Colors.black))
                 .animate()
                 .custom(
                     duration: 300.ms,

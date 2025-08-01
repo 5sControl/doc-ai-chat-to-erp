@@ -10,13 +10,15 @@ class HappyBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const dur = Duration(milliseconds: 200);
-    const w = 130.0;
-    const h = 130.0;
+    final w =MediaQuery.of(context).size.shortestSide <
+                                            600 ? 120.0 : 200.0;
+    final h = MediaQuery.of(context).size.shortestSide <
+                                            600 ? 120.0 : 200.0;
 
     return Stack(
       children: [
         Positioned(
-                bottom: MediaQuery.of(context).padding.bottom + 40,
+                bottom: 40,
                 right: 20,
                 child: SvgPicture.asset(
                   Assets.happyBox,
@@ -29,7 +31,7 @@ class HappyBox extends StatelessWidget {
             .moveY(begin: 0, end: 10, duration: dur)
             .moveY(begin: 0, end: -10, duration: dur, delay: dur),
         Positioned(
-                bottom: MediaQuery.of(context).padding.bottom + 40,
+                bottom: 40,
                 right: 20,
                 child: SvgPicture.asset(
                   Assets.happyBoxLeftHand,
@@ -54,7 +56,7 @@ class HappyBox extends StatelessWidget {
                 delay: dur,
                 duration: dur),
         Positioned(
-                bottom: MediaQuery.of(context).padding.bottom + 40,
+                bottom: 40,
                 right: 20,
                 child: SvgPicture.asset(
                   Assets.happyBoxRightHand,
@@ -79,7 +81,7 @@ class HappyBox extends StatelessWidget {
                 delay: dur,
                 duration: dur),
         Positioned(
-            bottom: MediaQuery.of(context).padding.bottom + 30,
+            bottom:  30,
             right: 20,
             child: SvgPicture.asset(
               Assets.happyBoxFloor,

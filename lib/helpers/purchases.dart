@@ -1,23 +1,31 @@
 import 'dart:io' show Platform;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 class PurchasesService {
+  User? user = FirebaseAuth.instance.currentUser;
   Future<void> initPlatformState() async {
-    await Purchases.setLogLevel(LogLevel.debug);
 
-    late PurchasesConfiguration configuration;
+    if (!kIsWeb) {
+      Purchases.setLogLevel(LogLevel.debug);
 
-    if (Platform.isAndroid) {
-      configuration = PurchasesConfiguration('');
-    } else if (Platform.isIOS) {
-      configuration =
-          PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');
+      late PurchasesConfiguration configuration;
+      if (!kIsWeb && Platform.isAndroid) {
+        configuration = PurchasesConfiguration('goog_ugQdxFfTdHeYrhnJzuBXhYIUtQM');
+      } else if (!kIsWeb && Platform.isIOS) {
+        configuration =
+            PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');
+      }
+      await Purchases.configure(configuration..appUserID = user?.uid);
     }
-
-    await Purchases.configure(configuration);
-  }
+    else {
+      print('Purchases SDK is not supported on Web.');
+    }
+   }
 
   Future<Offerings?> getProducts() async {
     try {

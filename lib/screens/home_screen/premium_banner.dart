@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/bloc/offers/offers_event.dart';
+import 'package:summify/screens/bundle_screen/bundle_screen.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 
 import '../../gen/assets.gen.dart';
 import '../subscribtions_screen/subscriptions_screen.dart';
@@ -13,18 +18,26 @@ class PremiumBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressPremiumBanner() {
-      showCupertinoModalBottomSheet(
-        context: context,
-        expand: false,
-        bounce: false,
-        barrierColor: Colors.black54,
-        backgroundColor: Colors.transparent,
-        builder: (context) {
-          return const SubscriptionScreen(
-            fromOnboarding: true,
-            triggerScreen: 'Home',
-          );
-        },
+      context.read<OffersBloc>().add(NextScreenEvent());
+      // showCupertinoModalBottomSheet(
+      //   context: context,
+      //   expand: false,
+      //   bounce: false,
+      //   barrierColor: Colors.black54,
+      //   backgroundColor: Colors.transparent,
+      //   builder: (context) {
+      //     return const BundleScreen(
+      //       fromOnboarding: true,
+      //       triggerScreen: 'Home',
+      //     );
+      //   },
+      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const BundleScreen(
+                  triggerScreen: 'Home',
+                )),
       );
     }
 
@@ -33,10 +46,10 @@ class PremiumBanner extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 6),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
             gradient: const LinearGradient(colors: [
-              Color.fromRGBO(254, 205, 103, 1),
-              Color.fromRGBO(251, 171, 14, 1)
+              Color.fromRGBO(255, 238, 90, 1),
+              Color.fromRGBO(255, 208, 74, 1)
             ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +69,7 @@ class PremiumBanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Become Super Premium',
+                    'Break free from limits! ',
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontWeight: FontWeight.w600, color: Colors.black),
                   ),
@@ -70,19 +83,19 @@ class PremiumBanner extends StatelessWidget {
                                   color: Colors.black,
                                   fontSize: 14),
                           children: [
-                        const TextSpan(text: 'Get on '),
-                        WidgetSpan(
-                            child: DecoratedBox(
-                              decoration: const BoxDecoration(boxShadow: [
-                                BoxShadow(color: Colors.black12, blurRadius: 5)
-                              ]),
-                              child: SvgPicture.asset(
-                                Assets.icons.chrome,
-                                width: 20,
-                              ),
-                            ),
-                            alignment: PlaceholderAlignment.middle),
-                        const TextSpan(text: ' for free!'),
+                        const TextSpan(text: '2 apps for free! '),
+                        // WidgetSpan(
+                        //     child: DecoratedBox(
+                        //       decoration: const BoxDecoration(boxShadow: [
+                        //         BoxShadow(color: Colors.black12, blurRadius: 5)
+                        //       ]),
+                        //       child: SvgPicture.asset(
+                        //         Assets.icons.chrome,
+                        //         width: 20,
+                        //       ),
+                        //     ),
+                        //     alignment: PlaceholderAlignment.middle),
+                        //const TextSpan(text: ' for free!'),
                       ]))
                 ],
               ),

@@ -5,12 +5,12 @@ final darkTheme = ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: Colors.transparent,
     brightness: Brightness.dark,
-    primaryColor: const Color.fromRGBO(30, 188, 183, 1),
+    primaryColor: const Color.fromRGBO(0, 186, 195, 1),
     primaryColorDark: const Color.fromRGBO(25, 154, 151, 1),
     primaryColorLight: const Color.fromRGBO(227, 255, 254, 1),
     canvasColor: const Color.fromRGBO(5, 49, 57, 1),
-    highlightColor:  const Color.fromRGBO(5, 49, 57, 1),
-    hintColor:const Color.fromRGBO(227, 255, 254, 1) ,
+    highlightColor: const Color.fromRGBO(5, 49, 57, 1),
+    hintColor: Color.fromRGBO(0, 186, 195, 1),
     checkboxTheme: const CheckboxThemeData(
       side: BorderSide(
           width: 1,
@@ -47,7 +47,7 @@ final darkTheme = ThemeData(
         unselectedIconTheme: IconThemeData(size: 25)),
     floatingActionButtonTheme:
         const FloatingActionButtonThemeData(backgroundColor: Colors.teal),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       splashFactory: NoSplash.splashFactory,
       labelColor: Colors.black,
       labelStyle: TextStyle(
@@ -92,7 +92,11 @@ final darkTheme = ThemeData(
         style: ButtonStyle(
             overlayColor: MaterialStatePropertyAll(Colors.white12))),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(fontSize: 20, color: Colors.white, height: 2, fontWeight: FontWeight.w600),
+      bodyLarge: TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+          height: 2,
+          fontWeight: FontWeight.w600),
       bodyMedium: TextStyle(fontSize: 18, color: Colors.white),
       bodySmall: TextStyle(fontSize: 14, color: Colors.white),
       labelMedium: TextStyle(

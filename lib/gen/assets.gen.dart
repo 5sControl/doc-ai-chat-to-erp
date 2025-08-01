@@ -141,6 +141,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/delete.svg
   String get delete => 'assets/icons/delete.svg';
 
+  /// File path: assets/icons/delete_account.svg
+  String get deleteAccount => 'assets/icons/delete_account.svg';
+
   /// File path: assets/icons/desctop.svg
   String get desctop => 'assets/icons/desctop.svg';
 
@@ -171,8 +174,14 @@ class $AssetsIconsGen {
   /// File path: assets/icons/like.svg
   String get like => 'assets/icons/like.svg';
 
+  /// File path: assets/icons/login.svg
+  String get login => 'assets/icons/login.svg';
+
   /// File path: assets/icons/logo.svg
   String get logo => 'assets/icons/logo.svg';
+
+  /// File path: assets/icons/logout.svg
+  String get logout => 'assets/icons/logout.svg';
 
   /// File path: assets/icons/mini_dislike.svg
   String get miniDislike => 'assets/icons/mini_dislike.svg';
@@ -198,17 +207,29 @@ class $AssetsIconsGen {
   /// File path: assets/icons/play.svg
   String get play => 'assets/icons/play.svg';
 
+  /// File path: assets/icons/plus.svg
+  String get plus => 'assets/icons/plus.svg';
+
+  /// File path: assets/icons/present.svg
+  String get present => 'assets/icons/present.svg';
+
   /// File path: assets/icons/privacy.svg
   String get privacy => 'assets/icons/privacy.svg';
 
   /// File path: assets/icons/profile.svg
   String get profile => 'assets/icons/profile.svg';
 
+  /// File path: assets/icons/profile_circle.svg
+  String get profileCircle => 'assets/icons/profile_circle.svg';
+
   /// File path: assets/icons/profile_filled.svg
   String get profileFilled => 'assets/icons/profile_filled.svg';
 
   /// File path: assets/icons/restore.svg
   String get restore => 'assets/icons/restore.svg';
+
+  /// File path: assets/icons/send.svg
+  String get send => 'assets/icons/send.svg';
 
   /// File path: assets/icons/set_up.svg
   String get setUp => 'assets/icons/set_up.svg';
@@ -225,6 +246,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/summafy_mini.svg
   String get summafyMini => 'assets/icons/summafy_mini.svg';
 
+  /// File path: assets/icons/summify_logo.svg
+  String get summifyLogo => 'assets/icons/summify_logo.svg';
+
   /// File path: assets/icons/terms.svg
   String get terms => 'assets/icons/terms.svg';
 
@@ -236,6 +260,12 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/theme.svg
   String get theme => 'assets/icons/theme.svg';
+
+  /// File path: assets/icons/transcriptor1.svg
+  String get transcriptor1 => 'assets/icons/transcriptor1.svg';
+
+  /// File path: assets/icons/transcriptor2.svg
+  String get transcriptor2 => 'assets/icons/transcriptor2.svg';
 
   /// File path: assets/icons/translate.svg
   String get translate => 'assets/icons/translate.svg';
@@ -259,6 +289,7 @@ class $AssetsIconsGen {
         crown,
         danger,
         delete,
+        deleteAccount,
         desctop,
         discount,
         file,
@@ -269,7 +300,9 @@ class $AssetsIconsGen {
         i,
         info,
         like,
+        login,
         logo,
+        logout,
         miniDislike,
         miniLike,
         noImage,
@@ -278,19 +311,26 @@ class $AssetsIconsGen {
         paste,
         phone,
         play,
+        plus,
+        present,
         privacy,
         profile,
+        profileCircle,
         profileFilled,
         restore,
+        send,
         setUp,
         settings,
         share,
         star,
         summafyMini,
+        summifyLogo,
         terms,
         text,
         textScale,
         theme,
+        transcriptor1,
+        transcriptor2,
         translate,
         update,
         url
@@ -308,6 +348,10 @@ class $AssetsLibraryGen {
   AssetGenImage get atomicHabits =>
       const AssetGenImage('assets/library/atomicHabits.jpeg');
 
+  /// File path: assets/library/designingYourLife.jpeg
+  AssetGenImage get designingYourLife =>
+      const AssetGenImage('assets/library/designingYourLife.jpeg');
+
   /// File path: assets/library/doTheWork.jpeg
   AssetGenImage get doTheWork =>
       const AssetGenImage('assets/library/doTheWork.jpeg');
@@ -316,22 +360,93 @@ class $AssetsLibraryGen {
   AssetGenImage get extremeProductivity =>
       const AssetGenImage('assets/library/extremeProductivity.jpeg');
 
+  /// File path: assets/library/gettingComfy.jpeg
+  AssetGenImage get gettingComfy =>
+      const AssetGenImage('assets/library/gettingComfy.jpeg');
+
+  /// File path: assets/library/goodVibes.jpeg
+  AssetGenImage get goodVibes =>
+      const AssetGenImage('assets/library/goodVibes.jpeg');
+
+  /// File path: assets/library/howSuccessful.jpeg
+  AssetGenImage get howSuccessful =>
+      const AssetGenImage('assets/library/howSuccessful.jpeg');
+
+  /// File path: assets/library/howToBe.jpeg
+  AssetGenImage get howToBe =>
+      const AssetGenImage('assets/library/howToBe.jpeg');
+
+  /// File path: assets/library/learnOrDie.jpeg
+  AssetGenImage get learnOrDie =>
+      const AssetGenImage('assets/library/learnOrDie.jpeg');
+
+  /// File path: assets/library/maximizeYourPotential.jpeg
+  AssetGenImage get maximizeYourPotential =>
+      const AssetGenImage('assets/library/maximizeYourPotential.jpeg');
+
   /// File path: assets/library/notGivingAFuck.jpeg
   AssetGenImage get notGivingAFuck =>
       const AssetGenImage('assets/library/notGivingAFuck.jpeg');
+
+  /// File path: assets/library/startSomethingThatMatters.jpeg
+  AssetGenImage get startSomethingThatMatters =>
+      const AssetGenImage('assets/library/startSomethingThatMatters.jpeg');
+
+  /// File path: assets/library/successAndLuck.jpeg
+  AssetGenImage get successAndLuck =>
+      const AssetGenImage('assets/library/successAndLuck.jpeg');
+
+  /// File path: assets/library/the7Habits.jpeg
+  AssetGenImage get the7Habits =>
+      const AssetGenImage('assets/library/the7Habits.jpeg');
+
+  /// File path: assets/library/theCharge.jpeg
+  AssetGenImage get theCharge =>
+      const AssetGenImage('assets/library/theCharge.jpeg');
 
   /// File path: assets/library/unlimited_memory.jpeg
   AssetGenImage get unlimitedMemory =>
       const AssetGenImage('assets/library/unlimited_memory.jpeg');
 
+  /// File path: assets/library/whatColorIs.jpeg
+  AssetGenImage get whatColorIs =>
+      const AssetGenImage('assets/library/whatColorIs.jpeg');
+
+  /// File path: assets/library/whatGotYouHere.jpeg
+  AssetGenImage get whatGotYouHere =>
+      const AssetGenImage('assets/library/whatGotYouHere.jpeg');
+
+  /// File path: assets/library/whereverYouGo.jpeg
+  AssetGenImage get whereverYouGo =>
+      const AssetGenImage('assets/library/whereverYouGo.jpeg');
+
+  /// File path: assets/library/worksWellWithOthers.jpeg
+  AssetGenImage get worksWellWithOthers =>
+      const AssetGenImage('assets/library/worksWellWithOthers.jpeg');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         a13Things,
         atomicHabits,
+        designingYourLife,
         doTheWork,
         extremeProductivity,
+        gettingComfy,
+        goodVibes,
+        howSuccessful,
+        howToBe,
+        learnOrDie,
+        maximizeYourPotential,
         notGivingAFuck,
-        unlimitedMemory
+        startSomethingThatMatters,
+        successAndLuck,
+        the7Habits,
+        theCharge,
+        unlimitedMemory,
+        whatColorIs,
+        whatGotYouHere,
+        whereverYouGo,
+        worksWellWithOthers
       ];
 }
 
@@ -345,11 +460,19 @@ class $AssetsOnboardingGen {
   AssetGenImage get onb11 =>
       const AssetGenImage('assets/onboarding/onb1_1.png');
 
+  /// File path: assets/onboarding/onb1_1_dark.png
+  AssetGenImage get onb11Dark =>
+      const AssetGenImage('assets/onboarding/onb1_1_dark.png');
+
   /// File path: assets/onboarding/onb2.png
   AssetGenImage get onb2 => const AssetGenImage('assets/onboarding/onb2.png');
 
+  /// File path: assets/onboarding/onb2_dark.png
+  AssetGenImage get onb2Dark =>
+      const AssetGenImage('assets/onboarding/onb2_dark.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [onb1, onb11, onb2];
+  List<AssetGenImage> get values => [onb1, onb11, onb11Dark, onb2, onb2Dark];
 }
 
 class $AssetsSetUpGen {
@@ -419,6 +542,16 @@ class Assets {
   static const AssetGenImage placeholderLogo =
       AssetGenImage('assets/placeholder_logo.png');
   static const $AssetsSetUpGen setUp = $AssetsSetUpGen();
+  static const AssetGenImage subscriptionMen =
+      AssetGenImage('assets/subscription_men.png');
+  static const AssetGenImage subscriptionMenLight =
+      AssetGenImage('assets/subscription_men_light.png');
+  static const AssetGenImage subscriptionWoman =
+      AssetGenImage('assets/subscription_woman.png');
+  static const AssetGenImage subscriptionWoman1 =
+      AssetGenImage('assets/subscription_woman_1.png');
+  static const AssetGenImage subscriptionWomanLight =
+      AssetGenImage('assets/subscription_woman_light.png');
 
   /// List of all assets
   static List<dynamic> get values => [
@@ -431,14 +564,26 @@ class Assets {
         happyBoxLeftHand,
         happyBoxRightHand,
         niga,
-        placeholderLogo
+        placeholderLogo,
+        subscriptionMen,
+        subscriptionMenLight,
+        subscriptionWoman,
+        subscriptionWoman1,
+        subscriptionWomanLight
       ];
 }
 
 class AssetGenImage {
-  const AssetGenImage(this._assetName);
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+  });
 
   final String _assetName;
+
+  final Size? size;
+  final Set<String> flavors;
 
   Image image({
     Key? key,

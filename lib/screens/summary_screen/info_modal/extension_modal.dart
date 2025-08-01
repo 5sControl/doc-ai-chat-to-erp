@@ -100,14 +100,16 @@ class _ExtensionModalState extends State<ExtensionModal> {
       child: Scaffold(
         body: Center(
           child: Container(
-            width: double.infinity,
+            width:MediaQuery.of(context).size.shortestSide <
+                                            600 ?double.infinity : 343,
             margin: const EdgeInsets.all(15),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
                 borderRadius: BorderRadius.circular(10)),
             child: SizedBox(
-              width: double.infinity,
+              width:MediaQuery.of(context).size.shortestSide <
+                                           600 ?double.infinity : 343,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -333,25 +335,38 @@ class EmailField extends StatelessWidget {
 }
 
 class BackArrow extends StatelessWidget {
-  const BackArrow({super.key});
+  final bool? fromOnboarding;
+  const BackArrow({super.key, this.fromOnboarding});
 
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      Navigator.of(context).pop();
+      if (fromOnboarding != null) {
+        Navigator.of(context).pushNamed('/');
+        context.read<MixpanelBloc>().add(const ClosePaywall());
+      } else {
+        Navigator.of(context).pop();
+      }
     }
 
     return IconButton(
         visualDensity: VisualDensity.compact,
         onPressed: onPressClose,
         style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+              ),
+            ),
             backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0.2))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
         icon: Icon(
           Icons.close,
-          size: 20,
+          size: 18,
           color: Theme.of(context).iconTheme.color,
         ));
   }

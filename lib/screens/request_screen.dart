@@ -57,9 +57,10 @@ class _RequestScreenState extends State<RequestScreen> {
   void onPressSubmit() async {
     if (!emailError && emailController.value.text.isNotEmpty) {
       final res = await SummaryRepository().sendFeature(
-          getMoreSummaries: selectedOptions.contains('I need more summaries'),
-          addTranslation: selectedOptions.contains('Summary translation'),
-          askAQuestions: selectedOptions.contains('AI summary chat'),
+          getMoreSummaries: selectedOptions.contains('Secure summarization'),
+          addTranslation: selectedOptions.contains('Read my book'),
+          askAQuestions: selectedOptions.contains('Speech to text feature'),
+          readBook: selectedOptions.contains('Text to speech feature'),
           addLang: selectedOptions.contains('Add language')
               ? selectedLang
               : 'Not selected',
@@ -101,9 +102,10 @@ class _RequestScreenState extends State<RequestScreen> {
   @override
   Widget build(BuildContext context) {
     final List<String> options = [
-      'I need more summaries',
-      'Summary translation',
-      'AI summary chat',
+      'Secure summarization',
+      'Read my book',
+      'Speech to text feature',
+      'Text to speech feature',
       'Add language'
     ];
 
@@ -175,7 +177,9 @@ class _RequestScreenState extends State<RequestScreen> {
                       ),
                       const Spacer(),
                       ConfirmButton(
-                          onPressSubmit: onPressSubmit, emailError: emailError)
+                          onPressSubmit: onPressSubmit, emailError: emailError),
+                      SizedBox(height:MediaQuery.of(context).size.shortestSide <
+                                            600 ? 10 : 40,)
                     ],
                   ),
                 ),
@@ -252,7 +256,7 @@ class ConfirmButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).hintColor,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: InkWell(
         highlightColor:
@@ -303,7 +307,7 @@ class OptionContainer extends StatelessWidget {
           ),
           Text(
             title,
-            style: Theme.of(context).textTheme.labelMedium,
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
           ),
           // Spacer(),
           const SizedBox(
@@ -353,7 +357,7 @@ class _LanguagesDropdownState extends State<LanguagesDropdown> {
             overflow: TextOverflow.visible,
             maxLines: 1,
             style: Theme.of(context).textTheme.labelSmall),
-        menuMaxHeight: 300,
+        menuMaxHeight: 100,
         padding: EdgeInsets.zero,
         style: Theme.of(context).textTheme.labelSmall,
         // underline: Divider(),

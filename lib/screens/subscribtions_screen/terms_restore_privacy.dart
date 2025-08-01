@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class TermsRestorePrivacy extends StatelessWidget {
   const TermsRestorePrivacy({super.key});
@@ -27,12 +28,11 @@ class TermsRestorePrivacy extends StatelessWidget {
 
     return Row(
       children: [
-        if (Platform.isIOS)
+        if (!kIsWeb && Platform.isIOS)
           Expanded(
             child: TextButton(
               onPressed: onPressTerms,
-              style: const ButtonStyle(
-                  padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+              
               child: Text(
                 'Terms of use',
                 style: TextStyle(
@@ -47,7 +47,7 @@ class TermsRestorePrivacy extends StatelessWidget {
           child: TextButton(
             onPressed: onPressRestore,
             style: const ButtonStyle(
-                padding: MaterialStatePropertyAll(EdgeInsets.zero)),
+                  padding: WidgetStatePropertyAll(EdgeInsets.zero)),
             child: Text(
               'Restore purchase',
               style: TextStyle(
@@ -58,12 +58,10 @@ class TermsRestorePrivacy extends StatelessWidget {
             ),
           ),
         ),
-        if (Platform.isIOS)
+        if (!kIsWeb && Platform.isIOS)
           Expanded(
             child: TextButton(
               onPressed: onPressPrivacy,
-              style: const ButtonStyle(
-                  padding: MaterialStatePropertyAll(EdgeInsets.zero)),
               child: Text(
                 'Privacy policy',
                 style: TextStyle(

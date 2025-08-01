@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"ios":{"default":{"projectId":"elang-extension-prod","appId":"1:1006377902393:ios:fd582328a6ff1a26d308e8","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"elang-extension-prod","configurations":{"ios":"1:1006377902393:ios:fd582328a6ff1a26d308e8"}}}}}}

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
+import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 
 part 'mixpanel_event.dart';
 part 'mixpanel_state.dart';
@@ -38,6 +39,24 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
             : subscriptionBLink
       });
     });
+    on<SubScreenLimShow>((event, emit) {
+      mixpanel.track('Subscription screen show', properties: {
+        'Trigger': event.trigger,
+        "Screen": event.screen,
+      });
+    });
+    on<BundleScreenLimShow>((event, emit) {
+      mixpanel.track('Bundle screen from settings show', properties: {
+        'Trigger': event.trigger,
+        "Screen": event.screen,
+      });
+    });
+    on<BundleScreenLim1Show>((event, emit) {
+      mixpanel.track('Bundle screen from onboarding show', properties: {
+        'Trigger': event.trigger,
+        "Screen": event.screen,
+      });
+    });
     on<ActivateSubscription>((event, emit) {
       mixpanel.track('Activate subscription', properties: {
         'Subscription': event.plan,
@@ -59,7 +78,15 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
     on<SelectOption>((event, emit) {
       mixpanel.track('Select option', properties: {'Option': event.option});
     });
-
+    on<Summify>((event, emit) {
+      mixpanel.track('Summify', properties: {'Option': event.option});
+    });
+    on<SummifyError>((event, emit) {
+      mixpanel.track('Summify', properties: {'Option': event.option});
+    });
+    on<SummifySuccess>((event, emit) {
+      mixpanel.track('Summify', properties: {'Option': event.option});
+    });
     on<OpenSummary>((event, emit) {
       mixpanel.track('Open summary');
     });

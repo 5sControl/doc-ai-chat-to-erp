@@ -19,7 +19,7 @@ Map<String, dynamic> _$SummaryPreviewToJson(SummaryPreview instance) =>
     };
 
 Summary _$SummaryFromJson(Map<String, dynamic> json) => Summary(
-      contextLength: json['contextLength'] as int?,
+      contextLength: (json['contextLength'] as num?)?.toInt(),
       summaryText: json['summaryText'] as String?,
       summaryError: json['summaryError'] as String?,
     );
