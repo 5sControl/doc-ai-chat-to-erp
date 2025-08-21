@@ -1,0 +1,710 @@
+{
+	"info": {
+		"_postman_id": "f59fd36b-7c02-4d13-92bc-5d758c5868ce",
+		"name": "doc-ai-chat-to-erp Integration Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17266953"
+	},
+	"item": [
+		{
+			"name": "Summary from Link/Text",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has summary field\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.property('summary');",
+							"    pm.expect(response).to.have.property('context_length');",
+							"});",
+							"",
+							"pm.test(\"Summary is not empty\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.summary).to.not.be.empty;",
+							"});",
+							"",
+							"// Store response for other tests",
+							"if (pm.response.code === 200) {",
+							"    const response = pm.response.json();",
+							"    pm.environment.set(\"last_summary\", response.summary);",
+							"    pm.environment.set(\"last_context_length\", response.context_length);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"\",\n  \"context\": \"In recent years, the rapid advancement of artificial intelligence (AI) has fundamentally transformed various industries and aspects of daily life. From healthcare and financial services to transportation and entertainment, AI technologies have been integrated into numerous applications, leading to increased efficiency, improved decision-making, and new opportunities for innovation. For example, AI-powered diagnostic tools help doctors detect diseases earlier, while automated financial algorithms support investment strategies. However, these developments also raise concerns related to privacy, ethics, and job displacement, prompting a growing need for balanced regulation and responsible AI deployment. As AI continues to evolve, collaboration between technologists, policymakers, and society at large will be crucial for harnessing its benefits while mitigating risks. The future promises an era where AI enhances human capabilities and contributes to solving some of the world’s most pressing challenges.\",\n  \"type_summary\": \"short\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_ai}}/summarizer/application_by_summarize/",
+					"host": [
+						"{{base_url_ai}}"
+					],
+					"path": [
+						"summarizer",
+						"application_by_summarize",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "File Upload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has summary field\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.property('summary');",
+							"    pm.expect(response).to.have.property('context_length');",
+							"});",
+							"",
+							"pm.test(\"File processing successful\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.summary).to.not.be.empty;",
+							"    pm.expect(response.context_length).to.be.a('number');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "postman-cloud:///1f077579-4ef8-42b0-a60c-c316a5b186ea"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url_ai}}/summarizer/application_by_summarize/uploadfile/?type_summary=long",
+					"host": [
+						"{{base_url_ai}}"
+					],
+					"path": [
+						"summarizer",
+						"application_by_summarize",
+						"uploadfile",
+						""
+					],
+					"query": [
+						{
+							"key": "type_summary",
+							"value": "long"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Translation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has translated_text field\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.property('translated_text');",
+							"});",
+							"",
+							"pm.test(\"Translation is not empty\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.translated_text).to.not.be.empty;",
+							"});",
+							"",
+							"pm.test(\"Translation is different from original\", function () {",
+							"    const response = pm.response.json();",
+							"    const originalText = pm.request.body.raw;",
+							"    const originalJson = JSON.parse(originalText);",
+							"    pm.expect(response.translated_text).to.not.equal(originalJson.text);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"text\": \"Hello, how are you today?\",\n  \"language\": \"es\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_ai}}/ai-translator/ai-translator/translate-to/",
+					"host": [
+						"{{base_url_ai}}"
+					],
+					"path": [
+						"ai-translator",
+						"ai-translator",
+						"translate-to",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Question/Research",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has answer field\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.have.property('answer');",
+							"});",
+							"",
+							"pm.test(\"Answer is not empty\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response.answer).to.not.be.empty;",
+							"});",
+							"",
+							"pm.test(\"Answer is relevant to question\", function () {",
+							"    const response = pm.response.json();",
+							"    const requestBody = JSON.parse(pm.request.body.raw);",
+							"    pm.expect(response.answer.length).to.be.greaterThan(10);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"url\": \"\",\n  \"user_query\": \"What are the key benefits and challenges of artificial intelligence mentioned in the text?\",\n  \"context\": \"Artificial intelligence (AI) has rapidly evolved over the last decade, fundamentally changing the way businesses and societies operate. In sectors like healthcare, AI assists in detecting diseases earlier and personalizing patient treatment plans, which improves health outcomes. In transportation, AI powers autonomous vehicles and optimizes traffic flows, reducing congestion and accidents. Educational platforms leverage AI to provide adaptive learning experiences based on students' needs, increasing engagement and retention. Despite these benefits, AI technology poses challenges, including concerns about data privacy, potential job displacement due to automation, and the ethical implications of bias in AI algorithms. Ensuring transparency and fairness, as well as developing appropriate legal frameworks, is essential to maximize AI's positive impact while minimizing its risks. Collaboration among researchers, policymakers, and industry stakeholders will shape the future role of AI in society, aiming to unlock innovation, productivity, and equitable opportunities for all.\",\n  \"type_summary\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_ai}}/summarizer/application_by_summarize/",
+					"host": [
+						"{{base_url_ai}}"
+					],
+					"path": [
+						"summarizer",
+						"application_by_summarize",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rate/Review",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Review submitted successfully\", function () {",
+							"    // This endpoint might return empty response or success message",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"comment\": \"Great summary, very helpful!\",\n  \"device\": \"iPhone 14\",\n  \"grade\": 5,\n  \"summary\": \"This is the summary text that was generated\",\n  \"source\": \"https://en.wikipedia.org/wiki/Artificial_intelligence\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_ai}}/django-api/applications/reviews/",
+					"host": [
+						"{{base_url_ai}}"
+					],
+					"path": [
+						"django-api",
+						"applications",
+						"reviews",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Feature Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Feature request submitted successfully\", function () {",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"getMoreSummaries\": true,\n  \"addTranslation\": false,\n  \"askAQuestions\": true,\n  \"readBook\": false,\n  \"addLang\": \"French\",\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"message\": \"I would like to see more summary options and better question handling.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_ai}}/django-api/applications/function-reports/",
+					"host": [
+						"{{base_url_ai}}"
+					],
+					"path": [
+						"django-api",
+						"applications",
+						"function-reports",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Email Subscription",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Email subscription successful\", function () {",
+							"    pm.expect(pm.response.code).to.equal(201);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"user@example.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_easy4learn}}/django-api/applications/email/",
+					"host": [
+						"{{base_url_easy4learn}}"
+					],
+					"path": [
+						"django-api",
+						"applications",
+						"email",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Test User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"",
+							"pm.test(\"User is created and idToken received\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"idToken\");",
+							"    pm.expect(jsonData).to.have.property(\"email\");",
+							"});",
+							"",
+							"if (jsonData.idToken) {",
+							"    pm.environment.set(\"idToken\", jsonData.idToken);",
+							"}",
+							"if (jsonData.email) {",
+							"    pm.environment.set(\"user_email\", jsonData.email);",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function generateRandomEmail() {",
+							"    const random = Math.floor(Math.random() * 100000);",
+							"    return `user_${random}@example.com`;",
+							"}",
+							"pm.environment.set(\"user_email\", generateRandomEmail());",
+							"pm.environment.set(\"user_password\", \"just4Taqtile\");",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\",\n  \"returnSecureToken\": true\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDyYcP1OKozHwEKT9zCYoF3ydnxwpuiXsE",
+					"protocol": "https",
+					"host": [
+						"identitytoolkit",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"v1",
+						"accounts:signUp"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "AIzaSyDyYcP1OKozHwEKT9zCYoF3ydnxwpuiXsE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Subscription",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Subscription response validation\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"id\");",
+							"    pm.expect(jsonData).to.have.property(\"name\", \"Annual Bundle Subscription 2\");",
+							"    pm.expect(jsonData).to.have.property(\"duration\", \"year\");",
+							"    pm.expect(jsonData).to.have.property(\"isFinished\", false);",
+							"    pm.expect(new Date(jsonData.startDate)).to.be.a('date');",
+							"    pm.expect(new Date(jsonData.endDate)).to.be.a('date');",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{idToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"productStoreId\": \"SummifyAnnualBundleSubscription\",\n  \"purchaseToken\": \"test_purchase_token_123\",\n  \"platform\": \"ios\",\n  \"bundleId\": \"com.englishingames.summiShare\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_easy4learn}}/api/v1/users/subscriptions",
+					"host": [
+						"{{base_url_easy4learn}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"subscriptions"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bundle Info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    const response = pm.response.json();",
+							"    pm.expect(response).to.be.an('array');",
+							"});",
+							"",
+							"pm.test(\"Bundle info contains required fields\", function () {",
+							"    const response = pm.response.json();",
+							"    if (response.length > 0) {",
+							"        const bundle = response[0];",
+							"        pm.expect(bundle).to.have.property('productStoreId');",
+							"        pm.expect(bundle).to.have.property('duration');",
+							"        pm.expect(bundle).to.have.property('isFinished');",
+							"    }",
+							"});",
+							"",
+							"// Store bundle info for other tests",
+							"if (pm.response.code === 200) {",
+							"    const response = pm.response.json();",
+							"    if (response.length > 0) {",
+							"        pm.environment.set(\"product_store_id\", response[0].productStoreId);",
+							"        pm.environment.set(\"bundle_duration\", response[0].duration);",
+							"        pm.environment.set(\"bundle_finished\", response[0].isFinished);",
+							"    }",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {},
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{idToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url_easy4learn}}/api/v1/users/subscriptions?app=com.englishingames.summiShare&bundle=Premium%20Bundle%202",
+					"host": [
+						"{{base_url_easy4learn}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"subscriptions"
+					],
+					"query": [
+						{
+							"key": "app",
+							"value": "com.englishingames.summiShare"
+						},
+						{
+							"key": "bundle",
+							"value": "Premium%20Bundle%202"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
