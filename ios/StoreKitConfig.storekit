@@ -1,0 +1,256 @@
+{
+  "identifier" : "9D8B96AA",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6478384912",
+    "_developerTeamID" : "C52BX6VAT9",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 744716131.40694106,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21466512",
+      "localizations" : [
+
+      ],
+      "name" : "Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+            {
+              "eligibility" : [
+                "existing",
+                "new",
+                "expired"
+              ],
+              "internalID" : "58165551",
+              "isStackable" : true,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "One month free",
+              "subscriptionPeriod" : "P1M"
+            }
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6480509803",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get more summaries for text, video and files",
+              "displayName" : "Summify: AI Summarizer Monthly",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "Get more summaries for text, video and files",
+              "displayName" : "Summify: AI Summarizer Monthly",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "SummifyPremiumMonth",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "1m_sb_nbn_pr",
+          "subscriptionGroupID" : "21466512",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6479697820",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get more summaries for text, video and files",
+              "displayName" : "Summify: AI Summarizer Weekly",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "Get more summaries for text, video and files",
+              "displayName" : "Summify: AI Summarizer Weekly",
+              "locale" : "en_GB"
+            }
+          ],
+          "productID" : "SummifyPremiumWeekly",
+          "recurringSubscriptionPeriod" : "P1W",
+          "referenceName" : "1w_sb_nbn_pr",
+          "subscriptionGroupID" : "21466512",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+            {
+              "eligibility" : [
+                "expired",
+                "new",
+                "existing"
+              ],
+              "internalID" : "89179C92",
+              "isStackable" : true,
+              "numberOfPeriods" : 1,
+              "paymentMode" : "free",
+              "referenceName" : "one year free",
+              "subscriptionPeriod" : "P1Y"
+            }
+          ],
+          "displayPrice" : "34.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6480509766",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Get more summaries for text, video and files",
+              "displayName" : " Summify: AI Summarizer Annual",
+              "locale" : "en_GB"
+            },
+            {
+              "description" : "Get more summaries for text, video and files",
+              "displayName" : " Summify: AI Summarizer Annual",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "SummifyPremiumYear",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "1y_sb_nbn_pr",
+          "subscriptionGroupID" : "21466512",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    },
+    {
+      "id" : "21516507",
+      "localizations" : [
+
+      ],
+      "name" : "Premium_bundle_2",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "7.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6575366560",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Break free from limits!",
+              "displayName" : "Monthly Limitless Bundle",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "SummifyMonthlyBundleSubscription",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "1m_sb_bn_pr",
+          "subscriptionGroupID" : "21516507",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6575366893",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Break free from limits!",
+              "displayName" : "Annual Limitless Bundle",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "SummifyAnnualBundleSubscription",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "1y_sb_bn_pr",
+          "subscriptionGroupID" : "21516507",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "subscriptionOffersKeyPair" : {
+    "id" : "5B42D001",
+    "privateKey" : "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQghl1a3QZe4S7gtmAgiU+oGY0HWM/ceVcvak2G+VK+WMagCgYIKoZIzj0DAQehRANCAARFuIj2xo4ChB17ofw39m0aDHX5u4geCiPc/eqO3HnW9h/JekZMa5cPzz3lVw+f4BgBLZcMsJP99ZKCRDEH5lcS"
+  },
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

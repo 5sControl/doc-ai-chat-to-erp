@@ -5,39 +5,55 @@ class NotificationService {
   FlutterLocalNotificationsPlugin();
 
   Future<void> initNotification() async {
-    AndroidInitializationSettings initializationSettingsAndroid =
-    const AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    await notificationsPlugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
+    const iosSettings = DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
 
-    var initializationSettingsIOS = DarwinInitializationSettings();
-    // var initializationSettingsIOS = DarwinInitializationSettings(
-    //     requestAlertPermission: true,
-    //     requestBadgePermission: true,
-    //     requestSoundPermission: true,
-    //     onDidReceiveLocalNotification:
-    //         (int id, String? title, String? body, String? payload) async {});
+    const initializationSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: iosSettings,
+    );
 
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    await notificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse:
-            (NotificationResponse notificationResponse) async {});
-
+    await notificationsPlugin.initialize(initializationSettings);
   }
 
-  notificationDetails() {
+  static void _onNotificationResponse(NotificationResponse response) {
+    final payload = response.payload;
+    if (payload != null && payload.isNotEmpty) {
+      print('🔔 Получен payload: $payload');
+      // navigatorKey.currentState?.pushNamed('/someRoute', arguments: payload);
+    }
+  }
+
+  NotificationDetails notificationDetails() {
     return const NotificationDetails(
-        android: AndroidNotificationDetails('channelId', 'channelName',
-            importance: Importance.max),
-        iOS: DarwinNotificationDetails(
-        ));
+      android: AndroidNotificationDetails(
+        'default_channel_id',
+        'Общие уведомления',
+        channelDescription: 'Канал для основных уведомлений',
+        importance: Importance.max,
+        priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
   }
 
-  Future showNotification(
-      {int id = 0, String? title, String? body, String? payLoad}) async {
-    return notificationsPlugin.show(
-        id, title, body, await notificationDetails());
+  Future<void> showNotification({
+    int id = 0,
+    required String title,
+    required String body,
+    String? payload,
+  }) async {
+    await notificationsPlugin.show(
+      id,
+      title,
+      body,
+      notificationDetails(),
+      payload: payload,
+    );
   }
 }

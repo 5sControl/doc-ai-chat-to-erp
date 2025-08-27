@@ -1,50 +1,69 @@
 import 'dart:io';
 
-//import 'package:facebook_app_events/facebook_app_events.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:summify/bloc/offers/offers_bloc.dart';
+import 'package:summify/helpers/purchases.dart';
+import 'package:summify/screens/bundle_screen/bundle_screen.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
+import 'firebase_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-
 import 'package:path_provider/path_provider.dart';
-import 'package:status_bar_control/status_bar_control.dart';
+// import 'package:status_bar_control/status_bar_control.dart';
+import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/library/library_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
+import 'package:summify/screens/auth/auth_screen.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
+import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
 import 'bloc/subscriptions/subscriptions_bloc.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'screens/main_screen.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().initNotification();
+
+  if (kIsWeb){
+    runApp(const SummishareApp());
+  }
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final purchasesService = PurchasesService();
+  await purchasesService.initPlatformState();
 
   final storage = await HydratedStorage.build(
     storageDirectory: HydratedStorageDirectory(
       (await getApplicationDocumentsDirectory()).path,
     ),
   );
-
   HydratedBloc.storage = storage;
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
 
-  if (Platform.isAndroid) {
+  if (!kIsWeb && Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
+  //await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 
@@ -58,6 +77,7 @@ class SummishareApp extends StatelessWidget {
     //   facebookAppEvents.setAutoLogAppEventsEnabled(true);
     // }
 
+    final AuthService authService = AuthService();
     final brightness = MediaQuery.of(context).platformBrightness;
     final settingsBloc = SettingsBloc(brightness: brightness);
     final mixpanelBloc = MixpanelBloc(settingsBloc: settingsBloc);
@@ -81,7 +101,11 @@ class SummishareApp extends StatelessWidget {
           BlocProvider(
               create: (context) => SummariesBloc(
                   mixpanelBloc: mixpanelBloc,
-                  subscriptionBloc: context.read<SubscriptionsBloc>()))
+                  subscriptionBloc: context.read<SubscriptionsBloc>())),
+          BlocProvider(
+              create: (context) =>
+                  AuthenticationBloc(authService: authService)),
+          BlocProvider(create: (context) => OffersBloc()),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
@@ -92,22 +116,22 @@ class SummishareApp extends StatelessWidget {
 
             context.read<SubscriptionsBloc>().add(const InitSubscriptions());
 
-            void setSystemColor() async {
-              if (settingsState.appTheme == AppTheme.dark) {
-                await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
-              }
-
-              if (settingsState.appTheme == AppTheme.light) {
-                await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
-              }
-
-              if (settingsState.appTheme == AppTheme.auto) {
-                if (brightness == Brightness.dark) {
-                  await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
-                } else {
-                  await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
-                }
-              }
+            Future<void> setSystemColor() async {
+              // if (settingsState.appTheme == AppTheme.dark) {
+              //   await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+              // }
+              //
+              // if (settingsState.appTheme == AppTheme.light) {
+              //   await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+              // }
+              //
+              // if (settingsState.appTheme == AppTheme.auto) {
+              //   if (brightness == Brightness.dark) {
+              //     await StatusBarControl.setStyle(StatusBarStyle.LIGHT_CONTENT);
+              //   } else {
+              //     await StatusBarControl.setStyle(StatusBarStyle.DARK_CONTENT);
+              //   }
+              // }
             }
 
             setSystemColor();
@@ -124,10 +148,10 @@ class SummishareApp extends StatelessWidget {
               theme: lightTheme,
               darkTheme: darkTheme,
               themeMode: themeMode,
-              builder: (context, Widget? child) => child!,
+              //builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',
-              onGenerateRoute: (RouteSettings settings) {
+              onGenerateRoute: (settings) {
                 switch (settings.name) {
                   case '/':
                     return MaterialWithModalsPageRoute(
@@ -136,10 +160,28 @@ class SummishareApp extends StatelessWidget {
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const OnboardingScreen(),
                         settings: settings);
+                  case '/login':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const AuthScreen(), settings: settings);
                   case '/subscribe':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SubscriptionScreen(
                               triggerScreen: 'Home',
+                              showBackArrow: true,
+                            ),
+                        settings: settings);
+                  case '/subscribeLimit':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const SubscriptionScreenLimit(
+                              triggerScreen: 'Home',
+                              fromSettings: false,
+                            ),
+                        settings: settings);
+                  case '/bundle':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const BundleScreen(
+                              triggerScreen: 'Home',
+                              fromOnboarding: true,
                             ),
                         settings: settings);
                   case '/settings':
