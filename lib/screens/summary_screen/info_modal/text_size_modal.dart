@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 
 import '../../../bloc/settings/settings_bloc.dart';
 
@@ -126,26 +127,78 @@ class TextSizeModal extends StatelessWidget {
 }
 
 class BackArrow extends StatelessWidget {
-  const BackArrow({super.key});
+  final bool? fromOnboarding;
+  const BackArrow({super.key, this.fromOnboarding});
 
   @override
   Widget build(BuildContext context) {
     void onPressClose() {
-      Navigator.of(context).pop();
+      if (fromOnboarding != null) {
+        Navigator.of(context).pushNamed('/');
+        context.read<MixpanelBloc>().add(const ClosePaywall());
+      } else {
+        Navigator.of(context).pop();
+      }
     }
 
     return IconButton(
         visualDensity: VisualDensity.compact,
         onPressed: onPressClose,
         style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(30, 30)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+              ),
+            ),
             backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0.2))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
         icon: Icon(
           Icons.close,
-          size: 20,
+          size: 18,
           color: Theme.of(context).iconTheme.color,
         ));
   }
 }
+
+// class BackArrow extends StatelessWidget {
+//   const BackArrow({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     void onPressClose() {
+//       Navigator.of(context).pop();
+//     }
+
+//     return IconButton(
+//       visualDensity: VisualDensity.compact,
+//       onPressed: onPressClose,
+//       //style: ButtonStyle(
+//         //padding: const WidgetStatePropertyAll(EdgeInsets.all(0)),
+//         //backgroundColor: MaterialStatePropertyAll(
+//         // Theme.of(context).iconTheme.color!.withOpacity(0.1))),
+//       //),
+//       highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+//       icon: Container(
+//         decoration: BoxDecoration(
+//           shape: BoxShape.circle,
+//           border: Border.all(
+//             color: Theme.of(context).iconTheme.color!,
+//             width: 1.5,
+//           ),
+//         ),
+//         child: Padding(
+//           padding: const EdgeInsets.all(4.0), // Adjust the padding as needed
+//           child: Icon(
+//             Icons.close,
+//             size: 20,
+//             color: Theme.of(context).iconTheme.color,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

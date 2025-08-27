@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
@@ -10,6 +8,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 
 import '../gen/assets.gen.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -55,9 +54,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       passOnboarding();
       context.read<MixpanelBloc>().add(OnboardingStep(step: _currentPageIndex));
 
-      if (Platform.isIOS) {
+      if (!kIsWeb && Platform.isIOS) {
         Navigator.of(context).pushNamedAndRemoveUntil(
-            '/subscribe', (Route<dynamic> route) => false);
+            '/bundle', (Route<dynamic> route) => false);
       } else {
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
@@ -73,67 +72,71 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      child: Stack(
-        children: [
-          const BackgroundGradient(),
-          Scaffold(
-            extendBody: true,
-            resizeToAvoidBottomInset: false,
-            body: Padding(
-              padding: EdgeInsets.only(
-                  // bottom: MediaQuery.of(context).padding.bottom + 15,
-                  left: 0,
-                  right: 0,
-                  top: MediaQuery.of(context).padding.top),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: PageView(
-                      physics: const ClampingScrollPhysics(),
-                      controller: _pageViewController,
-                      onPageChanged: _handlePageViewChanged,
-                      children: const [
-                        // OnboardingScreen1(),
-                        OnboardingScreen2(),
-                        OnboardingScreen3(),
-                        OnboardingScreen4(),
-                      ],
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            const BackgroundGradient(),
+            Scaffold(
+              extendBody: true,
+              resizeToAvoidBottomInset: false,
+              body: Padding(
+                padding: EdgeInsets.only(
+                    // bottom: MediaQuery.of(context).padding.bottom + 15,
+                    left: 0,
+                    right: 0,
+                    top: MediaQuery.of(context).padding.top),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: PageView(
+                        physics: const ClampingScrollPhysics(),
+                        controller: _pageViewController,
+                        onPageChanged: _handlePageViewChanged,
+                        children: const [
+                          // OnboardingScreen1(),
+                          OnboardingScreen2(),
+                          OnboardingScreen3(),
+                          OnboardingScreen4(),
+                        ],
+                      ),
                     ),
-                  ),
-
-                  // PageIndicator(
-                  //   tabController: _tabController,
-                  //   currentPageIndex: _currentPageIndex,
-                  // ),
-                ],
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: GestureDetector(
-              onTap: onPressContinue,
-              child: Container(
-                height: 50,
-                margin: const EdgeInsets.all(15),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                    color: const Color.fromRGBO(31, 188, 183, 1),
-                    borderRadius: BorderRadius.circular(8)),
-                alignment: Alignment.center,
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
+        
+                    // PageIndicator(
+                    //   tabController: _tabController,
+                    //   currentPageIndex: _currentPageIndex,
+                    // ),
+                  ],
                 ),
               ),
-            ),
-          )
-        ],
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: GestureDetector(
+                onTap: onPressContinue,
+                child: Container(
+                  height: 50,
+                  margin: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                      color: const Color.fromRGBO(0, 186, 195, 1),
+                      borderRadius: BorderRadius.circular(8)),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -200,7 +203,9 @@ class OnboardingScreen2 extends StatelessWidget {
         ),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Image.asset('assets/onboarding/onb1_1.png')),
+            child:Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb1_1_dark.png', height:MediaQuery.of(context).size.shortestSide >
+                                            600 ? 200 : 200) : Image.asset('assets/onboarding/onb1_1.png', height: MediaQuery.of(context).size.shortestSide >
+                                            600 ? 200 : 200)),
         SizedBox(
           height: 10,
         ),
@@ -218,9 +223,13 @@ class OnboardingScreen3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Spacer(),
+        //const Spacer(),
+        const Divider(
+          color: Colors.transparent,
+          height: 25,
+        ),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text('One-click “share” to get summary',
@@ -228,13 +237,15 @@ class OnboardingScreen3 extends StatelessWidget {
                   fontSize: 36, fontWeight: FontWeight.w700, height: 1),
               textAlign: TextAlign.start),
         ),
-        const Divider(
-          color: Colors.transparent,
-          height: 25,
-        ),
+        // const Divider(
+        //   color: Colors.transparent,
+        //   height: 25,
+        // ),
         Container(
-            margin: const EdgeInsets.only(left: 15, top: 15),
-            child: Image.asset('assets/onboarding/onb2.png'))
+            margin: const EdgeInsets.only(left: 15, top:0),
+            child: Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb2_dark.png', height: MediaQuery.of(context).size.shortestSide >
+                                            600 ? MediaQuery.of(context).size.height - 20: MediaQuery.of(context).size.height,) : Image.asset('assets/onboarding/onb2.png', height: MediaQuery.of(context).size.shortestSide >
+                                            600 ? 1000 : MediaQuery.of(context).size.height,)),
       ],
     );
   }
@@ -314,8 +325,8 @@ class OnboardingScreen4 extends StatelessWidget {
                     .map((lang) => Container(
                           padding: const EdgeInsets.only(bottom: 15),
                           child: Material(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0.2),
+                            //color:
+                            //    Theme.of(context).primaryColor.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(8),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(8),
@@ -326,7 +337,7 @@ class OnboardingScreen4 extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
                                       color: selectedLang == lang.code
-                                          ? Theme.of(context).cardColor
+                                          ? Color.fromRGBO(0, 186, 195, 1)
                                           : Colors.transparent,
                                       width: 2),
                                 ),

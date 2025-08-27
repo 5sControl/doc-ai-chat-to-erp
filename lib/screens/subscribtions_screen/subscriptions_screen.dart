@@ -19,8 +19,9 @@ import 'subscription_body_year.dart';
 class SubscriptionScreen extends StatefulWidget {
   final bool? fromOnboarding;
   final String triggerScreen;
+  final bool showBackArrow;
   const SubscriptionScreen(
-      {super.key, this.fromOnboarding, required this.triggerScreen});
+      {super.key, this.fromOnboarding, required this.triggerScreen, required this.showBackArrow});
 
   @override
   State<SubscriptionScreen> createState() => _SubscriptionScreenState();
@@ -85,8 +86,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         packages.sort(
             (a, b) => a.storeProduct.price.compareTo(b.storeProduct.price));
 
-        final monthlyPackage = packages.firstWhere(
-            (element) => element.packageType == PackageType.monthly);
+        final monthlyPackage = packages
+            .firstWhere((element) => element.packageType == PackageType.weekly);
         final annualPackage = packages
             .firstWhere((element) => element.packageType == PackageType.annual);
 
@@ -98,14 +99,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 Animate(
                   effects: const [FadeEffect()],
                   child: SafeArea(
-                    child: Scaffold(
+                    child: Scaffold( 
                       appBar: AppBar(
-                        toolbarHeight: 50,
+                        toolbarHeight:widget.showBackArrow ? 40 : 0,
                         automaticallyImplyLeading: false,
                         actions: [
-                          BackArrow(fromOnboarding: widget.fromOnboarding),
+                          if(widget.showBackArrow) 
+                          BackArrow(fromOnboarding: widget.showBackArrow),
                           const SizedBox(
-                            width: 5,
+                            width: 10,
                           )
                         ],
                       ),
@@ -133,7 +135,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                 },
                                 child: Container(
                                   key: Key(selectedSubscriptionIndex == 1
-                                      ? 'month'
+                                      ? 'week'
                                       : 'year'),
                                   child: Builder(
                                     builder: (context) {
@@ -154,7 +156,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                           headerH,
                                                       child: Row(
                                                         children: [
-                                                          MonthTitle(
+                                                          WeekTitle(
                                                               onSelectSubscription:
                                                                   onSelectSubscription),
                                                           YearTitle(
@@ -188,7 +190,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                                           headerH,
                                                       child: Row(
                                                         children: [
-                                                          MonthTitle(
+                                                          WeekTitle(
                                                               onSelectSubscription:
                                                                   onSelectSubscription),
                                                           YearTitle(
@@ -234,9 +236,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 }
 
-class MonthTitle extends StatelessWidget {
+class WeekTitle extends StatelessWidget {
   final Function({required int index}) onSelectSubscription;
-  const MonthTitle({super.key, required this.onSelectSubscription});
+  const WeekTitle({super.key, required this.onSelectSubscription});
 
   @override
   Widget build(BuildContext context) {
@@ -246,14 +248,36 @@ class MonthTitle extends StatelessWidget {
       onTap: () => onSelectSubscription(index: 0),
       child: Center(
         child: Text(
-          'Pay monthly',
+          'Pay weekly',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall,
+          style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
+                                            600 ? 13 : 24),
         ),
       ),
     ));
   }
 }
+
+// class MonthTitle extends StatelessWidget {
+//   final Function({required int index}) onSelectSubscription;
+//   const MonthTitle({super.key, required this.onSelectSubscription});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//         child: InkWell(
+//       borderRadius: BorderRadius.circular(8),
+//       onTap: () => onSelectSubscription(index: 0),
+//       child: Center(
+//         child: Text(
+//           'Pay monthly',
+//           textAlign: TextAlign.center,
+//           style: Theme.of(context).textTheme.bodySmall,
+//         ),
+//       ),
+//     ));
+//   }
+// }
 
 class YearTitle extends StatelessWidget {
   final Function({required int index}) onSelectSubscription;
@@ -271,7 +295,8 @@ class YearTitle extends StatelessWidget {
           Text(
             'Pay annually',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
+            style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
+                                            600 ? 13 : 24),
           ),
           const SizedBox(
             height: 5,
@@ -285,8 +310,9 @@ class YearTitle extends StatelessWidget {
               //   Color.fromRGBO(255, 208, 74, 1),
               // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
             ),
-            child: Text('Save up to 25\$',
-                style: Theme.of(context).textTheme.bodySmall!
+            child: Text('Save up to 29\$',
+                style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
+                                            600 ? 13 : 24),
                 // .copyWith(color: Colors.black),
                 ),
           )
@@ -301,12 +327,13 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Text(
         'Be smart with your time!',
-        textAlign: TextAlign.start,
-        style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, height: 1),
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 28 : 56, fontWeight: FontWeight.w700, height: 1),
       ),
     );
   }
@@ -379,8 +406,7 @@ class BackArrow extends StatelessWidget {
   Widget build(BuildContext context) {
     void onPressClose() {
       if (fromOnboarding == null) {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+        Navigator.of(context).pushNamed('/login');
         context.read<MixpanelBloc>().add(const ClosePaywall());
       } else {
         Navigator.of(context).pop();
@@ -391,13 +417,20 @@ class BackArrow extends StatelessWidget {
         visualDensity: VisualDensity.compact,
         onPressed: onPressClose,
         style: ButtonStyle(
-            padding: const MaterialStatePropertyAll(EdgeInsets.all(0)),
+            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color:Theme.of(context).brightness == Brightness.dark? Colors.white : Colors.black),
+              ),
+            ),
             backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0.2))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.2),
+                Theme.of(context).iconTheme.color!.withOpacity(0))),
+        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
         icon: Icon(
           Icons.close,
-          size: 20,
+          size: 18,
           color: Theme.of(context).iconTheme.color,
         ));
   }

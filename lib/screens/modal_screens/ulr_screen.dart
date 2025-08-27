@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/summaries/summaries_bloc.dart';
@@ -65,6 +66,7 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
           if (controllerText.isNotEmpty) {
           context.read<SummariesBloc>().add(GetSummaryFromUrl(
               summaryUrl: urlController.text, fromShare: false));
+              context.read<MixpanelBloc>().add(Summify(option: 'link'));
           Navigator.of(context).pop();
         }
       });
@@ -125,13 +127,14 @@ class UrlTextField extends StatelessWidget {
           children: [
             Flexible(
               child: Container(
+                //color: Colors.white,
                 height: 40,
-                decoration: const BoxDecoration(boxShadow: [
-                  BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 5,
-                      offset: Offset(1, 1))
-                ]),
+                // decoration: const BoxDecoration(boxShadow: [
+                //   BoxShadow(
+                //       color: Colors.black12,
+                //       blurRadius: 5,
+                //       offset: Offset(1, 1))
+                // ]),
                 child: TextFormField(
                   controller: controller,
                   onChanged: (text) {
@@ -153,7 +156,7 @@ class UrlTextField extends StatelessWidget {
                   child: SvgPicture.asset(
                     Assets.icons.paste,
                     colorFilter: ColorFilter.mode(
-                        Theme.of(context).primaryColorDark, BlendMode.srcIn),
+                        Color.fromRGBO(0, 186, 195, 1), BlendMode.srcIn),
                   )),
             )
           ],

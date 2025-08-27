@@ -6,22 +6,22 @@ final lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.transparent,
     brightness: Brightness.light,
     primaryColor: const Color.fromRGBO(0, 186, 195, 1),
-    primaryColorDark: const Color.fromRGBO(25, 154, 151, 1),
+    primaryColorDark: const Color.fromRGBO(0, 186, 195, 1),
     primaryColorLight: const Color.fromRGBO(227, 255, 254, 1),
     canvasColor: const Color.fromRGBO(217, 255, 255, 1),
     highlightColor: const Color.fromRGBO(5, 49, 57, 1),
-    hintColor: const Color.fromRGBO(30, 188, 183, 1),
+    hintColor: const Color.fromRGBO(0, 186, 195, 1),
     checkboxTheme: const CheckboxThemeData(
       side: BorderSide(
           width: 1,
           style: BorderStyle.solid,
-          color: Colors.black,
+          color: Colors.white,
           strokeAlign: BorderSide.strokeAlignOutside),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      fillColor: MaterialStatePropertyAll(Colors.transparent),
+      fillColor: WidgetStatePropertyAll(Colors.transparent),
       visualDensity: VisualDensity.compact,
-      overlayColor: MaterialStatePropertyAll(Colors.white38),
-      checkColor: MaterialStatePropertyAll(Colors.white),
+      overlayColor: WidgetStatePropertyAll(Colors.white38),
+      checkColor: WidgetStatePropertyAll(Colors.white),
     ),
     cardColor: Colors.black,
     indicatorColor: Colors.black,
@@ -41,13 +41,13 @@ final lightTheme = ThemeData(
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.teal,
+        selectedItemColor: Color.fromRGBO(0, 186, 195, 1),
         elevation: 10,
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 25)),
-    floatingActionButtonTheme:
-        const FloatingActionButtonThemeData(backgroundColor: Colors.teal),
-    tabBarTheme: const TabBarTheme(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Color.fromRGBO(0, 186, 195, 1)),
+    tabBarTheme: const TabBarThemeData(
       splashFactory: NoSplash.splashFactory,
       labelColor: Colors.black,
       labelStyle: TextStyle(
@@ -72,7 +72,7 @@ final lightTheme = ThemeData(
         gapPadding: 10,
         borderRadius: BorderRadius.circular(8),
         borderSide:
-            const BorderSide(width: 2, color: Color.fromRGBO(30, 188, 183, 1)),
+            const BorderSide(width: 2, color: Color.fromRGBO(0, 186, 195, 1)),
       ),
       filled: true,
       fillColor: const Color.fromRGBO(227, 255, 254, 1),
@@ -89,8 +89,8 @@ final lightTheme = ThemeData(
           borderSide: BorderSide.none),
     ),
     iconButtonTheme: const IconButtonThemeData(
-        style: ButtonStyle(
-            overlayColor: MaterialStatePropertyAll(Colors.white12))),
+        style:
+            ButtonStyle(overlayColor: WidgetStatePropertyAll(Colors.white12))),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(
           fontSize: 20,

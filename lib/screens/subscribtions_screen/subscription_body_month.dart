@@ -30,11 +30,12 @@ class SubscriptionBodyMonth extends StatelessWidget {
           const Spacer(
             flex: 2,
           ),
-          const Text(
-            '1 month',
+          Text(
+            '1 week',
             textAlign: TextAlign.start,
             style:
-                TextStyle(fontSize: 36, fontWeight: FontWeight.w400, height: 1),
+                TextStyle(fontSize:MediaQuery.of(context).size.shortestSide <
+                                            600 ? 36 : 56, fontWeight: FontWeight.w400, height: 1),
           ),
           const Spacer(),
           if (abTest == 'A')
@@ -51,17 +52,19 @@ class SubscriptionBodyMonth extends StatelessWidget {
             //         decoration: TextDecoration.lineThrough)),
             TextSpan(
                 text:
-                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/month',
+                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/week',
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.w700)),
+                    .copyWith(fontWeight: FontWeight.w700, fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 24 : 44,)),
           ])),
           const Spacer(),
           Text(
             'Access all premium features!\nCancel anytime',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
+             style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: MediaQuery.of(context).size.shortestSide <
+                                            600 ? 14 : 24,),
           ),
           const Spacer(
             flex: 2,

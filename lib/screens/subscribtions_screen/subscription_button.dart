@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 
 class SubscriptionButton extends StatelessWidget {
@@ -13,6 +14,9 @@ class SubscriptionButton extends StatelessWidget {
       context
           .read<SubscriptionsBloc>()
           .add(MakePurchase(context: context, product: package));
+      context
+          .read<MixpanelBloc>()
+          .add(ActivateSubscription(plan: package.packageType.name));
     }
 
     return Container(

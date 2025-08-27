@@ -39,3 +39,5 @@ class SyncSubscriptions extends SubscriptionsEvent {
   @override
   List<Object?> get props => [];
 }
+
+

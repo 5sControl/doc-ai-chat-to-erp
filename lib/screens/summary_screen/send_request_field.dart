@@ -1,45 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
+import 'package:summify/gen/assets.gen.dart';
 
 import '../../models/models.dart';
 
-class SendRequestField extends StatelessWidget {
+class SendRequestField extends StatefulWidget {
   final String summaryKey;
   final SummaryData summaryData;
   const SendRequestField(
       {super.key, required this.summaryKey, required this.summaryData});
 
   @override
+  State<SendRequestField> createState() => _SendRequestFieldState();
+}
+
+class _SendRequestFieldState extends State<SendRequestField> {
+  late TextEditingController _controller;
+  bool _isTextEntered = false;
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+
+    _controller.addListener(() {
+      setState(() {
+        _isTextEntered = _controller.text.isNotEmpty;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
+    //final TextEditingController controller = TextEditingController();
 
     void onPressSendRequest() {
-      if (controller.text.isNotEmpty) {
-        if (summaryData.summaryOrigin == SummaryOrigin.url) {
+      if (_controller.text.isNotEmpty) {
+        if (widget.summaryData.summaryOrigin == SummaryOrigin.url) {
           context.read<ResearchBloc>().add(MakeQuestionFromUrl(
-              question: controller.text, summaryKey: summaryKey));
-          context.read<MixpanelBloc>().add(TrackResearchSummary(url: summaryKey));
+              question: _controller.text, summaryKey: widget.summaryKey));
+          context
+              .read<MixpanelBloc>()
+              .add(TrackResearchSummary(url: widget.summaryKey));
         }
 
-        if (summaryData.summaryOrigin == SummaryOrigin.file) {
+        if (widget.summaryData.summaryOrigin == SummaryOrigin.file) {
           context.read<ResearchBloc>().add(MakeQuestionFromFile(
-              question: controller.text,
-              filePath: summaryData.filePath ?? '',
-              summaryKey: summaryKey));
-          context.read<MixpanelBloc>().add(TrackResearchSummary(url: summaryKey));
+              question: _controller.text,
+              filePath: widget.summaryData.filePath ?? '',
+              summaryKey: widget.summaryKey));
+          context
+              .read<MixpanelBloc>()
+              .add(TrackResearchSummary(url: widget.summaryKey));
         }
 
-        if (summaryData.summaryOrigin == SummaryOrigin.text) {
+        if (widget.summaryData.summaryOrigin == SummaryOrigin.text) {
           context.read<ResearchBloc>().add(MakeQuestionFromText(
-              question: controller.text,
-              text: summaryData.userText ?? '',
-              summaryKey: summaryKey));
-          context.read<MixpanelBloc>().add(TrackResearchSummary(url: summaryKey));
+              question: _controller.text,
+              text: widget.summaryData.userText ?? '',
+              summaryKey: widget.summaryKey));
+          context
+              .read<MixpanelBloc>()
+              .add(TrackResearchSummary(url: widget.summaryKey));
         }
 
-        controller.text = '';
+        _controller.text = '';
         FocusScopeNode currentFocus = FocusScope.of(context);
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
@@ -75,12 +102,12 @@ class SendRequestField extends StatelessWidget {
           left: 15,
           right: 15),
       child: SizedBox(
-        height: 40,
+        height: 48,
         child: Row(
           children: [
             Flexible(
               child: TextFormField(
-                controller: controller,
+                controller: _controller,
                 cursorColor: Colors.black54,
                 onFieldSubmitted: (_) {
                   onPressSendRequest();
@@ -96,15 +123,18 @@ class SendRequestField extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              width: 5,
+            ),
             MaterialButton(
-                color: Theme.of(context).primaryColor,
+                color:_isTextEntered ? Color.fromRGBO(0, 186, 195, 1) : Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 padding: EdgeInsets.zero,
-                minWidth: 40,
-                height: 40,
+                minWidth: 48,
+                height: 48,
                 onPressed: onPressSendRequest,
-                child: const Icon(Icons.send_rounded))
+                child: SvgPicture.asset(Assets.icons.send, color: _isTextEntered ? Colors.white : Theme.of(context).primaryColor,))
           ],
         ),
       ),

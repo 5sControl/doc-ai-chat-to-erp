@@ -12,35 +12,28 @@ enum SummaryType { long, short }
 
 class ErrorDecode {
   final String detail;
+
   ErrorDecode({required this.detail});
 }
 
 class SummaryApiRepository {
-  final String linkUrl = "http://51.159.179.125:8002/application_by_summarize/";
-  final String linkUrlDev =
-      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/";
+  final String linkUrl =
+      "https://ai.5scontrol.com/summarizer/application_by_summarize/";
 
   final String fileUrl =
-      "http://51.159.179.125:8002/application_by_summarize/uploadfile/";
+      "https://ai.5scontrol.com/summarizer/application_by_summarize/uploadfile/";
 
-  final String fileUrlDev =
-      "https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/";
-
-  final String rateUrl = 'http://51.159.179.125:8000/api/applications/reviews/';
+  final String rateUrl =
+      'https://ai.5scontrol.com/ai-summarizer/django-api/applications/reviews/';
 
   final String requestUrl =
-      'http://51.159.179.125:8000/api/applications/function-reports/';
+      'https://ai.5scontrol.com/django-api/applications/function-reports/';
 
-  final String translateUrlDev =
-      'https://largely-whole-horse.ngrok-free.app/translator/translate-to/';
-
-  final String translateUrl = 'http://51.159.179.125:8088/translate-to/';
+  final String translateUrl =
+      'https://ai.5scontrol.com/ai-translator/ai-translator/translate-to/';
 
   final String researchUrl =
-      'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/';
-
-  final String researchFile =
-      'https://largely-whole-horse.ngrok-free.app/fastapi/application_by_summarize/uploadfile/';
+      'https://ai.5scontrol.com/fastapi/application_by_summarize/';
 
   final String sendEmailUrl =
       'https://easy4learn.com/django-api/applications/email/';
@@ -356,6 +349,7 @@ class SummaryApiRepository {
     required bool getMoreSummaries,
     required bool addTranslation,
     required bool askAQuestions,
+    required bool readBook,
     required String addLang,
     required String name,
     required String email,
@@ -368,6 +362,7 @@ class SummaryApiRepository {
           "getMoreSummaries": getMoreSummaries,
           "addTranslation": addTranslation,
           "askAQuestions": askAQuestions,
+          "readBook": readBook,
           "addLang": addLang,
           "name": name,
           "email": email,
@@ -473,19 +468,22 @@ class SummaryRepository {
     required bool getMoreSummaries,
     required bool addTranslation,
     required bool askAQuestions,
+    required bool readBook,
     required String addLang,
     required String name,
     required String email,
     required String message,
   }) {
     return _summaryRepository.requestAFeature(
-        getMoreSummaries: getMoreSummaries,
-        addTranslation: addTranslation,
-        askAQuestions: askAQuestions,
-        addLang: addLang,
-        name: name,
-        email: email,
-        message: message);
+      getMoreSummaries: getMoreSummaries,
+      addTranslation: addTranslation,
+      askAQuestions: askAQuestions,
+      readBook: readBook,
+      addLang: addLang,
+      name: name,
+      email: email,
+      message: message,
+    );
   }
 
   Future<void> sendEmailForPremium({required String email}) {

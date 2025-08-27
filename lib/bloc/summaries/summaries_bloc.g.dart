@@ -14,10 +14,10 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
       ratedSummaries: (json['ratedSummaries'] as List<dynamic>)
           .map((e) => e as String)
           .toSet(),
-      textCounter: json['textCounter'] as int,
+      textCounter: (json['textCounter'] as num).toInt(),
       defaultSummaryType:
           $enumDecode(_$SummaryTypeEnumMap, json['defaultSummaryType']),
-      freeSummaries: json['freeSummaries'] as int,
+      freeSummaries: (json['freeSummaries'] as num).toInt(),
     );
 
 Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>

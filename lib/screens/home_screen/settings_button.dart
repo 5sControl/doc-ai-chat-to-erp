@@ -20,7 +20,7 @@ class SettingsButton extends StatelessWidget {
             onPressed: onPressSettings,
             padding: EdgeInsets.zero,
             icon: SvgPicture.asset(
-              Assets.icons.settings,
+              Assets.icons.profileCircle,
               height: 35,
               width: 35,
               colorFilter: ColorFilter.mode(

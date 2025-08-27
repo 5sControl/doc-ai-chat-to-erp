@@ -42,7 +42,7 @@ class SummaryTextContainer extends StatelessWidget {
       child: SingleChildScrollView(
         controller: scrollController,
         padding:
-            const EdgeInsets.only(top: 50, bottom: 90, left: 15, right: 15),
+           EdgeInsets.only(top: 60, bottom: 90, left: 15, right: 15),
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
           key: Key(summaryTranslate != null && summaryTranslate!.isActive

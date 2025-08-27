@@ -27,6 +27,45 @@ class PaywallShow extends MixpanelEvent {
   List<Object?> get props => [trigger];
 }
 
+class SubScreenLimShow extends MixpanelEvent {
+  // Trigger: onboarding/settings
+  final String screen;
+  final String trigger;
+  const SubScreenLimShow({
+    required this.trigger,
+    required this.screen,
+  });
+
+  @override
+  List<Object?> get props => [trigger, screen];
+}
+
+class BundleScreenLimShow extends MixpanelEvent {
+  // Trigger: onboarding/settings
+  final String screen;
+  final String trigger;
+  const BundleScreenLimShow({
+    required this.trigger,
+    required this.screen,
+  });
+
+  @override
+  List<Object?> get props => [trigger, screen];
+}
+
+class BundleScreenLim1Show extends MixpanelEvent {
+  // Trigger: onboarding/settings
+  final String screen;
+  final String trigger;
+  const BundleScreenLim1Show({
+    required this.trigger,
+    required this.screen,
+  });
+
+  @override
+  List<Object?> get props => [trigger, screen];
+}
+
 class ActivateSubscription extends MixpanelEvent {
   final String plan;
   // Subscription: week, month, year
@@ -66,34 +105,29 @@ class SelectOption extends MixpanelEvent {
   List<Object?> get props => [option];
 }
 
-// class Summify extends MixpanelEvent {
-//   final String option;
-//   // Option: link, file, text
-//   final String url;
-//   const Summify({required this.option, required this.url});
-//
-//   @override
-//   List<Object?> get props => [option, url];
-// }
+class Summify extends MixpanelEvent {
+  final String option;
+  const Summify({required this.option});
 
-// class SummifyError extends MixpanelEvent {
-//   final String option;
-//   final String url;
-//   const SummifyError({required this.option, required this.url});
-//
-//   @override
-//   List<Object?> get props => [option, url];
-// }
+  @override
+  List<Object?> get props => [option];
+}
 
-// class SummifySuccess extends MixpanelEvent {
-//   final String option;
-//   // Option: link, file, text
-//   final String url;
-//   const SummifySuccess({required this.option, required this.url});
-//
-//   @override
-//   List<Object?> get props => [option, url];
-// }
+class SummifyError extends MixpanelEvent {
+  final String option;
+  const SummifyError({required this.option});
+
+  @override
+  List<Object?> get props => [option];
+}
+
+class SummifySuccess extends MixpanelEvent {
+  final String option;
+  const SummifySuccess({required this.option});
+
+  @override
+  List<Object?> get props => [option];
+}
 
 class OpenSummary extends MixpanelEvent {
   const OpenSummary();

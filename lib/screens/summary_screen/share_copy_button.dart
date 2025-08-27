@@ -83,7 +83,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
               stops: const [
             0.3,
             1,
-          ])),
+          ]),),
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom, left: 15, right: 15),
       child: Row(
@@ -98,7 +98,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
                     margin: const EdgeInsets.only(right: 5, left: 5),
                     child: MaterialButton(
                       padding: const EdgeInsets.symmetric(vertical: 7),
-                      color: Theme.of(context).primaryColor,
+                      color: Color.fromRGBO(0, 186, 195, 1),
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8))),
                       onPressed: button.action,
