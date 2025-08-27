@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:facebook_app_events/facebook_app_events.dart';
+//import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,12 +29,14 @@ import 'screens/main_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().initNotification();
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: await getApplicationDocumentsDirectory(),
+
+  final storage = await HydratedStorage.build(
+    storageDirectory: HydratedStorageDirectory(
+      (await getApplicationDocumentsDirectory()).path,
+    ),
   );
+
+  HydratedBloc.storage = storage;
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -43,7 +45,6 @@ void main() async {
   if (Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
-  // await HydratedBloc.storage.clear();
   runApp(const SummishareApp());
 }
 
@@ -52,10 +53,10 @@ class SummishareApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS) {
-      final facebookAppEvents = FacebookAppEvents();
-      facebookAppEvents.setAutoLogAppEventsEnabled(true);
-    }
+    // if (Platform.isIOS) {
+    //   final facebookAppEvents = FacebookAppEvents();
+    //   facebookAppEvents.setAutoLogAppEventsEnabled(true);
+    // }
 
     final brightness = MediaQuery.of(context).platformBrightness;
     final settingsBloc = SettingsBloc(brightness: brightness);
