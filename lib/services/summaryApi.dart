@@ -17,23 +17,29 @@ class ErrorDecode {
 }
 
 class SummaryApiRepository {
-  final String linkUrl =
-      "https://ai.5scontrol.com/summarizer/application_by_summarize/";
+  // Summarization endpoints
+  final String summarizeUrl =
+      "https://employees-training.com/api/v1/summaries";
 
-  final String fileUrl =
-      "https://ai.5scontrol.com/summarizer/application_by_summarize/uploadfile/";
+  final String summarizeFileUrl =
+      "https://employees-training.com/api/v1/summaries/files";
 
-  final String rateUrl =
-      'https://ai.5scontrol.com/ai-summarizer/django-api/applications/reviews/';
+  // Question answering endpoints
+  final String askQuestionUrl =
+      "https://employees-training.com/api/v1/questions";
 
-  final String requestUrl =
-      'https://ai.5scontrol.com/django-api/applications/function-reports/';
+  final String askQuestionFileUrl =
+      "https://employees-training.com/api/v1/questions/files";
+
+  // Other endpoints
+  final String reviewsUrl =
+      'https://employees-training.com/api/v1/reviews';
+
+  final String feedbackUrl =
+      'https://employees-training.com/api/v1/feedback';
 
   final String translateUrl =
-      'https://ai.5scontrol.com/ai-translator/ai-translator/translate-to/';
-
-  final String researchUrl =
-      'https://ai.5scontrol.com/fastapi/application_by_summarize/';
+      'https://employees-training.com/api/v1/translations';
 
   final String sendEmailUrl =
       'https://easy4learn.com/django-api/applications/email/';
@@ -45,7 +51,7 @@ class SummaryApiRepository {
   FutureOr<Object?> getFromLink(
       {required String summaryLink, required SummaryType summaryType}) async {
     try {
-      Response response = await _dio.post(linkUrl, data: {
+      Response response = await _dio.post(summarizeUrl, data: {
         'url': summaryLink,
         'context': '',
         "type_summary": summaryType.name
@@ -82,7 +88,7 @@ class SummaryApiRepository {
       {required String textToSummify, required SummaryType summaryType}) async {
     try {
       Response response = await _dio.post(
-        linkUrl,
+        summarizeUrl,
         data: {
           'url': '',
           'context': textToSummify,
@@ -128,7 +134,7 @@ class SummaryApiRepository {
     });
 
     try {
-      Response response = await _dio.post(fileUrl,
+      Response response = await _dio.post(summarizeFileUrl,
           data: formData, queryParameters: {'type_summary': summaryType.name});
 
       if (response.statusCode == 200) {
@@ -191,11 +197,10 @@ class SummaryApiRepository {
   Future<String> request(
       {required String summaryUrl, required String question}) async {
     try {
-      Response response = await _dio.post(linkUrl, data: {
+      Response response = await _dio.post(askQuestionUrl, data: {
         'url': summaryUrl,
+        'context': "",
         'user_query': question,
-        "context": "",
-        "type_summary": "",
       });
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
@@ -226,11 +231,10 @@ class SummaryApiRepository {
   Future<String> requestText(
       {required String userText, required String question}) async {
     try {
-      Response response = await _dio.post(linkUrl, data: {
+      Response response = await _dio.post(askQuestionUrl, data: {
         'url': '',
+        'context': userText,
         'user_query': question,
-        "context": userText,
-        "type_summary": "",
       });
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
@@ -268,7 +272,7 @@ class SummaryApiRepository {
     });
 
     try {
-      Response response = await _dio.post(fileUrl,
+      Response response = await _dio.post(askQuestionFileUrl,
           data: formData, queryParameters: {'user_query': question});
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
@@ -322,7 +326,7 @@ class SummaryApiRepository {
       required String comment}) async {
     try {
       Response response = await _dio.post(
-        rateUrl,
+        reviewsUrl,
         data: {
           'comment': comment,
           'device': device,
@@ -357,7 +361,7 @@ class SummaryApiRepository {
   }) async {
     try {
       Response response = await _dio.post(
-        requestUrl,
+        feedbackUrl,
         data: {
           "getMoreSummaries": getMoreSummaries,
           "addTranslation": addTranslation,
