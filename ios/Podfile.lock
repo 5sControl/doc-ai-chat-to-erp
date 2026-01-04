@@ -239,40 +239,40 @@ SPEC CHECKSUMS:
   AppCheckCore: cc8fd0a3a230ddd401f326489c99990b013f0c4f
   DKImagePickerController: 946cec48c7873164274ecc4624d19e3da4c1ef3c
   DKPhotoGallery: b3834fecb755ee09a593d7c9e389d8b5d6deed60
-  file_picker: b159e0c068aef54932bb15dc9fd1571818edaf49
-  file_selector_ios: f0670c1064a8c8450e38145d8043160105d0b97c
+  file_picker: a0560bc09d61de87f12d246fc47d2119e6ef37be
+  file_selector_ios: f92e583d43608aebc2e4a18daac30b8902845502
   Firebase: 1fe1c0a7d9aaea32efe01fbea5f0ebd8d70e53a2
-  firebase_auth: e37065f3f80ff90580c13ad0e5a48e3bb8d2ad77
-  firebase_core: 432718558359a8c08762151b5f49bb0f093eb6e0
+  firebase_auth: 34c515a8fa76a4ef678ac5ad5cfa3bb3120f5ab5
+  firebase_core: 2d4534e7b489907dcede540c835b48981d890943
   FirebaseAppCheckInterop: 06fe5a3799278ae4667e6c432edd86b1030fa3df
   FirebaseAuth: c4146bdfdc87329f9962babd24dae89373f49a32
   FirebaseAuthInterop: 7087d7a4ee4bc4de019b2d0c240974ed5d89e2fd
   FirebaseCore: 8344daef5e2661eb004b177488d6f9f0f24251b7
   FirebaseCoreExtension: 6f357679327f3614e995dc7cf3f2d600bdc774ac
   FirebaseCoreInternal: ef4505d2afb1d0ebbc33162cb3795382904b5679
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_email_sender: e03bdda7637bcd3539bfe718fddd980e9508efaa
-  flutter_local_notifications: ff50f8405aaa0ccdc7dcfb9022ca192e8ad9688f
-  google_sign_in_ios: 7411fab6948df90490dc4620ecbcabdc3ca04017
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  flutter_email_sender: aa1e9772696691d02cd91fea829856c11efb8e58
+  flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
+  google_sign_in_ios: b48bb9af78576358a168361173155596c845f0b9
   GoogleSignIn: ce8c89bb9b37fb624b92e7514cc67335d1e277e4
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
-  in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
+  in_app_review: 5596fe56fab799e8edb3561c03d053363ab13457
   Mixpanel-swift: 478ff46d19de4a251244a9c9a582070d4bb94cf9
-  mixpanel_flutter: c2e55a95a2ae23cf27c065115ecee6226e0e0718
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  mixpanel_flutter: fde04ecf0278ace477f3882cd3fa4a926858fc79
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  purchases_flutter: 38d47f2bba4e5ebb261df5d27f272e8592c5bf7d
+  purchases_flutter: bd645b9bea1c536b34d24778de8da95cc6a65235
   PurchasesHybridCommon: f0d344e7073314988b3d98fbb9da69db85aaff38
   RecaptchaInterop: 11e0b637842dfb48308d242afc3f448062325aba
   RevenueCat: 57028a8673201fdaacd1354065e8adbcba5739a4
   SDWebImage: f29024626962457f3470184232766516dee8dfea
-  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
-  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
+  share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
+  sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
 
 PODFILE CHECKSUM: e30f02f9d1c72c47bb6344a0a748c9d268180865
 

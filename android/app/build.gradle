@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.4.0'
+        classpath 'com.android.tools.build:gradle:8.6.1'
         classpath 'com.google.gms:google-services:4.4.1' // <-- добавьте эту строку
     }
 }
@@ -43,7 +43,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.englishingames.summishare"
-    compileSdkVersion 35
+    compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -68,8 +68,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 34
-        targetSdkVersion 34
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion flutter.targetSdkVersion ?: 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true

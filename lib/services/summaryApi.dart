@@ -340,8 +340,8 @@ class SummaryApiRepository {
       } else {
         return SendRateStatus.Error;
       }
-    } on DioException catch (_) {
-      print(_);
+    } on DioException catch (e) {
+      print(e);
       return SendRateStatus.Error;
     } catch (error) {
       print(error);
@@ -400,8 +400,8 @@ class SummaryApiRepository {
       } else {
         print(response.data);
       }
-    } on DioException catch (_) {
-      return print(_);
+    } on DioException catch (e) {
+      return print(e);
     } catch (error) {
       return print(error);
     }
