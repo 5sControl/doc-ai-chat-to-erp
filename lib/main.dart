@@ -17,6 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/library/library_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/quiz/quiz_bloc.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
@@ -88,6 +89,8 @@ class SummishareApp extends StatelessWidget {
               create: (context) => TranslatesBloc(mixpanelBloc: mixpanelBloc)),
           BlocProvider(
               create: (context) => ResearchBloc(mixpanelBloc: mixpanelBloc)),
+          BlocProvider(
+              create: (context) => QuizBloc(mixpanelBloc: mixpanelBloc)),
           BlocProvider(create: (context) => settingsBloc),
           BlocProvider(create: (context) => LibraryBloc()),
           BlocProvider(

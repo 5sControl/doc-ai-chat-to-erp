@@ -224,3 +224,247 @@ class LibraryDocument extends Equatable {
   @override
   List<Object?> get props => [title, annotation, summary, img];
 }
+
+enum QuizStatus { loading, ready, inProgress, completed, error }
+
+class QuizOption extends Equatable {
+  final String id;
+  final String text;
+
+  const QuizOption({required this.id, required this.text});
+
+  factory QuizOption.fromJson(Map<String, dynamic> json) {
+    return QuizOption(
+      id: json['id'] as String,
+      text: json['text'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'text': text,
+    };
+  }
+
+  @override
+  List<Object?> get props => [id, text];
+}
+
+class QuizQuestion extends Equatable {
+  final String id;
+  final String question;
+  final List<QuizOption> options;
+  final String correctAnswerId;
+  final String explanation;
+  final String? userAnswerId;
+  final bool? isCorrect;
+
+  const QuizQuestion({
+    required this.id,
+    required this.question,
+    required this.options,
+    required this.correctAnswerId,
+    required this.explanation,
+    this.userAnswerId,
+    this.isCorrect,
+  });
+
+  QuizQuestion copyWith({
+    String? id,
+    String? question,
+    List<QuizOption>? options,
+    String? correctAnswerId,
+    String? explanation,
+    String? userAnswerId,
+    bool? isCorrect,
+  }) {
+    return QuizQuestion(
+      id: id ?? this.id,
+      question: question ?? this.question,
+      options: options ?? this.options,
+      correctAnswerId: correctAnswerId ?? this.correctAnswerId,
+      explanation: explanation ?? this.explanation,
+      userAnswerId: userAnswerId ?? this.userAnswerId,
+      isCorrect: isCorrect ?? this.isCorrect,
+    );
+  }
+
+  factory QuizQuestion.fromJson(Map<String, dynamic> json) {
+    final optionsList = (json['options'] as List<dynamic>)
+        .map((opt) => QuizOption.fromJson(opt as Map<String, dynamic>))
+        .toList();
+    
+    return QuizQuestion(
+      id: json['id'] as String,
+      question: json['question'] as String,
+      options: optionsList,
+      correctAnswerId: json['correct_answer_id'] as String,
+      explanation: json['explanation'] as String,
+      userAnswerId: json['userAnswerId'] as String?,
+      isCorrect: json['isCorrect'] as bool?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'question': question,
+      'options': options.map((opt) => opt.toJson()).toList(),
+      'correct_answer_id': correctAnswerId,
+      'explanation': explanation,
+      'userAnswerId': userAnswerId,
+      'isCorrect': isCorrect,
+    };
+  }
+
+  @override
+  List<Object?> get props =>
+      [id, question, options, correctAnswerId, explanation, userAnswerId, isCorrect];
+}
+
+class QuizAnswer extends Equatable {
+  final String questionId;
+  final String selectedAnswerId;
+  final bool isCorrect;
+  final DateTime answeredAt;
+
+  const QuizAnswer({
+    required this.questionId,
+    required this.selectedAnswerId,
+    required this.isCorrect,
+    required this.answeredAt,
+  });
+
+  factory QuizAnswer.fromJson(Map<String, dynamic> json) {
+    return QuizAnswer(
+      questionId: json['questionId'] as String,
+      selectedAnswerId: json['selectedAnswerId'] as String,
+      isCorrect: json['isCorrect'] as bool,
+      answeredAt: DateTime.parse(json['answeredAt'] as String),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'questionId': questionId,
+      'selectedAnswerId': selectedAnswerId,
+      'isCorrect': isCorrect,
+      'answeredAt': answeredAt.toIso8601String(),
+    };
+  }
+
+  @override
+  List<Object?> get props => [questionId, selectedAnswerId, isCorrect, answeredAt];
+}
+
+class Quiz extends Equatable {
+  final String quizId;
+  final String documentKey;
+  final List<QuizQuestion> questions;
+  final QuizStatus status;
+  final List<QuizAnswer>? answers;
+  final DateTime? generatedAt;
+  final DateTime? completedAt;
+  final int? currentQuestionIndex;
+
+  const Quiz({
+    required this.quizId,
+    required this.documentKey,
+    required this.questions,
+    required this.status,
+    this.answers,
+    this.generatedAt,
+    this.completedAt,
+    this.currentQuestionIndex,
+  });
+
+  Quiz copyWith({
+    String? quizId,
+    String? documentKey,
+    List<QuizQuestion>? questions,
+    QuizStatus? status,
+    List<QuizAnswer>? answers,
+    DateTime? generatedAt,
+    DateTime? completedAt,
+    int? currentQuestionIndex,
+  }) {
+    return Quiz(
+      quizId: quizId ?? this.quizId,
+      documentKey: documentKey ?? this.documentKey,
+      questions: questions ?? this.questions,
+      status: status ?? this.status,
+      answers: answers ?? this.answers,
+      generatedAt: generatedAt ?? this.generatedAt,
+      completedAt: completedAt ?? this.completedAt,
+      currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
+    );
+  }
+
+  int get correctAnswersCount {
+    if (answers == null) return 0;
+    return answers!.where((answer) => answer.isCorrect).length;
+  }
+
+  double get scorePercentage {
+    if (questions.isEmpty) return 0.0;
+    return (correctAnswersCount / questions.length) * 100;
+  }
+
+  bool get isCompleted => status == QuizStatus.completed;
+
+  factory Quiz.fromJson(Map<String, dynamic> json) {
+    final questionsList = (json['questions'] as List<dynamic>)
+        .map((q) => QuizQuestion.fromJson(q as Map<String, dynamic>))
+        .toList();
+    
+    final answersList = json['answers'] != null
+        ? (json['answers'] as List<dynamic>)
+            .map((a) => QuizAnswer.fromJson(a as Map<String, dynamic>))
+            .toList()
+        : null;
+    
+    return Quiz(
+      quizId: json['quizId'] as String,
+      documentKey: json['documentKey'] as String,
+      questions: questionsList,
+      status: QuizStatus.values.firstWhere(
+        (e) => e.name == json['status'],
+        orElse: () => QuizStatus.ready,
+      ),
+      answers: answersList,
+      generatedAt: json['generatedAt'] != null
+          ? DateTime.parse(json['generatedAt'] as String)
+          : null,
+      completedAt: json['completedAt'] != null
+          ? DateTime.parse(json['completedAt'] as String)
+          : null,
+      currentQuestionIndex: json['currentQuestionIndex'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'quizId': quizId,
+      'documentKey': documentKey,
+      'questions': questions.map((q) => q.toJson()).toList(),
+      'status': status.name,
+      'answers': answers?.map((a) => a.toJson()).toList(),
+      'generatedAt': generatedAt?.toIso8601String(),
+      'completedAt': completedAt?.toIso8601String(),
+      'currentQuestionIndex': currentQuestionIndex,
+    };
+  }
+
+  @override
+  List<Object?> get props => [
+        quizId,
+        documentKey,
+        questions,
+        status,
+        answers,
+        generatedAt,
+        completedAt,
+        currentQuestionIndex,
+      ];
+}

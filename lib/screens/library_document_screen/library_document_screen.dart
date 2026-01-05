@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:summify/models/models.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
+import '../../bloc/quiz/quiz_bloc.dart';
 import '../../bloc/research/research_bloc.dart';
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
@@ -17,6 +18,7 @@ import '../../widgets/backgroung_gradient.dart';
 import '../summary_screen/info_modal/extension_modal.dart';
 import '../summary_screen/info_modal/text_size_modal.dart';
 import '../summary_screen/research_tab.dart';
+import 'quiz_tab.dart';
 
 class LibraryDocumentScreen extends StatefulWidget {
   final LibraryDocument libraryDocument;
@@ -34,7 +36,7 @@ class _LibraryDocumentScreenState extends State<LibraryDocumentScreen>
   @override
   void initState() {
     _tabController =
-        TabController(length: 3, vsync: this, initialIndex: activeTab);
+        TabController(length: 4, vsync: this, initialIndex: activeTab);
 
     _tabController.addListener(() {
       setState(() {
@@ -99,6 +101,10 @@ class _LibraryDocumentScreenState extends State<LibraryDocumentScreen>
                               text: widget.libraryDocument.summary),
                           ResearchTab(
                             summaryKey: widget.libraryDocument.title,
+                          ),
+                          QuizTab(
+                            documentKey: widget.libraryDocument.title,
+                            documentText: widget.libraryDocument.summary,
                           ),
                         ],
                       ),
@@ -396,6 +402,7 @@ class CustomTabBar extends StatelessWidget {
           ),
           Tab(text: "Summary"),
           Tab(text: "Research"),
+          Tab(text: "Quiz"),
         ],
       ),
     );

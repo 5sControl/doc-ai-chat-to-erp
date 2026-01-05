@@ -31,6 +31,10 @@ class SummaryApiRepository {
   final String askQuestionFileUrl =
       "https://employees-training.com/api/v1/questions/files";
 
+  // Quiz generation endpoint
+  final String generateQuizUrl =
+      "https://employees-training.com/api/v1/quizzes/generate";
+
   // Other endpoints
   final String reviewsUrl =
       'https://employees-training.com/api/v1/reviews';
@@ -406,6 +410,83 @@ class SummaryApiRepository {
       return print(error);
     }
   }
+
+  Future<Quiz> generateQuizFromText({
+    required String text,
+    int numQuestions = 5,
+    String difficulty = "medium",
+  }) async {
+    try {
+      Response response = await _dio.post(
+        generateQuizUrl,
+        data: {
+          'text': text,
+          'num_questions': numQuestions,
+          'difficulty': difficulty,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        
+        // Parse quiz data
+        final quizId = res['quiz_id'] as String;
+        final questionsList = res['questions'] as List<dynamic>;
+        final generatedAtStr = res['generated_at'] as String?;
+        
+        final questions = questionsList.map((q) {
+          final questionData = q as Map<String, dynamic>;
+          final optionsList = questionData['options'] as List<dynamic>;
+          
+          final options = optionsList.map((opt) {
+            final optData = opt as Map<String, dynamic>;
+            return QuizOption(
+              id: optData['id'] as String,
+              text: optData['text'] as String,
+            );
+          }).toList();
+          
+          return QuizQuestion(
+            id: questionData['id'] as String,
+            question: questionData['question'] as String,
+            options: options,
+            correctAnswerId: questionData['correct_answer_id'] as String,
+            explanation: questionData['explanation'] as String,
+          );
+        }).toList();
+        
+        final generatedAt = generatedAtStr != null
+            ? DateTime.parse(generatedAtStr)
+            : DateTime.now();
+        
+        return Quiz(
+          quizId: quizId,
+          documentKey: '', // Will be set by the caller
+          questions: questions,
+          status: QuizStatus.ready,
+          generatedAt: generatedAt,
+          currentQuestionIndex: 0,
+        );
+      } else {
+        throw Exception('Failed to generate quiz');
+      }
+    } on DioException catch (e) {
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+        error = ErrorDecode(
+          detail: decodedMap['detail'] ?? 'Failed to generate quiz',
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+      throw Exception(error.detail);
+    } catch (error) {
+      throw Exception('Failed to generate quiz: $error');
+    }
+  }
 }
 
 class SummaryRepository {
@@ -492,5 +573,18 @@ class SummaryRepository {
 
   Future<void> sendEmailForPremium({required String email}) {
     return _summaryRepository.sendEmail(email: email);
+  }
+
+  Future<Quiz> generateQuizFromText({
+    required String text,
+    required String documentKey,
+    int numQuestions = 5,
+    String difficulty = "medium",
+  }) {
+    return _summaryRepository.generateQuizFromText(
+      text: text,
+      numQuestions: numQuestions,
+      difficulty: difficulty,
+    ).then((quiz) => quiz.copyWith(documentKey: documentKey));
   }
 }
