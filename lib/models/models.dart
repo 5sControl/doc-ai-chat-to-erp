@@ -227,6 +227,8 @@ class LibraryDocument extends Equatable {
 
 enum QuizStatus { loading, ready, inProgress, completed, error }
 
+enum ReviewMode { overview, stepByStep }
+
 class QuizOption extends Equatable {
   final String id;
   final String text;
@@ -367,6 +369,7 @@ class Quiz extends Equatable {
   final DateTime? generatedAt;
   final DateTime? completedAt;
   final int? currentQuestionIndex;
+  final ReviewMode? reviewMode;
 
   const Quiz({
     required this.quizId,
@@ -377,6 +380,7 @@ class Quiz extends Equatable {
     this.generatedAt,
     this.completedAt,
     this.currentQuestionIndex,
+    this.reviewMode,
   });
 
   Quiz copyWith({
@@ -388,6 +392,7 @@ class Quiz extends Equatable {
     DateTime? generatedAt,
     DateTime? completedAt,
     int? currentQuestionIndex,
+    ReviewMode? reviewMode,
   }) {
     return Quiz(
       quizId: quizId ?? this.quizId,
@@ -398,6 +403,7 @@ class Quiz extends Equatable {
       generatedAt: generatedAt ?? this.generatedAt,
       completedAt: completedAt ?? this.completedAt,
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
+      reviewMode: reviewMode ?? this.reviewMode,
     );
   }
 
@@ -440,6 +446,12 @@ class Quiz extends Equatable {
           ? DateTime.parse(json['completedAt'] as String)
           : null,
       currentQuestionIndex: json['currentQuestionIndex'] as int?,
+      reviewMode: json['reviewMode'] != null
+          ? ReviewMode.values.firstWhere(
+              (e) => e.name == json['reviewMode'],
+              orElse: () => ReviewMode.overview,
+            )
+          : null,
     );
   }
 
@@ -453,6 +465,7 @@ class Quiz extends Equatable {
       'generatedAt': generatedAt?.toIso8601String(),
       'completedAt': completedAt?.toIso8601String(),
       'currentQuestionIndex': currentQuestionIndex,
+      'reviewMode': reviewMode?.name,
     };
   }
 
@@ -466,5 +479,6 @@ class Quiz extends Equatable {
         generatedAt,
         completedAt,
         currentQuestionIndex,
+        reviewMode,
       ];
 }

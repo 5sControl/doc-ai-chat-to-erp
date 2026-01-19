@@ -66,3 +66,38 @@ class CompleteQuiz extends QuizEvent {
   List<Object?> get props => [documentKey];
 }
 
+class PreviousQuestion extends QuizEvent {
+  final String documentKey;
+
+  const PreviousQuestion({required this.documentKey});
+
+  @override
+  List<Object?> get props => [documentKey];
+}
+
+class SetQuestionIndex extends QuizEvent {
+  final String documentKey;
+  final int index;
+
+  const SetQuestionIndex({
+    required this.documentKey,
+    required this.index,
+  });
+
+  @override
+  List<Object?> get props => [documentKey, index];
+}
+
+class SetReviewMode extends QuizEvent {
+  final String documentKey;
+  final ReviewMode mode;
+
+  const SetReviewMode({
+    required this.documentKey,
+    required this.mode,
+  });
+
+  @override
+  List<Object?> get props => [documentKey, mode];
+}
+

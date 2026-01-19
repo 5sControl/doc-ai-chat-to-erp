@@ -254,6 +254,13 @@ class _QuizQuestionScreen extends StatelessWidget {
                 currentIndex: currentIndex + 1,
                 totalQuestions: quiz.questions.length,
               ),
+              const SizedBox(height: 16),
+              // Question navigation dots
+              QuizNavigationDots(
+                quiz: quiz,
+                currentIndex: currentIndex,
+                documentKey: documentKey,
+              ),
               const SizedBox(height: 32),
               // Question
               Container(
@@ -426,37 +433,149 @@ class _QuizQuestionScreen extends StatelessWidget {
                   ),
                 ),
               const SizedBox(height: 24),
-              // Next button
+              // Navigation buttons
               if (hasAnswer)
-                ElevatedButton(
-                  onPressed: () {
-                    if (currentIndex + 1 >= quiz.questions.length) {
-                      context.read<QuizBloc>().add(CompleteQuiz(
-                            documentKey: documentKey,
-                          ));
-                    } else {
-                      context.read<QuizBloc>().add(NextQuestion(
-                            documentKey: documentKey,
-                          ));
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                Row(
+                  children: [
+                    // Previous button
+                    if (currentIndex > 0)
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            context.read<QuizBloc>().add(PreviousQuestion(
+                                  documentKey: documentKey,
+                                ));
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Previous',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    if (currentIndex > 0) const SizedBox(width: 12),
+                    // Next button
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (currentIndex + 1 >= quiz.questions.length) {
+                            context.read<QuizBloc>().add(CompleteQuiz(
+                                  documentKey: documentKey,
+                                ));
+                          } else {
+                            context.read<QuizBloc>().add(NextQuestion(
+                                  documentKey: documentKey,
+                                ));
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(
+                          currentIndex + 1 >= quiz.questions.length
+                              ? 'View Results'
+                              : 'Next Question',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    currentIndex + 1 >= quiz.questions.length
-                        ? 'View Results'
-                        : 'Next Question',
-                    style: const TextStyle(fontSize: 16),
-                  ),
+                  ],
                 ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class QuizNavigationDots extends StatelessWidget {
+  final Quiz quiz;
+  final int currentIndex;
+  final String documentKey;
+
+  const QuizNavigationDots({
+    super.key,
+    required this.quiz,
+    required this.currentIndex,
+    required this.documentKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 8,
+      runSpacing: 8,
+      children: List.generate(quiz.questions.length, (index) {
+        final question = quiz.questions[index];
+        final isAnswered = question.userAnswerId != null;
+        final isCurrent = index == currentIndex;
+        final isCorrect = question.isCorrect;
+
+        Color dotColor;
+        if (isCurrent) {
+          dotColor = Theme.of(context).primaryColor;
+        } else if (isAnswered) {
+          if (isCorrect == true) {
+            dotColor = Colors.green;
+          } else if (isCorrect == false) {
+            dotColor = Colors.red;
+          } else {
+            dotColor = Colors.grey;
+          }
+        } else {
+          dotColor = Colors.grey.shade300;
+        }
+
+        return GestureDetector(
+          onTap: () {
+            // Allow navigation to any question during active quiz
+            context.read<QuizBloc>().add(SetQuestionIndex(
+                  documentKey: documentKey,
+                  index: index,
+                ));
+          },
+          child: Container(
+            width: isCurrent ? 32 : 24,
+            height: isCurrent ? 32 : 24,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: dotColor,
+              border: isCurrent
+                  ? Border.all(color: Colors.white, width: 2)
+                  : null,
+              boxShadow: isCurrent
+                  ? [
+                      BoxShadow(
+                        color: Theme.of(context).primaryColor.withOpacity(0.3),
+                        blurRadius: 8,
+                        spreadRadius: 2,
+                      )
+                    ]
+                  : null,
+            ),
+            child: Center(
+              child: Text(
+                '${index + 1}',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: isCurrent ? 14 : 10,
+                  fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
@@ -522,6 +641,7 @@ class _QuizResultsScreen extends StatelessWidget {
     final score = quiz.scorePercentage;
     final correctCount = quiz.correctAnswersCount;
     final totalQuestions = quiz.questions.length;
+    final reviewMode = quiz.reviewMode ?? ReviewMode.overview;
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
@@ -535,6 +655,99 @@ class _QuizResultsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Review mode toggle
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          context.read<QuizBloc>().add(SetReviewMode(
+                                documentKey: documentKey,
+                                mode: ReviewMode.overview,
+                              ));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: reviewMode == ReviewMode.overview
+                                ? Colors.white
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: reviewMode == ReviewMode.overview
+                                ? [
+                                    BoxShadow(
+                                      color: Colors.grey.shade300,
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    )
+                                  ]
+                                : null,
+                          ),
+                          child: Text(
+                            'Overview',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: reviewMode == ReviewMode.overview
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              color: reviewMode == ReviewMode.overview
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.grey.shade600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          context.read<QuizBloc>().add(SetReviewMode(
+                                documentKey: documentKey,
+                                mode: ReviewMode.stepByStep,
+                              ));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: reviewMode == ReviewMode.stepByStep
+                                ? Colors.white
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: reviewMode == ReviewMode.stepByStep
+                                ? [
+                                    BoxShadow(
+                                      color: Colors.grey.shade300,
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    )
+                                  ]
+                                : null,
+                          ),
+                          child: Text(
+                            'Step by Step',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: reviewMode == ReviewMode.stepByStep
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              color: reviewMode == ReviewMode.stepByStep
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.grey.shade600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
               // Score display
               Container(
                 padding: const EdgeInsets.all(32),
@@ -587,41 +800,51 @@ class _QuizResultsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32),
-              // Review questions
-              Text(
-                'Review Answers',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+              // Review content based on mode
+              if (reviewMode == ReviewMode.overview) ...[
+                // Overview mode - show all questions
+                Text(
+                  'Review Answers',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                const SizedBox(height: 16),
+                ...quiz.questions.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final question = entry.value;
+                  return _QuestionReviewCard(
+                    question: question,
+                    questionNumber: index + 1,
+                  );
+                }),
+                const SizedBox(height: 24),
+                // Retake button
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<QuizBloc>().add(ResetQuiz(
+                          documentKey: documentKey,
+                        ));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-              ),
-              const SizedBox(height: 16),
-              ...quiz.questions.asMap().entries.map((entry) {
-                final index = entry.key;
-                final question = entry.value;
-                return _QuestionReviewCard(
-                  question: question,
-                  questionNumber: index + 1,
-                );
-              }),
-              const SizedBox(height: 24),
-              // Retake button
-              ElevatedButton(
-                onPressed: () {
-                  context.read<QuizBloc>().add(ResetQuiz(
-                        documentKey: documentKey,
-                      ));
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'Retake Quiz',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
-                child: const Text(
-                  'Retake Quiz',
-                  style: TextStyle(fontSize: 16),
+              ] else ...[
+                // Step by step mode - show one question at a time
+                _StepByStepReviewContent(
+                  quiz: quiz,
+                  documentKey: documentKey,
+                  settingsState: settingsState,
                 ),
-              ),
+              ],
             ],
           ),
         );
@@ -756,6 +979,254 @@ class _QuestionReviewCard extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _StepByStepReviewContent extends StatelessWidget {
+  final Quiz quiz;
+  final String documentKey;
+  final SettingsState settingsState;
+
+  const _StepByStepReviewContent({
+    required this.quiz,
+    required this.documentKey,
+    required this.settingsState,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final currentIndex = quiz.currentQuestionIndex ?? 0;
+    final currentQuestion = quiz.questions[currentIndex];
+    final isCorrect = currentQuestion.isCorrect == true;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Progress indicator
+        QuizProgressIndicator(
+          currentIndex: currentIndex + 1,
+          totalQuestions: quiz.questions.length,
+        ),
+        const SizedBox(height: 16),
+        // Question navigation dots
+        QuizNavigationDots(
+          quiz: quiz,
+          currentIndex: currentIndex,
+          documentKey: documentKey,
+        ),
+        const SizedBox(height: 32),
+        // Question card
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColorLight,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isCorrect ? Colors.green : Colors.red,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          isCorrect ? Icons.check : Icons.close,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          isCorrect ? 'Correct' : 'Incorrect',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                currentQuestion.question,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontSize: settingsState.fontSize.toDouble() + 4,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 24),
+        // Options
+        ...currentQuestion.options.map((option) {
+          final isUserAnswer = option.id == currentQuestion.userAnswerId;
+          final isCorrectAnswer = option.id == currentQuestion.correctAnswerId;
+
+          Color? backgroundColor;
+          Color? textColor;
+          if (isCorrectAnswer) {
+            backgroundColor = Colors.green.shade100;
+            textColor = Colors.green.shade900;
+          } else if (isUserAnswer && !isCorrectAnswer) {
+            backgroundColor = Colors.red.shade100;
+            textColor = Colors.red.shade900;
+          }
+
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: backgroundColor ?? Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isUserAnswer || isCorrectAnswer
+                      ? (isCorrectAnswer ? Colors.green : Colors.red)
+                      : Colors.grey.shade300,
+                  width: 2,
+                ),
+              ),
+              child: Row(
+                children: [
+                  if (isCorrectAnswer)
+                    Icon(Icons.check_circle, color: Colors.green.shade700)
+                  else if (isUserAnswer)
+                    Icon(Icons.cancel, color: Colors.red.shade700)
+                  else
+                    Icon(Icons.circle_outlined, color: Colors.grey.shade400),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      option.text,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: settingsState.fontSize.toDouble(),
+                            color: textColor,
+                            fontWeight: (isUserAnswer || isCorrectAnswer)
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+        const SizedBox(height: 24),
+        // Explanation
+        if (currentQuestion.explanation.isNotEmpty)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.blue.shade200),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.lightbulb_outline,
+                      color: Colors.blue.shade700,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Explanation',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: Colors.blue.shade700,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  currentQuestion.explanation,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: settingsState.fontSize.toDouble(),
+                        color: Colors.blue.shade900,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        const SizedBox(height: 24),
+        // Navigation buttons
+        Row(
+          children: [
+            // Previous button
+            if (currentIndex > 0)
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () {
+                    context.read<QuizBloc>().add(SetQuestionIndex(
+                          documentKey: documentKey,
+                          index: currentIndex - 1,
+                        ));
+                  },
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Previous',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+            if (currentIndex > 0) const SizedBox(width: 12),
+            // Next button or Retake
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (currentIndex + 1 >= quiz.questions.length) {
+                    // Last question - show retake option
+                    context.read<QuizBloc>().add(ResetQuiz(
+                          documentKey: documentKey,
+                        ));
+                  } else {
+                    context.read<QuizBloc>().add(SetQuestionIndex(
+                          documentKey: documentKey,
+                          index: currentIndex + 1,
+                        ));
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  currentIndex + 1 >= quiz.questions.length
+                      ? 'Retake Quiz'
+                      : 'Next Question',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

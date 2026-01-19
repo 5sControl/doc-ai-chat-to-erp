@@ -1,0 +1,127 @@
+{
+  "quiz_id": "demo_the_7_habits",
+  "documentKey": "The 7 Habits of Highly Effective People",
+  "generated_at": "2026-01-19T00:00:00Z",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "What is the first habit of highly effective people?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Be Proactive"
+        },
+        {
+          "id": "b",
+          "text": "Begin with the End in Mind"
+        },
+        {
+          "id": "c",
+          "text": "Put First Things First"
+        },
+        {
+          "id": "d",
+          "text": "Think Win-Win"
+        }
+      ],
+      "correct_answer_id": "a",
+      "explanation": "Be Proactive is the first habit. It's about taking ownership and control of your life rather than being reactive to circumstances. Proactive people focus on their Circle of Influence - the things they can actually control and change."
+    },
+    {
+      "id": "q2",
+      "question": "According to Covey, before 1920, success was primarily based on what?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Personality ethics like public image and attitude"
+        },
+        {
+          "id": "b",
+          "text": "Character ethics like integrity, humility, and courage"
+        },
+        {
+          "id": "c",
+          "text": "Social media presence and networking"
+        },
+        {
+          "id": "d",
+          "text": "Financial achievements and material possessions"
+        }
+      ],
+      "correct_answer_id": "b",
+      "explanation": "Covey found that before 1920, success was based on character ethics such as integrity, humility, and courage. After 1920, the focus shifted to personality ethics like public image, attitude, and personality."
+    },
+    {
+      "id": "q3",
+      "question": "What is Quadrant Two in the Time Management Matrix?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tasks that are urgent and important"
+        },
+        {
+          "id": "b",
+          "text": "Tasks that are important but not urgent"
+        },
+        {
+          "id": "c",
+          "text": "Tasks that are urgent but not important"
+        },
+        {
+          "id": "d",
+          "text": "Tasks that are neither urgent nor important"
+        }
+      ],
+      "correct_answer_id": "b",
+      "explanation": "Quadrant Two focuses on tasks that are important but not urgent. This is the most critical quadrant as these tasks include building relationships, planning for the future, and other important principles that won't happen overnight but are essential for success."
+    },
+    {
+      "id": "q4",
+      "question": "What does 'Synergize' (Habit 6) mean?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Working alone to maximize individual productivity"
+        },
+        {
+          "id": "b",
+          "text": "The combined value of individuals working together is greater than working independently"
+        },
+        {
+          "id": "c",
+          "text": "Compromising your values to please others"
+        },
+        {
+          "id": "d",
+          "text": "Listening without understanding"
+        }
+      ],
+      "correct_answer_id": "b",
+      "explanation": "Synergy means that the combined value of each individual working together will be greater than if each individual remained independent. In other words, two heads are better than one. By understanding and valuing different perspectives, you create opportunities for synergy."
+    },
+    {
+      "id": "q5",
+      "question": "What are the four dimensions mentioned in Habit 7: Sharpen the Saw?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Physical, financial, social, and career"
+        },
+        {
+          "id": "b",
+          "text": "Physical, spiritual, mental, and social"
+        },
+        {
+          "id": "c",
+          "text": "Physical, emotional, financial, and spiritual"
+        },
+        {
+          "id": "d",
+          "text": "Mental, financial, career, and social"
+        }
+      ],
+      "correct_answer_id": "b",
+      "explanation": "Habit 7, Sharpen the Saw, focuses on renewing yourself in four dimensions: physical (eating well, exercising), spiritual (examining your life, meditation), mental (reading, learning), and social/emotional (building relationships, maintaining an Abundance Mentality). By working on these four areas, you ensure lasting effectiveness."
+    }
+  ]
+}

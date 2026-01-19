@@ -178,10 +178,20 @@ class SummaryApiRepository {
   }
 
   Future<String> translate(
-      {required String text, required String languageCode}) async {
+      {required String text, required String languageCode, String? languageName}) async {
     try {
-      Response response = await _dio
-          .post(translateUrl, data: {'text': text, 'language': languageCode});
+      // Send both language_name (preferred) and language (backward compatibility)
+      final requestData = {
+        'text': text,
+        'language': languageCode,
+      };
+      
+      // Add language_name if provided - server will prioritize this
+      if (languageName != null && languageName.isNotEmpty) {
+        requestData['language_name'] = languageName;
+      }
+      
+      Response response = await _dio.post(translateUrl, data: requestData);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['translated_text'];
@@ -515,8 +525,12 @@ class SummaryRepository {
   }
 
   Future<String> getTranslate(
-      {required String text, required String languageCode}) {
-    return _summaryRepository.translate(text: text, languageCode: languageCode);
+      {required String text, required String languageCode, String? languageName}) {
+    return _summaryRepository.translate(
+      text: text, 
+      languageCode: languageCode,
+      languageName: languageName,
+    );
   }
 
   Future<String> makeRequest(

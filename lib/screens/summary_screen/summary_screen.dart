@@ -233,19 +233,9 @@ class _SummaryScreenState extends State<SummaryScreen>
                         extendBody: true,
                         floatingActionButtonLocation:
                             FloatingActionButtonLocation.centerDocked,
-                        bottomNavigationBar: AnimatedCrossFade(
-                          duration: const Duration(milliseconds: 300),
-                          firstChild: ShareAndCopyButton(
-                            activeTab: activeTab,
-                            sharedLink: widget.summaryKey,
-                            summaryData: summaryData,
-                          ),
-                          secondChild: SendRequestField(
-                              summaryKey: widget.summaryKey,
-                              summaryData: summaryData),
-                          crossFadeState: activeTab == 2
-                              ? CrossFadeState.showSecond
-                              : CrossFadeState.showFirst,
+                        bottomNavigationBar: _buildBottomBar(
+                          activeTab,
+                          summaryData,
                         )),
                     if (summaryData.isBlocked != null && summaryData.isBlocked!)
                       const PremiumBlurContainer()
@@ -257,6 +247,31 @@ class _SummaryScreenState extends State<SummaryScreen>
         );
       },
     );
+  }
+
+  Widget? _buildBottomBar(int activeTab, summaryData) {
+    // activeTab 0: brief summary
+    // activeTab 1: deep summary
+    // activeTab 2: research (Chat)
+    // activeTab 3: quiz
+    
+    if (activeTab == 2) {
+      // Show chat input for Research tab
+      return SendRequestField(
+        summaryKey: widget.summaryKey,
+        summaryData: summaryData,
+      );
+    } else if (activeTab == 0 || activeTab == 1) {
+      // Show Share/Copy/Translate buttons only for text tabs (Brief and Deep)
+      return ShareAndCopyButton(
+        activeTab: activeTab,
+        sharedLink: widget.summaryKey,
+        summaryData: summaryData,
+      );
+    } else {
+      // For Quiz tab (3) - show nothing
+      return null;
+    }
   }
 }
 

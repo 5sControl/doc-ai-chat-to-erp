@@ -2,6 +2,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:summify/services/summaryApi.dart';
+import 'package:summify/services/quiz_asset_loader.dart';
 import '../../models/models.dart';
 import '../mixpanel/mixpanel_bloc.dart';
 
@@ -37,12 +38,22 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
       emit(state.copyWith(quizzes: quizzes));
 
       try {
-        final quiz = await SummaryRepository().generateQuizFromText(
-          text: event.text,
-          documentKey: event.documentKey,
-          numQuestions: event.numQuestions,
-          difficulty: event.difficulty,
-        );
+        Quiz? quiz;
+        
+        // First, try to load from assets if available
+        if (QuizAssetLoader.hasAssetQuiz(event.documentKey)) {
+          quiz = await QuizAssetLoader.loadDemoQuiz(event.documentKey);
+        }
+        
+        // If asset quiz not found or failed to load, generate from API
+        if (quiz == null) {
+          quiz = await SummaryRepository().generateQuizFromText(
+            text: event.text,
+            documentKey: event.documentKey,
+            numQuestions: event.numQuestions,
+            difficulty: event.difficulty,
+          );
+        }
 
         final Map<String, Quiz> updatedQuizzes = Map.from(state.quizzes);
         updatedQuizzes[event.documentKey] = quiz.copyWith(
@@ -144,6 +155,7 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
       final completedQuiz = quiz.copyWith(
         status: QuizStatus.completed,
         completedAt: DateTime.now(),
+        reviewMode: ReviewMode.overview,
       );
 
       final Map<String, Quiz> quizzes = Map.from(state.quizzes);
@@ -175,6 +187,70 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
 
       final Map<String, Quiz> quizzes = Map.from(state.quizzes);
       quizzes[event.documentKey] = resetQuiz;
+      emit(state.copyWith(quizzes: quizzes));
+    });
+
+    on<PreviousQuestion>((event, emit) {
+      final quiz = state.quizzes[event.documentKey];
+      if (quiz == null || quiz.status != QuizStatus.inProgress) {
+        return;
+      }
+
+      final currentIndex = quiz.currentQuestionIndex ?? 0;
+      if (currentIndex <= 0) {
+        // Already at first question
+        return;
+      }
+
+      final updatedQuiz = quiz.copyWith(
+        currentQuestionIndex: currentIndex - 1,
+        status: QuizStatus.inProgress,
+      );
+
+      final Map<String, Quiz> quizzes = Map.from(state.quizzes);
+      quizzes[event.documentKey] = updatedQuiz;
+      emit(state.copyWith(quizzes: quizzes));
+    });
+
+    on<SetQuestionIndex>((event, emit) {
+      final quiz = state.quizzes[event.documentKey];
+      if (quiz == null) {
+        return;
+      }
+
+      // Allow navigation in completed quizzes or in-progress quizzes
+      if (quiz.status != QuizStatus.completed && 
+          quiz.status != QuizStatus.inProgress) {
+        return;
+      }
+
+      // Validate index bounds
+      if (event.index < 0 || event.index >= quiz.questions.length) {
+        return;
+      }
+
+      final updatedQuiz = quiz.copyWith(
+        currentQuestionIndex: event.index,
+      );
+
+      final Map<String, Quiz> quizzes = Map.from(state.quizzes);
+      quizzes[event.documentKey] = updatedQuiz;
+      emit(state.copyWith(quizzes: quizzes));
+    });
+
+    on<SetReviewMode>((event, emit) {
+      final quiz = state.quizzes[event.documentKey];
+      if (quiz == null || quiz.status != QuizStatus.completed) {
+        return;
+      }
+
+      final updatedQuiz = quiz.copyWith(
+        reviewMode: event.mode,
+        currentQuestionIndex: event.mode == ReviewMode.stepByStep ? 0 : null,
+      );
+
+      final Map<String, Quiz> quizzes = Map.from(state.quizzes);
+      quizzes[event.documentKey] = updatedQuiz;
       emit(state.copyWith(quizzes: quizzes));
     });
   }

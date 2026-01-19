@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/helpers/language_codes.dart';
 import 'package:summify/services/summaryApi.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
@@ -164,6 +165,7 @@ class TranslateButton extends StatelessWidget {
                     summaryKey: summaryKey,
                     summaryText: text!,
                     languageCode: settingsState.translateLanguage,
+                    languageName: languageNames[settingsState.translateLanguage],
                     summaryType: SummaryType.short));
                 context
                     .read<MixpanelBloc>()
@@ -182,6 +184,7 @@ class TranslateButton extends StatelessWidget {
                     summaryKey: summaryKey,
                     summaryText: text!,
                     languageCode: settingsState.translateLanguage,
+                    languageName: languageNames[settingsState.translateLanguage],
                     summaryType: SummaryType.long));
               } else if (!isShort &&
                   translatesState.longTranslates[summaryKey]?.translate !=

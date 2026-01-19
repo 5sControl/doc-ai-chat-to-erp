@@ -9,15 +9,18 @@ class TranslateSummary extends TranslatesEvent {
   final SummaryType summaryType;
   final String summaryText;
   final String languageCode;
-  const TranslateSummary(
-      {required this.summaryKey,
-      required this.summaryType,
-      required this.summaryText,
-      required this.languageCode});
+  final String? languageName;  // Full language name (e.g., 'Ukrainian', 'English')
+  const TranslateSummary({
+    required this.summaryKey,
+    required this.summaryType,
+    required this.summaryText,
+    required this.languageCode,
+    this.languageName,
+  });
 
   @override
-  List<Object> get props =>
-      [summaryKey, summaryType, summaryText, languageCode];
+  List<Object?> get props =>
+      [summaryKey, summaryType, summaryText, languageCode, languageName];
 }
 
 class ToggleTranslate extends TranslatesEvent {

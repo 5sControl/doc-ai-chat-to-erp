@@ -704,7 +704,7 @@ class SettingsScreen extends StatelessWidget {
                                   return Container();
                                 }
                               }),
-                          Text('version 1.4.3',
+                          Text('version 1.6.1',
                               textAlign: TextAlign.end,
                               style: Theme.of(context)
                                   .textTheme

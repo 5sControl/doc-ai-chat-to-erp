@@ -132,21 +132,32 @@ class _LibraryDocumentScreenState extends State<LibraryDocumentScreen>
             extendBody: true,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
-            bottomNavigationBar: AnimatedCrossFade(
-              duration: const Duration(milliseconds: 300),
-              firstChild: ShareAndCopyButton(
-                activeTab: activeTab,
-                libraryDocument: widget.libraryDocument,
-              ),
-              secondChild: SendRequestField(
-                libraryDocument: widget.libraryDocument,
-              ),
-              crossFadeState: activeTab == 2
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-            )),
+            bottomNavigationBar: _buildBottomBar(activeTab)),
       ],
     );
+  }
+
+  Widget? _buildBottomBar(int activeTab) {
+    // activeTab 0: annotation (Brief)
+    // activeTab 1: summary (Deep)
+    // activeTab 2: research (Chat)
+    // activeTab 3: quiz
+    
+    if (activeTab == 2) {
+      // Show chat input for Research tab
+      return SendRequestField(
+        libraryDocument: widget.libraryDocument,
+      );
+    } else if (activeTab == 0 || activeTab == 1) {
+      // Show Share/Copy/Translate buttons only for text tabs (Brief and Deep)
+      return ShareAndCopyButton(
+        activeTab: activeTab,
+        libraryDocument: widget.libraryDocument,
+      );
+    } else {
+      // For Quiz tab (3) - show nothing
+      return null;
+    }
   }
 }
 
