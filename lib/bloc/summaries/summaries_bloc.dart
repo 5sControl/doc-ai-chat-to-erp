@@ -23,7 +23,7 @@ final initialSummary = SummaryData(
   longSummaryStatus: SummaryStatus.complete,
   date: DateTime.now(),
   summaryPreview: SummaryPreview(
-    title: 'Atomic Habits',
+    title: 'Atomic Habits (Rephrase)',
     imageUrl: null,
   ),
   summaryOrigin: SummaryOrigin.text,
