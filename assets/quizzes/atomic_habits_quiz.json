@@ -1,0 +1,127 @@
+{
+  "quiz_id": "demo_atomic_habits",
+  "questions": [
+    {
+      "id": "q1",
+      "question": "According to the core idea of atomic habits, why is focusing on identity-based systems more effective than focusing on goals?",
+      "options": [
+        {
+          "id": "a1",
+          "text": "Because goals are too vague and impossible to measure, while systems provide clear metrics."
+        },
+        {
+          "id": "a2",
+          "text": "Because goals are about outcomes you want to achieve, while systems focus on who you wish to become—shaping long-term behavior through repeated actions."
+        },
+        {
+          "id": "a3",
+          "text": "Because systems rely on external rewards, which are more motivating than the internal satisfaction of achieving goals."
+        },
+        {
+          "id": "a4",
+          "text": "Because goals are only useful for short-term motivation, while systems eliminate the need for discipline entirely."
+        }
+      ],
+      "correct_answer_id": "a2",
+      "explanation": "The correct answer highlights the key distinction between goals (outcomes) and systems (identity and process). Atomic habits emphasize that identity change is the 'North Star'—each action is a vote for the type of person you want to become, making systems more sustainable and transformative than goal-setting alone."
+    },
+    {
+      "id": "q2",
+      "question": "Which of the following scenarios BEST demonstrates the **Two-Minute Rule** as a strategy for making habits easy?",
+      "options": [
+        {
+          "id": "a1",
+          "text": "Setting a goal to run a marathon and immediately signing up for a race to hold yourself accountable."
+        },
+        {
+          "id": "a2",
+          "text": "Deciding to 'read more books' and starting by committing to read just one page per day."
+        },
+        {
+          "id": "a3",
+          "text": "Rewarding yourself with a movie after completing a week of workouts to stay motivated."
+        },
+        {
+          "id": "a4",
+          "text": "Using habit stacking by saying, 'After I brush my teeth, I will meditate for 20 minutes.'"
+        }
+      ],
+      "correct_answer_id": "a2",
+      "explanation": "The Two-Minute Rule is about downscaling a habit to a version that takes two minutes or less to start (e.g., reading one page instead of a chapter). This reduces friction and makes the habit easy to begin, which is critical for consistency. The other options involve goal-setting, rewards, or longer commitments, which don’t align with the rule’s focus on simplicity."
+    },
+    {
+      "id": "q3",
+      "question": "The **Plateau of Latent Potential** explains why people often quit habits before seeing results. Which analogy BEST captures this concept?",
+      "options": [
+        {
+          "id": "a1",
+          "text": "A snowball rolling downhill: progress starts slow but accelerates over time due to compounding effects, even if it’s not visible early on."
+        },
+        {
+          "id": "a2",
+          "text": "A light switch: habits either work immediately or don’t, with no gradual improvement."
+        },
+        {
+          "id": "a3",
+          "text": "A battery charging: you see 100% progress only at the very end, with no intermediate signs of improvement."
+        },
+        {
+          "id": "a4",
+          "text": "A plant growing: you can see daily changes if you measure carefully, so lack of visible progress is just an excuse."
+        }
+      ],
+      "correct_answer_id": "a1",
+      "explanation": "The Plateau of Latent Potential refers to the idea that results from habits often lag behind the effort invested—like a snowball that grows slowly at first but gains momentum over time. This explains why people may abandon habits prematurely: they don’t see immediate results, even though small, consistent actions are compounding invisibly."
+    },
+    {
+      "id": "q4",
+      "question": "How does **Temptation Bundling** align with the **Second Law of Behavior Change** (make it attractive)?",
+      "options": [
+        {
+          "id": "a1",
+          "text": "It makes the habit harder to avoid by adding accountability, such as telling a friend about your goal."
+        },
+        {
+          "id": "a2",
+          "text": "It pairs a habit you *should* do with a habit you *want* to do, making the overall behavior more appealing."
+        },
+        {
+          "id": "a3",
+          "text": "It removes all distractions from your environment, so the habit becomes the only attractive option."
+        },
+        {
+          "id": "a4",
+          "text": "It focuses on tracking progress visually, which triggers dopamine and makes the habit satisfying."
+        }
+      ],
+      "correct_answer_id": "a2",
+      "explanation": "Temptation Bundling is a strategy to make habits more attractive by combining a less appealing habit (e.g., exercising) with a rewarding one (e.g., watching your favorite show). This leverages the Second Law by increasing craving for the habit, as the bundled activity makes the overall behavior more desirable."
+    },
+    {
+      "id": "q5",
+      "question": "Which of the following statements BEST reflects the idea that *'you fall to the level of your systems, not rise to your goals'*?",
+      "options": [
+        {
+          "id": "a1",
+          "text": "Motivation is the primary driver of success; without it, even the best systems will fail."
+        },
+        {
+          "id": "a2",
+          "text": "Long-term behavior is shaped by the processes you follow daily, not the aspirations you set. Without strong systems, goals are unsustainable."
+        },
+        {
+          "id": "a3",
+          "text": "Goals are useless unless they are broken down into specific, time-bound tasks with deadlines."
+        },
+        {
+          "id": "a4",
+          "text": "Systems only work if they are designed by experts; personal habits are too unreliable for consistent progress."
+        }
+      ],
+      "correct_answer_id": "a2",
+      "explanation": "This statement emphasizes that outcomes are a result of the systems (habits and processes) you implement, not the goals you set. Goals provide direction, but systems—repeated daily actions—determine your actual progress. Without robust systems, even ambitious goals will not be achieved consistently."
+    }
+  ],
+  "generated_at": "2026-01-19T17:49:50.239Z",
+  "documentKey": "Atomic Habits"
+}

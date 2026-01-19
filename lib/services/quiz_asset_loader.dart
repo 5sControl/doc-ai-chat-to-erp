@@ -6,6 +6,7 @@ class QuizAssetLoader {
   // Map of document keys to their asset file names
   static const Map<String, String> _quizAssets = {
     'The 7 Habits of Highly Effective People': 'the_7_habits_quiz.json',
+    'Atomic Habits': 'atomic_habits_quiz.json',
   };
 
   /// Attempts to load a pre-generated quiz from assets
