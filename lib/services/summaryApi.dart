@@ -48,8 +48,18 @@ class SummaryApiRepository {
   final String sendEmailUrl =
       'https://easy4learn.com/django-api/applications/email/';
 
-  final Dio _dio = Dio(
-    BaseOptions(responseType: ResponseType.plain),
+  // API Key for authentication with employees-training.com API
+  // Using a static key to avoid build-time complexities
+  static const String _apiKey = 'acf8421909af3940f4731f629e28ca486c9ed6af7d7f704a050494773a27c8a9';
+
+  // Initialize Dio with API key header
+  late final Dio _dio = Dio(
+    BaseOptions(
+      responseType: ResponseType.plain,
+      headers: {
+        'X-API-Key': _apiKey,
+      },
+    ),
   );
 
   FutureOr<Object?> getFromLink(
