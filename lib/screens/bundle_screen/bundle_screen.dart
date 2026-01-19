@@ -140,7 +140,28 @@ class _BundleScreenState extends State<BundleScreen>
     }
 
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        // Автоматически закрываем paywall после успешной покупки подписки
+        if (state.subscriptionStatus == SubscriptionStatus.subscribed &&
+            context.mounted) {
+          // Добавляем небольшую задержку, чтобы PurchaseSuccessScreen успел показаться
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (!context.mounted) return;
+            
+            // Учитываем различные сценарии открытия paywall
+            if (widget.fromOnboarding != null) {
+              Navigator.of(context).pushNamed('/login');
+              context.read<MixpanelBloc>().add(const ClosePaywall());
+            } else if (widget.fromSummary == true) {
+              Navigator.of(context).pushNamed('/');
+              context.read<MixpanelBloc>().add(const ClosePaywall());
+            } else {
+              // Обычное закрытие (из Settings или других мест)
+              Navigator.of(context).pop();
+            }
+          });
+        }
+      },
       builder: (context, state) {
         // final abTest = context.read<SettingsBloc>().state.abTest;
 

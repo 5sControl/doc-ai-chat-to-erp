@@ -1,4 +1,4 @@
-<svg width="1200" height="1600" xmlns="http://www.w3.org/2000/svg">
+<svg width="1200" height="1900" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
       .screen-box { fill: #00BAC3; stroke: #fff; stroke-width: 2; rx: 8; }
@@ -180,8 +180,8 @@
   <text x="70" y="1220" class="label" font-weight="bold">3. SubscriptionScreenLimit логика:</text>
   <text x="90" y="1240" class="label">   - Показывает разные экраны в зависимости от screenIndex</text>
   <text x="90" y="1260" class="label">   - screenIndex == 4 → показывает SubscriptionScreen</text>
-  <text x="90" y="1280" class="label">   - screenIndex < 3 → показывает "15 Deep Summaries Daily"</text>
-  <text x="90" y="1300" class="label">   - screenIndex >= 3 → показывает список функций премиум</text>
+  <text x="90" y="1280" class="label">   - screenIndex &lt; 3 → показывает "15 Deep Summaries Daily"</text>
+  <text x="90" y="1300" class="label">   - screenIndex &gt;= 3 → показывает список функций премиум</text>
   
   <text x="70" y="1330" class="label" font-weight="bold">4. Покупка подписки:</text>
   <text x="90" y="1350" class="label">   - MakePurchase event → Purchases.purchasePackage()</text>
@@ -194,5 +194,47 @@
   <text x="90" y="1480" class="label">   - Home (Premium Banner) → NextScreenEvent() → BundleScreen</text>
   <text x="90" y="1500" class="label">   - Summary Screen → NextScreenEvent() → SubscriptionScreenLimit</text>
   <text x="90" y="1520" class="label">   - Onboarding → BundleScreen (Tab 1 по умолчанию)</text>
+  
+  <!-- Limits Section -->
+  <rect x="50" y="1600" width="1100" height="280" fill="#e3f2fd" stroke="#1976d2" stroke-width="2" rx="5"/>
+  <text x="600" y="1630" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#1976d2">Лимиты и ограничения по тарифам</text>
+  
+  <!-- Free Tier -->
+  <rect x="80" y="1650" width="320" height="210" fill="#fff" stroke="#f44336" stroke-width="2" rx="5"/>
+  <text x="240" y="1680" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#f44336">Free (Бесплатный)</text>
+  <text x="90" y="1705" class="label" font-weight="bold">Лимиты:</text>
+  <text x="90" y="1725" class="label">• Summary: 2 бесплатных</text>
+  <text x="90" y="1745" class="label">• После лимита: isBlocked = true</text>
+  <text x="90" y="1765" class="label" font-weight="bold">Ограничения:</text>
+  <text x="90" y="1785" class="label">• Нет Document Research</text>
+  <text x="90" y="1805" class="label">• Нет Translation</text>
+  <text x="90" y="1825" class="label">• Нет Chrome Extension</text>
+  <text x="90" y="1845" class="label">• Цена: $0</text>
+  
+  <!-- Premium Tier -->
+  <rect x="440" y="1650" width="320" height="210" fill="#fff" stroke="#00BAC3" stroke-width="2" rx="5"/>
+  <text x="600" y="1680" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#00BAC3">Premium</text>
+  <text x="450" y="1705" class="label" font-weight="bold">Лимиты:</text>
+  <text x="450" y="1725" class="label">• Summary: Unlimited</text>
+  <text x="450" y="1745" class="label">• Все summary разблокированы</text>
+  <text x="450" y="1765" class="label" font-weight="bold">Функции:</text>
+  <text x="450" y="1785" class="label">• Unlimited Summaries</text>
+  <text x="450" y="1805" class="label">• Document Research ✅</text>
+  <text x="450" y="1825" class="label">• Translation ✅</text>
+  <text x="450" y="1845" class="label">• Chrome Extension ✅</text>
+  <text x="450" y="1865" class="label">• Цена: $4.99/мес или $34.99/год</text>
+  
+  <!-- Bundle Tier -->
+  <rect x="800" y="1650" width="320" height="210" fill="#fff" stroke="#9C27B0" stroke-width="2" rx="5"/>
+  <text x="960" y="1680" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#9C27B0">Bundle</text>
+  <text x="810" y="1705" class="label" font-weight="bold">Лимиты:</text>
+  <text x="810" y="1725" class="label">• Summary: Unlimited</text>
+  <text x="810" y="1745" class="label">• Все summary разблокированы</text>
+  <text x="810" y="1765" class="label" font-weight="bold">Включено:</text>
+  <text x="810" y="1785" class="label">• Все функции Premium ✅</text>
+  <text x="810" y="1805" class="label">• SpeechScribe приложение ✅</text>
+  <text x="810" y="1825" class="label">• SpeechScribe Chrome ✅</text>
+  <text x="810" y="1845" class="label">• Цена: $7.99/мес или $49.99/год</text>
 </svg>
+
 

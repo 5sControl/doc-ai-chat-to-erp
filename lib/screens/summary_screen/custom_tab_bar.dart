@@ -39,6 +39,7 @@ class CustomTabBar extends StatelessWidget {
           ),
           Tab(text: "Deep"),
           Tab(text: "Chat"),
+          Tab(text: "Quiz"),
         ],
       ),
     );

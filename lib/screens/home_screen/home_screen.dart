@@ -172,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       // });
     }
     _allSummaries =
-        context.read<SummariesBloc>().state.summaries.values.toList();
+        context.read<SummariesBloc>().state.summaries.values.toList()
+          ..sort((a, b) => b.date.compareTo(a.date));
     _filteredSummaries = _allSummaries;
 
     _searchController.addListener(() {
@@ -207,7 +208,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ?.toLowerCase()
                 .contains(lowerQuery) ??
             false;
-      }).toList();
+      }).toList()
+        ..sort((a, b) => b.date.compareTo(a.date));
     });
   }
 
@@ -259,7 +261,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           return BlocBuilder<SummariesBloc, SummariesState>(
             builder: (context, summariesState) {
               //final sumsKeys = summariesState.summaries.keys.toList();
-              _allSummaries = summariesState.summaries.values.toList();
+              _allSummaries = summariesState.summaries.values.toList()
+                ..sort((a, b) => b.date.compareTo(a.date));
               _filteredSummaries = _searchController.text.isEmpty
                   ? _allSummaries
                   : _filteredSummaries;

@@ -222,31 +222,50 @@ class OnboardingScreen3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        //const Spacer(),
-        const Divider(
-          color: Colors.transparent,
-          height: 25,
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height,
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text('One-click “share” to get summary',
-              style: TextStyle(
-                  fontSize: 36, fontWeight: FontWeight.w700, height: 1),
-              textAlign: TextAlign.start),
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //const Spacer(),
+            const Divider(
+              color: Colors.transparent,
+              height: 25,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text('One-click "share" to get summary',
+                  style: TextStyle(
+                      fontSize: 36, fontWeight: FontWeight.w700, height: 1),
+                  textAlign: TextAlign.start),
+            ),
+            // const Divider(
+            //   color: Colors.transparent,
+            //   height: 25,
+            // ),
+            Container(
+                margin: const EdgeInsets.only(left: 15, top:0),
+                child: Theme.of(context).brightness == Brightness.dark 
+                    ? Image.asset(
+                        'assets/onboarding/onb2_dark.png', 
+                        height: MediaQuery.of(context).size.shortestSide > 600 
+                            ? MediaQuery.of(context).size.height - 20 
+                            : MediaQuery.of(context).size.height * 0.7,
+                        fit: BoxFit.contain,
+                      ) 
+                    : Image.asset(
+                        'assets/onboarding/onb2.png', 
+                        height: MediaQuery.of(context).size.shortestSide > 600 
+                            ? 1000 
+                            : MediaQuery.of(context).size.height * 0.7,
+                        fit: BoxFit.contain,
+                      )),
+          ],
         ),
-        // const Divider(
-        //   color: Colors.transparent,
-        //   height: 25,
-        // ),
-        Container(
-            margin: const EdgeInsets.only(left: 15, top:0),
-            child: Theme.of(context).brightness == Brightness.dark ? Image.asset('assets/onboarding/onb2_dark.png', height: MediaQuery.of(context).size.shortestSide >
-                                            600 ? MediaQuery.of(context).size.height - 20: MediaQuery.of(context).size.height,) : Image.asset('assets/onboarding/onb2.png', height: MediaQuery.of(context).size.shortestSide >
-                                            600 ? 1000 : MediaQuery.of(context).size.height,)),
-      ],
+      ),
     );
   }
 }

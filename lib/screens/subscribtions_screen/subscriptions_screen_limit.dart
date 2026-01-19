@@ -77,7 +77,18 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
     }
 
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        // Автоматически закрываем paywall после успешной покупки подписки
+        if (state.subscriptionStatus == SubscriptionStatus.subscribed &&
+            context.mounted) {
+          // Добавляем небольшую задержку, чтобы PurchaseSuccessScreen успел показаться
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          });
+        }
+      },
       builder: (context, state) {
         // final abTest = context.read<SettingsBloc>().state.abTest;
 

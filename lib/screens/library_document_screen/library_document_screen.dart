@@ -111,7 +111,7 @@ class _LibraryDocumentScreenState extends State<LibraryDocumentScreen>
                       Align(
                         alignment: Alignment.topCenter,
                         child: Container(
-                          height: 64,
+                          height: 68,
                           decoration: BoxDecoration(
                               gradient: LinearGradient(
                             colors: gradientColors,

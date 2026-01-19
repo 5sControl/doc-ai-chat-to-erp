@@ -885,7 +885,7 @@ class MainGroup extends StatelessWidget {
                         child: InkWell(
                           onTap: () => item.onTap(),
                           highlightColor: Colors.white24,
-                          // borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(8),
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(

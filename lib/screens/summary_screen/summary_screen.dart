@@ -19,6 +19,7 @@ import 'package:summify/screens/summary_screen/send_request_field.dart';
 import 'package:summify/screens/summary_screen/summary_hero_image.dart';
 import 'package:summify/screens/summary_screen/share_copy_button.dart';
 import 'package:summify/screens/summary_screen/summary_text_container.dart';
+import 'package:summify/screens/library_document_screen/quiz_tab.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
@@ -52,7 +53,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     setState(() {
       activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
     });
-    _tabController = TabController(length: 3, vsync: this, initialIndex: AB);
+    _tabController = TabController(length: 4, vsync: this, initialIndex: AB);
     if (context
         .read<SummariesBloc>()
         .state
@@ -201,12 +202,16 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       ResearchTab(
                                         summaryKey: widget.summaryKey,
                                       ),
+                                      QuizTab(
+                                        documentKey: widget.summaryKey,
+                                        documentText: deepSummaryText,
+                                      ),
                                     ],
                                   ),
                                   Align(
                                     alignment: Alignment.topCenter,
                                     child: Container(
-                                      height: 64,
+                                      height: 68,
                                       decoration: BoxDecoration(
                                           gradient: LinearGradient(
                                         colors: gradientColors,
