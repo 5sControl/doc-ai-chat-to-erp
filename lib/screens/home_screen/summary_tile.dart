@@ -181,12 +181,9 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                       horizontal: 2, vertical: 2),
                                   child: Hero(
                                     tag: summaryData.date,
-                                    child: summaryData
-                                                    .summaryPreview.imageUrl ==
-                                                Assets.placeholderLogo.path ||
-                                            summaryData
-                                                    .summaryPreview.imageUrl ==
-                                                null
+                                    child: (summaryData.summaryPreview.imageUrl == null ||
+                                            summaryData.summaryPreview.imageUrl!.isEmpty ||
+                                            summaryData.summaryPreview.imageUrl == Assets.placeholderLogo.path)
                                         ? Image.asset(
                                             Assets.placeholderLogo.path)
                                         : CachedNetworkImage(

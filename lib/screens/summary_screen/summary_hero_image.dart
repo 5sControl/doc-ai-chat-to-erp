@@ -18,20 +18,21 @@ class SummaryHeroImage extends StatelessWidget {
         child: ImageFiltered(
           imageFilter: ImageFilter.blur(
               sigmaX: 15, sigmaY: 15, tileMode: TileMode.mirror),
-          child:
-          summaryData.summaryPreview.imageUrl != Assets.placeholderLogo.path
+          child: (summaryData.summaryPreview.imageUrl != null &&
+                  summaryData.summaryPreview.imageUrl!.isNotEmpty &&
+                  summaryData.summaryPreview.imageUrl != Assets.placeholderLogo.path)
               ? CachedNetworkImage(
-            imageUrl: summaryData.summaryPreview.imageUrl ?? '',
-            fit: BoxFit.cover,
-            color: Colors.black54,
-            colorBlendMode: BlendMode.colorBurn,
-          )
+                  imageUrl: summaryData.summaryPreview.imageUrl!,
+                  fit: BoxFit.cover,
+                  color: Colors.black54,
+                  colorBlendMode: BlendMode.colorBurn,
+                )
               : Image.asset(
-            Assets.placeholderLogo.path,
-            fit: BoxFit.cover,
-            color: Colors.black54,
-            colorBlendMode: BlendMode.colorBurn,
-          ),
+                  Assets.placeholderLogo.path,
+                  fit: BoxFit.cover,
+                  color: Colors.black54,
+                  colorBlendMode: BlendMode.colorBurn,
+                ),
         ),
       ),
     );
