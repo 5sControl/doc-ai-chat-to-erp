@@ -172,8 +172,8 @@ class _BundleScreenState extends State<BundleScreen>
             showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text('Ошибка'),
-                content: Text('Нет доступных подписок'),
+                title: Text('Error'),
+                content: Text('Subscriptions not available'),
                 actions: [
                   TextButton(
                     onPressed: () {

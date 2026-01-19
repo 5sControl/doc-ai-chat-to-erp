@@ -50,11 +50,17 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
             availableProducts: state.availableProducts,
             subscriptionStatus: state.subscriptionStatus));
 
-        await purchasesService.initPlatformState();
-        final offerings = await purchasesService.getProducts();
+        try {
+          await purchasesService.initPlatformState();
+          final offerings = await purchasesService.getProducts();
 
-        if (offerings is Offerings) {
-          emit(state.copyWith(availableProducts: offerings));
+          if (offerings is Offerings) {
+            emit(state.copyWith(availableProducts: offerings));
+          }
+        } catch (e) {
+          // Log the error but don't prevent the app from continuing
+          print('Error initializing purchases: $e');
+          // Emit state without available products - the app can still function
         }
 
         add(const GetSubscriptionStatus());
@@ -150,21 +156,16 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
           emit(state.copyWith(
               subscriptionStatus: SubscriptionStatus.subscribed));
         } else {
-          if (event.context.mounted) {
-            showSystemDialog(
-                context: event.context,
-                title: "No available subscriptions found");
-          }
+          // Log instead of showing dialog - allows app to continue without interruption
+          print('No active subscriptions found during restore');
           emit(state.copyWith(
               subscriptionStatus: SubscriptionStatus.unsubscribed));
         }
       } on PlatformException catch (e) {
-        if (event.context.mounted) {
-          showSystemDialog(
-              context: event.context,
-              title: "No available subscriptions found");
-        }
-        print(e.message);
+        // Log error instead of showing dialog - prevents blocking app flow
+        print('Error restoring subscriptions: ${e.message} (Code: ${e.code})');
+        emit(state.copyWith(
+            subscriptionStatus: SubscriptionStatus.unsubscribed));
       }
     });
 

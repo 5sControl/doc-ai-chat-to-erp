@@ -9,23 +9,26 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 class PurchasesService {
   User? user = FirebaseAuth.instance.currentUser;
   Future<void> initPlatformState() async {
-
     if (!kIsWeb) {
-      Purchases.setLogLevel(LogLevel.debug);
+      try {
+        Purchases.setLogLevel(LogLevel.debug);
 
-      late PurchasesConfiguration configuration;
-      if (!kIsWeb && Platform.isAndroid) {
-        configuration = PurchasesConfiguration('goog_ugQdxFfTdHeYrhnJzuBXhYIUtQM');
-      } else if (!kIsWeb && Platform.isIOS) {
-        configuration =
-            PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');
+        late PurchasesConfiguration configuration;
+        if (!kIsWeb && Platform.isAndroid) {
+          configuration = PurchasesConfiguration('goog_ugQdxFfTdHeYrhnJzuBXhYIUtQM');
+        } else if (!kIsWeb && Platform.isIOS) {
+          configuration =
+              PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');
+        }
+        await Purchases.configure(configuration..appUserID = user?.uid);
+      } on PlatformException catch (e) {
+        print('Failed to initialize RevenueCat: ${e.message} (Code: ${e.code})');
+        rethrow;
       }
-      await Purchases.configure(configuration..appUserID = user?.uid);
-    }
-    else {
+    } else {
       print('Purchases SDK is not supported on Web.');
     }
-   }
+  }
 
   Future<Offerings?> getProducts() async {
     try {
@@ -33,10 +36,10 @@ class PurchasesService {
       if (offerings.current != null) {
         return offerings;
       } else {
-        throw Exception();
+        throw Exception('No current offerings available');
       }
     } on PlatformException catch (e) {
-      throw Exception(e);
+      throw Exception('Failed to get products: ${e.message} (Code: ${e.code})');
     }
   }
 
