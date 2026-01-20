@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/models/models.dart';
 
@@ -193,13 +194,82 @@ class Answer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8)),
                 child: AnimatedCrossFade(
                   firstChild: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        answer ?? '',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(fontSize: state.fontSize.toDouble()),
+                      MarkdownBody(
+                        data: answer ?? '',
+                        selectable: true,
+                        styleSheet: MarkdownStyleSheet(
+                          h1: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            fontSize: state.fontSize.toDouble() + 6,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          h2: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            fontSize: state.fontSize.toDouble() + 4,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          h3: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble() + 2,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          h4: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble() + 1,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          h5: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          h6: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          p: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            color: Colors.black87,
+                          ),
+                          strong: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          em: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            fontStyle: FontStyle.italic,
+                            color: Colors.black87,
+                          ),
+                          listBullet: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            color: Colors.black87,
+                          ),
+                          listIndent: 16,
+                          blockquote: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            fontStyle: FontStyle.italic,
+                            color: Colors.black54,
+                          ),
+                          code: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble() - 1,
+                            fontFamily: 'monospace',
+                            backgroundColor: Colors.grey.shade200,
+                            color: Colors.black87,
+                          ),
+                          codeblockDecoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          a: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            fontSize: state.fontSize.toDouble(),
+                            color: Colors.blue.shade700,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
                       ),
                       Row(
                         children: [

@@ -24,7 +24,7 @@ final initialSummary = SummaryData(
   date: DateTime.now(),
   summaryPreview: SummaryPreview(
     title: 'Atomic Habits (Rephrase)',
-    imageUrl: Assets.library.atomicHabits_rephrase.path,
+    imageUrl: Assets.library.atomicHabitsRephrase.path,
   ),
   summaryOrigin: SummaryOrigin.text,
   shortSummary: const Summary(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../models/models.dart';
@@ -20,22 +21,6 @@ class SummaryTextContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var keywords = [
-      "Summary:",
-      "Key Points:",
-      "In-depth Analysis:",
-      "Additional Context:",
-      'Supporting Evidence:',
-      "Implications or Conclusions:"
-    ];
-    String t = summaryText;
-    List<String> parts = [];
-    for (String key in keywords) {
-      t = t.replaceAll(key, '~~~$key~~~');
-    }
-    parts = t.split('~~~');
-    parts.removeWhere((element) => element == '');
-
     final ScrollController scrollController = ScrollController();
     return Scrollbar(
       controller: scrollController,
@@ -66,25 +51,74 @@ class SummaryTextContainer extends StatelessWidget {
 
                   return Animate(
                     effects: const [FadeEffect()],
-                    child: SelectableText.rich(TextSpan(
-                        children: parts
-                            .map((e) => TextSpan(
-                                  text: e,
-                                  style: keywords.contains(e)
-                                      ? Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .copyWith(
-                                              fontSize:
-                                                  state.fontSize.toDouble() + 4)
-                                      : Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              fontSize:
-                                                  state.fontSize.toDouble()),
-                                ))
-                            .toList())),
+                    child: MarkdownBody(
+                      data: summaryText,
+                      selectable: true,
+                      styleSheet: MarkdownStyleSheet(
+                        h1: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble() + 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        h2: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontSize: state.fontSize.toDouble() + 6,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        h3: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontSize: state.fontSize.toDouble() + 4,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        h4: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontSize: state.fontSize.toDouble() + 2,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        h5: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble() + 1,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        h6: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble(),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        p: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble(),
+                        ),
+                        strong: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble(),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        em: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble(),
+                          fontStyle: FontStyle.italic,
+                        ),
+                        listBullet: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble(),
+                        ),
+                        listIndent: 24,
+                        blockquote: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble(),
+                          fontStyle: FontStyle.italic,
+                          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                        ),
+                        code: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble() - 1,
+                          fontFamily: 'monospace',
+                          backgroundColor: Theme.of(context).brightness == Brightness.dark 
+                            ? Colors.white.withOpacity(0.1)
+                            : Colors.black.withOpacity(0.05),
+                        ),
+                        codeblockDecoration: BoxDecoration(
+                          color: Theme.of(context).brightness == Brightness.dark 
+                            ? Colors.white.withOpacity(0.1)
+                            : Colors.black.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        a: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontSize: state.fontSize.toDouble(),
+                          color: Theme.of(context).primaryColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
                   );
                 },
               );
