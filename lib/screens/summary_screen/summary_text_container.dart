@@ -39,7 +39,7 @@ class SummaryTextContainer extends StatelessWidget {
                 builder: (context) {
                   // Используем MarkdownBody и для оригинального текста, и для перевода
                   final textToDisplay = summaryTranslate != null && summaryTranslate!.isActive
-                      ? summaryTranslate!.translate
+                      ? (summaryTranslate!.translate ?? summaryText)
                       : summaryText;
 
                   return Animate(

@@ -88,3 +88,10 @@ class UnlockHiddenSummaries extends SummariesEvent {
   @override
   List<Object?> get props => [];
 }
+
+class InitializeDemo extends SummariesEvent {
+  const InitializeDemo();
+
+  @override
+  List<Object?> get props => [];
+}
