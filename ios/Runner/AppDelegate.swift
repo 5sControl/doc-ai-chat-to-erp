@@ -113,3 +113,38 @@ import flutter_local_notifications
     }
   }
 }
+
+// MARK: - UNUserNotificationCenterDelegate
+extension AppDelegate {
+  override func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    willPresent notification: UNNotification,
+    withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+  ) {
+    // Show notification even when app is in foreground
+    if #available(iOS 14.0, *) {
+      completionHandler([.banner, .sound, .badge])
+    } else {
+      completionHandler([.alert, .sound, .badge])
+    }
+  }
+  
+  override func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    didReceive response: UNNotificationResponse,
+    withCompletionHandler completionHandler: @escaping () -> Void
+  ) {
+    let userInfo = response.notification.request.content.userInfo
+    print("🔥 AppDelegate: Notification tapped with userInfo: \(userInfo)")
+    
+    // Check if this is from Share Extension
+    if let shareKey = userInfo["shareKey"] as? String, shareKey == "ShareKey" {
+      print("🔥 AppDelegate: Share Extension notification detected")
+      
+      // Check shared data when notification is tapped
+      checkSharedData()
+    }
+    
+    completionHandler()
+  }
+}

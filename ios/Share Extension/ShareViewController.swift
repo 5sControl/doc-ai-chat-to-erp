@@ -1,9 +1,10 @@
 import UIKit
-import Social
 import MobileCoreServices
 import Photos
+import AVFoundation
+import UserNotifications
 
-class ShareViewController: SLComposeServiceViewController {
+class ShareViewController: UIViewController {
     var hostAppBundleIdentifier = ""
     var appGroupId = ""
     let sharedKey = "ShareKey"
@@ -14,10 +15,6 @@ class ShareViewController: SLComposeServiceViewController {
     let textContentType = kUTTypeText as String
     let urlContentType = kUTTypeURL as String
     let fileURLType = kUTTypeFileURL as String
-
-    override func isContentValid() -> Bool {
-        return true
-    }
   
     private func loadIds() {
         // loading Share extension App Id
@@ -32,63 +29,98 @@ class ShareViewController: SLComposeServiceViewController {
 
         // loading custom AppGroupId from Build Settings or use group.<hostAppBundleIdentifier>
         appGroupId = (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String) ?? "group.\(hostAppBundleIdentifier)"
+        
+        print("🔥 Share Extension: Bundle ID: \(shareExtensionAppBundleIdentifier)")
+        print("🔥 Share Extension: Host App Bundle ID: \(hostAppBundleIdentifier)")
+        print("🔥 Share Extension: App Group ID: \(appGroupId)")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Hide the view to avoid showing UI
+        self.view.alpha = 0
+        self.view.backgroundColor = .clear
 
         // load group and app id from build info
         loadIds()
+        
+        // Process shared content immediately
+        processSharedContent()
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
-        if let content = extensionContext?.inputItems[0] as? NSExtensionItem {
-            if let contents = content.attachments {
-                for (index, attachment) in contents.enumerated() {
-                    if attachment.hasItemConformingToTypeIdentifier(imageContentType) {
-                        handleImages(content: content, attachment: attachment, index: index)
-                    } else if attachment.hasItemConformingToTypeIdentifier(textContentType) {
-                        handleText(content: content, attachment: attachment, index: index)
-                    } else if attachment.hasItemConformingToTypeIdentifier(fileURLType) {
-                        handleFiles(content: content, attachment: attachment, index: index)
-                    } else if attachment.hasItemConformingToTypeIdentifier(urlContentType) {
-                        handleUrl(content: content, attachment: attachment, index: index)
-                    } else if attachment.hasItemConformingToTypeIdentifier(videoContentType) {
-                        handleVideos(content: content, attachment: attachment, index: index)
-                    }
-                }
+    
+    private func processSharedContent() {
+        print("🔥 Share Extension: Processing shared content")
+        
+        guard let extensionContext = extensionContext,
+              let inputItems = extensionContext.inputItems as? [NSExtensionItem] else {
+            print("🔥 Share Extension: No input items found")
+            dismissWithError()
+            return
+        }
+        
+        print("🔥 Share Extension: Found \(inputItems.count) input items")
+        
+        guard let content = inputItems.first else {
+            print("🔥 Share Extension: No content in input items")
+            dismissWithError()
+            return
+        }
+        
+        guard let attachments = content.attachments else {
+            print("🔥 Share Extension: No attachments found")
+            dismissWithError()
+            return
+        }
+        
+        print("🔥 Share Extension: Found \(attachments.count) attachments")
+        
+        for (index, attachment) in attachments.enumerated() {
+            print("🔥 Share Extension: Processing attachment \(index)")
+            
+            if attachment.hasItemConformingToTypeIdentifier(urlContentType) {
+                print("🔥 Share Extension: Detected URL type")
+                handleUrl(content: content, attachment: attachment, index: index)
+            } else if attachment.hasItemConformingToTypeIdentifier(textContentType) {
+                print("🔥 Share Extension: Detected text type")
+                handleText(content: content, attachment: attachment, index: index)
+            } else if attachment.hasItemConformingToTypeIdentifier(imageContentType) {
+                print("🔥 Share Extension: Detected image type")
+                handleImages(content: content, attachment: attachment, index: index)
+            } else if attachment.hasItemConformingToTypeIdentifier(videoContentType) {
+                print("🔥 Share Extension: Detected video type")
+                handleVideos(content: content, attachment: attachment, index: index)
+            } else if attachment.hasItemConformingToTypeIdentifier(fileURLType) {
+                print("🔥 Share Extension: Detected file type")
+                handleFiles(content: content, attachment: attachment, index: index)
+            } else {
+                print("🔥 Share Extension: Unknown attachment type")
             }
         }
-    }
-
-    override func didSelectPost() {
-        print("didSelectPost")
-    }
-
-    override func configurationItems() -> [Any]! {
-        // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
-        return []
     }
 
     private func handleText(content: NSExtensionItem, attachment: NSItemProvider, index: Int) {
         attachment.loadItem(forTypeIdentifier: textContentType, options: nil) { [weak self] data, error in
 
             if error == nil, let item = data as? String, let this = self {
-
+                print("🔥 Share Extension: Loaded text item: \(item)")
                 this.sharedText.append(item)
 
-                // If this is the last item, save imagesData in userDefaults and redirect to the host app
+                // If this is the last item, save data in userDefaults and show notification
                 if index == (content.attachments?.count)! - 1 {
+                    print("🔥 Share Extension: Saving \(this.sharedText.count) text items to UserDefaults")
                     let userDefaults = UserDefaults(suiteName: this.appGroupId)
                     userDefaults?.set(this.sharedText, forKey: this.sharedKey)
                     userDefaults?.synchronize()
-                    this.redirectToHostApp(type: .text)
+                    print("🔥 Share Extension: Text saved successfully")
+                    
+                    // Show notification with first text item
+                    let displayText = this.sharedText.first ?? "text content"
+                    this.showNotificationAndComplete(type: .text, sharedContent: displayText)
                 }
 
             } else {
+                print("🔥 Share Extension: ERROR loading text - \(error?.localizedDescription ?? "unknown error")")
                 self?.dismissWithError()
             }
         }
@@ -97,20 +129,57 @@ class ShareViewController: SLComposeServiceViewController {
     private func handleUrl(content: NSExtensionItem, attachment: NSItemProvider, index: Int) {
         attachment.loadItem(forTypeIdentifier: urlContentType, options: nil) { [weak self] data, error in
 
-            if error == nil, let item = data as? URL, let this = self {
-
-                this.sharedText.append(item.absoluteString)
-
-                // If this is the last item, save imagesData in userDefaults and redirect to the host app
-                if index == (content.attachments?.count)! - 1 {
-                    let userDefaults = UserDefaults(suiteName: this.appGroupId)
-                    userDefaults?.set(this.sharedText, forKey: this.sharedKey)
-                    userDefaults?.synchronize()
-                    this.redirectToHostApp(type: .text)
-                }
-
+            guard let this = self else { return }
+            
+            if let error = error {
+                print("🔥 Share Extension: ERROR loading URL - \(error.localizedDescription)")
+                this.dismissWithError()
+                return
+            }
+            
+            // Try to get URL - it can be either URL object or String
+            var urlString: String? = nil
+            
+            if let url = data as? URL {
+                print("🔥 Share Extension: Loaded URL object: \(url.absoluteString)")
+                urlString = url.absoluteString
+            } else if let string = data as? String {
+                print("🔥 Share Extension: Loaded URL as string: \(string)")
+                urlString = string
             } else {
-                self?.dismissWithError()
+                print("🔥 Share Extension: ERROR - Data is neither URL nor String, type: \(type(of: data))")
+                this.dismissWithError()
+                return
+            }
+            
+            guard let finalUrl = urlString else {
+                print("🔥 Share Extension: ERROR - Could not extract URL string")
+                this.dismissWithError()
+                return
+            }
+            
+            this.sharedText.append(finalUrl)
+
+            // If this is the last item, save data in userDefaults and show notification
+            if index == (content.attachments?.count)! - 1 {
+                print("🔥 Share Extension: Saving URL to UserDefaults: \(finalUrl)")
+                guard let userDefaults = UserDefaults(suiteName: this.appGroupId) else {
+                    print("🔥 Share Extension: ERROR - Could not create UserDefaults with suite: \(this.appGroupId)")
+                    this.dismissWithError()
+                    return
+                }
+                
+                userDefaults.set(this.sharedText, forKey: this.sharedKey)
+                userDefaults.synchronize()
+                
+                // Verify the data was saved
+                if let savedData = userDefaults.array(forKey: this.sharedKey) as? [String] {
+                    print("🔥 Share Extension: URL saved successfully, verified: \(savedData)")
+                } else {
+                    print("🔥 Share Extension: WARNING - Could not verify saved data")
+                }
+                
+                this.showNotificationAndComplete(type: .text, sharedContent: finalUrl)
             }
         }
     }
@@ -130,12 +199,15 @@ class ShareViewController: SLComposeServiceViewController {
                     this.sharedMedia.append(SharedMediaFile(path: newPath.absoluteString, thumbnail: nil, duration: nil, type: .image))
                 }
 
-                // If this is the last item, save imagesData in userDefaults and redirect to the host app
+                // If this is the last item, save data in userDefaults and show notification
                 if index == (content.attachments?.count)! - 1 {
                     let userDefaults = UserDefaults(suiteName: this.appGroupId)
                     userDefaults?.set(this.toData(data: this.sharedMedia), forKey: this.sharedKey)
                     userDefaults?.synchronize()
-                    this.redirectToHostApp(type: .media)
+                    
+                    let mediaCount = this.sharedMedia.count
+                    let displayText = mediaCount == 1 ? "1 image" : "\(mediaCount) images"
+                    this.showNotificationAndComplete(type: .media, sharedContent: displayText)
                 }
 
             } else {
@@ -162,12 +234,15 @@ class ShareViewController: SLComposeServiceViewController {
                     this.sharedMedia.append(sharedFile)
                 }
 
-                // If this is the last item, save imagesData in userDefaults and redirect to the host app
+                // If this is the last item, save data in userDefaults and show notification
                 if index == (content.attachments?.count)! - 1 {
                     let userDefaults = UserDefaults(suiteName: this.appGroupId)
                     userDefaults?.set(this.toData(data: this.sharedMedia), forKey: this.sharedKey)
                     userDefaults?.synchronize()
-                    this.redirectToHostApp(type: .media)
+                    
+                    let mediaCount = this.sharedMedia.count
+                    let displayText = mediaCount == 1 ? "1 video" : "\(mediaCount) videos"
+                    this.showNotificationAndComplete(type: .media, sharedContent: displayText)
                 }
 
             } else {
@@ -195,7 +270,10 @@ class ShareViewController: SLComposeServiceViewController {
                     let userDefaults = UserDefaults(suiteName: this.appGroupId)
                     userDefaults?.set(this.toData(data: this.sharedMedia), forKey: this.sharedKey)
                     userDefaults?.synchronize()
-                    this.redirectToHostApp(type: .file)
+                    
+                    let mediaCount = this.sharedMedia.count
+                    let displayText = mediaCount == 1 ? fileName : "\(mediaCount) files"
+                    this.showNotificationAndComplete(type: .file, sharedContent: displayText)
                 }
 
             } else {
@@ -217,20 +295,59 @@ class ShareViewController: SLComposeServiceViewController {
         extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
 
-    private func redirectToHostApp(type: RedirectType) {
-        // ids may not be loaded yet so we need loadIds here too
-        loadIds()
-        let url = URL(string: "ShareMedia-\(hostAppBundleIdentifier)://dataUrl=\(sharedKey)#\(type)")
-        var responder = self as UIResponder?
-        let selectorOpenURL = sel_registerName("openURL:")
-
-        while (responder != nil) {
-            if (responder?.responds(to: selectorOpenURL))! {
-                let _ = responder?.perform(selectorOpenURL, with: url)
+    private func showNotificationAndComplete(type: RedirectType, sharedContent: String) {
+        print("🔥 Share Extension: Showing notification for: \(sharedContent)")
+        
+        let center = UNUserNotificationCenter.current()
+        
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
+            guard let this = self else { return }
+            
+            if let error = error {
+                print("🔥 Share Extension: Notification authorization error: \(error.localizedDescription)")
+                this.completeExtension()
+                return
             }
-            responder = responder?.next
+            
+            guard granted else {
+                print("🔥 Share Extension: Notification permission denied")
+                this.completeExtension()
+                return
+            }
+            
+            print("🔥 Share Extension: Notification permission granted")
+            
+            let content = UNMutableNotificationContent()
+            content.title = "Content Shared to Summify"
+            
+            // Truncate long URLs for better display
+            let displayContent = sharedContent.count > 100 ? String(sharedContent.prefix(97)) + "..." : sharedContent
+            content.body = "Tap to open and process: \(displayContent)"
+            content.sound = .default
+            content.badge = 1
+            content.userInfo = ["shareType": "\(type)", "shareKey": this.sharedKey]
+            
+            let request = UNNotificationRequest(
+                identifier: UUID().uuidString,
+                content: content,
+                trigger: nil // Show immediately
+            )
+            
+            center.add(request) { error in
+                if let error = error {
+                    print("🔥 Share Extension: Error showing notification: \(error.localizedDescription)")
+                } else {
+                    print("🔥 Share Extension: Notification shown successfully")
+                }
+                this.completeExtension()
+            }
         }
-        extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+    }
+    
+    private func completeExtension() {
+        extensionContext?.completeRequest(returningItems: [], completionHandler: { _ in
+            print("🔥 Share Extension: Extension request completed")
+        })
     }
 
     enum RedirectType {
