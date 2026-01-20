@@ -32,7 +32,7 @@ dependencies:
   url_launcher: ^6.3.1
   file_picker: ^10.1.2
   flutter_local_notifications: ^19.1.0
-#  receive_sharing_intent: ^1.8.1
+  app_links: ^6.3.2
   simple_animations: ^5.1.0
   stream_transform: ^2.1.1
   bloc_concurrency: ^0.3.0

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,14 +22,18 @@ import 'package:summify/screens/summary_screen/share_copy_button.dart';
 import 'package:summify/screens/summary_screen/summary_text_container.dart';
 import 'package:summify/screens/library_document_screen/quiz_tab.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/translates/translates_bloc.dart';
 import '../../gen/assets.gen.dart';
+import '../../models/models.dart';
 import '../../widgets/backgroung_gradient.dart';
 import '../subscribtions_screen/subscriptions_screen.dart';
 import 'custom_tab_bar.dart';
 import 'header.dart';
+import 'info_modal/original_text_modal.dart';
 
 class SummaryScreen extends StatefulWidget {
   final String summaryKey;
@@ -131,8 +136,89 @@ class _SummaryScreenState extends State<SummaryScreen>
             }
 
             void onPressLink() async {
-              final Uri url = Uri.parse(widget.summaryKey);
-              if (!await launchUrl(url)) {}
+              switch (summaryData.summaryOrigin) {
+                case SummaryOrigin.url:
+                  // Open URL in browser
+                  final Uri url = Uri.parse(widget.summaryKey);
+                  if (!await launchUrl(url)) {
+                    if (context.mounted) {
+                      toastification.show(
+                        context: context,
+                        title: const Text('Could not open URL'),
+                        type: ToastificationType.error,
+                        autoCloseDuration: const Duration(seconds: 3),
+                      );
+                    }
+                  }
+                  break;
+                
+                case SummaryOrigin.file:
+                  // Open file in external app
+                  if (summaryData.filePath != null) {
+                    final file = File(summaryData.filePath!);
+                    if (await file.exists()) {
+                      try {
+                        await Share.shareXFiles(
+                          [XFile(summaryData.filePath!)],
+                          subject: displayLink,
+                        );
+                      } catch (e) {
+                        if (context.mounted) {
+                          toastification.show(
+                            context: context,
+                            title: const Text('Could not open file'),
+                            type: ToastificationType.error,
+                            autoCloseDuration: const Duration(seconds: 3),
+                          );
+                        }
+                      }
+                    } else {
+                      if (context.mounted) {
+                        toastification.show(
+                          context: context,
+                          title: const Text('Original file is no longer available'),
+                          type: ToastificationType.warning,
+                          autoCloseDuration: const Duration(seconds: 3),
+                        );
+                      }
+                    }
+                  } else {
+                    if (context.mounted) {
+                      toastification.show(
+                        context: context,
+                        title: const Text('File path not found'),
+                        type: ToastificationType.error,
+                        autoCloseDuration: const Duration(seconds: 3),
+                      );
+                    }
+                  }
+                  break;
+                
+                case SummaryOrigin.text:
+                  // Show modal with original text
+                  if (summaryData.userText != null) {
+                    showCupertinoModalBottomSheet(
+                      context: context,
+                      expand: false,
+                      bounce: false,
+                      barrierColor: Colors.black54,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) {
+                        return OriginalTextModal(
+                          originalText: summaryData.userText!,
+                        );
+                      },
+                    );
+                  } else {
+                    toastification.show(
+                      context: context,
+                      title: const Text('Original text not available'),
+                      type: ToastificationType.error,
+                      autoCloseDuration: const Duration(seconds: 3),
+                    );
+                  }
+                  break;
+              }
             }
 
             final gradientColors =

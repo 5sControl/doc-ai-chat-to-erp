@@ -344,7 +344,11 @@ class $AssetsLibraryGen {
   AssetGenImage get a13Things =>
       const AssetGenImage('assets/library/a13Things.jpeg');
 
-  /// File path: assets/library/atomicHabits.jpeg
+  /// File path: assets/library/atomicHabits_rephrase.jpeg.jpeg
+  AssetGenImage get atomicHabits =>
+      const AssetGenImage('assets/library/atomicHabits_rephrase.jpeg');
+
+  /// File path: assets/library/atomicHabits_rephrase.jpeg.jpeg
   AssetGenImage get atomicHabits =>
       const AssetGenImage('assets/library/atomicHabits.jpeg');
 

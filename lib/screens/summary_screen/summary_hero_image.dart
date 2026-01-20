@@ -12,23 +12,29 @@ class SummaryHeroImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = summaryData.summaryPreview.imageUrl;
+    final bool isValidUrl = imageUrl != null && 
+                           imageUrl.isNotEmpty && 
+                           imageUrl != Assets.placeholderLogo.path;
+    final bool isNetworkImage = isValidUrl && 
+                               (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
+    final bool isAssetImage = isValidUrl && imageUrl.startsWith('assets/');
+    
     return Hero(
       tag: summaryData.date,
       child: ClipRRect(
         child: ImageFiltered(
           imageFilter: ImageFilter.blur(
               sigmaX: 15, sigmaY: 15, tileMode: TileMode.mirror),
-          child: (summaryData.summaryPreview.imageUrl != null &&
-                  summaryData.summaryPreview.imageUrl!.isNotEmpty &&
-                  summaryData.summaryPreview.imageUrl != Assets.placeholderLogo.path)
+          child: isNetworkImage
               ? CachedNetworkImage(
-                  imageUrl: summaryData.summaryPreview.imageUrl!,
+                  imageUrl: imageUrl,
                   fit: BoxFit.cover,
                   color: Colors.black54,
                   colorBlendMode: BlendMode.colorBurn,
                 )
               : Image.asset(
-                  Assets.placeholderLogo.path,
+                  isAssetImage ? imageUrl : Assets.placeholderLogo.path,
                   fit: BoxFit.cover,
                   color: Colors.black54,
                   colorBlendMode: BlendMode.colorBurn,

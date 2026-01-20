@@ -46,11 +46,11 @@
                         android:scheme="content" />
             </intent-filter>
 
-            <!--TODO: Add this filter, if you want to support sharing text into your app-->
+            <!-- Support sharing text and URLs into app -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/*" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
 
             <!--TODO: Add this filter, if you want to support sharing images into your app-->
@@ -78,16 +78,16 @@
                 <data android:mimeType="video/*" />
             </intent-filter>
 
-            <!--TODO: Add this filter, if you want to support sharing any type of files-->
+            <!-- Support sharing documents and files -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
+                <data android:mimeType="application/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="*/*" />
+                <data android:mimeType="application/*" />
             </intent-filter>
         </activity>
 

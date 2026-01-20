@@ -13,8 +13,8 @@ Successfully replaced the initial demo content with Atomic Habits summary and qu
 - NEW: `'Atomic Habits'`
 
 **Updated content:**
-- Title: "Atomic Habits"
-- Image: Set to `null` (uses app icon)
+- Title: "Atomic Habits (Rephrase)"
+- Image: Set to `Assets.library.atomicHabits.path` (uses existing library cover)
 - Origin: Changed from `SummaryOrigin.url` to `SummaryOrigin.text`
 - Short Summary (Brief): 190-word overview with Four Laws and key concepts
 - Long Summary (Deep): Complete breakdown with strategies and examples

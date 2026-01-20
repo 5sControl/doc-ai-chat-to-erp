@@ -24,7 +24,7 @@ final initialSummary = SummaryData(
   date: DateTime.now(),
   summaryPreview: SummaryPreview(
     title: 'Atomic Habits (Rephrase)',
-    imageUrl: null,
+    imageUrl: Assets.library.atomicHabits_rephrase.path,
   ),
   summaryOrigin: SummaryOrigin.text,
   shortSummary: const Summary(
@@ -55,10 +55,10 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
   SummariesBloc({required this.subscriptionBloc, required this.mixpanelBloc})
       : super(SummariesState(
           summaries: {
-            'Atomic Habits': initialSummary,
+            'Atomic Habits (Rephrase)': initialSummary,
           },
           ratedSummaries: const {
-            'Atomic Habits'
+            'Atomic Habits (Rephrase)'
           },
           defaultSummaryType: SummaryType.short,
           textCounter: 1,

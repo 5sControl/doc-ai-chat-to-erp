@@ -181,16 +181,27 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                                       horizontal: 2, vertical: 2),
                                   child: Hero(
                                     tag: summaryData.date,
-                                    child: (summaryData.summaryPreview.imageUrl == null ||
-                                            summaryData.summaryPreview.imageUrl!.isEmpty ||
-                                            summaryData.summaryPreview.imageUrl == Assets.placeholderLogo.path)
-                                        ? Image.asset(
-                                            Assets.placeholderLogo.path)
-                                        : CachedNetworkImage(
-                                            imageUrl: summaryData
-                                                .summaryPreview.imageUrl!,
-                                            fit: BoxFit.cover,
-                                          ),
+                                    child: () {
+                                      final imageUrl = summaryData.summaryPreview.imageUrl;
+                                      final bool isValidUrl = imageUrl != null && 
+                                                             imageUrl.isNotEmpty && 
+                                                             imageUrl != Assets.placeholderLogo.path;
+                                      final bool isNetworkImage = isValidUrl && 
+                                                                 (imageUrl.startsWith('http://') || imageUrl.startsWith('https://'));
+                                      final bool isAssetImage = isValidUrl && imageUrl.startsWith('assets/');
+                                      
+                                      if (isNetworkImage) {
+                                        return CachedNetworkImage(
+                                          imageUrl: imageUrl,
+                                          fit: BoxFit.cover,
+                                        );
+                                      } else {
+                                        return Image.asset(
+                                          isAssetImage ? imageUrl : Assets.placeholderLogo.path,
+                                          fit: BoxFit.cover,
+                                        );
+                                      }
+                                    }(),
                                   ))),
                           Expanded(
                             child: Padding(

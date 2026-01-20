@@ -10,6 +10,17 @@ import 'package:summify/screens/summary_screen/info_modal/text_size_modal.dart';
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../gen/assets.gen.dart';
 
+String _getIconForOrigin(SummaryOrigin origin) {
+  switch (origin) {
+    case SummaryOrigin.url:
+      return Assets.icons.url;
+    case SummaryOrigin.file:
+      return Assets.icons.file;
+    case SummaryOrigin.text:
+      return Assets.icons.text;
+  }
+}
+
 class Header extends StatelessWidget {
   final String displayLink;
   final String sharedLink;
@@ -134,17 +145,35 @@ class Header extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: TextButton(
                 onPressed: onPressLink,
-                child: Text(
-                  displayLink,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      _getIconForOrigin(summaryData.summaryOrigin),
+                      width: 20,
+                      height: 20,
+                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        displayLink,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          overflow: TextOverflow.ellipsis,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.white,
+                          decorationThickness: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
                 )),
           ),
           const Divider(color: Colors.transparent),

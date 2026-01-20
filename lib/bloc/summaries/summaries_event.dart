@@ -15,10 +15,11 @@ class GetSummaryFromUrl extends SummariesEvent {
 
 class GetSummaryFromText extends SummariesEvent {
   final String text;
-  const GetSummaryFromText({required this.text});
+  final bool fromShare;
+  const GetSummaryFromText({required this.text, this.fromShare = false});
 
   @override
-  List<Object?> get props => [text];
+  List<Object?> get props => [text, fromShare];
 }
 
 class GetSummaryFromFile extends SummariesEvent {

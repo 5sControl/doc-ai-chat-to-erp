@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
@@ -13,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:status_bar_control/status_bar_control.dart';
+import 'package:app_links/app_links.dart';
 import 'package:summify/bloc/authentication/authentication_bloc.dart';
 import 'package:summify/bloc/library/library_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
@@ -68,43 +69,185 @@ void main() async {
   runApp(const SummishareApp());
 }
 
-class SummishareApp extends StatelessWidget {
+class SummishareApp extends StatefulWidget {
   const SummishareApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // if (Platform.isIOS) {
-    //   final facebookAppEvents = FacebookAppEvents();
-    //   facebookAppEvents.setAutoLogAppEventsEnabled(true);
-    // }
+  State<SummishareApp> createState() => _SummishareAppState();
+}
 
+class _SummishareAppState extends State<SummishareApp> {
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
+  late SummariesBloc _summariesBloc;
+  late MixpanelBloc _mixpanelBloc;
+  
+  static const platform = MethodChannel('com.summify.share');
+
+  @override
+  void initState() {
+    super.initState();
+    _initDeepLinks();
+    _initShareChannel();
+  }
+
+  void _initShareChannel() {
+    if (!kIsWeb && Platform.isIOS) {
+      platform.setMethodCallHandler((call) async {
+        print('🔥 Flutter: Received method call: ${call.method}');
+        
+        if (call.method == 'onSharedText') {
+          final List<dynamic> sharedData = call.arguments as List<dynamic>;
+          print('🔥 Flutter: Shared text received: $sharedData');
+          
+          for (var item in sharedData) {
+            if (item is String) {
+              _handleSharedText(item);
+            }
+          }
+        } else if (call.method == 'onSharedMedia') {
+          final List<dynamic> sharedMedia = call.arguments as List<dynamic>;
+          print('🔥 Flutter: Shared media received: $sharedMedia');
+          
+          for (var media in sharedMedia) {
+            if (media is Map) {
+              _handleSharedMedia(media);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  void _initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Handle links when app is already running
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      print('🔥 App link received (app running): $uri');
+      _handleIncomingLink(uri);
+    });
+
+    // Handle the initial link if the app was opened from a link
+    try {
+      final uri = await _appLinks.getInitialLink();
+      if (uri != null) {
+        print('🔥 Initial app link: $uri');
+        _handleIncomingLink(uri);
+      }
+    } catch (e) {
+      print('🔥 Error getting initial link: $e');
+    }
+
+    // For Android: Check for share intent
+    if (!kIsWeb && Platform.isAndroid) {
+      _checkAndroidShareIntent();
+    }
+  }
+
+  void _checkAndroidShareIntent() async {
+    try {
+      final intent = await platform.invokeMethod('getSharedData');
+      if (intent != null) {
+        print('🔥 Android share intent: $intent');
+        if (intent is String) {
+          _handleSharedText(intent);
+        } else if (intent is Map) {
+          _handleSharedMedia(intent);
+        }
+      }
+    } catch (e) {
+      print('🔥 No Android share intent or error: $e');
+    }
+  }
+
+  void _handleIncomingLink(Uri uri) {
+    print('🔥 Handling incoming link: $uri');
+    // Handle deep links if needed
+  }
+
+  void _handleSharedText(String text) {
+    print('🔥 Processing shared text: $text');
+    
+    // Check if it's a URL
+    if (text.startsWith('http://') || text.startsWith('https://')) {
+      print('🔥 Detected URL, processing summary...');
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _summariesBloc.add(GetSummaryFromUrl(summaryUrl: text, fromShare: true));
+        _mixpanelBloc.add(Summify(option: 'url'));
+      });
+    } else {
+      // Plain text
+      print('🔥 Detected plain text');
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _summariesBloc.add(GetSummaryFromText(text: text, fromShare: true));
+        _mixpanelBloc.add(Summify(option: 'text'));
+      });
+    }
+  }
+
+  void _handleSharedMedia(Map<dynamic, dynamic> media) {
+    print('🔥 Processing shared media: $media');
+    
+    final String? path = media['path'] as String?;
+    final int? type = media['type'] as int?;
+    
+    if (path != null) {
+      // Remove file:// prefix if present
+      final cleanPath = path.replaceFirst('file://', '');
+      final fileName = cleanPath.split('/').last;
+      
+      print('🔥 File path: $cleanPath, fileName: $fileName, type: $type');
+      
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _summariesBloc.add(GetSummaryFromFile(
+          filePath: cleanPath,
+          fileName: fileName,
+          fromShare: true,
+        ));
+        _mixpanelBloc.add(Summify(option: 'file'));
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final AuthService authService = AuthService();
     final brightness = MediaQuery.of(context).platformBrightness;
     final settingsBloc = SettingsBloc(brightness: brightness);
-    final mixpanelBloc = MixpanelBloc(settingsBloc: settingsBloc);
+    _mixpanelBloc = MixpanelBloc(settingsBloc: settingsBloc);
 
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (context) => TranslatesBloc(mixpanelBloc: mixpanelBloc)),
+              create: (context) => TranslatesBloc(mixpanelBloc: _mixpanelBloc)),
           BlocProvider(
-              create: (context) => ResearchBloc(mixpanelBloc: mixpanelBloc)),
+              create: (context) => ResearchBloc(mixpanelBloc: _mixpanelBloc)),
           BlocProvider(
-              create: (context) => QuizBloc(mixpanelBloc: mixpanelBloc)),
+              create: (context) => QuizBloc(mixpanelBloc: _mixpanelBloc)),
           BlocProvider(create: (context) => settingsBloc),
           BlocProvider(create: (context) => LibraryBloc()),
           BlocProvider(
-            create: (context) => mixpanelBloc,
+            create: (context) => _mixpanelBloc,
           ),
           BlocProvider(
             create: (context) => SubscriptionsBloc(
-              mixpanelBloc: mixpanelBloc,
+              mixpanelBloc: _mixpanelBloc,
             ),
           ),
           BlocProvider(
-              create: (context) => SummariesBloc(
-                  mixpanelBloc: mixpanelBloc,
-                  subscriptionBloc: context.read<SubscriptionsBloc>())),
+              create: (context) {
+                _summariesBloc = SummariesBloc(
+                    mixpanelBloc: _mixpanelBloc,
+                    subscriptionBloc: context.read<SubscriptionsBloc>());
+                return _summariesBloc;
+              }),
           BlocProvider(
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
