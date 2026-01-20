@@ -37,22 +37,15 @@ class SummaryTextContainer extends StatelessWidget {
             builder: (context, state) {
               return Builder(
                 builder: (context) {
-                  if (summaryTranslate != null && summaryTranslate!.isActive) {
-                    return Animate(
-                      effects: const [FadeEffect()],
-                      child: SelectableText.rich(TextSpan(
-                          text: summaryTranslate!.translate,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(fontSize: state.fontSize.toDouble()))),
-                    );
-                  }
+                  // Используем MarkdownBody и для оригинального текста, и для перевода
+                  final textToDisplay = summaryTranslate != null && summaryTranslate!.isActive
+                      ? summaryTranslate!.translate
+                      : summaryText;
 
                   return Animate(
                     effects: const [FadeEffect()],
                     child: MarkdownBody(
-                      data: summaryText,
+                      data: textToDisplay,
                       selectable: true,
                       styleSheet: MarkdownStyleSheet(
                         h1: Theme.of(context).textTheme.headlineMedium?.copyWith(
