@@ -53,3 +53,12 @@ class ClearKnowledgeCards extends KnowledgeCardsEvent {
   @override
   List<Object?> get props => [summaryKey];
 }
+
+class SyncCardsWithSaved extends KnowledgeCardsEvent {
+  final String summaryKey;
+
+  const SyncCardsWithSaved({required this.summaryKey});
+
+  @override
+  List<Object?> get props => [summaryKey];
+}

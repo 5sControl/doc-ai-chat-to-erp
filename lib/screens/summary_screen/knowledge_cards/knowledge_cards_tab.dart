@@ -28,9 +28,40 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
     super.initState();
     // Extract knowledge cards when tab is first opened
     _extractKnowledgeCards();
+    // Sync with saved cards
+    _syncWithSavedCards();
+  }
+
+  void _syncWithSavedCards() {
+    // Check if cards already exist for this summary
+    final knowledgeCardsState = context.read<KnowledgeCardsBloc>().state;
+    final hasCards = knowledgeCardsState.knowledgeCards[widget.summaryKey]?.isNotEmpty ?? false;
+    
+    print('🔄 Tab: _syncWithSavedCards called, hasCards: $hasCards');
+    
+    if (hasCards) {
+      // Sync saved status with SavedCardsBloc
+      print('🔄 Tab: Triggering SyncCardsWithSaved event');
+      context.read<KnowledgeCardsBloc>().add(
+        SyncCardsWithSaved(summaryKey: widget.summaryKey),
+      );
+    }
   }
 
   void _extractKnowledgeCards() {
+    // Check if cards already exist
+    final knowledgeCardsState = context.read<KnowledgeCardsBloc>().state;
+    final existingCards = knowledgeCardsState.knowledgeCards[widget.summaryKey];
+    final status = knowledgeCardsState.extractionStatuses[widget.summaryKey];
+    
+    // Don't re-extract if cards already exist and are complete
+    if (existingCards != null && 
+        existingCards.isNotEmpty && 
+        status == KnowledgeCardStatus.complete) {
+      print('📦 Cards already exist for ${widget.summaryKey}, skipping extraction');
+      return;
+    }
+
     final summariesState = context.read<SummariesBloc>().state;
     final summaryData = summariesState.summaries[widget.summaryKey];
 
@@ -40,6 +71,7 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
                          '';
 
       if (summaryText.isNotEmpty) {
+        print('📦 Extracting new cards for ${widget.summaryKey}');
         context.read<KnowledgeCardsBloc>().add(
           ExtractKnowledgeCards(
             summaryKey: widget.summaryKey,
@@ -93,6 +125,15 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
             : cards;
 
         final status = knowledgeCardsState.extractionStatuses[widget.summaryKey] ?? KnowledgeCardStatus.initial;
+
+        // Sync with saved cards on every rebuild (when user returns to tab)
+        if (cards.isNotEmpty && status == KnowledgeCardStatus.complete) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.read<KnowledgeCardsBloc>().add(
+              SyncCardsWithSaved(summaryKey: widget.summaryKey),
+            );
+          });
+        }
 
         return Column(
           children: [
