@@ -536,6 +536,9 @@ class KnowledgeCard extends Equatable {
   final String? explanation;
   final bool isSaved;
   final DateTime extractedAt;
+  final String? sourceSummaryKey;
+  final String? sourceTitle;
+  final DateTime? savedAt;
 
   const KnowledgeCard({
     required this.id,
@@ -545,6 +548,9 @@ class KnowledgeCard extends Equatable {
     this.explanation,
     required this.isSaved,
     required this.extractedAt,
+    this.sourceSummaryKey,
+    this.sourceTitle,
+    this.savedAt,
   });
 
   KnowledgeCard copyWith({
@@ -555,6 +561,9 @@ class KnowledgeCard extends Equatable {
     String? explanation,
     bool? isSaved,
     DateTime? extractedAt,
+    String? sourceSummaryKey,
+    String? sourceTitle,
+    DateTime? savedAt,
   }) {
     return KnowledgeCard(
       id: id ?? this.id,
@@ -564,6 +573,9 @@ class KnowledgeCard extends Equatable {
       explanation: explanation ?? this.explanation,
       isSaved: isSaved ?? this.isSaved,
       extractedAt: extractedAt ?? this.extractedAt,
+      sourceSummaryKey: sourceSummaryKey ?? this.sourceSummaryKey,
+      sourceTitle: sourceTitle ?? this.sourceTitle,
+      savedAt: savedAt ?? this.savedAt,
     );
   }
 
@@ -581,5 +593,8 @@ class KnowledgeCard extends Equatable {
         explanation,
         isSaved,
         extractedAt,
+        sourceSummaryKey,
+        sourceTitle,
+        savedAt,
       ];
 }

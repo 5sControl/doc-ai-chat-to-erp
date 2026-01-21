@@ -20,14 +20,16 @@ class ExtractKnowledgeCards extends KnowledgeCardsEvent {
 class SaveKnowledgeCard extends KnowledgeCardsEvent {
   final String summaryKey;
   final String cardId;
+  final String? sourceTitle;
 
   const SaveKnowledgeCard({
     required this.summaryKey,
     required this.cardId,
+    this.sourceTitle,
   });
 
   @override
-  List<Object?> get props => [summaryKey, cardId];
+  List<Object?> get props => [summaryKey, cardId, sourceTitle];
 }
 
 class UnsaveKnowledgeCard extends KnowledgeCardsEvent {

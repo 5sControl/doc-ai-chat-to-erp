@@ -136,6 +136,11 @@ KnowledgeCard _$KnowledgeCardFromJson(Map<String, dynamic> json) => KnowledgeCar
       explanation: json['explanation'] as String?,
       isSaved: json['isSaved'] as bool,
       extractedAt: DateTime.parse(json['extractedAt'] as String),
+      sourceSummaryKey: json['sourceSummaryKey'] as String?,
+      sourceTitle: json['sourceTitle'] as String?,
+      savedAt: json['savedAt'] == null
+          ? null
+          : DateTime.parse(json['savedAt'] as String),
     );
 
 Map<String, dynamic> _$KnowledgeCardToJson(KnowledgeCard instance) =>
@@ -147,6 +152,9 @@ Map<String, dynamic> _$KnowledgeCardToJson(KnowledgeCard instance) =>
       'explanation': instance.explanation,
       'isSaved': instance.isSaved,
       'extractedAt': instance.extractedAt.toIso8601String(),
+      'sourceSummaryKey': instance.sourceSummaryKey,
+      'sourceTitle': instance.sourceTitle,
+      'savedAt': instance.savedAt?.toIso8601String(),
     };
 
 const _$KnowledgeCardTypeEnumMap = {

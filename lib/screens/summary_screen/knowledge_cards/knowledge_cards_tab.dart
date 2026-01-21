@@ -68,10 +68,16 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
         ),
       );
     } else {
+      // Get source title from summary preview
+      final summariesState = context.read<SummariesBloc>().state;
+      final summaryData = summariesState.summaries[widget.summaryKey];
+      final sourceTitle = summaryData?.summaryPreview.title ?? widget.summaryKey;
+      
       context.read<KnowledgeCardsBloc>().add(
         SaveKnowledgeCard(
           summaryKey: widget.summaryKey,
           cardId: card.id,
+          sourceTitle: sourceTitle,
         ),
       );
     }

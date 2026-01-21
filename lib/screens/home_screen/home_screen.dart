@@ -12,6 +12,7 @@ import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
+import 'package:summify/screens/home_screen/bookmarks_button.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
 import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 
@@ -86,6 +87,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   void onPressSettings() {
     Navigator.of(context).pushNamed('/settings');
+  }
+
+  void onPressBookmarks() {
+    Navigator.of(context).pushNamed('/saved-cards');
   }
 
   void onPressDesktop() {
@@ -212,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   onPressed: onPressDesktop,
                                   padding: EdgeInsets.only(
                                       right: MediaQuery.of(context).size.width *
-                                          0.2),
+                                          0.15),
                                   visualDensity: VisualDensity.compact,
                                   icon: SvgPicture.asset(
                                     Assets.icons.desctop,
@@ -225,8 +230,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   ),
                                 ),
                                 const Logo(),
-                                SettingsButton(
-                                    onPressSettings: onPressSettings),
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      BookmarksButton(
+                                          onPressBookmarks: onPressBookmarks),
+                                      const SizedBox(width: 8),
+                                      SettingsButton(
+                                          onPressSettings: onPressSettings),
+                                    ],
+                                  ),
+                                ),
                               ],
                             )),
                         body: TabBarView(

@@ -25,6 +25,7 @@ import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/screens/auth/auth_screen.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
+import 'package:summify/screens/saved_cards_screen/saved_cards_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 import 'package:summify/services/authentication.dart';
@@ -34,6 +35,7 @@ import 'package:summify/themes/light_theme.dart';
 import 'bloc/subscriptions/subscriptions_bloc.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'bloc/knowledge_cards/knowledge_cards_bloc.dart';
+import 'bloc/saved_cards/saved_cards_bloc.dart';
 import 'screens/main_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -253,8 +255,12 @@ class _SummishareAppState extends State<SummishareApp> {
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
           BlocProvider(create: (context) => OffersBloc()),
+          BlocProvider(create: (context) => SavedCardsBloc()),
           BlocProvider(
-              create: (context) => KnowledgeCardsBloc(mixpanelBloc: _mixpanelBloc)),
+              create: (context) => KnowledgeCardsBloc(
+                mixpanelBloc: _mixpanelBloc,
+                savedCardsBloc: context.read<SavedCardsBloc>(),
+              )),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {
@@ -336,6 +342,10 @@ class _SummishareAppState extends State<SummishareApp> {
                   case '/settings':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SettingsScreen(),
+                        settings: settings);
+                  case '/saved-cards':
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => const SavedCardsScreen(),
                         settings: settings);
                   case '/request':
                     return MaterialWithModalsPageRoute(

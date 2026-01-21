@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/on_device_knowledge_cards_service.dart';
 
@@ -13,9 +14,13 @@ part 'knowledge_cards_bloc.g.dart';
 
 class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCardsState> {
   final MixpanelBloc mixpanelBloc;
+  final SavedCardsBloc savedCardsBloc;
   final OnDeviceKnowledgeCardsService onDeviceService = OnDeviceKnowledgeCardsService();
 
-  KnowledgeCardsBloc({required this.mixpanelBloc})
+  KnowledgeCardsBloc({
+    required this.mixpanelBloc,
+    required this.savedCardsBloc,
+  })
       : super(const KnowledgeCardsState(
           knowledgeCards: {},
           extractionStatuses: {},
@@ -103,9 +108,17 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     final currentCards = state.knowledgeCards[event.summaryKey];
     if (currentCards == null) return;
 
+    KnowledgeCard? cardToSave;
     final updatedCards = currentCards.map((card) {
       if (card.id == event.cardId) {
-        return card.copyWith(isSaved: true);
+        final savedCard = card.copyWith(
+          isSaved: true,
+          sourceSummaryKey: event.summaryKey,
+          sourceTitle: event.sourceTitle,
+          savedAt: DateTime.now(),
+        );
+        cardToSave = savedCard;
+        return savedCard;
       }
       return card;
     }).toList();
@@ -116,6 +129,11 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
         event.summaryKey: updatedCards,
       },
     ));
+
+    // Add to global saved cards
+    if (cardToSave != null) {
+      savedCardsBloc.add(AddSavedCard(card: cardToSave!));
+    }
 
     // Track analytics
     mixpanelBloc.add(KnowledgeCardSaved(
@@ -144,6 +162,9 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
         event.summaryKey: updatedCards,
       },
     ));
+
+    // Remove from global saved cards
+    savedCardsBloc.add(RemoveSavedCard(cardId: event.cardId));
 
     // Track analytics
     mixpanelBloc.add(KnowledgeCardUnsaved(

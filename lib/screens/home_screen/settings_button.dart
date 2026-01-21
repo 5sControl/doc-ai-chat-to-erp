@@ -9,24 +9,19 @@ class SettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          padding: const EdgeInsets.all(3),
-          width: 35,
+    return Container(
+      padding: const EdgeInsets.all(3),
+      width: 35,
+      height: 35,
+      child: IconButton(
+        onPressed: onPressSettings,
+        padding: EdgeInsets.zero,
+        icon: SvgPicture.asset(
+          Assets.icons.profileCircle,
           height: 35,
-          child: IconButton(
-            onPressed: onPressSettings,
-            padding: EdgeInsets.zero,
-            icon: SvgPicture.asset(
-              Assets.icons.profileCircle,
-              height: 35,
-              width: 35,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).cardColor, BlendMode.srcIn),
-            ),
-          ),
+          width: 35,
+          colorFilter: ColorFilter.mode(
+              Theme.of(context).cardColor, BlendMode.srcIn),
         ),
       ),
     );
