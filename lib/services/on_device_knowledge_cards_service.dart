@@ -53,21 +53,47 @@ class OnDeviceKnowledgeCardsService {
     }
   }
   
+  /// Calculate optimal number of cards based on text length
+  int _calculateOptimalCardCount(String text) {
+    final wordCount = text.split(RegExp(r'\s+')).length;
+    
+    // Base calculation: 1 card per ~200 words
+    // Minimum: 5 cards, Maximum: 30 cards
+    if (wordCount < 500) {
+      return 5; // Short text: 5 cards
+    } else if (wordCount < 1000) {
+      return 8; // Medium text: 8 cards
+    } else if (wordCount < 2000) {
+      return 12; // Long text: 12 cards
+    } else if (wordCount < 3000) {
+      return 15; // Very long text: 15 cards
+    } else if (wordCount < 5000) {
+      return 20; // Extra long text: 20 cards
+    } else {
+      return 30; // Maximum for very large texts
+    }
+  }
+
   /// Extract knowledge cards locally using Apple Intelligence
   Future<List<KnowledgeCard>> extractKnowledgeCards(
     String summaryText, {
-    int numCards = 5,
+    int? numCards,
   }) async {
     try {
       if (!Platform.isIOS) {
         throw Exception('Apple Intelligence is only available on iOS devices');
       }
       
+      // Auto-calculate optimal card count if not specified
+      final cardCount = numCards ?? _calculateOptimalCardCount(summaryText);
+      
+      print('🧠 KnowledgeCards: Text length: ${summaryText.length} chars, generating $cardCount cards');
+      
       final Map<dynamic, dynamic> result = await _channel.invokeMethod(
         'extractKnowledgeCards',
         {
           'text': summaryText,
-          'numCards': numCards,
+          'numCards': cardCount,
         },
       );
       

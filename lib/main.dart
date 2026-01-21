@@ -84,6 +84,7 @@ class _SummishareAppState extends State<SummishareApp> {
   StreamSubscription<Uri>? _linkSubscription;
   late SummariesBloc _summariesBloc;
   late MixpanelBloc _mixpanelBloc;
+  late SavedCardsBloc _savedCardsBloc;
   
   static const platform = MethodChannel('com.summify.share');
 
@@ -225,6 +226,7 @@ class _SummishareAppState extends State<SummishareApp> {
     final brightness = MediaQuery.of(context).platformBrightness;
     final settingsBloc = SettingsBloc(brightness: brightness);
     _mixpanelBloc = MixpanelBloc(settingsBloc: settingsBloc);
+    _savedCardsBloc = SavedCardsBloc();
 
     return MultiBlocProvider(
         providers: [
@@ -255,11 +257,11 @@ class _SummishareAppState extends State<SummishareApp> {
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
           BlocProvider(create: (context) => OffersBloc()),
-          BlocProvider(create: (context) => SavedCardsBloc()),
+          BlocProvider.value(value: _savedCardsBloc),
           BlocProvider(
               create: (context) => KnowledgeCardsBloc(
                 mixpanelBloc: _mixpanelBloc,
-                savedCardsBloc: context.read<SavedCardsBloc>(),
+                savedCardsBloc: _savedCardsBloc,
               )),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(

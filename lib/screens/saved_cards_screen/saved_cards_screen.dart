@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
+import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/models/models.dart';
-import 'package:summify/screens/summary_screen/knowledge_cards/widgets/knowledge_card_tile.dart';
+import 'package:summify/screens/saved_cards_screen/saved_card_tile.dart';
 import 'package:summify/screens/summary_screen/knowledge_cards/widgets/cards_type_filter.dart';
 import 'package:summify/screens/summary_screen/knowledge_cards/widgets/card_detail_modal.dart';
+import 'package:summify/screens/summary_screen/summary_screen.dart';
 
 class SavedCardsScreen extends StatefulWidget {
   const SavedCardsScreen({super.key});
@@ -34,14 +36,64 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
   }
 
   void _onCardRemove(KnowledgeCard card) {
-    context.read<SavedCardsBloc>().add(RemoveSavedCard(cardId: card.id));
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Card removed from bookmarks'),
-        duration: Duration(seconds: 2),
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Remove bookmark?'),
+        content: const Text(
+          'This card will be removed from your bookmarks.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<SavedCardsBloc>().add(RemoveSavedCard(cardId: card.id));
+              Navigator.pop(dialogContext);
+              
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Card removed from bookmarks'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.red,
+            ),
+            child: const Text('Remove'),
+          ),
+        ],
       ),
     );
+  }
+
+  void _onSourceTap(KnowledgeCard card) {
+    if (card.sourceSummaryKey == null) return;
+
+    // Check if summary exists
+    final summariesState = context.read<SummariesBloc>().state;
+    final summaryData = summariesState.summaries[card.sourceSummaryKey];
+
+    if (summaryData != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SummaryScreen(
+            summaryKey: card.sourceSummaryKey!,
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Source document not found'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   List<KnowledgeCard> _filterCards(List<KnowledgeCard> cards) {
@@ -67,8 +119,11 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDark ? const Color(0xFF1A1A1A) : const Color(0xFFF5F5F5);
+    
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: backgroundColor,
       appBar: AppBar(
         title: const Text(
           'Saved Cards',
@@ -79,7 +134,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: backgroundColor,
         actions: [
           BlocBuilder<SavedCardsBloc, SavedCardsState>(
             builder: (context, state) {
@@ -194,28 +249,11 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
                           final card = filteredCards[index];
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (card.sourceTitle != null) ...[
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 4, left: 4),
-                                    child: Text(
-                                      'From: ${card.sourceTitle}',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey.shade600,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                KnowledgeCardTile(
-                                  card: card,
-                                  onTap: () => _onCardTap(card),
-                                  onSave: () => _onCardRemove(card),
-                                ),
-                              ],
+                            child: SavedCardTile(
+                              card: card,
+                              onTap: () => _onCardTap(card),
+                              onSave: () => _onCardRemove(card),
+                              onSourceTap: () => _onSourceTap(card),
                             ),
                           );
                         },

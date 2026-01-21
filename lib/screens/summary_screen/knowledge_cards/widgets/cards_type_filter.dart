@@ -24,7 +24,7 @@ class CardsTypeFilter extends StatelessWidget {
           children: [
             // All types button
             _buildFilterChip(
-              label: 'Все',
+              label: 'All',
               isSelected: selectedType == null,
               onTap: () => onTypeSelected(null),
             ),
@@ -32,28 +32,28 @@ class CardsTypeFilter extends StatelessWidget {
 
             // Individual type filters
             _buildFilterChip(
-              label: 'Тезисы',
+              label: 'Theses',
               isSelected: selectedType == KnowledgeCardType.thesis,
               onTap: () => onTypeSelected(KnowledgeCardType.thesis),
             ),
             const SizedBox(width: 8),
 
             _buildFilterChip(
-              label: 'Термины',
+              label: 'Terms',
               isSelected: selectedType == KnowledgeCardType.term,
               onTap: () => onTypeSelected(KnowledgeCardType.term),
             ),
             const SizedBox(width: 8),
 
             _buildFilterChip(
-              label: 'Выводы',
+              label: 'Conclusions',
               isSelected: selectedType == KnowledgeCardType.conclusion,
               onTap: () => onTypeSelected(KnowledgeCardType.conclusion),
             ),
             const SizedBox(width: 8),
 
             _buildFilterChip(
-              label: 'Инсайты',
+              label: 'Insights',
               isSelected: selectedType == KnowledgeCardType.insight,
               onTap: () => onTypeSelected(KnowledgeCardType.insight),
             ),

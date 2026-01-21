@@ -65,13 +65,29 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
 
     try {
       // Use on-device Apple Intelligence to extract knowledge cards
-      final cards = await onDeviceService.extractKnowledgeCards(event.summaryText);
+      final extractedCards = await onDeviceService.extractKnowledgeCards(event.summaryText);
+
+      // Sync with saved cards - mark cards as saved if they exist in SavedCardsBloc
+      final savedCardsMap = savedCardsBloc.state.savedCards;
+      final syncedCards = extractedCards.map((card) {
+        final isSaved = savedCardsMap.containsKey(card.id);
+        if (isSaved) {
+          final savedCard = savedCardsMap[card.id]!;
+          return card.copyWith(
+            isSaved: true,
+            sourceSummaryKey: savedCard.sourceSummaryKey,
+            sourceTitle: savedCard.sourceTitle,
+            savedAt: savedCard.savedAt,
+          );
+        }
+        return card;
+      }).toList();
 
       // Update state with extracted cards
       emit(state.copyWith(
         knowledgeCards: {
           ...state.knowledgeCards,
-          event.summaryKey: cards,
+          event.summaryKey: syncedCards,
         },
         extractionStatuses: {
           ...state.extractionStatuses,
@@ -82,7 +98,7 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       // Track analytics
       mixpanelBloc.add(KnowledgeCardsAppleIntelligenceUsed(
         summaryKey: event.summaryKey,
-        cardsCount: cards.length,
+        cardsCount: syncedCards.length,
       ));
     } catch (error) {
       // Set error status
