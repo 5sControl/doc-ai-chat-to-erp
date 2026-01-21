@@ -269,3 +269,55 @@ class OpenSummifyExtensionModal extends MixpanelEvent {
   @override
   List<Object?> get props => [];
 }
+
+class KnowledgeCardsExtracted extends MixpanelEvent {
+  final String summaryKey;
+  final int cardsCount;
+
+  const KnowledgeCardsExtracted({
+    required this.summaryKey,
+    required this.cardsCount,
+  });
+
+  @override
+  List<Object?> get props => [summaryKey, cardsCount];
+}
+
+class KnowledgeCardsExtractionError extends MixpanelEvent {
+  final String summaryKey;
+  final String error;
+
+  const KnowledgeCardsExtractionError({
+    required this.summaryKey,
+    required this.error,
+  });
+
+  @override
+  List<Object?> get props => [summaryKey, error];
+}
+
+class KnowledgeCardSaved extends MixpanelEvent {
+  final String summaryKey;
+  final String cardId;
+
+  const KnowledgeCardSaved({
+    required this.summaryKey,
+    required this.cardId,
+  });
+
+  @override
+  List<Object?> get props => [summaryKey, cardId];
+}
+
+class KnowledgeCardUnsaved extends MixpanelEvent {
+  final String summaryKey;
+  final String cardId;
+
+  const KnowledgeCardUnsaved({
+    required this.summaryKey,
+    required this.cardId,
+  });
+
+  @override
+  List<Object?> get props => [summaryKey, cardId];
+}

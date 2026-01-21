@@ -482,3 +482,64 @@ class Quiz extends Equatable {
         reviewMode,
       ];
 }
+
+enum KnowledgeCardType { thesis, term, conclusion, insight }
+
+enum KnowledgeCardStatus { loading, complete, error, initial }
+
+@JsonSerializable()
+class KnowledgeCard extends Equatable {
+  final String id;
+  final KnowledgeCardType type;
+  final String title;
+  final String content;
+  final String? explanation;
+  final bool isSaved;
+  final DateTime extractedAt;
+
+  const KnowledgeCard({
+    required this.id,
+    required this.type,
+    required this.title,
+    required this.content,
+    this.explanation,
+    required this.isSaved,
+    required this.extractedAt,
+  });
+
+  KnowledgeCard copyWith({
+    String? id,
+    KnowledgeCardType? type,
+    String? title,
+    String? content,
+    String? explanation,
+    bool? isSaved,
+    DateTime? extractedAt,
+  }) {
+    return KnowledgeCard(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      explanation: explanation ?? this.explanation,
+      isSaved: isSaved ?? this.isSaved,
+      extractedAt: extractedAt ?? this.extractedAt,
+    );
+  }
+
+  factory KnowledgeCard.fromJson(Map<String, dynamic> json) =>
+      _$KnowledgeCardFromJson(json);
+
+  Map<String, dynamic> toJson() => _$KnowledgeCardToJson(this);
+
+  @override
+  List<Object?> get props => [
+        id,
+        type,
+        title,
+        content,
+        explanation,
+        isSaved,
+        extractedAt,
+      ];
+}

@@ -48,6 +48,10 @@ class SummaryApiRepository {
   final String sendEmailUrl =
       'https://easy4learn.com/django-api/applications/email/';
 
+  // Knowledge cards extraction endpoint
+  final String extractKnowledgeCardsUrl =
+      "https://employees-training.com/api/v1/knowledge-cards";
+
   // API Key for authentication with employees-training.com API
   // Using a static key to avoid build-time complexities
   static const String _apiKey = 'acf8421909af3940f4731f629e28ca486c9ed6af7d7f704a050494773a27c8a9';
@@ -507,6 +511,52 @@ class SummaryApiRepository {
       throw Exception('Failed to generate quiz: $error');
     }
   }
+
+  Future<List<KnowledgeCard>> extractKnowledgeCards(String summaryText) async {
+    try {
+      Response response = await _dio.post(extractKnowledgeCardsUrl, data: {
+        'text': summaryText,
+      });
+
+      if (response.statusCode == 200 && response.data.toString().isNotEmpty) {
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        final cardsData = res['cards'] as List<dynamic>;
+
+        return cardsData.map((cardData) {
+          final card = cardData as Map<String, dynamic>;
+          return KnowledgeCard(
+            id: card['id'] as String,
+            type: KnowledgeCardType.values.firstWhere(
+              (e) => e.name == card['type'],
+              orElse: () => KnowledgeCardType.insight,
+            ),
+            title: card['title'] as String,
+            content: card['content'] as String,
+            explanation: card['explanation'] as String?,
+            isSaved: false, // Default to not saved
+            extractedAt: DateTime.now(),
+          );
+        }).toList();
+      } else {
+        throw Exception('Failed to extract knowledge cards');
+      }
+    } on DioException catch (e) {
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+        error = ErrorDecode(
+          detail: decodedMap['detail'] ?? 'Failed to extract knowledge cards',
+        );
+      } catch (e) {
+        error = ErrorDecode(
+          detail: 'Processing error',
+        );
+      }
+      throw Exception(error.detail);
+    } catch (error) {
+      throw Exception('Failed to extract knowledge cards: $error');
+    }
+  }
 }
 
 class SummaryRepository {
@@ -610,5 +660,9 @@ class SummaryRepository {
       numQuestions: numQuestions,
       difficulty: difficulty,
     ).then((quiz) => quiz.copyWith(documentKey: documentKey));
+  }
+
+  Future<List<KnowledgeCard>> extractKnowledgeCards(String summaryText) {
+    return _summaryRepository.extractKnowledgeCards(summaryText);
   }
 }

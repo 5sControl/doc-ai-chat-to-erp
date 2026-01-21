@@ -33,6 +33,7 @@ import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
 import 'bloc/subscriptions/subscriptions_bloc.dart';
 import 'bloc/summaries/summaries_bloc.dart';
+import 'bloc/knowledge_cards/knowledge_cards_bloc.dart';
 import 'screens/main_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -252,6 +253,8 @@ class _SummishareAppState extends State<SummishareApp> {
               create: (context) =>
                   AuthenticationBloc(authService: authService)),
           BlocProvider(create: (context) => OffersBloc()),
+          BlocProvider(
+              create: (context) => KnowledgeCardsBloc(mixpanelBloc: _mixpanelBloc)),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (context, settingsState) {

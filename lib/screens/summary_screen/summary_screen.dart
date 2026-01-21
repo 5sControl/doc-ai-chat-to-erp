@@ -20,6 +20,7 @@ import 'package:summify/screens/summary_screen/send_request_field.dart';
 import 'package:summify/screens/summary_screen/summary_hero_image.dart';
 import 'package:summify/screens/summary_screen/share_copy_button.dart';
 import 'package:summify/screens/summary_screen/summary_text_container.dart';
+import 'package:summify/screens/summary_screen/knowledge_cards/knowledge_cards_tab.dart';
 import 'package:summify/screens/library_document_screen/quiz_tab.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
@@ -58,7 +59,7 @@ class _SummaryScreenState extends State<SummaryScreen>
     setState(() {
       activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
     });
-    _tabController = TabController(length: 4, vsync: this, initialIndex: AB);
+    _tabController = TabController(length: 5, vsync: this, initialIndex: AB);
     if (context
         .read<SummariesBloc>()
         .state
@@ -71,8 +72,29 @@ class _SummaryScreenState extends State<SummaryScreen>
     _tabController.addListener(() {
       setState(() {
         activeTab = _tabController.index;
+        String tabType;
+        switch (activeTab) {
+          case 0:
+            tabType = 'short';
+            break;
+          case 1:
+            tabType = 'long';
+            break;
+          case 2:
+            tabType = 'research';
+            break;
+          case 3:
+            tabType = 'quiz';
+            break;
+          case 4:
+            tabType = 'knowledge_cards';
+            break;
+          default:
+            tabType = 'unknown';
+        }
+
         context.read<MixpanelBloc>().add(ReadSummary(
-            type: activeTab == 0 ? 'short' : 'long',
+            type: tabType,
             url: widget.summaryKey,
             AB: context.read<SettingsBloc>().state.abTest));
       });
@@ -292,6 +314,9 @@ class _SummaryScreenState extends State<SummaryScreen>
                                         documentKey: widget.summaryKey,
                                         documentText: deepSummaryText,
                                       ),
+                                      KnowledgeCardsTab(
+                                        summaryKey: widget.summaryKey,
+                                      ),
                                     ],
                                   ),
                                   Align(
@@ -340,7 +365,8 @@ class _SummaryScreenState extends State<SummaryScreen>
     // activeTab 1: deep summary
     // activeTab 2: research (Chat)
     // activeTab 3: quiz
-    
+    // activeTab 4: knowledge cards
+
     if (activeTab == 2) {
       // Show chat input for Research tab
       return SendRequestField(
@@ -355,7 +381,7 @@ class _SummaryScreenState extends State<SummaryScreen>
         summaryData: summaryData,
       );
     } else {
-      // For Quiz tab (3) - show nothing
+      // For Quiz tab (3) and Knowledge Cards tab (4) - show nothing
       return null;
     }
   }

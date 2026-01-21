@@ -127,3 +127,31 @@ const _$LikeEnumMap = {
   Like.liked: 'liked',
   Like.disliked: 'disliked',
 };
+
+KnowledgeCard _$KnowledgeCardFromJson(Map<String, dynamic> json) => KnowledgeCard(
+      id: json['id'] as String,
+      type: $enumDecode(_$KnowledgeCardTypeEnumMap, json['type']),
+      title: json['title'] as String,
+      content: json['content'] as String,
+      explanation: json['explanation'] as String?,
+      isSaved: json['isSaved'] as bool,
+      extractedAt: DateTime.parse(json['extractedAt'] as String),
+    );
+
+Map<String, dynamic> _$KnowledgeCardToJson(KnowledgeCard instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'type': _$KnowledgeCardTypeEnumMap[instance.type]!,
+      'title': instance.title,
+      'content': instance.content,
+      'explanation': instance.explanation,
+      'isSaved': instance.isSaved,
+      'extractedAt': instance.extractedAt.toIso8601String(),
+    };
+
+const _$KnowledgeCardTypeEnumMap = {
+  KnowledgeCardType.thesis: 'thesis',
+  KnowledgeCardType.term: 'term',
+  KnowledgeCardType.conclusion: 'conclusion',
+  KnowledgeCardType.insight: 'insight',
+};
