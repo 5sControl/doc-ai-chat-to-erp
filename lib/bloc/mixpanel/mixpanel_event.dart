@@ -321,3 +321,27 @@ class KnowledgeCardUnsaved extends MixpanelEvent {
   @override
   List<Object?> get props => [summaryKey, cardId];
 }
+
+class KnowledgeCardsAppleIntelligenceUsed extends MixpanelEvent {
+  final String summaryKey;
+  final int cardsCount;
+
+  const KnowledgeCardsAppleIntelligenceUsed({
+    required this.summaryKey,
+    required this.cardsCount,
+  });
+
+  @override
+  List<Object?> get props => [summaryKey, cardsCount];
+}
+
+class KnowledgeCardsUnsupportedDevice extends MixpanelEvent {
+  final String summaryKey;
+
+  const KnowledgeCardsUnsupportedDevice({
+    required this.summaryKey,
+  });
+
+  @override
+  List<Object?> get props => [summaryKey];
+}

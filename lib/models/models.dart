@@ -485,7 +485,47 @@ class Quiz extends Equatable {
 
 enum KnowledgeCardType { thesis, term, conclusion, insight }
 
-enum KnowledgeCardStatus { loading, complete, error, initial }
+enum KnowledgeCardStatus { loading, complete, error, initial, unsupported }
+
+class DeviceInfo extends Equatable {
+  final bool supportsAppleIntelligence;
+  final String deviceModel;
+  final String osVersion;
+  final String? unsupportedReason;
+
+  const DeviceInfo({
+    required this.supportsAppleIntelligence,
+    required this.deviceModel,
+    required this.osVersion,
+    this.unsupportedReason,
+  });
+
+  factory DeviceInfo.fromJson(Map<String, dynamic> json) {
+    return DeviceInfo(
+      supportsAppleIntelligence: json['supportsAppleIntelligence'] as bool,
+      deviceModel: json['deviceModel'] as String,
+      osVersion: json['osVersion'] as String,
+      unsupportedReason: json['unsupportedReason'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'supportsAppleIntelligence': supportsAppleIntelligence,
+      'deviceModel': deviceModel,
+      'osVersion': osVersion,
+      'unsupportedReason': unsupportedReason,
+    };
+  }
+
+  @override
+  List<Object?> get props => [
+        supportsAppleIntelligence,
+        deviceModel,
+        osVersion,
+        unsupportedReason,
+      ];
+}
 
 @JsonSerializable()
 class KnowledgeCard extends Equatable {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:summify/models/models.dart';
 
 import 'knowledge_card_tile.dart';
+import 'unsupported_device_placeholder.dart';
 
 class CardsListView extends StatelessWidget {
   final List<KnowledgeCard> cards;
@@ -21,6 +22,10 @@ class CardsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (status == KnowledgeCardStatus.unsupported) {
+      return const UnsupportedDevicePlaceholder();
+    }
+    
     if (status == KnowledgeCardStatus.loading) {
       return const Center(
         child: Column(
@@ -29,7 +34,7 @@ class CardsListView extends StatelessWidget {
             CircularProgressIndicator(),
             SizedBox(height: 16),
             Text(
-              'Извлекаем ключевые знания...',
+              'Extracting key knowledge...',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -52,7 +57,7 @@ class CardsListView extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Не удалось извлечь знания',
+              'Failed to extract knowledge',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -61,7 +66,7 @@ class CardsListView extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: onRetry,
-              child: const Text('Попробовать снова'),
+              child: const Text('Try again'),
             ),
           ],
         ),
@@ -80,7 +85,7 @@ class CardsListView extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Карточки знаний не найдены',
+              'No knowledge cards found',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,

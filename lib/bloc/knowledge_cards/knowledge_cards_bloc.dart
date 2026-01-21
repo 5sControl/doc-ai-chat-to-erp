@@ -5,7 +5,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/models/models.dart';
-import 'package:summify/services/summaryApi.dart';
+import 'package:summify/services/on_device_knowledge_cards_service.dart';
 
 part 'knowledge_cards_event.dart';
 part 'knowledge_cards_state.dart';
@@ -13,7 +13,7 @@ part 'knowledge_cards_bloc.g.dart';
 
 class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCardsState> {
   final MixpanelBloc mixpanelBloc;
-  final SummaryRepository summaryRepository = SummaryRepository();
+  final OnDeviceKnowledgeCardsService onDeviceService = OnDeviceKnowledgeCardsService();
 
   KnowledgeCardsBloc({required this.mixpanelBloc})
       : super(const KnowledgeCardsState(
@@ -30,6 +30,26 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     ExtractKnowledgeCards event,
     Emitter<KnowledgeCardsState> emit,
   ) async {
+    // Check if Apple Intelligence is available
+    final isAvailable = await onDeviceService.isAvailable();
+    
+    if (!isAvailable) {
+      // Device not supported - show placeholder
+      emit(state.copyWith(
+        extractionStatuses: {
+          ...state.extractionStatuses,
+          event.summaryKey: KnowledgeCardStatus.unsupported,
+        },
+      ));
+      
+      // Track analytics
+      mixpanelBloc.add(KnowledgeCardsUnsupportedDevice(
+        summaryKey: event.summaryKey,
+      ));
+      
+      return;
+    }
+
     // Set loading status
     emit(state.copyWith(
       extractionStatuses: {
@@ -39,8 +59,8 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     ));
 
     try {
-      // Call API to extract knowledge cards
-      final cards = await summaryRepository.extractKnowledgeCards(event.summaryText);
+      // Use on-device Apple Intelligence to extract knowledge cards
+      final cards = await onDeviceService.extractKnowledgeCards(event.summaryText);
 
       // Update state with extracted cards
       emit(state.copyWith(
@@ -55,7 +75,7 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       ));
 
       // Track analytics
-      mixpanelBloc.add(KnowledgeCardsExtracted(
+      mixpanelBloc.add(KnowledgeCardsAppleIntelligenceUsed(
         summaryKey: event.summaryKey,
         cardsCount: cards.length,
       ));

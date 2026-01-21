@@ -180,5 +180,47 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
     on<OpenSummifyExtensionModal>((event, emit) {
       mixpanel.track('open_extension_modal', properties: {});
     });
+    
+    // KNOWLEDGE CARDS
+    on<KnowledgeCardsExtracted>((event, emit) {
+      mixpanel.track('knowledge_cards_extracted', properties: {
+        'summary_key': event.summaryKey,
+        'cards_count': event.cardsCount,
+      });
+    });
+    
+    on<KnowledgeCardsExtractionError>((event, emit) {
+      mixpanel.track('knowledge_cards_extraction_error', properties: {
+        'summary_key': event.summaryKey,
+        'error': event.error,
+      });
+    });
+    
+    on<KnowledgeCardSaved>((event, emit) {
+      mixpanel.track('knowledge_card_saved', properties: {
+        'summary_key': event.summaryKey,
+        'card_id': event.cardId,
+      });
+    });
+    
+    on<KnowledgeCardUnsaved>((event, emit) {
+      mixpanel.track('knowledge_card_unsaved', properties: {
+        'summary_key': event.summaryKey,
+        'card_id': event.cardId,
+      });
+    });
+    
+    on<KnowledgeCardsAppleIntelligenceUsed>((event, emit) {
+      mixpanel.track('knowledge_cards_apple_intelligence_used', properties: {
+        'summary_key': event.summaryKey,
+        'cards_count': event.cardsCount,
+      });
+    });
+    
+    on<KnowledgeCardsUnsupportedDevice>((event, emit) {
+      mixpanel.track('knowledge_cards_unsupported_device', properties: {
+        'summary_key': event.summaryKey,
+      });
+    });
   }
 }

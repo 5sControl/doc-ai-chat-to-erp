@@ -35,4 +35,5 @@ const _$KnowledgeCardStatusEnumMap = {
   KnowledgeCardStatus.complete: 'complete',
   KnowledgeCardStatus.error: 'error',
   KnowledgeCardStatus.initial: 'initial',
+  KnowledgeCardStatus.unsupported: 'unsupported',
 };
