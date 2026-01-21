@@ -6,6 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
 import 'package:summify/models/models.dart';
+import 'package:summify/services/demo_knowledge_cards.dart';
 import 'package:summify/services/on_device_knowledge_cards_service.dart';
 
 part 'knowledge_cards_event.dart';
@@ -30,6 +31,10 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     on<UnsaveKnowledgeCard>(_onUnsaveKnowledgeCard);
     on<ClearKnowledgeCards>(_onClearKnowledgeCards);
     on<SyncCardsWithSaved>(_onSyncCardsWithSaved);
+    on<InitializeDemoCards>(_onInitializeDemoCards);
+    
+    // Initialize demo cards on first launch (same pattern as demo summary)
+    add(const InitializeDemoCards());
   }
 
   Future<void> _onExtractKnowledgeCards(
@@ -125,12 +130,9 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     final currentCards = state.knowledgeCards[event.summaryKey];
     if (currentCards == null) return;
 
-    print('💾 Save: Saving card ${event.cardId} from ${event.summaryKey}');
-
     KnowledgeCard? cardToSave;
     final updatedCards = currentCards.map((card) {
       if (card.id == event.cardId) {
-        print('💾 Save: Found card to save - ${card.title}');
         final savedCard = card.copyWith(
           isSaved: true,
           sourceSummaryKey: event.summaryKey,
@@ -152,11 +154,7 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
 
     // Add to global saved cards
     if (cardToSave != null) {
-      print('💾 Save: Adding card to SavedCardsBloc - ID: ${cardToSave!.id}');
       savedCardsBloc.add(AddSavedCard(card: cardToSave!));
-      print('💾 Save: Total saved cards now: ${savedCardsBloc.state.savedCards.length}');
-    } else {
-      print('💾 Save: ERROR - cardToSave is null!');
     }
 
     // Track analytics
@@ -219,25 +217,16 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
   ) {
     final currentCards = state.knowledgeCards[event.summaryKey];
     if (currentCards == null || currentCards.isEmpty) {
-      print('🔄 Sync: No cards to sync for ${event.summaryKey}');
       return;
     }
 
     // Get all saved cards
     final savedCardsMap = savedCardsBloc.state.savedCards;
-    
-    print('🔄 Sync: Current cards count: ${currentCards.length}');
-    print('🔄 Sync: Saved cards count: ${savedCardsMap.length}');
-    print('🔄 Sync: Current card IDs: ${currentCards.map((c) => c.id).toList()}');
-    print('🔄 Sync: Saved card IDs: ${savedCardsMap.keys.toList()}');
 
     // Sync each card's saved status
-    int syncedCount = 0;
     final syncedCards = currentCards.map((card) {
       final isSaved = savedCardsMap.containsKey(card.id);
       if (isSaved) {
-        syncedCount++;
-        print('🔄 Sync: Card ${card.id} is SAVED, syncing...');
         final savedCard = savedCardsMap[card.id]!;
         return card.copyWith(
           isSaved: true,
@@ -246,18 +235,39 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
           savedAt: savedCard.savedAt,
         );
       } else {
-        print('🔄 Sync: Card ${card.id} is NOT saved');
-        // If card was unsaved, update its status
         return card.copyWith(isSaved: false);
       }
     }).toList();
-
-    print('🔄 Sync: Synced $syncedCount cards as saved');
 
     emit(state.copyWith(
       knowledgeCards: {
         ...state.knowledgeCards,
         event.summaryKey: syncedCards,
+      },
+    ));
+  }
+
+  void _onInitializeDemoCards(
+    InitializeDemoCards event,
+    Emitter<KnowledgeCardsState> emit,
+  ) {
+    // Check if demo cards already exist
+    if (state.knowledgeCards.containsKey(DemoKnowledgeCards.demoKey)) {
+      return;
+    }
+
+    // Get pre-generated demo cards
+    final demoCards = DemoKnowledgeCards.getDemoCards();
+
+    // Add demo cards to state
+    emit(state.copyWith(
+      knowledgeCards: {
+        ...state.knowledgeCards,
+        DemoKnowledgeCards.demoKey: demoCards,
+      },
+      extractionStatuses: {
+        ...state.extractionStatuses,
+        DemoKnowledgeCards.demoKey: KnowledgeCardStatus.complete,
       },
     ));
   }

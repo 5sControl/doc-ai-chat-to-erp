@@ -265,13 +265,13 @@ class _SummishareAppState extends State<SummishareApp> {
               )),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
-          builder: (context, settingsState) {
-            if (!settingsState.subscriptionsSynced) {
-              context.read<SubscriptionsBloc>().add(const SyncSubscriptions());
-              context.read<SettingsBloc>().add(const SetPurchasesSync());
-            }
+            builder: (context, settingsState) {
+              if (!settingsState.subscriptionsSynced) {
+                context.read<SubscriptionsBloc>().add(const SyncSubscriptions());
+                context.read<SettingsBloc>().add(const SetPurchasesSync());
+              }
 
-            context.read<SubscriptionsBloc>().add(const InitSubscriptions());
+              context.read<SubscriptionsBloc>().add(const InitSubscriptions());
 
             Future<void> setSystemColor() async {
               // if (settingsState.appTheme == AppTheme.dark) {

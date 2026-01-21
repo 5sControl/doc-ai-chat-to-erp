@@ -62,3 +62,10 @@ class SyncCardsWithSaved extends KnowledgeCardsEvent {
   @override
   List<Object?> get props => [summaryKey];
 }
+
+class InitializeDemoCards extends KnowledgeCardsEvent {
+  const InitializeDemoCards();
+
+  @override
+  List<Object?> get props => [];
+}

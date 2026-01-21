@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/knowledge_cards/knowledge_cards_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/models/models.dart';
+import 'package:summify/services/demo_knowledge_cards.dart';
 
 import 'widgets/cards_type_filter.dart';
 import 'widgets/cards_list_view.dart';
@@ -37,11 +38,8 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
     final knowledgeCardsState = context.read<KnowledgeCardsBloc>().state;
     final hasCards = knowledgeCardsState.knowledgeCards[widget.summaryKey]?.isNotEmpty ?? false;
     
-    print('🔄 Tab: _syncWithSavedCards called, hasCards: $hasCards');
-    
     if (hasCards) {
       // Sync saved status with SavedCardsBloc
-      print('🔄 Tab: Triggering SyncCardsWithSaved event');
       context.read<KnowledgeCardsBloc>().add(
         SyncCardsWithSaved(summaryKey: widget.summaryKey),
       );
@@ -58,7 +56,14 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
     if (existingCards != null && 
         existingCards.isNotEmpty && 
         status == KnowledgeCardStatus.complete) {
-      print('📦 Cards already exist for ${widget.summaryKey}, skipping extraction');
+      return;
+    }
+
+    // Check if this is demo summary - initialize demo cards instead
+    if (widget.summaryKey == DemoKnowledgeCards.demoKey) {
+      context.read<KnowledgeCardsBloc>().add(
+        const InitializeDemoCards(),
+      );
       return;
     }
 
@@ -71,7 +76,6 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
                          '';
 
       if (summaryText.isNotEmpty) {
-        print('📦 Extracting new cards for ${widget.summaryKey}');
         context.read<KnowledgeCardsBloc>().add(
           ExtractKnowledgeCards(
             summaryKey: widget.summaryKey,
