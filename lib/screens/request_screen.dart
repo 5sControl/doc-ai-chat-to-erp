@@ -8,7 +8,18 @@ import 'package:summify/widgets/backgroung_gradient.dart';
 import 'modal_screens/send_request_screen.dart';
 
 class RequestScreen extends StatefulWidget {
-  const RequestScreen({super.key});
+  final String? initialMessage;
+  final String? initialName;
+  final String? initialEmail;
+  final String title;
+
+  const RequestScreen({
+    super.key,
+    this.initialMessage,
+    this.initialName,
+    this.initialEmail,
+    this.title = 'Request a feature',
+  });
 
   @override
   State<RequestScreen> createState() => _RequestScreenState();
@@ -24,6 +35,16 @@ class _RequestScreenState extends State<RequestScreen> {
 
   @override
   void initState() {
+    if (widget.initialEmail != null && widget.initialEmail!.isNotEmpty) {
+      emailController.text = widget.initialEmail!;
+    }
+    if (widget.initialName != null && widget.initialName!.isNotEmpty) {
+      nameController.text = widget.initialName!;
+    }
+    if (widget.initialMessage != null && widget.initialMessage!.isNotEmpty) {
+      messageController.text = widget.initialMessage!;
+    }
+
     emailController.addListener(() {
       if (validateEmail(emailController.value.text) == null) {
         setState(() {
@@ -115,9 +136,7 @@ class _RequestScreenState extends State<RequestScreen> {
         const BackgroundGradient(),
         Scaffold(
             appBar: AppBar(
-              title: const Text(
-                'Request a feature',
-              ),
+              title: Text(widget.title),
             ),
             // extendBody: true,
             body: SingleChildScrollView(
@@ -210,6 +229,7 @@ class CustomInput extends StatefulWidget {
 class _CustomInputState extends State<CustomInput> {
   @override
   Widget build(BuildContext context) {
+    final bool isMessage = widget.title == 'Message';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -232,10 +252,12 @@ class _CustomInputState extends State<CustomInput> {
               ? AutovalidateMode.onUserInteraction
               : AutovalidateMode.disabled,
           validator: widget.title == 'Email' ? validateEmail : null,
-          textInputAction: TextInputAction.done,
+          textInputAction: isMessage ? TextInputAction.newline : TextInputAction.done,
           keyboardType: widget.title == 'Email'
               ? TextInputType.emailAddress
-              : TextInputType.text,
+              : (isMessage ? TextInputType.multiline : TextInputType.text),
+          minLines: isMessage ? 6 : 1,
+          maxLines: isMessage ? 12 : 1,
           decoration: InputDecoration(
             hintText: ' ${widget.placeholder}',
           ),

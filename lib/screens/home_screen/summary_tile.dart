@@ -282,8 +282,40 @@ class ErrorButtons extends StatelessWidget {
     }
 
     void onPressReport() {
+      final errorText = (summaryData.longSummary.summaryError ??
+              summaryData.shortSummary.summaryError)
+          ?.trim();
+
+      final title = (summaryData.summaryPreview.title ?? '').trim();
+      final origin = summaryData.summaryOrigin.name;
+      final filePath = summaryData.filePath;
+      final userTextLen = summaryData.userText?.length;
+
+      final buffer = StringBuffer()
+        ..writeln('Problem report')
+        ..writeln()
+        ..writeln('Summary key: $summaryLink')
+        ..writeln('Title: ${title.isEmpty ? '(none)' : title}')
+        ..writeln('Origin: $origin')
+        ..writeln('Created at: ${summaryData.date.toIso8601String()}')
+        ..writeln()
+        ..writeln('Source:')
+        ..writeln(origin == 'url'
+            ? summaryLink
+            : (origin == 'file'
+                ? (filePath ?? '(filePath is null)')
+                : 'text (length: ${userTextLen ?? 0})'))
+        ..writeln()
+        ..writeln('Server error:')
+        ..writeln((errorText == null || errorText.isEmpty)
+            ? '(empty)'
+            : errorText);
+
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const RequestScreen(),
+        builder: (context) => RequestScreen(
+          title: 'Report a problem',
+          initialMessage: buffer.toString(),
+        ),
       ));
     }
 
