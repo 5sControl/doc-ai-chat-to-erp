@@ -151,10 +151,14 @@ class _BundleScreenState extends State<BundleScreen>
             // Учитываем различные сценарии открытия paywall
             if (widget.fromOnboarding != null) {
               Navigator.of(context).pushNamed('/login');
-              context.read<MixpanelBloc>().add(const ClosePaywall());
+              if (context.mounted) {
+                context.read<MixpanelBloc>().add(const ClosePaywall());
+              }
             } else if (widget.fromSummary == true) {
               Navigator.of(context).pushNamed('/');
-              context.read<MixpanelBloc>().add(const ClosePaywall());
+              if (context.mounted) {
+                context.read<MixpanelBloc>().add(const ClosePaywall());
+              }
             } else {
               // Обычное закрытие (из Settings или других мест)
               Navigator.of(context).pop();
@@ -169,18 +173,19 @@ class _BundleScreenState extends State<BundleScreen>
             state.availableProducts!.all['Summify bundle access'] == null ||
             state.availableProducts!.all['Summify bundle access']!.availablePackages.isEmpty) {
           Future.microtask(() {
+            if (!context.mounted) return;
+            
             showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text('Error'),
-                content: Text('Subscriptions not available'),
+                title: const Text('Error'),
+                content: const Text('Subscriptions not available'),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(ctx).pop();
-                      Navigator.of(context).pop();
                     },
-                    child: Text('Ок'),
+                    child: const Text('Ок'),
                   ),
                 ],
               ),
