@@ -17,9 +17,11 @@ import 'package:summify/screens/auth/auth_dialog.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
 import 'package:summify/screens/settings_screen/select_lang_dialog.dart';
+import 'package:summify/screens/settings_screen/select_ui_lang_dialog.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:summify/l10n/app_localizations.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/settings/settings_bloc.dart';
@@ -48,6 +50,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     User? user = FirebaseAuth.instance.currentUser;
     String displayName = user?.email ?? 'No display name';
     void onPressSubscription() {
@@ -398,7 +401,32 @@ class SettingsScreen extends StatelessWidget {
 
     final List<ButtonItem> generalGroup = [
       ButtonItem(
-          title: 'Translation language',
+          title: l10n.settings_interfaceLanguage,
+          leadingIcon: Assets.icons.translate,
+          onTap: () => interfaceLanguageDialog(context: context),
+          trailing: BlocBuilder<SettingsBloc, SettingsState>(
+            builder: (context, state) {
+              final label =
+                  uiLanguages[state.uiLocaleCode] ?? uiLanguages['system']!;
+              return Row(
+                children: [
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.bodySmall!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                    color: Theme.of(context).textTheme.bodySmall!.color!,
+                  )
+                ],
+              );
+            },
+          )),
+      ButtonItem(
+          title: l10n.settings_translationLanguage,
           leadingIcon: Assets.icons.translate,
           onTap: () => translateDialog(context: context),
           trailing: BlocBuilder<SettingsBloc, SettingsState>(
@@ -506,9 +534,7 @@ class SettingsScreen extends StatelessWidget {
                 appBar: AppBar(
                   backgroundColor: Colors.transparent,
                   surfaceTintColor: Colors.transparent,
-                  title: const Text(
-                    'Profile',
-                  ),
+                  title: Text(l10n.settings_profile),
                 ),
                 body: Container(
                     height: double.infinity,
@@ -687,7 +713,7 @@ class SettingsScreen extends StatelessWidget {
                           const SizedBox(
                             height: 15,
                           ),
-                          ButtonsGroup(title: 'General', items: generalGroup),
+                          ButtonsGroup(title: l10n.settings_general, items: generalGroup),
                           // ButtonsGroup(title: 'Membership', items: membershipGroup),
                           ButtonsGroup(title: 'About', items: aboutGroup),
                           ButtonsGroup(title: 'Support', items: supportGroup),

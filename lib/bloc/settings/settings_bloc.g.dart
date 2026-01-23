@@ -15,6 +15,7 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
       appTheme: $enumDecode(_$AppThemeEnumMap, json['appTheme']),
       subscriptionsSynced: json['subscriptionsSynced'] as bool,
       translateLanguage: json['translateLanguage'] as String,
+      uiLocaleCode: json['uiLocaleCode'] as String? ?? 'system',
       fontSize: (json['fontSize'] as num).toInt(),
     );
 
@@ -27,6 +28,7 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'appTheme': _$AppThemeEnumMap[instance.appTheme]!,
       'subscriptionsSynced': instance.subscriptionsSynced,
       'translateLanguage': instance.translateLanguage,
+      'uiLocaleCode': instance.uiLocaleCode,
       'fontSize': instance.fontSize,
     };
 

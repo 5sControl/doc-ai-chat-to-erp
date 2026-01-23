@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/screens/subscribtions_screen/happy_box.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
@@ -46,6 +47,7 @@ class _PurchaseSuccessScreenState extends State<PurchaseSuccessScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     void onPressCopy() {
       Clipboard.setData(const ClipboardData(
           text:
@@ -96,7 +98,7 @@ class _PurchaseSuccessScreenState extends State<PurchaseSuccessScreen> {
                       height: 20,
                     ),
                     Text(
-                      '   You are the best!',
+                      l10n.purchase_youAreTheBest,
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -112,11 +114,11 @@ class _PurchaseSuccessScreenState extends State<PurchaseSuccessScreen> {
                                 .bodyLarge!
                                 .copyWith(fontSize: 26),
                             children: [
-                          const TextSpan(text: 'Get '),
+                          TextSpan(text: '${l10n.purchase_get} '),
                           WidgetSpan(
                               child: SvgPicture.asset(Assets.icons.chrome),
                               alignment: PlaceholderAlignment.middle),
-                          const TextSpan(text: ' version for free!'),
+                          TextSpan(text: ' ${l10n.purchase_versionForFree}'),
                         ])),
                     const SizedBox(
                       height: 20,
@@ -148,7 +150,7 @@ class _PurchaseSuccessScreenState extends State<PurchaseSuccessScreen> {
                                           Colors.white, BlendMode.srcIn),
                                     ),
                                     Text(
-                                      ' Copy link',
+                                      l10n.purchase_copyLink,
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
@@ -190,7 +192,7 @@ class _PurchaseSuccessScreenState extends State<PurchaseSuccessScreen> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10),
                                     child: Text(
-                                      'Collect your gift',
+                                      l10n.purchase_collectYourGift,
                                       textAlign: TextAlign.center,
                                       style: Theme.of(context)
                                           .textTheme
@@ -226,14 +228,15 @@ class EmailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return TextFormField(
       controller: emailController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validateEmail,
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
-      decoration: const InputDecoration(
-          hintText: ' Enter your email', fillColor: Colors.white),
+      decoration: InputDecoration(
+          hintText: l10n.purchase_enterYourEmail, fillColor: Colors.white),
       // onEditingComplete: () {},
       style: Theme.of(context).textTheme.labelMedium,
     );

@@ -11,6 +11,8 @@ class SettingsState extends Equatable {
   final AppTheme appTheme;
   final bool subscriptionsSynced;
   final String translateLanguage;
+  @JsonKey(defaultValue: 'system')
+  final String uiLocaleCode;
   final int fontSize;
 
   const SettingsState(
@@ -21,6 +23,7 @@ class SettingsState extends Equatable {
       required this.appTheme,
       required this.subscriptionsSynced,
       required this.translateLanguage,
+      this.uiLocaleCode = 'system',
       required this.fontSize});
 
   SettingsState copyWith({
@@ -32,6 +35,7 @@ class SettingsState extends Equatable {
     ThemeMode? themeMode,
     bool? subscriptionsSynced,
     String? translateLanguage,
+    String? uiLocaleCode,
     int? fontSize,
   }) {
     return SettingsState(
@@ -43,6 +47,7 @@ class SettingsState extends Equatable {
         appTheme: appTheme ?? this.appTheme,
         subscriptionsSynced: subscriptionsSynced ?? this.subscriptionsSynced,
         translateLanguage: translateLanguage ?? this.translateLanguage,
+        uiLocaleCode: uiLocaleCode ?? this.uiLocaleCode,
         fontSize: fontSize ?? this.fontSize);
   }
 
@@ -55,6 +60,7 @@ class SettingsState extends Equatable {
         appTheme,
         subscriptionsSynced,
         translateLanguage,
+        uiLocaleCode,
         fontSize
       ];
 

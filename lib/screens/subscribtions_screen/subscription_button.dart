@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
@@ -37,7 +38,7 @@ class SubscriptionButton extends StatelessWidget {
           overlayColor: const MaterialStatePropertyAll(Colors.white24),
           child: Center(
               child: Text(
-            'Select',
+            AppLocalizations.of(context)!.common_select,
             style: Theme.of(context)
                 .textTheme
                 .bodyMedium!

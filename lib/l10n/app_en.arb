@@ -1,0 +1,90 @@
+{
+  "@@locale": "en",
+
+  "common_continue": "Continue",
+  "common_select": "Select",
+  "common_ok": "OK",
+  "common_error": "Error",
+
+  "onboarding_translateSummarizationTo": "Translate summarization to",
+  "onboarding_goodbyeInfoOverload": "Goodbye information overload!",
+  "onboarding_oneClickShareToGetSummary": "One-click \"share\" to get summary",
+  "onboarding_welcomeTitle": "Welcome to Summify",
+  "onboarding_welcomeSubtitle": "Personal AI Summarizer",
+
+  "settings_profile": "Profile",
+  "settings_general": "General",
+  "settings_interfaceLanguage": "Interface language",
+  "settings_translationLanguage": "Translation language",
+  "settings_selectLanguageTitle": "Select language",
+
+  "paywall_beSmartWithYourTime": "Be smart with your time!",
+  "paywall_payWeekly": "Pay weekly",
+  "paywall_payAnnually": "Pay annually",
+  "paywall_saveUpTo": "Save up to {amount}\\$",
+  "@paywall_saveUpTo": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "paywall_buy": "BUY",
+  "paywall_andGetOn": "AND GET ON",
+  "paywall_forFree": "FOR FREE!",
+
+  "paywall_12Months": "12 months",
+  "paywall_1Week": "1 week",
+  "paywall_1Month": "1 month",
+  "paywall_1WeekMultiline": "1 \\nweek",
+  "paywall_1MonthMultiline": "1 \\nmonth",
+  "paywall_12MonthsMultiline": "12 \\nmonths",
+  "paywall_accessAllPremiumCancelAnytime": "Access all premium features!\\nCancel anytime",
+  "paywall_pricePerYear": "{price}/year",
+  "@paywall_pricePerYear": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "paywall_pricePerWeek": "{price}/week",
+  "@paywall_pricePerWeek": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+
+  "paywall_termsOfUse": "Terms of use",
+  "paywall_restorePurchase": "Restore purchase",
+  "paywall_privacyPolicy": "Privacy policy",
+
+  "paywall_unlimitedSummaries": "Unlimited Summaries",
+  "paywall_documentResearch": "Document Research",
+  "paywall_briefAndDeepSummary": "Brief and Deep Summary",
+  "paywall_translation": "Translation",
+  "paywall_addToChromeForFree": "Add to Chrome for FREE",
+
+  "offer_needMoreSummaries": "Need more summaries?",
+  "offer_maximizeYourProductivity": "Maximize your productivity!",
+  "offer_outOfSummaries": "Out of Summaries?",
+  "offer_maximizeProductivityAndEfficiency": "Maximize your productivity\\nand efficiency!",
+  "offer_getMoreInNoTime": "Get more in no time!",
+  "offer_15DeepSummariesDaily": "15 Deep Summaries Daily",
+  "offer_goUnlimited": "Go Unlimited",
+
+  "bundle_subscriptionsNotAvailable": "Subscriptions not available",
+  "bundle_getForFree": "GET FOR FREE",
+  "bundle_on": "on",
+  "bundle_version": "Version",
+  "bundle_offer_unlockLimitless": "Unlock Limitless",
+  "bundle_offer_possibilities": "Possibilities",
+  "bundle_offer_endlessPossibilities": "Endless Possibilities",
+  "bundle_offer_with50Off": "with 50% Off",
+  "bundle_offer_get4UnlimitedApps": "Get 4 Unlimited Apps",
+  "bundle_tabBundle": "Bundle",
+  "bundle_tabUnlimited": "Unlimited",
+
+  "purchase_youAreTheBest": "You are the best!",
+  "purchase_get": "Get",
+  "purchase_versionForFree": "version for free!",
+  "purchase_copyLink": "Copy link",
+  "purchase_collectYourGift": "Collect your gift",
+  "purchase_enterYourEmail": "Enter your email"
+}

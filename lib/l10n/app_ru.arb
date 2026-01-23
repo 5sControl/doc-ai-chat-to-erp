@@ -1,0 +1,90 @@
+{
+  "@@locale": "ru",
+
+  "common_continue": "Продолжить",
+  "common_select": "Выбрать",
+  "common_ok": "Ок",
+  "common_error": "Ошибка",
+
+  "onboarding_translateSummarizationTo": "Переводить саммари на",
+  "onboarding_goodbyeInfoOverload": "Прощай, информационная перегрузка!",
+  "onboarding_oneClickShareToGetSummary": "В один клик «Поделиться» — и получите саммари",
+  "onboarding_welcomeTitle": "Добро пожаловать в Summify",
+  "onboarding_welcomeSubtitle": "Персональный AI-саммаризатор",
+
+  "settings_profile": "Профиль",
+  "settings_general": "Общие",
+  "settings_interfaceLanguage": "Язык интерфейса",
+  "settings_translationLanguage": "Язык перевода",
+  "settings_selectLanguageTitle": "Выберите язык",
+
+  "paywall_beSmartWithYourTime": "Умно распоряжайтесь своим временем!",
+  "paywall_payWeekly": "Оплата еженедельно",
+  "paywall_payAnnually": "Оплата ежегодно",
+  "paywall_saveUpTo": "Сэкономьте до {amount}\\$",
+  "@paywall_saveUpTo": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "paywall_buy": "КУПИТЬ",
+  "paywall_andGetOn": "И ПОЛУЧИТЬ НА",
+  "paywall_forFree": "БЕСПЛАТНО!",
+
+  "paywall_12Months": "12 месяцев",
+  "paywall_1Week": "1 неделя",
+  "paywall_1Month": "1 месяц",
+  "paywall_1WeekMultiline": "1 \\nнеделя",
+  "paywall_1MonthMultiline": "1 \\nмесяц",
+  "paywall_12MonthsMultiline": "12 \\nмесяцев",
+  "paywall_accessAllPremiumCancelAnytime": "Доступ ко всем премиум-функциям!\\nОтмена в любой момент",
+  "paywall_pricePerYear": "{price}/год",
+  "@paywall_pricePerYear": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "paywall_pricePerWeek": "{price}/нед.",
+  "@paywall_pricePerWeek": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+
+  "paywall_termsOfUse": "Условия использования",
+  "paywall_restorePurchase": "Восстановить покупку",
+  "paywall_privacyPolicy": "Политика конфиденциальности",
+
+  "paywall_unlimitedSummaries": "Безлимитные саммари",
+  "paywall_documentResearch": "Исследование документов",
+  "paywall_briefAndDeepSummary": "Краткое и глубокое саммари",
+  "paywall_translation": "Перевод",
+  "paywall_addToChromeForFree": "Добавить в Chrome бесплатно",
+
+  "offer_needMoreSummaries": "Нужно больше саммари?",
+  "offer_maximizeYourProductivity": "Увеличьте продуктивность!",
+  "offer_outOfSummaries": "Саммари закончились?",
+  "offer_maximizeProductivityAndEfficiency": "Повышайте продуктивность\\nи эффективность!",
+  "offer_getMoreInNoTime": "Получайте больше за меньшее время!",
+  "offer_15DeepSummariesDaily": "15 глубоких саммари в день",
+  "offer_goUnlimited": "Включить безлимит",
+
+  "bundle_subscriptionsNotAvailable": "Подписки недоступны",
+  "bundle_getForFree": "ПОЛУЧИТЬ БЕСПЛАТНО",
+  "bundle_on": "в",
+  "bundle_version": "версии",
+  "bundle_offer_unlockLimitless": "Откройте безграничные",
+  "bundle_offer_possibilities": "возможности",
+  "bundle_offer_endlessPossibilities": "Безграничные возможности",
+  "bundle_offer_with50Off": "со скидкой 50%",
+  "bundle_offer_get4UnlimitedApps": "Получите 4 безлимитных приложения",
+  "bundle_tabBundle": "Пакет",
+  "bundle_tabUnlimited": "Безлимит",
+
+  "purchase_youAreTheBest": "Вы — лучшие!",
+  "purchase_get": "Получите",
+  "purchase_versionForFree": "версию бесплатно!",
+  "purchase_copyLink": "Скопировать ссылку",
+  "purchase_collectYourGift": "Забрать подарок",
+  "purchase_enterYourEmail": "Введите email"
+}

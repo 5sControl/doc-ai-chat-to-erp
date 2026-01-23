@@ -61,6 +61,10 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
       emit(state.copyWith(translateLanguage: event.translateLanguage));
     });
 
+    on<SetUiLocale>((event, emit) {
+      emit(state.copyWith(uiLocaleCode: event.uiLocaleCode));
+    });
+
     on<ScaleUpFontSize>((event, emit) {
       if (state.fontSize != fontSizes.last) {
         final nextSize = fontSizes[fontSizes.indexOf(state.fontSize) + 1];

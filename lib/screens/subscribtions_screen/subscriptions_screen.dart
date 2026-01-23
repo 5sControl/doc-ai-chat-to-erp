@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -253,13 +254,14 @@ class WeekTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Expanded(
         child: InkWell(
       borderRadius: BorderRadius.circular(8),
       onTap: () => onSelectSubscription(index: 0),
       child: Center(
         child: Text(
-          'Pay weekly',
+          l10n.paywall_payWeekly,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
                                             600 ? 13 : 24),
@@ -296,6 +298,7 @@ class YearTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Expanded(
         child: InkWell(
       borderRadius: BorderRadius.circular(8),
@@ -304,7 +307,7 @@ class YearTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Pay annually',
+            l10n.paywall_payAnnually,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
                                             600 ? 13 : 24),
@@ -321,7 +324,7 @@ class YearTitle extends StatelessWidget {
               //   Color.fromRGBO(255, 208, 74, 1),
               // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)
             ),
-            child: Text('Save up to 29\$',
+            child: Text(l10n.paywall_saveUpTo('29'),
                 style: TextStyle(fontSize:  MediaQuery.of(context).size.shortestSide <
                                             600 ? 13 : 24),
                 // .copyWith(color: Colors.black),
@@ -338,10 +341,11 @@ class Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Text(
-        'Be smart with your time!',
+        l10n.paywall_beSmartWithYourTime,
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: MediaQuery.of(context).size.shortestSide <
                                             600 ? 28 : 56, fontWeight: FontWeight.w700, height: 1),
@@ -355,6 +359,7 @@ class IconsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     void onPressInfo() {
       showMaterialModalBottomSheet(
         context: context,
@@ -386,15 +391,15 @@ class IconsRow extends StatelessWidget {
                     letterSpacing: 0,
                     color: Colors.black),
                 children: [
-              const TextSpan(text: "BUY "),
+              TextSpan(text: "${l10n.paywall_buy} "),
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.summafyMini),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(text: " AND GET ON "),
+              TextSpan(text: " ${l10n.paywall_andGetOn} "),
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.chrome),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(text: " FOR FREE!"),
+              TextSpan(text: " ${l10n.paywall_forFree}"),
             ])),
       )
           .animate(

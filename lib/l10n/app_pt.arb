@@ -1,0 +1,90 @@
+{
+  "@@locale": "pt",
+
+  "common_continue": "Continuar",
+  "common_select": "Selecionar",
+  "common_ok": "OK",
+  "common_error": "Erro",
+
+  "onboarding_translateSummarizationTo": "Traduzir os resumos para",
+  "onboarding_goodbyeInfoOverload": "Adeus à sobrecarga de informação!",
+  "onboarding_oneClickShareToGetSummary": "Um clique em \"Compartilhar\" para obter o resumo",
+  "onboarding_welcomeTitle": "Bem-vindo ao Summify",
+  "onboarding_welcomeSubtitle": "Resumidor de IA pessoal",
+
+  "settings_profile": "Perfil",
+  "settings_general": "Geral",
+  "settings_interfaceLanguage": "Idioma da interface",
+  "settings_translationLanguage": "Idioma de tradução",
+  "settings_selectLanguageTitle": "Selecionar idioma",
+
+  "paywall_beSmartWithYourTime": "Use seu tempo com inteligência!",
+  "paywall_payWeekly": "Pagar semanalmente",
+  "paywall_payAnnually": "Pagar anualmente",
+  "paywall_saveUpTo": "Economize até {amount}\\$",
+  "@paywall_saveUpTo": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "paywall_buy": "COMPRAR",
+  "paywall_andGetOn": "E RECEBA NO",
+  "paywall_forFree": "GRÁTIS!",
+
+  "paywall_12Months": "12 meses",
+  "paywall_1Week": "1 semana",
+  "paywall_1Month": "1 mês",
+  "paywall_1WeekMultiline": "1 \\nsemana",
+  "paywall_1MonthMultiline": "1 \\nmês",
+  "paywall_12MonthsMultiline": "12 \\nmeses",
+  "paywall_accessAllPremiumCancelAnytime": "Acesse todos os recursos premium!\\nCancele quando quiser",
+  "paywall_pricePerYear": "{price}/ano",
+  "@paywall_pricePerYear": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "paywall_pricePerWeek": "{price}/semana",
+  "@paywall_pricePerWeek": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+
+  "paywall_termsOfUse": "Termos de uso",
+  "paywall_restorePurchase": "Restaurar compra",
+  "paywall_privacyPolicy": "Política de privacidade",
+
+  "paywall_unlimitedSummaries": "Resumos ilimitados",
+  "paywall_documentResearch": "Pesquisa de documentos",
+  "paywall_briefAndDeepSummary": "Resumo breve e profundo",
+  "paywall_translation": "Tradução",
+  "paywall_addToChromeForFree": "Adicionar ao Chrome GRÁTIS",
+
+  "offer_needMoreSummaries": "Precisa de mais resumos?",
+  "offer_maximizeYourProductivity": "Maximize sua produtividade!",
+  "offer_outOfSummaries": "Sem resumos?",
+  "offer_maximizeProductivityAndEfficiency": "Maximize sua produtividade\\ne eficiência!",
+  "offer_getMoreInNoTime": "Faça mais em pouco tempo!",
+  "offer_15DeepSummariesDaily": "15 resumos aprofundados por dia",
+  "offer_goUnlimited": "Ativar ilimitado",
+
+  "bundle_subscriptionsNotAvailable": "Assinaturas indisponíveis",
+  "bundle_getForFree": "OBTER GRÁTIS",
+  "bundle_on": "na",
+  "bundle_version": "Versão",
+  "bundle_offer_unlockLimitless": "Desbloqueie infinitas",
+  "bundle_offer_possibilities": "possibilidades",
+  "bundle_offer_endlessPossibilities": "Possibilidades infinitas",
+  "bundle_offer_with50Off": "com 50% de desconto",
+  "bundle_offer_get4UnlimitedApps": "Obtenha 4 apps ilimitados",
+  "bundle_tabBundle": "Pacote",
+  "bundle_tabUnlimited": "Ilimitado",
+
+  "purchase_youAreTheBest": "Você é o melhor!",
+  "purchase_get": "Obtenha",
+  "purchase_versionForFree": "a versão grátis!",
+  "purchase_copyLink": "Copiar link",
+  "purchase_collectYourGift": "Resgatar seu presente",
+  "purchase_enterYourEmail": "Digite seu e-mail"
+}

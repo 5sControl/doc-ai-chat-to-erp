@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:path_provider/path_provider.dart';
@@ -301,10 +302,24 @@ class _SummishareAppState extends State<SummishareApp> {
             } else {
               themeMode = ThemeMode.light;
             }
+
+            Locale? localeFromUiCode(String code) {
+              if (code == 'system' || code.isEmpty) return null;
+              final normalized = code.replaceAll('_', '-');
+              final parts = normalized.split('-');
+              if (parts.length == 2) {
+                return Locale(parts[0], parts[1]);
+              }
+              return Locale(parts[0]);
+            }
+
             return MaterialApp(
               theme: lightTheme,
               darkTheme: darkTheme,
               themeMode: themeMode,
+              locale: localeFromUiCode(settingsState.uiLocaleCode),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
               //builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',

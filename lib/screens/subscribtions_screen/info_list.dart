@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
 import '../summary_screen/info_modal/extension_modal.dart';
 
-const List<String> infoItems = [
-  'Unlimited Summaries',
-  'Document Research',
-  'Brief and Deep Summary',
-  'Translation'
-];
-
 class InfoList extends StatelessWidget {
   const InfoList({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final abTest = context.read<SettingsBloc>().state.abTest;
+    final l10n = AppLocalizations.of(context)!;
+    final List<String> infoItems = [
+      l10n.paywall_unlimitedSummaries,
+      l10n.paywall_documentResearch,
+      l10n.paywall_briefAndDeepSummary,
+      l10n.paywall_translation,
+    ];
 
     void onPressExtensionLink() {
       showMaterialModalBottomSheet(
@@ -99,7 +99,7 @@ class InfoList extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 onTap: onPressExtensionLink,
                 child: Text(
-                  'Add to Chrome for FREE',
+                  l10n.paywall_addToChromeForFree,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       fontWeight: FontWeight.w400,
                       fontSize: MediaQuery.of(context).size.shortestSide <

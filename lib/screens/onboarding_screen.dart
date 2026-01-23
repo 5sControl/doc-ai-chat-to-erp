@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
+import 'package:summify/l10n/app_localizations.dart';
 
 import '../gen/assets.gen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -70,6 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return PopScope(
       canPop: false,
       child: Container(
@@ -125,8 +127,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       color: const Color.fromRGBO(0, 186, 195, 1),
                       borderRadius: BorderRadius.circular(8)),
                   alignment: Alignment.center,
-                  child: const Text(
-                    'Continue',
+                  child: Text(
+                    l10n.common_continue,
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -147,6 +149,7 @@ class OnboardingScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -154,12 +157,12 @@ class OnboardingScreen1 extends StatelessWidget {
           'assets/onboarding/onboardingBG.png',
           fit: BoxFit.cover,
         ),
-        const Column(
+        Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text('Welcome to Summify',
+            Text(l10n.onboarding_welcomeTitle,
                 style: TextStyle(
                     fontSize: 46,
                     fontWeight: FontWeight.w700,
@@ -169,7 +172,7 @@ class OnboardingScreen1 extends StatelessWidget {
             Divider(
               color: Colors.transparent,
             ),
-            Text('Personal AI Summarizer',
+            Text(l10n.onboarding_welcomeSubtitle,
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w400,
@@ -188,12 +191,13 @@ class OnboardingScreen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Text('Goodbye information overload!',
+          child: Text(l10n.onboarding_goodbyeInfoOverload,
               style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700),
               textAlign: TextAlign.start),
         ),
@@ -222,6 +226,7 @@ class OnboardingScreen3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -235,9 +240,9 @@ class OnboardingScreen3 extends StatelessWidget {
               color: Colors.transparent,
               height: 25,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text('One-click "share" to get summary',
+              child: Text(l10n.onboarding_oneClickShareToGetSummary,
                   style: TextStyle(
                       fontSize: 36, fontWeight: FontWeight.w700, height: 1),
                   textAlign: TextAlign.start),
@@ -282,6 +287,7 @@ class OnboardingScreen4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final List<LangItem> languages = [
       LangItem(title: 'English', icon: Assets.flags.en, code: 'en'),
       LangItem(title: 'Spanish', icon: Assets.flags.sp, code: 'es'),
@@ -304,6 +310,7 @@ class OnboardingScreen4 extends StatelessWidget {
       LangItem(title: 'Japanese', icon: Assets.flags.ja, code: 'ja'),
       LangItem(title: 'Korean', icon: Assets.flags.ko, code: 'ko'),
       LangItem(title: 'Persian', icon: Assets.flags.fa, code: 'fa'),
+      LangItem(title: 'Polish', icon: null, code: 'pl'),
       LangItem(title: 'Portuguese', icon: Assets.flags.pt, code: 'pt'),
       LangItem(title: 'Romanian', icon: Assets.flags.ro, code: 'ro'),
       LangItem(title: 'Turkish', icon: Assets.flags.tr, code: 'tr'),
@@ -314,10 +321,33 @@ class OnboardingScreen4 extends StatelessWidget {
       builder: (context, state) {
         final selectedLang = state.translateLanguage;
 
+        String? uiLocaleFromTranslateCode(String code) {
+          switch (code) {
+            case 'zh-cn':
+              return 'zh-CN';
+            case 'en':
+            case 'ru':
+            case 'pl':
+            case 'de':
+            case 'fr':
+            case 'es':
+            case 'pt':
+            case 'it':
+            case 'vi':
+              return code;
+          }
+          return null;
+        }
+
         void onSelectLanguage({required String language}) {
           context
               .read<SettingsBloc>()
               .add(SetTranslateLanguage(translateLanguage: language));
+
+          final uiLocaleCode = uiLocaleFromTranslateCode(language);
+          if (uiLocaleCode != null) {
+            context.read<SettingsBloc>().add(SetUiLocale(uiLocaleCode: uiLocaleCode));
+          }
         }
 
         return Column(
@@ -328,9 +358,9 @@ class OnboardingScreen4 extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Text('Translate summarization to',
+              child: Text(l10n.onboarding_translateSummarizationTo,
                   style: TextStyle(
                       fontSize: 34, fontWeight: FontWeight.w700, height: 1),
                   textAlign: TextAlign.start),

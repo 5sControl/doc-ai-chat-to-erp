@@ -11,12 +11,15 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
       summaries: (json['summaries'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, SummaryData.fromJson(e as Map<String, dynamic>)),
       ),
-      ratedSummaries: (json['ratedSummaries'] as List<dynamic>)
-          .map((e) => e as String)
-          .toSet(),
+      ratedSummaries:
+          (json['ratedSummaries'] as List<dynamic>)
+              .map((e) => e as String)
+              .toSet(),
       textCounter: (json['textCounter'] as num).toInt(),
-      defaultSummaryType:
-          $enumDecode(_$SummaryTypeEnumMap, json['defaultSummaryType']),
+      defaultSummaryType: $enumDecode(
+        _$SummaryTypeEnumMap,
+        json['defaultSummaryType'],
+      ),
       freeSummaries: (json['freeSummaries'] as num).toInt(),
     );
 

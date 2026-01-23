@@ -1,3 +1,5 @@
+// dart format width=80
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -5,7 +7,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
 import 'package:flutter/widgets.dart';
 
@@ -80,29 +82,29 @@ class $AssetsFlagsGen {
 
   /// List of all assets
   List<String> get values => [
-        ar,
-        cs,
-        de,
-        el,
-        en,
-        fa,
-        fr,
-        he,
-        hi,
-        id,
-        it,
-        ja,
-        ko,
-        nl,
-        pt,
-        ro,
-        ru,
-        sp,
-        tr,
-        uk,
-        vi,
-        zh
-      ];
+    ar,
+    cs,
+    de,
+    el,
+    en,
+    fa,
+    fr,
+    he,
+    hi,
+    id,
+    it,
+    ja,
+    ko,
+    nl,
+    pt,
+    ro,
+    ru,
+    sp,
+    tr,
+    uk,
+    vi,
+    zh,
+  ];
 }
 
 class $AssetsIconsGen {
@@ -278,63 +280,63 @@ class $AssetsIconsGen {
 
   /// List of all assets
   List<String> get values => [
-        apple,
-        chat,
-        check,
-        checkCircle,
-        chrome,
-        chromeMini,
-        clock,
-        copy,
-        crown,
-        danger,
-        delete,
-        deleteAccount,
-        desctop,
-        discount,
-        file,
-        google,
-        headrt,
-        home,
-        homeFilled,
-        i,
-        info,
-        like,
-        login,
-        logo,
-        logout,
-        miniDislike,
-        miniLike,
-        noImage,
-        notification,
-        oneOne,
-        paste,
-        phone,
-        play,
-        plus,
-        present,
-        privacy,
-        profile,
-        profileCircle,
-        profileFilled,
-        restore,
-        send,
-        setUp,
-        settings,
-        share,
-        star,
-        summafyMini,
-        summifyLogo,
-        terms,
-        text,
-        textScale,
-        theme,
-        transcriptor1,
-        transcriptor2,
-        translate,
-        update,
-        url
-      ];
+    apple,
+    chat,
+    check,
+    checkCircle,
+    chrome,
+    chromeMini,
+    clock,
+    copy,
+    crown,
+    danger,
+    delete,
+    deleteAccount,
+    desctop,
+    discount,
+    file,
+    google,
+    headrt,
+    home,
+    homeFilled,
+    i,
+    info,
+    like,
+    login,
+    logo,
+    logout,
+    miniDislike,
+    miniLike,
+    noImage,
+    notification,
+    oneOne,
+    paste,
+    phone,
+    play,
+    plus,
+    present,
+    privacy,
+    profile,
+    profileCircle,
+    profileFilled,
+    restore,
+    send,
+    setUp,
+    settings,
+    share,
+    star,
+    summafyMini,
+    summifyLogo,
+    terms,
+    text,
+    textScale,
+    theme,
+    transcriptor1,
+    transcriptor2,
+    translate,
+    update,
+    url,
+  ];
 }
 
 class $AssetsLibraryGen {
@@ -430,29 +432,29 @@ class $AssetsLibraryGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        a13Things,
-        atomicHabits,
-        atomicHabitsRephrase,
-        designingYourLife,
-        doTheWork,
-        extremeProductivity,
-        gettingComfy,
-        goodVibes,
-        howSuccessful,
-        howToBe,
-        learnOrDie,
-        maximizeYourPotential,
-        notGivingAFuck,
-        startSomethingThatMatters,
-        successAndLuck,
-        the7Habits,
-        theCharge,
-        unlimitedMemory,
-        whatColorIs,
-        whatGotYouHere,
-        whereverYouGo,
-        worksWellWithOthers
-      ];
+    a13Things,
+    atomicHabits,
+    atomicHabitsRephrase,
+    designingYourLife,
+    doTheWork,
+    extremeProductivity,
+    gettingComfy,
+    goodVibes,
+    howSuccessful,
+    howToBe,
+    learnOrDie,
+    maximizeYourPotential,
+    notGivingAFuck,
+    startSomethingThatMatters,
+    successAndLuck,
+    the7Habits,
+    theCharge,
+    unlimitedMemory,
+    whatColorIs,
+    whatGotYouHere,
+    whereverYouGo,
+    worksWellWithOthers,
+  ];
 }
 
 class $AssetsOnboardingGen {
@@ -478,6 +480,22 @@ class $AssetsOnboardingGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [onb1, onb11, onb11Dark, onb2, onb2Dark];
+}
+
+class $AssetsQuizzesGen {
+  const $AssetsQuizzesGen();
+
+  /// File path: assets/quizzes/README.md
+  String get readme => 'assets/quizzes/README.md';
+
+  /// File path: assets/quizzes/atomic_habits_quiz.json
+  String get atomicHabitsQuiz => 'assets/quizzes/atomic_habits_quiz.json';
+
+  /// File path: assets/quizzes/the_7_habits_quiz.json
+  String get the7HabitsQuiz => 'assets/quizzes/the_7_habits_quiz.json';
+
+  /// List of all assets
+  List<String> get values => [readme, atomicHabitsQuiz, the7HabitsQuiz];
 }
 
 class $AssetsSetUpGen {
@@ -516,20 +534,20 @@ class $AssetsSetUpGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
-        setUp1,
-        setUp1A,
-        setUp2,
-        setUp2A,
-        setUp3,
-        setUp3A,
-        setUp4,
-        setUp4A,
-        setUp5
-      ];
+    setUp1,
+    setUp1A,
+    setUp2,
+    setUp2A,
+    setUp3,
+    setUp3A,
+    setUp4,
+    setUp4A,
+    setUp5,
+  ];
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const AssetGenImage bgDark = AssetGenImage('assets/bg_dark.png');
   static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
@@ -544,38 +562,45 @@ class Assets {
   static const $AssetsLibraryGen library = $AssetsLibraryGen();
   static const AssetGenImage niga = AssetGenImage('assets/niga.png');
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
-  static const AssetGenImage placeholderLogo =
-      AssetGenImage('assets/placeholder_logo.png');
+  static const AssetGenImage placeholderLogo = AssetGenImage(
+    'assets/placeholder_logo.png',
+  );
+  static const $AssetsQuizzesGen quizzes = $AssetsQuizzesGen();
   static const $AssetsSetUpGen setUp = $AssetsSetUpGen();
-  static const AssetGenImage subscriptionMen =
-      AssetGenImage('assets/subscription_men.png');
-  static const AssetGenImage subscriptionMenLight =
-      AssetGenImage('assets/subscription_men_light.png');
-  static const AssetGenImage subscriptionWoman =
-      AssetGenImage('assets/subscription_woman.png');
-  static const AssetGenImage subscriptionWoman1 =
-      AssetGenImage('assets/subscription_woman_1.png');
-  static const AssetGenImage subscriptionWomanLight =
-      AssetGenImage('assets/subscription_woman_light.png');
+  static const AssetGenImage subscriptionMen = AssetGenImage(
+    'assets/subscription_men.png',
+  );
+  static const AssetGenImage subscriptionMenLight = AssetGenImage(
+    'assets/subscription_men_light.png',
+  );
+  static const AssetGenImage subscriptionWoman = AssetGenImage(
+    'assets/subscription_woman.png',
+  );
+  static const AssetGenImage subscriptionWoman1 = AssetGenImage(
+    'assets/subscription_woman_1.png',
+  );
+  static const AssetGenImage subscriptionWomanLight = AssetGenImage(
+    'assets/subscription_woman_light.png',
+  );
 
   /// List of all assets
   static List<dynamic> get values => [
-        bgDark,
-        bgLight,
-        extension,
-        girl,
-        happyBox,
-        happyBoxFloor,
-        happyBoxLeftHand,
-        happyBoxRightHand,
-        niga,
-        placeholderLogo,
-        subscriptionMen,
-        subscriptionMenLight,
-        subscriptionWoman,
-        subscriptionWoman1,
-        subscriptionWomanLight
-      ];
+    bgDark,
+    bgLight,
+    extension,
+    girl,
+    happyBox,
+    happyBoxFloor,
+    happyBoxLeftHand,
+    happyBoxRightHand,
+    niga,
+    placeholderLogo,
+    subscriptionMen,
+    subscriptionMenLight,
+    subscriptionWoman,
+    subscriptionWoman1,
+    subscriptionWomanLight,
+  ];
 }
 
 class AssetGenImage {
@@ -583,12 +608,14 @@ class AssetGenImage {
     this._assetName, {
     this.size,
     this.flavors = const {},
+    this.animation,
   });
 
   final String _assetName;
 
   final Size? size;
   final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
 
   Image image({
     Key? key,
@@ -608,10 +635,10 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {
@@ -643,18 +670,23 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;
 
   String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({
+    required this.isAnimation,
+    required this.duration,
+    required this.frames,
+  });
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }

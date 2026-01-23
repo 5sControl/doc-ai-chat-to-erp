@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/models/package_wrapper.dart';
@@ -81,11 +82,12 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         Center(
           child: Text(
-            'BUY',
+            l10n.paywall_buy,
             style: TextStyle(
                 fontSize: isTablet ? 34 : 26, fontWeight: FontWeight.bold),
           ),
@@ -167,6 +169,7 @@ class Body1 extends StatelessWidget {
     context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
   }
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: isTablet ? 300 : 210,
       margin: const EdgeInsets.only(
@@ -183,7 +186,7 @@ class Body1 extends StatelessWidget {
             height: isTablet ? 10 : 4,
           ),
           Text(
-            'GET FOR FREE',
+            l10n.bundle_getForFree,
             style: TextStyle(
                 color: Colors.black,
                 fontSize: isTablet ? 34 : 26,
@@ -264,8 +267,8 @@ class Body1 extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'on',
+              Text(
+                l10n.bundle_on,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 26,
@@ -280,8 +283,8 @@ class Body1 extends StatelessWidget {
               const SizedBox(
                 width: 15,
               ),
-              const Text(
-                'Version',
+              Text(
+                l10n.bundle_version,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 26,
@@ -307,25 +310,13 @@ class Title extends StatefulWidget {
 }
 
 class _TitleState extends State<Title> {
-  final List<List<String>> wordPairs = [
-    ['Unlock Limitless', 'Possibilities'],
-    ['Endless Possibilities', 'with 50% Off'],
-    ['Get 4 Unlimited Apps', 'with 50% Off'],
-  ];
-
-  List<String> displayedPair = ["", ""];
+  static const _pairCount = 3;
   int index = 0;
-
-  List<String> getRandomPair() {
-    final random = Random();
-    index = random.nextInt(wordPairs.length);
-    return wordPairs[index];
-  }
 
   @override
   void initState() {
     super.initState();
-    displayedPair = getRandomPair();
+    index = Random().nextInt(_pairCount);
     if(widget.fromOnboarding == null){
     context
         .read<MixpanelBloc>()
@@ -339,13 +330,20 @@ class _TitleState extends State<Title> {
 
   void refreshPair() {
     setState(() {
-      displayedPair = getRandomPair();
+      index = Random().nextInt(_pairCount);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
+    final wordPairs = [
+      [l10n.bundle_offer_unlockLimitless, l10n.bundle_offer_possibilities],
+      [l10n.bundle_offer_endlessPossibilities, l10n.bundle_offer_with50Off],
+      [l10n.bundle_offer_get4UnlimitedApps, l10n.bundle_offer_with50Off],
+    ];
+    final displayedPair = wordPairs[index];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: AutoSizeText.rich(
@@ -364,14 +362,14 @@ class _TitleState extends State<Title> {
           TextSpan(
               text: '${displayedPair[1]}',
               style: TextStyle(
-                fontSize: displayedPair[1] == 'with 50% Off'
+                fontSize: displayedPair[1] == l10n.bundle_offer_with50Off
                     ? isTablet
                         ? 55
                         : 36
                     : isTablet
                         ? 40
                         : 28,
-                color: displayedPair[1] == 'with 50% Off' 
+                color: displayedPair[1] == l10n.bundle_offer_with50Off
                     ? const Color.fromRGBO(0, 186, 195, 1)
                     : Theme.of(context).brightness == Brightness.dark
                         ? Colors.white
@@ -438,12 +436,13 @@ class SubscriptionCover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     String subscriptionTitle = '';
     switch (package.storeProduct.identifier) {
       case 'SummifyMonthlyBundleSubscription' || 'summify_bundle_week':
-        subscriptionTitle = '1 month';
+        subscriptionTitle = l10n.paywall_1Month;
       case 'SummifyAnnualBundleSubscription' || 'summify_bundle_month':
-        subscriptionTitle = '12 months';
+        subscriptionTitle = l10n.paywall_12Months;
     }
 
     final textColor = Theme.of(context).brightness == Brightness.light
@@ -547,6 +546,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
+    final l10n = AppLocalizations.of(context)!;
     void onPressGoPremium() {
       if (widget.package != null) {
         context
@@ -576,8 +576,8 @@ class _SubscribeButtonState extends State<SubscribeButton> {
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 14),
-            child: const Text(
-              'Continue',
+            child: Text(
+              l10n.common_continue,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w700,

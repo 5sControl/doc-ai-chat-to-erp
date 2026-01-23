@@ -1,0 +1,90 @@
+{
+  "@@locale": "zh_CN",
+
+  "common_continue": "继续",
+  "common_select": "选择",
+  "common_ok": "好",
+  "common_error": "错误",
+
+  "onboarding_translateSummarizationTo": "将摘要翻译为",
+  "onboarding_goodbyeInfoOverload": "告别信息过载！",
+  "onboarding_oneClickShareToGetSummary": "一键“分享”获取摘要",
+  "onboarding_welcomeTitle": "欢迎使用 Summify",
+  "onboarding_welcomeSubtitle": "个人 AI 摘要工具",
+
+  "settings_profile": "个人资料",
+  "settings_general": "通用",
+  "settings_interfaceLanguage": "界面语言",
+  "settings_translationLanguage": "翻译语言",
+  "settings_selectLanguageTitle": "选择语言",
+
+  "paywall_beSmartWithYourTime": "聪明地利用你的时间！",
+  "paywall_payWeekly": "按周付费",
+  "paywall_payAnnually": "按年付费",
+  "paywall_saveUpTo": "最多节省 {amount}\\$",
+  "@paywall_saveUpTo": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "paywall_buy": "购买",
+  "paywall_andGetOn": "并在",
+  "paywall_forFree": "免费获得！",
+
+  "paywall_12Months": "12 个月",
+  "paywall_1Week": "1 周",
+  "paywall_1Month": "1 个月",
+  "paywall_1WeekMultiline": "1 \\n周",
+  "paywall_1MonthMultiline": "1 \\n个月",
+  "paywall_12MonthsMultiline": "12 \\n个月",
+  "paywall_accessAllPremiumCancelAnytime": "解锁所有高级功能！\\n随时取消",
+  "paywall_pricePerYear": "{price}/年",
+  "@paywall_pricePerYear": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "paywall_pricePerWeek": "{price}/周",
+  "@paywall_pricePerWeek": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+
+  "paywall_termsOfUse": "使用条款",
+  "paywall_restorePurchase": "恢复购买",
+  "paywall_privacyPolicy": "隐私政策",
+
+  "paywall_unlimitedSummaries": "无限摘要",
+  "paywall_documentResearch": "文档研究",
+  "paywall_briefAndDeepSummary": "简短与深入摘要",
+  "paywall_translation": "翻译",
+  "paywall_addToChromeForFree": "免费添加到 Chrome",
+
+  "offer_needMoreSummaries": "需要更多摘要？",
+  "offer_maximizeYourProductivity": "提升你的效率！",
+  "offer_outOfSummaries": "摘要用完了？",
+  "offer_maximizeProductivityAndEfficiency": "提升你的效率\\n和生产力！",
+  "offer_getMoreInNoTime": "立刻获得更多！",
+  "offer_15DeepSummariesDaily": "每天 15 条深入摘要",
+  "offer_goUnlimited": "开启无限",
+
+  "bundle_subscriptionsNotAvailable": "订阅不可用",
+  "bundle_getForFree": "免费获取",
+  "bundle_on": "在",
+  "bundle_version": "版本",
+  "bundle_offer_unlockLimitless": "解锁无限",
+  "bundle_offer_possibilities": "可能",
+  "bundle_offer_endlessPossibilities": "无限可能",
+  "bundle_offer_with50Off": "立减 50%",
+  "bundle_offer_get4UnlimitedApps": "获取 4 个无限应用",
+  "bundle_tabBundle": "套餐",
+  "bundle_tabUnlimited": "无限",
+
+  "purchase_youAreTheBest": "你太棒了！",
+  "purchase_get": "免费获取",
+  "purchase_versionForFree": "版本！",
+  "purchase_copyLink": "复制链接",
+  "purchase_collectYourGift": "领取礼物",
+  "purchase_enterYourEmail": "输入邮箱"
+}

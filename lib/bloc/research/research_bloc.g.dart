@@ -10,15 +10,13 @@ ResearchState _$ResearchStateFromJson(Map<String, dynamic> json) =>
     ResearchState(
       questions: (json['questions'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(
-            k,
-            (e as List<dynamic>)
-                .map(
-                    (e) => ResearchQuestion.fromJson(e as Map<String, dynamic>))
-                .toList()),
+          k,
+          (e as List<dynamic>)
+              .map((e) => ResearchQuestion.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
       ),
     );
 
 Map<String, dynamic> _$ResearchStateToJson(ResearchState instance) =>
-    <String, dynamic>{
-      'questions': instance.questions,
-    };
+    <String, dynamic>{'questions': instance.questions};

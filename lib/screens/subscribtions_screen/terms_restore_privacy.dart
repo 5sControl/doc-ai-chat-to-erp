@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
@@ -11,6 +12,8 @@ class TermsRestorePrivacy extends StatelessWidget {
   const TermsRestorePrivacy({super.key});
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     void onPressTerms() async {
       final Uri url = Uri.parse(
           'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
@@ -34,7 +37,7 @@ class TermsRestorePrivacy extends StatelessWidget {
               onPressed: onPressTerms,
               
               child: Text(
-                'Terms of use',
+                l10n.paywall_termsOfUse,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,
@@ -49,7 +52,7 @@ class TermsRestorePrivacy extends StatelessWidget {
             style: const ButtonStyle(
                   padding: WidgetStatePropertyAll(EdgeInsets.zero)),
             child: Text(
-              'Restore purchase',
+              l10n.paywall_restorePurchase,
               style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 13,
@@ -63,7 +66,7 @@ class TermsRestorePrivacy extends StatelessWidget {
             child: TextButton(
               onPressed: onPressPrivacy,
               child: Text(
-                'Privacy policy',
+                l10n.paywall_privacyPolicy,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 13,

@@ -5,6 +5,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/summary_screen/info_modal/text_size_modal.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
+import 'package:summify/l10n/app_localizations.dart';
 
 const Map<String, String> translateLanguages = {
   "ar": "Arabic",
@@ -66,6 +67,7 @@ class _DialogStateState extends State<DialogState> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = FixedExtentScrollController(
       initialItem: 0,
     );
@@ -108,7 +110,7 @@ class _DialogStateState extends State<DialogState> {
               children: [
                 const SizedBox(height: 20),
                 Text(
-                  'Select Language',
+                  l10n.settings_selectLanguageTitle,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
                       fontSize: 26,
@@ -127,9 +129,9 @@ class _DialogStateState extends State<DialogState> {
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
                     onPressed: onPressConfirm,
-                    child: const Text(
-                      'Select',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    child: Text(
+                      l10n.common_select,
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
                 ),

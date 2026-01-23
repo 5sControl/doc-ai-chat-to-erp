@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/screens/subscribtions_screen/subscription_button.dart';
@@ -14,6 +15,8 @@ class SubscriptionBodyYear extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     String currency({required String code}) {
       Locale locale = Localizations.localeOf(context);
       var format = NumberFormat.simpleCurrency(locale: locale.toString());
@@ -22,6 +25,9 @@ class SubscriptionBodyYear extends StatelessWidget {
 
     final currencySymbol = currency(code: package.storeProduct.currencyCode.toUpperCase());
     final abTest = context.read<SettingsBloc>().state.abTest;
+    final perYearText = l10n.paywall_pricePerYear(
+      '$currencySymbol${package.storeProduct.price.toStringAsFixed(2)}',
+    );
 
     return Expanded(
       child: Column(
@@ -31,7 +37,7 @@ class SubscriptionBodyYear extends StatelessWidget {
             flex: 2,
           ),
          Text(
-            '12 months',
+            l10n.paywall_12Months,
             textAlign: TextAlign.start,
             style:
                 TextStyle(fontSize:MediaQuery.of(context).size.shortestSide <
@@ -53,8 +59,7 @@ class SubscriptionBodyYear extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     decoration: TextDecoration.lineThrough)),
             TextSpan(
-                text:
-                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/year',
+                text: ' $perYearText',
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
@@ -63,7 +68,7 @@ class SubscriptionBodyYear extends StatelessWidget {
           ])),
           const Spacer(),
           Text(
-            'Access all premium features!\nCancel anytime',
+            l10n.paywall_accessAllPremiumCancelAnytime,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: MediaQuery.of(context).size.shortestSide <
                                             600 ? 14 : 24,),

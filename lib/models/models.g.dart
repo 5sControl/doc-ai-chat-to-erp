@@ -13,55 +13,55 @@ SummaryPreview _$SummaryPreviewFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$SummaryPreviewToJson(SummaryPreview instance) =>
-    <String, dynamic>{
-      'imageUrl': instance.imageUrl,
-      'title': instance.title,
-    };
+    <String, dynamic>{'imageUrl': instance.imageUrl, 'title': instance.title};
 
 Summary _$SummaryFromJson(Map<String, dynamic> json) => Summary(
-      contextLength: (json['contextLength'] as num?)?.toInt(),
-      summaryText: json['summaryText'] as String?,
-      summaryError: json['summaryError'] as String?,
-    );
+  contextLength: (json['contextLength'] as num?)?.toInt(),
+  summaryText: json['summaryText'] as String?,
+  summaryError: json['summaryError'] as String?,
+);
 
 Map<String, dynamic> _$SummaryToJson(Summary instance) => <String, dynamic>{
-      'summaryText': instance.summaryText,
-      'summaryError': instance.summaryError,
-      'contextLength': instance.contextLength,
-    };
+  'summaryText': instance.summaryText,
+  'summaryError': instance.summaryError,
+  'contextLength': instance.contextLength,
+};
 
 SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
-      shortSummaryStatus:
-          $enumDecode(_$SummaryStatusEnumMap, json['shortSummaryStatus']),
-      longSummaryStatus:
-          $enumDecode(_$SummaryStatusEnumMap, json['longSummaryStatus']),
-      date: DateTime.parse(json['date'] as String),
-      summaryOrigin: $enumDecode(_$SummaryOriginEnumMap, json['summaryOrigin']),
-      shortSummary:
-          Summary.fromJson(json['shortSummary'] as Map<String, dynamic>),
-      longSummary:
-          Summary.fromJson(json['longSummary'] as Map<String, dynamic>),
-      summaryPreview: SummaryPreview.fromJson(
-          json['summaryPreview'] as Map<String, dynamic>),
-      filePath: json['filePath'] as String?,
-      isBlocked: json['isBlocked'] as bool?,
-      userText: json['userText'] as String?,
-    );
+  shortSummaryStatus: $enumDecode(
+    _$SummaryStatusEnumMap,
+    json['shortSummaryStatus'],
+  ),
+  longSummaryStatus: $enumDecode(
+    _$SummaryStatusEnumMap,
+    json['longSummaryStatus'],
+  ),
+  date: DateTime.parse(json['date'] as String),
+  summaryOrigin: $enumDecode(_$SummaryOriginEnumMap, json['summaryOrigin']),
+  shortSummary: Summary.fromJson(json['shortSummary'] as Map<String, dynamic>),
+  longSummary: Summary.fromJson(json['longSummary'] as Map<String, dynamic>),
+  summaryPreview: SummaryPreview.fromJson(
+    json['summaryPreview'] as Map<String, dynamic>,
+  ),
+  filePath: json['filePath'] as String?,
+  isBlocked: json['isBlocked'] as bool?,
+  userText: json['userText'] as String?,
+);
 
-Map<String, dynamic> _$SummaryDataToJson(SummaryData instance) =>
-    <String, dynamic>{
-      'shortSummaryStatus':
-          _$SummaryStatusEnumMap[instance.shortSummaryStatus]!,
-      'longSummaryStatus': _$SummaryStatusEnumMap[instance.longSummaryStatus]!,
-      'date': instance.date.toIso8601String(),
-      'summaryOrigin': _$SummaryOriginEnumMap[instance.summaryOrigin]!,
-      'summaryPreview': instance.summaryPreview,
-      'shortSummary': instance.shortSummary,
-      'longSummary': instance.longSummary,
-      'filePath': instance.filePath,
-      'userText': instance.userText,
-      'isBlocked': instance.isBlocked,
-    };
+Map<String, dynamic> _$SummaryDataToJson(
+  SummaryData instance,
+) => <String, dynamic>{
+  'shortSummaryStatus': _$SummaryStatusEnumMap[instance.shortSummaryStatus]!,
+  'longSummaryStatus': _$SummaryStatusEnumMap[instance.longSummaryStatus]!,
+  'date': instance.date.toIso8601String(),
+  'summaryOrigin': _$SummaryOriginEnumMap[instance.summaryOrigin]!,
+  'summaryPreview': instance.summaryPreview,
+  'shortSummary': instance.shortSummary,
+  'longSummary': instance.longSummary,
+  'filePath': instance.filePath,
+  'userText': instance.userText,
+  'isBlocked': instance.isBlocked,
+};
 
 const _$SummaryStatusEnumMap = {
   SummaryStatus.loading: 'loading',
@@ -81,8 +81,10 @@ const _$SummaryOriginEnumMap = {
 SummaryTranslate _$SummaryTranslateFromJson(Map<String, dynamic> json) =>
     SummaryTranslate(
       translate: json['translate'] as String?,
-      translateStatus:
-          $enumDecode(_$TranslateStatusEnumMap, json['translateStatus']),
+      translateStatus: $enumDecode(
+        _$TranslateStatusEnumMap,
+        json['translateStatus'],
+      ),
       isActive: json['isActive'] as bool,
     );
 
@@ -128,7 +130,8 @@ const _$LikeEnumMap = {
   Like.disliked: 'disliked',
 };
 
-KnowledgeCard _$KnowledgeCardFromJson(Map<String, dynamic> json) => KnowledgeCard(
+KnowledgeCard _$KnowledgeCardFromJson(Map<String, dynamic> json) =>
+    KnowledgeCard(
       id: json['id'] as String,
       type: $enumDecode(_$KnowledgeCardTypeEnumMap, json['type']),
       title: json['title'] as String,
@@ -138,9 +141,10 @@ KnowledgeCard _$KnowledgeCardFromJson(Map<String, dynamic> json) => KnowledgeCar
       extractedAt: DateTime.parse(json['extractedAt'] as String),
       sourceSummaryKey: json['sourceSummaryKey'] as String?,
       sourceTitle: json['sourceTitle'] as String?,
-      savedAt: json['savedAt'] == null
-          ? null
-          : DateTime.parse(json['savedAt'] as String),
+      savedAt:
+          json['savedAt'] == null
+              ? null
+              : DateTime.parse(json['savedAt'] as String),
     );
 
 Map<String, dynamic> _$KnowledgeCardToJson(KnowledgeCard instance) =>

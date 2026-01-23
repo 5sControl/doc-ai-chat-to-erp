@@ -58,6 +58,14 @@ class SetTranslateLanguage extends SettingsEvent {
   List<Object> get props => [translateLanguage];
 }
 
+class SetUiLocale extends SettingsEvent {
+  final String uiLocaleCode;
+  const SetUiLocale({required this.uiLocaleCode});
+
+  @override
+  List<Object> get props => [uiLocaleCode];
+}
+
 class ScaleUpFontSize extends SettingsEvent {
   const ScaleUpFontSize();
 

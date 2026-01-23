@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/screens/subscribtions_screen/subscription_button.dart';
@@ -14,6 +15,8 @@ class SubscriptionBodyMonth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     String currency({required String code}) {
       Locale locale = Localizations.localeOf(context);
       var format = NumberFormat.simpleCurrency(locale: locale.toString());
@@ -22,6 +25,9 @@ class SubscriptionBodyMonth extends StatelessWidget {
 
     final currencySymbol = currency(code: package.storeProduct.currencyCode);
     final abTest = context.read<SettingsBloc>().state.abTest;
+    final perWeekText = l10n.paywall_pricePerWeek(
+      '$currencySymbol${package.storeProduct.price.toStringAsFixed(2)}',
+    );
 
     return Expanded(
       child: Column(
@@ -31,7 +37,7 @@ class SubscriptionBodyMonth extends StatelessWidget {
             flex: 2,
           ),
           Text(
-            '1 week',
+            l10n.paywall_1Week,
             textAlign: TextAlign.start,
             style:
                 TextStyle(fontSize:MediaQuery.of(context).size.shortestSide <
@@ -51,8 +57,7 @@ class SubscriptionBodyMonth extends StatelessWidget {
             //         fontWeight: FontWeight.w400,
             //         decoration: TextDecoration.lineThrough)),
             TextSpan(
-                text:
-                    ' $currencySymbol${package.storeProduct.price.toStringAsFixed(2)}/week',
+                text: ' $perWeekText',
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge!
@@ -61,7 +66,7 @@ class SubscriptionBodyMonth extends StatelessWidget {
           ])),
           const Spacer(),
           Text(
-            'Access all premium features!\nCancel anytime',
+            l10n.paywall_accessAllPremiumCancelAnytime,
             textAlign: TextAlign.center,
              style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: MediaQuery.of(context).size.shortestSide <
                                             600 ? 14 : 24,),

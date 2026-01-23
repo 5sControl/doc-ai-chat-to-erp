@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
@@ -174,18 +175,19 @@ class _BundleScreenState extends State<BundleScreen>
             state.availableProducts!.all['Summify bundle access']!.availablePackages.isEmpty) {
           Future.microtask(() {
             if (!context.mounted) return;
+            final l10n = AppLocalizations.of(context)!;
             
             showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: const Text('Error'),
-                content: const Text('Subscriptions not available'),
+                title: Text(l10n.common_error),
+                content: Text(l10n.bundle_subscriptionsNotAvailable),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(ctx).pop();
                     },
-                    child: const Text('Ок'),
+                    child: Text(l10n.common_ok),
                   ),
                 ],
               ),
@@ -284,17 +286,17 @@ class _BundleScreenState extends State<BundleScreen>
                                               borderRadius:
                                                   BorderRadius.circular(6),
                                             ),
-                                            tabs: const [
+                                            tabs: [
                                               Tab(
                                                 child: Align(
                                                   alignment: Alignment.center,
-                                                  child: Text('Bundle'),
+                                                  child: Text(AppLocalizations.of(context)!.bundle_tabBundle),
                                                 ),
                                               ),
                                               Tab(
                                                 child: Align(
                                                   alignment: Alignment.center,
-                                                  child: Text('Unlimited'),
+                                                  child: Text(AppLocalizations.of(context)!.bundle_tabUnlimited),
                                                 ),
                                               )
                                             ],
@@ -366,6 +368,7 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: 40,
       child: ToggleButtons(
@@ -382,14 +385,14 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
             }
           });
         },
-        children: const [
+        children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text('Bundle'),
+            child: Text(l10n.bundle_tabBundle),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text('Unlimited'),
+            child: Text(l10n.bundle_tabUnlimited),
           ),
         ],
       ),
@@ -402,6 +405,7 @@ class IconsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     void onPressInfo() {
       showMaterialModalBottomSheet(
         context: context,
@@ -433,17 +437,15 @@ class IconsRow extends StatelessWidget {
                     letterSpacing: 0,
                     color: Colors.black),
                 children: [
-              const TextSpan(text: "BUY "),
+              TextSpan(text: "${l10n.paywall_buy} "),
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.summafyMini),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(text: " AND GET ON "),
+              TextSpan(text: " ${l10n.paywall_andGetOn} "),
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.chrome),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(
-                text: " FOR FREE!",
-              ),
+              TextSpan(text: " ${l10n.paywall_forFree}"),
             ])),
       )
           .animate(

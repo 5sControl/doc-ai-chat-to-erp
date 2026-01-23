@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -337,13 +338,14 @@ class Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
     final List<String> screenTexts = [
-      'Need more summaries?',
-      'Maximize your productivity!',
-      'Out of Summaries?',
-      'Need more summaries?',
-      'Maximize your productivity!',
-      'Out of Summaries?',
+      l10n.offer_needMoreSummaries,
+      l10n.offer_maximizeYourProductivity,
+      l10n.offer_outOfSummaries,
+      l10n.offer_needMoreSummaries,
+      l10n.offer_maximizeYourProductivity,
+      l10n.offer_outOfSummaries,
     ];
     return Container(
       child: Padding(
@@ -423,10 +425,11 @@ class SubTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
     final List<String> screenTexts = [
-      'Maximize your productivity\nand efficiency!',
+      l10n.offer_maximizeProductivityAndEfficiency,
       '',
-      'Get more in no time!',
+      l10n.offer_getMoreInNoTime,
     ];
     return Container(
       child: Padding(
@@ -449,11 +452,11 @@ class SubTitle extends StatelessWidget {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    buildRichText(context, 'Unlimited Summaries'),
-                    buildRichText(context, 'Document Research'),
-                    buildRichText(context, 'Brief and Deep Summary'),
-                    buildRichText(context, 'Translation'),
-                    buildRichText(context, 'Add to Chrome for FREE',
+                    buildRichText(context, l10n.paywall_unlimitedSummaries),
+                    buildRichText(context, l10n.paywall_documentResearch),
+                    buildRichText(context, l10n.paywall_briefAndDeepSummary),
+                    buildRichText(context, l10n.paywall_translation),
+                    buildRichText(context, l10n.paywall_addToChromeForFree,
                         isLink: true),
                   ],
                 );
@@ -469,10 +472,11 @@ class Text1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
     final List<String> screenTexts = [
-      '15 Deep Summaries Daily',
-      '15 Deep Summaries Daily',
-      '15 Deep Summaries Daily',
+      l10n.offer_15DeepSummariesDaily,
+      l10n.offer_15DeepSummariesDaily,
+      l10n.offer_15DeepSummariesDaily,
       '',
       '',
       '',
@@ -502,6 +506,7 @@ class IconsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     void onPressInfo() {
       showMaterialModalBottomSheet(
         context: context,
@@ -533,15 +538,15 @@ class IconsRow extends StatelessWidget {
                     letterSpacing: 0,
                     color: Colors.black),
                 children: [
-              const TextSpan(text: "BUY "),
+              TextSpan(text: "${l10n.paywall_buy} "),
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.summafyMini),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(text: " AND GET ON "),
+              TextSpan(text: " ${l10n.paywall_andGetOn} "),
               WidgetSpan(
                   child: SvgPicture.asset(Assets.icons.chrome),
                   alignment: PlaceholderAlignment.middle),
-              const TextSpan(text: " FOR FREE!"),
+              TextSpan(text: " ${l10n.paywall_forFree}"),
             ])),
       )
           .animate(
@@ -775,14 +780,15 @@ class SubscriptionCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
     String subscriptionTitle = '';
     switch (package.storeProduct.identifier) {
       case 'SummifyPremiumWeekly' || 'summify_premium_week':
-        subscriptionTitle = '1 \nweek';
+        subscriptionTitle = l10n.paywall_1WeekMultiline;
       case 'SummifyPremiumYear' || 'summify_premium_year':
-        subscriptionTitle = '12 \nmonths';
+        subscriptionTitle = l10n.paywall_12MonthsMultiline;
       case 'SummifyPremiumMonth' || 'summify_premium_month':
-        subscriptionTitle = '1 \nmonth';
+        subscriptionTitle = l10n.paywall_1MonthMultiline;
     }
 
     final textColor = Theme.of(context).brightness == Brightness.light
@@ -896,6 +902,7 @@ class _SubscribeButtonState extends State<SubscribeButton> {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
+    final l10n = AppLocalizations.of(context)!;
     void onPressGoPremium() {
       if (widget.package != null) {
         context
@@ -919,8 +926,8 @@ class _SubscribeButtonState extends State<SubscribeButton> {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(vertical: isTablet ? 18 : 10),
-            child: const Text(
-              'Go Unlimited',
+            child: Text(
+              l10n.offer_goUnlimited,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.w700,

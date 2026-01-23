@@ -10,25 +10,26 @@ KnowledgeCardsState _$KnowledgeCardsStateFromJson(Map<String, dynamic> json) =>
     KnowledgeCardsState(
       knowledgeCards: (json['knowledgeCards'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(
-            k,
-            (e as List<dynamic>)
-                .map((e) => KnowledgeCard.fromJson(e as Map<String, dynamic>))
-                .toList()),
+          k,
+          (e as List<dynamic>)
+              .map((e) => KnowledgeCard.fromJson(e as Map<String, dynamic>))
+              .toList(),
+        ),
       ),
-      extractionStatuses: (json['extractionStatuses'] as Map<String, dynamic>).map(
-        (k, e) => MapEntry(k, $enumDecode(_$KnowledgeCardStatusEnumMap, e)),
-      ),
+      extractionStatuses: (json['extractionStatuses'] as Map<String, dynamic>)
+          .map(
+            (k, e) => MapEntry(k, $enumDecode(_$KnowledgeCardStatusEnumMap, e)),
+          ),
     );
 
-Map<String, dynamic> _$KnowledgeCardsStateToJson(KnowledgeCardsState instance) =>
-    <String, dynamic>{
-      'knowledgeCards': instance.knowledgeCards.map(
-        (k, e) => MapEntry(k, e.map((e) => e.toJson()).toList()),
-      ),
-      'extractionStatuses': instance.extractionStatuses.map(
-        (k, e) => MapEntry(k, _$KnowledgeCardStatusEnumMap[e]!),
-      ),
-    };
+Map<String, dynamic> _$KnowledgeCardsStateToJson(
+  KnowledgeCardsState instance,
+) => <String, dynamic>{
+  'knowledgeCards': instance.knowledgeCards,
+  'extractionStatuses': instance.extractionStatuses.map(
+    (k, e) => MapEntry(k, _$KnowledgeCardStatusEnumMap[e]!),
+  ),
+};
 
 const _$KnowledgeCardStatusEnumMap = {
   KnowledgeCardStatus.loading: 'loading',

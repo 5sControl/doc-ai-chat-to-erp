@@ -1,0 +1,90 @@
+{
+  "@@locale": "vi",
+
+  "common_continue": "Tiếp tục",
+  "common_select": "Chọn",
+  "common_ok": "OK",
+  "common_error": "Lỗi",
+
+  "onboarding_translateSummarizationTo": "Dịch tóm tắt sang",
+  "onboarding_goodbyeInfoOverload": "Tạm biệt quá tải thông tin!",
+  "onboarding_oneClickShareToGetSummary": "Chỉ một lần \"Chia sẻ\" để nhận tóm tắt",
+  "onboarding_welcomeTitle": "Chào mừng đến với Summify",
+  "onboarding_welcomeSubtitle": "Trình tóm tắt AI cá nhân",
+
+  "settings_profile": "Hồ sơ",
+  "settings_general": "Chung",
+  "settings_interfaceLanguage": "Ngôn ngữ giao diện",
+  "settings_translationLanguage": "Ngôn ngữ dịch",
+  "settings_selectLanguageTitle": "Chọn ngôn ngữ",
+
+  "paywall_beSmartWithYourTime": "Hãy sử dụng thời gian thông minh!",
+  "paywall_payWeekly": "Thanh toán hàng tuần",
+  "paywall_payAnnually": "Thanh toán hàng năm",
+  "paywall_saveUpTo": "Tiết kiệm đến {amount}\\$",
+  "@paywall_saveUpTo": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "paywall_buy": "MUA",
+  "paywall_andGetOn": "VÀ NHẬN TRÊN",
+  "paywall_forFree": "MIỄN PHÍ!",
+
+  "paywall_12Months": "12 tháng",
+  "paywall_1Week": "1 tuần",
+  "paywall_1Month": "1 tháng",
+  "paywall_1WeekMultiline": "1 \\ntuần",
+  "paywall_1MonthMultiline": "1 \\ntháng",
+  "paywall_12MonthsMultiline": "12 \\ntháng",
+  "paywall_accessAllPremiumCancelAnytime": "Truy cập mọi tính năng cao cấp!\\nHủy bất cứ lúc nào",
+  "paywall_pricePerYear": "{price}/năm",
+  "@paywall_pricePerYear": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "paywall_pricePerWeek": "{price}/tuần",
+  "@paywall_pricePerWeek": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+
+  "paywall_termsOfUse": "Điều khoản sử dụng",
+  "paywall_restorePurchase": "Khôi phục mua hàng",
+  "paywall_privacyPolicy": "Chính sách quyền riêng tư",
+
+  "paywall_unlimitedSummaries": "Tóm tắt không giới hạn",
+  "paywall_documentResearch": "Nghiên cứu tài liệu",
+  "paywall_briefAndDeepSummary": "Tóm tắt ngắn và chi tiết",
+  "paywall_translation": "Dịch",
+  "paywall_addToChromeForFree": "Thêm vào Chrome MIỄN PHÍ",
+
+  "offer_needMoreSummaries": "Cần thêm tóm tắt?",
+  "offer_maximizeYourProductivity": "Tăng năng suất của bạn!",
+  "offer_outOfSummaries": "Hết lượt tóm tắt?",
+  "offer_maximizeProductivityAndEfficiency": "Tăng năng suất\\nvà hiệu quả!",
+  "offer_getMoreInNoTime": "Nhận thêm chỉ trong chốc lát!",
+  "offer_15DeepSummariesDaily": "15 tóm tắt chi tiết mỗi ngày",
+  "offer_goUnlimited": "Bật không giới hạn",
+
+  "bundle_subscriptionsNotAvailable": "Không có gói đăng ký",
+  "bundle_getForFree": "NHẬN MIỄN PHÍ",
+  "bundle_on": "trên",
+  "bundle_version": "phiên bản",
+  "bundle_offer_unlockLimitless": "Mở khóa vô hạn",
+  "bundle_offer_possibilities": "khả năng",
+  "bundle_offer_endlessPossibilities": "Khả năng vô tận",
+  "bundle_offer_with50Off": "giảm 50%",
+  "bundle_offer_get4UnlimitedApps": "Nhận 4 ứng dụng không giới hạn",
+  "bundle_tabBundle": "Gói",
+  "bundle_tabUnlimited": "Không giới hạn",
+
+  "purchase_youAreTheBest": "Bạn tuyệt vời nhất!",
+  "purchase_get": "Nhận",
+  "purchase_versionForFree": "phiên bản miễn phí!",
+  "purchase_copyLink": "Sao chép liên kết",
+  "purchase_collectYourGift": "Nhận quà",
+  "purchase_enterYourEmail": "Nhập email của bạn"
+}
