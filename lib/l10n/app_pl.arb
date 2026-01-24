@@ -86,5 +86,138 @@
   "purchase_versionForFree": "wersję za darmo!",
   "purchase_copyLink": "Kopiuj link",
   "purchase_collectYourGift": "Odbierz prezent",
-  "purchase_enterYourEmail": "Wpisz e-mail"
+  "purchase_enterYourEmail": "Wpisz e-mail",
+
+  "summary_couldNotOpenURL": "Nie można otworzyć URL",
+  "summary_couldNotOpenFile": "Nie można otworzyć pliku",
+  "summary_originalFileNoLongerAvailable": "Oryginalny plik nie jest już dostępny",
+  "summary_filePathNotFound": "Nie znaleziono ścieżki do pliku",
+  "summary_originalTextNotAvailable": "Oryginalny tekst niedostępny",
+  "summary_breakThroughTheLimits": "Przekrocz limity",
+
+  "quiz_failedToGenerate": "Nie udało się wygenerować quizu",
+  "quiz_retry": "Ponów",
+  "quiz_knowledgeQuiz": "Quiz wiedzy",
+  "quiz_testYourUnderstanding": "Sprawdź swoje zrozumienie tego dokumentu",
+  "quiz_questions": "Pytania",
+  "quiz_estimatedTime": "Szacowany czas",
+  "quiz_minutes": "min",
+  "quiz_startQuiz": "Rozpocznij quiz",
+  "quiz_explanation": "Wyjaśnienie",
+  "quiz_previous": "Poprzednie",
+  "quiz_viewResults": "Zobacz wyniki",
+  "quiz_nextQuestion": "Następne pytanie",
+  "quiz_questionNofTotal": "Pytanie {current} z {total}",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "Przegląd",
+  "quiz_stepByStep": "Krok po kroku",
+  "quiz_excellent": "Doskonale! 🎉",
+  "quiz_goodJob": "Dobra robota! 👍",
+  "quiz_notBad": "Nieźle! Ucz się dalej 📚",
+  "quiz_keepPracticing": "Ćwicz dalej! 💪",
+  "quiz_correct": "Poprawnie",
+  "quiz_incorrect": "Niepoprawnie",
+  "quiz_total": "Razem",
+  "quiz_retakeQuiz": "Powtórz quiz",
+  "quiz_reviewAnswers": "Sprawdź odpowiedzi",
+  "quiz_question": "Pytanie {number}",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "Zapisane karty",
+  "savedCards_removeBookmarkTitle": "Usunąć zakładkę?",
+  "savedCards_removeBookmarkMessage": "Ta karta zostanie usunięta z zakładek.",
+  "savedCards_cancel": "Anuluj",
+  "savedCards_remove": "Usuń",
+  "savedCards_cardRemoved": "Karta usunięta z zakładek",
+  "savedCards_sourceNotFound": "Nie znaleziono źródłowego dokumentu",
+  "savedCards_clearAll": "Wyczyść wszystko",
+  "savedCards_searchHint": "Szukaj zapisanych kart...",
+  "savedCards_cardCount": "{count} karta",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count} kart",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "Wyczyść filtry",
+  "savedCards_noCardsYet": "Brak zapisanych kart",
+  "savedCards_saveCardsToAccess": "Zapisuj ciekawe karty, aby uzyskać do nich później dostęp",
+  "savedCards_noCardsFound": "Nie znaleziono kart",
+  "savedCards_tryAdjustingFilters": "Spróbuj dostosować filtry",
+  "savedCards_clearAllTitle": "Wyczyścić wszystkie zapisane karty?",
+  "savedCards_clearAllMessage": "Spowoduje to usunięcie wszystkich zapisanych kart. Tej operacji nie można cofnąć.",
+  "savedCards_allCleared": "Wszystkie zapisane karty zostały usunięte",
+
+  "home_search": "Szukaj",
+
+  "info_productivityInfo": "Informacje o produktywności",
+  "info_words": "Słowa",
+  "info_time": "Czas, ",
+  "info_timeMin": "(min)",
+  "info_saved": "Zaoszczędzono, ",
+  "info_original": "Oryginał",
+  "info_brief": "Krótkie",
+  "info_deep": "Szczegółowe",
+
+  "extension_growYourProductivity": "ZWIĘKSZ PRODUKTYWNOŚĆ",
+  "extension_copyLink": "Kopiuj link",
+  "extension_sendLink": "Wyślij link",
+  "extension_enterYourEmail": "Wpisz swój e-mail",
+
+  "auth_skip": "Pomiń",
+  "auth_hello": "Witaj!",
+  "auth_fillInToGetStarted": "Wypełnij, aby rozpocząć",
+  "auth_emailAddress": "Adres e-mail",
+  "auth_password": "Hasło",
+  "auth_forgotPassword": "Zapomniałeś hasła?",
+  "auth_loginIn": "Zaloguj się",
+  "auth_orLoginWith": "Lub zaloguj się za pomocą",
+  "auth_dontHaveAccount": "Nie masz konta? ",
+  "auth_registerNow": "Zarejestruj się teraz",
+  "auth_passwordCannotBeEmpty": "Hasło nie może być puste",
+  "auth_passwordMustBe6Chars": "Hasło musi mieć co najmniej 6 znaków",
+
+  "registration_skip": "Pomiń",
+  "registration_registerAndGet": "Zarejestruj się i otrzymaj",
+  "registration_2Free": "2 darmowe ",
+  "registration_unlimited": "nieograniczone",
+  "registration_summarizations": "podsumowania",
+  "registration_name": "Imię",
+  "registration_emailAddress": "Adres e-mail",
+  "registration_password": "Hasło",
+  "registration_confirmPassword": "Potwierdź hasło",
+  "registration_register": "Zarejestruj się",
+  "registration_orLoginWith": "Lub zaloguj się za pomocą",
+  "registration_alreadyHaveAccount": "Masz już konto? ",
+  "registration_loginNow": "Zaloguj się teraz",
+  "registration_passwordMismatch": "Hasła nie pasują",
+
+  "request_secureSum": "Bezpieczne podsumowanie",
+  "request_readMyBook": "Przeczytaj moją książkę",
+  "request_speechToText": "Funkcja mowy na tekst",
+  "request_textToSpeech": "Funkcja tekstu na mowę",
+  "request_addLanguage": "Dodaj język",
+  "request_orWriteMessage": "Lub napisz do nas wiadomość",
+  "request_name": "Imię",
+  "request_enterYourName": "Wpisz swoje imię",
+  "request_email": "E-mail",
+  "request_enterYourEmail": "Wpisz swój e-mail",
+  "request_message": "Wiadomość",
+  "request_enterYourRequest": "Wpisz swoją prośbę",
+  "request_submit": "Wyślij",
+  "request_selectLanguage": "Wybierz język"
 }

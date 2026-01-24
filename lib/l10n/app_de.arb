@@ -86,5 +86,138 @@
   "purchase_versionForFree": "Version kostenlos!",
   "purchase_copyLink": "Link kopieren",
   "purchase_collectYourGift": "Geschenk abholen",
-  "purchase_enterYourEmail": "E-Mail eingeben"
+  "purchase_enterYourEmail": "E-Mail eingeben",
+
+  "summary_couldNotOpenURL": "URL konnte nicht geöffnet werden",
+  "summary_couldNotOpenFile": "Datei konnte nicht geöffnet werden",
+  "summary_originalFileNoLongerAvailable": "Originaldatei ist nicht mehr verfügbar",
+  "summary_filePathNotFound": "Dateipfad nicht gefunden",
+  "summary_originalTextNotAvailable": "Originaltext nicht verfügbar",
+  "summary_breakThroughTheLimits": "Überwinde die Grenzen",
+
+  "quiz_failedToGenerate": "Quiz konnte nicht generiert werden",
+  "quiz_retry": "Wiederholen",
+  "quiz_knowledgeQuiz": "Wissensquiz",
+  "quiz_testYourUnderstanding": "Teste dein Verständnis dieses Dokuments",
+  "quiz_questions": "Fragen",
+  "quiz_estimatedTime": "Geschätzte Zeit",
+  "quiz_minutes": "Min",
+  "quiz_startQuiz": "Quiz starten",
+  "quiz_explanation": "Erklärung",
+  "quiz_previous": "Zurück",
+  "quiz_viewResults": "Ergebnisse anzeigen",
+  "quiz_nextQuestion": "Nächste Frage",
+  "quiz_questionNofTotal": "Frage {current} von {total}",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "Übersicht",
+  "quiz_stepByStep": "Schritt für Schritt",
+  "quiz_excellent": "Ausgezeichnet! 🎉",
+  "quiz_goodJob": "Gut gemacht! 👍",
+  "quiz_notBad": "Nicht schlecht! Lerne weiter 📚",
+  "quiz_keepPracticing": "Übe weiter! 💪",
+  "quiz_correct": "Richtig",
+  "quiz_incorrect": "Falsch",
+  "quiz_total": "Gesamt",
+  "quiz_retakeQuiz": "Quiz wiederholen",
+  "quiz_reviewAnswers": "Antworten überprüfen",
+  "quiz_question": "Frage {number}",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "Gespeicherte Karten",
+  "savedCards_removeBookmarkTitle": "Lesezeichen entfernen?",
+  "savedCards_removeBookmarkMessage": "Diese Karte wird aus deinen Lesezeichen entfernt.",
+  "savedCards_cancel": "Abbrechen",
+  "savedCards_remove": "Entfernen",
+  "savedCards_cardRemoved": "Karte aus Lesezeichen entfernt",
+  "savedCards_sourceNotFound": "Quelldokument nicht gefunden",
+  "savedCards_clearAll": "Alle löschen",
+  "savedCards_searchHint": "Gespeicherte Karten durchsuchen...",
+  "savedCards_cardCount": "{count} Karte",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count} Karten",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "Filter löschen",
+  "savedCards_noCardsYet": "Noch keine gespeicherten Karten",
+  "savedCards_saveCardsToAccess": "Speichere interessante Karten für späteren Zugriff",
+  "savedCards_noCardsFound": "Keine Karten gefunden",
+  "savedCards_tryAdjustingFilters": "Versuche, die Filter anzupassen",
+  "savedCards_clearAllTitle": "Alle gespeicherten Karten löschen?",
+  "savedCards_clearAllMessage": "Dies entfernt alle deine gespeicherten Karten. Diese Aktion kann nicht rückgängig gemacht werden.",
+  "savedCards_allCleared": "Alle gespeicherten Karten gelöscht",
+
+  "home_search": "Suche",
+
+  "info_productivityInfo": "Produktivitätsinfo",
+  "info_words": "Wörter",
+  "info_time": "Zeit, ",
+  "info_timeMin": "(Min)",
+  "info_saved": "Gespart, ",
+  "info_original": "Original",
+  "info_brief": "Kurz",
+  "info_deep": "Ausführlich",
+
+  "extension_growYourProductivity": "STEIGERE DEINE PRODUKTIVITÄT",
+  "extension_copyLink": "Link kopieren",
+  "extension_sendLink": "Link senden",
+  "extension_enterYourEmail": "E-Mail eingeben",
+
+  "auth_skip": "Überspringen",
+  "auth_hello": "Hallo!",
+  "auth_fillInToGetStarted": "Fülle aus, um zu beginnen",
+  "auth_emailAddress": "E-Mail-Adresse",
+  "auth_password": "Passwort",
+  "auth_forgotPassword": "Passwort vergessen?",
+  "auth_loginIn": "Anmelden",
+  "auth_orLoginWith": "Oder anmelden mit",
+  "auth_dontHaveAccount": "Noch kein Konto? ",
+  "auth_registerNow": "Jetzt registrieren",
+  "auth_passwordCannotBeEmpty": "Passwort darf nicht leer sein",
+  "auth_passwordMustBe6Chars": "Passwort muss mindestens 6 Zeichen lang sein",
+
+  "registration_skip": "Überspringen",
+  "registration_registerAndGet": "Registriere dich und erhalte",
+  "registration_2Free": "2 kostenlose ",
+  "registration_unlimited": "unbegrenzte",
+  "registration_summarizations": "Zusammenfassungen",
+  "registration_name": "Name",
+  "registration_emailAddress": "E-Mail-Adresse",
+  "registration_password": "Passwort",
+  "registration_confirmPassword": "Passwort bestätigen",
+  "registration_register": "Registrieren",
+  "registration_orLoginWith": "Oder anmelden mit",
+  "registration_alreadyHaveAccount": "Hast du bereits ein Konto? ",
+  "registration_loginNow": "Jetzt anmelden",
+  "registration_passwordMismatch": "Passwörter stimmen nicht überein",
+
+  "request_secureSum": "Sichere Zusammenfassung",
+  "request_readMyBook": "Mein Buch lesen",
+  "request_speechToText": "Sprache-zu-Text-Funktion",
+  "request_textToSpeech": "Text-zu-Sprache-Funktion",
+  "request_addLanguage": "Sprache hinzufügen",
+  "request_orWriteMessage": "Oder schreibe uns eine Nachricht",
+  "request_name": "Name",
+  "request_enterYourName": "Gib deinen Namen ein",
+  "request_email": "E-Mail",
+  "request_enterYourEmail": "Gib deine E-Mail ein",
+  "request_message": "Nachricht",
+  "request_enterYourRequest": "Gib deine Anfrage ein",
+  "request_submit": "Senden",
+  "request_selectLanguage": "Sprache auswählen"
 }

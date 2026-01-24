@@ -86,5 +86,138 @@
   "purchase_versionForFree": "la version gratuitement !",
   "purchase_copyLink": "Copier le lien",
   "purchase_collectYourGift": "Récupérer votre cadeau",
-  "purchase_enterYourEmail": "Entrez votre e-mail"
+  "purchase_enterYourEmail": "Entrez votre e-mail",
+
+  "summary_couldNotOpenURL": "Impossible d'ouvrir l'URL",
+  "summary_couldNotOpenFile": "Impossible d'ouvrir le fichier",
+  "summary_originalFileNoLongerAvailable": "Le fichier original n'est plus disponible",
+  "summary_filePathNotFound": "Chemin du fichier introuvable",
+  "summary_originalTextNotAvailable": "Texte original non disponible",
+  "summary_breakThroughTheLimits": "Dépassez les limites",
+
+  "quiz_failedToGenerate": "Échec de la génération du quiz",
+  "quiz_retry": "Réessayer",
+  "quiz_knowledgeQuiz": "Quiz de connaissances",
+  "quiz_testYourUnderstanding": "Testez votre compréhension de ce document",
+  "quiz_questions": "Questions",
+  "quiz_estimatedTime": "Temps estimé",
+  "quiz_minutes": "min",
+  "quiz_startQuiz": "Commencer le quiz",
+  "quiz_explanation": "Explication",
+  "quiz_previous": "Précédent",
+  "quiz_viewResults": "Voir les résultats",
+  "quiz_nextQuestion": "Question suivante",
+  "quiz_questionNofTotal": "Question {current} sur {total}",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "Vue d'ensemble",
+  "quiz_stepByStep": "Étape par étape",
+  "quiz_excellent": "Excellent ! 🎉",
+  "quiz_goodJob": "Bon travail ! 👍",
+  "quiz_notBad": "Pas mal ! Continuez à apprendre 📚",
+  "quiz_keepPracticing": "Continuez à pratiquer ! 💪",
+  "quiz_correct": "Correct",
+  "quiz_incorrect": "Incorrect",
+  "quiz_total": "Total",
+  "quiz_retakeQuiz": "Refaire le quiz",
+  "quiz_reviewAnswers": "Réviser les réponses",
+  "quiz_question": "Question {number}",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "Cartes enregistrées",
+  "savedCards_removeBookmarkTitle": "Supprimer le favori ?",
+  "savedCards_removeBookmarkMessage": "Cette carte sera retirée de vos favoris.",
+  "savedCards_cancel": "Annuler",
+  "savedCards_remove": "Supprimer",
+  "savedCards_cardRemoved": "Carte retirée des favoris",
+  "savedCards_sourceNotFound": "Document source introuvable",
+  "savedCards_clearAll": "Tout effacer",
+  "savedCards_searchHint": "Rechercher des cartes enregistrées...",
+  "savedCards_cardCount": "{count} carte",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count} cartes",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "Effacer les filtres",
+  "savedCards_noCardsYet": "Pas encore de cartes enregistrées",
+  "savedCards_saveCardsToAccess": "Enregistrez des cartes intéressantes pour y accéder plus tard",
+  "savedCards_noCardsFound": "Aucune carte trouvée",
+  "savedCards_tryAdjustingFilters": "Essayez d'ajuster les filtres",
+  "savedCards_clearAllTitle": "Effacer toutes les cartes enregistrées ?",
+  "savedCards_clearAllMessage": "Cela supprimera toutes vos cartes enregistrées. Cette action ne peut pas être annulée.",
+  "savedCards_allCleared": "Toutes les cartes enregistrées ont été effacées",
+
+  "home_search": "Rechercher",
+
+  "info_productivityInfo": "Info productivité",
+  "info_words": "Mots",
+  "info_time": "Temps, ",
+  "info_timeMin": "(min)",
+  "info_saved": "Économisé, ",
+  "info_original": "Original",
+  "info_brief": "Bref",
+  "info_deep": "Approfondi",
+
+  "extension_growYourProductivity": "AUGMENTEZ VOTRE PRODUCTIVITÉ",
+  "extension_copyLink": "Copier le lien",
+  "extension_sendLink": "Envoyer le lien",
+  "extension_enterYourEmail": "Entrez votre e-mail",
+
+  "auth_skip": "Passer",
+  "auth_hello": "Bonjour !",
+  "auth_fillInToGetStarted": "Remplissez pour commencer",
+  "auth_emailAddress": "Adresse e-mail",
+  "auth_password": "Mot de passe",
+  "auth_forgotPassword": "Mot de passe oublié ?",
+  "auth_loginIn": "Se connecter",
+  "auth_orLoginWith": "Ou connectez-vous avec",
+  "auth_dontHaveAccount": "Vous n'avez pas de compte ? ",
+  "auth_registerNow": "Inscrivez-vous maintenant",
+  "auth_passwordCannotBeEmpty": "Le mot de passe ne peut pas être vide",
+  "auth_passwordMustBe6Chars": "Le mot de passe doit contenir au moins 6 caractères",
+
+  "registration_skip": "Passer",
+  "registration_registerAndGet": "Inscrivez-vous et obtenez",
+  "registration_2Free": "2 ",
+  "registration_unlimited": "résumés illimités",
+  "registration_summarizations": "gratuits",
+  "registration_name": "Nom",
+  "registration_emailAddress": "Adresse e-mail",
+  "registration_password": "Mot de passe",
+  "registration_confirmPassword": "Confirmer le mot de passe",
+  "registration_register": "S'inscrire",
+  "registration_orLoginWith": "Ou connectez-vous avec",
+  "registration_alreadyHaveAccount": "Vous avez déjà un compte ? ",
+  "registration_loginNow": "Connectez-vous maintenant",
+  "registration_passwordMismatch": "Les mots de passe ne correspondent pas",
+
+  "request_secureSum": "Résumé sécurisé",
+  "request_readMyBook": "Lire mon livre",
+  "request_speechToText": "Fonction parole-texte",
+  "request_textToSpeech": "Fonction texte-parole",
+  "request_addLanguage": "Ajouter une langue",
+  "request_orWriteMessage": "Ou écrivez-nous un message",
+  "request_name": "Nom",
+  "request_enterYourName": "Entrez votre nom",
+  "request_email": "E-mail",
+  "request_enterYourEmail": "Entrez votre e-mail",
+  "request_message": "Message",
+  "request_enterYourRequest": "Entrez votre demande",
+  "request_submit": "Envoyer",
+  "request_selectLanguage": "Sélectionner la langue"
 }

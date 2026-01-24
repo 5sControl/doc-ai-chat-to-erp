@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/saved_cards_screen/saved_card_tile.dart';
 import 'package:summify/screens/summary_screen/knowledge_cards/widgets/cards_type_filter.dart';
@@ -39,14 +40,14 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Remove bookmark?'),
-        content: const Text(
-          'This card will be removed from your bookmarks.',
+        title: Text(AppLocalizations.of(context)!.savedCards_removeBookmarkTitle),
+        content: Text(
+          AppLocalizations.of(context)!.savedCards_removeBookmarkMessage,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.savedCards_cancel),
           ),
           TextButton(
             onPressed: () {
@@ -54,16 +55,16 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
               Navigator.pop(dialogContext);
               
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Card removed from bookmarks'),
-                  duration: Duration(seconds: 2),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.savedCards_cardRemoved),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Remove'),
+            child: Text(AppLocalizations.of(context)!.savedCards_remove),
           ),
         ],
       ),
@@ -88,9 +89,9 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Source document not found'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.savedCards_sourceNotFound),
+          duration: const Duration(seconds: 2),
         ),
       );
     }
@@ -125,9 +126,9 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: const Text(
-          'Saved Cards',
-          style: TextStyle(
+        title: Text(
+          AppLocalizations.of(context)!.savedCards_title,
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -145,7 +146,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
                 onPressed: () {
                   _showClearAllDialog();
                 },
-                tooltip: 'Clear all',
+                tooltip: AppLocalizations.of(context)!.savedCards_clearAll,
               );
             },
           ),
@@ -173,7 +174,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
                     });
                   },
                   decoration: InputDecoration(
-                    hintText: 'Search saved cards...',
+                    hintText: AppLocalizations.of(context)!.savedCards_searchHint,
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: _searchQuery.isNotEmpty
                         ? IconButton(
@@ -217,7 +218,9 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${filteredCards.length} card${filteredCards.length != 1 ? 's' : ''}',
+                      filteredCards.length == 1 
+                        ? AppLocalizations.of(context)!.savedCards_cardCount(filteredCards.length)
+                        : AppLocalizations.of(context)!.savedCards_cardsCount(filteredCards.length),
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey.shade600,
@@ -232,7 +235,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
                             _searchController.clear();
                           });
                         },
-                        child: const Text('Clear filters'),
+                        child: Text(AppLocalizations.of(context)!.savedCards_clearFilters),
                       ),
                   ],
                 ),
@@ -278,7 +281,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'No saved cards yet',
+            AppLocalizations.of(context)!.savedCards_noCardsYet,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
@@ -287,7 +290,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Save interesting cards to access them later',
+            AppLocalizations.of(context)!.savedCards_saveCardsToAccess,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey.shade600,
@@ -311,7 +314,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'No cards found',
+            AppLocalizations.of(context)!.savedCards_noCardsFound,
             style: TextStyle(
               fontSize: 18,
               color: Colors.grey.shade700,
@@ -319,7 +322,7 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Try adjusting your filters',
+            AppLocalizations.of(context)!.savedCards_tryAdjustingFilters,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey.shade600,
@@ -334,14 +337,14 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Clear all saved cards?'),
-        content: const Text(
-          'This will remove all your saved cards. This action cannot be undone.',
+        title: Text(AppLocalizations.of(context)!.savedCards_clearAllTitle),
+        content: Text(
+          AppLocalizations.of(context)!.savedCards_clearAllMessage,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.savedCards_cancel),
           ),
           TextButton(
             onPressed: () {
@@ -349,16 +352,16 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
               Navigator.pop(dialogContext);
               
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('All saved cards cleared'),
-                  duration: Duration(seconds: 2),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.savedCards_allCleared),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             },
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Clear all'),
+            child: Text(AppLocalizations.of(context)!.savedCards_clearAll),
           ),
         ],
       ),

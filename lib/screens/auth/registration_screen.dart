@@ -8,6 +8,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/helpers/show_error_toast.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscribtions_screen/happy_box.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
@@ -63,7 +64,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     void onPressRegister() {
       if (password != confirmPassword) {
-        showErrorToast(context: context, error: 'Password mismatch');
+        showErrorToast(context: context, error: AppLocalizations.of(context)!.registration_passwordMismatch);
       } else {
         context
             .read<AuthenticationBloc>()
@@ -118,7 +119,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Navigator.of(context).pushNamed('/bundle');
                   },
                   child: Text(
-                    'Skip',
+                    AppLocalizations.of(context)!.registration_skip,
                     style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).brightness == Brightness.dark
@@ -159,7 +160,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           height: 26,
                         ),
                         Text(
-                          'Register and get',
+                          AppLocalizations.of(context)!.registration_registerAndGet,
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           style: TextStyle(
@@ -172,7 +173,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         Row(children: [
                           Text(
-                            '2 free ',
+                            AppLocalizations.of(context)!.registration_2Free,
                             //maxLines: 2,
                             textAlign: TextAlign.start,
                             style: TextStyle(
@@ -199,7 +200,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               color: Colors.transparent,
                               child: Center(
                                   child: Text(
-                                'Unlimited',
+                                AppLocalizations.of(context)!.registration_unlimited,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -218,7 +219,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ]),
                         Text(
-                          'summarizations',
+                          AppLocalizations.of(context)!.registration_summarizations,
                           maxLines: 2,
                           textAlign: TextAlign.start,
                           style: TextStyle(
@@ -314,7 +315,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Center(
                       child: RichText(
                         text: TextSpan(
-                            text: 'Already have an account? ',
+                            text: AppLocalizations.of(context)!.registration_alreadyHaveAccount,
                             style: TextStyle(
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
@@ -323,7 +324,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 fontSize: 15),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: 'Login Now',
+                                  text: AppLocalizations.of(context)!.registration_loginNow,
                                   style: TextStyle(
                                     color: Theme.of(context).brightness ==
                                             Brightness.dark
@@ -401,8 +402,8 @@ class NameInput extends StatelessWidget {
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           label: Text(
-            'Name',
-            style: TextStyle(
+            AppLocalizations.of(context)!.registration_name,
+            style: const TextStyle(
                 color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(
@@ -438,8 +439,8 @@ class EmailInput extends StatelessWidget {
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           label: Text(
-            'Email Address',
-            style: TextStyle(
+            AppLocalizations.of(context)!.registration_emailAddress,
+            style: const TextStyle(
                 color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           border: OutlineInputBorder(
@@ -497,8 +498,8 @@ class _PasswordInputState extends State<PasswordInput> {
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           label: Text(
-            'Password',
-            style: TextStyle(
+            AppLocalizations.of(context)!.registration_password,
+            style: const TextStyle(
                 color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           suffixIcon: IconButton(
@@ -565,8 +566,8 @@ class _ConfirmPasswordInputState extends State<ConfirmPasswordInput> {
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
           label: Text(
-            'Confirm password',
-            style: TextStyle(
+            AppLocalizations.of(context)!.registration_confirmPassword,
+            style: const TextStyle(
                 color: Colors.black, fontSize: 14, fontWeight: FontWeight.w400),
           ),
           suffixIcon: IconButton(
@@ -607,9 +608,9 @@ class SignUpButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: const Color.fromRGBO(0, 186, 195, 1),
             borderRadius: BorderRadius.circular(8)),
-        child: const Text(
-          'Register',
-          style: TextStyle(
+        child: Text(
+          AppLocalizations.of(context)!.registration_register,
+          style: const TextStyle(
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
@@ -637,11 +638,11 @@ class DividerRow extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              'Or Login with',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              AppLocalizations.of(context)!.registration_orLoginWith,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
           Expanded(

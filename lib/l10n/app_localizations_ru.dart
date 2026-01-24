@@ -205,4 +205,327 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get purchase_enterYourEmail => 'Введите email';
+
+  @override
+  String get summary_couldNotOpenURL => 'Не удалось открыть URL';
+
+  @override
+  String get summary_couldNotOpenFile => 'Не удалось открыть файл';
+
+  @override
+  String get summary_originalFileNoLongerAvailable =>
+      'Оригинальный файл больше не доступен';
+
+  @override
+  String get summary_filePathNotFound => 'Путь к файлу не найден';
+
+  @override
+  String get summary_originalTextNotAvailable => 'Исходный текст недоступен';
+
+  @override
+  String get summary_breakThroughTheLimits => 'Преодолейте ограничения';
+
+  @override
+  String get quiz_failedToGenerate => 'Не удалось создать квиз';
+
+  @override
+  String get quiz_retry => 'Повторить';
+
+  @override
+  String get quiz_knowledgeQuiz => 'Тест знаний';
+
+  @override
+  String get quiz_testYourUnderstanding =>
+      'Проверьте ваше понимание этого документа';
+
+  @override
+  String get quiz_questions => 'Вопросы';
+
+  @override
+  String get quiz_estimatedTime => 'Примерное время';
+
+  @override
+  String get quiz_minutes => 'мин';
+
+  @override
+  String get quiz_startQuiz => 'Начать квиз';
+
+  @override
+  String get quiz_explanation => 'Объяснение';
+
+  @override
+  String get quiz_previous => 'Назад';
+
+  @override
+  String get quiz_viewResults => 'Посмотреть результаты';
+
+  @override
+  String get quiz_nextQuestion => 'Следующий вопрос';
+
+  @override
+  String quiz_questionNofTotal(Object current, Object total) {
+    return 'Вопрос $current из $total';
+  }
+
+  @override
+  String get quiz_overview => 'Обзор';
+
+  @override
+  String get quiz_stepByStep => 'Пошагово';
+
+  @override
+  String get quiz_excellent => 'Отлично! 🎉';
+
+  @override
+  String get quiz_goodJob => 'Хорошая работа! 👍';
+
+  @override
+  String get quiz_notBad => 'Неплохо! Продолжайте учиться 📚';
+
+  @override
+  String get quiz_keepPracticing => 'Продолжайте практиковаться! 💪';
+
+  @override
+  String get quiz_correct => 'Верно';
+
+  @override
+  String get quiz_incorrect => 'Неверно';
+
+  @override
+  String get quiz_total => 'Всего';
+
+  @override
+  String get quiz_retakeQuiz => 'Пройти квиз снова';
+
+  @override
+  String get quiz_reviewAnswers => 'Проверить ответы';
+
+  @override
+  String quiz_question(Object number) {
+    return 'Вопрос $number';
+  }
+
+  @override
+  String get savedCards_title => 'Сохраненные карточки';
+
+  @override
+  String get savedCards_removeBookmarkTitle => 'Удалить закладку?';
+
+  @override
+  String get savedCards_removeBookmarkMessage =>
+      'Эта карточка будет удалена из ваших закладок.';
+
+  @override
+  String get savedCards_cancel => 'Отмена';
+
+  @override
+  String get savedCards_remove => 'Удалить';
+
+  @override
+  String get savedCards_cardRemoved => 'Карточка удалена из закладок';
+
+  @override
+  String get savedCards_sourceNotFound => 'Исходный документ не найден';
+
+  @override
+  String get savedCards_clearAll => 'Очистить все';
+
+  @override
+  String get savedCards_searchHint => 'Поиск сохраненных карточек...';
+
+  @override
+  String savedCards_cardCount(Object count) {
+    return '$count карточка';
+  }
+
+  @override
+  String savedCards_cardsCount(Object count) {
+    return '$count карточек';
+  }
+
+  @override
+  String get savedCards_clearFilters => 'Очистить фильтры';
+
+  @override
+  String get savedCards_noCardsYet => 'Пока нет сохраненных карточек';
+
+  @override
+  String get savedCards_saveCardsToAccess =>
+      'Сохраняйте интересные карточки для быстрого доступа';
+
+  @override
+  String get savedCards_noCardsFound => 'Карточки не найдены';
+
+  @override
+  String get savedCards_tryAdjustingFilters => 'Попробуйте изменить фильтры';
+
+  @override
+  String get savedCards_clearAllTitle => 'Очистить все сохраненные карточки?';
+
+  @override
+  String get savedCards_clearAllMessage =>
+      'Это удалит все ваши сохраненные карточки. Это действие нельзя отменить.';
+
+  @override
+  String get savedCards_allCleared => 'Все сохраненные карточки удалены';
+
+  @override
+  String get home_search => 'Поиск';
+
+  @override
+  String get info_productivityInfo => 'Информация о продуктивности';
+
+  @override
+  String get info_words => 'Слова';
+
+  @override
+  String get info_time => 'Время, ';
+
+  @override
+  String get info_timeMin => '(мин)';
+
+  @override
+  String get info_saved => 'Сэкономлено, ';
+
+  @override
+  String get info_original => 'Оригинал';
+
+  @override
+  String get info_brief => 'Краткое';
+
+  @override
+  String get info_deep => 'Глубокое';
+
+  @override
+  String get extension_growYourProductivity => 'ПОВЫШАЙТЕ ПРОДУКТИВНОСТЬ';
+
+  @override
+  String get extension_copyLink => 'Скопировать ссылку';
+
+  @override
+  String get extension_sendLink => 'Отправить ссылку';
+
+  @override
+  String get extension_enterYourEmail => 'Введите ваш email';
+
+  @override
+  String get auth_skip => 'Пропустить';
+
+  @override
+  String get auth_hello => 'Привет!';
+
+  @override
+  String get auth_fillInToGetStarted => 'Заполните, чтобы начать';
+
+  @override
+  String get auth_emailAddress => 'Адрес электронной почты';
+
+  @override
+  String get auth_password => 'Пароль';
+
+  @override
+  String get auth_forgotPassword => 'Забыли пароль?';
+
+  @override
+  String get auth_loginIn => 'Войти';
+
+  @override
+  String get auth_orLoginWith => 'Или войдите с помощью';
+
+  @override
+  String get auth_dontHaveAccount => 'Нет аккаунта? ';
+
+  @override
+  String get auth_registerNow => 'Зарегистрируйтесь';
+
+  @override
+  String get auth_passwordCannotBeEmpty => 'Пароль не может быть пустым';
+
+  @override
+  String get auth_passwordMustBe6Chars =>
+      'Пароль должен содержать не менее 6 символов';
+
+  @override
+  String get registration_skip => 'Пропустить';
+
+  @override
+  String get registration_registerAndGet => 'Зарегистрируйтесь и получите';
+
+  @override
+  String get registration_2Free => '2 бесплатные ';
+
+  @override
+  String get registration_unlimited => 'безлимитные';
+
+  @override
+  String get registration_summarizations => 'саммари';
+
+  @override
+  String get registration_name => 'Имя';
+
+  @override
+  String get registration_emailAddress => 'Адрес электронной почты';
+
+  @override
+  String get registration_password => 'Пароль';
+
+  @override
+  String get registration_confirmPassword => 'Подтвердите пароль';
+
+  @override
+  String get registration_register => 'Зарегистрироваться';
+
+  @override
+  String get registration_orLoginWith => 'Или войдите с помощью';
+
+  @override
+  String get registration_alreadyHaveAccount => 'Уже есть аккаунт? ';
+
+  @override
+  String get registration_loginNow => 'Войдите сейчас';
+
+  @override
+  String get registration_passwordMismatch => 'Пароли не совпадают';
+
+  @override
+  String get request_secureSum => 'Безопасная саммаризация';
+
+  @override
+  String get request_readMyBook => 'Прочитать мою книгу';
+
+  @override
+  String get request_speechToText => 'Функция речь-в-текст';
+
+  @override
+  String get request_textToSpeech => 'Функция текст-в-речь';
+
+  @override
+  String get request_addLanguage => 'Добавить язык';
+
+  @override
+  String get request_orWriteMessage => 'Или напишите нам сообщение';
+
+  @override
+  String get request_name => 'Имя';
+
+  @override
+  String get request_enterYourName => 'Введите ваше имя';
+
+  @override
+  String get request_email => 'Email';
+
+  @override
+  String get request_enterYourEmail => 'Введите ваш email';
+
+  @override
+  String get request_message => 'Сообщение';
+
+  @override
+  String get request_enterYourRequest => 'Введите ваш запрос';
+
+  @override
+  String get request_submit => 'Отправить';
+
+  @override
+  String get request_selectLanguage => 'Выберите язык';
 }

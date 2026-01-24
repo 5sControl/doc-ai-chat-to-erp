@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/quiz/quiz_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
@@ -60,7 +61,7 @@ class _QuizTabState extends State<QuizTab> {
                   const Icon(Icons.error_outline, size: 48, color: Colors.red),
                   const SizedBox(height: 16),
                   Text(
-                    'Failed to generate quiz',
+                    AppLocalizations.of(context)!.quiz_failedToGenerate,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
@@ -71,7 +72,7 @@ class _QuizTabState extends State<QuizTab> {
                             text: widget.documentText,
                           ));
                     },
-                    child: const Text('Retry'),
+                    child: Text(AppLocalizations.of(context)!.quiz_retry),
                   ),
                 ],
               ),
@@ -123,14 +124,14 @@ class _QuizStartScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Knowledge Quiz',
+                  AppLocalizations.of(context)!.quiz_knowledgeQuiz,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Test your understanding of this document',
+                  AppLocalizations.of(context)!.quiz_testYourUnderstanding,
                   style: Theme.of(context).textTheme.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -145,14 +146,14 @@ class _QuizStartScreen extends StatelessWidget {
                     children: [
                       _InfoRow(
                         icon: Icons.help_outline,
-                        label: 'Questions',
+                        label: AppLocalizations.of(context)!.quiz_questions,
                         value: '${quiz.questions.length}',
                       ),
                       const SizedBox(height: 12),
                       _InfoRow(
                         icon: Icons.timer_outlined,
-                        label: 'Estimated time',
-                        value: '${quiz.questions.length * 2} min',
+                        label: AppLocalizations.of(context)!.quiz_estimatedTime,
+                        value: '${quiz.questions.length * 2} ${AppLocalizations.of(context)!.quiz_minutes}',
                       ),
                     ],
                   ),
@@ -171,9 +172,9 @@ class _QuizStartScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Start Quiz',
-                    style: TextStyle(fontSize: 18),
+                  child: Text(
+                    AppLocalizations.of(context)!.quiz_startQuiz,
+                    style: const TextStyle(fontSize: 18),
                   ),
                 ),
               ],
@@ -407,18 +408,18 @@ class _QuizQuestionScreen extends StatelessWidget {
                             Icons.lightbulb_outline,
                             color: Colors.blue.shade700,
                             size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Explanation',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(
-                                  color: Colors.blue.shade700,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          AppLocalizations.of(context)!.quiz_explanation,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall
+                              ?.copyWith(
+                                color: Colors.blue.shade700,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -481,8 +482,8 @@ class _QuizQuestionScreen extends StatelessWidget {
                         ),
                         child: Text(
                           currentIndex + 1 >= quiz.questions.length
-                              ? 'View Results'
-                              : 'Next Question',
+                              ? AppLocalizations.of(context)!.quiz_viewResults
+                              : AppLocalizations.of(context)!.quiz_nextQuestion,
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
@@ -599,7 +600,7 @@ class QuizProgressIndicator extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Question $currentIndex of $totalQuestions',
+              AppLocalizations.of(context)!.quiz_questionNofTotal(currentIndex, totalQuestions),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -688,19 +689,19 @@ class _QuizResultsScreen extends StatelessWidget {
                                     )
                                   ]
                                 : null,
-                          ),
-                          child: Text(
-                            'Overview',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: reviewMode == ReviewMode.overview
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              color: reviewMode == ReviewMode.overview
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
+                        ),
+                      child: Text(
+                        AppLocalizations.of(context)!.quiz_overview,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: reviewMode == ReviewMode.overview
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: reviewMode == ReviewMode.overview
+                              ? Theme.of(context).primaryColor
+                              : Colors.grey.shade600,
+                        ),
+                      ),
                         ),
                       ),
                     ),
@@ -728,19 +729,19 @@ class _QuizResultsScreen extends StatelessWidget {
                                     )
                                   ]
                                 : null,
-                          ),
-                          child: Text(
-                            'Step by Step',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: reviewMode == ReviewMode.stepByStep
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              color: reviewMode == ReviewMode.stepByStep
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey.shade600,
-                            ),
-                          ),
+                        ),
+                      child: Text(
+                        AppLocalizations.of(context)!.quiz_stepByStep,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: reviewMode == ReviewMode.stepByStep
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                          color: reviewMode == ReviewMode.stepByStep
+                              ? Theme.of(context).primaryColor
+                              : Colors.grey.shade600,
+                        ),
+                      ),
                         ),
                       ),
                     ),
@@ -773,7 +774,7 @@ class _QuizResultsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      _getScoreMessage(score),
+                      _getScoreMessage(score, context),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             color: Colors.white,
                           ),
@@ -782,15 +783,15 @@ class _QuizResultsScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                        children: [
                         _ScoreStat(
-                          label: 'Correct',
+                          label: AppLocalizations.of(context)!.quiz_correct,
                           value: '$correctCount',
                           color: Colors.green.shade300,
                         ),
                         const SizedBox(width: 24),
                         _ScoreStat(
-                          label: 'Total',
+                          label: AppLocalizations.of(context)!.quiz_total,
                           value: '$totalQuestions',
                           color: Colors.white70,
                         ),
@@ -832,9 +833,9 @@ class _QuizResultsScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Retake Quiz',
-                    style: TextStyle(fontSize: 16),
+                  child: Text(
+                    AppLocalizations.of(context)!.quiz_retakeQuiz,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ),
               ] else ...[
@@ -852,15 +853,15 @@ class _QuizResultsScreen extends StatelessWidget {
     );
   }
 
-  String _getScoreMessage(double score) {
+  String _getScoreMessage(double score, BuildContext context) {
     if (score >= 90) {
-      return 'Excellent! 🎉';
+      return AppLocalizations.of(context)!.quiz_excellent;
     } else if (score >= 70) {
-      return 'Good job! 👍';
+      return AppLocalizations.of(context)!.quiz_goodJob;
     } else if (score >= 50) {
-      return 'Not bad! Keep learning 📚';
+      return AppLocalizations.of(context)!.quiz_notBad;
     } else {
-      return 'Keep practicing! 💪';
+      return AppLocalizations.of(context)!.quiz_keepPracticing;
     }
   }
 }
@@ -946,7 +947,7 @@ class _QuestionReviewCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'Question $questionNumber',
+                          AppLocalizations.of(context)!.quiz_question(questionNumber),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -1047,7 +1048,7 @@ class _StepByStepReviewContent extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          isCorrect ? 'Correct' : 'Incorrect',
+                          isCorrect ? AppLocalizations.of(context)!.quiz_correct : AppLocalizations.of(context)!.quiz_incorrect,
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -1148,7 +1149,7 @@ class _StepByStepReviewContent extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Explanation',
+                      AppLocalizations.of(context)!.quiz_explanation,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             color: Colors.blue.shade700,
                             fontWeight: FontWeight.bold,
@@ -1187,9 +1188,9 @@ class _StepByStepReviewContent extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text(
-                    'Previous',
-                    style: TextStyle(fontSize: 16),
+                  child: Text(
+                    AppLocalizations.of(context)!.quiz_previous,
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ),
               ),
@@ -1218,8 +1219,8 @@ class _StepByStepReviewContent extends StatelessWidget {
                 ),
                 child: Text(
                   currentIndex + 1 >= quiz.questions.length
-                      ? 'Retake Quiz'
-                      : 'Next Question',
+                      ? AppLocalizations.of(context)!.quiz_retakeQuiz
+                      : AppLocalizations.of(context)!.quiz_nextQuestion,
                   style: const TextStyle(fontSize: 16),
                 ),
               ),

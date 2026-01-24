@@ -203,4 +203,332 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get purchase_enterYourEmail => 'Entrez votre e-mail';
+
+  @override
+  String get summary_couldNotOpenURL => 'Impossible d\'ouvrir l\'URL';
+
+  @override
+  String get summary_couldNotOpenFile => 'Impossible d\'ouvrir le fichier';
+
+  @override
+  String get summary_originalFileNoLongerAvailable =>
+      'Le fichier original n\'est plus disponible';
+
+  @override
+  String get summary_filePathNotFound => 'Chemin du fichier introuvable';
+
+  @override
+  String get summary_originalTextNotAvailable =>
+      'Texte original non disponible';
+
+  @override
+  String get summary_breakThroughTheLimits => 'Dépassez les limites';
+
+  @override
+  String get quiz_failedToGenerate => 'Échec de la génération du quiz';
+
+  @override
+  String get quiz_retry => 'Réessayer';
+
+  @override
+  String get quiz_knowledgeQuiz => 'Quiz de connaissances';
+
+  @override
+  String get quiz_testYourUnderstanding =>
+      'Testez votre compréhension de ce document';
+
+  @override
+  String get quiz_questions => 'Questions';
+
+  @override
+  String get quiz_estimatedTime => 'Temps estimé';
+
+  @override
+  String get quiz_minutes => 'min';
+
+  @override
+  String get quiz_startQuiz => 'Commencer le quiz';
+
+  @override
+  String get quiz_explanation => 'Explication';
+
+  @override
+  String get quiz_previous => 'Précédent';
+
+  @override
+  String get quiz_viewResults => 'Voir les résultats';
+
+  @override
+  String get quiz_nextQuestion => 'Question suivante';
+
+  @override
+  String quiz_questionNofTotal(Object current, Object total) {
+    return 'Question $current sur $total';
+  }
+
+  @override
+  String get quiz_overview => 'Vue d\'ensemble';
+
+  @override
+  String get quiz_stepByStep => 'Étape par étape';
+
+  @override
+  String get quiz_excellent => 'Excellent ! 🎉';
+
+  @override
+  String get quiz_goodJob => 'Bon travail ! 👍';
+
+  @override
+  String get quiz_notBad => 'Pas mal ! Continuez à apprendre 📚';
+
+  @override
+  String get quiz_keepPracticing => 'Continuez à pratiquer ! 💪';
+
+  @override
+  String get quiz_correct => 'Correct';
+
+  @override
+  String get quiz_incorrect => 'Incorrect';
+
+  @override
+  String get quiz_total => 'Total';
+
+  @override
+  String get quiz_retakeQuiz => 'Refaire le quiz';
+
+  @override
+  String get quiz_reviewAnswers => 'Réviser les réponses';
+
+  @override
+  String quiz_question(Object number) {
+    return 'Question $number';
+  }
+
+  @override
+  String get savedCards_title => 'Cartes enregistrées';
+
+  @override
+  String get savedCards_removeBookmarkTitle => 'Supprimer le favori ?';
+
+  @override
+  String get savedCards_removeBookmarkMessage =>
+      'Cette carte sera retirée de vos favoris.';
+
+  @override
+  String get savedCards_cancel => 'Annuler';
+
+  @override
+  String get savedCards_remove => 'Supprimer';
+
+  @override
+  String get savedCards_cardRemoved => 'Carte retirée des favoris';
+
+  @override
+  String get savedCards_sourceNotFound => 'Document source introuvable';
+
+  @override
+  String get savedCards_clearAll => 'Tout effacer';
+
+  @override
+  String get savedCards_searchHint => 'Rechercher des cartes enregistrées...';
+
+  @override
+  String savedCards_cardCount(Object count) {
+    return '$count carte';
+  }
+
+  @override
+  String savedCards_cardsCount(Object count) {
+    return '$count cartes';
+  }
+
+  @override
+  String get savedCards_clearFilters => 'Effacer les filtres';
+
+  @override
+  String get savedCards_noCardsYet => 'Pas encore de cartes enregistrées';
+
+  @override
+  String get savedCards_saveCardsToAccess =>
+      'Enregistrez des cartes intéressantes pour y accéder plus tard';
+
+  @override
+  String get savedCards_noCardsFound => 'Aucune carte trouvée';
+
+  @override
+  String get savedCards_tryAdjustingFilters => 'Essayez d\'ajuster les filtres';
+
+  @override
+  String get savedCards_clearAllTitle =>
+      'Effacer toutes les cartes enregistrées ?';
+
+  @override
+  String get savedCards_clearAllMessage =>
+      'Cela supprimera toutes vos cartes enregistrées. Cette action ne peut pas être annulée.';
+
+  @override
+  String get savedCards_allCleared =>
+      'Toutes les cartes enregistrées ont été effacées';
+
+  @override
+  String get home_search => 'Rechercher';
+
+  @override
+  String get info_productivityInfo => 'Info productivité';
+
+  @override
+  String get info_words => 'Mots';
+
+  @override
+  String get info_time => 'Temps, ';
+
+  @override
+  String get info_timeMin => '(min)';
+
+  @override
+  String get info_saved => 'Économisé, ';
+
+  @override
+  String get info_original => 'Original';
+
+  @override
+  String get info_brief => 'Bref';
+
+  @override
+  String get info_deep => 'Approfondi';
+
+  @override
+  String get extension_growYourProductivity => 'AUGMENTEZ VOTRE PRODUCTIVITÉ';
+
+  @override
+  String get extension_copyLink => 'Copier le lien';
+
+  @override
+  String get extension_sendLink => 'Envoyer le lien';
+
+  @override
+  String get extension_enterYourEmail => 'Entrez votre e-mail';
+
+  @override
+  String get auth_skip => 'Passer';
+
+  @override
+  String get auth_hello => 'Bonjour !';
+
+  @override
+  String get auth_fillInToGetStarted => 'Remplissez pour commencer';
+
+  @override
+  String get auth_emailAddress => 'Adresse e-mail';
+
+  @override
+  String get auth_password => 'Mot de passe';
+
+  @override
+  String get auth_forgotPassword => 'Mot de passe oublié ?';
+
+  @override
+  String get auth_loginIn => 'Se connecter';
+
+  @override
+  String get auth_orLoginWith => 'Ou connectez-vous avec';
+
+  @override
+  String get auth_dontHaveAccount => 'Vous n\'avez pas de compte ? ';
+
+  @override
+  String get auth_registerNow => 'Inscrivez-vous maintenant';
+
+  @override
+  String get auth_passwordCannotBeEmpty =>
+      'Le mot de passe ne peut pas être vide';
+
+  @override
+  String get auth_passwordMustBe6Chars =>
+      'Le mot de passe doit contenir au moins 6 caractères';
+
+  @override
+  String get registration_skip => 'Passer';
+
+  @override
+  String get registration_registerAndGet => 'Inscrivez-vous et obtenez';
+
+  @override
+  String get registration_2Free => '2 ';
+
+  @override
+  String get registration_unlimited => 'résumés illimités';
+
+  @override
+  String get registration_summarizations => 'gratuits';
+
+  @override
+  String get registration_name => 'Nom';
+
+  @override
+  String get registration_emailAddress => 'Adresse e-mail';
+
+  @override
+  String get registration_password => 'Mot de passe';
+
+  @override
+  String get registration_confirmPassword => 'Confirmer le mot de passe';
+
+  @override
+  String get registration_register => 'S\'inscrire';
+
+  @override
+  String get registration_orLoginWith => 'Ou connectez-vous avec';
+
+  @override
+  String get registration_alreadyHaveAccount => 'Vous avez déjà un compte ? ';
+
+  @override
+  String get registration_loginNow => 'Connectez-vous maintenant';
+
+  @override
+  String get registration_passwordMismatch =>
+      'Les mots de passe ne correspondent pas';
+
+  @override
+  String get request_secureSum => 'Résumé sécurisé';
+
+  @override
+  String get request_readMyBook => 'Lire mon livre';
+
+  @override
+  String get request_speechToText => 'Fonction parole-texte';
+
+  @override
+  String get request_textToSpeech => 'Fonction texte-parole';
+
+  @override
+  String get request_addLanguage => 'Ajouter une langue';
+
+  @override
+  String get request_orWriteMessage => 'Ou écrivez-nous un message';
+
+  @override
+  String get request_name => 'Nom';
+
+  @override
+  String get request_enterYourName => 'Entrez votre nom';
+
+  @override
+  String get request_email => 'E-mail';
+
+  @override
+  String get request_enterYourEmail => 'Entrez votre e-mail';
+
+  @override
+  String get request_message => 'Message';
+
+  @override
+  String get request_enterYourRequest => 'Entrez votre demande';
+
+  @override
+  String get request_submit => 'Envoyer';
+
+  @override
+  String get request_selectLanguage => 'Sélectionner la langue';
 }

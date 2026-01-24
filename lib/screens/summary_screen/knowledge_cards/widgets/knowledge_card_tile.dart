@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:summify/models/models.dart';
 
 class KnowledgeCardTile extends StatelessWidget {
@@ -62,15 +63,32 @@ class KnowledgeCardTile extends StatelessWidget {
               const SizedBox(height: 8),
 
               // Content preview
-              Text(
-                card.content,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                  height: 1.4,
+              MarkdownBody(
+                data: card.content,
+                styleSheet: MarkdownStyleSheet(
+                  p: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                    height: 1.4,
+                  ),
+                  strong: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  em: const TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black87,
+                  ),
+                  code: TextStyle(
+                    fontSize: 13,
+                    backgroundColor: Colors.grey.shade100,
+                    color: Colors.black87,
+                    fontFamily: 'monospace',
+                  ),
                 ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
+                shrinkWrap: true,
               ),
 
               if (card.explanation != null && card.explanation!.isNotEmpty) ...[
@@ -81,15 +99,32 @@ class KnowledgeCardTile extends StatelessWidget {
                     color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Text(
-                    card.explanation!,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade700,
-                      fontStyle: FontStyle.italic,
+                  child: MarkdownBody(
+                    data: card.explanation!,
+                    styleSheet: MarkdownStyleSheet(
+                      p: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey.shade700,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      strong: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade700,
+                      ),
+                      em: TextStyle(
+                        fontSize: 12,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey.shade700,
+                      ),
+                      code: TextStyle(
+                        fontSize: 11,
+                        backgroundColor: Colors.grey.shade200,
+                        color: Colors.grey.shade700,
+                        fontFamily: 'monospace',
+                      ),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                    shrinkWrap: true,
                   ),
                 ),
               ],

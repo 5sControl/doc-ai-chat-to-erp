@@ -486,6 +486,624 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your email'**
   String get purchase_enterYourEmail;
+
+  /// No description provided for @summary_couldNotOpenURL.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open URL'**
+  String get summary_couldNotOpenURL;
+
+  /// No description provided for @summary_couldNotOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open file'**
+  String get summary_couldNotOpenFile;
+
+  /// No description provided for @summary_originalFileNoLongerAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Original file is no longer available'**
+  String get summary_originalFileNoLongerAvailable;
+
+  /// No description provided for @summary_filePathNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'File path not found'**
+  String get summary_filePathNotFound;
+
+  /// No description provided for @summary_originalTextNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Original text not available'**
+  String get summary_originalTextNotAvailable;
+
+  /// No description provided for @summary_breakThroughTheLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Break through the limits'**
+  String get summary_breakThroughTheLimits;
+
+  /// No description provided for @quiz_failedToGenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate quiz'**
+  String get quiz_failedToGenerate;
+
+  /// No description provided for @quiz_retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get quiz_retry;
+
+  /// No description provided for @quiz_knowledgeQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowledge Quiz'**
+  String get quiz_knowledgeQuiz;
+
+  /// No description provided for @quiz_testYourUnderstanding.
+  ///
+  /// In en, this message translates to:
+  /// **'Test your understanding of this document'**
+  String get quiz_testYourUnderstanding;
+
+  /// No description provided for @quiz_questions.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions'**
+  String get quiz_questions;
+
+  /// No description provided for @quiz_estimatedTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated time'**
+  String get quiz_estimatedTime;
+
+  /// No description provided for @quiz_minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'min'**
+  String get quiz_minutes;
+
+  /// No description provided for @quiz_startQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Quiz'**
+  String get quiz_startQuiz;
+
+  /// No description provided for @quiz_explanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Explanation'**
+  String get quiz_explanation;
+
+  /// No description provided for @quiz_previous.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get quiz_previous;
+
+  /// No description provided for @quiz_viewResults.
+  ///
+  /// In en, this message translates to:
+  /// **'View Results'**
+  String get quiz_viewResults;
+
+  /// No description provided for @quiz_nextQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Question'**
+  String get quiz_nextQuestion;
+
+  /// No description provided for @quiz_questionNofTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {current} of {total}'**
+  String quiz_questionNofTotal(Object current, Object total);
+
+  /// No description provided for @quiz_overview.
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get quiz_overview;
+
+  /// No description provided for @quiz_stepByStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step by Step'**
+  String get quiz_stepByStep;
+
+  /// No description provided for @quiz_excellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent! 🎉'**
+  String get quiz_excellent;
+
+  /// No description provided for @quiz_goodJob.
+  ///
+  /// In en, this message translates to:
+  /// **'Good job! 👍'**
+  String get quiz_goodJob;
+
+  /// No description provided for @quiz_notBad.
+  ///
+  /// In en, this message translates to:
+  /// **'Not bad! Keep learning 📚'**
+  String get quiz_notBad;
+
+  /// No description provided for @quiz_keepPracticing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep practicing! 💪'**
+  String get quiz_keepPracticing;
+
+  /// No description provided for @quiz_correct.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get quiz_correct;
+
+  /// No description provided for @quiz_incorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect'**
+  String get quiz_incorrect;
+
+  /// No description provided for @quiz_total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get quiz_total;
+
+  /// No description provided for @quiz_retakeQuiz.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake Quiz'**
+  String get quiz_retakeQuiz;
+
+  /// No description provided for @quiz_reviewAnswers.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Answers'**
+  String get quiz_reviewAnswers;
+
+  /// No description provided for @quiz_question.
+  ///
+  /// In en, this message translates to:
+  /// **'Question {number}'**
+  String quiz_question(Object number);
+
+  /// No description provided for @savedCards_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved Cards'**
+  String get savedCards_title;
+
+  /// No description provided for @savedCards_removeBookmarkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove bookmark?'**
+  String get savedCards_removeBookmarkTitle;
+
+  /// No description provided for @savedCards_removeBookmarkMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This card will be removed from your bookmarks.'**
+  String get savedCards_removeBookmarkMessage;
+
+  /// No description provided for @savedCards_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get savedCards_cancel;
+
+  /// No description provided for @savedCards_remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get savedCards_remove;
+
+  /// No description provided for @savedCards_cardRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Card removed from bookmarks'**
+  String get savedCards_cardRemoved;
+
+  /// No description provided for @savedCards_sourceNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Source document not found'**
+  String get savedCards_sourceNotFound;
+
+  /// No description provided for @savedCards_clearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get savedCards_clearAll;
+
+  /// No description provided for @savedCards_searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search saved cards...'**
+  String get savedCards_searchHint;
+
+  /// No description provided for @savedCards_cardCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} card'**
+  String savedCards_cardCount(Object count);
+
+  /// No description provided for @savedCards_cardsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} cards'**
+  String savedCards_cardsCount(Object count);
+
+  /// No description provided for @savedCards_clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get savedCards_clearFilters;
+
+  /// No description provided for @savedCards_noCardsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved cards yet'**
+  String get savedCards_noCardsYet;
+
+  /// No description provided for @savedCards_saveCardsToAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Save interesting cards to access them later'**
+  String get savedCards_saveCardsToAccess;
+
+  /// No description provided for @savedCards_noCardsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No cards found'**
+  String get savedCards_noCardsFound;
+
+  /// No description provided for @savedCards_tryAdjustingFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your filters'**
+  String get savedCards_tryAdjustingFilters;
+
+  /// No description provided for @savedCards_clearAllTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all saved cards?'**
+  String get savedCards_clearAllTitle;
+
+  /// No description provided for @savedCards_clearAllMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove all your saved cards. This action cannot be undone.'**
+  String get savedCards_clearAllMessage;
+
+  /// No description provided for @savedCards_allCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'All saved cards cleared'**
+  String get savedCards_allCleared;
+
+  /// No description provided for @home_search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get home_search;
+
+  /// No description provided for @info_productivityInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Productivity Info'**
+  String get info_productivityInfo;
+
+  /// No description provided for @info_words.
+  ///
+  /// In en, this message translates to:
+  /// **'Words'**
+  String get info_words;
+
+  /// No description provided for @info_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Time, '**
+  String get info_time;
+
+  /// No description provided for @info_timeMin.
+  ///
+  /// In en, this message translates to:
+  /// **'(min)'**
+  String get info_timeMin;
+
+  /// No description provided for @info_saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved, '**
+  String get info_saved;
+
+  /// No description provided for @info_original.
+  ///
+  /// In en, this message translates to:
+  /// **'Original'**
+  String get info_original;
+
+  /// No description provided for @info_brief.
+  ///
+  /// In en, this message translates to:
+  /// **'Brief'**
+  String get info_brief;
+
+  /// No description provided for @info_deep.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep'**
+  String get info_deep;
+
+  /// No description provided for @extension_growYourProductivity.
+  ///
+  /// In en, this message translates to:
+  /// **'GROW YOUR PRODUCTIVITY'**
+  String get extension_growYourProductivity;
+
+  /// No description provided for @extension_copyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy link'**
+  String get extension_copyLink;
+
+  /// No description provided for @extension_sendLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Send link'**
+  String get extension_sendLink;
+
+  /// No description provided for @extension_enterYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get extension_enterYourEmail;
+
+  /// No description provided for @auth_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get auth_skip;
+
+  /// No description provided for @auth_hello.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello!'**
+  String get auth_hello;
+
+  /// No description provided for @auth_fillInToGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in to get started'**
+  String get auth_fillInToGetStarted;
+
+  /// No description provided for @auth_emailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get auth_emailAddress;
+
+  /// No description provided for @auth_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get auth_password;
+
+  /// No description provided for @auth_forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password?'**
+  String get auth_forgotPassword;
+
+  /// No description provided for @auth_loginIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Login in'**
+  String get auth_loginIn;
+
+  /// No description provided for @auth_orLoginWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Or Login with'**
+  String get auth_orLoginWith;
+
+  /// No description provided for @auth_dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account? '**
+  String get auth_dontHaveAccount;
+
+  /// No description provided for @auth_registerNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Register Now'**
+  String get auth_registerNow;
+
+  /// No description provided for @auth_passwordCannotBeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Password cannot be empty'**
+  String get auth_passwordCannotBeEmpty;
+
+  /// No description provided for @auth_passwordMustBe6Chars.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters long'**
+  String get auth_passwordMustBe6Chars;
+
+  /// No description provided for @registration_skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get registration_skip;
+
+  /// No description provided for @registration_registerAndGet.
+  ///
+  /// In en, this message translates to:
+  /// **'Register and get'**
+  String get registration_registerAndGet;
+
+  /// No description provided for @registration_2Free.
+  ///
+  /// In en, this message translates to:
+  /// **'2 free '**
+  String get registration_2Free;
+
+  /// No description provided for @registration_unlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited'**
+  String get registration_unlimited;
+
+  /// No description provided for @registration_summarizations.
+  ///
+  /// In en, this message translates to:
+  /// **'summarizations'**
+  String get registration_summarizations;
+
+  /// No description provided for @registration_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get registration_name;
+
+  /// No description provided for @registration_emailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Email Address'**
+  String get registration_emailAddress;
+
+  /// No description provided for @registration_password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get registration_password;
+
+  /// No description provided for @registration_confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get registration_confirmPassword;
+
+  /// No description provided for @registration_register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get registration_register;
+
+  /// No description provided for @registration_orLoginWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Or Login with'**
+  String get registration_orLoginWith;
+
+  /// No description provided for @registration_alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? '**
+  String get registration_alreadyHaveAccount;
+
+  /// No description provided for @registration_loginNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Login Now'**
+  String get registration_loginNow;
+
+  /// No description provided for @registration_passwordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Password mismatch'**
+  String get registration_passwordMismatch;
+
+  /// No description provided for @request_secureSum.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure summarization'**
+  String get request_secureSum;
+
+  /// No description provided for @request_readMyBook.
+  ///
+  /// In en, this message translates to:
+  /// **'Read my book'**
+  String get request_readMyBook;
+
+  /// No description provided for @request_speechToText.
+  ///
+  /// In en, this message translates to:
+  /// **'Speech to text feature'**
+  String get request_speechToText;
+
+  /// No description provided for @request_textToSpeech.
+  ///
+  /// In en, this message translates to:
+  /// **'Text to speech feature'**
+  String get request_textToSpeech;
+
+  /// No description provided for @request_addLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add language'**
+  String get request_addLanguage;
+
+  /// No description provided for @request_orWriteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Or write us a message'**
+  String get request_orWriteMessage;
+
+  /// No description provided for @request_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get request_name;
+
+  /// No description provided for @request_enterYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name'**
+  String get request_enterYourName;
+
+  /// No description provided for @request_email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get request_email;
+
+  /// No description provided for @request_enterYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get request_enterYourEmail;
+
+  /// No description provided for @request_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get request_message;
+
+  /// No description provided for @request_enterYourRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your request'**
+  String get request_enterYourRequest;
+
+  /// No description provided for @request_submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get request_submit;
+
+  /// No description provided for @request_selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select language'**
+  String get request_selectLanguage;
 }
 
 class _AppLocalizationsDelegate

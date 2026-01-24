@@ -11,6 +11,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/home_screen/home_screen.dart';
 import 'package:summify/screens/modal_screens/rate_summary_screen.dart';
@@ -166,7 +167,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                     if (context.mounted) {
                       toastification.show(
                         context: context,
-                        title: const Text('Could not open URL'),
+                        title: Text(AppLocalizations.of(context)!.summary_couldNotOpenURL),
                         type: ToastificationType.error,
                         autoCloseDuration: const Duration(seconds: 3),
                       );
@@ -188,7 +189,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                         if (context.mounted) {
                           toastification.show(
                             context: context,
-                            title: const Text('Could not open file'),
+                            title: Text(AppLocalizations.of(context)!.summary_couldNotOpenFile),
                             type: ToastificationType.error,
                             autoCloseDuration: const Duration(seconds: 3),
                           );
@@ -198,7 +199,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                       if (context.mounted) {
                         toastification.show(
                           context: context,
-                          title: const Text('Original file is no longer available'),
+                          title: Text(AppLocalizations.of(context)!.summary_originalFileNoLongerAvailable),
                           type: ToastificationType.warning,
                           autoCloseDuration: const Duration(seconds: 3),
                         );
@@ -208,7 +209,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                     if (context.mounted) {
                       toastification.show(
                         context: context,
-                        title: const Text('File path not found'),
+                        title: Text(AppLocalizations.of(context)!.summary_filePathNotFound),
                         type: ToastificationType.error,
                         autoCloseDuration: const Duration(seconds: 3),
                       );
@@ -234,7 +235,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                   } else {
                     toastification.show(
                       context: context,
-                      title: const Text('Original text not available'),
+                      title: Text(AppLocalizations.of(context)!.summary_originalTextNotAvailable),
                       type: ToastificationType.error,
                       autoCloseDuration: const Duration(seconds: 3),
                     );
@@ -467,10 +468,10 @@ class PremiumBlurContainer extends StatelessWidget {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    const Text(
-                                      'Break through the limits',
+                                    Text(
+                                      AppLocalizations.of(context)!.summary_breakThroughTheLimits,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700),

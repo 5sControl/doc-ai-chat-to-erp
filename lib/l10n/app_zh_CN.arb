@@ -86,5 +86,138 @@
   "purchase_versionForFree": "版本！",
   "purchase_copyLink": "复制链接",
   "purchase_collectYourGift": "领取礼物",
-  "purchase_enterYourEmail": "输入邮箱"
+  "purchase_enterYourEmail": "输入邮箱",
+
+  "summary_couldNotOpenURL": "无法打开URL",
+  "summary_couldNotOpenFile": "无法打开文件",
+  "summary_originalFileNoLongerAvailable": "原始文件不再可用",
+  "summary_filePathNotFound": "未找到文件路径",
+  "summary_originalTextNotAvailable": "原始文本不可用",
+  "summary_breakThroughTheLimits": "突破限制",
+
+  "quiz_failedToGenerate": "生成测验失败",
+  "quiz_retry": "重试",
+  "quiz_knowledgeQuiz": "知识测验",
+  "quiz_testYourUnderstanding": "测试您对此文档的理解",
+  "quiz_questions": "问题",
+  "quiz_estimatedTime": "预计时间",
+  "quiz_minutes": "分钟",
+  "quiz_startQuiz": "开始测验",
+  "quiz_explanation": "说明",
+  "quiz_previous": "上一题",
+  "quiz_viewResults": "查看结果",
+  "quiz_nextQuestion": "下一题",
+  "quiz_questionNofTotal": "第{current}题，共{total}题",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "概览",
+  "quiz_stepByStep": "逐步",
+  "quiz_excellent": "太棒了！🎉",
+  "quiz_goodJob": "做得好！👍",
+  "quiz_notBad": "不错！继续学习📚",
+  "quiz_keepPracticing": "继续练习！💪",
+  "quiz_correct": "正确",
+  "quiz_incorrect": "错误",
+  "quiz_total": "总计",
+  "quiz_retakeQuiz": "重做测验",
+  "quiz_reviewAnswers": "查看答案",
+  "quiz_question": "第{number}题",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "已保存的卡片",
+  "savedCards_removeBookmarkTitle": "删除书签？",
+  "savedCards_removeBookmarkMessage": "此卡片将从您的书签中删除。",
+  "savedCards_cancel": "取消",
+  "savedCards_remove": "删除",
+  "savedCards_cardRemoved": "卡片已从书签中删除",
+  "savedCards_sourceNotFound": "未找到源文档",
+  "savedCards_clearAll": "全部清除",
+  "savedCards_searchHint": "搜索已保存的卡片...",
+  "savedCards_cardCount": "{count}张卡片",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count}张卡片",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "清除过滤器",
+  "savedCards_noCardsYet": "还没有保存的卡片",
+  "savedCards_saveCardsToAccess": "保存有趣的卡片以便稍后访问",
+  "savedCards_noCardsFound": "未找到卡片",
+  "savedCards_tryAdjustingFilters": "尝试调整过滤器",
+  "savedCards_clearAllTitle": "清除所有已保存的卡片？",
+  "savedCards_clearAllMessage": "这将删除您所有已保存的卡片。此操作无法撤消。",
+  "savedCards_allCleared": "所有已保存的卡片已清除",
+
+  "home_search": "搜索",
+
+  "info_productivityInfo": "生产力信息",
+  "info_words": "字数",
+  "info_time": "时间，",
+  "info_timeMin": "（分钟）",
+  "info_saved": "节省，",
+  "info_original": "原文",
+  "info_brief": "简要",
+  "info_deep": "深入",
+
+  "extension_growYourProductivity": "提高您的生产力",
+  "extension_copyLink": "复制链接",
+  "extension_sendLink": "发送链接",
+  "extension_enterYourEmail": "输入邮箱",
+
+  "auth_skip": "跳过",
+  "auth_hello": "你好！",
+  "auth_fillInToGetStarted": "填写以开始",
+  "auth_emailAddress": "电子邮件地址",
+  "auth_password": "密码",
+  "auth_forgotPassword": "忘记密码？",
+  "auth_loginIn": "登录",
+  "auth_orLoginWith": "或使用以下方式登录",
+  "auth_dontHaveAccount": "还没有账户？",
+  "auth_registerNow": "立即注册",
+  "auth_passwordCannotBeEmpty": "密码不能为空",
+  "auth_passwordMustBe6Chars": "密码必须至少包含6个字符",
+
+  "registration_skip": "跳过",
+  "registration_registerAndGet": "注册并获得",
+  "registration_2Free": "2次免费",
+  "registration_unlimited": "无限",
+  "registration_summarizations": "摘要",
+  "registration_name": "姓名",
+  "registration_emailAddress": "电子邮件地址",
+  "registration_password": "密码",
+  "registration_confirmPassword": "确认密码",
+  "registration_register": "注册",
+  "registration_orLoginWith": "或使用以下方式登录",
+  "registration_alreadyHaveAccount": "已有账户？",
+  "registration_loginNow": "立即登录",
+  "registration_passwordMismatch": "密码不匹配",
+
+  "request_secureSum": "安全摘要",
+  "request_readMyBook": "阅读我的书",
+  "request_speechToText": "语音转文字功能",
+  "request_textToSpeech": "文字转语音功能",
+  "request_addLanguage": "添加语言",
+  "request_orWriteMessage": "或给我们写信息",
+  "request_name": "姓名",
+  "request_enterYourName": "输入您的姓名",
+  "request_email": "电子邮件",
+  "request_enterYourEmail": "输入您的邮箱",
+  "request_message": "信息",
+  "request_enterYourRequest": "输入您的请求",
+  "request_submit": "提交",
+  "request_selectLanguage": "选择语言"
 }

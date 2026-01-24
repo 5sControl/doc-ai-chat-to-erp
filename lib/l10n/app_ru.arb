@@ -86,5 +86,138 @@
   "purchase_versionForFree": "версию бесплатно!",
   "purchase_copyLink": "Скопировать ссылку",
   "purchase_collectYourGift": "Забрать подарок",
-  "purchase_enterYourEmail": "Введите email"
+  "purchase_enterYourEmail": "Введите email",
+
+  "summary_couldNotOpenURL": "Не удалось открыть URL",
+  "summary_couldNotOpenFile": "Не удалось открыть файл",
+  "summary_originalFileNoLongerAvailable": "Оригинальный файл больше не доступен",
+  "summary_filePathNotFound": "Путь к файлу не найден",
+  "summary_originalTextNotAvailable": "Исходный текст недоступен",
+  "summary_breakThroughTheLimits": "Преодолейте ограничения",
+
+  "quiz_failedToGenerate": "Не удалось создать квиз",
+  "quiz_retry": "Повторить",
+  "quiz_knowledgeQuiz": "Тест знаний",
+  "quiz_testYourUnderstanding": "Проверьте ваше понимание этого документа",
+  "quiz_questions": "Вопросы",
+  "quiz_estimatedTime": "Примерное время",
+  "quiz_minutes": "мин",
+  "quiz_startQuiz": "Начать квиз",
+  "quiz_explanation": "Объяснение",
+  "quiz_previous": "Назад",
+  "quiz_viewResults": "Посмотреть результаты",
+  "quiz_nextQuestion": "Следующий вопрос",
+  "quiz_questionNofTotal": "Вопрос {current} из {total}",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "Обзор",
+  "quiz_stepByStep": "Пошагово",
+  "quiz_excellent": "Отлично! 🎉",
+  "quiz_goodJob": "Хорошая работа! 👍",
+  "quiz_notBad": "Неплохо! Продолжайте учиться 📚",
+  "quiz_keepPracticing": "Продолжайте практиковаться! 💪",
+  "quiz_correct": "Верно",
+  "quiz_incorrect": "Неверно",
+  "quiz_total": "Всего",
+  "quiz_retakeQuiz": "Пройти квиз снова",
+  "quiz_reviewAnswers": "Проверить ответы",
+  "quiz_question": "Вопрос {number}",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "Сохраненные карточки",
+  "savedCards_removeBookmarkTitle": "Удалить закладку?",
+  "savedCards_removeBookmarkMessage": "Эта карточка будет удалена из ваших закладок.",
+  "savedCards_cancel": "Отмена",
+  "savedCards_remove": "Удалить",
+  "savedCards_cardRemoved": "Карточка удалена из закладок",
+  "savedCards_sourceNotFound": "Исходный документ не найден",
+  "savedCards_clearAll": "Очистить все",
+  "savedCards_searchHint": "Поиск сохраненных карточек...",
+  "savedCards_cardCount": "{count} карточка",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count} карточек",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "Очистить фильтры",
+  "savedCards_noCardsYet": "Пока нет сохраненных карточек",
+  "savedCards_saveCardsToAccess": "Сохраняйте интересные карточки для быстрого доступа",
+  "savedCards_noCardsFound": "Карточки не найдены",
+  "savedCards_tryAdjustingFilters": "Попробуйте изменить фильтры",
+  "savedCards_clearAllTitle": "Очистить все сохраненные карточки?",
+  "savedCards_clearAllMessage": "Это удалит все ваши сохраненные карточки. Это действие нельзя отменить.",
+  "savedCards_allCleared": "Все сохраненные карточки удалены",
+
+  "home_search": "Поиск",
+
+  "info_productivityInfo": "Информация о продуктивности",
+  "info_words": "Слова",
+  "info_time": "Время, ",
+  "info_timeMin": "(мин)",
+  "info_saved": "Сэкономлено, ",
+  "info_original": "Оригинал",
+  "info_brief": "Краткое",
+  "info_deep": "Глубокое",
+
+  "extension_growYourProductivity": "ПОВЫШАЙТЕ ПРОДУКТИВНОСТЬ",
+  "extension_copyLink": "Скопировать ссылку",
+  "extension_sendLink": "Отправить ссылку",
+  "extension_enterYourEmail": "Введите ваш email",
+
+  "auth_skip": "Пропустить",
+  "auth_hello": "Привет!",
+  "auth_fillInToGetStarted": "Заполните, чтобы начать",
+  "auth_emailAddress": "Адрес электронной почты",
+  "auth_password": "Пароль",
+  "auth_forgotPassword": "Забыли пароль?",
+  "auth_loginIn": "Войти",
+  "auth_orLoginWith": "Или войдите с помощью",
+  "auth_dontHaveAccount": "Нет аккаунта? ",
+  "auth_registerNow": "Зарегистрируйтесь",
+  "auth_passwordCannotBeEmpty": "Пароль не может быть пустым",
+  "auth_passwordMustBe6Chars": "Пароль должен содержать не менее 6 символов",
+
+  "registration_skip": "Пропустить",
+  "registration_registerAndGet": "Зарегистрируйтесь и получите",
+  "registration_2Free": "2 бесплатные ",
+  "registration_unlimited": "безлимитные",
+  "registration_summarizations": "саммари",
+  "registration_name": "Имя",
+  "registration_emailAddress": "Адрес электронной почты",
+  "registration_password": "Пароль",
+  "registration_confirmPassword": "Подтвердите пароль",
+  "registration_register": "Зарегистрироваться",
+  "registration_orLoginWith": "Или войдите с помощью",
+  "registration_alreadyHaveAccount": "Уже есть аккаунт? ",
+  "registration_loginNow": "Войдите сейчас",
+  "registration_passwordMismatch": "Пароли не совпадают",
+
+  "request_secureSum": "Безопасная саммаризация",
+  "request_readMyBook": "Прочитать мою книгу",
+  "request_speechToText": "Функция речь-в-текст",
+  "request_textToSpeech": "Функция текст-в-речь",
+  "request_addLanguage": "Добавить язык",
+  "request_orWriteMessage": "Или напишите нам сообщение",
+  "request_name": "Имя",
+  "request_enterYourName": "Введите ваше имя",
+  "request_email": "Email",
+  "request_enterYourEmail": "Введите ваш email",
+  "request_message": "Сообщение",
+  "request_enterYourRequest": "Введите ваш запрос",
+  "request_submit": "Отправить",
+  "request_selectLanguage": "Выберите язык"
 }

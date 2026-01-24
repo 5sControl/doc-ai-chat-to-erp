@@ -23,7 +23,7 @@ class DemoKnowledgeCards {
         type: KnowledgeCardType.term,
         title: 'The Four Laws of Behavior Change',
         content:
-            'To build a good habit, make it: 1. Obvious (Cue) - Make the cue visible. 2. Attractive (Craving) - Make it appealing. 3. Easy (Response) - Reduce friction. 4. Satisfying (Reward) - Make it immediately rewarding.',
+            'To build a good habit, make it:\n\n1. **Obvious** (Cue) - Make the cue visible\n2. **Attractive** (Craving) - Make it appealing\n3. **Easy** (Response) - Reduce friction\n4. **Satisfying** (Reward) - Make it immediately rewarding',
         explanation: null,
         isSaved: false,
         extractedAt: DateTime(2024, 1, 1),
@@ -33,7 +33,7 @@ class DemoKnowledgeCards {
         type: KnowledgeCardType.insight,
         title: 'Habit Stacking Strategy',
         content:
-            'Use "Habit Stacking": "After [CURRENT HABIT], I will [NEW HABIT]." For example, "After I pour my morning coffee, I will write one sentence in my journal."',
+            'Use **Habit Stacking**: *"After [CURRENT HABIT], I will [NEW HABIT]."*\n\nFor example: *"After I pour my morning coffee, I will write one sentence in my journal."*',
         explanation: null,
         isSaved: false,
         extractedAt: DateTime(2024, 1, 1),
@@ -43,8 +43,8 @@ class DemoKnowledgeCards {
         type: KnowledgeCardType.insight,
         title: 'The Two-Minute Rule',
         content:
-            'The Two-Minute Rule: Downscale any new habit to take two minutes or less to do. "Go for a run" becomes "put on running shoes." Master the art of showing up.',
-        explanation: null,
+            '**The Two-Minute Rule**: Downscale any new habit to take two minutes or less to do.\n\n*"Go for a run"* becomes *"put on running shoes."*\n\nMaster the art of showing up.',
+        explanation: 'This rule helps overcome procrastination by making the habit so **easy** that you can\'t say no.',
         isSaved: false,
         extractedAt: DateTime(2024, 1, 1),
       ),
@@ -53,7 +53,7 @@ class DemoKnowledgeCards {
         type: KnowledgeCardType.thesis,
         title: 'Forget goals, focus on systems',
         content:
-            'Forget goals, focus on systems. Goals are about results you want; systems are about the processes that lead to those results. You don\'t rise to the level of your goals, you fall to the level of your systems.',
+            'Forget goals, focus on **systems**.\n\n- **Goals** are about results you want\n- **Systems** are about the processes that lead to those results\n\nYou don\'t rise to the level of your goals, you fall to the level of your systems.',
         explanation: null,
         isSaved: false,
         extractedAt: DateTime(2024, 1, 1),
@@ -63,7 +63,7 @@ class DemoKnowledgeCards {
         type: KnowledgeCardType.insight,
         title: 'Identity change is the North Star',
         content:
-            'Identity change is the North Star. The ultimate form of intrinsic motivation is when a habit becomes part of your identity. Shift from "I want to run" to "I am a runner." Every small action is a vote for that new identity.',
+            '**Identity change** is the North Star. The ultimate form of intrinsic motivation is when a habit becomes part of your identity.\n\nShift from *"I want to run"* to *"I am a runner."*\n\nEvery small action is a vote for that new identity.',
         explanation: null,
         isSaved: false,
         extractedAt: DateTime(2024, 1, 1),

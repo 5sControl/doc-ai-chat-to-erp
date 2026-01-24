@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/models/models.dart';
 import 'package:toastification/toastification.dart';
@@ -66,13 +67,52 @@ class CardDetailModal extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  Text(
-                    card.content,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                      height: 1.6,
+                  MarkdownBody(
+                    data: card.content,
+                    styleSheet: MarkdownStyleSheet(
+                      p: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black87,
+                        height: 1.6,
+                      ),
+                      strong: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      em: const TextStyle(
+                        fontSize: 16,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black87,
+                      ),
+                      code: TextStyle(
+                        fontSize: 14,
+                        backgroundColor: Colors.grey.shade100,
+                        color: Colors.black87,
+                        fontFamily: 'monospace',
+                      ),
+                      h1: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      h2: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      h3: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      listBullet: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
                     ),
+                    shrinkWrap: true,
+                    selectable: true,
                   ),
 
                   if (card.explanation != null && card.explanation!.isNotEmpty) ...[
@@ -96,13 +136,33 @@ class CardDetailModal extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            card.explanation!,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade700,
-                              height: 1.5,
+                          MarkdownBody(
+                            data: card.explanation!,
+                            styleSheet: MarkdownStyleSheet(
+                              p: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade700,
+                                height: 1.5,
+                              ),
+                              strong: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade700,
+                              ),
+                              em: TextStyle(
+                                fontSize: 14,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.grey.shade700,
+                              ),
+                              code: TextStyle(
+                                fontSize: 13,
+                                backgroundColor: Colors.grey.shade200,
+                                color: Colors.grey.shade700,
+                                fontFamily: 'monospace',
+                              ),
                             ),
+                            shrinkWrap: true,
+                            selectable: true,
                           ),
                         ],
                       ),

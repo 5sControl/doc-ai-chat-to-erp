@@ -10,6 +10,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
 import 'package:summify/screens/home_screen/bookmarks_button.dart';
@@ -178,15 +179,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: TextField(
-                                        controller: _searchController,
-                                        decoration: InputDecoration(
-                                          fillColor:
-                                              Color.fromRGBO(187, 247, 247, 1),
-                                          hintText: 'Search',
-                                          prefixIcon: Icon(
-                                            Icons.search,
-                                            size: 20,
-                                          ),
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          fillColor:
+                              const Color.fromRGBO(187, 247, 247, 1),
+                          hintText: AppLocalizations.of(context)!.home_search,
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            size: 20,
+                          ),
                                           suffixIcon: _searchController
                                                   .text.isEmpty
                                               ? null

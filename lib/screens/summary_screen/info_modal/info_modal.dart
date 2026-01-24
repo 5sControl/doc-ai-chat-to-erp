@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 
 class InfoModal extends StatelessWidget {
@@ -50,7 +51,7 @@ class InfoModal extends StatelessWidget {
                 Padding(
                     padding: const EdgeInsets.only(left: 15, top: 20),
                     child: Text(
-                      'Productivity Info',
+                      AppLocalizations.of(context)!.info_productivityInfo,
                       style: Theme.of(context).textTheme.bodyLarge,
                     )),
                 const Padding(
@@ -69,7 +70,7 @@ class InfoModal extends StatelessWidget {
                 const SizedBox(),
                 Center(
                   child: Text(
-                    'Words',
+                    AppLocalizations.of(context)!.info_words,
                     style: textStyle,
                     textAlign: TextAlign.center,
                   ),
@@ -78,9 +79,9 @@ class InfoModal extends StatelessWidget {
                   child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(children: [
-                        TextSpan(text: 'Time, ', style: textStyle),
+                        TextSpan(text: AppLocalizations.of(context)!.info_time, style: textStyle),
                         TextSpan(
-                            text: '(min)',
+                            text: AppLocalizations.of(context)!.info_timeMin,
                             style: textStyle.copyWith(fontSize: 10)),
                       ])),
                 ),
@@ -88,14 +89,14 @@ class InfoModal extends StatelessWidget {
                   child: RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(children: [
-                        TextSpan(text: 'Saved, ', style: textStyle),
+                        TextSpan(text: AppLocalizations.of(context)!.info_saved, style: textStyle),
                         TextSpan(
-                            text: '(min)',
+                            text: AppLocalizations.of(context)!.info_timeMin,
                             style: textStyle.copyWith(fontSize: 10)),
                       ])),
                 ),
                 Center(
-                    child: Text('Original',
+                    child: Text(AppLocalizations.of(context)!.info_original,
                         style: textStyle, textAlign: TextAlign.center)),
                 Center(
                   child: Text(
@@ -120,7 +121,7 @@ class InfoModal extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    'Brief',
+                    AppLocalizations.of(context)!.info_brief,
                     style: textStyle,
                     textAlign: TextAlign.center,
                   ),
@@ -155,7 +156,7 @@ class InfoModal extends StatelessWidget {
                 ),
                 Center(
                   child: Text(
-                    'Deep',
+                    AppLocalizations.of(context)!.info_deep,
                     style: textStyle,
                     textAlign: TextAlign.center,
                   ),

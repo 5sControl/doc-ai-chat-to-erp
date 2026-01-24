@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/helpers/show_error_toast.dart';
 import 'package:summify/helpers/show_success_toast.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/screens/auth/registration_screen.dart';
 import 'package:summify/screens/auth/reset_password_screen.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
@@ -125,7 +126,7 @@ class _AuthScreenState extends State<AuthScreen> {
               .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
               },
                   child: Text(
-                    'Skip',
+                    AppLocalizations.of(context)!.auth_skip,
                     style: TextStyle(fontSize: 16, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
                   ))
             ],
@@ -144,11 +145,11 @@ class _AuthScreenState extends State<AuthScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 56,
                     ),
                     Text(
-                      'Hello!',
+                      AppLocalizations.of(context)!.auth_hello,
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -158,7 +159,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           fontWeight: FontWeight.w700),
                     ),
                     Text(
-                      'Fill in to get started',
+                      AppLocalizations.of(context)!.auth_fillInToGetStarted,
                       maxLines: 2,
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -192,9 +193,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: Container(
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(vertical: 5),
-                    child: const Text(
-                      'Forgot password?',
-                      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+                    child: Text(
+                      AppLocalizations.of(context)!.auth_forgotPassword,
+                      style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -252,11 +253,11 @@ class _AuthScreenState extends State<AuthScreen> {
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      text: 'Don\'t have an account? ',
+                      text: AppLocalizations.of(context)!.auth_dontHaveAccount,
                       style: TextStyle( color:Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black, fontSize: 15),
                       children: <TextSpan>[
                         TextSpan(
-                          text: 'Register Now',
+                          text: AppLocalizations.of(context)!.auth_registerNow,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
@@ -330,9 +331,9 @@ class EmailInput extends StatelessWidget {
               const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
-          label: const Text(
-            'Email Address',
-            style: TextStyle(
+          label: Text(
+            AppLocalizations.of(context)!.auth_emailAddress,
+            style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14,
                 fontWeight: FontWeight.w400),
@@ -374,10 +375,11 @@ class _PasswordInputState extends State<PasswordInput> {
   }
 
   String? _validatePassword(String? value) {
+    final context = this.context;
     if (value == null || value.isEmpty) {
-      return 'Password cannot be empty';
+      return AppLocalizations.of(context)!.auth_passwordCannotBeEmpty;
     } else if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
+      return AppLocalizations.of(context)!.auth_passwordMustBe6Chars;
     }
     // Add more validation criteria if needed
     return null;
@@ -400,9 +402,9 @@ class _PasswordInputState extends State<PasswordInput> {
               const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
           floatingLabelAlignment: FloatingLabelAlignment.start,
           floatingLabelBehavior: FloatingLabelBehavior.auto,
-          label: const Text(
-            'Password',
-            style: TextStyle(
+          label: Text(
+            AppLocalizations.of(context)!.auth_password,
+            style: const TextStyle(
                 color: Colors.black,
                 fontSize: 14,
                 fontWeight: FontWeight.w400),
@@ -445,9 +447,9 @@ class SignUpButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: const Color.fromRGBO(0, 186, 195, 1),
             borderRadius: BorderRadius.circular(8)),
-        child: const Text(
-          'Login in',
-          style: TextStyle(
+        child: Text(
+          AppLocalizations.of(context)!.auth_loginIn,
+          style: const TextStyle(
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
@@ -475,11 +477,11 @@ class DividerRow extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              'Or Login with',
-              style: TextStyle(
+              AppLocalizations.of(context)!.auth_orLoginWith,
+              style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14),
             ),

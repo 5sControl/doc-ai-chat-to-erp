@@ -86,5 +86,138 @@
   "purchase_versionForFree": "phiên bản miễn phí!",
   "purchase_copyLink": "Sao chép liên kết",
   "purchase_collectYourGift": "Nhận quà",
-  "purchase_enterYourEmail": "Nhập email của bạn"
+  "purchase_enterYourEmail": "Nhập email của bạn",
+
+  "summary_couldNotOpenURL": "Không thể mở URL",
+  "summary_couldNotOpenFile": "Không thể mở tệp",
+  "summary_originalFileNoLongerAvailable": "Tệp gốc không còn khả dụng",
+  "summary_filePathNotFound": "Không tìm thấy đường dẫn tệp",
+  "summary_originalTextNotAvailable": "Văn bản gốc không khả dụng",
+  "summary_breakThroughTheLimits": "Vượt qua giới hạn",
+
+  "quiz_failedToGenerate": "Không tạo được câu đố",
+  "quiz_retry": "Thử lại",
+  "quiz_knowledgeQuiz": "Câu đố kiến thức",
+  "quiz_testYourUnderstanding": "Kiểm tra sự hiểu biết của bạn về tài liệu này",
+  "quiz_questions": "Câu hỏi",
+  "quiz_estimatedTime": "Thời gian ước tính",
+  "quiz_minutes": "phút",
+  "quiz_startQuiz": "Bắt đầu câu đố",
+  "quiz_explanation": "Giải thích",
+  "quiz_previous": "Trước",
+  "quiz_viewResults": "Xem kết quả",
+  "quiz_nextQuestion": "Câu hỏi tiếp theo",
+  "quiz_questionNofTotal": "Câu hỏi {current} trong {total}",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "Tổng quan",
+  "quiz_stepByStep": "Từng bước",
+  "quiz_excellent": "Xuất sắc! 🎉",
+  "quiz_goodJob": "Làm tốt lắm! 👍",
+  "quiz_notBad": "Không tệ! Tiếp tục học 📚",
+  "quiz_keepPracticing": "Tiếp tục luyện tập! 💪",
+  "quiz_correct": "Đúng",
+  "quiz_incorrect": "Sai",
+  "quiz_total": "Tổng",
+  "quiz_retakeQuiz": "Làm lại câu đố",
+  "quiz_reviewAnswers": "Xem lại câu trả lời",
+  "quiz_question": "Câu hỏi {number}",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "Thẻ đã lưu",
+  "savedCards_removeBookmarkTitle": "Xóa dấu trang?",
+  "savedCards_removeBookmarkMessage": "Thẻ này sẽ bị xóa khỏi dấu trang của bạn.",
+  "savedCards_cancel": "Hủy",
+  "savedCards_remove": "Xóa",
+  "savedCards_cardRemoved": "Đã xóa thẻ khỏi dấu trang",
+  "savedCards_sourceNotFound": "Không tìm thấy tài liệu nguồn",
+  "savedCards_clearAll": "Xóa tất cả",
+  "savedCards_searchHint": "Tìm kiếm thẻ đã lưu...",
+  "savedCards_cardCount": "{count} thẻ",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count} thẻ",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "Xóa bộ lọc",
+  "savedCards_noCardsYet": "Chưa có thẻ nào được lưu",
+  "savedCards_saveCardsToAccess": "Lưu thẻ thú vị để truy cập sau",
+  "savedCards_noCardsFound": "Không tìm thấy thẻ nào",
+  "savedCards_tryAdjustingFilters": "Thử điều chỉnh bộ lọc",
+  "savedCards_clearAllTitle": "Xóa tất cả thẻ đã lưu?",
+  "savedCards_clearAllMessage": "Điều này sẽ xóa tất cả thẻ đã lưu của bạn. Hành động này không thể hoàn tác.",
+  "savedCards_allCleared": "Đã xóa tất cả thẻ đã lưu",
+
+  "home_search": "Tìm kiếm",
+
+  "info_productivityInfo": "Thông tin năng suất",
+  "info_words": "Từ",
+  "info_time": "Thời gian, ",
+  "info_timeMin": "(phút)",
+  "info_saved": "Đã tiết kiệm, ",
+  "info_original": "Gốc",
+  "info_brief": "Ngắn gọn",
+  "info_deep": "Sâu",
+
+  "extension_growYourProductivity": "TĂNG NĂNG SUẤT CỦA BẠN",
+  "extension_copyLink": "Sao chép liên kết",
+  "extension_sendLink": "Gửi liên kết",
+  "extension_enterYourEmail": "Nhập email của bạn",
+
+  "auth_skip": "Bỏ qua",
+  "auth_hello": "Xin chào!",
+  "auth_fillInToGetStarted": "Điền vào để bắt đầu",
+  "auth_emailAddress": "Địa chỉ email",
+  "auth_password": "Mật khẩu",
+  "auth_forgotPassword": "Quên mật khẩu?",
+  "auth_loginIn": "Đăng nhập",
+  "auth_orLoginWith": "Hoặc đăng nhập bằng",
+  "auth_dontHaveAccount": "Chưa có tài khoản? ",
+  "auth_registerNow": "Đăng ký ngay",
+  "auth_passwordCannotBeEmpty": "Mật khẩu không được để trống",
+  "auth_passwordMustBe6Chars": "Mật khẩu phải có ít nhất 6 ký tự",
+
+  "registration_skip": "Bỏ qua",
+  "registration_registerAndGet": "Đăng ký và nhận",
+  "registration_2Free": "2 ",
+  "registration_unlimited": "bản tóm tắt không giới hạn",
+  "registration_summarizations": "miễn phí",
+  "registration_name": "Tên",
+  "registration_emailAddress": "Địa chỉ email",
+  "registration_password": "Mật khẩu",
+  "registration_confirmPassword": "Xác nhận mật khẩu",
+  "registration_register": "Đăng ký",
+  "registration_orLoginWith": "Hoặc đăng nhập bằng",
+  "registration_alreadyHaveAccount": "Đã có tài khoản? ",
+  "registration_loginNow": "Đăng nhập ngay",
+  "registration_passwordMismatch": "Mật khẩu không khớp",
+
+  "request_secureSum": "Tóm tắt an toàn",
+  "request_readMyBook": "Đọc sách của tôi",
+  "request_speechToText": "Tính năng chuyển giọng nói thành văn bản",
+  "request_textToSpeech": "Tính năng chuyển văn bản thành giọng nói",
+  "request_addLanguage": "Thêm ngôn ngữ",
+  "request_orWriteMessage": "Hoặc viết tin nhắn cho chúng tôi",
+  "request_name": "Tên",
+  "request_enterYourName": "Nhập tên của bạn",
+  "request_email": "Email",
+  "request_enterYourEmail": "Nhập email của bạn",
+  "request_message": "Tin nhắn",
+  "request_enterYourRequest": "Nhập yêu cầu của bạn",
+  "request_submit": "Gửi",
+  "request_selectLanguage": "Chọn ngôn ngữ"
 }

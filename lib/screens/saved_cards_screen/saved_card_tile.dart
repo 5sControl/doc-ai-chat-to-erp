@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:summify/models/models.dart';
 
 class SavedCardTile extends StatelessWidget {
@@ -105,15 +106,32 @@ class SavedCardTile extends StatelessWidget {
               const SizedBox(height: 12),
 
               // Content
-              Text(
-                card.content,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade700,
-                  height: 1.4,
+              MarkdownBody(
+                data: card.content,
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey.shade700,
+                    height: 1.4,
+                  ),
+                  strong: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade700,
+                  ),
+                  em: TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.grey.shade700,
+                  ),
+                  code: TextStyle(
+                    fontSize: 13,
+                    backgroundColor: Colors.grey.shade100,
+                    color: Colors.grey.shade700,
+                    fontFamily: 'monospace',
+                  ),
                 ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
+                shrinkWrap: true,
               ),
 
               // Source link at bottom left

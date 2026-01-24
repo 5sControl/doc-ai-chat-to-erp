@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../helpers/email_validator.dart';
@@ -135,7 +136,7 @@ class _ExtensionModalState extends State<ExtensionModal> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text('GROW YOUR PRODUCTIVITY',
+                          child: Text(AppLocalizations.of(context)!.extension_growYourProductivity,
                               style: Theme.of(context).textTheme.bodyLarge),
                         ),
                         const SizedBox(
@@ -239,7 +240,7 @@ class _ExtensionModalState extends State<ExtensionModal> {
                                               Colors.white, BlendMode.srcIn),
                                         ),
                                         Text(
-                                          ' Copy link',
+                                          ' ${AppLocalizations.of(context)!.extension_copyLink}',
                                           textAlign: TextAlign.center,
                                           style: Theme.of(context)
                                               .textTheme
@@ -282,7 +283,7 @@ class _ExtensionModalState extends State<ExtensionModal> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 10),
                                         child: Text(
-                                          'Send link',
+                                          AppLocalizations.of(context)!.extension_sendLink,
                                           textAlign: TextAlign.center,
                                           style: Theme.of(context)
                                               .textTheme
@@ -326,8 +327,8 @@ class EmailField extends StatelessWidget {
       validator: validateEmail,
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.emailAddress,
-      decoration: const InputDecoration(
-          hintText: ' Enter your email', fillColor: Colors.white),
+      decoration: InputDecoration(
+          hintText: ' ${AppLocalizations.of(context)!.extension_enterYourEmail}', fillColor: Colors.white),
       // onEditingComplete: () {},
       style: Theme.of(context).textTheme.labelMedium,
     );
