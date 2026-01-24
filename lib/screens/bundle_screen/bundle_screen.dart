@@ -58,7 +58,7 @@ class _BundleScreenState extends State<BundleScreen>
     _tabController = TabController(
       length: 2,
       vsync: this,
-      initialIndex: widget.fromOnboarding == true ? 1 : 0,
+      initialIndex: 0,
     );
     _updateState();
     _tabController.addListener(() {
@@ -290,13 +290,13 @@ class _BundleScreenState extends State<BundleScreen>
                                               Tab(
                                                 child: Align(
                                                   alignment: Alignment.center,
-                                                  child: Text(AppLocalizations.of(context)!.bundle_tabBundle),
+                                                  child: Text(AppLocalizations.of(context)!.bundle_tabUnlimited),
                                                 ),
                                               ),
                                               Tab(
                                                 child: Align(
                                                   alignment: Alignment.center,
-                                                  child: Text(AppLocalizations.of(context)!.bundle_tabUnlimited),
+                                                  child: Text(AppLocalizations.of(context)!.bundle_tabBundle),
                                                 ),
                                               )
                                             ],
@@ -332,17 +332,17 @@ class _BundleScreenState extends State<BundleScreen>
                               body: TabBarView(
                                 controller: _tabController,
                                 children: [
-                                  BundleScreen1(
-                                      fromOnboarding: widget.fromOnboarding,
-                                      packages: packages,
-                                      selectedSubscriptionIndex:
-                                          selectedSubscriptionIndex,
-                                      onSelectSubscription:
-                                          onSelectSubscription),
                                   const SubscriptionScreenLimit(
                                     triggerScreen: 'Home',
                                     fromSettings: false,
-                                  )
+                                  ),
+                                  BundleScreen1(
+                                    fromOnboarding: widget.fromOnboarding,
+                                    packages: packages,
+                                    selectedSubscriptionIndex:
+                                        selectedSubscriptionIndex,
+                                    onSelectSubscription: onSelectSubscription,
+                                  ),
                                 ],
                               ),
                             ),
