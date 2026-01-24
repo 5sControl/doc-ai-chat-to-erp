@@ -55,12 +55,12 @@ class _SummaryScreenState extends State<SummaryScreen>
 
   @override
   void initState() {
-    final AB = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
+    final AB = context.read<SettingsBloc>().state.abTest == 'A' ? 2 : 1;
 
     setState(() {
-      activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 1 : 0;
+      activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 2 : 1;
     });
-    _tabController = TabController(length: 5, vsync: this, initialIndex: AB);
+    _tabController = TabController(length: 6, vsync: this, initialIndex: AB);
     if (context
         .read<SummariesBloc>()
         .state
@@ -76,18 +76,21 @@ class _SummaryScreenState extends State<SummaryScreen>
         String tabType;
         switch (activeTab) {
           case 0:
-            tabType = 'short';
+            tabType = 'source';
             break;
           case 1:
-            tabType = 'long';
+            tabType = 'short';
             break;
           case 2:
-            tabType = 'research';
+            tabType = 'long';
             break;
           case 3:
-            tabType = 'quiz';
+            tabType = 'research';
             break;
           case 4:
+            tabType = 'quiz';
+            break;
+          case 5:
             tabType = 'knowledge_cards';
             break;
           default:
@@ -122,6 +125,10 @@ class _SummaryScreenState extends State<SummaryScreen>
 
             final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
             final String formattedDate = formatter.format(summaryData.date);
+
+            final sourceText = summaryData.summaryOrigin == SummaryOrigin.text && summaryData.userText != null
+                ? summaryData.userText!
+                : AppLocalizations.of(context)!.summary_sourceNotAvailable;
 
             final briefSummaryText = getTransformedText(
                 text: summaryData.shortSummary.summaryText ?? '');
@@ -293,6 +300,12 @@ class _SummaryScreenState extends State<SummaryScreen>
                                     controller: _tabController,
                                     children: [
                                       SummaryTextContainer(
+                                        summaryText: sourceText,
+                                        summary: Summary(summaryText: sourceText),
+                                        summaryStatus: SummaryStatus.complete,
+                                        summaryTranslate: null,
+                                      ),
+                                      SummaryTextContainer(
                                         summaryText: briefSummaryText,
                                         summary: summaryData.shortSummary,
                                         summaryStatus:
@@ -362,27 +375,28 @@ class _SummaryScreenState extends State<SummaryScreen>
   }
 
   Widget? _buildBottomBar(int activeTab, summaryData) {
-    // activeTab 0: brief summary
-    // activeTab 1: deep summary
-    // activeTab 2: research (Chat)
-    // activeTab 3: quiz
-    // activeTab 4: knowledge cards
+    // activeTab 0: source
+    // activeTab 1: brief summary
+    // activeTab 2: deep summary
+    // activeTab 3: research (Chat)
+    // activeTab 4: quiz
+    // activeTab 5: knowledge cards
 
-    if (activeTab == 2) {
+    if (activeTab == 3) {
       // Show chat input for Research tab
       return SendRequestField(
         summaryKey: widget.summaryKey,
         summaryData: summaryData,
       );
-    } else if (activeTab == 0 || activeTab == 1) {
-      // Show Share/Copy/Translate buttons only for text tabs (Brief and Deep)
+    } else if (activeTab == 0 || activeTab == 1 || activeTab == 2) {
+      // Show Share/Copy/Translate buttons only for text tabs (Source, Brief and Deep)
       return ShareAndCopyButton(
         activeTab: activeTab,
         sharedLink: widget.summaryKey,
         summaryData: summaryData,
       );
     } else {
-      // For Quiz tab (3) and Knowledge Cards tab (4) - show nothing
+      // For Quiz tab (4) and Knowledge Cards tab (5) - show nothing
       return null;
     }
   }

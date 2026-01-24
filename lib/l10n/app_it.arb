@@ -94,6 +94,8 @@
   "summary_filePathNotFound": "Percorso del file non trovato",
   "summary_originalTextNotAvailable": "Testo originale non disponibile",
   "summary_breakThroughTheLimits": "Supera i limiti",
+  "summary_sourceTab": "Fonte",
+  "summary_sourceNotAvailable": "Il testo sorgente non è disponibile per questo tipo di riepilogo",
 
   "quiz_failedToGenerate": "Impossibile generare il quiz",
   "quiz_retry": "Riprova",

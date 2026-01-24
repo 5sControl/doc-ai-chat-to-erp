@@ -94,6 +94,8 @@
   "summary_filePathNotFound": "Путь к файлу не найден",
   "summary_originalTextNotAvailable": "Исходный текст недоступен",
   "summary_breakThroughTheLimits": "Преодолейте ограничения",
+  "summary_sourceTab": "Источник",
+  "summary_sourceNotAvailable": "Исходный текст недоступен для этого типа резюме",
 
   "quiz_failedToGenerate": "Не удалось создать квиз",
   "quiz_retry": "Повторить",

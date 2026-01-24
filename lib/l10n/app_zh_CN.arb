@@ -94,6 +94,8 @@
   "summary_filePathNotFound": "未找到文件路径",
   "summary_originalTextNotAvailable": "原始文本不可用",
   "summary_breakThroughTheLimits": "突破限制",
+  "summary_sourceTab": "来源",
+  "summary_sourceNotAvailable": "此类摘要无法使用源文本",
 
   "quiz_failedToGenerate": "生成测验失败",
   "quiz_retry": "重试",

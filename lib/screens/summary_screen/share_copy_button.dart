@@ -39,8 +39,10 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
   Widget build(BuildContext context) {
     void onPressShare() {
       final text = widget.activeTab == 0
-          ? widget.summaryData.shortSummary.summaryText
-          : widget.summaryData.longSummary.summaryText;
+          ? widget.summaryData.userText
+          : widget.activeTab == 1
+              ? widget.summaryData.shortSummary.summaryText
+              : widget.summaryData.longSummary.summaryText;
 
       final box = context.findRenderObject() as RenderBox?;
       Share.share(
@@ -52,8 +54,10 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
 
     void onPressCopy() {
       final text = widget.activeTab == 0
-          ? widget.summaryData.shortSummary.summaryText
-          : widget.summaryData.longSummary.summaryText;
+          ? widget.summaryData.userText
+          : widget.activeTab == 1
+              ? widget.summaryData.shortSummary.summaryText
+              : widget.summaryData.longSummary.summaryText;
 
       Clipboard.setData(ClipboardData(text: text ?? ''));
       context.read<MixpanelBloc>().add(const CopySummary());
@@ -140,13 +144,13 @@ class TranslateButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
-        if (settingsState.translateLanguage == 'en') {
+        if (settingsState.translateLanguage == 'en' || activeTab == 0) {
           return const SizedBox();
         }
 
         return BlocBuilder<TranslatesBloc, TranslatesState>(
           builder: (context, translatesState) {
-            final bool isShort = activeTab == 0;
+            final bool isShort = activeTab == 1;
             final bool isLoading = translatesState
                         .shortTranslates[summaryKey]?.translateStatus ==
                     TranslateStatus.loading ||
@@ -196,7 +200,7 @@ class TranslateButton extends StatelessWidget {
 
             bool isActive = false;
 
-            if (activeTab == 0) {
+            if (activeTab == 1) {
               translatesState.shortTranslates[summaryKey] != null &&
                       translatesState.shortTranslates[summaryKey]!.isActive
                   ? isActive = true

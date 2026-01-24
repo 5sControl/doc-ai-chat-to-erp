@@ -94,6 +94,8 @@
   "summary_filePathNotFound": "File path not found",
   "summary_originalTextNotAvailable": "Original text not available",
   "summary_breakThroughTheLimits": "Break through the limits",
+  "summary_sourceTab": "Source",
+  "summary_sourceNotAvailable": "Source text is not available for this type of summary",
 
   "quiz_failedToGenerate": "Failed to generate quiz",
   "quiz_retry": "Retry",

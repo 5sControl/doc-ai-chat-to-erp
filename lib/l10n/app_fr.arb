@@ -94,6 +94,8 @@
   "summary_filePathNotFound": "Chemin du fichier introuvable",
   "summary_originalTextNotAvailable": "Texte original non disponible",
   "summary_breakThroughTheLimits": "Dépassez les limites",
+  "summary_sourceTab": "Source",
+  "summary_sourceNotAvailable": "Le texte source n'est pas disponible pour ce type de résumé",
 
   "quiz_failedToGenerate": "Échec de la génération du quiz",
   "quiz_retry": "Réessayer",

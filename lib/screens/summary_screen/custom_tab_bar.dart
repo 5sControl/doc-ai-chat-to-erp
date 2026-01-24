@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:summify/l10n/app_localizations.dart';
 
 class CustomTabBar extends StatelessWidget {
   final TabController tabController;
@@ -33,14 +34,17 @@ class CustomTabBar extends StatelessWidget {
         indicator: BoxDecoration(
             color: Color.fromRGBO(0, 186, 195, 1),
             borderRadius: BorderRadius.circular(6)),
-        tabs: const [
+        tabs: [
           Tab(
+            text: AppLocalizations.of(context)!.summary_sourceTab,
+          ),
+          const Tab(
             text: "Brief",
           ),
-          Tab(text: "Deep"),
-          Tab(text: "Chat"),
-          Tab(text: "Quiz"),
-          Tab(text: "Cards"),
+          const Tab(text: "Deep"),
+          const Tab(text: "Chat"),
+          const Tab(text: "Quiz"),
+          const Tab(text: "Cards"),
         ],
       ),
     );
