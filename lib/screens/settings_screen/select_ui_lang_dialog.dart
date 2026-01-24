@@ -16,6 +16,7 @@ const Map<String, String> uiLanguages = {
   "it": "Italiano",
   "vi": "Tiếng Việt",
   "zh-CN": "中文(简体)",
+  "tr": "Türkçe",
 };
 
 Future<void> interfaceLanguageDialog({

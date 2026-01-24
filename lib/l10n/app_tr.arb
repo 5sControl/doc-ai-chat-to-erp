@@ -1,0 +1,223 @@
+{
+  "@@locale": "tr",
+
+  "common_continue": "Devam Et",
+  "common_select": "Seç",
+  "common_ok": "Tamam",
+  "common_error": "Hata",
+
+  "onboarding_translateSummarizationTo": "Özeti şu dile çevir",
+  "onboarding_goodbyeInfoOverload": "Bilgi yükünden kurtulun!",
+  "onboarding_oneClickShareToGetSummary": "Özet almak için tek tıkla \"paylaş\"",
+  "onboarding_welcomeTitle": "Summify'a Hoş Geldiniz",
+  "onboarding_welcomeSubtitle": "Kişisel AI Özetleyici",
+
+  "settings_profile": "Profil",
+  "settings_general": "Genel",
+  "settings_interfaceLanguage": "Arayüz dili",
+  "settings_translationLanguage": "Çeviri dili",
+  "settings_selectLanguageTitle": "Dil seç",
+
+  "paywall_beSmartWithYourTime": "Zamanınızı akıllıca kullanın!",
+  "paywall_payWeekly": "Haftalık öde",
+  "paywall_payAnnually": "Yıllık öde",
+  "paywall_saveUpTo": "{amount}\\$'a kadar tasarruf edin",
+  "@paywall_saveUpTo": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "paywall_buy": "SATIN AL",
+  "paywall_andGetOn": "VE ŞU ŞEKİLDE EDİN",
+  "paywall_forFree": "ÜCRETSİZ!",
+
+  "paywall_12Months": "12 ay",
+  "paywall_1Week": "1 hafta",
+  "paywall_1Month": "1 ay",
+  "paywall_1WeekMultiline": "1 \\nhafta",
+  "paywall_1MonthMultiline": "1 \\nay",
+  "paywall_12MonthsMultiline": "12 \\nay",
+  "paywall_accessAllPremiumCancelAnytime": "Tüm premium özelliklere erişin!\\nİstediğiniz zaman iptal edin",
+  "paywall_pricePerYear": "{price}/yıl",
+  "@paywall_pricePerYear": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "paywall_pricePerWeek": "{price}/hafta",
+  "@paywall_pricePerWeek": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+
+  "paywall_termsOfUse": "Kullanım koşulları",
+  "paywall_restorePurchase": "Satın almayı geri yükle",
+  "paywall_privacyPolicy": "Gizlilik politikası",
+
+  "paywall_unlimitedSummaries": "Sınırsız Özetler",
+  "paywall_documentResearch": "Doküman Araştırması",
+  "paywall_briefAndDeepSummary": "Kısa ve Derin Özet",
+  "paywall_translation": "Çeviri",
+  "paywall_addToChromeForFree": "Chrome'a ÜCRETSİZ ekleyin",
+
+  "offer_needMoreSummaries": "Daha fazla özetе ihtiyacınız var mı?",
+  "offer_maximizeYourProductivity": "Üretkenliğinizi en üst düzeye çıkarın!",
+  "offer_outOfSummaries": "Özetler bitti mi?",
+  "offer_maximizeProductivityAndEfficiency": "Üretkenliğinizi\\nve verimliliğinizi en üst düzeye çıkarın!",
+  "offer_getMoreInNoTime": "Kısa sürede daha fazlasını elde edin!",
+  "offer_15DeepSummariesDaily": "Günlük 15 Derin Özet",
+  "offer_goUnlimited": "Sınırsıza Geçin",
+
+  "bundle_subscriptionsNotAvailable": "Abonelikler mevcut değil",
+  "bundle_getForFree": "ÜCRETSİZ EDİN",
+  "bundle_on": "üzerinde",
+  "bundle_version": "Sürüm",
+  "bundle_offer_unlockLimitless": "Sınırsız",
+  "bundle_offer_possibilities": "Olanakları",
+  "bundle_offer_endlessPossibilities": "Sonsuz Olanakları",
+  "bundle_offer_with50Off": "%50 İndirimle",
+  "bundle_offer_get4UnlimitedApps": "4 Sınırsız Uygulama Edinin",
+  "bundle_tabBundle": "Paket",
+  "bundle_tabUnlimited": "Sınırsız",
+
+  "purchase_youAreTheBest": "Harikasınız!",
+  "purchase_get": "Edinin",
+  "purchase_versionForFree": "sürümünü ücretsiz!",
+  "purchase_copyLink": "Bağlantıyı kopyala",
+  "purchase_collectYourGift": "Hediyenizi alın",
+  "purchase_enterYourEmail": "E-postanızı girin",
+
+  "summary_couldNotOpenURL": "URL açılamadı",
+  "summary_couldNotOpenFile": "Dosya açılamadı",
+  "summary_originalFileNoLongerAvailable": "Orijinal dosya artık mevcut değil",
+  "summary_filePathNotFound": "Dosya yolu bulunamadı",
+  "summary_originalTextNotAvailable": "Orijinal metin mevcut değil",
+  "summary_breakThroughTheLimits": "Sınırları aşın",
+
+  "quiz_failedToGenerate": "Quiz oluşturulamadı",
+  "quiz_retry": "Tekrar Dene",
+  "quiz_knowledgeQuiz": "Bilgi Quizi",
+  "quiz_testYourUnderstanding": "Bu belgeyi ne kadar anladığınızı test edin",
+  "quiz_questions": "Sorular",
+  "quiz_estimatedTime": "Tahmini süre",
+  "quiz_minutes": "dk",
+  "quiz_startQuiz": "Quiz'e Başla",
+  "quiz_explanation": "Açıklama",
+  "quiz_previous": "Önceki",
+  "quiz_viewResults": "Sonuçları Görüntüle",
+  "quiz_nextQuestion": "Sonraki Soru",
+  "quiz_questionNofTotal": "Soru {current} / {total}",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "Genel Bakış",
+  "quiz_stepByStep": "Adım Adım",
+  "quiz_excellent": "Mükemmel! 🎉",
+  "quiz_goodJob": "Aferin! 👍",
+  "quiz_notBad": "Fena değil! Öğrenmeye devam edin 📚",
+  "quiz_keepPracticing": "Pratik yapmaya devam edin! 💪",
+  "quiz_correct": "Doğru",
+  "quiz_incorrect": "Yanlış",
+  "quiz_total": "Toplam",
+  "quiz_retakeQuiz": "Quiz'i Tekrarla",
+  "quiz_reviewAnswers": "Cevapları İncele",
+  "quiz_question": "Soru {number}",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "Kaydedilen Kartlar",
+  "savedCards_removeBookmarkTitle": "Yer işareti kaldırılsın mı?",
+  "savedCards_removeBookmarkMessage": "Bu kart yer işaretlerinizden kaldırılacak.",
+  "savedCards_cancel": "İptal",
+  "savedCards_remove": "Kaldır",
+  "savedCards_cardRemoved": "Kart yer işaretlerinden kaldırıldı",
+  "savedCards_sourceNotFound": "Kaynak belge bulunamadı",
+  "savedCards_clearAll": "Tümünü temizle",
+  "savedCards_searchHint": "Kaydedilen kartları ara...",
+  "savedCards_cardCount": "{count} kart",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count} kart",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "Filtreleri temizle",
+  "savedCards_noCardsYet": "Henüz kaydedilen kart yok",
+  "savedCards_saveCardsToAccess": "İlginç kartları daha sonra erişmek için kaydedin",
+  "savedCards_noCardsFound": "Kart bulunamadı",
+  "savedCards_tryAdjustingFilters": "Filtrelerinizi ayarlamayı deneyin",
+  "savedCards_clearAllTitle": "Tüm kaydedilen kartlar temizlensin mi?",
+  "savedCards_clearAllMessage": "Bu, tüm kaydedilen kartlarınızı kaldıracaktır. Bu işlem geri alınamaz.",
+  "savedCards_allCleared": "Tüm kaydedilen kartlar temizlendi",
+
+  "home_search": "Ara",
+
+  "info_productivityInfo": "Üretkenlik Bilgisi",
+  "info_words": "Kelimeler",
+  "info_time": "Süre, ",
+  "info_timeMin": "(dk)",
+  "info_saved": "Tasarruf, ",
+  "info_original": "Orijinal",
+  "info_brief": "Kısa",
+  "info_deep": "Derin",
+
+  "extension_growYourProductivity": "ÜRETKENLİĞİNİZİ ARTIRIN",
+  "extension_copyLink": "Bağlantıyı kopyala",
+  "extension_sendLink": "Bağlantıyı gönder",
+  "extension_enterYourEmail": "E-postanızı girin",
+
+  "auth_skip": "Atla",
+  "auth_hello": "Merhaba!",
+  "auth_fillInToGetStarted": "Başlamak için doldurun",
+  "auth_emailAddress": "E-posta Adresi",
+  "auth_password": "Şifre",
+  "auth_forgotPassword": "Şifrenizi mi unuttunuz?",
+  "auth_loginIn": "Giriş Yap",
+  "auth_orLoginWith": "Veya şununla giriş yapın",
+  "auth_dontHaveAccount": "Hesabınız yok mu? ",
+  "auth_registerNow": "Şimdi Kaydolun",
+  "auth_passwordCannotBeEmpty": "Şifre boş olamaz",
+  "auth_passwordMustBe6Chars": "Şifre en az 6 karakter olmalıdır",
+
+  "registration_skip": "Atla",
+  "registration_registerAndGet": "Kaydolun ve alın",
+  "registration_2Free": "2 ücretsiz ",
+  "registration_unlimited": "Sınırsız",
+  "registration_summarizations": "özetlemeler",
+  "registration_name": "Ad",
+  "registration_emailAddress": "E-posta Adresi",
+  "registration_password": "Şifre",
+  "registration_confirmPassword": "Şifreyi onayla",
+  "registration_register": "Kaydol",
+  "registration_orLoginWith": "Veya şununla giriş yapın",
+  "registration_alreadyHaveAccount": "Zaten hesabınız var mı? ",
+  "registration_loginNow": "Şimdi Giriş Yapın",
+  "registration_passwordMismatch": "Şifreler uyuşmuyor",
+
+  "request_secureSum": "Güvenli özetleme",
+  "request_readMyBook": "Kitabımı oku",
+  "request_speechToText": "Konuşmadan metne özelliği",
+  "request_textToSpeech": "Metinden konuşmaya özelliği",
+  "request_addLanguage": "Dil ekle",
+  "request_orWriteMessage": "Veya bize bir mesaj yazın",
+  "request_name": "Ad",
+  "request_enterYourName": "Adınızı girin",
+  "request_email": "E-posta",
+  "request_enterYourEmail": "E-postanızı girin",
+  "request_message": "Mesaj",
+  "request_enterYourRequest": "İsteğinizi girin",
+  "request_submit": "Gönder",
+  "request_selectLanguage": "Dil seç"
+}

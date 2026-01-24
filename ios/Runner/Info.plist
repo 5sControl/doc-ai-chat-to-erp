@@ -20,6 +20,7 @@
 		<string>it</string>
 		<string>vi</string>
 		<string>zh-Hans</string>
+		<string>tr</string>
 	</array>
 	<key>CFBundleDisplayName</key>
 	<string>Summify</string>
