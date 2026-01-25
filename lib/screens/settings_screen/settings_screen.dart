@@ -28,6 +28,7 @@ import '../../bloc/settings/settings_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
 import '../subscribtions_screen/subscriptions_screen.dart';
 import '../summary_screen/info_modal/extension_modal.dart';
+import 'tts_settings_section.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class ButtonItem {
@@ -37,12 +38,13 @@ class ButtonItem {
   final Gradient? background;
   final Function onTap;
 
-  const ButtonItem(
-      {required this.title,
-      required this.leadingIcon,
-      required this.onTap,
-      this.trailing,
-      this.background});
+  const ButtonItem({
+    required this.title,
+    required this.leadingIcon,
+    required this.onTap,
+    this.trailing,
+    this.background,
+  });
 }
 
 class SettingsScreen extends StatelessWidget {
@@ -71,10 +73,12 @@ class SettingsScreen extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const SubscriptionScreenLimit(
-                  triggerScreen: 'Settings',
-                  fromSettings: true,
-                )),
+          builder:
+              (context) => const SubscriptionScreenLimit(
+                triggerScreen: 'Settings',
+                fromSettings: true,
+              ),
+        ),
       );
     }
 
@@ -96,27 +100,31 @@ class SettingsScreen extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const BundleScreen(
-                  triggerScreen: 'Settings',
-                  fromSettings: true,
-                )),
+          builder:
+              (context) => const BundleScreen(
+                triggerScreen: 'Settings',
+                fromSettings: true,
+              ),
+        ),
       );
     }
 
     void onPressRestore() async {
-      context
-          .read<SubscriptionsBloc>()
-          .add(RestoreSubscriptions(context: context));
+      context.read<SubscriptionsBloc>().add(
+        RestoreSubscriptions(context: context),
+      );
     }
 
     void onPressOurApps() async {
       if (!kIsWeb && Platform.isIOS) {
         final Uri url = Uri.parse(
-            'https://apps.apple.com/ru/developer/english-in-games/id1656052466');
+          'https://apps.apple.com/ru/developer/english-in-games/id1656052466',
+        );
         if (!await launchUrl(url)) {}
       } else {
         final Uri url = Uri.parse(
-            'https://play.google.com/store/apps/dev?id=8797601455128207838&hl=ru&gl=US');
+          'https://play.google.com/store/apps/dev?id=8797601455128207838&hl=ru&gl=US',
+        );
         if (!await launchUrl(url)) {}
       }
     }
@@ -135,7 +143,8 @@ class SettingsScreen extends StatelessWidget {
 
     void onPressTerms() async {
       final Uri url = Uri.parse(
-          'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/');
+        'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
+      );
       if (!await launchUrl(url)) {}
     }
 
@@ -145,8 +154,11 @@ class SettingsScreen extends StatelessWidget {
     }
 
     void onPressShareApp() async {
-      await Share.shareUri(Uri.parse(
-          'https://apps.apple.com/us/app/ai-text-summarizer-summify/id6478384912'));
+      await Share.shareUri(
+        Uri.parse(
+          'https://apps.apple.com/us/app/ai-text-summarizer-summify/id6478384912',
+        ),
+      );
     }
 
     void onPressSetupShare() {
@@ -185,8 +197,12 @@ class SettingsScreen extends StatelessWidget {
       context.read<MixpanelBloc>().add(const OpenSummifyExtensionModal());
     }
 
-    void showAuthDialog(BuildContext context, String title, String subTitle,
-        String buttonText) {
+    void showAuthDialog(
+      BuildContext context,
+      String title,
+      String subTitle,
+      String buttonText,
+    ) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -195,12 +211,17 @@ class SettingsScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color:Theme.of(context).brightness == Brightness.dark ? Color.fromRGBO(5, 49, 57, 1) : Color.fromRGBO(227, 255, 254, 1),
+                color:
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Color.fromRGBO(5, 49, 57, 1)
+                        : Color.fromRGBO(227, 255, 254, 1),
               ),
-              width:MediaQuery.of(context).size.shortestSide >
-                                            600 ?  343 : MediaQuery.of(context).size.width - 20,
-              height:MediaQuery.of(context).size.shortestSide >
-                                            600 ? 250 : 230,
+              width:
+                  MediaQuery.of(context).size.shortestSide > 600
+                      ? 343
+                      : MediaQuery.of(context).size.width - 20,
+              height:
+                  MediaQuery.of(context).size.shortestSide > 600 ? 250 : 230,
               child: Column(
                 children: [
                   // Row(
@@ -220,9 +241,7 @@ class SettingsScreen extends StatelessWidget {
                   //     ),
                   //   ],
                   // ),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  SizedBox(height: 30),
                   Text(
                     title,
                     textAlign: TextAlign.center,
@@ -231,22 +250,24 @@ class SettingsScreen extends StatelessWidget {
                       fontSize: 23,
                     ),
                   ),
-                  const SizedBox(
-                    height: 7,
-                  ),
+                  const SizedBox(height: 7),
                   Expanded(
                     child: Center(
                       child: Text(
                         subTitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 15, color: Theme.of(context).brightness == Brightness.dark ? Color.fromRGBO(132, 134, 152, 1) : null),
+                          fontWeight: FontWeight.w300,
+                          fontSize: 15,
+                          color:
+                              Theme.of(context).brightness == Brightness.dark
+                                  ? Color.fromRGBO(132, 134, 152, 1)
+                                  : null,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -254,27 +275,31 @@ class SettingsScreen extends StatelessWidget {
                         onTap: () {
                           if (buttonText == 'Yes, log out') {
                             context.read<AuthenticationBloc>().add(SignOut());
-                            context
-                                .read<SubscriptionsBloc>()
-                                .add(GetSubscriptionStatus());
+                            context.read<SubscriptionsBloc>().add(
+                              GetSubscriptionStatus(),
+                            );
                             Navigator.of(context).pop();
                           } else if (buttonText == 'Yes, delete') {
-                            context
-                                .read<AuthenticationBloc>()
-                                .add(DeleteUser());
+                            context.read<AuthenticationBloc>().add(
+                              DeleteUser(),
+                            );
                             Navigator.of(context).pop();
                           }
                         },
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          width:MediaQuery.of(context).size.shortestSide >
-                                            600 ?  343/2.3 : MediaQuery.of(context).size.width / 2.3,
+                          width:
+                              MediaQuery.of(context).size.shortestSide > 600
+                                  ? 343 / 2.3
+                                  : MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 3)),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                              width: 3,
+                            ),
+                          ),
                           child: Text(
                             buttonText,
                             style: TextStyle(
@@ -284,9 +309,7 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      SizedBox(width: 10),
                       InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
@@ -294,8 +317,10 @@ class SettingsScreen extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          width:MediaQuery.of(context).size.shortestSide >
-                                            600 ?  343/2.3 : MediaQuery.of(context).size.width / 2.3,
+                          width:
+                              MediaQuery.of(context).size.shortestSide > 600
+                                  ? 343 / 2.3
+                                  : MediaQuery.of(context).size.width / 2.3,
                           decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.circular(12),
@@ -323,67 +348,86 @@ class SettingsScreen extends StatelessWidget {
 
     final List<ButtonItem> mainGroup = [
       ButtonItem(
-          title: 'App Bundle',
-          leadingIcon: Assets.icons.present,
-          onTap: onPressSubscription1,
-          trailing: Container(
-              width: 90,
-              margin: const EdgeInsets.only(left: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: Color.fromRGBO(90, 255, 245, 1)),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-              child: const Text(
-                'New',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              ))),
+        title: 'App Bundle',
+        leadingIcon: Assets.icons.present,
+        onTap: onPressSubscription1,
+        trailing: Container(
+          width: 90,
+          margin: const EdgeInsets.only(left: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: Color.fromRGBO(90, 255, 245, 1),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          child: const Text(
+            'New',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
       ButtonItem(
-          title: 'Subscription',
-          leadingIcon: Assets.icons.crown,
-          onTap: onPressSubscription,
-          trailing: Container(
-              width: 90,
-              margin: const EdgeInsets.only(left: 10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  gradient: const LinearGradient(colors: [
-                    Color.fromRGBO(255, 238, 90, 1),
-                    Color.fromRGBO(255, 208, 74, 1)
-                  ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-              child: const Text(
-                'Upgrade',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              ))),
+        title: 'Subscription',
+        leadingIcon: Assets.icons.crown,
+        onTap: onPressSubscription,
+        trailing: Container(
+          width: 90,
+          margin: const EdgeInsets.only(left: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromRGBO(255, 238, 90, 1),
+                Color.fromRGBO(255, 208, 74, 1),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          child: const Text(
+            'Upgrade',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
       ButtonItem(
         title: 'Add Summify for Chrome',
         leadingIcon: Assets.icons.chromeMini,
         trailing: Container(
-            width: 90,
-            margin: const EdgeInsets.only(left: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                gradient: const LinearGradient(colors: [
-                  Color.fromRGBO(255, 238, 90, 1),
-                  Color.fromRGBO(255, 208, 74, 1)
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-            child: const Text(
-              'Free',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500),
-            )),
+          width: 90,
+          margin: const EdgeInsets.only(left: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromRGBO(255, 238, 90, 1),
+                Color.fromRGBO(255, 208, 74, 1),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          child: const Text(
+            'Free',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
         onTap: onPressChrome,
       ),
       ButtonItem(
@@ -401,55 +445,57 @@ class SettingsScreen extends StatelessWidget {
 
     final List<ButtonItem> generalGroup = [
       ButtonItem(
-          title: l10n.settings_interfaceLanguage,
-          leadingIcon: Assets.icons.translate,
-          onTap: () => interfaceLanguageDialog(context: context),
-          trailing: BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (context, state) {
-              final label =
-                  uiLanguages[state.uiLocaleCode] ?? uiLanguages['system']!;
-              return Row(
-                children: [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodySmall!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                    color: Theme.of(context).textTheme.bodySmall!.color!,
-                  )
-                ],
-              );
-            },
-          )),
+        title: l10n.settings_interfaceLanguage,
+        leadingIcon: Assets.icons.translate,
+        onTap: () => interfaceLanguageDialog(context: context),
+        trailing: BlocBuilder<SettingsBloc, SettingsState>(
+          builder: (context, state) {
+            final label =
+                uiLanguages[state.uiLocaleCode] ?? uiLanguages['system']!;
+            return Row(
+              children: [
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.bodySmall!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                  color: Theme.of(context).textTheme.bodySmall!.color!,
+                ),
+              ],
+            );
+          },
+        ),
+      ),
       ButtonItem(
-          title: l10n.settings_translationLanguage,
-          leadingIcon: Assets.icons.translate,
-          onTap: () => translateDialog(context: context),
-          trailing: BlocBuilder<SettingsBloc, SettingsState>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  Text(
-                    translateLanguages[state.translateLanguage]!
-                        .replaceAll('(Simplified)', '')
-                        .replaceAll('(Traditional)', ''),
-                    style: Theme.of(context).textTheme.bodySmall!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                    color: Theme.of(context).textTheme.bodySmall!.color!,
-                  )
-                ],
-              );
-            },
-          )),
+        title: l10n.settings_translationLanguage,
+        leadingIcon: Assets.icons.translate,
+        onTap: () => translateDialog(context: context),
+        trailing: BlocBuilder<SettingsBloc, SettingsState>(
+          builder: (context, state) {
+            return Row(
+              children: [
+                Text(
+                  translateLanguages[state.translateLanguage]!
+                      .replaceAll('(Simplified)', '')
+                      .replaceAll('(Traditional)', ''),
+                  style: Theme.of(context).textTheme.bodySmall!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 20,
+                  color: Theme.of(context).textTheme.bodySmall!.color!,
+                ),
+              ],
+            );
+          },
+        ),
+      ),
       ButtonItem(
         title: 'Notifications',
         leadingIcon: Assets.icons.notification,
@@ -499,250 +545,257 @@ class SettingsScreen extends StatelessWidget {
         title: 'Restore purchase',
         leadingIcon: Assets.icons.restore,
         onTap: onPressRestore,
-      )
+      ),
     ];
 
     final List<ButtonItem> authGroup = [
       ButtonItem(
-          title: 'Log out',
-          leadingIcon: Assets.icons.logout,
-          onTap: () {
-            showAuthDialog(context, 'Are you sure you\nwant to log out?',
-                'Come back soon, we\'ll be\nwaiting for you!', 'Yes, log out');
-          }),
+        title: 'Log out',
+        leadingIcon: Assets.icons.logout,
+        onTap: () {
+          showAuthDialog(
+            context,
+            'Are you sure you\nwant to log out?',
+            'Come back soon, we\'ll be\nwaiting for you!',
+            'Yes, log out',
+          );
+        },
+      ),
       ButtonItem(
-          title: 'Delete account',
-          leadingIcon: Assets.icons.deleteAccount,
-          onTap: () {
-            showAuthDialog(
-                context,
-                'Are you sure that you\nwant to delete your account?',
-                'Please note that all your documents will\nalso be deleted!',
-                'Yes, delete');
-          })
+        title: 'Delete account',
+        leadingIcon: Assets.icons.deleteAccount,
+        onTap: () {
+          showAuthDialog(
+            context,
+            'Are you sure that you\nwant to delete your account?',
+            'Please note that all your documents will\nalso be deleted!',
+            'Yes, delete',
+          );
+        },
+      ),
     ];
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
-        listenWhen: (_, current) => current is AuthenticationSuccessState,
-        listener: (context, state) {
-          context.read<SubscriptionsBloc>().add(const GetSubscriptionStatus());
-        },
-        builder: (context, state) {
-          return Stack(
-            children: [
-              const BackgroundGradient(),
-              Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  surfaceTintColor: Colors.transparent,
-                  title: Text(l10n.settings_profile),
+      listenWhen: (_, current) => current is AuthenticationSuccessState,
+      listener: (context, state) {
+        context.read<SubscriptionsBloc>().add(const GetSubscriptionStatus());
+      },
+      builder: (context, state) {
+        return Stack(
+          children: [
+            const BackgroundGradient(),
+            Scaffold(
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                title: Text(l10n.settings_profile),
+              ),
+              body: Container(
+                height: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
                 ),
-                body: Container(
-                    height: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Container(
-                            // profile
-                            padding: const EdgeInsets.symmetric(vertical: 0),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.2),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(8))),
-                            child: Column(
-                              children: [
-                                Material(
-                                  color: Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8)),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    child: StreamBuilder<User?>(
-                                        stream: FirebaseAuth.instance
-                                            .authStateChanges(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const CircularProgressIndicator();
-                                          } else if (snapshot.hasData) {
-                                            return Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Container(
+                        // profile
+                        padding: const EdgeInsets.symmetric(vertical: 0),
+                        decoration: BoxDecoration(
+                          color: Theme.of(
+                            context,
+                          ).primaryColor.withOpacity(0.2),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Material(
+                              color: Theme.of(
+                                context,
+                              ).primaryColor.withOpacity(0),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                child: StreamBuilder<User?>(
+                                  stream:
+                                      FirebaseAuth.instance.authStateChanges(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    } else if (snapshot.hasData) {
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 15,
+                                            ),
+                                            child: SvgPicture.asset(
+                                              Assets.icons.profile,
+                                              height: 35,
+                                              colorFilter: ColorFilter.mode(
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodySmall!.color!,
+                                                BlendMode.srcIn,
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Hello!',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  color:
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .color,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              Text(
+                                                displayName,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  color:
+                                                      Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .color,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.of(
+                                            context,
+                                          ).pushNamed('/login');
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 15,
+                                                  ),
+                                              child: SvgPicture.asset(
+                                                Assets.icons.login,
+                                                height: 35,
+                                                colorFilter: ColorFilter.mode(
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall!.color!,
+                                                  BlendMode.srcIn,
+                                                ),
+                                              ),
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 15),
-                                                  child: SvgPicture.asset(
-                                                    Assets.icons.profile,
-                                                    height: 35,
-                                                    colorFilter:
-                                                        ColorFilter.mode(
-                                                            Theme.of(context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .color!,
-                                                            BlendMode.srcIn),
+                                                Text(
+                                                  'Never lose your data!',
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    color:
+                                                        Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .color,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Hello!',
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .color,
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w400),
-                                                    ),
-                                                    Text(
-                                                      displayName,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .color,
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ),
-                                                  ],
+                                                Text(
+                                                  'Log in',
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    color:
+                                                        Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .color,
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
                                                 ),
                                               ],
-                                            );
-                                          } else {
-                                            return InkWell(
-                                              onTap: () {
-                                                Navigator.of(context).pushNamed(
-                                                  '/login',
-                                                );
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 15),
-                                                    child: SvgPicture.asset(
-                                                      Assets.icons.login,
-                                                      height: 35,
-                                                      colorFilter:
-                                                          ColorFilter.mode(
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .color!,
-                                                              BlendMode.srcIn),
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        'Never lose your data!',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .color,
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                      ),
-                                                      Text(
-                                                        'Log in',
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .color,
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                        }),
-                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          MainGroup(
-                            items: mainGroup,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          ButtonsGroup(title: l10n.settings_general, items: generalGroup),
-                          // ButtonsGroup(title: 'Membership', items: membershipGroup),
-                          ButtonsGroup(title: 'About', items: aboutGroup),
-                          ButtonsGroup(title: 'Support', items: supportGroup),
-                          StreamBuilder<User?>(
-                              stream: FirebaseAuth.instance.authStateChanges(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData &&
-                                    snapshot.connectionState !=
-                                        ConnectionState.waiting) {
-                                  return ButtonsGroupAuth(
-                                    items: authGroup,
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              }),
-                          Text('version 1.6.1',
-                              textAlign: TextAlign.end,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(height: 1))
-                        ],
+                          ],
+                        ),
                       ),
-                    )),
+                      const SizedBox(height: 15),
+                      MainGroup(items: mainGroup),
+                      const SizedBox(height: 15),
+                      ButtonsGroup(
+                        title: l10n.settings_general,
+                        items: generalGroup,
+                      ),
+                      // ButtonsGroup(title: 'Membership', items: membershipGroup),
+                      ButtonsGroup(title: 'About', items: aboutGroup),
+                      ButtonsGroup(title: 'Support', items: supportGroup),
+                      StreamBuilder<User?>(
+                        stream: FirebaseAuth.instance.authStateChanges(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.connectionState !=
+                                  ConnectionState.waiting) {
+                            return ButtonsGroupAuth(items: authGroup);
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      const TtsSettingsSection(),
+                      Text(
+                        'version 1.6.1',
+                        textAlign: TextAlign.end,
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall!.copyWith(height: 1),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ],
-          );
-        });
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -762,25 +815,28 @@ class BackArrow extends StatelessWidget {
     }
 
     return IconButton(
-        visualDensity: VisualDensity.compact,
-        onPressed: onPressClose,
-        style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
-            minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.black),
-              ),
-            ),
-            backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).iconTheme.color!.withOpacity(0))),
-        highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
-        icon: Icon(
-          Icons.close,
-          size: 18,
-          color: Theme.of(context).iconTheme.color,
-        ));
+      visualDensity: VisualDensity.compact,
+      onPressed: onPressClose,
+      style: ButtonStyle(
+        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+        minimumSize: MaterialStateProperty.all<Size>(Size(33, 33)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.0),
+            side: BorderSide(color: Colors.black),
+          ),
+        ),
+        backgroundColor: MaterialStatePropertyAll(
+          Theme.of(context).iconTheme.color!.withOpacity(0),
+        ),
+      ),
+      highlightColor: Theme.of(context).iconTheme.color!.withOpacity(0.3),
+      icon: Icon(
+        Icons.close,
+        size: 18,
+        color: Theme.of(context).iconTheme.color,
+      ),
+    );
   }
 }
 
@@ -814,35 +870,46 @@ class _ThemeButtonsState extends State<ThemeButtons> {
       builder: (context, state) {
         return Container(
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(8)),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
           padding: const EdgeInsets.all(2),
           child: Row(
             mainAxisSize: MainAxisSize.max,
-            children: themeItems
-                .map((themeItem) => Container(
-                      width: 50,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5, vertical: 2),
-                      decoration: BoxDecoration(
-                          color: themeItem.appTheme == state.appTheme
-                              ? Theme.of(context).highlightColor
-                              : Colors.white24,
-                          borderRadius: BorderRadius.circular(6)),
-                      child: InkWell(
-                        onTap: () =>
-                            onSelectTheme(appTheme: themeItem.appTheme),
-                        child: Text(
-                          themeItem.title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
+            children:
+                themeItems
+                    .map(
+                      (themeItem) => Container(
+                        width: 50,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              themeItem.appTheme == state.appTheme
+                                  ? Theme.of(context).highlightColor
+                                  : Colors.white24,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: InkWell(
+                          onTap:
+                              () => onSelectTheme(appTheme: themeItem.appTheme),
+                          child: Text(
+                            themeItem.title,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
                               fontSize: 14,
-                              color: themeItem.appTheme == state.appTheme
-                                  ? Colors.white
-                                  : Colors.black),
+                              color:
+                                  themeItem.appTheme == state.appTheme
+                                      ? Colors.white
+                                      : Colors.black,
+                            ),
+                          ),
                         ),
                       ),
-                    ))
-                .toList(),
+                    )
+                    .toList(),
           ),
         );
       },
@@ -867,8 +934,9 @@ class NotificationsSwitch extends StatelessWidget {
             scale: 0.9,
             child: Switch(
               inactiveThumbColor: Colors.grey.shade500,
-              trackOutlineColor:
-                  MaterialStatePropertyAll(Theme.of(context).highlightColor),
+              trackOutlineColor: MaterialStatePropertyAll(
+                Theme.of(context).highlightColor,
+              ),
               activeColor: Theme.of(context).highlightColor,
               activeTrackColor: Colors.white,
               inactiveTrackColor: Colors.white,
@@ -897,91 +965,105 @@ class MainGroup extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 0),
           decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(8))),
+            color: Theme.of(context).primaryColor,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
           child: Column(
-            children: items
-                .map(
-                  (item) => Column(
-                    children: [
-                      Material(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                        child: InkWell(
-                          onTap: () => item.onTap(),
-                          highlightColor: Colors.white24,
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            decoration: BoxDecoration(
-                                gradient: item.background,
-                                borderRadius: item.background != null
-                                    ? const BorderRadius.only(
-                                        bottomLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(8))
-                                    : const BorderRadius.all(
-                                        Radius.circular(8))),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  child: SvgPicture.asset(
-                                    item.leadingIcon,
-                                    height: 20,
-                                    colorFilter: ColorFilter.mode(
-                                        Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .color!,
-                                        BlendMode.srcIn),
-                                  ),
+            children:
+                items
+                    .map(
+                      (item) => Column(
+                        children: [
+                          Material(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                            child: InkWell(
+                              onTap: () => item.onTap(),
+                              highlightColor: Colors.white24,
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
                                 ),
-                                Flexible(
-                                    fit: FlexFit.tight,
-                                    child: Text(
-                                      item.title,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!
-                                              .color,
+                                decoration: BoxDecoration(
+                                  gradient: item.background,
+                                  borderRadius:
+                                      item.background != null
+                                          ? const BorderRadius.only(
+                                            bottomLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          )
+                                          : const BorderRadius.all(
+                                            Radius.circular(8),
+                                          ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                      ),
+                                      child: SvgPicture.asset(
+                                        item.leadingIcon,
+                                        height: 20,
+                                        colorFilter: ColorFilter.mode(
+                                          Theme.of(
+                                            context,
+                                          ).textTheme.bodySmall!.color!,
+                                          BlendMode.srcIn,
+                                        ),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Text(
+                                        item.title,
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                          color:
+                                              Theme.of(
+                                                context,
+                                              ).textTheme.bodySmall!.color,
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                    )),
-                                Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: item.trailing ??
-                                        Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 20,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!
-                                              .color,
-                                        ))
-                              ],
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child:
+                                          item.trailing ??
+                                          Icon(
+                                            Icons.arrow_forward_ios,
+                                            size: 20,
+                                            color:
+                                                Theme.of(
+                                                  context,
+                                                ).textTheme.bodySmall!.color,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          if (items.indexOf(item) != items.length - 1)
+                            Divider(
+                              height: 1,
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodySmall!.color!.withOpacity(0.5),
+                            ),
+                        ],
                       ),
-                      if (items.indexOf(item) != items.length - 1)
-                        Divider(
-                          height: 1,
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .color!
-                              .withOpacity(0.5),
-                        )
-                    ],
-                  ),
-                )
-                .toList(),
+                    )
+                    .toList(),
           ),
         ),
       ],
@@ -1014,130 +1096,144 @@ class _ButtonsGroupState extends State<ButtonsGroup> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            padding: EdgeInsets.only(bottom: 0),
-            child: Row(
-              children: [
-                Text(
-                  widget.title,
-                  textAlign: TextAlign.start,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
+          duration: Duration(milliseconds: 300),
+          padding: EdgeInsets.only(bottom: 0),
+          child: Row(
+            children: [
+              Text(
+                widget.title,
+                textAlign: TextAlign.start,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
                 ),
-                const Spacer(),
-                // IconButton(
-                //     visualDensity: VisualDensity.compact,
-                //     padding: EdgeInsets.zero,
-                //     color: Theme.of(context).textTheme.bodyMedium!.color,
-                //     style: const ButtonStyle(
-                //         iconSize: MaterialStatePropertyAll(20)),
-                //     onPressed: onToggleOpen,
-                //     icon: Transform.rotate(
-                //         angle: !isOpen ? -pi : -pi / 2,
-                //         child: const Icon(Icons.arrow_back_ios_rounded)))
-              ],
-            )),
+              ),
+              const Spacer(),
+              // IconButton(
+              //     visualDensity: VisualDensity.compact,
+              //     padding: EdgeInsets.zero,
+              //     color: Theme.of(context).textTheme.bodyMedium!.color,
+              //     style: const ButtonStyle(
+              //         iconSize: MaterialStatePropertyAll(20)),
+              //     onPressed: onToggleOpen,
+              //     icon: Transform.rotate(
+              //         angle: !isOpen ? -pi : -pi / 2,
+              //         child: const Icon(Icons.arrow_back_ios_rounded)))
+            ],
+          ),
+        ),
         AnimatedCrossFade(
-            firstChild: Container(
-              clipBehavior: Clip.hardEdge,
-              margin: const EdgeInsets.only(bottom: 15),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor.withOpacity(0.2),
-                  borderRadius: const BorderRadius.all(Radius.circular(8))),
-              child: Column(
-                children: widget.items
-                    .map(
-                      (item) => Column(
-                        children: [
-                          Material(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                            child: InkWell(
-                              onTap: () => item.onTap(),
-                              highlightColor: Colors.white24,
-                              // borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                decoration: BoxDecoration(
+          firstChild: Container(
+            clipBehavior: Clip.hardEdge,
+            margin: const EdgeInsets.only(bottom: 15),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor.withOpacity(0.2),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Column(
+              children:
+                  widget.items
+                      .map(
+                        (item) => Column(
+                          children: [
+                            Material(
+                              color: Theme.of(
+                                context,
+                              ).primaryColor.withOpacity(0),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              child: InkWell(
+                                onTap: () => item.onTap(),
+                                highlightColor: Colors.white24,
+                                // borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
                                     gradient: item.background,
-                                    borderRadius: item.background != null
-                                        ? const BorderRadius.only(
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8))
-                                        : const BorderRadius.all(
-                                            Radius.circular(8))),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: SvgPicture.asset(
-                                        item.leadingIcon,
-                                        height: 20,
-                                        colorFilter: ColorFilter.mode(
-                                            Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .color!,
-                                            BlendMode.srcIn),
+                                    borderRadius:
+                                        item.background != null
+                                            ? const BorderRadius.only(
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8),
+                                            )
+                                            : const BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                        ),
+                                        child: SvgPicture.asset(
+                                          item.leadingIcon,
+                                          height: 20,
+                                          colorFilter: ColorFilter.mode(
+                                            Theme.of(
+                                              context,
+                                            ).textTheme.bodySmall!.color!,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    Flexible(
+                                      Flexible(
                                         fit: FlexFit.tight,
                                         child: Text(
                                           item.title,
                                           textAlign: TextAlign.start,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!
-                                              .copyWith(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400),
-                                        )),
-                                    Padding(
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodySmall!.copyWith(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: item.trailing ??
+                                          horizontal: 10,
+                                        ),
+                                        child:
+                                            item.trailing ??
                                             Icon(
                                               Icons.arrow_forward_ios,
                                               size: 20,
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .color,
-                                            ))
-                                  ],
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall!.color,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          if (widget.items.indexOf(item) !=
-                              widget.items.length - 1)
-                            Divider(
-                              height: 1,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .color!
-                                  .withOpacity(0.5),
-                            )
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
+                            if (widget.items.indexOf(item) !=
+                                widget.items.length - 1)
+                              Divider(
+                                height: 1,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodySmall!.color!.withOpacity(0.5),
+                              ),
+                          ],
+                        ),
+                      )
+                      .toList(),
             ),
-            secondChild: Container(),
-            crossFadeState:
-                isOpen ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            duration: Duration(milliseconds: 300)),
+          ),
+          secondChild: Container(),
+          crossFadeState:
+              isOpen ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: Duration(milliseconds: 300),
+        ),
       ],
     );
   }
@@ -1167,88 +1263,103 @@ class _ButtonsGroupStateAuth extends State<ButtonsGroupAuth> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AnimatedCrossFade(
-            firstChild: Container(
-              clipBehavior: Clip.hardEdge,
-              margin: const EdgeInsets.only(bottom: 15),
-              decoration: BoxDecoration(
-                  //color: Theme.of(context).primaryColor.withOpacity(0.2),
-                  borderRadius: const BorderRadius.all(Radius.circular(8))),
-              child: Column(
-                children: widget.items
-                    .map(
-                      (item) => Column(
-                        children: [
-                          Material(
-                            color:
-                                Theme.of(context).primaryColor.withOpacity(0),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                            child: InkWell(
-                              onTap: () => item.onTap(),
-                              highlightColor: Colors.white24,
-                              // borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                decoration: BoxDecoration(
+          firstChild: Container(
+            clipBehavior: Clip.hardEdge,
+            margin: const EdgeInsets.only(bottom: 15),
+            decoration: BoxDecoration(
+              //color: Theme.of(context).primaryColor.withOpacity(0.2),
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Column(
+              children:
+                  widget.items
+                      .map(
+                        (item) => Column(
+                          children: [
+                            Material(
+                              color: Theme.of(
+                                context,
+                              ).primaryColor.withOpacity(0),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              child: InkWell(
+                                onTap: () => item.onTap(),
+                                highlightColor: Colors.white24,
+                                // borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                  ),
+                                  decoration: BoxDecoration(
                                     gradient: item.background,
-                                    borderRadius: item.background != null
-                                        ? const BorderRadius.only(
-                                            bottomLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8))
-                                        : const BorderRadius.all(
-                                            Radius.circular(8))),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: SvgPicture.asset(
-                                        item.leadingIcon,
-                                        height: 20,
+                                    borderRadius:
+                                        item.background != null
+                                            ? const BorderRadius.only(
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8),
+                                            )
+                                            : const BorderRadius.all(
+                                              Radius.circular(8),
+                                            ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                        ),
+                                        child: SvgPicture.asset(
+                                          item.leadingIcon,
+                                          height: 20,
+                                        ),
                                       ),
-                                    ),
-                                    Flexible(
+                                      Flexible(
                                         fit: FlexFit.tight,
                                         child: Text(
                                           item.title,
                                           textAlign: TextAlign.start,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!
-                                              .copyWith(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400),
-                                        )),
-                                    Padding(
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodySmall!.copyWith(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        child: item.trailing ??
+                                          horizontal: 10,
+                                        ),
+                                        child:
+                                            item.trailing ??
                                             Icon(
                                               Icons.arrow_forward_ios,
                                               size: 20,
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .color,
-                                            ))
-                                  ],
+                                              color:
+                                                  Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall!.color,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
+                          ],
+                        ),
+                      )
+                      .toList(),
             ),
-            secondChild: Container(),
-            crossFadeState:
-                isOpen ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-            duration: Duration(milliseconds: 300)),
+          ),
+          secondChild: Container(),
+          crossFadeState:
+              isOpen ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+          duration: Duration(milliseconds: 300),
+        ),
       ],
     );
   }

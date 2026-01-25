@@ -15,15 +15,20 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
   final Brightness brightness;
 
   SettingsBloc({required this.brightness})
-      : super(SettingsState(
-            onboardingPassed: false,
-            howToShowed: false,
-            isNotificationsEnabled: true,
-            appTheme: AppTheme.auto,
-            subscriptionsSynced: false,
-            translateLanguage: 'en',
-            fontSize: 18,
-            abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B')) {
+    : super(
+        SettingsState(
+          onboardingPassed: false,
+          howToShowed: false,
+          isNotificationsEnabled: true,
+          appTheme: AppTheme.auto,
+          subscriptionsSynced: false,
+          translateLanguage: 'en',
+          fontSize: 18,
+          abTest: (DateTime.now().minute % 2) == 1 ? 'A' : 'B',
+          kokoroVoiceId: 'af',
+          kokoroSynthesisSpeed: 1.0,
+        ),
+      ) {
     on<PassOnboarding>((event, emit) {
       emit(state.copyWith(onboardingPassed: true));
     });
@@ -36,21 +41,21 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
       if (state.isNotificationsEnabled) {
         Future.delayed(const Duration(seconds: 1), () {
           NotificationService().showNotification(
-              title: 'Your summary is ready! Open and get useful insights.',
-              body: event.title);
+            title: 'Your summary is ready! Open and get useful insights.',
+            body: event.title,
+          );
         });
       }
     });
 
     on<ToggleNotifications>((event, emit) {
-      emit(state.copyWith(
-          isNotificationsEnabled: !state.isNotificationsEnabled));
+      emit(
+        state.copyWith(isNotificationsEnabled: !state.isNotificationsEnabled),
+      );
     });
 
     on<SelectAppTheme>((event, emit) async {
-      emit(state.copyWith(
-        appTheme: event.appTheme,
-      ));
+      emit(state.copyWith(appTheme: event.appTheme));
     });
 
     on<SetPurchasesSync>((event, emit) async {
@@ -77,6 +82,14 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
         final nextSize = fontSizes[fontSizes.indexOf(state.fontSize) - 1];
         emit(state.copyWith(fontSize: nextSize));
       }
+    });
+
+    on<SetKokoroVoiceId>((event, emit) {
+      emit(state.copyWith(kokoroVoiceId: event.kokoroVoiceId));
+    });
+
+    on<SetKokoroSynthesisSpeed>((event, emit) {
+      emit(state.copyWith(kokoroSynthesisSpeed: event.kokoroSynthesisSpeed));
     });
   }
 

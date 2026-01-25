@@ -219,6 +219,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get summary_breakThroughTheLimits => '突破限制';
 
   @override
+  String get summary_sourceTab => '来源';
+
+  @override
+  String get summary_sourceNotAvailable => '此类摘要无法使用源文本';
+
+  @override
   String get quiz_failedToGenerate => '生成测验失败';
 
   @override
@@ -516,6 +522,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get request_selectLanguage => '选择语言';
+
+  @override
+  String get ttsDownloadDialogTitle => 'Downloading voice model';
+
+  @override
+  String get ttsDownloadDialogBody =>
+      'Please keep the app open while we download the voice resources.';
+
+  @override
+  String get ttsModelReadyTitle => 'Voice model ready';
+
+  @override
+  String get ttsModelReadyMessage =>
+      'Voice model downloaded successfully. You can choose a voice in Settings.';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -733,6 +753,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get summary_breakThroughTheLimits => '突破限制';
 
   @override
+  String get summary_sourceTab => '来源';
+
+  @override
+  String get summary_sourceNotAvailable => '此类摘要无法使用源文本';
+
+  @override
   String get quiz_failedToGenerate => '生成测验失败';
 
   @override
@@ -1030,4 +1056,18 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get request_selectLanguage => '选择语言';
+
+  @override
+  String get ttsDownloadDialogTitle => 'Downloading voice model';
+
+  @override
+  String get ttsDownloadDialogBody =>
+      'Please keep the app open while we download the voice resources.';
+
+  @override
+  String get ttsModelReadyTitle => 'Voice model ready';
+
+  @override
+  String get ttsModelReadyMessage =>
+      'Voice model downloaded successfully. You can choose a voice in Settings.';
 }

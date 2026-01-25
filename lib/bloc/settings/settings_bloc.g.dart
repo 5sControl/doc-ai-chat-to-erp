@@ -17,6 +17,9 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
       translateLanguage: json['translateLanguage'] as String,
       uiLocaleCode: json['uiLocaleCode'] as String? ?? 'system',
       fontSize: (json['fontSize'] as num).toInt(),
+      kokoroVoiceId: json['kokoroVoiceId'] as String? ?? 'af',
+      kokoroSynthesisSpeed:
+          (json['kokoroSynthesisSpeed'] as num?)?.toDouble() ?? 1.0,
     );
 
 Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
@@ -30,6 +33,8 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
       'translateLanguage': instance.translateLanguage,
       'uiLocaleCode': instance.uiLocaleCode,
       'fontSize': instance.fontSize,
+      'kokoroVoiceId': instance.kokoroVoiceId,
+      'kokoroSynthesisSpeed': instance.kokoroSynthesisSpeed,
     };
 
 const _$AppThemeEnumMap = {

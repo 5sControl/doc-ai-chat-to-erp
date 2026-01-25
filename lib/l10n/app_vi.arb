@@ -221,5 +221,10 @@
   "request_message": "Tin nhắn",
   "request_enterYourRequest": "Nhập yêu cầu của bạn",
   "request_submit": "Gửi",
-  "request_selectLanguage": "Chọn ngôn ngữ"
+  "request_selectLanguage": "Chọn ngôn ngữ",
+
+  "ttsDownloadDialogTitle": "Downloading voice model",
+  "ttsDownloadDialogBody": "Please keep the app open while we download the voice resources.",
+  "ttsModelReadyTitle": "Voice model ready",
+  "ttsModelReadyMessage": "Voice model downloaded successfully. You can choose a voice in Settings."
 }

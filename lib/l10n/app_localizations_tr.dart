@@ -224,6 +224,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Sınırları aşın';
 
   @override
+  String get summary_sourceTab => 'Kaynak';
+
+  @override
+  String get summary_sourceNotAvailable =>
+      'Bu tür özet için kaynak metin mevcut değil';
+
+  @override
   String get quiz_failedToGenerate => 'Quiz oluşturulamadı';
 
   @override
@@ -527,4 +534,18 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get request_selectLanguage => 'Dil seç';
+
+  @override
+  String get ttsDownloadDialogTitle => 'Ses modeli indiriliyor';
+
+  @override
+  String get ttsDownloadDialogBody =>
+      'Ses kaynaklarını indirirken uygulamayı açık tutun.';
+
+  @override
+  String get ttsModelReadyTitle => 'Ses modeli hazır';
+
+  @override
+  String get ttsModelReadyMessage =>
+      'Ses modeli başarıyla indirildi. Ayarlarda bir ses seçebilirsiniz.';
 }

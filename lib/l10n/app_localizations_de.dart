@@ -226,6 +226,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Überwinde die Grenzen';
 
   @override
+  String get summary_sourceTab => 'Quelle';
+
+  @override
+  String get summary_sourceNotAvailable =>
+      'Quelltext ist für diese Art von Zusammenfassung nicht verfügbar';
+
+  @override
   String get quiz_failedToGenerate => 'Quiz konnte nicht generiert werden';
 
   @override
@@ -530,4 +537,18 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get request_selectLanguage => 'Sprache auswählen';
+
+  @override
+  String get ttsDownloadDialogTitle => 'Downloading voice model';
+
+  @override
+  String get ttsDownloadDialogBody =>
+      'Please keep the app open while we download the voice resources.';
+
+  @override
+  String get ttsModelReadyTitle => 'Voice model ready';
+
+  @override
+  String get ttsModelReadyMessage =>
+      'Voice model downloaded successfully. You can choose a voice in Settings.';
 }

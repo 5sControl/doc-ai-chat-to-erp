@@ -525,6 +525,18 @@ abstract class AppLocalizations {
   /// **'Break through the limits'**
   String get summary_breakThroughTheLimits;
 
+  /// No description provided for @summary_sourceTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get summary_sourceTab;
+
+  /// No description provided for @summary_sourceNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Source text is not available for this type of summary'**
+  String get summary_sourceNotAvailable;
+
   /// No description provided for @quiz_failedToGenerate.
   ///
   /// In en, this message translates to:
@@ -1106,6 +1118,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select language'**
   String get request_selectLanguage;
+
+  /// No description provided for @ttsDownloadDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading voice model'**
+  String get ttsDownloadDialogTitle;
+
+  /// No description provided for @ttsDownloadDialogBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please keep the app open while we download the voice resources.'**
+  String get ttsDownloadDialogBody;
+
+  /// No description provided for @ttsModelReadyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice model ready'**
+  String get ttsModelReadyTitle;
+
+  /// No description provided for @ttsModelReadyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice model downloaded successfully. You can choose a voice in Settings.'**
+  String get ttsModelReadyMessage;
 }
 
 class _AppLocalizationsDelegate

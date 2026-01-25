@@ -79,3 +79,21 @@ class ScaleDownFontSize extends SettingsEvent {
   @override
   List<Object> get props => [];
 }
+
+class SetKokoroVoiceId extends SettingsEvent {
+  final String kokoroVoiceId;
+
+  const SetKokoroVoiceId({required this.kokoroVoiceId});
+
+  @override
+  List<Object> get props => [kokoroVoiceId];
+}
+
+class SetKokoroSynthesisSpeed extends SettingsEvent {
+  final double kokoroSynthesisSpeed;
+
+  const SetKokoroSynthesisSpeed({required this.kokoroSynthesisSpeed});
+
+  @override
+  List<Object> get props => [kokoroSynthesisSpeed];
+}

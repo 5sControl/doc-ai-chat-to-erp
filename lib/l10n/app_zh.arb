@@ -221,5 +221,10 @@
   "request_message": "信息",
   "request_enterYourRequest": "输入您的请求",
   "request_submit": "提交",
-  "request_selectLanguage": "选择语言"
+  "request_selectLanguage": "选择语言",
+
+  "ttsDownloadDialogTitle": "Downloading voice model",
+  "ttsDownloadDialogBody": "Please keep the app open while we download the voice resources.",
+  "ttsModelReadyTitle": "Voice model ready",
+  "ttsModelReadyMessage": "Voice model downloaded successfully. You can choose a voice in Settings."
 }

@@ -1,0 +1,19 @@
+{
+  "voices": [
+    {
+      "id": "af",
+      "name": "Amber (English US)",
+      "language": "en-US"
+    },
+    {
+      "id": "bf",
+      "name": "Basil (English GB)",
+      "language": "en-GB"
+    },
+    {
+      "id": "cf",
+      "name": "Celeste (English US)",
+      "language": "en-US"
+    }
+  ]
+}

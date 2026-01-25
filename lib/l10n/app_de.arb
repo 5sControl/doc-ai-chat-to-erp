@@ -221,5 +221,10 @@
   "request_message": "Nachricht",
   "request_enterYourRequest": "Gib deine Anfrage ein",
   "request_submit": "Senden",
-  "request_selectLanguage": "Sprache auswählen"
+  "request_selectLanguage": "Sprache auswählen",
+
+  "ttsDownloadDialogTitle": "Downloading voice model",
+  "ttsDownloadDialogBody": "Please keep the app open while we download the voice resources.",
+  "ttsModelReadyTitle": "Voice model ready",
+  "ttsModelReadyMessage": "Voice model downloaded successfully. You can choose a voice in Settings."
 }

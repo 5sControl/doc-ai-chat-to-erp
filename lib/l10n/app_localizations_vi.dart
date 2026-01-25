@@ -223,6 +223,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Vượt qua giới hạn';
 
   @override
+  String get summary_sourceTab => 'Nguồn';
+
+  @override
+  String get summary_sourceNotAvailable =>
+      'Văn bản nguồn không khả dụng cho loại tóm tắt này';
+
+  @override
   String get quiz_failedToGenerate => 'Không tạo được câu đố';
 
   @override
@@ -523,4 +530,18 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get request_selectLanguage => 'Chọn ngôn ngữ';
+
+  @override
+  String get ttsDownloadDialogTitle => 'Downloading voice model';
+
+  @override
+  String get ttsDownloadDialogBody =>
+      'Please keep the app open while we download the voice resources.';
+
+  @override
+  String get ttsModelReadyTitle => 'Voice model ready';
+
+  @override
+  String get ttsModelReadyMessage =>
+      'Voice model downloaded successfully. You can choose a voice in Settings.';
 }

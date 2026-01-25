@@ -94,6 +94,8 @@
   "summary_filePathNotFound": "Dosya yolu bulunamadı",
   "summary_originalTextNotAvailable": "Orijinal metin mevcut değil",
   "summary_breakThroughTheLimits": "Sınırları aşın",
+  "summary_sourceTab": "Kaynak",
+  "summary_sourceNotAvailable": "Bu tür özet için kaynak metin mevcut değil",
 
   "quiz_failedToGenerate": "Quiz oluşturulamadı",
   "quiz_retry": "Tekrar Dene",
@@ -219,5 +221,10 @@
   "request_message": "Mesaj",
   "request_enterYourRequest": "İsteğinizi girin",
   "request_submit": "Gönder",
-  "request_selectLanguage": "Dil seç"
+  "request_selectLanguage": "Dil seç",
+
+  "ttsDownloadDialogTitle": "Ses modeli indiriliyor",
+  "ttsDownloadDialogBody": "Ses kaynaklarını indirirken uygulamayı açık tutun.",
+  "ttsModelReadyTitle": "Ses modeli hazır",
+  "ttsModelReadyMessage": "Ses modeli başarıyla indirildi. Ayarlarda bir ses seçebilirsiniz."
 }
