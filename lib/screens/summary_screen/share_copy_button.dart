@@ -253,39 +253,44 @@ class _VoiceButtonState extends State<VoiceButton> {
           builder: (context, _, __) {
             final isDownloading = service.isDownloading;
             return ValueListenableBuilder<bool>(
-              valueListenable: service.isSpeaking,
-              builder: (context, isSpeaking, __) {
-                return MaterialButton(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
-                  color: const Color.fromRGBO(0, 186, 195, 1),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  onPressed:
-                      isDownloading
-                          ? null
-                          : () async {
-                            if (isSpeaking) {
-                              await service.stop();
-                            } else {
-                              await _handleVoicePlay(context);
-                            }
-                          },
-                  child:
-                      isDownloading
-                          ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
-                            ),
-                          )
-                          : Icon(
-                            isSpeaking ? Icons.pause : Icons.play_arrow,
-                            color: Colors.white,
-                            size: 26,
-                          ),
+              valueListenable: service.isGenerating,
+              builder: (context, isGenerating, __) {
+                return ValueListenableBuilder<bool>(
+                  valueListenable: service.isSpeaking,
+                  builder: (context, isSpeaking, __) {
+                    return MaterialButton(
+                      padding: const EdgeInsets.symmetric(vertical: 7),
+                      color: const Color.fromRGBO(0, 186, 195, 1),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                      ),
+                      onPressed:
+                          (isDownloading || isGenerating)
+                              ? null
+                              : () async {
+                                if (isSpeaking) {
+                                  await service.stop();
+                                } else {
+                                  await _handleVoicePlay(context);
+                                }
+                              },
+                      child:
+                          (isDownloading || isGenerating)
+                              ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                              )
+                              : Icon(
+                                isSpeaking ? Icons.pause : Icons.play_arrow,
+                                color: Colors.white,
+                                size: 26,
+                              ),
+                    );
+                  },
                 );
               },
             );

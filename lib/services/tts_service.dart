@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -60,6 +61,7 @@ class TtsService {
 
   final ValueNotifier<double> downloadProgress = ValueNotifier(0);
   final ValueNotifier<bool> isSpeaking = ValueNotifier(false);
+  final ValueNotifier<bool> isGenerating = ValueNotifier(false);
   final ValueNotifier<String?> textTruncationMessage = ValueNotifier(null);
   final Dio _dio = Dio();
   final ValueNotifier<List<TtsVoice>> voiceListNotifier = ValueNotifier(
@@ -242,6 +244,41 @@ class TtsService {
     return modelDir;
   }
 
+  /// Get cache directory for TTS audio files
+  Future<Directory> _getCacheDirectory() async {
+    final cacheDir = await getApplicationCacheDirectory();
+    final ttsCacheDir = Directory('${cacheDir.path}/tts_cache');
+    if (!await ttsCacheDir.exists()) {
+      await ttsCacheDir.create(recursive: true);
+    }
+    return ttsCacheDir;
+  }
+
+  /// Generate cache key from text, voiceId, and speed
+  String _getCacheKey(String text, String voiceId, double speed) {
+    final keyString = '$text|$voiceId|$speed';
+    final bytes = utf8.encode(keyString);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  /// Get cached audio file path if it exists
+  Future<File?> _getCachedAudioFile(String text, String voiceId, double speed) async {
+    try {
+      final cacheDir = await _getCacheDirectory();
+      final cacheKey = _getCacheKey(text, voiceId, speed);
+      final cachedFile = File('${cacheDir.path}/$cacheKey.wav');
+      if (await cachedFile.exists()) {
+        debugPrint('[TtsService] Found cached audio file: ${cachedFile.path}');
+        return cachedFile;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('[TtsService] Error checking cache: $e');
+      return null;
+    }
+  }
+
   Future<void> _loadVoicesFromFile(File voicesFile) async {
     if (!await voicesFile.exists()) {
       debugPrint('[TtsService] Voices file does not exist: ${voicesFile.path}');
@@ -422,6 +459,36 @@ class TtsService {
     if (text.trim().isEmpty) return;
     final completer = Completer<void>();
     try {
+      // Check cache first
+      final cachedFile = await _getCachedAudioFile(text, voiceId, speed);
+      if (cachedFile != null) {
+        // Use cached file
+        debugPrint('[TtsService] Using cached audio file');
+        _currentAudioPath = cachedFile.path;
+        
+        // Play audio using AudioPlayer
+        _speechCompleter = completer;
+        isSpeaking.value = true;
+
+        StreamSubscription? completeSubscription;
+        completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+          if (!completer.isCompleted) {
+            completer.complete();
+          }
+          completeSubscription?.cancel();
+        });
+
+        try {
+          await _audioPlayer.play(DeviceFileSource(cachedFile.path));
+          await completer.future;
+        } finally {
+          completeSubscription.cancel();
+        }
+        return;
+      }
+
+      // Set generating state to true
+      isGenerating.value = true;
       await ensureModelReady();
 
       if (_kokoro == null) {
@@ -554,11 +621,10 @@ class TtsService {
         debugPrint('[TtsService] Text was truncated from $originalLength to ${truncatedPhonemes.length} chars');
       }
 
-      // Save audio to temporary file
-      final tempDir = await getTemporaryDirectory();
-      final audioFile = File(
-        '${tempDir.path}/tts_${DateTime.now().millisecondsSinceEpoch}.wav',
-      );
+      // Save audio to cache directory
+      final cacheDir = await _getCacheDirectory();
+      final cacheKey = _getCacheKey(text, voiceId, speed);
+      final audioFile = File('${cacheDir.path}/$cacheKey.wav');
       _currentAudioPath = audioFile.path;
 
       // Convert audio data to Float32List and save to WAV file
@@ -569,6 +635,10 @@ class TtsService {
                 result.audio.map((e) => e.toDouble()).toList(),
               );
       await _saveAudioToFile(audioData, result.sampleRate, audioFile);
+      debugPrint('[TtsService] Saved audio to cache: ${audioFile.path}');
+
+      // Generation complete, set generating to false before starting playback
+      isGenerating.value = false;
 
       // Play audio using AudioPlayer
       _speechCompleter = completer;
@@ -601,6 +671,8 @@ class TtsService {
     } catch (error) {
       // Clear truncation message on error
       textTruncationMessage.value = null;
+      // Clear generating state on error
+      isGenerating.value = false;
       if (!completer.isCompleted) {
         completer.completeError(error);
       }
@@ -610,6 +682,8 @@ class TtsService {
         _speechCompleter = null;
       }
       isSpeaking.value = false;
+      // Ensure generating is false in finally block
+      isGenerating.value = false;
 
       // Clean up temporary audio file
       if (_currentAudioPath != null) {

@@ -31,6 +31,7 @@ import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
+import 'package:summify/services/tts_service.dart';
 import 'package:summify/themes/dark_theme.dart';
 import 'package:summify/themes/light_theme.dart';
 import 'bloc/subscriptions/subscriptions_bloc.dart';
@@ -320,6 +321,7 @@ class _SummishareAppState extends State<SummishareApp> {
               locale: localeFromUiCode(settingsState.uiLocaleCode),
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
+              navigatorObservers: [_TtsRouteObserver()],
               //builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',
@@ -388,5 +390,40 @@ class _SummishareAppState extends State<SummishareApp> {
             );
           },
         ));
+  }
+}
+
+/// RouteObserver that stops TTS when navigating away from current route
+class _TtsRouteObserver extends RouteObserver<PageRoute<dynamic>> {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPush(route, previousRoute);
+    // Stop TTS when navigating to a new route
+    if (previousRoute != null) {
+      TtsService.instance.stop();
+    }
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didPop(route, previousRoute);
+    // Stop TTS when popping back from a route
+    TtsService.instance.stop();
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    // Stop TTS when replacing a route
+    if (oldRoute != null) {
+      TtsService.instance.stop();
+    }
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    super.didRemove(route, previousRoute);
+    // Stop TTS when removing a route
+    TtsService.instance.stop();
   }
 }

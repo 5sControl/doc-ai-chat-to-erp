@@ -68,6 +68,9 @@ class _SummaryScreenState extends State<SummaryScreen>
       );
     }
     _tabController.addListener(() {
+      // Stop TTS when switching tabs
+      TtsService.instance.stop();
+      
       setState(() {
         activeTab = _tabController.index;
         String tabType;
