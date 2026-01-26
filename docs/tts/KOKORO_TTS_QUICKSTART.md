@@ -1,5 +1,13 @@
 # Kokoro TTS - Быстрый старт
 
+## ⚠️ ВАЖНО: Перед началом
+
+**НЕ используйте оригинальный пакет из pub.dev!** 
+
+Вам нужно:
+1. Скопировать папку `lib/patches/kokoro_tts_flutter_patched/` из этого проекта
+2. Использовать `path:` в pubspec.yaml, а НЕ `git:` или версию из pub.dev
+
 ## Шаг 1: Подготовка файлов
 
 1. Скачайте модель с Hugging Face:
@@ -16,16 +24,47 @@
          voices.json
    ```
 
-3. Добавьте в `pubspec.yaml`:
+3. Скопируйте файлы фонетизации (ОБЯЗАТЕЛЬНО):
+   - `assets/us_gold.json` - словарь фонетизации (~2-3 MB)
+   - `assets/us_silver.json` - словарь фонетизации (~200-300 KB)
+   
+   Эти файлы нужны для преобразования английского текста в фонемы.
+
+4. Добавьте в `pubspec.yaml`:
    ```yaml
    flutter:
      assets:
        - assets/tts_models/kokoro/model.onnx
        - assets/tts_models/kokoro/voices.json
        - assets/tokenizer_vocab.json
+       - assets/us_gold.json      # ОБЯЗАТЕЛЬНО
+       - assets/us_silver.json    # ОБЯЗАТЕЛЬНО
+       - assets/lexicon.json      # Опционально
    ```
 
-## Шаг 2: Генерация tokenizer_vocab.json
+## Шаг 2: Копирование файлов фонетизации
+
+**КРИТИЧЕСКИ ВАЖНО:** Скопируйте файлы `us_gold.json` и `us_silver.json` из этого проекта!
+
+Эти файлы используются библиотекой `malsami` для фонетизации английского текста. Без них библиотека не сможет преобразовать текст в фонемы.
+
+**Что копировать:**
+- `assets/us_gold.json` (~2-3 MB) - словарь высококачественной фонетизации
+- `assets/us_silver.json` (~200-300 KB) - словарь базовой фонетизации
+
+**Куда копировать:**
+```
+ваш_проект/
+  assets/
+    us_gold.json
+    us_silver.json
+```
+
+**Откуда взять:**
+1. Скопируйте из этого проекта (рекомендуется)
+2. Или установите пакет `malsami` и скопируйте из `packages/malsami/assets/`
+
+## Шаг 3: Генерация tokenizer_vocab.json
 
 Запустите скрипт для создания правильного словаря токенизации:
 
@@ -50,22 +89,45 @@ with open('assets/tokenizer_vocab.json', 'w', encoding='utf-8') as f:
 
 **КРИТИЧЕСКИ ВАЖНО:** Используйте `ensure_ascii=True` - это обязательно для Dart JSON парсера!
 
-## Шаг 3: Добавление зависимостей
+## Шаг 3: Копирование патченной библиотеки
 
-Добавьте в `pubspec.yaml`:
+**ВАЖНО:** Не используйте оригинальный пакет из pub.dev! Нужно скопировать патченную версию.
+
+1. Скопируйте папку `lib/patches/kokoro_tts_flutter_patched/` из этого проекта в ваш проект:
+   ```
+   ваш_проект/
+     lib/
+       patches/
+         kokoro_tts_flutter_patched/
+           (всю папку)
+   ```
+
+2. Добавьте в `pubspec.yaml`:
 
 ```yaml
 dependencies:
+  # Используйте локальный путь к патченной библиотеке
   kokoro_tts_flutter:
-    git:
-      url: https://github.com/your-username/kokoro_tts_flutter.git
+    path: lib/patches/kokoro_tts_flutter_patched
+  
+  # Остальные зависимости
   onnxruntime: ^1.15.0
   path_provider: ^2.1.0
   shared_preferences: ^2.2.0
   audioplayers: ^5.2.0
 ```
 
-## Шаг 4: Базовая интеграция
+3. Выполните:
+```bash
+flutter pub get
+```
+
+**Почему не git URL?**
+- Патченная версия содержит исправления и логирование
+- Оригинальная версия из pub.dev может не работать правильно
+- Используйте локальный путь `path:` вместо `git:`
+
+## Шаг 5: Базовая интеграция
 
 ```dart
 import 'package:kokoro_tts_flutter/kokoro_tts_flutter.dart';
@@ -90,7 +152,7 @@ final result = await kokoro.createTTS(
 // (используйте ваш аудио плеер)
 ```
 
-## Шаг 5: Копирование файлов модели
+## Шаг 6: Копирование файлов модели
 
 Перед использованием скопируйте файлы из assets в рабочую директорию:
 
@@ -143,6 +205,14 @@ python test_kokoro_tokens.py
 **Решение:** 
 1. Используйте правильный `tokenizer_vocab.json` из IPATokenizer
 2. Проверьте токены с помощью `test_kokoro/test_kokoro_tokens.py` - они должны совпадать с логами Flutter
+
+### ❌ Ошибка: "Failed to load us_gold.json" или "us_gold.json required for phonemization"
+**Причина:** Отсутствуют файлы фонетизации
+**Решение:** 
+1. Скопируйте `assets/us_gold.json` и `assets/us_silver.json` из этого проекта
+2. Добавьте их в `pubspec.yaml` в секцию `assets:`
+3. Выполните `flutter clean && flutter pub get`
+4. Перезапустите приложение
 
 ## Полная документация
 
