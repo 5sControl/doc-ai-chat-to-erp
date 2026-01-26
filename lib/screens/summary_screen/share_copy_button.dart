@@ -211,10 +211,30 @@ class _VoiceButtonState extends State<VoiceButton> {
         voiceId: settings.kokoroVoiceId,
         speed: settings.kokoroSynthesisSpeed,
       );
+      
+      // Check if text was truncated and show message
+      final truncationMessage = service.textTruncationMessage.value;
+      if (truncationMessage != null && mounted) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(truncationMessage),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
     } catch (error) {
       if (!mounted) return;
+      
+      // Ensure service state is reset even if error occurs
+      if (service.isSpeaking.value) {
+        await service.stop();
+      }
+      final errorMessage = error.toString().contains('us_gold.json') ||
+              error.toString().contains('Unable to load asset')
+          ? 'Voice synthesis requires additional files. Please restart the app.'
+          : 'Unable to play voice on this device.';
       messenger.showSnackBar(
-        const SnackBar(content: Text('Unable to play voice on this device.')),
+        SnackBar(content: Text(errorMessage)),
       );
     }
   }

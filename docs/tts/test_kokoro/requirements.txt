@@ -1,0 +1,10 @@
+# Requirements for test_kokoro_tokens.py
+# Install with: pip install -r requirements.txt
+
+# Required for tokenization test
+# Note: ttstokenizer should be in workspace or installed via pip
+numpy>=1.20.0
+
+# Optional - for model inference test
+onnxruntime>=1.15.0
+soundfile>=0.12.0

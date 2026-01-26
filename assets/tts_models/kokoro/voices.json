@@ -6,14 +6,54 @@
       "language": "en-US"
     },
     {
-      "id": "bf",
-      "name": "Basil (English GB)",
+      "id": "af_bella",
+      "name": "Bella (English US)",
+      "language": "en-US"
+    },
+    {
+      "id": "af_nicole",
+      "name": "Nicole (English US)",
+      "language": "en-US"
+    },
+    {
+      "id": "af_sarah",
+      "name": "Sarah (English US)",
+      "language": "en-US"
+    },
+    {
+      "id": "af_sky",
+      "name": "Sky (English US)",
+      "language": "en-US"
+    },
+    {
+      "id": "am_adam",
+      "name": "Adam (English US)",
+      "language": "en-US"
+    },
+    {
+      "id": "am_michael",
+      "name": "Michael (English US)",
+      "language": "en-US"
+    },
+    {
+      "id": "bf_emma",
+      "name": "Emma (English GB)",
       "language": "en-GB"
     },
     {
-      "id": "cf",
-      "name": "Celeste (English US)",
-      "language": "en-US"
+      "id": "bf_isabella",
+      "name": "Isabella (English GB)",
+      "language": "en-GB"
+    },
+    {
+      "id": "bm_george",
+      "name": "George (English GB)",
+      "language": "en-GB"
+    },
+    {
+      "id": "bm_lewis",
+      "name": "Lewis (English GB)",
+      "language": "en-GB"
     }
   ]
 }

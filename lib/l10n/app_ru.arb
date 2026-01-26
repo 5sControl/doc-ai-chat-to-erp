@@ -223,8 +223,8 @@
   "request_submit": "Отправить",
   "request_selectLanguage": "Выберите язык",
 
-  "ttsDownloadDialogTitle": "Downloading voice model",
-  "ttsDownloadDialogBody": "Please keep the app open while we download the voice resources.",
-  "ttsModelReadyTitle": "Voice model ready",
-  "ttsModelReadyMessage": "Voice model downloaded successfully. You can choose a voice in Settings."
+  "ttsDownloadDialogTitle": "Скачивание голосовой модели",
+  "ttsDownloadDialogBody": "Пожалуйста, не закрывайте приложение во время скачивания голосовых ресурсов.",
+  "ttsModelReadyTitle": "Голосовая модель готова",
+  "ttsModelReadyMessage": "Голосовая модель успешно скачана. Вы можете выбрать голос в Настройках."
 }

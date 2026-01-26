@@ -27,6 +27,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:toastification/toastification.dart';
 
+import 'package:summify/services/tts_service.dart';
+
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/translates/translates_bloc.dart';
 import '../../gen/assets.gen.dart';
@@ -39,10 +41,7 @@ import 'info_modal/original_text_modal.dart';
 
 class SummaryScreen extends StatefulWidget {
   final String summaryKey;
-  const SummaryScreen({
-    super.key,
-    required this.summaryKey,
-  });
+  const SummaryScreen({super.key, required this.summaryKey});
 
   @override
   State<SummaryScreen> createState() => _SummaryScreenState();
@@ -61,14 +60,12 @@ class _SummaryScreenState extends State<SummaryScreen>
       activeTab = context.read<SettingsBloc>().state.abTest == 'A' ? 2 : 1;
     });
     _tabController = TabController(length: 6, vsync: this, initialIndex: AB);
-    if (context
-        .read<SummariesBloc>()
-        .state
-        .ratedSummaries
-        .contains(widget.summaryKey)) {
-      context
-          .read<MixpanelBloc>()
-          .add(ShowSummaryAgain(url: widget.summaryKey));
+    if (context.read<SummariesBloc>().state.ratedSummaries.contains(
+      widget.summaryKey,
+    )) {
+      context.read<MixpanelBloc>().add(
+        ShowSummaryAgain(url: widget.summaryKey),
+      );
     }
     _tabController.addListener(() {
       setState(() {
@@ -97,10 +94,13 @@ class _SummaryScreenState extends State<SummaryScreen>
             tabType = 'unknown';
         }
 
-        context.read<MixpanelBloc>().add(ReadSummary(
+        context.read<MixpanelBloc>().add(
+          ReadSummary(
             type: tabType,
             url: widget.summaryKey,
-            AB: context.read<SettingsBloc>().state.abTest));
+            AB: context.read<SettingsBloc>().state.abTest,
+          ),
+        );
       });
     });
     super.initState();
@@ -108,6 +108,7 @@ class _SummaryScreenState extends State<SummaryScreen>
 
   @override
   void dispose() {
+    TtsService.instance.stop();
     _tabController.dispose();
     super.dispose();
   }
@@ -120,21 +121,26 @@ class _SummaryScreenState extends State<SummaryScreen>
           builder: (context, state) {
             final summaryData = state.summaries[widget.summaryKey]!;
 
-            final displayLink = summaryData.summaryPreview.title ??
+            final displayLink =
+                summaryData.summaryPreview.title ??
                 widget.summaryKey.replaceAll('https://', '');
 
             final DateFormat formatter = DateFormat('HH:mm E, MM.dd.yy');
             final String formattedDate = formatter.format(summaryData.date);
 
-            final sourceText = summaryData.summaryOrigin == SummaryOrigin.text && summaryData.userText != null
-                ? summaryData.userText!
-                : AppLocalizations.of(context)!.summary_sourceNotAvailable;
+            final sourceText =
+                summaryData.summaryOrigin == SummaryOrigin.text &&
+                        summaryData.userText != null
+                    ? summaryData.userText!
+                    : AppLocalizations.of(context)!.summary_sourceNotAvailable;
 
             final briefSummaryText = getTransformedText(
-                text: summaryData.shortSummary.summaryText ?? '');
+              text: summaryData.shortSummary.summaryText ?? '',
+            );
 
             final deepSummaryText = getTransformedText(
-                text: summaryData.longSummary.summaryText ?? '');
+              text: summaryData.longSummary.summaryText ?? '',
+            );
 
             void showRateScreen() {
               showMaterialModalBottomSheet(
@@ -145,23 +151,30 @@ class _SummaryScreenState extends State<SummaryScreen>
                 backgroundColor: Colors.transparent,
                 enableDrag: false,
                 builder: (context) {
-                  return RateSummaryScreen(
-                    summaryLink: widget.summaryKey,
-                  );
+                  return RateSummaryScreen(summaryLink: widget.summaryKey);
                 },
               );
             }
 
             void onPressBack() {
-                final subscriptionStatus = BlocProvider.of<SubscriptionsBloc>(context).state.subscriptionStatus;
+              final subscriptionStatus =
+                  BlocProvider.of<SubscriptionsBloc>(
+                    context,
+                  ).state.subscriptionStatus;
               if (!state.ratedSummaries.contains(widget.summaryKey)) {
                 showRateScreen();
               } else {
-                subscriptionStatus != SubscriptionStatus.subscribed ? Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => BundleScreen(
-                          triggerScreen: 'Summary',
-                          fromSummary: true,
-                        ))) :   Navigator.of(context).pop();
+                subscriptionStatus != SubscriptionStatus.subscribed
+                    ? Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder:
+                            (context) => BundleScreen(
+                              triggerScreen: 'Summary',
+                              fromSummary: true,
+                            ),
+                      ),
+                    )
+                    : Navigator.of(context).pop();
               }
             }
 
@@ -174,29 +187,34 @@ class _SummaryScreenState extends State<SummaryScreen>
                     if (context.mounted) {
                       toastification.show(
                         context: context,
-                        title: Text(AppLocalizations.of(context)!.summary_couldNotOpenURL),
+                        title: Text(
+                          AppLocalizations.of(context)!.summary_couldNotOpenURL,
+                        ),
                         type: ToastificationType.error,
                         autoCloseDuration: const Duration(seconds: 3),
                       );
                     }
                   }
                   break;
-                
+
                 case SummaryOrigin.file:
                   // Open file in external app
                   if (summaryData.filePath != null) {
                     final file = File(summaryData.filePath!);
                     if (await file.exists()) {
                       try {
-                        await Share.shareXFiles(
-                          [XFile(summaryData.filePath!)],
-                          subject: displayLink,
-                        );
+                        await Share.shareXFiles([
+                          XFile(summaryData.filePath!),
+                        ], subject: displayLink);
                       } catch (e) {
                         if (context.mounted) {
                           toastification.show(
                             context: context,
-                            title: Text(AppLocalizations.of(context)!.summary_couldNotOpenFile),
+                            title: Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.summary_couldNotOpenFile,
+                            ),
                             type: ToastificationType.error,
                             autoCloseDuration: const Duration(seconds: 3),
                           );
@@ -206,7 +224,11 @@ class _SummaryScreenState extends State<SummaryScreen>
                       if (context.mounted) {
                         toastification.show(
                           context: context,
-                          title: Text(AppLocalizations.of(context)!.summary_originalFileNoLongerAvailable),
+                          title: Text(
+                            AppLocalizations.of(
+                              context,
+                            )!.summary_originalFileNoLongerAvailable,
+                          ),
                           type: ToastificationType.warning,
                           autoCloseDuration: const Duration(seconds: 3),
                         );
@@ -216,14 +238,18 @@ class _SummaryScreenState extends State<SummaryScreen>
                     if (context.mounted) {
                       toastification.show(
                         context: context,
-                        title: Text(AppLocalizations.of(context)!.summary_filePathNotFound),
+                        title: Text(
+                          AppLocalizations.of(
+                            context,
+                          )!.summary_filePathNotFound,
+                        ),
                         type: ToastificationType.error,
                         autoCloseDuration: const Duration(seconds: 3),
                       );
                     }
                   }
                   break;
-                
+
                 case SummaryOrigin.text:
                   // Show modal with original text
                   if (summaryData.userText != null) {
@@ -242,7 +268,11 @@ class _SummaryScreenState extends State<SummaryScreen>
                   } else {
                     toastification.show(
                       context: context,
-                      title: Text(AppLocalizations.of(context)!.summary_originalTextNotAvailable),
+                      title: Text(
+                        AppLocalizations.of(
+                          context,
+                        )!.summary_originalTextNotAvailable,
+                      ),
                       type: ToastificationType.error,
                       autoCloseDuration: const Duration(seconds: 3),
                     );
@@ -254,14 +284,14 @@ class _SummaryScreenState extends State<SummaryScreen>
             final gradientColors =
                 Theme.of(context).brightness == Brightness.dark
                     ? const [
-                        Color.fromRGBO(15, 57, 60, 0),
-                        Color.fromRGBO(15, 57, 60, 1),
-                      ]
+                      Color.fromRGBO(15, 57, 60, 0),
+                      Color.fromRGBO(15, 57, 60, 1),
+                    ]
                     : const [
-                        Color.fromRGBO(223, 252, 252, 0),
-                        Color.fromRGBO(191, 249, 249, 1),
-                        Color.fromRGBO(191, 249, 249, 1),
-                      ];
+                      Color.fromRGBO(223, 252, 252, 0),
+                      Color.fromRGBO(191, 249, 249, 1),
+                      Color.fromRGBO(191, 249, 249, 1),
+                    ];
 
             return BlocBuilder<TranslatesBloc, TranslatesState>(
               builder: (context, translatesState) {
@@ -270,100 +300,103 @@ class _SummaryScreenState extends State<SummaryScreen>
                     const BackgroundGradient(),
                     // Container(color: Colors.white38),
                     Scaffold(
-                        body: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Stack(
-                              fit: StackFit.loose,
-                              children: [
-                                Positioned.fill(
-                                  child: SummaryHeroImage(
-                                    summaryData: summaryData,
-                                  ),
-                                ),
-                                Header(
-                                  sharedLink: widget.summaryKey,
-                                  displayLink: displayLink,
-                                  formattedDate: formattedDate,
-                                  onPressLink: onPressLink,
-                                  onPressBack: onPressBack,
+                      body: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Stack(
+                            fit: StackFit.loose,
+                            children: [
+                              Positioned.fill(
+                                child: SummaryHeroImage(
                                   summaryData: summaryData,
                                 ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Stack(
-                                fit: StackFit.loose,
-                                children: [
-                                  TabBarView(
-                                    controller: _tabController,
-                                    children: [
-                                      SummaryTextContainer(
-                                        summaryText: sourceText,
-                                        summary: Summary(summaryText: sourceText),
-                                        summaryStatus: SummaryStatus.complete,
-                                        summaryTranslate: null,
-                                      ),
-                                      SummaryTextContainer(
-                                        summaryText: briefSummaryText,
-                                        summary: summaryData.shortSummary,
-                                        summaryStatus:
-                                            summaryData.shortSummaryStatus,
-                                        summaryTranslate: translatesState
-                                            .shortTranslates[widget.summaryKey],
-                                      ),
-                                      SummaryTextContainer(
-                                        summaryText: deepSummaryText,
-                                        summary: summaryData.longSummary,
-                                        summaryStatus:
-                                            summaryData.longSummaryStatus,
-                                        summaryTranslate: translatesState
-                                            .longTranslates[widget.summaryKey],
-                                      ),
-                                      ResearchTab(
-                                        summaryKey: widget.summaryKey,
-                                      ),
-                                      QuizTab(
-                                        documentKey: widget.summaryKey,
-                                        documentText: deepSummaryText,
-                                      ),
-                                      KnowledgeCardsTab(
-                                        summaryKey: widget.summaryKey,
-                                      ),
-                                    ],
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Container(
-                                      height: 68,
-                                      decoration: BoxDecoration(
-                                          gradient: LinearGradient(
+                              ),
+                              Header(
+                                sharedLink: widget.summaryKey,
+                                displayLink: displayLink,
+                                formattedDate: formattedDate,
+                                onPressLink: onPressLink,
+                                onPressBack: onPressBack,
+                                summaryData: summaryData,
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Stack(
+                              fit: StackFit.loose,
+                              children: [
+                                TabBarView(
+                                  controller: _tabController,
+                                  children: [
+                                    SummaryTextContainer(
+                                      summaryText: sourceText,
+                                      summary: Summary(summaryText: sourceText),
+                                      summaryStatus: SummaryStatus.complete,
+                                      summaryTranslate: null,
+                                    ),
+                                    SummaryTextContainer(
+                                      summaryText: briefSummaryText,
+                                      summary: summaryData.shortSummary,
+                                      summaryStatus:
+                                          summaryData.shortSummaryStatus,
+                                      summaryTranslate:
+                                          translatesState.shortTranslates[widget
+                                              .summaryKey],
+                                    ),
+                                    SummaryTextContainer(
+                                      summaryText: deepSummaryText,
+                                      summary: summaryData.longSummary,
+                                      summaryStatus:
+                                          summaryData.longSummaryStatus,
+                                      summaryTranslate:
+                                          translatesState.longTranslates[widget
+                                              .summaryKey],
+                                    ),
+                                    ResearchTab(summaryKey: widget.summaryKey),
+                                    QuizTab(
+                                      documentKey: widget.summaryKey,
+                                      documentText: deepSummaryText,
+                                    ),
+                                    KnowledgeCardsTab(
+                                      summaryKey: widget.summaryKey,
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Container(
+                                    height: 68,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
                                         colors: gradientColors,
                                         begin: Alignment.bottomCenter,
                                         end: Alignment.topCenter,
-                                      )),
-                                      child: Align(
-                                        alignment: Alignment.topCenter,
-                                        child: CustomTabBar(
-                                            tabController: _tabController),
+                                      ),
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment.topCenter,
+                                      child: CustomTabBar(
+                                        tabController: _tabController,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        extendBody: true,
-                        floatingActionButtonLocation:
-                            FloatingActionButtonLocation.centerDocked,
-                        bottomNavigationBar: _buildBottomBar(
-                          activeTab,
-                          summaryData,
-                        )),
+                          ),
+                        ],
+                      ),
+                      extendBody: true,
+                      floatingActionButtonLocation:
+                          FloatingActionButtonLocation.centerDocked,
+                      bottomNavigationBar: _buildBottomBar(
+                        activeTab,
+                        summaryData,
+                      ),
+                    ),
                     if (summaryData.isBlocked != null && summaryData.isBlocked!)
-                      const PremiumBlurContainer()
+                      const PremiumBlurContainer(),
                   ],
                 );
               },
@@ -426,77 +459,91 @@ class PremiumBlurContainer extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => SubscriptionScreenLimit(triggerScreen: 'Summary', fromSettings: true)),
+          builder:
+              (context) => SubscriptionScreenLimit(
+                triggerScreen: 'Summary',
+                fromSettings: true,
+              ),
+        ),
       );
     }
 
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-          height: MediaQuery.of(context).size.height -
-              240 -
-              MediaQuery.of(context).padding.bottom,
-          width: double.infinity,
-          //margin: //EdgeInsets.only(
-          //left: 15,
-          //right: 15,
-          //bottom: MediaQuery.of(context).padding.bottom),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        height:
+            MediaQuery.of(context).size.height -
+            240 -
+            MediaQuery.of(context).padding.bottom,
+        width: double.infinity,
+        //margin: //EdgeInsets.only(
+        //left: 15,
+        //right: 15,
+        //bottom: MediaQuery.of(context).padding.bottom),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.black26),
+              child: Center(
                 child: Container(
-                  decoration: const BoxDecoration(color: Colors.black26),
-                  child: Center(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: const LinearGradient(
-                            colors: [
-                              Color.fromRGBO(255, 238, 90, 1),
-                              Color.fromRGBO(255, 208, 74, 1),
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter),
-                      ),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(4),
-                        color: Colors.transparent,
-                        child: InkWell(
-                            radius: 4,
-                            highlightColor: Colors.white54,
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: onPressPremium,
-                            child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 8),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      Assets.icons.crown,
-                                      height: 34,
-                                      width: 34,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)!.summary_breakThroughTheLimits,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ))),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromRGBO(255, 238, 90, 1),
+                        Color.fromRGBO(255, 208, 74, 1),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: Material(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.transparent,
+                    child: InkWell(
+                      radius: 4,
+                      highlightColor: Colors.white54,
+                      borderRadius: BorderRadius.circular(4),
+                      onTap: onPressPremium,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 8,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              Assets.icons.crown,
+                              height: 34,
+                              width: 34,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              AppLocalizations.of(
+                                context,
+                              )!.summary_breakThroughTheLimits,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ))),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

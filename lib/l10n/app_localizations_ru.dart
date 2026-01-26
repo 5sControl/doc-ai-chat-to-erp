@@ -537,16 +537,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get request_selectLanguage => 'Выберите язык';
 
   @override
-  String get ttsDownloadDialogTitle => 'Downloading voice model';
+  String get ttsDownloadDialogTitle => 'Скачивание голосовой модели';
 
   @override
   String get ttsDownloadDialogBody =>
-      'Please keep the app open while we download the voice resources.';
+      'Пожалуйста, не закрывайте приложение во время скачивания голосовых ресурсов.';
 
   @override
-  String get ttsModelReadyTitle => 'Voice model ready';
+  String get ttsModelReadyTitle => 'Голосовая модель готова';
 
   @override
   String get ttsModelReadyMessage =>
-      'Voice model downloaded successfully. You can choose a voice in Settings.';
+      'Голосовая модель успешно скачана. Вы можете выбрать голос в Настройках.';
 }

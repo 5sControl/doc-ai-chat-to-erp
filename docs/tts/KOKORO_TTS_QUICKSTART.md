@@ -116,6 +116,18 @@ Future<void> copyModelFiles() async {
 }
 ```
 
+## Проверка токенизации
+
+Для проверки правильности токенизации используйте готовый скрипт:
+
+```bash
+cd test_kokoro
+pip install -r requirements.txt
+python test_kokoro_tokens.py
+```
+
+Скрипт выведет эталонные токены для сравнения с логами Flutter приложения.
+
 ## Типичные ошибки
 
 ### ❌ FormatException: Unexpected character
@@ -128,7 +140,9 @@ Future<void> copyModelFiles() async {
 
 ### ❌ Аудио звучит как "абра-кадабра"
 **Причина:** Неправильный словарь токенизации
-**Решение:** Используйте правильный `tokenizer_vocab.json` из IPATokenizer
+**Решение:** 
+1. Используйте правильный `tokenizer_vocab.json` из IPATokenizer
+2. Проверьте токены с помощью `test_kokoro/test_kokoro_tokens.py` - они должны совпадать с логами Flutter
 
 ## Полная документация
 

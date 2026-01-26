@@ -49,6 +49,27 @@ class _TtsSettingsSectionState extends State<TtsSettingsSection> {
                   return ValueListenableBuilder<List<TtsVoice>>(
                     valueListenable: TtsService.instance.voiceListNotifier,
                     builder: (context, voices, _) {
+                      if (voices.isEmpty && !isLoadingVoices) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'No voices available. Please download the voice model first.',
+                              style: TextStyle(color: Colors.orange),
+                            ),
+                            const SizedBox(height: 8),
+                            DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                                border: OutlineInputBorder(),
+                              ),
+                              value: state.kokoroVoiceId,
+                              items: const [],
+                              onChanged: null,
+                            ),
+                          ],
+                        );
+                      }
                       return DropdownButtonFormField<String>(
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.symmetric(horizontal: 12),

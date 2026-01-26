@@ -45,6 +45,7 @@ dependencies:
   flutter_email_sender: ^7.0.0
   audioplayers: ^5.2.0
   flutter_tts: ^3.5.0
+  kokoro_tts_flutter: ^0.2.0+1
 #  status_bar_control: ^3.2.1
   purchases_flutter: ^8.7.2
   flutter_dialogs: ^3.0.0
@@ -80,3 +81,7 @@ flutter:
     - assets/set_up/
     - assets/flags/
     - assets/quizzes/
+    - assets/tokenizer_vocab.json
+    - assets/us_gold.json
+    - assets/lexicon.json
+    - assets/tts_models/kokoro/voices.json
