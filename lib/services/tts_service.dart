@@ -254,19 +254,48 @@ class TtsService {
     return ttsCacheDir;
   }
 
-  /// Generate cache key from text, voiceId, and speed
-  String _getCacheKey(String text, String voiceId, double speed) {
-    final keyString = '$text|$voiceId|$speed';
-    final bytes = utf8.encode(keyString);
-    final digest = sha256.convert(bytes);
-    return digest.toString();
+  /// Generate cache key from text, voiceId, and speed (legacy) or from summaryKey and activeTab (tab-based)
+  String _getCacheKey({
+    String? text,
+    String? voiceId,
+    double? speed,
+    String? summaryKey,
+    int? activeTab,
+  }) {
+    // Tab-based caching: use summaryKey + activeTab
+    if (summaryKey != null && activeTab != null) {
+      final keyString = '$summaryKey|$activeTab';
+      final bytes = utf8.encode(keyString);
+      final digest = sha256.convert(bytes);
+      return digest.toString();
+    }
+    // Legacy text-based caching: use text + voiceId + speed
+    if (text != null && voiceId != null && speed != null) {
+      final keyString = '$text|$voiceId|$speed';
+      final bytes = utf8.encode(keyString);
+      final digest = sha256.convert(bytes);
+      return digest.toString();
+    }
+    throw ArgumentError('Either (summaryKey, activeTab) or (text, voiceId, speed) must be provided');
   }
 
   /// Get cached audio file path if it exists
-  Future<File?> _getCachedAudioFile(String text, String voiceId, double speed) async {
+  Future<File?> _getCachedAudioFile({
+    String? text,
+    String? voiceId,
+    double? speed,
+    String? summaryKey,
+    int? activeTab,
+  }) async {
     try {
       final cacheDir = await _getCacheDirectory();
-      final cacheKey = _getCacheKey(text, voiceId, speed);
+      final cacheKey = _getCacheKey(
+        text: text,
+        voiceId: voiceId,
+        speed: speed,
+        summaryKey: summaryKey,
+        activeTab: activeTab,
+      );
       final cachedFile = File('${cacheDir.path}/$cacheKey.wav');
       final exists = await cachedFile.exists();
       debugPrint('[TtsService] Cache check: key=$cacheKey, exists=$exists, path=${cachedFile.path}');
@@ -439,11 +468,12 @@ class TtsService {
     _speechCompleter = null;
     isSpeaking.value = false;
 
-    // Clean up temporary audio file
+    // Clean up temporary audio file (but not cached files)
     if (_currentAudioPath != null) {
       try {
         final file = File(_currentAudioPath!);
-        if (await file.exists()) {
+        // Only delete if it's not a cached file
+        if (await file.exists() && !_isCachedFile(file)) {
           await file.delete();
         }
       } catch (e) {
@@ -453,15 +483,25 @@ class TtsService {
     }
   }
 
+  /// Check if a file is in the cache directory (should not be deleted)
+  bool _isCachedFile(File file) {
+    final path = file.path;
+    return path.contains('/tts_cache/');
+  }
+
   Future<void> speak({
     required String text,
     required String voiceId,
     required double speed,
+    String? summaryKey,
+    int? activeTab,
   }) async {
     if (text.trim().isEmpty) return;
     final completer = Completer<void>();
-    // Store original text for cache key (before any processing)
+    // Store original text for cache key (before any processing) - only if not using tab-based cache
     final originalTextForCache = text.trim();
+    // Determine if we should use tab-based caching
+    final useTabCache = summaryKey != null && activeTab != null;
     try {
       // Set generating state to true
       isGenerating.value = true;
@@ -513,6 +553,41 @@ class TtsService {
         }
       }
 
+      // If using tab-based cache, check cache BEFORE phonemization (saves time)
+      if (useTabCache) {
+        final cachedFile = await _getCachedAudioFile(
+          summaryKey: summaryKey,
+          activeTab: activeTab,
+        );
+        if (cachedFile != null) {
+          // Use cached file
+          debugPrint('[TtsService] Using cached audio file from tab cache: ${cachedFile.path}');
+          isGenerating.value = false;
+          _currentAudioPath = cachedFile.path;
+          
+          // Play audio using AudioPlayer
+          _speechCompleter = completer;
+          isSpeaking.value = true;
+
+          StreamSubscription? completeSubscription;
+          completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+            if (!completer.isCompleted) {
+              completer.complete();
+            }
+            completeSubscription?.cancel();
+          });
+
+          try {
+            await _audioPlayer.play(DeviceFileSource(cachedFile.path));
+            await completer.future;
+          } finally {
+            completeSubscription.cancel();
+          }
+          return;
+        }
+        debugPrint('[TtsService] Tab cache miss for summaryKey=$summaryKey, activeTab=$activeTab, will generate new audio');
+      }
+
       // Check phoneme length and truncate if needed (Kokoro limit is 510 phonemes)
       // The library counts phonemes - need to be very conservative
       // Based on testing, even 667 chars causes error, so use 400 chars max
@@ -539,39 +614,41 @@ class TtsService {
         debugPrint('[TtsService] Truncated to ${truncatedPhonemes.length} chars (original: $originalLength)');
       }
 
-      // Check cache AFTER phonemization and truncation
-      // Use original text for cache key to ensure consistency across runs
-      // (phonemization and truncation may vary slightly, but original text is stable)
-      final cacheKey = _getCacheKey(originalTextForCache, voiceId, speed);
-      debugPrint('[TtsService] Checking cache with key: $cacheKey (original text length: ${originalTextForCache.length}, truncated phonemes: ${truncatedPhonemes.length})');
-      final cachedFile = await _getCachedAudioFile(originalTextForCache, voiceId, speed);
-      if (cachedFile != null) {
-        // Use cached file
-        debugPrint('[TtsService] Using cached audio file: ${cachedFile.path}');
-        isGenerating.value = false;
-        _currentAudioPath = cachedFile.path;
-        
-        // Play audio using AudioPlayer
-        _speechCompleter = completer;
-        isSpeaking.value = true;
+      // For legacy text-based cache, check AFTER phonemization and truncation
+      if (!useTabCache) {
+        final cachedFile = await _getCachedAudioFile(
+          text: originalTextForCache,
+          voiceId: voiceId,
+          speed: speed,
+        );
+        if (cachedFile != null) {
+          // Use cached file
+          debugPrint('[TtsService] Using cached audio file from text cache: ${cachedFile.path}');
+          isGenerating.value = false;
+          _currentAudioPath = cachedFile.path;
+          
+          // Play audio using AudioPlayer
+          _speechCompleter = completer;
+          isSpeaking.value = true;
 
-        StreamSubscription? completeSubscription;
-        completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
-          if (!completer.isCompleted) {
-            completer.complete();
+          StreamSubscription? completeSubscription;
+          completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+            if (!completer.isCompleted) {
+              completer.complete();
+            }
+            completeSubscription?.cancel();
+          });
+
+          try {
+            await _audioPlayer.play(DeviceFileSource(cachedFile.path));
+            await completer.future;
+          } finally {
+            completeSubscription.cancel();
           }
-          completeSubscription?.cancel();
-        });
-
-        try {
-          await _audioPlayer.play(DeviceFileSource(cachedFile.path));
-          await completer.future;
-        } finally {
-          completeSubscription.cancel();
+          return;
         }
-        return;
+        debugPrint('[TtsService] Text cache miss, will generate new audio');
       }
-      debugPrint('[TtsService] Cache miss, will generate new audio');
 
       // Synthesize speech using Kokoro
       TtsResult result;
@@ -634,10 +711,16 @@ class TtsService {
       }
 
       // Save audio to cache directory
-      // Use original text for cache key to ensure consistency
-      // cacheKey already declared above for cache check
+      // Use tab-based cache key if available, otherwise use text-based cache key
       final cacheDir = await _getCacheDirectory();
-      debugPrint('[TtsService] Saving to cache with key: $cacheKey (original text length: ${originalTextForCache.length}, truncated phonemes: ${truncatedPhonemes.length})');
+      final cacheKey = useTabCache
+          ? _getCacheKey(summaryKey: summaryKey, activeTab: activeTab)
+          : _getCacheKey(text: originalTextForCache, voiceId: voiceId, speed: speed);
+      if (useTabCache) {
+        debugPrint('[TtsService] Saving to tab cache with key: $cacheKey (summaryKey=$summaryKey, activeTab=$activeTab)');
+      } else {
+        debugPrint('[TtsService] Saving to text cache with key: $cacheKey (original text length: ${originalTextForCache.length}, truncated phonemes: ${truncatedPhonemes.length})');
+      }
       final audioFile = File('${cacheDir.path}/$cacheKey.wav');
       _currentAudioPath = audioFile.path;
 
@@ -699,11 +782,12 @@ class TtsService {
       // Ensure generating is false in finally block
       isGenerating.value = false;
 
-      // Clean up temporary audio file
+      // Clean up temporary audio file (but not cached files)
       if (_currentAudioPath != null) {
         try {
           final file = File(_currentAudioPath!);
-          if (await file.exists()) {
+          // Only delete if it's not a cached file
+          if (await file.exists() && !_isCachedFile(file)) {
             await file.delete();
           }
         } catch (e) {

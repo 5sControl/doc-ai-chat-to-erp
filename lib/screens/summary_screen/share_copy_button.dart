@@ -213,6 +213,8 @@ class _VoiceButtonState extends State<VoiceButton> {
         text: text,
         voiceId: settings.kokoroVoiceId,
         speed: settings.kokoroSynthesisSpeed,
+        summaryKey: widget.summaryKey,
+        activeTab: widget.activeTab,
       );
       
       // Check if text was truncated and show message
