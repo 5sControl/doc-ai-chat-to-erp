@@ -268,7 +268,9 @@ class TtsService {
       final cacheDir = await _getCacheDirectory();
       final cacheKey = _getCacheKey(text, voiceId, speed);
       final cachedFile = File('${cacheDir.path}/$cacheKey.wav');
-      if (await cachedFile.exists()) {
+      final exists = await cachedFile.exists();
+      debugPrint('[TtsService] Cache check: key=$cacheKey, exists=$exists, path=${cachedFile.path}');
+      if (exists) {
         debugPrint('[TtsService] Found cached audio file: ${cachedFile.path}');
         return cachedFile;
       }
@@ -458,35 +460,9 @@ class TtsService {
   }) async {
     if (text.trim().isEmpty) return;
     final completer = Completer<void>();
+    // Store original text for cache key (before any processing)
+    final originalTextForCache = text.trim();
     try {
-      // Check cache first
-      final cachedFile = await _getCachedAudioFile(text, voiceId, speed);
-      if (cachedFile != null) {
-        // Use cached file
-        debugPrint('[TtsService] Using cached audio file');
-        _currentAudioPath = cachedFile.path;
-        
-        // Play audio using AudioPlayer
-        _speechCompleter = completer;
-        isSpeaking.value = true;
-
-        StreamSubscription? completeSubscription;
-        completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
-          if (!completer.isCompleted) {
-            completer.complete();
-          }
-          completeSubscription?.cancel();
-        });
-
-        try {
-          await _audioPlayer.play(DeviceFileSource(cachedFile.path));
-          await completer.future;
-        } finally {
-          completeSubscription.cancel();
-        }
-        return;
-      }
-
       // Set generating state to true
       isGenerating.value = true;
       await ensureModelReady();
@@ -551,15 +527,51 @@ class TtsService {
       if (phonemes.length > maxPhonemeChars) {
         debugPrint('[TtsService] Phonemes too long: $originalLength chars, truncating to $maxPhonemeChars');
         // Truncate by character length, trying to break at word boundaries (spaces)
+        // Use deterministic truncation: always truncate to exact maxPhonemeChars first
         truncatedPhonemes = phonemes.substring(0, maxPhonemeChars);
-        // Try to find last space to break at word boundary
+        // Try to find last space to break at word boundary (deterministic: always use same threshold)
         final lastSpace = truncatedPhonemes.lastIndexOf(' ');
-        if (lastSpace > maxPhonemeChars * 0.7) {
+        // Use fixed threshold (70% of maxPhonemeChars = 280) to ensure deterministic behavior
+        if (lastSpace > 280) {
           truncatedPhonemes = truncatedPhonemes.substring(0, lastSpace);
         }
         wasTruncated = true;
-        debugPrint('[TtsService] Truncated to ${truncatedPhonemes.length} chars');
+        debugPrint('[TtsService] Truncated to ${truncatedPhonemes.length} chars (original: $originalLength)');
       }
+
+      // Check cache AFTER phonemization and truncation
+      // Use original text for cache key to ensure consistency across runs
+      // (phonemization and truncation may vary slightly, but original text is stable)
+      final cacheKey = _getCacheKey(originalTextForCache, voiceId, speed);
+      debugPrint('[TtsService] Checking cache with key: $cacheKey (original text length: ${originalTextForCache.length}, truncated phonemes: ${truncatedPhonemes.length})');
+      final cachedFile = await _getCachedAudioFile(originalTextForCache, voiceId, speed);
+      if (cachedFile != null) {
+        // Use cached file
+        debugPrint('[TtsService] Using cached audio file: ${cachedFile.path}');
+        isGenerating.value = false;
+        _currentAudioPath = cachedFile.path;
+        
+        // Play audio using AudioPlayer
+        _speechCompleter = completer;
+        isSpeaking.value = true;
+
+        StreamSubscription? completeSubscription;
+        completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+          if (!completer.isCompleted) {
+            completer.complete();
+          }
+          completeSubscription?.cancel();
+        });
+
+        try {
+          await _audioPlayer.play(DeviceFileSource(cachedFile.path));
+          await completer.future;
+        } finally {
+          completeSubscription.cancel();
+        }
+        return;
+      }
+      debugPrint('[TtsService] Cache miss, will generate new audio');
 
       // Synthesize speech using Kokoro
       TtsResult result;
@@ -622,8 +634,10 @@ class TtsService {
       }
 
       // Save audio to cache directory
+      // Use original text for cache key to ensure consistency
+      // cacheKey already declared above for cache check
       final cacheDir = await _getCacheDirectory();
-      final cacheKey = _getCacheKey(text, voiceId, speed);
+      debugPrint('[TtsService] Saving to cache with key: $cacheKey (original text length: ${originalTextForCache.length}, truncated phonemes: ${truncatedPhonemes.length})');
       final audioFile = File('${cacheDir.path}/$cacheKey.wav');
       _currentAudioPath = audioFile.path;
 
