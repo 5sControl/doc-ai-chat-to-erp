@@ -195,7 +195,10 @@ class _VoiceButtonState extends State<VoiceButton> {
     final service = TtsService.instance;
     final settings = context.read<SettingsBloc>().state;
     final messenger = ScaffoldMessenger.of(context);
-    if (!service.isModelReady) {
+    
+    // Check if model needs to be downloaded (only show dialog if not downloaded)
+    final isDownloaded = await service.isModelDownloaded();
+    if (!isDownloaded && !service.isModelReady) {
       final ready = await showDialog<bool>(
         context: context,
         barrierDismissible: false,

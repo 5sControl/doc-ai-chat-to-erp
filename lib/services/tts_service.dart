@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:kokoro_tts_flutter/kokoro_tts_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Lightweight wrapper for the Kokoro voices JSON structure.
 class TtsVoice {
@@ -49,6 +50,10 @@ class TtsService {
     _loadVoicesFromAssets().catchError((e) {
       debugPrint('[TtsService] Failed to load voices from assets on init: $e');
     });
+    // Check if model was previously downloaded and restore state
+    _restoreModelState().catchError((e) {
+      debugPrint('[TtsService] Failed to restore model state: $e');
+    });
   }
 
   static final TtsService instance = TtsService._();
@@ -79,8 +84,6 @@ class TtsService {
     if (_modelReady && _kokoro != null) return;
     if (_downloadCompleter != null) return _downloadCompleter!.future;
     _downloadCompleter = Completer();
-    _isDownloading = true;
-    downloadProgress.value = 0;
 
     try {
       final modelDir = await _modelDirectory();
@@ -95,8 +98,13 @@ class TtsService {
         tasks.add(_DownloadTask(_voicesUrl, voicesFile));
       }
 
+      // Only set downloading flags if we actually need to download something
       if (tasks.isNotEmpty) {
+        _isDownloading = true;
+        downloadProgress.value = 0;
         await _downloadAssets(tasks);
+        // Save state after successful download
+        await _saveModelDownloadedState();
       }
 
       // Load voices from downloaded file (may contain more voices than assets version)
@@ -125,7 +133,10 @@ class TtsService {
       }
 
       _modelReady = true;
-      downloadProgress.value = 1;
+      if (tasks.isEmpty) {
+        // If no download was needed, set progress to 1 immediately
+        downloadProgress.value = 1;
+      }
       _downloadCompleter?.complete();
     } catch (error) {
       _downloadCompleter?.completeError(error);
@@ -133,6 +144,56 @@ class TtsService {
     } finally {
       _isDownloading = false;
       _downloadCompleter = null;
+    }
+  }
+
+  /// Check if model files are already downloaded without initializing download
+  Future<bool> isModelDownloaded() async {
+    try {
+      final modelDir = await _modelDirectory();
+      final modelFile = File('${modelDir.path}/model.onnx');
+      final voicesFile = File('${modelDir.path}/voices.json');
+      return await modelFile.exists() && await voicesFile.exists();
+    } catch (e) {
+      debugPrint('[TtsService] Error checking if model is downloaded: $e');
+      return false;
+    }
+  }
+
+  /// Restore model state from SharedPreferences on initialization
+  Future<void> _restoreModelState() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final wasDownloaded = prefs.getBool('tts_model_downloaded') ?? false;
+      if (wasDownloaded) {
+        // Check if files still exist
+        final modelDir = await _modelDirectory();
+        final modelFile = File('${modelDir.path}/model.onnx');
+        final voicesFile = File('${modelDir.path}/voices.json');
+        if (await modelFile.exists() && await voicesFile.exists()) {
+          // Files exist, mark as ready (but don't initialize Kokoro yet)
+          _modelReady = true;
+          downloadProgress.value = 1;
+          debugPrint('[TtsService] Restored model state: model was previously downloaded');
+        } else {
+          // Files don't exist, clear the flag
+          await prefs.remove('tts_model_downloaded');
+          debugPrint('[TtsService] Model files missing, cleared download state');
+        }
+      }
+    } catch (e) {
+      debugPrint('[TtsService] Error restoring model state: $e');
+    }
+  }
+
+  /// Save model downloaded state to SharedPreferences
+  Future<void> _saveModelDownloadedState() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('tts_model_downloaded', true);
+      debugPrint('[TtsService] Saved model downloaded state');
+    } catch (e) {
+      debugPrint('[TtsService] Error saving model state: $e');
     }
   }
 
