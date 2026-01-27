@@ -103,7 +103,6 @@ class AnswerAndQuestionItem extends StatelessWidget {
           summaryKey: summaryKey,
           answer: question.answer,
           answerStatus: question.answerStatus,
-          like: question.like,
         )
       ],
     );
@@ -114,12 +113,10 @@ class Answer extends StatelessWidget {
   final String? answer;
   final String summaryKey;
   final AnswerStatus answerStatus;
-  final Like like;
   const Answer(
       {super.key,
       required this.answer,
       required this.answerStatus,
-      required this.like,
       required this.summaryKey});
 
   @override
@@ -132,18 +129,6 @@ class Answer extends StatelessWidget {
 
     void onPressCopy() {
       Clipboard.setData(ClipboardData(text: answer ?? ''));
-    }
-
-    void onPressLike() {
-      context
-          .read<ResearchBloc>()
-          .add(LikeAnswer(summaryKey: summaryKey, answer: answer!));
-    }
-
-    void onPressDislike() {
-      context
-          .read<ResearchBloc>()
-          .add(DislikeAnswer(summaryKey: summaryKey, answer: answer!));
     }
 
     if (answerStatus == AnswerStatus.error) {
@@ -283,32 +268,6 @@ class Answer extends StatelessWidget {
                                 Assets.icons.copy,
                                 colorFilter: const ColorFilter.mode(
                                     Colors.black54, BlendMode.srcIn),
-                              )),
-                          IconButton(
-                              onPressed: onPressLike,
-                              style: bStyle,
-                              iconSize: 20,
-                              visualDensity: VisualDensity.compact,
-                              icon: SvgPicture.asset(
-                                Assets.icons.miniLike,
-                                colorFilter: ColorFilter.mode(
-                                    like == Like.liked
-                                        ? Colors.green
-                                        : Colors.black54,
-                                    BlendMode.srcIn),
-                              )),
-                          IconButton(
-                              onPressed: onPressDislike,
-                              style: bStyle,
-                              iconSize: 20,
-                              visualDensity: VisualDensity.compact,
-                              icon: SvgPicture.asset(
-                                Assets.icons.miniDislike,
-                                colorFilter: ColorFilter.mode(
-                                    like == Like.disliked
-                                        ? Colors.red
-                                        : Colors.black54,
-                                    BlendMode.srcIn),
                               )),
                         ],
                       ),

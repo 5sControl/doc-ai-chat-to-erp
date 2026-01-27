@@ -20,7 +20,7 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
                 answer:
                     "Setting up the share button in Summify's settings will allow you to easily distribute summaries to your preferred contacts or platforms as well it will simplify the process of sharing  summarizations with others.",
                 answerStatus: AnswerStatus.completed,
-                like: Like.liked)
+                like: Like.unliked)
           ]
         })) {
     on<MakeQuestionFromUrl>((event, emit) async {
@@ -157,38 +157,6 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
         emit(state.copyWith(questions: questions));
       }
     }, transformer: droppable());
-
-    on<LikeAnswer>((event, emit) {
-      final Map<String, List<ResearchQuestion>> questions =
-          Map.from(state.questions);
-      List<ResearchQuestion> newList =
-          List.from(state.questions[event.summaryKey]!);
-      newList = newList.map((answer) {
-        if (answer.answer == event.answer) {
-          return answer.copyWith(like: Like.liked);
-        } else {
-          return answer;
-        }
-      }).toList();
-      questions.update(event.summaryKey, (value) => [...newList]);
-      emit(state.copyWith(questions: questions));
-    });
-
-    on<DislikeAnswer>((event, emit) {
-      final Map<String, List<ResearchQuestion>> questions =
-          Map.from(state.questions);
-      List<ResearchQuestion> newList =
-          List.from(state.questions[event.summaryKey]!);
-      newList = newList.map((answer) {
-        if (answer.answer == event.answer) {
-          return answer.copyWith(like: Like.disliked);
-        } else {
-          return answer;
-        }
-      }).toList();
-      questions.update(event.summaryKey, (value) => [...newList]);
-      emit(state.copyWith(questions: questions));
-    });
   }
 
   @override
