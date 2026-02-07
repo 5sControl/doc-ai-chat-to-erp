@@ -34,10 +34,10 @@
   "paywall_12Months": "12 mesi",
   "paywall_1Week": "1 settimana",
   "paywall_1Month": "1 mese",
-  "paywall_1WeekMultiline": "1 \\nsettimana",
-  "paywall_1MonthMultiline": "1 \\nmese",
-  "paywall_12MonthsMultiline": "12 \\nmesi",
-  "paywall_accessAllPremiumCancelAnytime": "Accedi a tutte le funzionalità premium!\\nAnnulla quando vuoi",
+  "paywall_1WeekMultiline": "1 settimana",
+  "paywall_1MonthMultiline": "1 mese",
+  "paywall_12MonthsMultiline": "12 mesi",
+  "paywall_accessAllPremiumCancelAnytime": "Accedi a tutte le funzionalità premium! Annulla quando vuoi",
   "paywall_pricePerYear": "{price}/anno",
   "@paywall_pricePerYear": {
     "placeholders": {
@@ -64,7 +64,7 @@
   "offer_needMoreSummaries": "Ti servono più riassunti?",
   "offer_maximizeYourProductivity": "Massimizza la tua produttività!",
   "offer_outOfSummaries": "Riassunti esauriti?",
-  "offer_maximizeProductivityAndEfficiency": "Massimizza produttività\\ned efficienza!",
+  "offer_maximizeProductivityAndEfficiency": "Massimizza produttività ed efficienza!",
   "offer_getMoreInNoTime": "Ottieni di più in poco tempo!",
   "offer_15DeepSummariesDaily": "15 riassunti approfonditi al giorno",
   "offer_goUnlimited": "Attiva illimitato",

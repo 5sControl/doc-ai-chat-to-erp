@@ -83,16 +83,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get paywall_1Month => '1 个月';
 
   @override
-  String get paywall_1WeekMultiline => '1 \\n周';
+  String get paywall_1WeekMultiline => '1 周';
 
   @override
-  String get paywall_1MonthMultiline => '1 \\n个月';
+  String get paywall_1MonthMultiline => '1 个月';
 
   @override
-  String get paywall_12MonthsMultiline => '12 \\n个月';
+  String get paywall_12MonthsMultiline => '12 个月';
 
   @override
-  String get paywall_accessAllPremiumCancelAnytime => '解锁所有高级功能！\\n随时取消';
+  String get paywall_accessAllPremiumCancelAnytime => '解锁所有高级功能！随时取消';
 
   @override
   String paywall_pricePerYear(Object price) {
@@ -138,7 +138,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get offer_outOfSummaries => '摘要用完了？';
 
   @override
-  String get offer_maximizeProductivityAndEfficiency => '提升你的效率\\n和生产力！';
+  String get offer_maximizeProductivityAndEfficiency => '提升你的效率和生产力！';
 
   @override
   String get offer_getMoreInNoTime => '立刻获得更多！';
@@ -617,16 +617,16 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get paywall_1Month => '1 个月';
 
   @override
-  String get paywall_1WeekMultiline => '1 \\n周';
+  String get paywall_1WeekMultiline => '1 周';
 
   @override
-  String get paywall_1MonthMultiline => '1 \\n个月';
+  String get paywall_1MonthMultiline => '1 个月';
 
   @override
-  String get paywall_12MonthsMultiline => '12 \\n个月';
+  String get paywall_12MonthsMultiline => '12 个月';
 
   @override
-  String get paywall_accessAllPremiumCancelAnytime => '解锁所有高级功能！\\n随时取消';
+  String get paywall_accessAllPremiumCancelAnytime => '解锁所有高级功能！随时取消';
 
   @override
   String paywall_pricePerYear(Object price) {
@@ -672,7 +672,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get offer_outOfSummaries => '摘要用完了？';
 
   @override
-  String get offer_maximizeProductivityAndEfficiency => '提升你的效率\\n和生产力！';
+  String get offer_maximizeProductivityAndEfficiency => '提升你的效率和生产力！';
 
   @override
   String get offer_getMoreInNoTime => '立刻获得更多！';

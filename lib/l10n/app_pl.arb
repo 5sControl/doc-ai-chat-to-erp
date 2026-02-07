@@ -34,10 +34,10 @@
   "paywall_12Months": "12 miesięcy",
   "paywall_1Week": "1 tydzień",
   "paywall_1Month": "1 miesiąc",
-  "paywall_1WeekMultiline": "1 \\ntydzień",
-  "paywall_1MonthMultiline": "1 \\nmiesiąc",
-  "paywall_12MonthsMultiline": "12 \\nmiesięcy",
-  "paywall_accessAllPremiumCancelAnytime": "Dostęp do wszystkich funkcji premium!\\nAnuluj w dowolnym momencie",
+  "paywall_1WeekMultiline": "1 tydzień",
+  "paywall_1MonthMultiline": "1 miesiąc",
+  "paywall_12MonthsMultiline": "12 miesięcy",
+  "paywall_accessAllPremiumCancelAnytime": "Dostęp do wszystkich funkcji premium! Anuluj w dowolnym momencie",
   "paywall_pricePerYear": "{price}/rok",
   "@paywall_pricePerYear": {
     "placeholders": {
@@ -64,7 +64,7 @@
   "offer_needMoreSummaries": "Potrzebujesz więcej podsumowań?",
   "offer_maximizeYourProductivity": "Zwiększ swoją produktywność!",
   "offer_outOfSummaries": "Brak podsumowań?",
-  "offer_maximizeProductivityAndEfficiency": "Zwiększ produktywność\\ni efektywność!",
+  "offer_maximizeProductivityAndEfficiency": "Zwiększ produktywność i efektywność!",
   "offer_getMoreInNoTime": "Zyskaj więcej w mgnieniu oka!",
   "offer_15DeepSummariesDaily": "15 szczegółowych podsumowań dziennie",
   "offer_goUnlimited": "Włącz bez limitu",

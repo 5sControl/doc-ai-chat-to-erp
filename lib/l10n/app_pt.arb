@@ -34,10 +34,10 @@
   "paywall_12Months": "12 meses",
   "paywall_1Week": "1 semana",
   "paywall_1Month": "1 mês",
-  "paywall_1WeekMultiline": "1 \\nsemana",
-  "paywall_1MonthMultiline": "1 \\nmês",
-  "paywall_12MonthsMultiline": "12 \\nmeses",
-  "paywall_accessAllPremiumCancelAnytime": "Acesse todos os recursos premium!\\nCancele quando quiser",
+  "paywall_1WeekMultiline": "1 semana",
+  "paywall_1MonthMultiline": "1 mês",
+  "paywall_12MonthsMultiline": "12 meses",
+  "paywall_accessAllPremiumCancelAnytime": "Acesse todos os recursos premium! Cancele quando quiser",
   "paywall_pricePerYear": "{price}/ano",
   "@paywall_pricePerYear": {
     "placeholders": {
@@ -64,7 +64,7 @@
   "offer_needMoreSummaries": "Precisa de mais resumos?",
   "offer_maximizeYourProductivity": "Maximize sua produtividade!",
   "offer_outOfSummaries": "Sem resumos?",
-  "offer_maximizeProductivityAndEfficiency": "Maximize sua produtividade\\ne eficiência!",
+  "offer_maximizeProductivityAndEfficiency": "Maximize sua produtividade e eficiência!",
   "offer_getMoreInNoTime": "Faça mais em pouco tempo!",
   "offer_15DeepSummariesDaily": "15 resumos aprofundados por dia",
   "offer_goUnlimited": "Ativar ilimitado",

@@ -84,17 +84,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get paywall_1Month => '1 tháng';
 
   @override
-  String get paywall_1WeekMultiline => '1 \\ntuần';
+  String get paywall_1WeekMultiline => '1 tuần';
 
   @override
-  String get paywall_1MonthMultiline => '1 \\ntháng';
+  String get paywall_1MonthMultiline => '1 tháng';
 
   @override
-  String get paywall_12MonthsMultiline => '12 \\ntháng';
+  String get paywall_12MonthsMultiline => '12 tháng';
 
   @override
   String get paywall_accessAllPremiumCancelAnytime =>
-      'Truy cập mọi tính năng cao cấp!\\nHủy bất cứ lúc nào';
+      'Truy cập mọi tính năng cao cấp! Hủy bất cứ lúc nào';
 
   @override
   String paywall_pricePerYear(Object price) {
@@ -141,7 +141,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get offer_maximizeProductivityAndEfficiency =>
-      'Tăng năng suất\\nvà hiệu quả!';
+      'Tăng năng suất và hiệu quả!';
 
   @override
   String get offer_getMoreInNoTime => 'Nhận thêm chỉ trong chốc lát!';

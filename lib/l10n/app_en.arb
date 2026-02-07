@@ -34,10 +34,10 @@
   "paywall_12Months": "12 months",
   "paywall_1Week": "1 week",
   "paywall_1Month": "1 month",
-  "paywall_1WeekMultiline": "1 \\nweek",
-  "paywall_1MonthMultiline": "1 \\nmonth",
-  "paywall_12MonthsMultiline": "12 \\nmonths",
-  "paywall_accessAllPremiumCancelAnytime": "Access all premium features!\\nCancel anytime",
+  "paywall_1WeekMultiline": "1 week",
+  "paywall_1MonthMultiline": "1 month",
+  "paywall_12MonthsMultiline": "12 months",
+  "paywall_accessAllPremiumCancelAnytime": "Access all premium features! Cancel anytime",
   "paywall_pricePerYear": "{price}/year",
   "@paywall_pricePerYear": {
     "placeholders": {
@@ -64,7 +64,7 @@
   "offer_needMoreSummaries": "Need more summaries?",
   "offer_maximizeYourProductivity": "Maximize your productivity!",
   "offer_outOfSummaries": "Out of Summaries?",
-  "offer_maximizeProductivityAndEfficiency": "Maximize your productivity\\nand efficiency!",
+  "offer_maximizeProductivityAndEfficiency": "Maximize your productivity and efficiency!",
   "offer_getMoreInNoTime": "Get more in no time!",
   "offer_15DeepSummariesDaily": "15 Deep Summaries Daily",
   "offer_goUnlimited": "Go Unlimited",

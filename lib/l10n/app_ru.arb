@@ -34,10 +34,10 @@
   "paywall_12Months": "12 месяцев",
   "paywall_1Week": "1 неделя",
   "paywall_1Month": "1 месяц",
-  "paywall_1WeekMultiline": "1 \\nнеделя",
-  "paywall_1MonthMultiline": "1 \\nмесяц",
-  "paywall_12MonthsMultiline": "12 \\nмесяцев",
-  "paywall_accessAllPremiumCancelAnytime": "Доступ ко всем премиум-функциям!\\nОтмена в любой момент",
+  "paywall_1WeekMultiline": "1 неделя",
+  "paywall_1MonthMultiline": "1 месяц",
+  "paywall_12MonthsMultiline": "12 месяцев",
+  "paywall_accessAllPremiumCancelAnytime": "Доступ ко всем премиум-функциям! Отмена в любой момент",
   "paywall_pricePerYear": "{price}/год",
   "@paywall_pricePerYear": {
     "placeholders": {
@@ -64,7 +64,7 @@
   "offer_needMoreSummaries": "Нужно больше саммари?",
   "offer_maximizeYourProductivity": "Увеличьте продуктивность!",
   "offer_outOfSummaries": "Саммари закончились?",
-  "offer_maximizeProductivityAndEfficiency": "Повышайте продуктивность\\nи эффективность!",
+  "offer_maximizeProductivityAndEfficiency": "Повышайте продуктивность и эффективность!",
   "offer_getMoreInNoTime": "Получайте больше за меньшее время!",
   "offer_15DeepSummariesDaily": "15 глубоких саммари в день",
   "offer_goUnlimited": "Включить безлимит",

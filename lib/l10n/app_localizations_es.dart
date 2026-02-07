@@ -85,17 +85,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get paywall_1Month => '1 mes';
 
   @override
-  String get paywall_1WeekMultiline => '1 \\nsemana';
+  String get paywall_1WeekMultiline => '1 semana';
 
   @override
-  String get paywall_1MonthMultiline => '1 \\nmes';
+  String get paywall_1MonthMultiline => '1 mes';
 
   @override
-  String get paywall_12MonthsMultiline => '12 \\nmeses';
+  String get paywall_12MonthsMultiline => '12 meses';
 
   @override
   String get paywall_accessAllPremiumCancelAnytime =>
-      'Accede a todas las funciones premium\\nCancela cuando quieras';
+      'Accede a todas las funciones premium. Cancela cuando quieras';
 
   @override
   String paywall_pricePerYear(Object price) {
@@ -142,7 +142,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get offer_maximizeProductivityAndEfficiency =>
-      '¡Maximiza tu productividad\\ny eficiencia!';
+      '¡Maximiza tu productividad y eficiencia!';
 
   @override
   String get offer_getMoreInNoTime => '¡Obtén más en un instante!';

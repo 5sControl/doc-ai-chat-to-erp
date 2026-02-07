@@ -84,17 +84,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get paywall_1Month => '1 ay';
 
   @override
-  String get paywall_1WeekMultiline => '1 \\nhafta';
+  String get paywall_1WeekMultiline => '1 hafta';
 
   @override
-  String get paywall_1MonthMultiline => '1 \\nay';
+  String get paywall_1MonthMultiline => '1 ay';
 
   @override
-  String get paywall_12MonthsMultiline => '12 \\nay';
+  String get paywall_12MonthsMultiline => '12 ay';
 
   @override
   String get paywall_accessAllPremiumCancelAnytime =>
-      'Tüm premium özelliklere erişin!\\nİstediğiniz zaman iptal edin';
+      'Tüm premium özelliklere erişin! İstediğiniz zaman iptal edin';
 
   @override
   String paywall_pricePerYear(Object price) {
@@ -131,7 +131,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get paywall_addToChromeForFree => 'Chrome\'a ÜCRETSİZ ekleyin';
 
   @override
-  String get offer_needMoreSummaries => 'Daha fazla özetе ihtiyacınız var mı?';
+  String get offer_needMoreSummaries => 'Daha fazla özete ihtiyacınız var mı?';
 
   @override
   String get offer_maximizeYourProductivity =>
@@ -142,7 +142,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get offer_maximizeProductivityAndEfficiency =>
-      'Üretkenliğinizi\\nve verimliliğinizi en üst düzeye çıkarın!';
+      'Üretkenliğinizi ve verimliliğinizi en üst düzeye çıkarın!';
 
   @override
   String get offer_getMoreInNoTime => 'Kısa sürede daha fazlasını elde edin!';

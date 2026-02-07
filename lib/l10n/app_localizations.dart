@@ -264,25 +264,25 @@ abstract class AppLocalizations {
   /// No description provided for @paywall_1WeekMultiline.
   ///
   /// In en, this message translates to:
-  /// **'1 \\nweek'**
+  /// **'1 week'**
   String get paywall_1WeekMultiline;
 
   /// No description provided for @paywall_1MonthMultiline.
   ///
   /// In en, this message translates to:
-  /// **'1 \\nmonth'**
+  /// **'1 month'**
   String get paywall_1MonthMultiline;
 
   /// No description provided for @paywall_12MonthsMultiline.
   ///
   /// In en, this message translates to:
-  /// **'12 \\nmonths'**
+  /// **'12 months'**
   String get paywall_12MonthsMultiline;
 
   /// No description provided for @paywall_accessAllPremiumCancelAnytime.
   ///
   /// In en, this message translates to:
-  /// **'Access all premium features!\\nCancel anytime'**
+  /// **'Access all premium features! Cancel anytime'**
   String get paywall_accessAllPremiumCancelAnytime;
 
   /// No description provided for @paywall_pricePerYear.
@@ -366,7 +366,7 @@ abstract class AppLocalizations {
   /// No description provided for @offer_maximizeProductivityAndEfficiency.
   ///
   /// In en, this message translates to:
-  /// **'Maximize your productivity\\nand efficiency!'**
+  /// **'Maximize your productivity and efficiency!'**
   String get offer_maximizeProductivityAndEfficiency;
 
   /// No description provided for @offer_getMoreInNoTime.

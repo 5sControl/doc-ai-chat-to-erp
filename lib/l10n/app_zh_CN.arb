@@ -34,10 +34,10 @@
   "paywall_12Months": "12 个月",
   "paywall_1Week": "1 周",
   "paywall_1Month": "1 个月",
-  "paywall_1WeekMultiline": "1 \\n周",
-  "paywall_1MonthMultiline": "1 \\n个月",
-  "paywall_12MonthsMultiline": "12 \\n个月",
-  "paywall_accessAllPremiumCancelAnytime": "解锁所有高级功能！\\n随时取消",
+  "paywall_1WeekMultiline": "1 周",
+  "paywall_1MonthMultiline": "1 个月",
+  "paywall_12MonthsMultiline": "12 个月",
+  "paywall_accessAllPremiumCancelAnytime": "解锁所有高级功能！随时取消",
   "paywall_pricePerYear": "{price}/年",
   "@paywall_pricePerYear": {
     "placeholders": {
@@ -64,7 +64,7 @@
   "offer_needMoreSummaries": "需要更多摘要？",
   "offer_maximizeYourProductivity": "提升你的效率！",
   "offer_outOfSummaries": "摘要用完了？",
-  "offer_maximizeProductivityAndEfficiency": "提升你的效率\\n和生产力！",
+  "offer_maximizeProductivityAndEfficiency": "提升你的效率和生产力！",
   "offer_getMoreInNoTime": "立刻获得更多！",
   "offer_15DeepSummariesDaily": "每天 15 条深入摘要",
   "offer_goUnlimited": "开启无限",

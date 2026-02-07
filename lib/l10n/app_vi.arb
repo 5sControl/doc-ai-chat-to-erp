@@ -34,10 +34,10 @@
   "paywall_12Months": "12 tháng",
   "paywall_1Week": "1 tuần",
   "paywall_1Month": "1 tháng",
-  "paywall_1WeekMultiline": "1 \\ntuần",
-  "paywall_1MonthMultiline": "1 \\ntháng",
-  "paywall_12MonthsMultiline": "12 \\ntháng",
-  "paywall_accessAllPremiumCancelAnytime": "Truy cập mọi tính năng cao cấp!\\nHủy bất cứ lúc nào",
+  "paywall_1WeekMultiline": "1 tuần",
+  "paywall_1MonthMultiline": "1 tháng",
+  "paywall_12MonthsMultiline": "12 tháng",
+  "paywall_accessAllPremiumCancelAnytime": "Truy cập mọi tính năng cao cấp! Hủy bất cứ lúc nào",
   "paywall_pricePerYear": "{price}/năm",
   "@paywall_pricePerYear": {
     "placeholders": {
@@ -64,7 +64,7 @@
   "offer_needMoreSummaries": "Cần thêm tóm tắt?",
   "offer_maximizeYourProductivity": "Tăng năng suất của bạn!",
   "offer_outOfSummaries": "Hết lượt tóm tắt?",
-  "offer_maximizeProductivityAndEfficiency": "Tăng năng suất\\nvà hiệu quả!",
+  "offer_maximizeProductivityAndEfficiency": "Tăng năng suất và hiệu quả!",
   "offer_getMoreInNoTime": "Nhận thêm chỉ trong chốc lát!",
   "offer_15DeepSummariesDaily": "15 tóm tắt chi tiết mỗi ngày",
   "offer_goUnlimited": "Bật không giới hạn",
