@@ -52,6 +52,18 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Chọn ngôn ngữ';
 
   @override
+  String get wordTapHint_title => 'Dịch từ';
+
+  @override
+  String get wordTapHint_message => 'Chạm hai lần vào một từ để xem bản dịch.';
+
+  @override
+  String get wordTapHint_dontShowAgain => 'Không hiển thị lại';
+
+  @override
+  String get wordTapHint_showLater => 'Hiển thị sau';
+
+  @override
   String get paywall_beSmartWithYourTime => 'Hãy sử dụng thời gian thông minh!';
 
   @override

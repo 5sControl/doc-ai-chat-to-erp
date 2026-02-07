@@ -19,6 +19,7 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
         SettingsState(
           onboardingPassed: false,
           howToShowed: false,
+          wordTapHintDismissed: false,
           isNotificationsEnabled: true,
           appTheme: AppTheme.auto,
           subscriptionsSynced: false,
@@ -35,6 +36,10 @@ class SettingsBloc extends HydratedBloc<SettingsEvent, SettingsState> {
 
     on<HowToShowed>((event, emit) {
       emit(state.copyWith(howToShowed: true));
+    });
+
+    on<WordTapHintDismissed>((event, emit) {
+      emit(state.copyWith(wordTapHintDismissed: true));
     });
 
     on<SendNotify>((event, emit) {

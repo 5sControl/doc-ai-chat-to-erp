@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/models.dart';
 import 'markdown_word_tap_builder.dart';
 
@@ -11,7 +14,10 @@ import 'markdown_word_tap_builder.dart';
 /// Called when user double-taps a word while showing original (untranslated) text.
 typedef OnWordLookup = void Function(BuildContext context, String word);
 
-class SummaryTextContainer extends StatelessWidget {
+/// Shown at most once per app session so multiple tabs don't show the hint repeatedly.
+bool _wordTapHintShownThisSession = false;
+
+class SummaryTextContainer extends StatefulWidget {
   final String summaryText;
   final Summary summary;
   final SummaryStatus summaryStatus;
@@ -30,30 +36,85 @@ class SummaryTextContainer extends StatelessWidget {
     this.onWordLookup,
   });
 
-  bool _isShowingOriginalText(
-          SummaryTranslate? summaryTranslate) =>
+  @override
+  State<SummaryTextContainer> createState() => _SummaryTextContainerState();
+}
+
+class _SummaryTextContainerState extends State<SummaryTextContainer> {
+  late final ScrollController _scrollController;
+  Timer? _wordTapHintTimer;
+
+  bool _isShowingOriginalText(SummaryTranslate? summaryTranslate) =>
       summaryTranslate == null || !summaryTranslate.isActive;
 
   void _onWordTap(BuildContext context, String word, OnWordLookup callback) {
-    if (_isShowingOriginalText(summaryTranslate)) {
+    if (_isShowingOriginalText(widget.summaryTranslate)) {
       final trimmed = word.trim();
       if (trimmed.isNotEmpty) callback(context, trimmed);
     }
   }
 
+  void _maybeShowWordTapHint() {
+    if (!mounted) return;
+    if (_wordTapHintShownThisSession) return;
+    final settingsState = context.read<SettingsBloc>().state;
+    if (settingsState.wordTapHintDismissed) return;
+    _wordTapHintShownThisSession = true;
+    final l10n = AppLocalizations.of(context);
+    final scaffoldContext = context;
+    showDialog<void>(
+      context: scaffoldContext,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.wordTapHint_title),
+        content: Text(l10n.wordTapHint_message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.wordTapHint_showLater),
+          ),
+          TextButton(
+            onPressed: () {
+              scaffoldContext.read<SettingsBloc>().add(const WordTapHintDismissed());
+              Navigator.of(dialogContext).pop();
+            },
+            child: Text(l10n.wordTapHint_dontShowAgain),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    if (widget.onWordLookup != null && _isShowingOriginalText(widget.summaryTranslate)) {
+      _wordTapHintTimer = Timer(const Duration(seconds: 5), () {
+        if (!mounted) return;
+        _maybeShowWordTapHint();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _wordTapHintTimer?.cancel();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-    final onWordLookup = this.onWordLookup;
+    final onWordLookup = widget.onWordLookup;
 
     return Scrollbar(
-      controller: scrollController,
+      controller: _scrollController,
       child: SingleChildScrollView(
-        controller: scrollController,
+        controller: _scrollController,
         padding: const EdgeInsets.only(top: 60, bottom: 90, left: 15, right: 15),
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(
-          key: Key(summaryTranslate != null && summaryTranslate!.isActive
+          key: Key(widget.summaryTranslate != null && widget.summaryTranslate!.isActive
               ? 'short'
               : 'long'),
           child: BlocBuilder<SettingsBloc, SettingsState>(
@@ -61,9 +122,9 @@ class SummaryTextContainer extends StatelessWidget {
               return Builder(
                 builder: (context) {
                   final textToDisplay =
-                      summaryTranslate != null && summaryTranslate!.isActive
-                          ? (summaryTranslate!.translate ?? summaryText)
-                          : summaryText;
+                      widget.summaryTranslate != null && widget.summaryTranslate!.isActive
+                          ? (widget.summaryTranslate!.translate ?? widget.summaryText)
+                          : widget.summaryText;
 
                   final styleSheet = MarkdownStyleSheet(
                     h1: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -135,7 +196,7 @@ class SummaryTextContainer extends StatelessWidget {
                   );
 
                   final builders =
-                      _isShowingOriginalText(summaryTranslate) && onWordLookup != null
+                      _isShowingOriginalText(widget.summaryTranslate) && onWordLookup != null
                           ? <String, MarkdownElementBuilder>{
                               'p': MarkdownWordTapBuilder(
                                   onWordTap: (w) => _onWordTap(context, w, onWordLookup)),

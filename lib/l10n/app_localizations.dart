@@ -201,6 +201,30 @@ abstract class AppLocalizations {
   /// **'Select language'**
   String get settings_selectLanguageTitle;
 
+  /// No description provided for @wordTapHint_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Word translation'**
+  String get wordTapHint_title;
+
+  /// No description provided for @wordTapHint_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Double-tap a word to get its translation.'**
+  String get wordTapHint_message;
+
+  /// No description provided for @wordTapHint_dontShowAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t show again'**
+  String get wordTapHint_dontShowAgain;
+
+  /// No description provided for @wordTapHint_showLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Show later'**
+  String get wordTapHint_showLater;
+
   /// No description provided for @paywall_beSmartWithYourTime.
   ///
   /// In en, this message translates to:

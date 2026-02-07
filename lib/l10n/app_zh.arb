@@ -18,6 +18,11 @@
   "settings_translationLanguage": "翻译语言",
   "settings_selectLanguageTitle": "选择语言",
 
+  "wordTapHint_title": "单词翻译",
+  "wordTapHint_message": "双击单词即可获取翻译。",
+  "wordTapHint_dontShowAgain": "不再显示",
+  "wordTapHint_showLater": "稍后显示",
+
   "paywall_beSmartWithYourTime": "聪明地利用你的时间！",
   "paywall_payWeekly": "按周付费",
   "paywall_payAnnually": "按年付费",

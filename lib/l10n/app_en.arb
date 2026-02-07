@@ -18,6 +18,11 @@
   "settings_translationLanguage": "Translation language",
   "settings_selectLanguageTitle": "Select language",
 
+  "wordTapHint_title": "Word translation",
+  "wordTapHint_message": "Double-tap a word to get its translation.",
+  "wordTapHint_dontShowAgain": "Don't show again",
+  "wordTapHint_showLater": "Show later",
+
   "paywall_beSmartWithYourTime": "Be smart with your time!",
   "paywall_payWeekly": "Pay weekly",
   "paywall_payAnnually": "Pay annually",

@@ -52,6 +52,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Dil seç';
 
   @override
+  String get wordTapHint_title => 'Kelime çevirisi';
+
+  @override
+  String get wordTapHint_message =>
+      'Çevirisini almak için bir kelimeye çift dokunun.';
+
+  @override
+  String get wordTapHint_dontShowAgain => 'Bir daha gösterme';
+
+  @override
+  String get wordTapHint_showLater => 'Daha sonra göster';
+
+  @override
   String get paywall_beSmartWithYourTime => 'Zamanınızı akıllıca kullanın!';
 
   @override

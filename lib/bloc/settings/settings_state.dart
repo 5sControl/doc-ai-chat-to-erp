@@ -6,6 +6,8 @@ enum AppTheme { auto, dark, light }
 class SettingsState extends Equatable {
   final bool onboardingPassed;
   final bool howToShowed;
+  @JsonKey(defaultValue: false)
+  final bool wordTapHintDismissed;
   final String abTest;
   final bool isNotificationsEnabled;
   final AppTheme appTheme;
@@ -22,6 +24,7 @@ class SettingsState extends Equatable {
   const SettingsState({
     required this.onboardingPassed,
     required this.howToShowed,
+    this.wordTapHintDismissed = false,
     required this.abTest,
     required this.isNotificationsEnabled,
     required this.appTheme,
@@ -36,6 +39,7 @@ class SettingsState extends Equatable {
   SettingsState copyWith({
     bool? onboardingPassed,
     bool? howToShowed,
+    bool? wordTapHintDismissed,
     String? abTest,
     bool? isNotificationsEnabled,
     AppTheme? appTheme,
@@ -50,6 +54,8 @@ class SettingsState extends Equatable {
     return SettingsState(
       onboardingPassed: onboardingPassed ?? this.onboardingPassed,
       howToShowed: howToShowed ?? this.howToShowed,
+      wordTapHintDismissed:
+          wordTapHintDismissed ?? this.wordTapHintDismissed,
       abTest: abTest ?? this.abTest,
       isNotificationsEnabled:
           isNotificationsEnabled ?? this.isNotificationsEnabled,
@@ -67,6 +73,7 @@ class SettingsState extends Equatable {
   List<Object> get props => [
     onboardingPassed,
     howToShowed,
+    wordTapHintDismissed,
     abTest,
     isNotificationsEnabled,
     appTheme,

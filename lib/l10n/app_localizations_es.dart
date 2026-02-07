@@ -53,6 +53,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Selecciona el idioma';
 
   @override
+  String get wordTapHint_title => 'Traducción de palabras';
+
+  @override
+  String get wordTapHint_message =>
+      'Pulsa dos veces en una palabra para obtener su traducción.';
+
+  @override
+  String get wordTapHint_dontShowAgain => 'No volver a mostrar';
+
+  @override
+  String get wordTapHint_showLater => 'Mostrar más tarde';
+
+  @override
   String get paywall_beSmartWithYourTime => '¡Aprovecha tu tiempo!';
 
   @override

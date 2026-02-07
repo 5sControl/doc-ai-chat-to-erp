@@ -18,6 +18,13 @@ class HowToShowed extends SettingsEvent {
   List<Object?> get props => [];
 }
 
+class WordTapHintDismissed extends SettingsEvent {
+  const WordTapHintDismissed();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class SendNotify extends SettingsEvent {
   final String title;
   final String description;

@@ -10,6 +10,7 @@ SettingsState _$SettingsStateFromJson(Map<String, dynamic> json) =>
     SettingsState(
       onboardingPassed: json['onboardingPassed'] as bool,
       howToShowed: json['howToShowed'] as bool,
+      wordTapHintDismissed: json['wordTapHintDismissed'] as bool? ?? false,
       abTest: json['abTest'] as String,
       isNotificationsEnabled: json['isNotificationsEnabled'] as bool,
       appTheme: $enumDecode(_$AppThemeEnumMap, json['appTheme']),
@@ -26,6 +27,7 @@ Map<String, dynamic> _$SettingsStateToJson(SettingsState instance) =>
     <String, dynamic>{
       'onboardingPassed': instance.onboardingPassed,
       'howToShowed': instance.howToShowed,
+      'wordTapHintDismissed': instance.wordTapHintDismissed,
       'abTest': instance.abTest,
       'isNotificationsEnabled': instance.isNotificationsEnabled,
       'appTheme': _$AppThemeEnumMap[instance.appTheme]!,

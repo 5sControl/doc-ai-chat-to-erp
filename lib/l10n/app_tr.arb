@@ -18,6 +18,11 @@
   "settings_translationLanguage": "Çeviri dili",
   "settings_selectLanguageTitle": "Dil seç",
 
+  "wordTapHint_title": "Kelime çevirisi",
+  "wordTapHint_message": "Çevirisini almak için bir kelimeye çift dokunun.",
+  "wordTapHint_dontShowAgain": "Bir daha gösterme",
+  "wordTapHint_showLater": "Daha sonra göster",
+
   "paywall_beSmartWithYourTime": "Zamanınızı akıllıca kullanın!",
   "paywall_payWeekly": "Haftalık öde",
   "paywall_payAnnually": "Yıllık öde",

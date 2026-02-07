@@ -18,6 +18,11 @@
   "settings_translationLanguage": "Язык перевода",
   "settings_selectLanguageTitle": "Выберите язык",
 
+  "wordTapHint_title": "Перевод слова",
+  "wordTapHint_message": "Дважды нажмите на слово, чтобы получить его перевод.",
+  "wordTapHint_dontShowAgain": "Больше не показывать",
+  "wordTapHint_showLater": "Показать позже",
+
   "paywall_beSmartWithYourTime": "Умно распоряжайтесь своим временем!",
   "paywall_payWeekly": "Оплата еженедельно",
   "paywall_payAnnually": "Оплата ежегодно",

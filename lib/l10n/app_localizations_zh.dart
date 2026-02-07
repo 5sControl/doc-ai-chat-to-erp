@@ -51,6 +51,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings_selectLanguageTitle => '选择语言';
 
   @override
+  String get wordTapHint_title => '单词翻译';
+
+  @override
+  String get wordTapHint_message => '双击单词即可获取翻译。';
+
+  @override
+  String get wordTapHint_dontShowAgain => '不再显示';
+
+  @override
+  String get wordTapHint_showLater => '稍后显示';
+
+  @override
   String get paywall_beSmartWithYourTime => '聪明地利用你的时间！';
 
   @override
@@ -577,6 +589,18 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get settings_selectLanguageTitle => '选择语言';
+
+  @override
+  String get wordTapHint_title => '单词翻译';
+
+  @override
+  String get wordTapHint_message => '双击单词即可获取翻译。';
+
+  @override
+  String get wordTapHint_dontShowAgain => '不再显示';
+
+  @override
+  String get wordTapHint_showLater => '稍后显示';
 
   @override
   String get paywall_beSmartWithYourTime => '聪明地利用你的时间！';

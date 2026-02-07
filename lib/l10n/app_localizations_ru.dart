@@ -53,6 +53,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Выберите язык';
 
   @override
+  String get wordTapHint_title => 'Перевод слова';
+
+  @override
+  String get wordTapHint_message =>
+      'Дважды нажмите на слово, чтобы получить его перевод.';
+
+  @override
+  String get wordTapHint_dontShowAgain => 'Больше не показывать';
+
+  @override
+  String get wordTapHint_showLater => 'Показать позже';
+
+  @override
   String get paywall_beSmartWithYourTime =>
       'Умно распоряжайтесь своим временем!';
 

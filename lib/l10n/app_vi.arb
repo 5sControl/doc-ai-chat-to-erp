@@ -18,6 +18,11 @@
   "settings_translationLanguage": "Ngôn ngữ dịch",
   "settings_selectLanguageTitle": "Chọn ngôn ngữ",
 
+  "wordTapHint_title": "Dịch từ",
+  "wordTapHint_message": "Chạm hai lần vào một từ để xem bản dịch.",
+  "wordTapHint_dontShowAgain": "Không hiển thị lại",
+  "wordTapHint_showLater": "Hiển thị sau",
+
   "paywall_beSmartWithYourTime": "Hãy sử dụng thời gian thông minh!",
   "paywall_payWeekly": "Thanh toán hàng tuần",
   "paywall_payAnnually": "Thanh toán hàng năm",

@@ -18,6 +18,11 @@
   "settings_translationLanguage": "Idioma de traducción",
   "settings_selectLanguageTitle": "Selecciona el idioma",
 
+  "wordTapHint_title": "Traducción de palabras",
+  "wordTapHint_message": "Pulsa dos veces en una palabra para obtener su traducción.",
+  "wordTapHint_dontShowAgain": "No volver a mostrar",
+  "wordTapHint_showLater": "Mostrar más tarde",
+
   "paywall_beSmartWithYourTime": "¡Aprovecha tu tiempo!",
   "paywall_payWeekly": "Pagar semanalmente",
   "paywall_payAnnually": "Pagar anualmente",
