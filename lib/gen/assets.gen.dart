@@ -56,6 +56,9 @@ class $AssetsFlagsGen {
   /// File path: assets/flags/nl.svg
   String get nl => 'assets/flags/nl.svg';
 
+  /// File path: assets/flags/pl.svg
+  String get pl => 'assets/flags/pl.svg';
+
   /// File path: assets/flags/pt.svg
   String get pt => 'assets/flags/pt.svg';
 
@@ -96,6 +99,7 @@ class $AssetsFlagsGen {
     ja,
     ko,
     nl,
+    pl,
     pt,
     ro,
     ru,
@@ -546,6 +550,23 @@ class $AssetsSetUpGen {
   ];
 }
 
+class $AssetsTtsModelsGen {
+  const $AssetsTtsModelsGen();
+
+  /// Directory path: assets/tts_models/kokoro
+  $AssetsTtsModelsKokoroGen get kokoro => const $AssetsTtsModelsKokoroGen();
+}
+
+class $AssetsTtsModelsKokoroGen {
+  const $AssetsTtsModelsKokoroGen();
+
+  /// File path: assets/tts_models/kokoro/voices.json
+  String get voices => 'assets/tts_models/kokoro/voices.json';
+
+  /// List of all assets
+  List<String> get values => [voices];
+}
+
 class Assets {
   const Assets._();
 
@@ -559,6 +580,7 @@ class Assets {
   static const String happyBoxLeftHand = 'assets/happy_box_left_hand.svg';
   static const String happyBoxRightHand = 'assets/happy_box_right_hand.svg';
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const String lexicon = 'assets/lexicon.json';
   static const $AssetsLibraryGen library = $AssetsLibraryGen();
   static const AssetGenImage niga = AssetGenImage('assets/niga.png');
   static const $AssetsOnboardingGen onboarding = $AssetsOnboardingGen();
@@ -582,6 +604,10 @@ class Assets {
   static const AssetGenImage subscriptionWomanLight = AssetGenImage(
     'assets/subscription_woman_light.png',
   );
+  static const String tokenizerVocab = 'assets/tokenizer_vocab.json';
+  static const $AssetsTtsModelsGen ttsModels = $AssetsTtsModelsGen();
+  static const String usGold = 'assets/us_gold.json';
+  static const String usSilver = 'assets/us_silver.json';
 
   /// List of all assets
   static List<dynamic> get values => [
@@ -593,6 +619,7 @@ class Assets {
     happyBoxFloor,
     happyBoxLeftHand,
     happyBoxRightHand,
+    lexicon,
     niga,
     placeholderLogo,
     subscriptionMen,
@@ -600,6 +627,9 @@ class Assets {
     subscriptionWoman,
     subscriptionWoman1,
     subscriptionWomanLight,
+    tokenizerVocab,
+    usGold,
+    usSilver,
   ];
 }
 

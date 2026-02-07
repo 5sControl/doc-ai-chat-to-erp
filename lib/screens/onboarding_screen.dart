@@ -310,7 +310,7 @@ class OnboardingScreen4 extends StatelessWidget {
       LangItem(title: 'Japanese', icon: Assets.flags.ja, code: 'ja'),
       LangItem(title: 'Korean', icon: Assets.flags.ko, code: 'ko'),
       LangItem(title: 'Persian', icon: Assets.flags.fa, code: 'fa'),
-      LangItem(title: 'Polish', icon: null, code: 'pl'),
+      LangItem(title: 'Polish', icon: Assets.flags.pl, code: 'pl'),
       LangItem(title: 'Portuguese', icon: Assets.flags.pt, code: 'pt'),
       LangItem(title: 'Romanian', icon: Assets.flags.ro, code: 'ro'),
       LangItem(title: 'Turkish', icon: Assets.flags.tr, code: 'tr'),
