@@ -175,7 +175,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                     body: Stack(
                                       children: [
                                         Column(
-                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
@@ -230,8 +230,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                                     height: 20,
                                                   )
                                                 : Container(),
-                                            const Human(),
-                                            Spacer(),
+                                            Expanded(child: const Human()),
+                                            const SizedBox(height: 12),
                                             Align(
                                               alignment: Alignment.bottomCenter,
                                               child: Column(
@@ -324,7 +324,8 @@ class Human extends StatelessWidget {
                     ? 600
                     : double.infinity
                 : 400,
-            fit: BoxFit.cover,
+            height: double.infinity,
+            fit: BoxFit.contain,
           ),
         );
       });
