@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
@@ -57,7 +56,6 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           emit: emit,
           summaryOrigin: SummaryOrigin.url,
         );
-        await _loadSummaryPreview(summaryKey: event.summaryUrl, emit: emit);
         await _loadSummaryFromUrl(
           summaryKey: event.summaryUrl,
           fromShare: event.fromShare,
@@ -209,35 +207,52 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     emit(state.copyWith(summaries: summaryMap));
   }
 
-  Future<void> _loadSummaryPreview({
-    required String summaryKey,
-    required Emitter<SummariesState> emit,
-  }) async {
-    final previewData = await getPreviewData(summaryKey);
-    final summaryData = state.summaries[summaryKey]?.copyWith(
-      summaryPreview: SummaryPreview(
-        imageUrl: previewData.image?.url ?? Assets.placeholderLogo.path,
-        title: previewData.title,
-      ),
-    );
-    final Map<String, SummaryData> summariesMap = Map.from(state.summaries);
-    summariesMap.update(summaryKey, (value) => summaryData!);
-    emit(state.copyWith(summaries: summariesMap));
-  }
-
   Future<void> _loadSummaryFromUrl({
     required String summaryKey,
     required bool fromShare,
     required Emitter<SummariesState> emit,
   }) async {
-    final shortSummaryResponse = await summaryRepository.getSummaryFromLink(
-      summaryLink: summaryKey,
-      summaryType: SummaryType.short,
-    );
-    final longSummaryResponse = await summaryRepository.getSummaryFromLink(
-      summaryLink: summaryKey,
-      summaryType: SummaryType.long,
-    );
+    dynamic shortSummaryResponse;
+    dynamic longSummaryResponse;
+
+    try {
+      final article = await summaryRepository.getArticleByUrl(summaryKey);
+      if (article == null) {
+        final err = Exception('Could not fetch article');
+        shortSummaryResponse = err;
+        longSummaryResponse = err;
+      } else {
+        final summaryMap = Map<String, SummaryData>.from(state.summaries);
+        summaryMap.update(summaryKey, (summaryData) {
+          return summaryData.copyWith(
+            summaryPreview: SummaryPreview(
+              title: article.title?.isNotEmpty == true
+                  ? article.title
+                  : summaryKey.replaceAll('https://', ''),
+              imageUrl: article.imageUrl ?? Assets.placeholderLogo.path,
+            ),
+            userText: article.content,
+          );
+        });
+        emit(state.copyWith(summaries: summaryMap));
+
+        final results = await Future.wait([
+          summaryRepository.getSummaryFromText(
+            textToSummify: article.content,
+            summaryType: SummaryType.short,
+          ),
+          summaryRepository.getSummaryFromText(
+            textToSummify: article.content,
+            summaryType: SummaryType.long,
+          ),
+        ]);
+        shortSummaryResponse = results[0];
+        longSummaryResponse = results[1];
+      }
+    } catch (e) {
+      shortSummaryResponse = e is Exception ? e : Exception(e.toString());
+      longSummaryResponse = shortSummaryResponse;
+    }
 
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryKey, (summaryData) {
@@ -257,43 +272,18 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           longSummary: longSummaryResponse,
           longSummaryStatus: SummaryStatus.complete,
         );
-      } else if (shortSummaryResponse is Exception) {
-        mixpanelBloc.add(SummarizingError(
-          url: summaryKey,
-          fromShare: fromShare,
-          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
-        ));
-        return summaryData.copyWith(
-          longSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          shortSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          longSummaryStatus: SummaryStatus.error,
-          shortSummaryStatus: SummaryStatus.error,
-        );
       } else {
+        final errMsg = shortSummaryResponse is Exception
+            ? shortSummaryResponse.toString().replaceAll('Exception:', '')
+            : shortSummaryResponse.toString();
         mixpanelBloc.add(SummarizingError(
           url: summaryKey,
           fromShare: fromShare,
-          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
+          error: errMsg,
         ));
         return summaryData.copyWith(
-          longSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          shortSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
+          longSummary: Summary(summaryError: errMsg),
+          shortSummary: Summary(summaryError: errMsg),
           longSummaryStatus: SummaryStatus.error,
           shortSummaryStatus: SummaryStatus.error,
         );

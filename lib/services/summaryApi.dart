@@ -16,6 +16,15 @@ class ErrorDecode {
   ErrorDecode({required this.detail});
 }
 
+/// Result of fetching an article by URL (content, title, image URL for list preview).
+class FetchArticleResult {
+  final String content;
+  final String? title;
+  final String? imageUrl;
+
+  FetchArticleResult({required this.content, this.title, this.imageUrl});
+}
+
 class SummaryApiRepository {
   // Summarization endpoints
   final String summarizeUrl =
@@ -65,6 +74,39 @@ class SummaryApiRepository {
       },
     ),
   );
+
+  static const String _fetchArticlePath = '/fetch';
+
+  /// Fetches article by URL: content, title, image_url. No summarization.
+  Future<FetchArticleResult?> fetchArticleByUrl(String url) async {
+    try {
+      final response = await _dio.post(
+        summarizeUrl + _fetchArticlePath,
+        data: {'url': url},
+      );
+      if (response.statusCode == 200 && response.data != null) {
+        final res = jsonDecode(response.data.toString()) as Map<String, dynamic>;
+        final imageUrl = res['image_url'] as String?;
+        return FetchArticleResult(
+          content: res['content'] as String,
+          title: res['title'] as String?,
+          imageUrl: imageUrl != null && imageUrl.isNotEmpty ? imageUrl : null,
+        );
+      }
+      return null;
+    } on DioException catch (e) {
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+        error = ErrorDecode(detail: decodedMap['detail']);
+      } catch (_) {
+        error = ErrorDecode(detail: 'Processing error');
+      }
+      throw Exception(error.detail);
+    } catch (error) {
+      throw Exception('Some error');
+    }
+  }
 
   FutureOr<Object?> getFromLink(
       {required String summaryLink, required SummaryType summaryType}) async {
@@ -561,6 +603,10 @@ class SummaryApiRepository {
 
 class SummaryRepository {
   final SummaryApiRepository _summaryRepository = SummaryApiRepository();
+
+  Future<FetchArticleResult?> getArticleByUrl(String url) {
+    return _summaryRepository.fetchArticleByUrl(url);
+  }
 
   FutureOr<Object?> getSummaryFromLink(
       {required String summaryLink, required SummaryType summaryType}) {
