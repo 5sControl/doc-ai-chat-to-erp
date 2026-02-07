@@ -84,7 +84,7 @@ class Header extends StatelessWidget {
     }
 
     return Container(
-      height: 220,
+      height: 224,
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
           left: 15,

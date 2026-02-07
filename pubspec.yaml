@@ -53,6 +53,8 @@ dependencies:
   auto_size_text: ^3.0.0
   hydrated_bloc: ^10.0.0
   flutter_markdown: ^0.7.4+1
+  markdown: ^7.3.0
+  translator: ^1.0.4+1
 
 dev_dependencies:
   flutter_test:
