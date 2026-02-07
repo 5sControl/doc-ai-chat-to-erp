@@ -490,6 +490,26 @@ class AppLocalizationsRu extends AppLocalizations {
       'Это саммари создано сверх дневного лимита. Откройте по подписке. Завтра будет 1 новое бесплатное саммари.';
 
   @override
+  String get giftCode_menuTitle => 'Ввести подарочный код';
+
+  @override
+  String get giftCode_dialogTitle => 'Введите подарочный код';
+
+  @override
+  String get giftCode_placeholder => 'Код';
+
+  @override
+  String get giftCode_activate => 'Активировать';
+
+  @override
+  String giftCode_success(int count) {
+    return 'Подарочный код принят. Вам добавлено $count документов.';
+  }
+
+  @override
+  String get giftCode_error => 'Неверный или уже использованный код.';
+
+  @override
   String get registration_summarizations => 'саммари';
 
   @override

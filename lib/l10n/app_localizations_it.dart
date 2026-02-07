@@ -491,6 +491,26 @@ class AppLocalizationsIt extends AppLocalizations {
       'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.';
 
   @override
+  String get giftCode_menuTitle => 'Riscatta codice regalo';
+
+  @override
+  String get giftCode_dialogTitle => 'Inserisci il codice regalo';
+
+  @override
+  String get giftCode_placeholder => 'Codice';
+
+  @override
+  String get giftCode_activate => 'Attiva';
+
+  @override
+  String giftCode_success(int count) {
+    return 'Codice regalo accettato. Hai ricevuto $count documenti.';
+  }
+
+  @override
+  String get giftCode_error => 'Codice non valido o già utilizzato.';
+
+  @override
   String get registration_summarizations => 'gratis';
 
   @override

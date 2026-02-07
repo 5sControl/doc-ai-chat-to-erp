@@ -205,6 +205,19 @@
   "limit_resetsTomorrow": "Limit resets at midnight. You get 1 more free summary tomorrow.",
   "limit_usedTodayTryTomorrow": "You've used your 1 free summary today. Come back tomorrow for another one, or go unlimited.",
   "limit_blockedCardOverlay": "This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.",
+  "giftCode_menuTitle": "Redeem gift code",
+  "giftCode_dialogTitle": "Enter gift code",
+  "giftCode_placeholder": "Code",
+  "giftCode_activate": "Activate",
+  "giftCode_success": "Gift code accepted. You received {count} documents.",
+  "@giftCode_success": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "giftCode_error": "Invalid or already used code.",
   "registration_summarizations": "summarizations",
   "registration_name": "Name",
   "registration_emailAddress": "Email Address",

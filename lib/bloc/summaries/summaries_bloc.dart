@@ -23,6 +23,12 @@ const throttleDuration = Duration(milliseconds: 100);
 /// Free tier: 1 summary per day (resets at midnight, policy A: blocked stay blocked).
 const int freeDailyLimit = 1;
 
+/// How many gift document slots one redeemed code adds.
+const int giftCreditsPerCode = 10;
+
+/// Valid gift codes (one-time use per user). Can be replaced with backend validation later.
+const Set<String> validGiftCodes = {'SUMMIFY10', 'PROMO2024'};
+
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
     return concurrent<E>().call(events.throttle(duration), mapper);
@@ -45,6 +51,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           textCounter: 1,
           freeSummariesUsedToday: 0,
           lastFreeSummaryDate: '',
+          giftBalance: 0,
+          redeemedGiftCodes: {},
         )) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionStatus == SubscriptionStatus.subscribed) {
@@ -158,6 +166,32 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       _initializeDemoData(emit);
     });
 
+    on<RedeemGiftCode>((event, emit) {
+      final code = event.code.trim().toUpperCase();
+      if (validGiftCodes.contains(code) &&
+          !state.redeemedGiftCodes.contains(code)) {
+        final newRedeemed = Set<String>.from(state.redeemedGiftCodes)
+          ..add(code);
+        emit(state.copyWith(
+          giftBalance: state.giftBalance + giftCreditsPerCode,
+          redeemedGiftCodes: newRedeemed,
+          lastRedeemMessage: 'success',
+        ));
+      } else {
+        emit(state.copyWith(lastRedeemMessage: 'error'));
+      }
+    });
+
+    on<UseGiftSlot>((event, emit) {
+      if (state.giftBalance > 0) {
+        emit(state.copyWith(giftBalance: state.giftBalance - 1));
+      }
+    });
+
+    on<ClearRedeemMessage>((event, emit) {
+      emit(state.copyWith(clearRedeemMessage: true));
+    });
+
     // Initialize demo data after state is loaded from storage
     add(const InitializeDemo());
   }
@@ -172,6 +206,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         ..['freeSummariesUsedToday'] = 0
         ..['lastFreeSummaryDate'] = '';
       return SummariesState.fromJson(migrated);
+    }
+    // Ensure gift fields exist for older persisted state
+    if (!json.containsKey('giftBalance')) {
+      final withGift = Map<String, dynamic>.from(json)
+        ..['giftBalance'] = 0
+        ..['redeemedGiftCodes'] = json['redeemedGiftCodes'] ?? [];
+      return SummariesState.fromJson(withGift);
     }
     return SummariesState.fromJson(json);
   }
@@ -188,13 +229,14 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
   }
 
-  /// True if free user has already used their 1 free summary today (for UI to show paywall before creating).
+  /// True if free user has no slot left: daily limit used and no gift balance (for UI to show paywall before creating).
   static bool isFreeDailyLimitReached(
     SummariesState state,
     SubscriptionStatus subscriptionStatus,
   ) =>
       subscriptionStatus == SubscriptionStatus.unsubscribed &&
-      _usedTodayEffective(state) >= freeDailyLimit;
+      _usedTodayEffective(state) >= freeDailyLimit &&
+      state.giftBalance <= 0;
 
   @override
   Map<String, dynamic>? toJson(SummariesState state) {
@@ -301,16 +343,20 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryKey, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
-        add(const IncrementFreeSummaries());
+        final usedToday = _usedTodayEffective(state);
+        final subscribed = subscriptionBloc.state.subscriptionStatus ==
+            SubscriptionStatus.subscribed;
+        final useDaily = !subscribed && usedToday < freeDailyLimit;
+        final useGift =
+            !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
+        final isBlocked = !subscribed && !useDaily && !useGift;
+        if (useDaily) add(const IncrementFreeSummaries());
+        if (useGift) add(const UseGiftSlot());
         mixpanelBloc.add(
           SummarizingSuccess(url: summaryKey, fromShare: fromShare),
         );
         return summaryData.copyWith(
-          isBlocked: _usedTodayEffective(state) >= freeDailyLimit &&
-                  subscriptionBloc.state.subscriptionStatus ==
-                      SubscriptionStatus.unsubscribed
-              ? true
-              : false,
+          isBlocked: isBlocked,
           shortSummary: shortSummaryResponse,
           shortSummaryStatus: SummaryStatus.complete,
           longSummary: longSummaryResponse,
@@ -353,16 +399,20 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(summaryTitle, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
+        final usedToday = _usedTodayEffective(state);
+        final subscribed = subscriptionBloc.state.subscriptionStatus ==
+            SubscriptionStatus.subscribed;
+        final useDaily = !subscribed && usedToday < freeDailyLimit;
+        final useGift =
+            !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
+        final isBlocked = !subscribed && !useDaily && !useGift;
+        if (useDaily) add(const IncrementFreeSummaries());
+        if (useGift) add(const UseGiftSlot());
         mixpanelBloc.add(
           const SummarizingSuccess(url: 'from text', fromShare: false),
         );
-        add(const IncrementFreeSummaries());
         return summaryData.copyWith(
-          isBlocked: _usedTodayEffective(state) >= freeDailyLimit &&
-                  subscriptionBloc.state.subscriptionStatus ==
-                      SubscriptionStatus.unsubscribed
-              ? true
-              : false,
+          isBlocked: isBlocked,
           summaryOrigin: SummaryOrigin.text,
           userText: text,
           shortSummary: shortSummaryResponse,
@@ -442,16 +492,20 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.update(fileName, (summaryData) {
       if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
+        final usedToday = _usedTodayEffective(state);
+        final subscribed = subscriptionBloc.state.subscriptionStatus ==
+            SubscriptionStatus.subscribed;
+        final useDaily = !subscribed && usedToday < freeDailyLimit;
+        final useGift =
+            !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
+        final isBlocked = !subscribed && !useDaily && !useGift;
+        if (useDaily) add(const IncrementFreeSummaries());
+        if (useGift) add(const UseGiftSlot());
         mixpanelBloc.add(
           SummarizingSuccess(url: fileName, fromShare: fromShare),
         );
-        add(const IncrementFreeSummaries());
         return summaryData.copyWith(
-          isBlocked: _usedTodayEffective(state) >= freeDailyLimit &&
-                  subscriptionBloc.state.subscriptionStatus ==
-                      SubscriptionStatus.unsubscribed
-              ? true
-              : false,
+          isBlocked: isBlocked,
           filePath: filePath,
           shortSummary: shortSummaryResponse,
           shortSummaryStatus: SummaryStatus.complete,

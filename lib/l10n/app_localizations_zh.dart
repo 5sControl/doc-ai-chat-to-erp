@@ -476,6 +476,26 @@ class AppLocalizationsZh extends AppLocalizations {
       'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.';
 
   @override
+  String get giftCode_menuTitle => '兌換禮品碼';
+
+  @override
+  String get giftCode_dialogTitle => '輸入禮品碼';
+
+  @override
+  String get giftCode_placeholder => '碼';
+
+  @override
+  String get giftCode_activate => '啟用';
+
+  @override
+  String giftCode_success(int count) {
+    return '禮品碼已接受。您已獲得 $count 個文檔。';
+  }
+
+  @override
+  String get giftCode_error => '無效或已使用的代碼。';
+
+  @override
   String get registration_summarizations => '摘要';
 
   @override
@@ -1032,6 +1052,26 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   @override
   String get limit_blockedCardOverlay =>
       'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.';
+
+  @override
+  String get giftCode_menuTitle => '兑换礼品码';
+
+  @override
+  String get giftCode_dialogTitle => '输入礼品码';
+
+  @override
+  String get giftCode_placeholder => '码';
+
+  @override
+  String get giftCode_activate => '激活';
+
+  @override
+  String giftCode_success(int count) {
+    return '礼品码已接受。您已获得 $count 个文档。';
+  }
+
+  @override
+  String get giftCode_error => '无效或已使用的代码。';
 
   @override
   String get registration_summarizations => '摘要';

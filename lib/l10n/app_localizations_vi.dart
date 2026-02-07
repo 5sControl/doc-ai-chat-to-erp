@@ -484,6 +484,26 @@ class AppLocalizationsVi extends AppLocalizations {
       'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.';
 
   @override
+  String get giftCode_menuTitle => 'Đổi mã quà tặng';
+
+  @override
+  String get giftCode_dialogTitle => 'Nhập mã quà tặng';
+
+  @override
+  String get giftCode_placeholder => 'Mã';
+
+  @override
+  String get giftCode_activate => 'Kích hoạt';
+
+  @override
+  String giftCode_success(int count) {
+    return 'Mã quà tặng đã được chấp nhận. Bạn nhận được $count tài liệu.';
+  }
+
+  @override
+  String get giftCode_error => 'Mã không hợp lệ hoặc đã sử dụng.';
+
+  @override
   String get registration_summarizations => 'miễn phí';
 
   @override

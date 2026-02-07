@@ -22,6 +22,12 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
       ),
       freeSummariesUsedToday: (json['freeSummariesUsedToday'] as num?)?.toInt() ?? 0,
       lastFreeSummaryDate: (json['lastFreeSummaryDate'] as String?) ?? '',
+      giftBalance: (json['giftBalance'] as num?)?.toInt() ?? 0,
+      redeemedGiftCodes: (json['redeemedGiftCodes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toSet() ??
+          {},
+      lastRedeemMessage: json['lastRedeemMessage'] as String?,
     );
 
 Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>
@@ -32,6 +38,9 @@ Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>
       'defaultSummaryType': _$SummaryTypeEnumMap[instance.defaultSummaryType]!,
       'freeSummariesUsedToday': instance.freeSummariesUsedToday,
       'lastFreeSummaryDate': instance.lastFreeSummaryDate,
+      'giftBalance': instance.giftBalance,
+      'redeemedGiftCodes': instance.redeemedGiftCodes.toList(),
+      'lastRedeemMessage': instance.lastRedeemMessage,
     };
 
 const _$SummaryTypeEnumMap = {

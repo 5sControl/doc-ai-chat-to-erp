@@ -16,6 +16,7 @@ import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/auth/auth_dialog.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/modal_screens/set_up_share_screen.dart';
+import 'package:summify/screens/settings_screen/redeem_gift_code_dialog.dart';
 import 'package:summify/screens/settings_screen/select_lang_dialog.dart';
 import 'package:summify/screens/settings_screen/select_ui_lang_dialog.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
@@ -399,6 +400,11 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+      ButtonItem(
+        title: l10n.giftCode_menuTitle,
+        leadingIcon: Assets.icons.present,
+        onTap: () => showRedeemGiftCodeDialog(context: context),
       ),
       ButtonItem(
         title: 'Add Summify for Chrome',

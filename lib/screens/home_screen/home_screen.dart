@@ -17,6 +17,8 @@ import 'package:summify/screens/home_screen/bookmarks_button.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
+import 'package:summify/services/demo_data_initializer.dart';
+import 'package:summify/widgets/ads_carousel.dart';
 
 import 'logo.dart';
 import 'summary_tile.dart';
@@ -214,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         decoration: InputDecoration(
                           fillColor:
                               const Color.fromRGBO(187, 247, 247, 1),
-                          hintText: AppLocalizations.of(context)!.home_search,
+                          hintText: AppLocalizations.of(context).home_search,
                           prefixIcon: const Icon(
                             Icons.search,
                             size: 20,
@@ -280,16 +282,51 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(top: 10),
-                              child: ListView.builder(
-                                itemCount: _filteredSummaries.length,
-                                itemBuilder: (context, index) {
-                                  final summaryData = _filteredSummaries[index];
-                                  final link = summariesState.summaries.entries
-                                      .firstWhere(
-                                          (entry) => entry.value == summaryData)
-                                      .key;
-                                  return SummaryTile(
-                                    sharedLink: link,
+                              child: Builder(
+                                builder: (context) {
+                                  final demoKey =
+                                      DemoDataInitializer.demoKey;
+                                  final filteredEntries =
+                                      summariesState.summaries.entries
+                                          .where((e) =>
+                                              _filteredSummaries.contains(e.value))
+                                          .toList();
+                                  final demoEntry = filteredEntries
+                                      .where((e) => e.key == demoKey)
+                                      .firstOrNull;
+                                  final userEntries = filteredEntries
+                                      .where((e) => e.key != demoKey)
+                                      .toList()
+                                    ..sort((a, b) =>
+                                        b.value.date.compareTo(a.value.date));
+                                  final orderedKeys = <String>[
+                                    if (demoEntry != null) demoEntry.key,
+                                    ...userEntries.map((e) => e.key),
+                                  ];
+                                  final carouselIndex =
+                                      demoEntry != null ? 1 : 0;
+                                  final itemCount =
+                                      orderedKeys.length + 1;
+                                  return ListView.builder(
+                                    itemCount: itemCount,
+                                    itemBuilder: (context, index) {
+                                      if (index == carouselIndex) {
+                                        return const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8),
+                                          child: AdsCarousel(),
+                                        );
+                                      }
+                                      final summaryIndex = index <
+                                              carouselIndex
+                                          ? index
+                                          : index - 1;
+                                      final link =
+                                          orderedKeys[summaryIndex];
+                                      return SummaryTile(
+                                        sharedLink: link,
+                                      );
+                                    },
                                   );
                                 },
                               ),

@@ -95,3 +95,25 @@ class InitializeDemo extends SummariesEvent {
   @override
   List<Object?> get props => [];
 }
+
+class RedeemGiftCode extends SummariesEvent {
+  final String code;
+  const RedeemGiftCode({required this.code});
+
+  @override
+  List<Object?> get props => [code];
+}
+
+class UseGiftSlot extends SummariesEvent {
+  const UseGiftSlot();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ClearRedeemMessage extends SummariesEvent {
+  const ClearRedeemMessage();
+
+  @override
+  List<Object?> get props => [];
+}

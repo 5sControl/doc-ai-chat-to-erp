@@ -205,6 +205,19 @@
   "limit_resetsTomorrow": "Лимит обновляется в полночь. Завтра снова будет 1 бесплатное саммари.",
   "limit_usedTodayTryTomorrow": "Вы уже использовали 1 бесплатное саммари сегодня. Завтра будет ещё одно или оформите подписку.",
   "limit_blockedCardOverlay": "Это саммари создано сверх дневного лимита. Откройте по подписке. Завтра будет 1 новое бесплатное саммари.",
+  "giftCode_menuTitle": "Ввести подарочный код",
+  "giftCode_dialogTitle": "Введите подарочный код",
+  "giftCode_placeholder": "Код",
+  "giftCode_activate": "Активировать",
+  "giftCode_success": "Подарочный код принят. Вам добавлено {count} документов.",
+  "@giftCode_success": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "giftCode_error": "Неверный или уже использованный код.",
   "registration_summarizations": "саммари",
   "registration_name": "Имя",
   "registration_emailAddress": "Адрес электронной почты",

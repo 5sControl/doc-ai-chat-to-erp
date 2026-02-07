@@ -1017,6 +1017,42 @@ abstract class AppLocalizations {
   /// **'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.'**
   String get limit_blockedCardOverlay;
 
+  /// No description provided for @giftCode_menuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Redeem gift code'**
+  String get giftCode_menuTitle;
+
+  /// No description provided for @giftCode_dialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter gift code'**
+  String get giftCode_dialogTitle;
+
+  /// No description provided for @giftCode_placeholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get giftCode_placeholder;
+
+  /// No description provided for @giftCode_activate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get giftCode_activate;
+
+  /// No description provided for @giftCode_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift code accepted. You received {count} documents.'**
+  String giftCode_success(int count);
+
+  /// No description provided for @giftCode_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid or already used code.'**
+  String get giftCode_error;
+
   /// No description provided for @registration_summarizations.
   ///
   /// In en, this message translates to:

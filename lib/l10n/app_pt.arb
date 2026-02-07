@@ -205,6 +205,17 @@
   "limit_resetsTomorrow": "Limit resets at midnight. You get 1 more free summary tomorrow.",
   "limit_usedTodayTryTomorrow": "You've used your 1 free summary today. Come back tomorrow for another one, or go unlimited.",
   "limit_blockedCardOverlay": "This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.",
+  "giftCode_menuTitle": "Resgatar código presente",
+  "giftCode_dialogTitle": "Introduza o código presente",
+  "giftCode_placeholder": "Código",
+  "giftCode_activate": "Ativar",
+  "giftCode_success": "Código presente aceite. Recebeu {count} documentos.",
+  "@giftCode_success": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "giftCode_error": "Código inválido ou já utilizado.",
   "registration_summarizations": "grátis",
   "registration_name": "Nome",
   "registration_emailAddress": "Endereço de e-mail",

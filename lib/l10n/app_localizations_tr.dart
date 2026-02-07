@@ -489,6 +489,26 @@ class AppLocalizationsTr extends AppLocalizations {
       'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.';
 
   @override
+  String get giftCode_menuTitle => 'Hediye kodu kullan';
+
+  @override
+  String get giftCode_dialogTitle => 'Hediye kodunu girin';
+
+  @override
+  String get giftCode_placeholder => 'Kod';
+
+  @override
+  String get giftCode_activate => 'Etkinleştir';
+
+  @override
+  String giftCode_success(int count) {
+    return 'Hediye kodu kabul edildi. $count belge aldınız.';
+  }
+
+  @override
+  String get giftCode_error => 'Geçersiz veya zaten kullanılmış kod.';
+
+  @override
   String get registration_summarizations => 'özetlemeler';
 
   @override

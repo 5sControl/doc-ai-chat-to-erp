@@ -1,0 +1,44 @@
+{
+  "ads": [
+    {
+      "id": "ad_3",
+      "title": "YouTube Double Subtitles",
+      "subtitle": "Turn any YouTube video into a listening lesson",
+      "iconPath": "assets/ads/subtune.png",
+      "urlAndroid": "https://elang.app/",
+      "urlIos": "https://apps.apple.com/us/app/subtune-listening-podcast/id6464495720"
+    },
+    {
+      "id": "ad_4",
+      "title": "Listen and repeat guide",
+      "subtitle": "Train your ear with short audio sessions every day",
+      "iconPath": "assets/ads/tutor.png",
+      "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.easy5",
+      "urlIos": "https://apps.apple.com/us/app/english-words-new-vocabulary/id1622786750"
+    },
+    {
+      "id": "verbs5",
+      "title": "Irregular Verbs: Tutor",
+      "subtitle": "5 verbs Every day",
+      "iconPath": "assets/ads/verbs5-225-72.png",
+      "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.easy5verbs",
+      "urlIos": "https://apps.apple.com/by/app/irregular-verbs-in-english-pro/id1638688704"
+    }, 
+    {
+      "id": "ad_1",
+      "title": "Flashcards",
+      "subtitle": "Learn and remember new words with smart flashcards",
+      "iconPath": "assets/ads/cards.png",
+      "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.englishcards",
+      "urlIos": "https://apps.apple.com/us/app/english-vocab-words-duo-cards/id1658981786"
+    },
+    {
+      "id": "ad_2",
+      "title": "Listening by Books/Podcasts",
+      "subtitle": "Listen, read along, and grow your comprehension + Quizes",
+      "iconPath": "assets/ads/listening.png",  
+      "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.listening",
+      "urlIos": "https://apps.apple.com/us/app/english-listening-by-podcast/id6447188725"
+    }
+  ]
+}
