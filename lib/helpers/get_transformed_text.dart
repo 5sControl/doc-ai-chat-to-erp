@@ -28,3 +28,12 @@ String getTransformedText({required String text}) {
       .replaceFirst(
           'Implications or Conclusions:', '\n\nImplications or Conclusions:\n');
 }
+
+/// Strips Markdown syntax so TTS does not read "hash hash" or asterisks.
+/// Removes ##, ###, ####, **, __ (leaving the text content).
+String stripMarkdownForTts(String text) {
+  return text
+      .replaceAll(RegExp(r'^#+\s*', multiLine: true), '')
+      .replaceAll('**', '')
+      .replaceAll('__', '');
+}

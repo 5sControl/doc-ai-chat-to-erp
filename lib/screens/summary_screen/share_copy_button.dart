@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
+import 'package:summify/services/demo_data_initializer.dart';
 import 'package:summify/helpers/language_codes.dart';
 import 'package:summify/services/summaryApi.dart';
 import 'package:summify/services/tts_service.dart';
@@ -152,17 +153,21 @@ class VoiceButton extends StatefulWidget {
 
 class _VoiceButtonState extends State<VoiceButton> {
   String? get _currentText {
+    final isDemo = widget.summaryKey == DemoDataInitializer.demoKey;
     if (widget.activeTab == 0) {
-      return widget.summaryData.userText;
+      final raw = widget.summaryData.userText ?? '';
+      return isDemo ? stripMarkdownForTts(raw) : raw;
     }
     if (widget.activeTab == 1) {
-      return getTransformedText(
-        text: widget.summaryData.shortSummary.summaryText ?? '',
-      );
+      final raw = widget.summaryData.shortSummary.summaryText ?? '';
+      return isDemo
+          ? stripMarkdownForTts(raw)
+          : getTransformedText(text: raw);
     }
-    return getTransformedText(
-      text: widget.summaryData.longSummary.summaryText ?? '',
-    );
+    final raw = widget.summaryData.longSummary.summaryText ?? '';
+    return isDemo
+        ? stripMarkdownForTts(raw)
+        : getTransformedText(text: raw);
   }
 
   bool _modelReadyInfoShown = false;

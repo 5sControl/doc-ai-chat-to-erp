@@ -11,6 +11,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
+import 'package:summify/services/demo_data_initializer.dart';
 import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/home_screen/home_screen.dart';
@@ -137,13 +138,18 @@ class _SummaryScreenState extends State<SummaryScreen>
                     ? summaryData.userText!
                     : AppLocalizations.of(context)!.summary_sourceNotAvailable;
 
-            final briefSummaryText = getTransformedText(
-              text: summaryData.shortSummary.summaryText ?? '',
-            );
+            final isDemo = widget.summaryKey == DemoDataInitializer.demoKey;
+            final briefSummaryText = isDemo
+                ? (summaryData.shortSummary.summaryText ?? '')
+                : getTransformedText(
+                    text: summaryData.shortSummary.summaryText ?? '',
+                  );
 
-            final deepSummaryText = getTransformedText(
-              text: summaryData.longSummary.summaryText ?? '',
-            );
+            final deepSummaryText = isDemo
+                ? (summaryData.longSummary.summaryText ?? '')
+                : getTransformedText(
+                    text: summaryData.longSummary.summaryText ?? '',
+                  );
 
             void showRateScreen() {
               showMaterialModalBottomSheet(
