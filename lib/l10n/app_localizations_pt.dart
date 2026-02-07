@@ -132,7 +132,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get paywall_addToChromeForFree => 'Adicionar ao Chrome GRÁTIS';
 
   @override
-  String get offer_needMoreSummaries => 'Precisa de mais resumos?';
+  String get offer_needMoreSummaries => 'Você precisa de sucesso?';
 
   @override
   String get offer_maximizeYourProductivity => 'Maximize sua produtividade!';

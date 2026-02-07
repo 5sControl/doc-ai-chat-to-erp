@@ -133,7 +133,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get paywall_addToChromeForFree => 'Добавить в Chrome бесплатно';
 
   @override
-  String get offer_needMoreSummaries => 'Нужно больше саммари?';
+  String get offer_needMoreSummaries => 'Вам нужен успех?';
 
   @override
   String get offer_maximizeYourProductivity => 'Увеличьте продуктивность!';

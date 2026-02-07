@@ -131,7 +131,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get paywall_addToChromeForFree => 'Chrome\'a ÜCRETSİZ ekleyin';
 
   @override
-  String get offer_needMoreSummaries => 'Daha fazla özete ihtiyacınız var mı?';
+  String get offer_needMoreSummaries => 'Başarıya ihtiyacınız var mı?';
 
   @override
   String get offer_maximizeYourProductivity =>

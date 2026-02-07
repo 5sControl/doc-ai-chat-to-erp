@@ -131,7 +131,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get paywall_addToChromeForFree => 'Thêm vào Chrome MIỄN PHÍ';
 
   @override
-  String get offer_needMoreSummaries => 'Cần thêm tóm tắt?';
+  String get offer_needMoreSummaries => 'Bạn cần thành công?';
 
   @override
   String get offer_maximizeYourProductivity => 'Tăng năng suất của bạn!';

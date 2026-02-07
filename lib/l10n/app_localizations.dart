@@ -348,7 +348,7 @@ abstract class AppLocalizations {
   /// No description provided for @offer_needMoreSummaries.
   ///
   /// In en, this message translates to:
-  /// **'Need more summaries?'**
+  /// **'Do you need success?'**
   String get offer_needMoreSummaries;
 
   /// No description provided for @offer_maximizeYourProductivity.

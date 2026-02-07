@@ -129,7 +129,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get paywall_addToChromeForFree => '免费添加到 Chrome';
 
   @override
-  String get offer_needMoreSummaries => '需要更多摘要？';
+  String get offer_needMoreSummaries => '您需要成功吗？';
 
   @override
   String get offer_maximizeYourProductivity => '提升你的效率！';
@@ -660,7 +660,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get paywall_addToChromeForFree => '免费添加到 Chrome';
 
   @override
-  String get offer_needMoreSummaries => '需要更多摘要？';
+  String get offer_needMoreSummaries => '您需要成功吗？';
 
   @override
   String get offer_maximizeYourProductivity => '提升你的效率！';

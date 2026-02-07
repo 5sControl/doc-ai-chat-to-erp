@@ -179,7 +179,31 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const Human(),
+                                            const Title(),
+                                            state.screenIndex == 5 ||
+                                                    state.screenIndex == 0 ||
+                                                    state.screenIndex == 2
+                                                ? SizedBox(
+                                                    height: 10,
+                                                  )
+                                                : Container(
+                                                    height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .shortestSide >=
+                                                            600
+                                                        ? 7
+                                                        : 0,
+                                                  ),
+                                            const SubTitle(),
+                                            state.screenIndex < 3 &&
+                                                    state.screenIndex != 1
+                                                ? const SizedBox(
+                                                    height: 0,
+                                                  )
+                                                : SizedBox(
+                                                    height: 5,
+                                                  ),
                                             widget.fromSettings &&
                                                     (state.screenIndex == 0 ||
                                                         state.screenIndex ==
@@ -206,31 +230,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
                                                     height: 20,
                                                   )
                                                 : Container(),
-                                            const Title(),
-                                            state.screenIndex == 5 ||
-                                                    state.screenIndex == 0 ||
-                                                    state.screenIndex == 2
-                                                ? SizedBox(
-                                                    height: 10,
-                                                  )
-                                                : Container(
-                                                    height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .shortestSide >=
-                                                            600
-                                                        ? 7
-                                                        : 0,
-                                                  ),
-                                            const SubTitle(),
-                                            state.screenIndex < 3 &&
-                                                    state.screenIndex != 1
-                                                ? const SizedBox(
-                                                    height: 0,
-                                                  )
-                                                : SizedBox(
-                                                    height: 5,
-                                                  ),
+                                            const Human(),
                                             Spacer(),
                                             Align(
                                               alignment: Alignment.bottomCenter,
