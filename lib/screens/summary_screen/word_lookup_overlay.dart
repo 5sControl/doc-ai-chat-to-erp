@@ -1,6 +1,70 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../services/word_translate_service.dart';
+
+/// Shows the word lookup as a system overlay (above the route, does not affect layout).
+/// Fetches translation, updates the overlay, auto-dismisses after [duration], optionally speaks the word via [onSpeakWord].
+void showWordLookupOverlay(
+  BuildContext context, {
+  required String word,
+  required String targetLang,
+  Duration duration = WordLookupOverlay.defaultDuration,
+  void Function(String word)? onSpeakWord,
+}) {
+  final overlay = Overlay.of(context);
+  final state = ValueNotifier<_LookupState>(
+    _LookupState(word: word, result: null, loading: true),
+  );
+  OverlayEntry? entry;
+  Timer? dismissTimer;
+
+  void remove() {
+    dismissTimer?.cancel();
+    entry?.remove();
+    entry = null;
+  }
+
+  entry = OverlayEntry(
+    builder: (ctx) {
+      return Positioned(
+        top: MediaQuery.of(ctx).padding.top + 8,
+        left: 16,
+        right: 16,
+        child: ListenableBuilder(
+          listenable: state,
+          builder: (_, __) {
+            final s = state.value;
+            return WordLookupOverlay(
+              word: s.word,
+              result: s.result,
+              isLoading: s.loading,
+              onDismiss: remove,
+            );
+          },
+        ),
+      );
+    },
+  );
+  overlay.insert(entry!);
+
+  WordTranslateService.instance.lookup(word, targetLang).then((result) {
+    if (entry == null) return;
+    state.value = _LookupState(word: word, result: result, loading: false);
+    dismissTimer = Timer(duration, remove);
+    if (!result.isError && onSpeakWord != null) {
+      onSpeakWord(word);
+    }
+  });
+}
+
+class _LookupState {
+  final String word;
+  final WordLookupResult? result;
+  final bool loading;
+  _LookupState({required this.word, this.result, required this.loading});
+}
 
 /// Compact overlay showing word + translation (or loading/error). Auto-hides after [duration].
 class WordLookupOverlay extends StatelessWidget {

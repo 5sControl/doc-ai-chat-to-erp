@@ -21,6 +21,7 @@ import 'package:summify/screens/summary_screen/send_request_field.dart';
 import 'package:summify/screens/summary_screen/summary_hero_image.dart';
 import 'package:summify/screens/summary_screen/share_copy_button.dart';
 import 'package:summify/screens/summary_screen/summary_text_container.dart';
+import 'package:summify/screens/summary_screen/word_lookup_overlay.dart';
 import 'package:summify/screens/summary_screen/knowledge_cards/knowledge_cards_tab.dart';
 import 'package:summify/screens/library_document_screen/quiz_tab.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -298,6 +299,25 @@ class _SummaryScreenState extends State<SummaryScreen>
 
             return BlocBuilder<TranslatesBloc, TranslatesState>(
               builder: (context, translatesState) {
+                void onWordLookup(BuildContext ctx, String word) {
+                  final targetLang = ctx.read<SettingsBloc>().state.translateLanguage;
+                  showWordLookupOverlay(
+                    ctx,
+                    word: word,
+                    targetLang: targetLang,
+                    onSpeakWord: (w) async {
+                      if (await TtsService.instance.isModelDownloaded()) {
+                        if (!ctx.mounted) return;
+                        final settings = ctx.read<SettingsBloc>().state;
+                        TtsService.instance.speak(
+                          text: w,
+                          voiceId: settings.kokoroVoiceId,
+                          speed: settings.kokoroSynthesisSpeed,
+                        );
+                      }
+                    },
+                  );
+                }
                 return Stack(
                   children: [
                     const BackgroundGradient(),
@@ -337,6 +357,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       summary: Summary(summaryText: sourceText),
                                       summaryStatus: SummaryStatus.complete,
                                       summaryTranslate: null,
+                                      onWordLookup: onWordLookup,
                                     ),
                                     SummaryTextContainer(
                                       summaryText: briefSummaryText,
@@ -346,6 +367,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       summaryTranslate:
                                           translatesState.shortTranslates[widget
                                               .summaryKey],
+                                      onWordLookup: onWordLookup,
                                     ),
                                     SummaryTextContainer(
                                       summaryText: deepSummaryText,
@@ -355,6 +377,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       summaryTranslate:
                                           translatesState.longTranslates[widget
                                               .summaryKey],
+                                      onWordLookup: onWordLookup,
                                     ),
                                     ResearchTab(summaryKey: widget.summaryKey),
                                     QuizTab(
