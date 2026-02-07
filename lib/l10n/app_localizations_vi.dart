@@ -147,9 +147,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get offer_getMoreInNoTime => 'Nhận thêm chỉ trong chốc lát!';
 
   @override
-  String get offer_15DeepSummariesDaily => '15 tóm tắt chi tiết mỗi ngày';
-
-  @override
   String get offer_goUnlimited => 'Bật không giới hạn';
 
   @override

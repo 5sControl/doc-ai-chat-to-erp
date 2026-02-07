@@ -375,12 +375,6 @@ abstract class AppLocalizations {
   /// **'Get more in no time!'**
   String get offer_getMoreInNoTime;
 
-  /// No description provided for @offer_15DeepSummariesDaily.
-  ///
-  /// In en, this message translates to:
-  /// **'15 Deep Summaries Daily'**
-  String get offer_15DeepSummariesDaily;
-
   /// No description provided for @offer_goUnlimited.
   ///
   /// In en, this message translates to:

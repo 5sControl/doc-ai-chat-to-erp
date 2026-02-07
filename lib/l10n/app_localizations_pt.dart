@@ -148,9 +148,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get offer_getMoreInNoTime => 'Faça mais em pouco tempo!';
 
   @override
-  String get offer_15DeepSummariesDaily => '15 resumos aprofundados por dia';
-
-  @override
   String get offer_goUnlimited => 'Ativar ilimitado';
 
   @override

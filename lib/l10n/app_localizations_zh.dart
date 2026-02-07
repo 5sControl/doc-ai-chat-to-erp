@@ -144,9 +144,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get offer_getMoreInNoTime => '立刻获得更多！';
 
   @override
-  String get offer_15DeepSummariesDaily => '每天 15 条深入摘要';
-
-  @override
   String get offer_goUnlimited => '开启无限';
 
   @override
@@ -676,9 +673,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get offer_getMoreInNoTime => '立刻获得更多！';
-
-  @override
-  String get offer_15DeepSummariesDaily => '每天 15 条深入摘要';
 
   @override
   String get offer_goUnlimited => '开启无限';

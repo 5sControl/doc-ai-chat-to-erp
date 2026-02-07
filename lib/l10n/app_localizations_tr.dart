@@ -148,9 +148,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get offer_getMoreInNoTime => 'Kısa sürede daha fazlasını elde edin!';
 
   @override
-  String get offer_15DeepSummariesDaily => 'Günlük 15 Derin Özet';
-
-  @override
   String get offer_goUnlimited => 'Sınırsıza Geçin';
 
   @override

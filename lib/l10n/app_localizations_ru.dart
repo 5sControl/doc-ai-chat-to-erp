@@ -149,9 +149,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get offer_getMoreInNoTime => 'Получайте больше за меньшее время!';
 
   @override
-  String get offer_15DeepSummariesDaily => '15 глубоких саммари в день';
-
-  @override
   String get offer_goUnlimited => 'Включить безлимит';
 
   @override

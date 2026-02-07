@@ -472,15 +472,7 @@ class Text1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isTablet = MediaQuery.of(context).size.shortestSide >= 600;
-    final l10n = AppLocalizations.of(context)!;
-    final List<String> screenTexts = [
-      l10n.offer_15DeepSummariesDaily,
-      l10n.offer_15DeepSummariesDaily,
-      l10n.offer_15DeepSummariesDaily,
-      '',
-      '',
-      '',
-    ];
+    final List<String> screenTexts = ['', '', '', '', '', ''];
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(top: 6),
