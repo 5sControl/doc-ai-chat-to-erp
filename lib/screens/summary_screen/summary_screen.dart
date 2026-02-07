@@ -133,8 +133,7 @@ class _SummaryScreenState extends State<SummaryScreen>
             final String formattedDate = formatter.format(summaryData.date);
 
             final sourceText =
-                summaryData.summaryOrigin == SummaryOrigin.text &&
-                        summaryData.userText != null
+                summaryData.userText != null && summaryData.userText!.isNotEmpty
                     ? summaryData.userText!
                     : AppLocalizations.of(context)!.summary_sourceNotAvailable;
 
