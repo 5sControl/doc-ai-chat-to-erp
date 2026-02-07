@@ -8,7 +8,10 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import '../../bloc/settings/settings_bloc.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/models.dart';
-import 'markdown_word_tap_builder.dart';
+import '../../services/tts_service.dart';
+import 'markdown_tts_highlight_builder.dart';
+import 'markdown_word_tap_builder.dart'
+    show MarkdownWordTapBuilder, wordBoundariesAtOffset;
 
 /// Callback to show word lookup outside the control (e.g. via system overlay).
 /// Called when user double-taps a word while showing original (untranslated) text.
@@ -23,6 +26,12 @@ class SummaryTextContainer extends StatefulWidget {
   final SummaryStatus summaryStatus;
   final SummaryTranslate? summaryTranslate;
 
+  /// Tab index (0=source, 1=brief, 2=deep) for TTS highlight matching.
+  final int tabIndex;
+
+  /// Summary key for TTS highlight matching.
+  final String summaryKey;
+
   /// If set, double-tap on a word (when showing original text) will call this
   /// with (context, word). The host can show translation via overlay/snack/etc.
   final OnWordLookup? onWordLookup;
@@ -33,6 +42,8 @@ class SummaryTextContainer extends StatefulWidget {
     required this.summary,
     required this.summaryStatus,
     required this.summaryTranslate,
+    required this.tabIndex,
+    required this.summaryKey,
     this.onWordLookup,
   });
 
@@ -46,6 +57,71 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
 
   bool _isShowingOriginalText(SummaryTranslate? summaryTranslate) =>
       summaryTranslate == null || !summaryTranslate.isActive;
+
+  bool _shouldShowTtsHighlight(TtsService tts) {
+    if (!tts.isSpeaking.value) return false;
+    final ctx = tts.playbackContext.value;
+    if (ctx == null) return false;
+    return ctx.summaryKey == widget.summaryKey &&
+        ctx.activeTab == widget.tabIndex;
+  }
+
+  Map<String, MarkdownElementBuilder> _ttsHighlightBuilders(
+    BuildContext context,
+    OnWordLookup? onWordLookup,
+    List<int> blockOffsets,
+    int readEndIndex,
+    int currentWordStart,
+    int currentWordEnd,
+  ) {
+    final onWordTap = onWordLookup != null
+        ? (w) => _onWordTap(context, w, onWordLookup)
+        : (_) {};
+    final builder = MarkdownTtsHighlightBuilder(
+      onWordTap: onWordTap,
+      blockOffsets: blockOffsets,
+      readEndIndex: readEndIndex,
+      currentWordStart: currentWordStart,
+      currentWordEnd: currentWordEnd,
+    );
+    return {
+      'p': builder,
+      'h1': builder,
+      'h2': builder,
+      'h3': builder,
+      'h4': builder,
+      'h5': builder,
+      'h6': builder,
+      'li': builder,
+      'blockquote': builder,
+    };
+  }
+
+  Map<String, MarkdownElementBuilder> _wordTapBuilders(
+    BuildContext context,
+    OnWordLookup onWordLookup,
+  ) {
+    return {
+      'p': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'h1': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'h2': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'h3': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'h4': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'h5': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'h6': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'li': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+      'blockquote': MarkdownWordTapBuilder(
+          onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+    };
+  }
 
   void _onWordTap(BuildContext context, String word, OnWordLookup callback) {
     if (_isShowingOriginalText(widget.summaryTranslate)) {
@@ -119,9 +195,16 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
               : 'long'),
           child: BlocBuilder<SettingsBloc, SettingsState>(
             builder: (context, state) {
-              return Builder(
-                builder: (context) {
-                  final textToDisplay =
+              final ttsService = TtsService.instance;
+              return ValueListenableBuilder<TtsPlaybackContext?>(
+                valueListenable: ttsService.playbackContext,
+                builder: (context, _, __) {
+                  return ValueListenableBuilder<Duration?>(
+                    valueListenable: ttsService.playbackPosition,
+                    builder: (context, ___, ____) {
+                      return Builder(
+                        builder: (context) {
+                          final textToDisplay =
                       widget.summaryTranslate != null && widget.summaryTranslate!.isActive
                           ? (widget.summaryTranslate!.translate ?? widget.summaryText)
                           : widget.summaryText;
@@ -195,38 +278,65 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                         ),
                   );
 
+                  final showTtsHighlight = _isShowingOriginalText(widget.summaryTranslate) &&
+                      _shouldShowTtsHighlight(ttsService);
+
+                  int readEndIndex = 0;
+                  int currentWordStart = 0;
+                  int currentWordEnd = 0;
+
+                  final (blockOffsets, flattenedText) = showTtsHighlight
+                      ? computeBlockOffsets(textToDisplay)
+                      : (<int>[], '');
+
+                  if (showTtsHighlight && flattenedText.isNotEmpty) {
+                    final pos = ttsService.playbackPosition.value;
+                    final dur = ttsService.playbackDuration.value;
+                    if (pos != null &&
+                        dur != null &&
+                        dur.inMilliseconds > 0) {
+                      final progress =
+                          pos.inMilliseconds / dur.inMilliseconds;
+                      final estimatedCharIndex = (progress * flattenedText.length)
+                          .round()
+                          .clamp(0, flattenedText.length);
+                      final (ws, we) =
+                          wordBoundariesAtOffset(flattenedText, estimatedCharIndex);
+                      readEndIndex = ws;
+                      currentWordStart = ws;
+                      currentWordEnd = we;
+                    }
+                  }
+
                   final builders =
-                      _isShowingOriginalText(widget.summaryTranslate) && onWordLookup != null
+                      _isShowingOriginalText(widget.summaryTranslate)
                           ? <String, MarkdownElementBuilder>{
-                              'p': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'h1': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'h2': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'h3': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'h4': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'h5': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'h6': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'li': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
-                              'blockquote': MarkdownWordTapBuilder(
-                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+                              if (showTtsHighlight)
+                                ..._ttsHighlightBuilders(
+                                  context,
+                                  onWordLookup,
+                                  blockOffsets,
+                                  readEndIndex,
+                                  currentWordStart,
+                                  currentWordEnd,
+                                )
+                              else if (onWordLookup != null)
+                                ..._wordTapBuilders(context, onWordLookup),
                             }
                           : const <String, MarkdownElementBuilder>{};
 
-                  return Animate(
-                    effects: const [FadeEffect()],
-                    child: MarkdownBody(
-                      data: textToDisplay,
-                      selectable: true,
-                      styleSheet: styleSheet,
-                      builders: builders,
-                    ),
+                          return Animate(
+                            effects: const [FadeEffect()],
+                            child: MarkdownBody(
+                              data: textToDisplay,
+                              selectable: true,
+                              styleSheet: styleSheet,
+                              builders: builders,
+                            ),
+                          );
+                        },
+                      );
+                    },
                   );
                 },
               );

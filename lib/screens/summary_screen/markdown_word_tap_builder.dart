@@ -16,6 +16,23 @@ String wordAtOffset(String text, int offset) {
   return start < end ? text.substring(start, end) : '';
 }
 
+/// Returns (start, end) character indices for the word at [offset].
+/// If offset is not inside a word, returns (offset, offset).
+(int, int) wordBoundariesAtOffset(String text, int offset) {
+  if (text.isEmpty || offset < 0 || offset >= text.length) {
+    return (0, 0);
+  }
+  int start = offset;
+  int end = offset;
+  while (start > 0 && _isWordChar(text, start - 1)) {
+    start--;
+  }
+  while (end < text.length && _isWordChar(text, end)) {
+    end++;
+  }
+  return (start, end);
+}
+
 bool _isWordChar(String s, int i) {
   if (i < 0 || i >= s.length) return false;
   final c = s.codeUnitAt(i);

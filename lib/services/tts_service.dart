@@ -37,6 +37,19 @@ class TtsVoice {
   }
 }
 
+/// Context for TTS playback used for text highlighting.
+class TtsPlaybackContext {
+  final String summaryKey;
+  final int activeTab;
+  final String text;
+
+  const TtsPlaybackContext({
+    required this.summaryKey,
+    required this.activeTab,
+    required this.text,
+  });
+}
+
 class TtsService {
   static const _modelUrl =
       'https://huggingface.co/NeuML/kokoro-base-onnx/resolve/main/model.onnx';
@@ -63,6 +76,10 @@ class TtsService {
   final ValueNotifier<bool> isSpeaking = ValueNotifier(false);
   final ValueNotifier<bool> isGenerating = ValueNotifier(false);
   final ValueNotifier<String?> textTruncationMessage = ValueNotifier(null);
+  final ValueNotifier<Duration?> playbackPosition = ValueNotifier(null);
+  final ValueNotifier<Duration?> playbackDuration = ValueNotifier(null);
+  final ValueNotifier<TtsPlaybackContext?> playbackContext =
+      ValueNotifier(null);
   final Dio _dio = Dio();
   final ValueNotifier<List<TtsVoice>> voiceListNotifier = ValueNotifier(
     const [],
@@ -81,6 +98,8 @@ class TtsService {
   final List<TtsVoice> _voices = [];
   Completer<void>? _speechCompleter;
   String? _currentAudioPath;
+  StreamSubscription<Duration>? _positionSubscription;
+  StreamSubscription<Duration>? _durationSubscription;
 
   Future<void> ensureModelReady() async {
     if (_modelReady && _kokoro != null) return;
@@ -460,8 +479,19 @@ class TtsService {
     voiceListNotifier.value = List.unmodifiable(_voices);
   }
 
+  void _clearPlaybackState() {
+    _positionSubscription?.cancel();
+    _positionSubscription = null;
+    _durationSubscription?.cancel();
+    _durationSubscription = null;
+    playbackPosition.value = null;
+    playbackDuration.value = null;
+    playbackContext.value = null;
+  }
+
   Future<void> stop() async {
     await _audioPlayer.stop();
+    _clearPlaybackState();
     if (_speechCompleter != null && !_speechCompleter!.isCompleted) {
       _speechCompleter!.complete();
     }
@@ -487,6 +517,26 @@ class TtsService {
   bool _isCachedFile(File file) {
     final path = file.path;
     return path.contains('/tts_cache/');
+  }
+
+  void _setupPlaybackTracking({
+    required String text,
+    String? summaryKey,
+    int? activeTab,
+  }) {
+    if (summaryKey != null && activeTab != null) {
+      playbackContext.value = TtsPlaybackContext(
+        summaryKey: summaryKey,
+        activeTab: activeTab,
+        text: text,
+      );
+      _positionSubscription = _audioPlayer.onPositionChanged.listen((p) {
+        playbackPosition.value = p;
+      });
+      _durationSubscription = _audioPlayer.onDurationChanged.listen((d) {
+        playbackDuration.value = d;
+      });
+    }
   }
 
   Future<void> speak({
@@ -568,9 +618,15 @@ class TtsService {
           // Play audio using AudioPlayer
           _speechCompleter = completer;
           isSpeaking.value = true;
+          _setupPlaybackTracking(
+            text: originalTextForCache,
+            summaryKey: summaryKey,
+            activeTab: activeTab,
+          );
 
           StreamSubscription? completeSubscription;
           completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+            _clearPlaybackState();
             if (!completer.isCompleted) {
               completer.complete();
             }
@@ -740,9 +796,17 @@ class TtsService {
       // Play audio using AudioPlayer
       _speechCompleter = completer;
       isSpeaking.value = true;
+      if (useTabCache) {
+        _setupPlaybackTracking(
+          text: originalTextForCache,
+          summaryKey: summaryKey,
+          activeTab: activeTab,
+        );
+      }
 
       StreamSubscription? completeSubscription;
       completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+        _clearPlaybackState();
         if (!completer.isCompleted) {
           completer.complete();
         }
@@ -781,6 +845,7 @@ class TtsService {
       isSpeaking.value = false;
       // Ensure generating is false in finally block
       isGenerating.value = false;
+      _clearPlaybackState();
 
       // Clean up temporary audio file (but not cached files)
       if (_currentAudioPath != null) {

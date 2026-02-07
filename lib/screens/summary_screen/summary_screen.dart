@@ -356,6 +356,8 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       summary: Summary(summaryText: sourceText),
                                       summaryStatus: SummaryStatus.complete,
                                       summaryTranslate: null,
+                                      tabIndex: 0,
+                                      summaryKey: widget.summaryKey,
                                       onWordLookup: onWordLookup,
                                     ),
                                     SummaryTextContainer(
@@ -366,6 +368,8 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       summaryTranslate:
                                           translatesState.shortTranslates[widget
                                               .summaryKey],
+                                      tabIndex: 1,
+                                      summaryKey: widget.summaryKey,
                                       onWordLookup: onWordLookup,
                                     ),
                                     SummaryTextContainer(
@@ -376,6 +380,8 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       summaryTranslate:
                                           translatesState.longTranslates[widget
                                               .summaryKey],
+                                      tabIndex: 2,
+                                      summaryKey: widget.summaryKey,
                                       onWordLookup: onWordLookup,
                                     ),
                                     ResearchTab(summaryKey: widget.summaryKey),

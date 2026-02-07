@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/helpers/get_transformed_text.dart';
 import 'package:summify/helpers/language_codes.dart';
 import 'package:summify/services/summaryApi.dart';
 import 'package:summify/services/tts_service.dart';
@@ -151,11 +152,17 @@ class VoiceButton extends StatefulWidget {
 
 class _VoiceButtonState extends State<VoiceButton> {
   String? get _currentText {
-    return widget.activeTab == 0
-        ? widget.summaryData.userText
-        : widget.activeTab == 1
-        ? widget.summaryData.shortSummary.summaryText
-        : widget.summaryData.longSummary.summaryText;
+    if (widget.activeTab == 0) {
+      return widget.summaryData.userText;
+    }
+    if (widget.activeTab == 1) {
+      return getTransformedText(
+        text: widget.summaryData.shortSummary.summaryText ?? '',
+      );
+    }
+    return getTransformedText(
+      text: widget.summaryData.longSummary.summaryText ?? '',
+    );
   }
 
   bool _modelReadyInfoShown = false;
