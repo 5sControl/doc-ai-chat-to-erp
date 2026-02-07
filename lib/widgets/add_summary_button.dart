@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 
 import '../bloc/mixpanel/mixpanel_bloc.dart';
 import '../screens/modal_screens/text_screen.dart';
@@ -79,11 +81,25 @@ class AddSummaryButton extends StatelessWidget {
         //       resource: result?.paths[0] ?? 'file', registrated: false));
         // } else
           if (result?.paths.isNotEmpty != null) {
-          final fileName = result!.paths[0]?.split('/').last;
-          context.read<SummariesBloc>().add(GetSummaryFromFile(
-              fileName: fileName!,
-              filePath: result.paths[0]!,
-              fromShare: false));
+          if (SummariesBloc.isFreeDailyLimitReached(
+            context.read<SummariesBloc>().state,
+            context.read<SubscriptionsBloc>().state.subscriptionStatus,
+          )) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const SubscriptionScreenLimit(
+                  triggerScreen: 'Summary',
+                  fromSettings: true,
+                ),
+              ),
+            );
+          } else {
+            final fileName = result!.paths[0]?.split('/').last;
+            context.read<SummariesBloc>().add(GetSummaryFromFile(
+                fileName: fileName!,
+                filePath: result.paths[0]!,
+                fromShare: false));
+          }
         }
       });
     }

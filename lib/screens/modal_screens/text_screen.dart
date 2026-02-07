@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/summaries/summaries_bloc.dart';
@@ -23,11 +25,26 @@ class _TextModalScreenState extends State<TextModalScreen> {
   void onPressSummify() {
     Future.delayed(const Duration(milliseconds: 300), () {
       if (controllerText.isNotEmpty) {
-        context
-            .read<SummariesBloc>()
-            .add(GetSummaryFromText(text: textController.text));
-        context.read<MixpanelBloc>().add(const Summify(option: 'text'));
-        Navigator.of(context).pop();
+        if (SummariesBloc.isFreeDailyLimitReached(
+          context.read<SummariesBloc>().state,
+          context.read<SubscriptionsBloc>().state.subscriptionStatus,
+        )) {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SubscriptionScreenLimit(
+                triggerScreen: 'Summary',
+                fromSettings: true,
+              ),
+            ),
+          );
+        } else {
+          context
+              .read<SummariesBloc>()
+              .add(GetSummaryFromText(text: textController.text));
+          context.read<MixpanelBloc>().add(const Summify(option: 'text'));
+          Navigator.of(context).pop();
+        }
       }
     });
   }

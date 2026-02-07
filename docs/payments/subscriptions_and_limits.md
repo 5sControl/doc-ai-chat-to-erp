@@ -91,16 +91,19 @@
 ### 2.1. Бесплатный тариф (Free Tier)
 
 #### Лимиты:
-- **Количество бесплатных summary**: **2 summary**
-- После достижения лимита контент блокируется (`isBlocked: true`)
+- **Количество бесплатных summary**: **1 summary в день**
+- Лимит сбрасывается в полночь (календарный день).
+- После достижения лимита контент блокируется (`isBlocked: true`).
+- **Политика A:** уже заблокированные summary остаются за paywall до покупки подписки (не разблокируются на следующий день).
 - Лимит применяется ко всем типам summary:
   - Summary из URL
   - Summary из текста
   - Summary из файлов
+- Обход удалением документа невозможен: учитываются только факты создания summary, счётчик не уменьшается при удалении.
 
 #### Ограничения:
 - Нет доступа к премиум функциям
-- Ограниченное количество summary
+- Ограниченное количество summary (1 в день)
 
 ### 2.2. Премиум тариф (Premium Subscription)
 
@@ -167,7 +170,7 @@ SubscriptionStatus {
 ### 4.3. Блокировка контента
 
 Контент блокируется (`isBlocked: true`), если:
-- `freeSummaries >= 2` И
+- бесплатных summary использовано сегодня уже **1** (лимит 1 в день: `freeSummariesUsedToday` с учётом даты `lastFreeSummaryDate`) И
 - `subscriptionStatus == SubscriptionStatus.unsubscribed`
 
 ---
@@ -246,18 +249,21 @@ SubscriptionStatus {
 
 ---
 
-## 9. Счетчик бесплатных summary
+## 9. Счетчик бесплатных summary (дневной лимит)
 
 ### 9.1. Механизм подсчета
-- Счетчик `freeSummaries` увеличивается при каждом успешном создании summary
-- Сбрасывается при активации подписки (неявно, через разблокировку)
-- Хранится в `SummariesState`
+- В состоянии хранятся `freeSummariesUsedToday` (int) и `lastFreeSummaryDate` (String, yyyy-MM-dd).
+- «Использовано сегодня» = `freeSummariesUsedToday`, если `lastFreeSummaryDate` совпадает с сегодняшней датой, иначе 0 (новый день).
+- При смене дня счётчик не сбрасывается явно — при проверке лимита дата сравнивается с сегодняшней.
+- Удаление summary не уменьшает счётчик (обход удалением невозможен).
+- Хранится в `SummariesState`, персистится через HydratedBloc.
 
 ### 9.2. Условия инкремента
-Счетчик увеличивается (`IncrementFreeSummaries`) при:
+Счётчик увеличивается (`IncrementFreeSummaries`) при:
 - Успешном создании summary из URL
 - Успешном создании summary из текста
 - Успешном создании summary из файла
+- Если сохранённая дата не сегодня — сначала сбрасывается на 0 и обновляется дата на сегодня, затем +1.
 
 ---
 
@@ -311,8 +317,8 @@ SubscriptionStatus {
 - `lib/helpers/purchases.dart` - интеграция с RevenueCat
 
 ### 11.2. Лимиты
-- `lib/bloc/summaries/summaries_bloc.dart` - логика summary и лимитов
-- `lib/bloc/summaries/summaries_state.dart` - состояние summary
+- `lib/bloc/summaries/summaries_bloc.dart` - логика summary и дневного лимита (константа `freeDailyLimit`, `_usedTodayEffective`, миграция из старого `freeSummaries`)
+- `lib/bloc/summaries/summaries_state.dart` - состояние summary (`freeSummariesUsedToday`, `lastFreeSummaryDate`)
 
 ### 11.3. UI
 - `lib/screens/subscribtions_screen/subscriptions_screen_limit.dart` - экран подписок
@@ -326,7 +332,7 @@ SubscriptionStatus {
 
 ## 12. Важные замечания
 
-1. **Лимит бесплатных summary**: Реально ограничение составляет **2 summary**, а не 15, как может показаться из UI сообщений.
+1. **Лимит бесплатных summary**: **1 summary в день**; сброс в полночь. Заблокированные summary не разблокируются на следующий день (политика A).
 
 2. **Bundle подписки**: Управляются через отдельный API, не через RevenueCat entitlements.
 
@@ -342,7 +348,7 @@ SubscriptionStatus {
 
 | Функция | Free | Premium | Bundle |
 |---------|------|---------|--------|
-| Количество summary | 2 | Unlimited | Unlimited |
+| Количество summary | 1 в день | Unlimited | Unlimited |
 | Document Research | ❌ | ✅ | ✅ |
 | Brief Summary | ✅ | ✅ | ✅ |
 | Deep Summary | ✅ | ✅ | ✅ |

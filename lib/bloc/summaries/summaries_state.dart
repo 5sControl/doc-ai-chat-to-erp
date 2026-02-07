@@ -8,29 +8,35 @@ class SummariesState extends Equatable {
   // final Map<String, int> dailySummariesMap;
   final int textCounter;
   final SummaryType defaultSummaryType;
-  final int freeSummaries;
+  final int freeSummariesUsedToday;
+  final String lastFreeSummaryDate;
 
-  const SummariesState(
-      {required this.summaries,
-      required this.ratedSummaries,
-      required this.textCounter,
-      required this.defaultSummaryType,
-      required this.freeSummaries});
+  const SummariesState({
+    required this.summaries,
+    required this.ratedSummaries,
+    required this.textCounter,
+    required this.defaultSummaryType,
+    required this.freeSummariesUsedToday,
+    required this.lastFreeSummaryDate,
+  });
 
-  SummariesState copyWith(
-      {Map<String, SummaryData>? summaries,
-      Set<String>? ratedSummaries,
-      int? textCounter,
-      SummaryType? defaultSummaryType,
-      int? freeSummaries}) {
+  SummariesState copyWith({
+    Map<String, SummaryData>? summaries,
+    Set<String>? ratedSummaries,
+    int? textCounter,
+    SummaryType? defaultSummaryType,
+    int? freeSummariesUsedToday,
+    String? lastFreeSummaryDate,
+  }) {
     return SummariesState(
-        summaries: summaries ?? this.summaries,
-        ratedSummaries: ratedSummaries ?? this.ratedSummaries,
-        // dailyLimit: dailyLimit ?? this.dailyLimit,
-        // dailySummariesMap: dailySummariesMap ?? this.dailySummariesMap,
-        textCounter: textCounter ?? this.textCounter,
-        defaultSummaryType: defaultSummaryType ?? this.defaultSummaryType,
-        freeSummaries: freeSummaries ?? this.freeSummaries);
+      summaries: summaries ?? this.summaries,
+      ratedSummaries: ratedSummaries ?? this.ratedSummaries,
+      textCounter: textCounter ?? this.textCounter,
+      defaultSummaryType: defaultSummaryType ?? this.defaultSummaryType,
+      freeSummariesUsedToday:
+          freeSummariesUsedToday ?? this.freeSummariesUsedToday,
+      lastFreeSummaryDate: lastFreeSummaryDate ?? this.lastFreeSummaryDate,
+    );
   }
 
   factory SummariesState.fromJson(Map<String, dynamic> json) =>
@@ -44,6 +50,7 @@ class SummariesState extends Equatable {
         ratedSummaries,
         textCounter,
         defaultSummaryType,
-        freeSummaries
+        freeSummariesUsedToday,
+        lastFreeSummaryDate,
       ];
 }

@@ -981,11 +981,41 @@ abstract class AppLocalizations {
   /// **'2 free '**
   String get registration_2Free;
 
+  /// No description provided for @registration_1FreePerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'1 free per day'**
+  String get registration_1FreePerDay;
+
   /// No description provided for @registration_unlimited.
   ///
   /// In en, this message translates to:
   /// **'Unlimited'**
   String get registration_unlimited;
+
+  /// No description provided for @limit_onePerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'1 free summary per day'**
+  String get limit_onePerDay;
+
+  /// No description provided for @limit_resetsTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit resets at midnight. You get 1 more free summary tomorrow.'**
+  String get limit_resetsTomorrow;
+
+  /// No description provided for @limit_usedTodayTryTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve used your 1 free summary today. Come back tomorrow for another one, or go unlimited.'**
+  String get limit_usedTodayTryTomorrow;
+
+  /// No description provided for @limit_blockedCardOverlay.
+  ///
+  /// In en, this message translates to:
+  /// **'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.'**
+  String get limit_blockedCardOverlay;
 
   /// No description provided for @registration_summarizations.
   ///

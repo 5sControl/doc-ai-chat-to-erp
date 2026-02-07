@@ -468,7 +468,25 @@ class AppLocalizationsPt extends AppLocalizations {
   String get registration_2Free => '2 ';
 
   @override
+  String get registration_1FreePerDay => '1 free per day';
+
+  @override
   String get registration_unlimited => 'resumos ilimitados';
+
+  @override
+  String get limit_onePerDay => '1 free summary per day';
+
+  @override
+  String get limit_resetsTomorrow =>
+      'Limit resets at midnight. You get 1 more free summary tomorrow.';
+
+  @override
+  String get limit_usedTodayTryTomorrow =>
+      'You\'ve used your 1 free summary today. Come back tomorrow for another one, or go unlimited.';
+
+  @override
+  String get limit_blockedCardOverlay =>
+      'This summary was created over your daily limit. Unlock with Premium. Tomorrow you get 1 new free summary.';
 
   @override
   String get registration_summarizations => 'grátis';

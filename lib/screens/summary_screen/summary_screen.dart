@@ -524,57 +524,76 @@ class PremiumBlurContainer extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(color: Colors.black26),
               child: Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    gradient: const LinearGradient(
-                      colors: [
-                        Color.fromRGBO(255, 238, 90, 1),
-                        Color.fromRGBO(255, 208, 74, 1),
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: Material(
-                    borderRadius: BorderRadius.circular(4),
-                    color: Colors.transparent,
-                    child: InkWell(
-                      radius: 4,
-                      highlightColor: Colors.white54,
-                      borderRadius: BorderRadius.circular(4),
-                      onTap: onPressPremium,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 8,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              Assets.icons.crown,
-                              height: 34,
-                              width: 34,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.summary_breakThroughTheLimits,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        AppLocalizations.of(context)!
+                            .limit_blockedCardOverlay,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color.fromRGBO(255, 238, 90, 1),
+                            Color.fromRGBO(255, 208, 74, 1),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.transparent,
+                        child: InkWell(
+                          radius: 4,
+                          highlightColor: Colors.white54,
+                          borderRadius: BorderRadius.circular(4),
+                          onTap: onPressPremium,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 8,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  Assets.icons.crown,
+                                  height: 34,
+                                  width: 34,
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.summary_breakThroughTheLimits,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

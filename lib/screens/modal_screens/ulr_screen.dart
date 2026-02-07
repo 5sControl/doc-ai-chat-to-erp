@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/summaries/summaries_bloc.dart';
@@ -64,10 +66,25 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
         // } else
 
           if (controllerText.isNotEmpty) {
-          context.read<SummariesBloc>().add(GetSummaryFromUrl(
-              summaryUrl: urlController.text, fromShare: false));
-              context.read<MixpanelBloc>().add(Summify(option: 'link'));
-          Navigator.of(context).pop();
+          if (SummariesBloc.isFreeDailyLimitReached(
+            context.read<SummariesBloc>().state,
+            context.read<SubscriptionsBloc>().state.subscriptionStatus,
+          )) {
+            Navigator.of(context).pop();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const SubscriptionScreenLimit(
+                  triggerScreen: 'Summary',
+                  fromSettings: true,
+                ),
+              ),
+            );
+          } else {
+            context.read<SummariesBloc>().add(GetSummaryFromUrl(
+                summaryUrl: urlController.text, fromShare: false));
+            context.read<MixpanelBloc>().add(Summify(option: 'link'));
+            Navigator.of(context).pop();
+          }
         }
       });
     }

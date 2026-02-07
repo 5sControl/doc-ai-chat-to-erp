@@ -15,6 +15,7 @@ import 'package:summify/models/models.dart';
 import 'package:summify/screens/home_screen/settings_button.dart';
 import 'package:summify/screens/home_screen/bookmarks_button.dart';
 import 'package:summify/screens/home_screen/premium_banner.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 
 import 'logo.dart';
@@ -34,6 +35,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   void getSummary({required String summaryUrl}) {
     Future.delayed(const Duration(milliseconds: 300), () {
+      if (!mounted) return;
+      if (SummariesBloc.isFreeDailyLimitReached(
+        context.read<SummariesBloc>().state,
+        context.read<SubscriptionsBloc>().state.subscriptionStatus,
+      )) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const SubscriptionScreenLimit(
+              triggerScreen: 'Summary',
+              fromSettings: true,
+            ),
+          ),
+        );
+        return;
+      }
       context
           .read<SummariesBloc>()
           .add(GetSummaryFromUrl(summaryUrl: summaryUrl, fromShare: true));
@@ -43,6 +59,21 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void getSummaryFromFile(
       {required String filePath, required String fileName}) {
     Future.delayed(const Duration(milliseconds: 300), () {
+      if (!mounted) return;
+      if (SummariesBloc.isFreeDailyLimitReached(
+        context.read<SummariesBloc>().state,
+        context.read<SubscriptionsBloc>().state.subscriptionStatus,
+      )) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const SubscriptionScreenLimit(
+              triggerScreen: 'Summary',
+              fromSettings: true,
+            ),
+          ),
+        );
+        return;
+      }
       context.read<SummariesBloc>().add(GetSummaryFromFile(
           filePath: filePath, fileName: fileName, fromShare: true));
       context.read<MixpanelBloc>().add(Summify(option: 'file'));

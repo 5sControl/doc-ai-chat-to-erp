@@ -469,7 +469,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get registration_2Free => '2 бесплатные ';
 
   @override
+  String get registration_1FreePerDay => '1 бесплатное в день';
+
+  @override
   String get registration_unlimited => 'безлимитные';
+
+  @override
+  String get limit_onePerDay => '1 бесплатное саммари в день';
+
+  @override
+  String get limit_resetsTomorrow =>
+      'Лимит обновляется в полночь. Завтра снова будет 1 бесплатное саммари.';
+
+  @override
+  String get limit_usedTodayTryTomorrow =>
+      'Вы уже использовали 1 бесплатное саммари сегодня. Завтра будет ещё одно или оформите подписку.';
+
+  @override
+  String get limit_blockedCardOverlay =>
+      'Это саммари создано сверх дневного лимита. Откройте по подписке. Завтра будет 1 новое бесплатное саммари.';
 
   @override
   String get registration_summarizations => 'саммари';

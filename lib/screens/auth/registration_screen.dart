@@ -173,7 +173,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ),
                         Row(children: [
                           Text(
-                            AppLocalizations.of(context)!.registration_2Free,
+                            AppLocalizations.of(context)!.registration_1FreePerDay,
                             //maxLines: 2,
                             textAlign: TextAlign.start,
                             style: TextStyle(

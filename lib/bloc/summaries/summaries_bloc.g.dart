@@ -20,7 +20,8 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
         _$SummaryTypeEnumMap,
         json['defaultSummaryType'],
       ),
-      freeSummaries: (json['freeSummaries'] as num).toInt(),
+      freeSummariesUsedToday: (json['freeSummariesUsedToday'] as num?)?.toInt() ?? 0,
+      lastFreeSummaryDate: (json['lastFreeSummaryDate'] as String?) ?? '',
     );
 
 Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>
@@ -29,7 +30,8 @@ Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>
       'ratedSummaries': instance.ratedSummaries.toList(),
       'textCounter': instance.textCounter,
       'defaultSummaryType': _$SummaryTypeEnumMap[instance.defaultSummaryType]!,
-      'freeSummaries': instance.freeSummaries,
+      'freeSummariesUsedToday': instance.freeSummariesUsedToday,
+      'lastFreeSummaryDate': instance.lastFreeSummaryDate,
     };
 
 const _$SummaryTypeEnumMap = {

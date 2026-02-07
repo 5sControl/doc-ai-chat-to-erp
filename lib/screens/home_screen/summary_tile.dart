@@ -8,8 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/request_screen.dart';
+import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
@@ -273,6 +275,20 @@ class ErrorButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressRetry() {
+      if (SummariesBloc.isFreeDailyLimitReached(
+        context.read<SummariesBloc>().state,
+        context.read<SubscriptionsBloc>().state.subscriptionStatus,
+      )) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const SubscriptionScreenLimit(
+              triggerScreen: 'Summary',
+              fromSettings: true,
+            ),
+          ),
+        );
+        return;
+      }
       context
           .read<SummariesBloc>()
           .add(GetSummaryFromUrl(summaryUrl: summaryLink, fromShare: false));

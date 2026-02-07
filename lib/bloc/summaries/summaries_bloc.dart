@@ -20,6 +20,9 @@ part 'summaries_bloc.g.dart';
 
 const throttleDuration = Duration(milliseconds: 100);
 
+/// Free tier: 1 summary per day (resets at midnight, policy A: blocked stay blocked).
+const int freeDailyLimit = 1;
+
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
     return concurrent<E>().call(events.throttle(duration), mapper);
@@ -40,7 +43,8 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           ratedSummaries: {},
           defaultSummaryType: SummaryType.short,
           textCounter: 1,
-          freeSummaries: 0,
+          freeSummariesUsedToday: 0,
+          lastFreeSummaryDate: '',
         )) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionStatus == SubscriptionStatus.subscribed) {
@@ -131,7 +135,18 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
     on<IncrementFreeSummaries>(
       (event, emit) {
-        emit(state.copyWith(freeSummaries: state.freeSummaries + 1));
+        final today = _todayDateString();
+        final usedToday = _usedTodayEffective(state);
+        if (state.lastFreeSummaryDate != today) {
+          emit(state.copyWith(
+            freeSummariesUsedToday: 1,
+            lastFreeSummaryDate: today,
+          ));
+        } else {
+          emit(state.copyWith(
+            freeSummariesUsedToday: usedToday + 1,
+          ));
+        }
       },
     );
 
@@ -149,8 +164,37 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
   @override
   SummariesState? fromJson(Map<String, dynamic> json) {
+    // Migrate old format (freeSummaries) to daily limit format
+    if (json.containsKey('freeSummaries') &&
+        !json.containsKey('freeSummariesUsedToday')) {
+      final migrated = Map<String, dynamic>.from(json)
+        ..remove('freeSummaries')
+        ..['freeSummariesUsedToday'] = 0
+        ..['lastFreeSummaryDate'] = '';
+      return SummariesState.fromJson(migrated);
+    }
     return SummariesState.fromJson(json);
   }
+
+  /// Effective count of free summaries used today (0 if we're on a new day).
+  static int _usedTodayEffective(SummariesState state) {
+    final today = _todayDateString();
+    if (state.lastFreeSummaryDate != today) return 0;
+    return state.freeSummariesUsedToday;
+  }
+
+  static String _todayDateString() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  }
+
+  /// True if free user has already used their 1 free summary today (for UI to show paywall before creating).
+  static bool isFreeDailyLimitReached(
+    SummariesState state,
+    SubscriptionStatus subscriptionStatus,
+  ) =>
+      subscriptionStatus == SubscriptionStatus.unsubscribed &&
+      _usedTodayEffective(state) >= freeDailyLimit;
 
   @override
   Map<String, dynamic>? toJson(SummariesState state) {
@@ -262,7 +306,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           SummarizingSuccess(url: summaryKey, fromShare: fromShare),
         );
         return summaryData.copyWith(
-          isBlocked: state.freeSummaries >= 2 &&
+          isBlocked: _usedTodayEffective(state) >= freeDailyLimit &&
                   subscriptionBloc.state.subscriptionStatus ==
                       SubscriptionStatus.unsubscribed
               ? true
@@ -314,7 +358,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         );
         add(const IncrementFreeSummaries());
         return summaryData.copyWith(
-          isBlocked: state.freeSummaries >= 2 &&
+          isBlocked: _usedTodayEffective(state) >= freeDailyLimit &&
                   subscriptionBloc.state.subscriptionStatus ==
                       SubscriptionStatus.unsubscribed
               ? true
@@ -403,7 +447,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         );
         add(const IncrementFreeSummaries());
         return summaryData.copyWith(
-          isBlocked: state.freeSummaries >= 2 &&
+          isBlocked: _usedTodayEffective(state) >= freeDailyLimit &&
                   subscriptionBloc.state.subscriptionStatus ==
                       SubscriptionStatus.unsubscribed
               ? true
