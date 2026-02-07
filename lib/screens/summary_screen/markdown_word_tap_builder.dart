@@ -55,7 +55,9 @@ class MarkdownWordTapBuilder extends MarkdownElementBuilder {
         tag == 'h3' ||
         tag == 'h4' ||
         tag == 'h5' ||
-        tag == 'h6') {
+        tag == 'h6' ||
+        tag == 'li' ||
+        tag == 'blockquote') {
       final text = element.textContent;
       if (text.isEmpty) return null;
       final style = preferredStyle ?? parentStyle ?? const TextStyle();

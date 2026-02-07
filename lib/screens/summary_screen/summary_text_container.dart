@@ -151,6 +151,10 @@ class SummaryTextContainer extends StatelessWidget {
                                   onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
                               'h6': MarkdownWordTapBuilder(
                                   onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+                              'li': MarkdownWordTapBuilder(
+                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
+                              'blockquote': MarkdownWordTapBuilder(
+                                  onWordTap: (w) => _onWordTap(context, w, onWordLookup)),
                             }
                           : const <String, MarkdownElementBuilder>{};
 
