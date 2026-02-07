@@ -223,9 +223,6 @@ class AppLocalizationsRu extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Преодолейте ограничения';
 
   @override
-  String get summary_sourceTab => 'Источник';
-
-  @override
   String get summary_sourceNotAvailable =>
       'Исходный текст недоступен для этого типа резюме';
 

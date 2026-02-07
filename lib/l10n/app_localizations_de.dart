@@ -222,9 +222,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Überwinde die Grenzen';
 
   @override
-  String get summary_sourceTab => 'Quelle';
-
-  @override
   String get summary_sourceNotAvailable =>
       'Quelltext ist für diese Art von Zusammenfassung nicht verfügbar';
 

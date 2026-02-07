@@ -93,7 +93,6 @@
   "summary_filePathNotFound": "Caminho do arquivo não encontrado",
   "summary_originalTextNotAvailable": "Texto original não disponível",
   "summary_breakThroughTheLimits": "Supere os limites",
-  "summary_sourceTab": "Fonte",
   "summary_sourceNotAvailable": "O texto de origem não está disponível para este tipo de resumo",
 
   "quiz_failedToGenerate": "Falha ao gerar o quiz",

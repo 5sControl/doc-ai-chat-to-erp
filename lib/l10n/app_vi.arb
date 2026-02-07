@@ -93,7 +93,6 @@
   "summary_filePathNotFound": "Không tìm thấy đường dẫn tệp",
   "summary_originalTextNotAvailable": "Văn bản gốc không khả dụng",
   "summary_breakThroughTheLimits": "Vượt qua giới hạn",
-  "summary_sourceTab": "Nguồn",
   "summary_sourceNotAvailable": "Văn bản nguồn không khả dụng cho loại tóm tắt này",
 
   "quiz_failedToGenerate": "Không tạo được câu đố",

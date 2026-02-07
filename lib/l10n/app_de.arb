@@ -93,7 +93,6 @@
   "summary_filePathNotFound": "Dateipfad nicht gefunden",
   "summary_originalTextNotAvailable": "Originaltext nicht verfügbar",
   "summary_breakThroughTheLimits": "Überwinde die Grenzen",
-  "summary_sourceTab": "Quelle",
   "summary_sourceNotAvailable": "Quelltext ist für diese Art von Zusammenfassung nicht verfügbar",
 
   "quiz_failedToGenerate": "Quiz konnte nicht generiert werden",

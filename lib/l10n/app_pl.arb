@@ -93,7 +93,6 @@
   "summary_filePathNotFound": "Nie znaleziono ścieżki do pliku",
   "summary_originalTextNotAvailable": "Oryginalny tekst niedostępny",
   "summary_breakThroughTheLimits": "Przekrocz limity",
-  "summary_sourceTab": "Źródło",
   "summary_sourceNotAvailable": "Tekst źródłowy nie jest dostępny dla tego typu podsumowania",
 
   "quiz_failedToGenerate": "Nie udało się wygenerować quizu",

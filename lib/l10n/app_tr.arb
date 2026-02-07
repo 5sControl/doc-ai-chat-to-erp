@@ -93,7 +93,6 @@
   "summary_filePathNotFound": "Dosya yolu bulunamadı",
   "summary_originalTextNotAvailable": "Orijinal metin mevcut değil",
   "summary_breakThroughTheLimits": "Sınırları aşın",
-  "summary_sourceTab": "Kaynak",
   "summary_sourceNotAvailable": "Bu tür özet için kaynak metin mevcut değil",
 
   "quiz_failedToGenerate": "Quiz oluşturulamadı",

@@ -220,9 +220,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Vượt qua giới hạn';
 
   @override
-  String get summary_sourceTab => 'Nguồn';
-
-  @override
   String get summary_sourceNotAvailable =>
       'Văn bản nguồn không khả dụng cho loại tóm tắt này';
 

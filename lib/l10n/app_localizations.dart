@@ -519,12 +519,6 @@ abstract class AppLocalizations {
   /// **'Break through the limits'**
   String get summary_breakThroughTheLimits;
 
-  /// No description provided for @summary_sourceTab.
-  ///
-  /// In en, this message translates to:
-  /// **'Source'**
-  String get summary_sourceTab;
-
   /// No description provided for @summary_sourceNotAvailable.
   ///
   /// In en, this message translates to:

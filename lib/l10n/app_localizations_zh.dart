@@ -216,9 +216,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get summary_breakThroughTheLimits => '突破限制';
 
   @override
-  String get summary_sourceTab => '来源';
-
-  @override
   String get summary_sourceNotAvailable => '此类摘要无法使用源文本';
 
   @override
@@ -745,9 +742,6 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get summary_breakThroughTheLimits => '突破限制';
-
-  @override
-  String get summary_sourceTab => '来源';
 
   @override
   String get summary_sourceNotAvailable => '此类摘要无法使用源文本';

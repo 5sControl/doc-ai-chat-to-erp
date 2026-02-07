@@ -221,9 +221,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Sınırları aşın';
 
   @override
-  String get summary_sourceTab => 'Kaynak';
-
-  @override
   String get summary_sourceNotAvailable =>
       'Bu tür özet için kaynak metin mevcut değil';
 

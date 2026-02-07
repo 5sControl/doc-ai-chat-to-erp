@@ -222,9 +222,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get summary_breakThroughTheLimits => 'Dépassez les limites';
 
   @override
-  String get summary_sourceTab => 'Source';
-
-  @override
   String get summary_sourceNotAvailable =>
       'Le texte source n\'est pas disponible pour ce type de résumé';
 

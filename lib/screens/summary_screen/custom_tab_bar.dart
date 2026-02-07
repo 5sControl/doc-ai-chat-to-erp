@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:summify/l10n/app_localizations.dart';
 
 class CustomTabBar extends StatelessWidget {
   final TabController tabController;
@@ -35,8 +34,8 @@ class CustomTabBar extends StatelessWidget {
             color: Color.fromRGBO(0, 186, 195, 1),
             borderRadius: BorderRadius.circular(6)),
         tabs: [
-          Tab(
-            text: AppLocalizations.of(context)!.summary_sourceTab,
+          const Tab(
+            text: "Source",
           ),
           const Tab(
             text: "Brief",
