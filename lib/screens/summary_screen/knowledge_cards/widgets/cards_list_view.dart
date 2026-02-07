@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:summify/models/models.dart';
 
 import 'knowledge_card_tile.dart';
-import 'unsupported_device_placeholder.dart';
+import 'knowledge_cards_unavailable_dialog.dart';
 
-class CardsListView extends StatelessWidget {
-  final List<KnowledgeCard> cards;
-  final KnowledgeCardStatus status;
-  final Function(KnowledgeCard) onCardTap;
-  final Function(KnowledgeCard) onCardSave;
-  final VoidCallback onRetry;
-
+class CardsListView extends StatefulWidget {
   const CardsListView({
     super.key,
     required this.cards,
@@ -20,12 +14,45 @@ class CardsListView extends StatelessWidget {
     required this.onRetry,
   });
 
+  final List<KnowledgeCard> cards;
+  final KnowledgeCardStatus status;
+  final Function(KnowledgeCard) onCardTap;
+  final Function(KnowledgeCard) onCardSave;
+  final VoidCallback onRetry;
+
+  @override
+  State<CardsListView> createState() => _CardsListViewState();
+}
+
+class _CardsListViewState extends State<CardsListView> {
+  bool _errorDialogShown = false;
+
+  @override
+  void didUpdateWidget(covariant CardsListView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.status != widget.status && widget.status != KnowledgeCardStatus.error) {
+      _errorDialogShown = false;
+    }
+  }
+
+  void _showUnavailableDialogOnce() {
+    if (widget.status != KnowledgeCardStatus.error || _errorDialogShown) return;
+    _errorDialogShown = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      KnowledgeCardsUnavailableDialog.show(context, widget.onRetry);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (status == KnowledgeCardStatus.unsupported) {
-      return const UnsupportedDevicePlaceholder();
+    if (status == KnowledgeCardStatus.unsupported || status == KnowledgeCardStatus.error) {
+      if (status == KnowledgeCardStatus.error) {
+        _showUnavailableDialogOnce();
+      }
+      return _buildErrorView();
     }
-    
+
     if (status == KnowledgeCardStatus.loading) {
       return const Center(
         child: Column(
@@ -39,34 +66,6 @@ class CardsListView extends StatelessWidget {
                 fontSize: 16,
                 color: Colors.grey,
               ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    if (status == KnowledgeCardStatus.error) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              size: 48,
-              color: Colors.red,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Failed to extract knowledge',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: const Text('Try again'),
             ),
           ],
         ),
@@ -110,6 +109,40 @@ class CardsListView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  KnowledgeCardStatus get status => widget.status;
+  List<KnowledgeCard> get cards => widget.cards;
+  VoidCallback get onRetry => widget.onRetry;
+  Function(KnowledgeCard) get onCardTap => widget.onCardTap;
+  Function(KnowledgeCard) get onCardSave => widget.onCardSave;
+
+  Widget _buildErrorView() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error_outline,
+            size: 48,
+            color: Colors.red,
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Failed to extract knowledge',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: onRetry,
+            child: const Text('Try again'),
+          ),
+        ],
+      ),
     );
   }
 }

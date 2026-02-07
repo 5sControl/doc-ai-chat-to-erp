@@ -8,6 +8,7 @@ import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/demo_knowledge_cards.dart';
 import 'package:summify/services/on_device_knowledge_cards_service.dart';
+import 'package:summify/services/summaryApi.dart';
 
 part 'knowledge_cards_event.dart';
 part 'knowledge_cards_state.dart';
@@ -41,27 +42,6 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     ExtractKnowledgeCards event,
     Emitter<KnowledgeCardsState> emit,
   ) async {
-    // Check if Apple Intelligence is available
-    final isAvailable = await onDeviceService.isAvailable();
-    
-    if (!isAvailable) {
-      // Device not supported - show placeholder
-      emit(state.copyWith(
-        extractionStatuses: {
-          ...state.extractionStatuses,
-          event.summaryKey: KnowledgeCardStatus.unsupported,
-        },
-      ));
-      
-      // Track analytics
-      mixpanelBloc.add(KnowledgeCardsUnsupportedDevice(
-        summaryKey: event.summaryKey,
-      ));
-      
-      return;
-    }
-
-    // Set loading status
     emit(state.copyWith(
       extractionStatuses: {
         ...state.extractionStatuses,
@@ -69,58 +49,73 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       },
     ));
 
+    List<KnowledgeCard>? extractedCards;
+
     try {
-      // Use on-device Apple Intelligence to extract knowledge cards
-      final extractedCards = await onDeviceService.extractKnowledgeCards(event.summaryText);
-
-      // Sync with saved cards - mark cards as saved if they exist in SavedCardsBloc
-      final savedCardsMap = savedCardsBloc.state.savedCards;
-      final syncedCards = extractedCards.map((card) {
-        final isSaved = savedCardsMap.containsKey(card.id);
-        if (isSaved) {
-          final savedCard = savedCardsMap[card.id]!;
-          return card.copyWith(
-            isSaved: true,
-            sourceSummaryKey: savedCard.sourceSummaryKey,
-            sourceTitle: savedCard.sourceTitle,
-            savedAt: savedCard.savedAt,
-          );
+      extractedCards = await SummaryRepository().extractKnowledgeCards(event.summaryText);
+    } catch (_) {
+      final isAvailable = await onDeviceService.isAvailable();
+      if (isAvailable) {
+        try {
+          extractedCards = await onDeviceService.extractKnowledgeCards(event.summaryText);
+        } catch (error) {
+          emit(state.copyWith(
+            extractionStatuses: {
+              ...state.extractionStatuses,
+              event.summaryKey: KnowledgeCardStatus.error,
+            },
+          ));
+          mixpanelBloc.add(KnowledgeCardsExtractionError(
+            summaryKey: event.summaryKey,
+            error: error.toString(),
+          ));
+          return;
         }
-        return card;
-      }).toList();
-
-      // Update state with extracted cards
-      emit(state.copyWith(
-        knowledgeCards: {
-          ...state.knowledgeCards,
-          event.summaryKey: syncedCards,
-        },
-        extractionStatuses: {
-          ...state.extractionStatuses,
-          event.summaryKey: KnowledgeCardStatus.complete,
-        },
-      ));
-
-      // Track analytics
-      mixpanelBloc.add(KnowledgeCardsAppleIntelligenceUsed(
-        summaryKey: event.summaryKey,
-        cardsCount: syncedCards.length,
-      ));
-    } catch (error) {
-      // Set error status
-      emit(state.copyWith(
-        extractionStatuses: {
-          ...state.extractionStatuses,
-          event.summaryKey: KnowledgeCardStatus.error,
-        },
-      ));
-
-      // Track error analytics
-      mixpanelBloc.add(KnowledgeCardsExtractionError(
-        summaryKey: event.summaryKey,
-        error: error.toString(),
-      ));
+      } else {
+        emit(state.copyWith(
+          extractionStatuses: {
+            ...state.extractionStatuses,
+            event.summaryKey: KnowledgeCardStatus.error,
+          },
+        ));
+        mixpanelBloc.add(KnowledgeCardsExtractionError(
+          summaryKey: event.summaryKey,
+          error: 'Server unavailable and on-device not available',
+        ));
+        return;
+      }
     }
+
+    final savedCardsMap = savedCardsBloc.state.savedCards;
+    final syncedCards = extractedCards.map((card) {
+      final isSaved = savedCardsMap.containsKey(card.id);
+      if (isSaved) {
+        final savedCard = savedCardsMap[card.id]!;
+        return card.copyWith(
+          isSaved: true,
+          sourceSummaryKey: savedCard.sourceSummaryKey,
+          sourceTitle: savedCard.sourceTitle,
+          savedAt: savedCard.savedAt,
+        );
+      }
+      return card;
+    }).toList();
+
+    emit(state.copyWith(
+      knowledgeCards: {
+        ...state.knowledgeCards,
+        event.summaryKey: syncedCards,
+      },
+      extractionStatuses: {
+        ...state.extractionStatuses,
+        event.summaryKey: KnowledgeCardStatus.complete,
+      },
+    ));
+
+    mixpanelBloc.add(KnowledgeCardsAppleIntelligenceUsed(
+      summaryKey: event.summaryKey,
+      cardsCount: syncedCards.length,
+    ));
   }
 
   void _onSaveKnowledgeCard(
