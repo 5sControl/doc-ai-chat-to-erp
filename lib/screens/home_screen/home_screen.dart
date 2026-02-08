@@ -300,11 +300,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     ..sort((a, b) =>
                                         b.value.date.compareTo(a.value.date));
                                   final orderedKeys = <String>[
-                                    if (demoEntry != null) demoEntry.key,
                                     ...userEntries.map((e) => e.key),
+                                    if (demoEntry != null) demoEntry.key,
                                   ];
-                                  final carouselIndex =
-                                      demoEntry != null ? 1 : 0;
+                                  final carouselIndex = orderedKeys.length;
                                   final itemCount =
                                       orderedKeys.length + 1;
                                   return ListView.builder(
@@ -317,12 +316,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                           child: AdsCarousel(),
                                         );
                                       }
-                                      final summaryIndex = index <
-                                              carouselIndex
-                                          ? index
-                                          : index - 1;
-                                      final link =
-                                          orderedKeys[summaryIndex];
+                                      final link = orderedKeys[index];
                                       return SummaryTile(
                                         sharedLink: link,
                                       );
