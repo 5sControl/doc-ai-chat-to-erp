@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/models/models.dart';
+import 'package:summify/screens/summary_screen/markdown_word_tap_builder.dart';
+import 'package:summify/screens/summary_screen/word_lookup_overlay.dart';
 import 'package:toastification/toastification.dart';
+
+import '../../../bloc/settings/settings_bloc.dart';
 
 class CardDetailModal extends StatelessWidget {
   final KnowledgeCard card;
@@ -67,7 +72,8 @@ class CardDetailModal extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
-                  MarkdownBody(
+                  _buildMarkdownWithWordTap(
+                    context,
                     data: card.content,
                     styleSheet: MarkdownStyleSheet(
                       p: const TextStyle(
@@ -111,8 +117,6 @@ class CardDetailModal extends StatelessWidget {
                         color: Colors.black87,
                       ),
                     ),
-                    shrinkWrap: true,
-                    selectable: true,
                   ),
 
                   if (card.explanation != null && card.explanation!.isNotEmpty) ...[
@@ -136,7 +140,8 @@ class CardDetailModal extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          MarkdownBody(
+                          _buildMarkdownWithWordTap(
+                            context,
                             data: card.explanation!,
                             styleSheet: MarkdownStyleSheet(
                               p: TextStyle(
@@ -161,8 +166,6 @@ class CardDetailModal extends StatelessWidget {
                                 fontFamily: 'monospace',
                               ),
                             ),
-                            shrinkWrap: true,
-                            selectable: true,
                           ),
                         ],
                       ),
@@ -203,6 +206,80 @@ class CardDetailModal extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  static Widget _buildMarkdownWithWordTap(
+    BuildContext context, {
+    required String data,
+    required MarkdownStyleSheet styleSheet,
+  }) {
+    void onWordLookup(BuildContext ctx, String word) {
+      final targetLang = ctx.read<SettingsBloc>().state.translateLanguage;
+      showWordLookupOverlay(
+        ctx,
+        word: word,
+        targetLang: targetLang,
+        duration: word.length > 40
+            ? const Duration(seconds: 5)
+            : WordLookupOverlay.defaultDuration,
+      );
+    }
+
+    final builders = <String, MarkdownElementBuilder>{
+      'p': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'h1': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'h2': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'h3': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'h4': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'h5': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'h6': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'li': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+      'blockquote': MarkdownWordTapBuilder(
+          onWordTap: (w) {
+            final t = w.trim();
+            if (t.isNotEmpty) onWordLookup(context, t);
+          }),
+    };
+
+    return MarkdownBody(
+      data: data,
+      styleSheet: styleSheet,
+      shrinkWrap: true,
+      selectable: true,
+      builders: builders,
     );
   }
 
