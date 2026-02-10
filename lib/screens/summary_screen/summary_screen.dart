@@ -24,6 +24,7 @@ import 'package:summify/screens/summary_screen/share_copy_button.dart';
 import 'package:summify/screens/summary_screen/summary_text_container.dart';
 import 'package:summify/screens/summary_screen/word_lookup_overlay.dart';
 import 'package:summify/screens/summary_screen/knowledge_cards/knowledge_cards_tab.dart';
+import 'package:summify/screens/summary_screen/knowledge_cards/widgets/knowledge_cards_bottom_bar.dart';
 import 'package:summify/screens/library_document_screen/quiz_tab.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
@@ -465,8 +466,14 @@ class _SummaryScreenState extends State<SummaryScreen>
         sharedLink: widget.summaryKey,
         summaryData: summaryData,
       );
+    } else if (activeTab == 5) {
+      // Knowledge Cards tab - show Regenerate button in bottom bar
+      return KnowledgeCardsBottomBar(
+        summaryKey: widget.summaryKey,
+        summaryData: summaryData,
+      );
     } else {
-      // For Quiz tab (4) and Knowledge Cards tab (5) - show nothing
+      // For Quiz tab (4) - show nothing
       return null;
     }
   }
