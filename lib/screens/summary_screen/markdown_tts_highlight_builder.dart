@@ -151,8 +151,11 @@ class _PlainWordTapText extends StatefulWidget {
 
 class _PlainWordTapTextState extends State<_PlainWordTapText> {
   static const _selectionDebounceMs = 450;
+  static const _tapSlop = 18.0;
   Timer? _selectionDebounceTimer;
   TextSelection? _lastSelection;
+  Offset? _tapDownPosition;
+  double _tapDownMaxWidth = 0;
 
   void _onSelectionChanged(TextSelection selection, SelectionChangedCause? cause) {
     if (selection.start == selection.end) return;
@@ -189,11 +192,21 @@ class _PlainWordTapTextState extends State<_PlainWordTapText> {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTapDown: (details) {
-            final word = _wordAtPosition(
-              details.localPosition,
-              constraints.maxWidth,
-            );
+            _tapDownPosition = details.localPosition;
+            _tapDownMaxWidth = constraints.maxWidth;
+          },
+          onTapUp: (details) {
+            final down = _tapDownPosition;
+            _tapDownPosition = null;
+            if (down == null) return;
+            final dx = details.localPosition.dx - down.dx;
+            final dy = details.localPosition.dy - down.dy;
+            if (dx * dx + dy * dy > _tapSlop * _tapSlop) return;
+            final word = _wordAtPosition(down, _tapDownMaxWidth);
             if (word.isNotEmpty) widget.onWordTap(word);
+          },
+          onTapCancel: () {
+            _tapDownPosition = null;
           },
           child: SelectableText.rich(
             TextSpan(text: widget.text, style: widget.style),
@@ -241,8 +254,11 @@ class _HighlightedWordTapText extends StatefulWidget {
 
 class _HighlightedWordTapTextState extends State<_HighlightedWordTapText> {
   static const _selectionDebounceMs = 450;
+  static const _tapSlop = 18.0;
   Timer? _selectionDebounceTimer;
   TextSelection? _lastSelection;
+  Offset? _tapDownPosition;
+  double _tapDownMaxWidth = 0;
 
   void _onSelectionChanged(TextSelection selection, SelectionChangedCause? cause) {
     if (selection.start == selection.end) return;
@@ -314,11 +330,21 @@ class _HighlightedWordTapTextState extends State<_HighlightedWordTapText> {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTapDown: (details) {
-            final word = _wordAtPosition(
-              details.localPosition,
-              constraints.maxWidth,
-            );
+            _tapDownPosition = details.localPosition;
+            _tapDownMaxWidth = constraints.maxWidth;
+          },
+          onTapUp: (details) {
+            final down = _tapDownPosition;
+            _tapDownPosition = null;
+            if (down == null) return;
+            final dx = details.localPosition.dx - down.dx;
+            final dy = details.localPosition.dy - down.dy;
+            if (dx * dx + dy * dy > _tapSlop * _tapSlop) return;
+            final word = _wordAtPosition(down, _tapDownMaxWidth);
             if (word.isNotEmpty) widget.onWordTap(word);
+          },
+          onTapCancel: () {
+            _tapDownPosition = null;
           },
           child: SelectableText.rich(
             TextSpan(children: spans, style: widget.style),
