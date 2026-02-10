@@ -1,6 +1,8 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:summify/services/demo_data_initializer.dart';
+import 'package:summify/services/demo_research.dart';
 import 'package:summify/services/summaryApi.dart';
 import 'package:json_annotation/json_annotation.dart';
 import '../../models/models.dart';
@@ -148,6 +150,21 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
         emit(state.copyWith(questions: questions));
       }
     }, transformer: droppable());
+
+    on<InitializeDemoResearch>((event, emit) {
+      final existing = state.questions[DemoDataInitializer.demoKey];
+      if (existing != null && existing.isNotEmpty) return;
+
+      final demoQuestion = ResearchQuestion(
+        question: DemoResearch.demoQuestion,
+        answer: DemoResearch.demoAnswer,
+        answerStatus: AnswerStatus.completed,
+        like: Like.unliked,
+      );
+      final questions = Map<String, List<ResearchQuestion>>.from(state.questions);
+      questions[DemoDataInitializer.demoKey] = [demoQuestion];
+      emit(state.copyWith(questions: questions));
+    });
   }
 
   @override

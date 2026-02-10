@@ -36,3 +36,10 @@ class MakeQuestionFromText extends ResearchEvent {
   @override
   List<Object> get props => [summaryKey, text, question];
 }
+
+class InitializeDemoResearch extends ResearchEvent {
+  const InitializeDemoResearch();
+
+  @override
+  List<Object?> get props => [];
+}

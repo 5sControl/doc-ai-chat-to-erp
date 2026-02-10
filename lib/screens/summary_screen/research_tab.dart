@@ -9,6 +9,7 @@ import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/helpers/chat_content_parser.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/mermaid_viewer_screen.dart';
+import 'package:summify/services/demo_data_initializer.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
@@ -26,6 +27,12 @@ class _ResearchTabState extends State<ResearchTab> {
 
   @override
   void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.summaryKey == DemoDataInitializer.demoKey) {
+        context.read<ResearchBloc>().add(const InitializeDemoResearch());
+      }
+    });
     Future.delayed(const Duration(milliseconds: 200), () {
       controller.animateTo(
         controller.position.maxScrollExtent,
@@ -33,7 +40,6 @@ class _ResearchTabState extends State<ResearchTab> {
         duration: const Duration(milliseconds: 1000),
       );
     });
-    super.initState();
   }
 
   @override
