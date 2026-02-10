@@ -171,6 +171,7 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
         // Sync with saved cards on every rebuild (when user returns to tab)
         if (cards.isNotEmpty && status == KnowledgeCardStatus.complete) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
             context.read<KnowledgeCardsBloc>().add(
               SyncCardsWithSaved(summaryKey: widget.summaryKey),
             );
