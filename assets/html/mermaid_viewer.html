@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=0.5, user-scalable=yes">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: auto; background: #fff; -webkit-overflow-scrolling: touch; }
+    .diagram-wrapper {
+      overflow: auto;
+      width: 100%;
+      min-height: 100%;
+      padding: 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .mermaid {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      min-width: min-content;
+    }
+    .mermaid svg {
+      max-width: none;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="diagram-wrapper">
+    <div class="mermaid">{{MERMAID_CODE}}</div>
+  </div>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+  </script>
+</body>
+</html>

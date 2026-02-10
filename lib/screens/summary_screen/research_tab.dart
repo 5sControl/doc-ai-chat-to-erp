@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
+import 'package:summify/helpers/chat_content_parser.dart';
 import 'package:summify/models/models.dart';
+import 'package:summify/screens/mermaid_viewer_screen.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
@@ -163,6 +165,157 @@ class Answer extends StatelessWidget {
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, state) {
+        final segments = parseChatContent(answer ?? '');
+        final useSegments = hasMermaidSegments(segments);
+
+        final styleSheet = MarkdownStyleSheet(
+          h1: Theme.of(context).textTheme.labelLarge?.copyWith(
+            fontSize: state.fontSize.toDouble() + 6,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          h2: Theme.of(context).textTheme.labelLarge?.copyWith(
+            fontSize: state.fontSize.toDouble() + 4,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          h3: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble() + 2,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          h4: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble() + 1,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          h5: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          h6: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          p: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            color: Colors.black87,
+          ),
+          strong: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          em: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            fontStyle: FontStyle.italic,
+            color: Colors.black87,
+          ),
+          listBullet: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            color: Colors.black87,
+          ),
+          listIndent: 16,
+          blockquote: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            fontStyle: FontStyle.italic,
+            color: Colors.black54,
+          ),
+          code: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble() - 1,
+            fontFamily: 'monospace',
+            backgroundColor: Colors.grey.shade200,
+            color: Colors.black87,
+          ),
+          codeblockDecoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          a: Theme.of(context).textTheme.labelMedium?.copyWith(
+            fontSize: state.fontSize.toDouble(),
+            color: Colors.blue.shade700,
+            decoration: TextDecoration.underline,
+          ),
+        );
+
+        Widget content;
+        if (useSegments) {
+          final children = <Widget>[];
+          var mermaidIndex = 0;
+          for (final segment in segments) {
+            switch (segment) {
+              case TextSegment(:final markdown):
+                if (markdown.isNotEmpty) {
+                  children.add(MarkdownBody(
+                    data: markdown,
+                    selectable: true,
+                    styleSheet: styleSheet,
+                  ));
+                }
+              case MermaidSegment(:final code):
+                mermaidIndex++;
+                final label = segments.whereType<MermaidSegment>().length > 1
+                    ? 'Diagram $mermaidIndex'
+                    : 'Diagram';
+                children.add(_MermaidLinkBlock(
+                  label: label,
+                  code: code,
+                ));
+            }
+          }
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...children,
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: onPressCopy,
+                    splashRadius: 10,
+                    style: bStyle,
+                    iconSize: 20,
+                    visualDensity: VisualDensity.compact,
+                    icon: SvgPicture.asset(
+                      Assets.icons.copy,
+                      colorFilter: const ColorFilter.mode(
+                          Colors.black54, BlendMode.srcIn),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        } else {
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MarkdownBody(
+                data: answer ?? '',
+                selectable: true,
+                styleSheet: styleSheet,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: onPressCopy,
+                    splashRadius: 10,
+                    style: bStyle,
+                    iconSize: 20,
+                    visualDensity: VisualDensity.compact,
+                    icon: SvgPicture.asset(
+                      Assets.icons.copy,
+                      colorFilter: const ColorFilter.mode(
+                          Colors.black54, BlendMode.srcIn),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+
         return Animate(
           delay: const Duration(milliseconds: 100),
           effects: const [FadeEffect()],
@@ -178,101 +331,7 @@ class Answer extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8)),
                 child: AnimatedCrossFade(
-                  firstChild: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MarkdownBody(
-                        data: answer ?? '',
-                        selectable: true,
-                        styleSheet: MarkdownStyleSheet(
-                          h1: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            fontSize: state.fontSize.toDouble() + 6,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                          h2: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            fontSize: state.fontSize.toDouble() + 4,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                          h3: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble() + 2,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                          h4: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble() + 1,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                          h5: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                          h6: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                          p: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            color: Colors.black87,
-                          ),
-                          strong: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                          em: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            fontStyle: FontStyle.italic,
-                            color: Colors.black87,
-                          ),
-                          listBullet: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            color: Colors.black87,
-                          ),
-                          listIndent: 16,
-                          blockquote: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            fontStyle: FontStyle.italic,
-                            color: Colors.black54,
-                          ),
-                          code: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble() - 1,
-                            fontFamily: 'monospace',
-                            backgroundColor: Colors.grey.shade200,
-                            color: Colors.black87,
-                          ),
-                          codeblockDecoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          a: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            fontSize: state.fontSize.toDouble(),
-                            color: Colors.blue.shade700,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: onPressCopy,
-                              splashRadius: 10,
-                              style: bStyle,
-                              iconSize: 20,
-                              visualDensity: VisualDensity.compact,
-                              icon: SvgPicture.asset(
-                                Assets.icons.copy,
-                                colorFilter: const ColorFilter.mode(
-                                    Colors.black54, BlendMode.srcIn),
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
+                  firstChild: content,
                   secondChild: Container(
                     width: 30,
                     height: 30,
@@ -292,6 +351,62 @@ class Answer extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _MermaidLinkBlock extends StatelessWidget {
+  final String label;
+  final String code;
+
+  const _MermaidLinkBlock({
+    required this.label,
+    required this.code,
+  });
+
+  void _openViewer(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => MermaidViewerScreen(
+          mermaidCode: code,
+          title: label,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
+      child: InkWell(
+        onTap: () => _openViewer(context),
+        borderRadius: BorderRadius.circular(4),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.account_tree_outlined,
+                  size: 20, color: Colors.blue.shade700),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Colors.blue.shade700,
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const SizedBox(width: 4),
+              Icon(Icons.open_in_new, size: 16, color: Colors.blue.shade700),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
