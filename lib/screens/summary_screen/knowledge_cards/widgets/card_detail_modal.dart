@@ -8,7 +8,7 @@ import 'package:summify/screens/summary_screen/markdown_word_tap_builder.dart';
 import 'package:summify/screens/summary_screen/word_lookup_overlay.dart';
 import 'package:toastification/toastification.dart';
 
-import '../../../bloc/settings/settings_bloc.dart';
+import '../../../../bloc/settings/settings_bloc.dart';
 
 class CardDetailModal extends StatelessWidget {
   final KnowledgeCard card;
