@@ -56,7 +56,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get wordTapHint_message =>
-      'Çevirisini almak için bir kelimeye çift dokunun.';
+      'Çevirisini almak için bir kelimeye dokunun.';
 
   @override
   String get wordTapHint_dontShowAgain => 'Bir daha gösterme';

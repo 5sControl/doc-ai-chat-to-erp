@@ -19,7 +19,7 @@
   "settings_selectLanguageTitle": "选择语言",
 
   "wordTapHint_title": "单词翻译",
-  "wordTapHint_message": "双击单词即可获取翻译。",
+  "wordTapHint_message": "点击单词即可获取翻译。",
   "wordTapHint_dontShowAgain": "不再显示",
   "wordTapHint_showLater": "稍后显示",
 

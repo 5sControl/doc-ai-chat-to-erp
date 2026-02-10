@@ -57,7 +57,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get wordTapHint_message =>
-      'Tippen Sie doppelt auf ein Wort, um die Übersetzung zu erhalten.';
+      'Tippen Sie auf ein Wort, um die Übersetzung zu erhalten.';
 
   @override
   String get wordTapHint_dontShowAgain => 'Nicht mehr anzeigen';

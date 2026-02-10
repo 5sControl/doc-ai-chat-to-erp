@@ -57,7 +57,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get wordTapHint_message =>
-      'Dotknij dwukrotnie słowa, aby uzyskać jego tłumaczenie.';
+      'Dotknij słowa, aby uzyskać jego tłumaczenie.';
 
   @override
   String get wordTapHint_dontShowAgain => 'Nie pokazuj ponownie';

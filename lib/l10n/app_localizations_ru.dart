@@ -57,7 +57,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get wordTapHint_message =>
-      'Дважды нажмите на слово, чтобы получить его перевод.';
+      'Нажмите на слово, чтобы получить его перевод.';
 
   @override
   String get wordTapHint_dontShowAgain => 'Больше не показывать';

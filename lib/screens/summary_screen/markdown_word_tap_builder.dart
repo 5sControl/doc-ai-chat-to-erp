@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -42,7 +44,7 @@ bool _isWordChar(String s, int i) {
       (c >= 0xC0); // extended letters (e.g. accented, Cyrillic)
 }
 
-/// Markdown element builder for block text (p, h1..h6) that detects double-tap and reports the tapped word.
+/// Markdown element builder for block text (p, h1..h6) that detects tap and reports the tapped word.
 class MarkdownWordTapBuilder extends MarkdownElementBuilder {
   MarkdownWordTapBuilder({required this.onWordTap});
 
@@ -104,19 +106,52 @@ class _WordTapText extends StatefulWidget {
 }
 
 class _WordTapTextState extends State<_WordTapText> {
+  static const _selectionDebounceMs = 450;
+  Timer? _selectionDebounceTimer;
+  TextSelection? _lastSelection;
+
+  void _onSelectionChanged(TextSelection selection, SelectionChangedCause? cause) {
+    if (selection.start == selection.end) return;
+    if (selection.end > widget.text.length) return;
+    _lastSelection = selection;
+    _selectionDebounceTimer?.cancel();
+    _selectionDebounceTimer = Timer(
+      const Duration(milliseconds: _selectionDebounceMs),
+      () {
+        if (!mounted) return;
+        final sel = _lastSelection;
+        if (sel == null || sel.start == sel.end || sel.end > widget.text.length) {
+          return;
+        }
+        var selectedText = widget.text.substring(sel.start, sel.end).trim();
+        if (selectedText.length > 500) selectedText = selectedText.substring(0, 500);
+        if (selectedText.length >= 2) {
+          widget.onWordTap(selectedText);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _selectionDebounceTimer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onDoubleTapDown: (details) {
+          onTapDown: (details) {
             final word = _wordAtPosition(details.localPosition, constraints.maxWidth);
             if (word.isNotEmpty) widget.onWordTap(word);
           },
           child: SelectableText.rich(
             TextSpan(text: widget.text, style: widget.style),
             textAlign: TextAlign.start,
+            onSelectionChanged: _onSelectionChanged,
           ),
         );
       },

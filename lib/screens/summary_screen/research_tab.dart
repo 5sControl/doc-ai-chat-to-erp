@@ -13,6 +13,8 @@ import 'package:summify/services/demo_data_initializer.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
+import 'markdown_word_tap_builder.dart';
+import 'word_lookup_overlay.dart';
 
 class ResearchTab extends StatefulWidget {
   final String summaryKey;
@@ -246,6 +248,68 @@ class Answer extends StatelessWidget {
           ),
         );
 
+        void onWordLookup(BuildContext ctx, String word) {
+          final targetLang = ctx.read<SettingsBloc>().state.translateLanguage;
+          showWordLookupOverlay(
+            ctx,
+            word: word,
+            targetLang: targetLang,
+            duration: word.length > 40
+                ? const Duration(seconds: 5)
+                : WordLookupOverlay.defaultDuration,
+          );
+        }
+
+        Map<String, MarkdownElementBuilder> wordTapBuilders() {
+          return {
+            'p': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'h1': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'h2': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'h3': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'h4': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'h5': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'h6': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'li': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+            'blockquote': MarkdownWordTapBuilder(
+                onWordTap: (w) {
+                  final trimmed = w.trim();
+                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
+                }),
+          };
+        }
+
         Widget content;
         if (useSegments) {
           final children = <Widget>[];
@@ -258,6 +322,7 @@ class Answer extends StatelessWidget {
                     data: markdown,
                     selectable: true,
                     styleSheet: styleSheet,
+                    builders: wordTapBuilders(),
                   ));
                 }
               case MermaidSegment(:final code):
@@ -301,6 +366,7 @@ class Answer extends StatelessWidget {
                 data: answer ?? '',
                 selectable: true,
                 styleSheet: styleSheet,
+                builders: wordTapBuilders(),
               ),
               Row(
                 children: [

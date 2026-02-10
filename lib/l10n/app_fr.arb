@@ -19,7 +19,7 @@
   "settings_selectLanguageTitle": "Choisir la langue",
 
   "wordTapHint_title": "Traduction de mots",
-  "wordTapHint_message": "Doublez-cliquez sur un mot pour obtenir sa traduction.",
+  "wordTapHint_message": "Appuyez sur un mot pour obtenir sa traduction.",
   "wordTapHint_dontShowAgain": "Ne plus afficher",
   "wordTapHint_showLater": "Afficher plus tard",
 

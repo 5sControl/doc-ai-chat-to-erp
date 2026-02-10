@@ -311,6 +311,9 @@ class _SummaryScreenState extends State<SummaryScreen>
                     ctx,
                     word: word,
                     targetLang: targetLang,
+                    duration: word.length > 40
+                        ? const Duration(seconds: 5)
+                        : WordLookupOverlay.defaultDuration,
                     onSpeakWord: (w) async {
                       if (await TtsService.instance.isModelDownloaded()) {
                         if (!ctx.mounted) return;

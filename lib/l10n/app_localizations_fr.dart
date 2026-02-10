@@ -57,7 +57,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get wordTapHint_message =>
-      'Doublez-cliquez sur un mot pour obtenir sa traduction.';
+      'Appuyez sur un mot pour obtenir sa traduction.';
 
   @override
   String get wordTapHint_dontShowAgain => 'Ne plus afficher';

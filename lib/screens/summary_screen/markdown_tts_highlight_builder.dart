@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -132,7 +134,7 @@ class _HighlightableWordTapText extends StatelessWidget {
   }
 }
 
-class _PlainWordTapText extends StatelessWidget {
+class _PlainWordTapText extends StatefulWidget {
   const _PlainWordTapText({
     required this.text,
     required this.style,
@@ -144,21 +146,59 @@ class _PlainWordTapText extends StatelessWidget {
   final void Function(String word) onWordTap;
 
   @override
+  State<_PlainWordTapText> createState() => _PlainWordTapTextState();
+}
+
+class _PlainWordTapTextState extends State<_PlainWordTapText> {
+  static const _selectionDebounceMs = 450;
+  Timer? _selectionDebounceTimer;
+  TextSelection? _lastSelection;
+
+  void _onSelectionChanged(TextSelection selection, SelectionChangedCause? cause) {
+    if (selection.start == selection.end) return;
+    if (selection.end > widget.text.length) return;
+    _lastSelection = selection;
+    _selectionDebounceTimer?.cancel();
+    _selectionDebounceTimer = Timer(
+      const Duration(milliseconds: _selectionDebounceMs),
+      () {
+        if (!mounted) return;
+        final sel = _lastSelection;
+        if (sel == null || sel.start == sel.end || sel.end > widget.text.length) {
+          return;
+        }
+        var selectedText = widget.text.substring(sel.start, sel.end).trim();
+        if (selectedText.length > 500) selectedText = selectedText.substring(0, 500);
+        if (selectedText.length >= 2) {
+          widget.onWordTap(selectedText);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _selectionDebounceTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onDoubleTapDown: (details) {
+          onTapDown: (details) {
             final word = _wordAtPosition(
               details.localPosition,
               constraints.maxWidth,
             );
-            if (word.isNotEmpty) onWordTap(word);
+            if (word.isNotEmpty) widget.onWordTap(word);
           },
           child: SelectableText.rich(
-            TextSpan(text: text, style: style),
+            TextSpan(text: widget.text, style: widget.style),
             textAlign: TextAlign.start,
+            onSelectionChanged: _onSelectionChanged,
           ),
         );
       },
@@ -167,16 +207,16 @@ class _PlainWordTapText extends StatelessWidget {
 
   String _wordAtPosition(Offset localPosition, double maxWidth) {
     final painter = TextPainter(
-      text: TextSpan(text: text, style: style),
+      text: TextSpan(text: widget.text, style: widget.style),
       textDirection: TextDirection.ltr,
       maxLines: null,
     )..layout(maxWidth: maxWidth);
     final position = painter.getPositionForOffset(localPosition);
-    return wordAtOffset(text, position.offset);
+    return wordAtOffset(widget.text, position.offset);
   }
 }
 
-class _HighlightedWordTapText extends StatelessWidget {
+class _HighlightedWordTapText extends StatefulWidget {
   const _HighlightedWordTapText({
     required this.text,
     required this.style,
@@ -196,6 +236,43 @@ class _HighlightedWordTapText extends StatelessWidget {
   final int currentWordEnd;
 
   @override
+  State<_HighlightedWordTapText> createState() => _HighlightedWordTapTextState();
+}
+
+class _HighlightedWordTapTextState extends State<_HighlightedWordTapText> {
+  static const _selectionDebounceMs = 450;
+  Timer? _selectionDebounceTimer;
+  TextSelection? _lastSelection;
+
+  void _onSelectionChanged(TextSelection selection, SelectionChangedCause? cause) {
+    if (selection.start == selection.end) return;
+    if (selection.end > widget.text.length) return;
+    _lastSelection = selection;
+    _selectionDebounceTimer?.cancel();
+    _selectionDebounceTimer = Timer(
+      const Duration(milliseconds: _selectionDebounceMs),
+      () {
+        if (!mounted) return;
+        final sel = _lastSelection;
+        if (sel == null || sel.start == sel.end || sel.end > widget.text.length) {
+          return;
+        }
+        var selectedText = widget.text.substring(sel.start, sel.end).trim();
+        if (selectedText.length > 500) selectedText = selectedText.substring(0, 500);
+        if (selectedText.length >= 2) {
+          widget.onWordTap(selectedText);
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _selectionDebounceTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final readColor = (isDark ? Colors.amber : Colors.amber)
@@ -205,28 +282,28 @@ class _HighlightedWordTapText extends StatelessWidget {
 
     final spans = <TextSpan>[];
     int i = 0;
-    while (i < text.length) {
-      final (wordStart, wordEnd) = wordBoundariesAtOffset(text, i);
+    while (i < widget.text.length) {
+      final (wordStart, wordEnd) = wordBoundariesAtOffset(widget.text, i);
       if (wordStart >= wordEnd) {
-        spans.add(TextSpan(text: text[i], style: style));
+        spans.add(TextSpan(text: widget.text[i], style: widget.style));
         i++;
         continue;
       }
-      final word = text.substring(wordStart, wordEnd);
-      final globalStart = blockStart + wordStart;
-      final globalEnd = blockStart + wordEnd;
+      final word = widget.text.substring(wordStart, wordEnd);
+      final globalStart = widget.blockStart + wordStart;
+      final globalEnd = widget.blockStart + wordEnd;
 
       Color? backgroundColor;
-      if (globalStart < currentWordEnd && globalEnd > currentWordStart) {
+      if (globalStart < widget.currentWordEnd && globalEnd > widget.currentWordStart) {
         backgroundColor = currentColor;
-      } else if (globalEnd <= readEndIndex) {
+      } else if (globalEnd <= widget.readEndIndex) {
         backgroundColor = readColor;
       }
 
       spans.add(
         TextSpan(
           text: word,
-          style: style.copyWith(backgroundColor: backgroundColor),
+          style: widget.style.copyWith(backgroundColor: backgroundColor),
         ),
       );
       i = wordEnd;
@@ -236,16 +313,17 @@ class _HighlightedWordTapText extends StatelessWidget {
       builder: (context, constraints) {
         return GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onDoubleTapDown: (details) {
+          onTapDown: (details) {
             final word = _wordAtPosition(
               details.localPosition,
               constraints.maxWidth,
             );
-            if (word.isNotEmpty) onWordTap(word);
+            if (word.isNotEmpty) widget.onWordTap(word);
           },
           child: SelectableText.rich(
-            TextSpan(children: spans, style: style),
+            TextSpan(children: spans, style: widget.style),
             textAlign: TextAlign.start,
+            onSelectionChanged: _onSelectionChanged,
           ),
         );
       },
@@ -254,11 +332,11 @@ class _HighlightedWordTapText extends StatelessWidget {
 
   String _wordAtPosition(Offset localPosition, double maxWidth) {
     final painter = TextPainter(
-      text: TextSpan(text: text, style: style),
+      text: TextSpan(text: widget.text, style: widget.style),
       textDirection: TextDirection.ltr,
       maxLines: null,
     )..layout(maxWidth: maxWidth);
     final position = painter.getPositionForOffset(localPosition);
-    return wordAtOffset(text, position.offset);
+    return wordAtOffset(widget.text, position.offset);
   }
 }

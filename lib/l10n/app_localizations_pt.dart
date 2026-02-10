@@ -56,8 +56,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get wordTapHint_title => 'Tradução de palavras';
 
   @override
-  String get wordTapHint_message =>
-      'Toque duas vezes numa palavra para obter a tradução.';
+  String get wordTapHint_message => 'Toque numa palavra para obter a tradução.';
 
   @override
   String get wordTapHint_dontShowAgain => 'Não mostrar novamente';

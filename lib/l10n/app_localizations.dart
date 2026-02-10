@@ -210,7 +210,7 @@ abstract class AppLocalizations {
   /// No description provided for @wordTapHint_message.
   ///
   /// In en, this message translates to:
-  /// **'Double-tap a word to get its translation.'**
+  /// **'Tap a word to get its translation.'**
   String get wordTapHint_message;
 
   /// No description provided for @wordTapHint_dontShowAgain.

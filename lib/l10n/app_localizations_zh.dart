@@ -54,7 +54,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get wordTapHint_title => '单词翻译';
 
   @override
-  String get wordTapHint_message => '双击单词即可获取翻译。';
+  String get wordTapHint_message => '点击单词即可获取翻译。';
 
   @override
   String get wordTapHint_dontShowAgain => '不再显示';
@@ -644,7 +644,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get wordTapHint_title => '单词翻译';
 
   @override
-  String get wordTapHint_message => '双击单词即可获取翻译。';
+  String get wordTapHint_message => '点击单词即可获取翻译。';
 
   @override
   String get wordTapHint_dontShowAgain => '不再显示';

@@ -19,7 +19,7 @@
   "settings_selectLanguageTitle": "Выберите язык",
 
   "wordTapHint_title": "Перевод слова",
-  "wordTapHint_message": "Дважды нажмите на слово, чтобы получить его перевод.",
+  "wordTapHint_message": "Нажмите на слово, чтобы получить его перевод.",
   "wordTapHint_dontShowAgain": "Больше не показывать",
   "wordTapHint_showLater": "Показать позже",
 
