@@ -594,4 +594,17 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get ttsModelReadyMessage =>
       'Voice model downloaded successfully. You can choose a voice in Settings.';
+
+  @override
+  String get knowledgeCards_regenerate => 'Wygeneruj ponownie';
+
+  @override
+  String get knowledgeCards_regenerateTitle => 'Wygenerować karty ponownie?';
+
+  @override
+  String get knowledgeCards_regenerateMessage =>
+      'Obecne karty zostaną usunięte i wygenerowane na nowo. Kontynuować?';
+
+  @override
+  String get knowledgeCards_cancel => 'Anuluj';
 }

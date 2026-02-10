@@ -593,4 +593,18 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get ttsModelReadyMessage =>
       'Ses modeli başarıyla indirildi. Ayarlarda bir ses seçebilirsiniz.';
+
+  @override
+  String get knowledgeCards_regenerate => 'Yeniden oluştur';
+
+  @override
+  String get knowledgeCards_regenerateTitle =>
+      'Bilgi kartları yeniden oluşturulsun mu?';
+
+  @override
+  String get knowledgeCards_regenerateMessage =>
+      'Mevcut kartlarınız silinecek ve yenileri oluşturulacak. Devam edilsin mi?';
+
+  @override
+  String get knowledgeCards_cancel => 'İptal';
 }

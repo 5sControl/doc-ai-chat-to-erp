@@ -270,6 +270,7 @@ class OpenSummifyExtensionModal extends MixpanelEvent {
   List<Object?> get props => [];
 }
 
+/// Fired when knowledge cards were extracted via API.
 class KnowledgeCardsExtracted extends MixpanelEvent {
   final String summaryKey;
   final int cardsCount;
@@ -320,19 +321,6 @@ class KnowledgeCardUnsaved extends MixpanelEvent {
 
   @override
   List<Object?> get props => [summaryKey, cardId];
-}
-
-class KnowledgeCardsAppleIntelligenceUsed extends MixpanelEvent {
-  final String summaryKey;
-  final int cardsCount;
-
-  const KnowledgeCardsAppleIntelligenceUsed({
-    required this.summaryKey,
-    required this.cardsCount,
-  });
-
-  @override
-  List<Object?> get props => [summaryKey, cardsCount];
 }
 
 class KnowledgeCardsUnsupportedDevice extends MixpanelEvent {

@@ -7,7 +7,6 @@ import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/demo_knowledge_cards.dart';
-import 'package:summify/services/on_device_knowledge_cards_service.dart';
 import 'package:summify/services/summaryApi.dart';
 
 part 'knowledge_cards_event.dart';
@@ -17,7 +16,6 @@ part 'knowledge_cards_bloc.g.dart';
 class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCardsState> {
   final MixpanelBloc mixpanelBloc;
   final SavedCardsBloc savedCardsBloc;
-  final OnDeviceKnowledgeCardsService onDeviceService = OnDeviceKnowledgeCardsService();
 
   KnowledgeCardsBloc({
     required this.mixpanelBloc,
@@ -49,41 +47,22 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       },
     ));
 
-    List<KnowledgeCard>? extractedCards;
+    List<KnowledgeCard> extractedCards;
 
     try {
       extractedCards = await SummaryRepository().extractKnowledgeCards(event.summaryText);
-    } catch (_) {
-      final isAvailable = await onDeviceService.isAvailable();
-      if (isAvailable) {
-        try {
-          extractedCards = await onDeviceService.extractKnowledgeCards(event.summaryText);
-        } catch (error) {
-          emit(state.copyWith(
-            extractionStatuses: {
-              ...state.extractionStatuses,
-              event.summaryKey: KnowledgeCardStatus.error,
-            },
-          ));
-          mixpanelBloc.add(KnowledgeCardsExtractionError(
-            summaryKey: event.summaryKey,
-            error: error.toString(),
-          ));
-          return;
-        }
-      } else {
-        emit(state.copyWith(
-          extractionStatuses: {
-            ...state.extractionStatuses,
-            event.summaryKey: KnowledgeCardStatus.error,
-          },
-        ));
-        mixpanelBloc.add(KnowledgeCardsExtractionError(
-          summaryKey: event.summaryKey,
-          error: 'Server unavailable and on-device not available',
-        ));
-        return;
-      }
+    } catch (error) {
+      emit(state.copyWith(
+        extractionStatuses: {
+          ...state.extractionStatuses,
+          event.summaryKey: KnowledgeCardStatus.error,
+        },
+      ));
+      mixpanelBloc.add(KnowledgeCardsExtractionError(
+        summaryKey: event.summaryKey,
+        error: error.toString(),
+      ));
+      return;
     }
 
     final savedCardsMap = savedCardsBloc.state.savedCards;
@@ -112,7 +91,7 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       },
     ));
 
-    mixpanelBloc.add(KnowledgeCardsAppleIntelligenceUsed(
+    mixpanelBloc.add(KnowledgeCardsExtracted(
       summaryKey: event.summaryKey,
       cardsCount: syncedCards.length,
     ));

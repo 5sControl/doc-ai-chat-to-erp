@@ -1220,6 +1220,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Voice model downloaded successfully. You can choose a voice in Settings.'**
   String get ttsModelReadyMessage;
+
+  /// No description provided for @knowledgeCards_regenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate'**
+  String get knowledgeCards_regenerate;
+
+  /// No description provided for @knowledgeCards_regenerateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate knowledge cards?'**
+  String get knowledgeCards_regenerateTitle;
+
+  /// No description provided for @knowledgeCards_regenerateMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current cards will be removed and new ones will be generated. Continue?'**
+  String get knowledgeCards_regenerateMessage;
+
+  /// No description provided for @knowledgeCards_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get knowledgeCards_cancel;
 }
 
 class _AppLocalizationsDelegate

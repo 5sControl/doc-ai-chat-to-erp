@@ -588,4 +588,17 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get ttsModelReadyMessage =>
       'Voice model downloaded successfully. You can choose a voice in Settings.';
+
+  @override
+  String get knowledgeCards_regenerate => 'Tạo lại';
+
+  @override
+  String get knowledgeCards_regenerateTitle => 'Tạo lại thẻ kiến thức?';
+
+  @override
+  String get knowledgeCards_regenerateMessage =>
+      'Các thẻ hiện tại sẽ bị xóa và thẻ mới sẽ được tạo. Tiếp tục?';
+
+  @override
+  String get knowledgeCards_cancel => 'Hủy';
 }

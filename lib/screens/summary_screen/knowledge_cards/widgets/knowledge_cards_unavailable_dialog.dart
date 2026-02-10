@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'unsupported_device_placeholder.dart';
 
-/// Dialog shown when neither server nor on-device extraction succeeded.
+/// Dialog shown when knowledge cards extraction failed (e.g. server error).
 /// Uses [UnsupportedDevicePlaceholder] as content, with Try again and Got it actions.
 class KnowledgeCardsUnavailableDialog extends StatelessWidget {
   const KnowledgeCardsUnavailableDialog({

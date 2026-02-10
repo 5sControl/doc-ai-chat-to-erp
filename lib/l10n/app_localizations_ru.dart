@@ -594,4 +594,17 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get ttsModelReadyMessage =>
       'Голосовая модель успешно скачана. Вы можете выбрать голос в Настройках.';
+
+  @override
+  String get knowledgeCards_regenerate => 'Создать заново';
+
+  @override
+  String get knowledgeCards_regenerateTitle => 'Создать карточки заново?';
+
+  @override
+  String get knowledgeCards_regenerateMessage =>
+      'Текущие карточки будут удалены, будут сгенерированы новые. Продолжить?';
+
+  @override
+  String get knowledgeCards_cancel => 'Отмена';
 }

@@ -245,5 +245,10 @@
   "ttsDownloadDialogTitle": "Downloading voice model",
   "ttsDownloadDialogBody": "Please keep the app open while we download the voice resources.",
   "ttsModelReadyTitle": "Voice model ready",
-  "ttsModelReadyMessage": "Voice model downloaded successfully. You can choose a voice in Settings."
+  "ttsModelReadyMessage": "Voice model downloaded successfully. You can choose a voice in Settings.",
+
+  "knowledgeCards_regenerate": "重新生成",
+  "knowledgeCards_regenerateTitle": "重新生成知识卡片？",
+  "knowledgeCards_regenerateMessage": "当前卡片将被删除并生成新卡片。是否继续？",
+  "knowledgeCards_cancel": "取消"
 }

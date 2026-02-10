@@ -247,5 +247,10 @@
   "ttsDownloadDialogTitle": "Скачивание голосовой модели",
   "ttsDownloadDialogBody": "Пожалуйста, не закрывайте приложение во время скачивания голосовых ресурсов.",
   "ttsModelReadyTitle": "Голосовая модель готова",
-  "ttsModelReadyMessage": "Голосовая модель успешно скачана. Вы можете выбрать голос в Настройках."
+  "ttsModelReadyMessage": "Голосовая модель успешно скачана. Вы можете выбрать голос в Настройках.",
+
+  "knowledgeCards_regenerate": "Создать заново",
+  "knowledgeCards_regenerateTitle": "Создать карточки заново?",
+  "knowledgeCards_regenerateMessage": "Текущие карточки будут удалены, будут сгенерированы новые. Продолжить?",
+  "knowledgeCards_cancel": "Отмена"
 }

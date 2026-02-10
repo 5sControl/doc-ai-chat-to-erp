@@ -580,6 +580,18 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get ttsModelReadyMessage =>
       'Voice model downloaded successfully. You can choose a voice in Settings.';
+
+  @override
+  String get knowledgeCards_regenerate => '重新生成';
+
+  @override
+  String get knowledgeCards_regenerateTitle => '重新生成知識卡片？';
+
+  @override
+  String get knowledgeCards_regenerateMessage => '當前卡片將被刪除並生成新卡片。是否繼續？';
+
+  @override
+  String get knowledgeCards_cancel => '取消';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -1158,4 +1170,16 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   @override
   String get ttsModelReadyMessage =>
       'Voice model downloaded successfully. You can choose a voice in Settings.';
+
+  @override
+  String get knowledgeCards_regenerate => '重新生成';
+
+  @override
+  String get knowledgeCards_regenerateTitle => '重新生成知识卡片？';
+
+  @override
+  String get knowledgeCards_regenerateMessage => '当前卡片将被删除并生成新卡片。是否继续？';
+
+  @override
+  String get knowledgeCards_cancel => '取消';
 }

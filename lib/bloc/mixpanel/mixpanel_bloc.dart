@@ -182,7 +182,7 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
     });
     
     // KNOWLEDGE CARDS
-    on<KnowledgeCardsExtracted>((event, emit) {
+    on<KnowledgeCardsExtracted>((KnowledgeCardsExtracted event, emit) {
       mixpanel.track('knowledge_cards_extracted', properties: {
         'summary_key': event.summaryKey,
         'cards_count': event.cardsCount,
@@ -207,13 +207,6 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
       mixpanel.track('knowledge_card_unsaved', properties: {
         'summary_key': event.summaryKey,
         'card_id': event.cardId,
-      });
-    });
-    
-    on<KnowledgeCardsAppleIntelligenceUsed>((event, emit) {
-      mixpanel.track('knowledge_cards_apple_intelligence_used', properties: {
-        'summary_key': event.summaryKey,
-        'cards_count': event.cardsCount,
       });
     });
     

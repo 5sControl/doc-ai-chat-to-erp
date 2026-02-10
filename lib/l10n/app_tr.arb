@@ -245,5 +245,10 @@
   "ttsDownloadDialogTitle": "Ses modeli indiriliyor",
   "ttsDownloadDialogBody": "Ses kaynaklarını indirirken uygulamayı açık tutun.",
   "ttsModelReadyTitle": "Ses modeli hazır",
-  "ttsModelReadyMessage": "Ses modeli başarıyla indirildi. Ayarlarda bir ses seçebilirsiniz."
+  "ttsModelReadyMessage": "Ses modeli başarıyla indirildi. Ayarlarda bir ses seçebilirsiniz.",
+
+  "knowledgeCards_regenerate": "Yeniden oluştur",
+  "knowledgeCards_regenerateTitle": "Bilgi kartları yeniden oluşturulsun mu?",
+  "knowledgeCards_regenerateMessage": "Mevcut kartlarınız silinecek ve yenileri oluşturulacak. Devam edilsin mi?",
+  "knowledgeCards_cancel": "İptal"
 }
