@@ -231,6 +231,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get summary_sourceNotAvailable => '此类摘要无法使用源文本';
 
   @override
+  String get research_chipAskQuestion => 'Ask a question';
+
+  @override
+  String get research_chipMermaidDiagram => 'Mermaid diagram';
+
+  @override
+  String get research_diagramRequest =>
+      'Create a Mermaid diagram for this document';
+
+  @override
+  String get research_mermaidCopy => 'Copy';
+
+  @override
+  String get research_mermaidOpenLive => 'Open in Mermaid Live';
+
+  @override
   String get quiz_failedToGenerate => '生成测验失败';
 
   @override
@@ -819,6 +835,22 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get summary_sourceNotAvailable => '此类摘要无法使用源文本';
+
+  @override
+  String get research_chipAskQuestion => 'Ask a question';
+
+  @override
+  String get research_chipMermaidDiagram => 'Mermaid diagram';
+
+  @override
+  String get research_diagramRequest =>
+      'Create a Mermaid diagram for this document';
+
+  @override
+  String get research_mermaidCopy => 'Copy';
+
+  @override
+  String get research_mermaidOpenLive => 'Open in Mermaid Live';
 
   @override
   String get quiz_failedToGenerate => '生成测验失败';

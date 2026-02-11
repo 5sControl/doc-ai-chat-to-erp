@@ -240,6 +240,22 @@ class AppLocalizationsRu extends AppLocalizations {
       'Исходный текст недоступен для этого типа резюме';
 
   @override
+  String get research_chipAskQuestion => 'Задать вопрос';
+
+  @override
+  String get research_chipMermaidDiagram => 'Mermaid-диаграмма';
+
+  @override
+  String get research_diagramRequest =>
+      'Создай Mermaid-диаграмму по этому документу';
+
+  @override
+  String get research_mermaidCopy => 'Копировать';
+
+  @override
+  String get research_mermaidOpenLive => 'Открыть в Mermaid Live';
+
+  @override
   String get quiz_failedToGenerate => 'Не удалось создать квиз';
 
   @override

@@ -38,7 +38,10 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
 
       try {
         final answer = await SummaryRepository().makeRequest(
-            summaryUrl: event.summaryKey, question: event.question);
+          summaryUrl: event.summaryKey,
+          question: event.question,
+          systemHint: event.systemHint,
+        );
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
         final List<ResearchQuestion> newList =
@@ -83,7 +86,10 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
 
       try {
         final answer = await SummaryRepository().makeRequestFromFile(
-            filePath: event.filePath, question: event.question);
+          filePath: event.filePath,
+          question: event.question,
+          systemHint: event.systemHint,
+        );
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
         final List<ResearchQuestion> newList =
@@ -128,7 +134,10 @@ class ResearchBloc extends HydratedBloc<ResearchEvent, ResearchState> {
 
       try {
         final answer = await SummaryRepository().makeRequestFromText(
-            userText: event.text, question: event.question);
+          userText: event.text,
+          question: event.question,
+          systemHint: event.systemHint,
+        );
         final Map<String, List<ResearchQuestion>> questions =
             Map.from(state.questions);
         final List<ResearchQuestion> newList =

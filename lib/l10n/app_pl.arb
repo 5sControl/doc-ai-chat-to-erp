@@ -100,6 +100,12 @@
   "summary_breakThroughTheLimits": "Przekrocz limity",
   "summary_sourceNotAvailable": "Tekst źródłowy nie jest dostępny dla tego typu podsumowania",
 
+  "research_chipAskQuestion": "Ask a question",
+  "research_chipMermaidDiagram": "Mermaid diagram",
+  "research_diagramRequest": "Create a Mermaid diagram for this document",
+  "research_mermaidCopy": "Copy",
+  "research_mermaidOpenLive": "Open in Mermaid Live",
+
   "quiz_failedToGenerate": "Nie udało się wygenerować quizu",
   "quiz_retry": "Ponów",
   "quiz_knowledgeQuiz": "Quiz wiedzy",

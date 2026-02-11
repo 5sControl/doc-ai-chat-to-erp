@@ -264,14 +264,21 @@ class SummaryApiRepository {
     }
   }
 
-  Future<String> request(
-      {required String summaryUrl, required String question}) async {
+  Future<String> request({
+    required String summaryUrl,
+    required String question,
+    String? systemHint,
+  }) async {
     try {
-      Response response = await _dio.post(askQuestionUrl, data: {
+      final data = <String, dynamic>{
         'url': summaryUrl,
         'context': "",
         'user_query': question,
-      });
+      };
+      if (systemHint != null && systemHint.isNotEmpty) {
+        data['system_hint'] = systemHint;
+      }
+      Response response = await _dio.post(askQuestionUrl, data: data);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['answer'];
@@ -298,14 +305,21 @@ class SummaryApiRepository {
     }
   }
 
-  Future<String> requestText(
-      {required String userText, required String question}) async {
+  Future<String> requestText({
+    required String userText,
+    required String question,
+    String? systemHint,
+  }) async {
     try {
-      Response response = await _dio.post(askQuestionUrl, data: {
+      final data = <String, dynamic>{
         'url': '',
         'context': userText,
         'user_query': question,
-      });
+      };
+      if (systemHint != null && systemHint.isNotEmpty) {
+        data['system_hint'] = systemHint;
+      }
+      Response response = await _dio.post(askQuestionUrl, data: data);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['answer'];
@@ -332,8 +346,11 @@ class SummaryApiRepository {
     }
   }
 
-  Future<String> requestFile(
-      {required String filePath, required String question}) async {
+  Future<String> requestFile({
+    required String filePath,
+    required String question,
+    String? systemHint,
+  }) async {
     FormData formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(
         filePath,
@@ -342,8 +359,12 @@ class SummaryApiRepository {
     });
 
     try {
+      final queryParams = <String, dynamic>{'user_query': question};
+      if (systemHint != null && systemHint.isNotEmpty) {
+        queryParams['system_hint'] = systemHint;
+      }
       Response response = await _dio.post(askQuestionFileUrl,
-          data: formData, queryParameters: {'user_query': question});
+          data: formData, queryParameters: queryParams);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['answer'];
@@ -629,22 +650,40 @@ class SummaryRepository {
     );
   }
 
-  Future<String> makeRequest(
-      {required String summaryUrl, required String question}) {
+  Future<String> makeRequest({
+    required String summaryUrl,
+    required String question,
+    String? systemHint,
+  }) {
     return _summaryRepository.request(
-        question: question, summaryUrl: summaryUrl);
+      question: question,
+      summaryUrl: summaryUrl,
+      systemHint: systemHint,
+    );
   }
 
-  Future<String> makeRequestFromText(
-      {required String userText, required String question}) {
+  Future<String> makeRequestFromText({
+    required String userText,
+    required String question,
+    String? systemHint,
+  }) {
     return _summaryRepository.requestText(
-        question: question, userText: userText);
+      question: question,
+      userText: userText,
+      systemHint: systemHint,
+    );
   }
 
-  Future<String> makeRequestFromFile(
-      {required String filePath, required String question}) {
+  Future<String> makeRequestFromFile({
+    required String filePath,
+    required String question,
+    String? systemHint,
+  }) {
     return _summaryRepository.requestFile(
-        question: question, filePath: filePath);
+      question: question,
+      filePath: filePath,
+      systemHint: systemHint,
+    );
   }
 
   Future<dynamic> getSummaryFromFile(

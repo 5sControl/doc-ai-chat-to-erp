@@ -100,6 +100,12 @@
   "summary_breakThroughTheLimits": "Dépassez les limites",
   "summary_sourceNotAvailable": "Le texte source n'est pas disponible pour ce type de résumé",
 
+  "research_chipAskQuestion": "Ask a question",
+  "research_chipMermaidDiagram": "Mermaid diagram",
+  "research_diagramRequest": "Create a Mermaid diagram for this document",
+  "research_mermaidCopy": "Copy",
+  "research_mermaidOpenLive": "Open in Mermaid Live",
+
   "quiz_failedToGenerate": "Échec de la génération du quiz",
   "quiz_retry": "Réessayer",
   "quiz_knowledgeQuiz": "Quiz de connaissances",

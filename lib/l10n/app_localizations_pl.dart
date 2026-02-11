@@ -239,6 +239,22 @@ class AppLocalizationsPl extends AppLocalizations {
       'Tekst źródłowy nie jest dostępny dla tego typu podsumowania';
 
   @override
+  String get research_chipAskQuestion => 'Ask a question';
+
+  @override
+  String get research_chipMermaidDiagram => 'Mermaid diagram';
+
+  @override
+  String get research_diagramRequest =>
+      'Create a Mermaid diagram for this document';
+
+  @override
+  String get research_mermaidCopy => 'Copy';
+
+  @override
+  String get research_mermaidOpenLive => 'Open in Mermaid Live';
+
+  @override
   String get quiz_failedToGenerate => 'Nie udało się wygenerować quizu';
 
   @override

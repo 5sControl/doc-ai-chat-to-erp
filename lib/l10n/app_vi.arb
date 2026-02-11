@@ -100,6 +100,12 @@
   "summary_breakThroughTheLimits": "Vượt qua giới hạn",
   "summary_sourceNotAvailable": "Văn bản nguồn không khả dụng cho loại tóm tắt này",
 
+  "research_chipAskQuestion": "Ask a question",
+  "research_chipMermaidDiagram": "Mermaid diagram",
+  "research_diagramRequest": "Create a Mermaid diagram for this document",
+  "research_mermaidCopy": "Copy",
+  "research_mermaidOpenLive": "Open in Mermaid Live",
+
   "quiz_failedToGenerate": "Không tạo được câu đố",
   "quiz_retry": "Thử lại",
   "quiz_knowledgeQuiz": "Câu đố kiến thức",

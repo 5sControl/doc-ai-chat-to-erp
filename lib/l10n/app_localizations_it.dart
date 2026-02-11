@@ -240,6 +240,22 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il testo sorgente non è disponibile per questo tipo di riepilogo';
 
   @override
+  String get research_chipAskQuestion => 'Ask a question';
+
+  @override
+  String get research_chipMermaidDiagram => 'Mermaid diagram';
+
+  @override
+  String get research_diagramRequest =>
+      'Create a Mermaid diagram for this document';
+
+  @override
+  String get research_mermaidCopy => 'Copy';
+
+  @override
+  String get research_mermaidOpenLive => 'Open in Mermaid Live';
+
+  @override
   String get quiz_failedToGenerate => 'Impossibile generare il quiz';
 
   @override

@@ -100,6 +100,12 @@
   "summary_breakThroughTheLimits": "Überwinde die Grenzen",
   "summary_sourceNotAvailable": "Quelltext ist für diese Art von Zusammenfassung nicht verfügbar",
 
+  "research_chipAskQuestion": "Ask a question",
+  "research_chipMermaidDiagram": "Mermaid diagram",
+  "research_diagramRequest": "Create a Mermaid diagram for this document",
+  "research_mermaidCopy": "Copy",
+  "research_mermaidOpenLive": "Open in Mermaid Live",
+
   "quiz_failedToGenerate": "Quiz konnte nicht generiert werden",
   "quiz_retry": "Wiederholen",
   "quiz_knowledgeQuiz": "Wissensquiz",

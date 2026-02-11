@@ -549,6 +549,36 @@ abstract class AppLocalizations {
   /// **'Source text is not available for this type of summary'**
   String get summary_sourceNotAvailable;
 
+  /// No description provided for @research_chipAskQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a question'**
+  String get research_chipAskQuestion;
+
+  /// No description provided for @research_chipMermaidDiagram.
+  ///
+  /// In en, this message translates to:
+  /// **'Mermaid diagram'**
+  String get research_chipMermaidDiagram;
+
+  /// No description provided for @research_diagramRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a Mermaid diagram for this document'**
+  String get research_diagramRequest;
+
+  /// No description provided for @research_mermaidCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get research_mermaidCopy;
+
+  /// No description provided for @research_mermaidOpenLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Mermaid Live'**
+  String get research_mermaidOpenLive;
+
   /// No description provided for @quiz_failedToGenerate.
   ///
   /// In en, this message translates to:

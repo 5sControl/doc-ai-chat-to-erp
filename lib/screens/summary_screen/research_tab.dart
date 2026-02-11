@@ -7,9 +7,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:summify/bloc/research/research_bloc.dart';
 import 'package:summify/helpers/chat_content_parser.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/mermaid_viewer_screen.dart';
 import 'package:summify/services/demo_data_initializer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
@@ -447,37 +449,108 @@ class _MermaidLinkBlock extends StatelessWidget {
     );
   }
 
+  Future<void> _openMermaidLive(BuildContext context) async {
+    Clipboard.setData(ClipboardData(text: code));
+    final uri = Uri.parse('https://mermaid.live');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Copied – paste in Mermaid Live', style: TextStyle(color: Colors.white)),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
+  void _copyCode(BuildContext context) {
+    Clipboard.setData(ClipboardData(text: code));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Copied', style: TextStyle(color: Colors.white)),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final copyLabel = l10n.research_mermaidCopy;
+    final openLiveLabel = l10n.research_mermaidOpenLive;
+
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 4),
-      child: InkWell(
-        onTap: () => _openViewer(context),
-        borderRadius: BorderRadius.circular(4),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: () => _openViewer(context),
             borderRadius: BorderRadius.circular(4),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.account_tree_outlined,
-                  size: 20, color: Colors.blue.shade700),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: Colors.blue.shade700,
-                      fontWeight: FontWeight.w500,
-                    ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(4),
               ),
-              const SizedBox(width: 4),
-              Icon(Icons.open_in_new, size: 16, color: Colors.blue.shade700),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.account_tree_outlined,
+                      size: 20, color: Colors.blue.shade700),
+                  const SizedBox(width: 8),
+                  Text(
+                    label,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Colors.blue.shade700,
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(Icons.open_in_new, size: 16, color: Colors.blue.shade700),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              TextButton.icon(
+                onPressed: () => _copyCode(context),
+                icon: SvgPicture.asset(
+                  Assets.icons.copy,
+                  width: 16,
+                  height: 16,
+                  colorFilter: ColorFilter.mode(
+                    Colors.blue.shade700,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                label: Text(
+                  copyLabel,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Colors.blue.shade700,
+                      ),
+                ),
+              ),
+              TextButton.icon(
+                onPressed: () => _openMermaidLive(context),
+                icon: Icon(Icons.open_in_new, size: 14, color: Colors.blue.shade700),
+                label: Text(
+                  openLiveLabel,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Colors.blue.shade700,
+                      ),
+                ),
+              ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

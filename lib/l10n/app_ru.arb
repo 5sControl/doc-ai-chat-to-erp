@@ -100,6 +100,12 @@
   "summary_breakThroughTheLimits": "Преодолейте ограничения",
   "summary_sourceNotAvailable": "Исходный текст недоступен для этого типа резюме",
 
+  "research_chipAskQuestion": "Задать вопрос",
+  "research_chipMermaidDiagram": "Mermaid-диаграмма",
+  "research_diagramRequest": "Создай Mermaid-диаграмму по этому документу",
+  "research_mermaidCopy": "Копировать",
+  "research_mermaidOpenLive": "Открыть в Mermaid Live",
+
   "quiz_failedToGenerate": "Не удалось создать квиз",
   "quiz_retry": "Повторить",
   "quiz_knowledgeQuiz": "Тест знаний",
