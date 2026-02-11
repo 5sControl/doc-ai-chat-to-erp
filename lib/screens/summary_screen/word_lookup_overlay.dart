@@ -4,8 +4,15 @@ import 'package:flutter/material.dart';
 
 import '../../services/word_translate_service.dart';
 
+/// Remove callback for the currently shown word lookup overlay. Only one overlay at a time.
+void Function()? _removeCurrentWordLookup;
+
+/// Long text threshold: no auto-dismiss timer, user closes manually.
+const int _longTextLengthThreshold = 100;
+
 /// Shows the word lookup as a system overlay (above the route, does not affect layout).
-/// Fetches translation, updates the overlay, auto-dismisses after [duration], optionally speaks the word via [onSpeakWord].
+/// Fetches translation, updates the overlay, auto-dismisses after [duration] unless text length > [_longTextLengthThreshold].
+/// Only one overlay is shown at a time; showing a new one removes the previous.
 void showWordLookupOverlay(
   BuildContext context, {
   required String word,
@@ -13,6 +20,9 @@ void showWordLookupOverlay(
   Duration duration = WordLookupOverlay.defaultDuration,
   void Function(String word)? onSpeakWord,
 }) {
+  _removeCurrentWordLookup?.call();
+  _removeCurrentWordLookup = null;
+
   final overlay = Overlay.of(context);
   final state = ValueNotifier<_LookupState>(
     _LookupState(word: word, result: null, loading: true),
@@ -24,6 +34,9 @@ void showWordLookupOverlay(
     dismissTimer?.cancel();
     entry?.remove();
     entry = null;
+    if (_removeCurrentWordLookup == remove) {
+      _removeCurrentWordLookup = null;
+    }
   }
 
   entry = OverlayEntry(
@@ -48,11 +61,14 @@ void showWordLookupOverlay(
     },
   );
   overlay.insert(entry!);
+  _removeCurrentWordLookup = remove;
 
   WordTranslateService.instance.lookup(word, targetLang).then((result) {
     if (entry == null) return;
     state.value = _LookupState(word: word, result: result, loading: false);
-    dismissTimer = Timer(duration, remove);
+    if (word.length <= _longTextLengthThreshold) {
+      dismissTimer = Timer(duration, remove);
+    }
     if (!result.isError && onSpeakWord != null) {
       onSpeakWord(word);
     }
@@ -81,7 +97,7 @@ class WordLookupOverlay extends StatelessWidget {
     this.onDismiss,
   });
 
-  static const Duration defaultDuration = Duration(seconds: 3);
+  static const Duration defaultDuration = Duration(seconds: 5);
 
   @override
   Widget build(BuildContext context) {
