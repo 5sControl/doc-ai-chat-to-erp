@@ -91,6 +91,51 @@ class _SubscriptionScreenState extends State<SubscriptionScreenLimit> {
         }
       },
       builder: (context, state) {
+        // Пока продукты не загружены или недоступны — показываем загрузку/сообщение, чтобы избежать серого экрана (особенно на Android)
+        final isLoading = state is SubscriptionsStateLoading;
+        final current = state.availableProducts?.current;
+        final hasProducts = current != null && current.availablePackages.isNotEmpty;
+        if (isLoading || !hasProducts) {
+          return Stack(
+            children: [
+              if (widget.fromSettings) const BackgroundGradient(),
+              SafeArea(
+                child: Scaffold(
+                  appBar: widget.fromSettings
+                      ? AppBar(
+                          toolbarHeight: 50,
+                          elevation: 0,
+                          backgroundColor: Colors.transparent,
+                          automaticallyImplyLeading: false,
+                          actions: [
+                            BackArrow(fromOnboarding: widget.fromSettings),
+                          ],
+                        )
+                      : null,
+                  body: Center(
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .bundle_subscriptionsNotAvailable,
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ],
+                            ),
+                          ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
+
         // final abTest = context.read<SettingsBloc>().state.abTest;
 
         const double headerH = 0.16;
