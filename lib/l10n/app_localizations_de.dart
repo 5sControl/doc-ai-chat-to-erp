@@ -624,4 +624,27 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get knowledgeCards_cancel => 'Abbrechen';
+
+  @override
+  String knowledgeCards_voiceAnswerTitle(Object term) {
+    return 'Wie verstehen Sie den Begriff \"$term\"?';
+  }
+
+  @override
+  String get knowledgeCards_voiceAnswerSend => 'Senden';
+
+  @override
+  String get knowledgeCards_voiceAnswerStubMessage =>
+      'Die Überprüfung Ihrer Antwort wird bald in der App verfügbar sein.';
+
+  @override
+  String get knowledgeCards_voiceAnswerError =>
+      'Antwort konnte nicht überprüft werden. Bitte Verbindung prüfen und erneut versuchen.';
+
+  @override
+  String get knowledgeCards_tapMicToSpeak =>
+      'Tippen Sie auf das Mikrofon, um zu sprechen';
+
+  @override
+  String get knowledgeCards_listening => 'Aufnahme...';
 }

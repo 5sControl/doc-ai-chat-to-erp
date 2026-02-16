@@ -617,4 +617,26 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get knowledgeCards_cancel => 'Hủy';
+
+  @override
+  String knowledgeCards_voiceAnswerTitle(Object term) {
+    return 'Bạn hiểu thuật ngữ \"$term\" như thế nào?';
+  }
+
+  @override
+  String get knowledgeCards_voiceAnswerSend => 'Gửi';
+
+  @override
+  String get knowledgeCards_voiceAnswerStubMessage =>
+      'Việc xác minh câu trả lời của bạn sẽ sớm có trong ứng dụng.';
+
+  @override
+  String get knowledgeCards_voiceAnswerError =>
+      'Không thể xác minh câu trả lời. Kiểm tra kết nối và thử lại.';
+
+  @override
+  String get knowledgeCards_tapMicToSpeak => 'Chạm vào micrô để nói';
+
+  @override
+  String get knowledgeCards_listening => 'Đang nghe...';
 }

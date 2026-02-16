@@ -256,5 +256,17 @@
   "knowledgeCards_regenerate": "Wygeneruj ponownie",
   "knowledgeCards_regenerateTitle": "Wygenerować karty ponownie?",
   "knowledgeCards_regenerateMessage": "Obecne karty zostaną usunięte i wygenerowane na nowo. Kontynuować?",
-  "knowledgeCards_cancel": "Anuluj"
+  "knowledgeCards_cancel": "Anuluj",
+
+  "knowledgeCards_voiceAnswerTitle": "Jak rozumiesz termin \"{term}\"?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "Wyślij",
+  "knowledgeCards_voiceAnswerStubMessage": "Weryfikacja Twojej odpowiedzi będzie wkrótce dostępna w aplikacji.",
+  "knowledgeCards_voiceAnswerError": "Nie udało się zweryfikować odpowiedzi. Sprawdź połączenie i spróbuj ponownie.",
+  "knowledgeCards_tapMicToSpeak": "Dotknij mikrofonu, aby mówić",
+  "knowledgeCards_listening": "Słucham..."
 }

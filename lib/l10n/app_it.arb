@@ -256,5 +256,17 @@
   "knowledgeCards_regenerate": "Rigenera",
   "knowledgeCards_regenerateTitle": "Rigenerare le schede?",
   "knowledgeCards_regenerateMessage": "Le schede attuali saranno rimosse e ne verranno generate di nuove. Continuare?",
-  "knowledgeCards_cancel": "Annulla"
+  "knowledgeCards_cancel": "Annulla",
+
+  "knowledgeCards_voiceAnswerTitle": "Come interpreti il termine \"{term}\"?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "Invia",
+  "knowledgeCards_voiceAnswerStubMessage": "La verifica della tua risposta sarà disponibile nell'app a breve.",
+  "knowledgeCards_voiceAnswerError": "Impossibile verificare la risposta. Controlla la connessione e riprova.",
+  "knowledgeCards_tapMicToSpeak": "Tocca il microfono per parlare",
+  "knowledgeCards_listening": "In ascolto..."
 }

@@ -256,5 +256,17 @@
   "knowledgeCards_regenerate": "Tạo lại",
   "knowledgeCards_regenerateTitle": "Tạo lại thẻ kiến thức?",
   "knowledgeCards_regenerateMessage": "Các thẻ hiện tại sẽ bị xóa và thẻ mới sẽ được tạo. Tiếp tục?",
-  "knowledgeCards_cancel": "Hủy"
+  "knowledgeCards_cancel": "Hủy",
+
+  "knowledgeCards_voiceAnswerTitle": "Bạn hiểu thuật ngữ \"{term}\" như thế nào?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "Gửi",
+  "knowledgeCards_voiceAnswerStubMessage": "Việc xác minh câu trả lời của bạn sẽ sớm có trong ứng dụng.",
+  "knowledgeCards_voiceAnswerError": "Không thể xác minh câu trả lời. Kiểm tra kết nối và thử lại.",
+  "knowledgeCards_tapMicToSpeak": "Chạm vào micrô để nói",
+  "knowledgeCards_listening": "Đang nghe..."
 }

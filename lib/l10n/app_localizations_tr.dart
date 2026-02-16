@@ -623,4 +623,26 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get knowledgeCards_cancel => 'İptal';
+
+  @override
+  String knowledgeCards_voiceAnswerTitle(Object term) {
+    return '\"$term\" terimini nasıl anlıyorsunuz?';
+  }
+
+  @override
+  String get knowledgeCards_voiceAnswerSend => 'Gönder';
+
+  @override
+  String get knowledgeCards_voiceAnswerStubMessage =>
+      'Yanıtınızın doğrulanması yakında uygulamada kullanılabilecek.';
+
+  @override
+  String get knowledgeCards_voiceAnswerError =>
+      'Yanıt doğrulanamadı. Bağlantınızı kontrol edin ve tekrar deneyin.';
+
+  @override
+  String get knowledgeCards_tapMicToSpeak => 'Konuşmak için mikrofona dokunun';
+
+  @override
+  String get knowledgeCards_listening => 'Dinleniyor...';
 }

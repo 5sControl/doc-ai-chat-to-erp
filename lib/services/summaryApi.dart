@@ -61,6 +61,10 @@ class SummaryApiRepository {
   final String extractKnowledgeCardsUrl =
       "https://employees-training.com/api/v1/knowledge-cards";
 
+  // Knowledge cards verify answer endpoint
+  final String verifyKnowledgeCardAnswerUrl =
+      "https://employees-training.com/api/v1/knowledge-cards/verify";
+
   // API Key for authentication with employees-training.com API
   // Using a static key to avoid build-time complexities
   static const String _apiKey = 'acf8421909af3940f4731f629e28ca486c9ed6af7d7f704a050494773a27c8a9';
@@ -620,7 +624,67 @@ class SummaryApiRepository {
       throw Exception('Failed to extract knowledge cards: $error');
     }
   }
+
+  /// Verifies user's answer against the card definition.
+  /// Returns shortFeedback and accuracy (0-100). API not implemented yet.
+  Future<KnowledgeCardVerifyResult> verifyKnowledgeCardAnswer({
+    required String cardTitle,
+    required String cardContent,
+    required String userAnswer,
+  }) async {
+    try {
+      Response response = await _dio.post(
+        verifyKnowledgeCardAnswerUrl,
+        data: {
+          'cardTitle': cardTitle,
+          'cardContent': cardContent,
+          'userAnswer': userAnswer,
+        },
+      );
+
+      if (response.statusCode == 200 && response.data.toString().isNotEmpty) {
+        final res = jsonDecode(response.data) as Map<String, dynamic>;
+        return KnowledgeCardVerifyResult(
+          shortFeedback: res['shortFeedback'] as String? ?? '',
+          accuracy: (res['accuracy'] as num?)?.toInt() ?? 0,
+        );
+      } else {
+        throw Exception('Failed to verify answer');
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404 || e.response?.statusCode == 501) {
+        // Endpoint not implemented yet
+        throw KnowledgeCardVerifyUnavailableException();
+      }
+      ErrorDecode error;
+      try {
+        final decodedMap = json.decode(e.response?.data);
+        error = ErrorDecode(
+          detail: decodedMap['detail'] ?? 'Failed to verify answer',
+        );
+      } catch (_) {
+        error = ErrorDecode(detail: 'Processing error');
+      }
+      throw Exception(error.detail);
+    } catch (error) {
+      throw Exception('Failed to verify answer: $error');
+    }
+  }
 }
+
+/// Result of knowledge card answer verification.
+class KnowledgeCardVerifyResult {
+  final String shortFeedback;
+  final int accuracy;
+
+  KnowledgeCardVerifyResult({
+    required this.shortFeedback,
+    required this.accuracy,
+  });
+}
+
+/// Thrown when verify endpoint is not implemented yet (404/501).
+class KnowledgeCardVerifyUnavailableException implements Exception {}
 
 class SummaryRepository {
   final SummaryApiRepository _summaryRepository = SummaryApiRepository();
@@ -749,5 +813,17 @@ class SummaryRepository {
 
   Future<List<KnowledgeCard>> extractKnowledgeCards(String summaryText) {
     return _summaryRepository.extractKnowledgeCards(summaryText);
+  }
+
+  Future<KnowledgeCardVerifyResult> verifyKnowledgeCardAnswer({
+    required String cardTitle,
+    required String cardContent,
+    required String userAnswer,
+  }) {
+    return _summaryRepository.verifyKnowledgeCardAnswer(
+      cardTitle: cardTitle,
+      cardContent: cardContent,
+      userAnswer: userAnswer,
+    );
   }
 }

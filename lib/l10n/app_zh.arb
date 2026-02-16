@@ -256,5 +256,17 @@
   "knowledgeCards_regenerate": "重新生成",
   "knowledgeCards_regenerateTitle": "重新生成知識卡片？",
   "knowledgeCards_regenerateMessage": "當前卡片將被刪除並生成新卡片。是否繼續？",
-  "knowledgeCards_cancel": "取消"
+  "knowledgeCards_cancel": "取消",
+
+  "knowledgeCards_voiceAnswerTitle": "你如何理解「{term}」這個術語？",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "發送",
+  "knowledgeCards_voiceAnswerStubMessage": "您的答案驗證將很快在應用中提供。",
+  "knowledgeCards_voiceAnswerError": "無法驗證答案，請檢查網路連線後重試。",
+  "knowledgeCards_tapMicToSpeak": "點擊麥克風說話",
+  "knowledgeCards_listening": "正在聽..."
 }

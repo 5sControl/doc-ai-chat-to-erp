@@ -12,6 +12,7 @@ class CardsListView extends StatefulWidget {
     required this.onCardTap,
     required this.onCardSave,
     required this.onRetry,
+    this.onCardMicTap,
   });
 
   final List<KnowledgeCard> cards;
@@ -19,6 +20,7 @@ class CardsListView extends StatefulWidget {
   final Function(KnowledgeCard) onCardTap;
   final Function(KnowledgeCard) onCardSave;
   final VoidCallback onRetry;
+  final void Function(KnowledgeCard)? onCardMicTap;
 
   @override
   State<CardsListView> createState() => _CardsListViewState();
@@ -104,8 +106,9 @@ class _CardsListViewState extends State<CardsListView> {
           padding: const EdgeInsets.only(bottom: 12),
           child: KnowledgeCardTile(
             card: card,
-            onTap: () => onCardTap(card),
-            onSave: () => onCardSave(card),
+            onTap: () => widget.onCardTap(card),
+            onSave: () => widget.onCardSave(card),
+            onMicTap: widget.onCardMicTap != null ? () => widget.onCardMicTap!(card) : null,
           ),
         );
       },
@@ -117,6 +120,7 @@ class _CardsListViewState extends State<CardsListView> {
   VoidCallback get onRetry => widget.onRetry;
   Function(KnowledgeCard) get onCardTap => widget.onCardTap;
   Function(KnowledgeCard) get onCardSave => widget.onCardSave;
+  void Function(KnowledgeCard)? get onCardMicTap => widget.onCardMicTap;
 
   Widget _buildErrorView() {
     return Center(

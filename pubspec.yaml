@@ -1,7 +1,7 @@
 name: summify
 description: "Summify Extension"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.7.0+43
+version: 1.7.0+44
 
 environment:
   sdk: '>=3.7.0 <4.0.0'
@@ -57,6 +57,7 @@ dependencies:
   smooth_page_indicator: ^2.0.1
   translator: ^1.0.4+1
   webview_flutter: ^4.10.0
+  speech_to_text: ^7.0.0
 
 dev_dependencies:
   flutter_test:

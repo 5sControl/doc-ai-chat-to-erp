@@ -620,4 +620,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get knowledgeCards_cancel => 'Cancel';
+
+  @override
+  String knowledgeCards_voiceAnswerTitle(Object term) {
+    return 'How do you understand the term \"$term\"?';
+  }
+
+  @override
+  String get knowledgeCards_voiceAnswerSend => 'Send';
+
+  @override
+  String get knowledgeCards_voiceAnswerStubMessage =>
+      'Verification of your answer will be available in the app soon.';
+
+  @override
+  String get knowledgeCards_voiceAnswerError =>
+      'Couldn\'t verify the answer. Check your connection and try again.';
+
+  @override
+  String get knowledgeCards_tapMicToSpeak => 'Tap the microphone to speak';
+
+  @override
+  String get knowledgeCards_listening => 'Listening...';
 }

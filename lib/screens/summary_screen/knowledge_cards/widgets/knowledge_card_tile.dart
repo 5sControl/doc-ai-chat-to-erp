@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:summify/models/models.dart';
 
 class KnowledgeCardTile extends StatelessWidget {
   final KnowledgeCard card;
   final VoidCallback onTap;
   final VoidCallback onSave;
+  final VoidCallback? onMicTap;
 
   const KnowledgeCardTile({
     super.key,
     required this.card,
     required this.onTap,
     required this.onSave,
+    this.onMicTap,
   });
 
   @override
@@ -28,10 +29,19 @@ class KnowledgeCardTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with type icon and save button
+              // Header with type icon, optional mic, and save button
               Row(
                 children: [
                   _buildTypeIcon(card.type),
+                  if (onMicTap != null) ...[
+                    const SizedBox(width: 8),
+                    IconButton(
+                      onPressed: onMicTap,
+                      icon: const Icon(Icons.mic_none, size: 20, color: Colors.grey),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                    ),
+                  ],
                   const Spacer(),
                   IconButton(
                     onPressed: onSave,
@@ -60,74 +70,6 @@ class KnowledgeCardTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
 
-              const SizedBox(height: 8),
-
-              // Content preview
-              MarkdownBody(
-                data: card.content,
-                styleSheet: MarkdownStyleSheet(
-                  p: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.black87,
-                    height: 1.4,
-                  ),
-                  strong: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                  em: const TextStyle(
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.black87,
-                  ),
-                  code: TextStyle(
-                    fontSize: 13,
-                    backgroundColor: Colors.grey.shade100,
-                    color: Colors.black87,
-                    fontFamily: 'monospace',
-                  ),
-                ),
-                shrinkWrap: true,
-              ),
-
-              if (card.explanation != null && card.explanation!.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: MarkdownBody(
-                    data: card.explanation!,
-                    styleSheet: MarkdownStyleSheet(
-                      p: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade700,
-                        fontStyle: FontStyle.italic,
-                      ),
-                      strong: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade700,
-                      ),
-                      em: TextStyle(
-                        fontSize: 12,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey.shade700,
-                      ),
-                      code: TextStyle(
-                        fontSize: 11,
-                        backgroundColor: Colors.grey.shade200,
-                        color: Colors.grey.shade700,
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                    shrinkWrap: true,
-                  ),
-                ),
-              ],
             ],
           ),
         ),

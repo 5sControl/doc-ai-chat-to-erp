@@ -258,5 +258,17 @@
   "knowledgeCards_regenerate": "Создать заново",
   "knowledgeCards_regenerateTitle": "Создать карточки заново?",
   "knowledgeCards_regenerateMessage": "Текущие карточки будут удалены, будут сгенерированы новые. Продолжить?",
-  "knowledgeCards_cancel": "Отмена"
+  "knowledgeCards_cancel": "Отмена",
+
+  "knowledgeCards_voiceAnswerTitle": "Как вы понимаете термин «{term}»?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "Отправить",
+  "knowledgeCards_voiceAnswerStubMessage": "Проверка верности ответа появится в программе в скором времени.",
+  "knowledgeCards_voiceAnswerError": "Не удалось проверить ответ. Проверьте подключение и попробуйте снова.",
+  "knowledgeCards_tapMicToSpeak": "Нажмите на микрофон, чтобы говорить",
+  "knowledgeCards_listening": "Идёт запись..."
 }

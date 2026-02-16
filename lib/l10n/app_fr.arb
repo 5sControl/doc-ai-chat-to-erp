@@ -256,5 +256,17 @@
   "knowledgeCards_regenerate": "Régénérer",
   "knowledgeCards_regenerateTitle": "Régénérer les cartes ?",
   "knowledgeCards_regenerateMessage": "Vos cartes actuelles seront supprimées et de nouvelles seront générées. Continuer ?",
-  "knowledgeCards_cancel": "Annuler"
+  "knowledgeCards_cancel": "Annuler",
+
+  "knowledgeCards_voiceAnswerTitle": "Comment comprenez-vous le terme \"{term}\" ?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "Envoyer",
+  "knowledgeCards_voiceAnswerStubMessage": "La vérification de votre réponse sera bientôt disponible dans l'application.",
+  "knowledgeCards_voiceAnswerError": "Impossible de vérifier la réponse. Vérifiez votre connexion et réessayez.",
+  "knowledgeCards_tapMicToSpeak": "Appuyez sur le micro pour parler",
+  "knowledgeCards_listening": "Écoute..."
 }

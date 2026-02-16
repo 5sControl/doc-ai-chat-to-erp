@@ -1274,6 +1274,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get knowledgeCards_cancel;
+
+  /// No description provided for @knowledgeCards_voiceAnswerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you understand the term \"{term}\"?'**
+  String knowledgeCards_voiceAnswerTitle(Object term);
+
+  /// No description provided for @knowledgeCards_voiceAnswerSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get knowledgeCards_voiceAnswerSend;
+
+  /// No description provided for @knowledgeCards_voiceAnswerStubMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification of your answer will be available in the app soon.'**
+  String get knowledgeCards_voiceAnswerStubMessage;
+
+  /// No description provided for @knowledgeCards_voiceAnswerError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t verify the answer. Check your connection and try again.'**
+  String get knowledgeCards_voiceAnswerError;
+
+  /// No description provided for @knowledgeCards_tapMicToSpeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the microphone to speak'**
+  String get knowledgeCards_tapMicToSpeak;
+
+  /// No description provided for @knowledgeCards_listening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening...'**
+  String get knowledgeCards_listening;
 }
 
 class _AppLocalizationsDelegate

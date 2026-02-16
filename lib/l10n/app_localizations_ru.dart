@@ -623,4 +623,27 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get knowledgeCards_cancel => 'Отмена';
+
+  @override
+  String knowledgeCards_voiceAnswerTitle(Object term) {
+    return 'Как вы понимаете термин «$term»?';
+  }
+
+  @override
+  String get knowledgeCards_voiceAnswerSend => 'Отправить';
+
+  @override
+  String get knowledgeCards_voiceAnswerStubMessage =>
+      'Проверка верности ответа появится в программе в скором времени.';
+
+  @override
+  String get knowledgeCards_voiceAnswerError =>
+      'Не удалось проверить ответ. Проверьте подключение и попробуйте снова.';
+
+  @override
+  String get knowledgeCards_tapMicToSpeak =>
+      'Нажмите на микрофон, чтобы говорить';
+
+  @override
+  String get knowledgeCards_listening => 'Идёт запись...';
 }

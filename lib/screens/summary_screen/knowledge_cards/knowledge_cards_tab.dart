@@ -8,6 +8,7 @@ import 'package:summify/services/demo_knowledge_cards.dart';
 import 'widgets/cards_type_filter.dart';
 import 'widgets/cards_list_view.dart';
 import 'widgets/card_detail_modal.dart';
+import 'widgets/card_voice_answer_modal.dart';
 
 class KnowledgeCardsTab extends StatefulWidget {
   final String summaryKey;
@@ -99,6 +100,15 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
     );
   }
 
+  void _onCardMicTap(KnowledgeCard card) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => CardVoiceAnswerModal(card: card),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   void _onCardSave(KnowledgeCard card) {
     if (card.isSaved) {
       context.read<KnowledgeCardsBloc>().add(
@@ -170,6 +180,7 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
                 onCardTap: _onCardTap,
                 onCardSave: _onCardSave,
                 onRetry: _extractKnowledgeCards,
+                onCardMicTap: _onCardMicTap,
               ),
             ),
           ],

@@ -258,5 +258,17 @@
   "knowledgeCards_regenerate": "Regenerate",
   "knowledgeCards_regenerateTitle": "Regenerate knowledge cards?",
   "knowledgeCards_regenerateMessage": "Your current cards will be removed and new ones will be generated. Continue?",
-  "knowledgeCards_cancel": "Cancel"
+  "knowledgeCards_cancel": "Cancel",
+
+  "knowledgeCards_voiceAnswerTitle": "How do you understand the term \"{term}\"?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "Send",
+  "knowledgeCards_voiceAnswerStubMessage": "Verification of your answer will be available in the app soon.",
+  "knowledgeCards_voiceAnswerError": "Couldn't verify the answer. Check your connection and try again.",
+  "knowledgeCards_tapMicToSpeak": "Tap the microphone to speak",
+  "knowledgeCards_listening": "Listening..."
 }

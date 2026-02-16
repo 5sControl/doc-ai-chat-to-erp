@@ -608,6 +608,26 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get knowledgeCards_cancel => '取消';
+
+  @override
+  String knowledgeCards_voiceAnswerTitle(Object term) {
+    return '你如何理解「$term」這個術語？';
+  }
+
+  @override
+  String get knowledgeCards_voiceAnswerSend => '發送';
+
+  @override
+  String get knowledgeCards_voiceAnswerStubMessage => '您的答案驗證將很快在應用中提供。';
+
+  @override
+  String get knowledgeCards_voiceAnswerError => '無法驗證答案，請檢查網路連線後重試。';
+
+  @override
+  String get knowledgeCards_tapMicToSpeak => '點擊麥克風說話';
+
+  @override
+  String get knowledgeCards_listening => '正在聽...';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -1214,4 +1234,24 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get knowledgeCards_cancel => '取消';
+
+  @override
+  String knowledgeCards_voiceAnswerTitle(Object term) {
+    return '你如何理解「$term」这个术语？';
+  }
+
+  @override
+  String get knowledgeCards_voiceAnswerSend => '发送';
+
+  @override
+  String get knowledgeCards_voiceAnswerStubMessage => '您的答案验证将很快在应用中提供。';
+
+  @override
+  String get knowledgeCards_voiceAnswerError => '无法验证答案，请检查网络连接后重试。';
+
+  @override
+  String get knowledgeCards_tapMicToSpeak => '点击麦克风说话';
+
+  @override
+  String get knowledgeCards_listening => '正在听...';
 }

@@ -256,5 +256,17 @@
   "knowledgeCards_regenerate": "Yeniden oluştur",
   "knowledgeCards_regenerateTitle": "Bilgi kartları yeniden oluşturulsun mu?",
   "knowledgeCards_regenerateMessage": "Mevcut kartlarınız silinecek ve yenileri oluşturulacak. Devam edilsin mi?",
-  "knowledgeCards_cancel": "İptal"
+  "knowledgeCards_cancel": "İptal",
+
+  "knowledgeCards_voiceAnswerTitle": "\"{term}\" terimini nasıl anlıyorsunuz?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerSend": "Gönder",
+  "knowledgeCards_voiceAnswerStubMessage": "Yanıtınızın doğrulanması yakında uygulamada kullanılabilecek.",
+  "knowledgeCards_voiceAnswerError": "Yanıt doğrulanamadı. Bağlantınızı kontrol edin ve tekrar deneyin.",
+  "knowledgeCards_tapMicToSpeak": "Konuşmak için mikrofona dokunun",
+  "knowledgeCards_listening": "Dinleniyor..."
 }
