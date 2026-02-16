@@ -10,6 +10,9 @@ void Function()? _removeCurrentWordLookup;
 /// Long text threshold: no auto-dismiss timer, user closes manually.
 const int _longTextLengthThreshold = 100;
 
+/// Max words (1-3) for auto TTS playback. Longer selections (phrases/sentences) are not spoken.
+const int _maxWordsForAutoSpeak = 3;
+
 /// Shows the word lookup as a system overlay (above the route, does not affect layout).
 /// Fetches translation, updates the overlay, auto-dismisses after [duration] unless text length > [_longTextLengthThreshold].
 /// Only one overlay is shown at a time; showing a new one removes the previous.
@@ -69,7 +72,8 @@ void showWordLookupOverlay(
     if (word.length <= _longTextLengthThreshold) {
       dismissTimer = Timer(duration, remove);
     }
-    if (!result.isError && onSpeakWord != null) {
+    final wordCount = word.trim().split(RegExp(r'\s+')).where((s) => s.isNotEmpty).length;
+    if (!result.isError && onSpeakWord != null && wordCount >= 1 && wordCount <= _maxWordsForAutoSpeak) {
       onSpeakWord(word);
     }
   });

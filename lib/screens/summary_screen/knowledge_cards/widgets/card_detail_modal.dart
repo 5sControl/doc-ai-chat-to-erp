@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/summary_screen/markdown_word_tap_builder.dart';
-import 'package:summify/screens/summary_screen/word_lookup_overlay.dart';
+import 'package:summify/screens/summary_screen/word_lookup_helper.dart';
 import 'package:toastification/toastification.dart';
-
-import '../../../../bloc/settings/settings_bloc.dart';
 
 class CardDetailModal extends StatelessWidget {
   final KnowledgeCard card;
@@ -214,17 +211,7 @@ class CardDetailModal extends StatelessWidget {
     required String data,
     required MarkdownStyleSheet styleSheet,
   }) {
-    void onWordLookup(BuildContext ctx, String word) {
-      final targetLang = ctx.read<SettingsBloc>().state.translateLanguage;
-      showWordLookupOverlay(
-        ctx,
-        word: word,
-        targetLang: targetLang,
-        duration: word.length > 40
-            ? const Duration(seconds: 5)
-            : WordLookupOverlay.defaultDuration,
-      );
-    }
+    final onWordLookup = createWordLookupHandler(context);
 
     final builders = <String, MarkdownElementBuilder>{
       'p': MarkdownWordTapBuilder(

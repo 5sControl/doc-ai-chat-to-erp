@@ -16,7 +16,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/settings/settings_bloc.dart';
 import '../../gen/assets.gen.dart';
 import 'markdown_word_tap_builder.dart';
-import 'word_lookup_overlay.dart';
+import 'word_lookup_helper.dart';
 
 class ResearchTab extends StatefulWidget {
   final String summaryKey;
@@ -250,17 +250,7 @@ class Answer extends StatelessWidget {
           ),
         );
 
-        void onWordLookup(BuildContext ctx, String word) {
-          final targetLang = ctx.read<SettingsBloc>().state.translateLanguage;
-          showWordLookupOverlay(
-            ctx,
-            word: word,
-            targetLang: targetLang,
-            duration: word.length > 40
-                ? const Duration(seconds: 5)
-                : WordLookupOverlay.defaultDuration,
-          );
-        }
+        final onWordLookup = createWordLookupHandler(context);
 
         Map<String, MarkdownElementBuilder> wordTapBuilders() {
           return {
