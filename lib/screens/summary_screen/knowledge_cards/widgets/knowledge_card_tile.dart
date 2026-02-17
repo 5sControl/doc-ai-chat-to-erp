@@ -58,16 +58,28 @@ class KnowledgeCardTile extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              // Title
-              Text(
-                card.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              // Title and expand hint (tap opens full card)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      card.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Icon(
+                    Icons.expand_more,
+                    size: 22,
+                    color: Colors.grey,
+                  ),
+                ],
               ),
 
             ],
