@@ -615,6 +615,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerTask => '請用你自己的話解釋';
+
+  @override
   String get knowledgeCards_voiceAnswerSend => '發送';
 
   @override
@@ -1239,6 +1242,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String knowledgeCards_voiceAnswerTitle(Object term) {
     return '你如何理解「$term」这个术语？';
   }
+
+  @override
+  String get knowledgeCards_voiceAnswerTask => '请用你自己的话解释';
 
   @override
   String get knowledgeCards_voiceAnswerSend => '发送';

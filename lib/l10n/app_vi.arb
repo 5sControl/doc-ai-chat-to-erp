@@ -264,6 +264,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerTask": "Giải thích bằng lời của bạn",
   "knowledgeCards_voiceAnswerSend": "Gửi",
   "knowledgeCards_voiceAnswerStubMessage": "Việc xác minh câu trả lời của bạn sẽ sớm có trong ứng dụng.",
   "knowledgeCards_voiceAnswerError": "Không thể xác minh câu trả lời. Kiểm tra kết nối và thử lại.",

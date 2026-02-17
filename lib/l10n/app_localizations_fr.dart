@@ -633,6 +633,10 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerTask =>
+      'Expliquez avec vos propres mots';
+
+  @override
   String get knowledgeCards_voiceAnswerSend => 'Envoyer';
 
   @override

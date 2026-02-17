@@ -631,6 +631,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerTask => 'Spiega con parole tue';
+
+  @override
   String get knowledgeCards_voiceAnswerSend => 'Invia';
 
   @override

@@ -266,6 +266,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerTask": "Explain in your own words",
   "knowledgeCards_voiceAnswerSend": "Send",
   "knowledgeCards_voiceAnswerStubMessage": "Verification of your answer will be available in the app soon.",
   "knowledgeCards_voiceAnswerError": "Couldn't verify the answer. Check your connection and try again.",

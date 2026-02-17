@@ -266,6 +266,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerTask": "Объясните своими словами",
   "knowledgeCards_voiceAnswerSend": "Отправить",
   "knowledgeCards_voiceAnswerStubMessage": "Проверка верности ответа появится в программе в скором времени.",
   "knowledgeCards_voiceAnswerError": "Не удалось проверить ответ. Проверьте подключение и попробуйте снова.",

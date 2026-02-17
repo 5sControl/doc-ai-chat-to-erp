@@ -264,6 +264,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerTask": "Kendi cümlelerinizle açıklayın",
   "knowledgeCards_voiceAnswerSend": "Gönder",
   "knowledgeCards_voiceAnswerStubMessage": "Yanıtınızın doğrulanması yakında uygulamada kullanılabilecek.",
   "knowledgeCards_voiceAnswerError": "Yanıt doğrulanamadı. Bağlantınızı kontrol edin ve tekrar deneyin.",

@@ -264,6 +264,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerTask": "Erklären Sie es mit eigenen Worten",
   "knowledgeCards_voiceAnswerSend": "Senden",
   "knowledgeCards_voiceAnswerStubMessage": "Die Überprüfung Ihrer Antwort wird bald in der App verfügbar sein.",
   "knowledgeCards_voiceAnswerError": "Antwort konnte nicht überprüft werden. Bitte Verbindung prüfen und erneut versuchen.",

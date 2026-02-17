@@ -624,6 +624,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerTask => 'Giải thích bằng lời của bạn';
+
+  @override
   String get knowledgeCards_voiceAnswerSend => 'Gửi';
 
   @override

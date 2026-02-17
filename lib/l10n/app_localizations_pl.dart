@@ -630,6 +630,9 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerTask => 'Wyjaśnij własnymi słowami';
+
+  @override
   String get knowledgeCards_voiceAnswerSend => 'Wyślij';
 
   @override

@@ -629,6 +629,10 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerTask =>
+      'Explique com suas próprias palavras';
+
+  @override
   String get knowledgeCards_voiceAnswerSend => 'Enviar';
 
   @override

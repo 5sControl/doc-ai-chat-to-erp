@@ -1281,6 +1281,12 @@ abstract class AppLocalizations {
   /// **'How do you understand the term \"{term}\"?'**
   String knowledgeCards_voiceAnswerTitle(Object term);
 
+  /// No description provided for @knowledgeCards_voiceAnswerTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain in your own words'**
+  String get knowledgeCards_voiceAnswerTask;
+
   /// No description provided for @knowledgeCards_voiceAnswerSend.
   ///
   /// In en, this message translates to:

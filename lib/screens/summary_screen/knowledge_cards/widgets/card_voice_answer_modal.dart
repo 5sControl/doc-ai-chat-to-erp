@@ -23,7 +23,7 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
   final SpeechToText _speech = SpeechToText();
   bool _isListening = false;
   bool _speechAvailable = false;
-  String _recognizedText = '';
+  final TextEditingController _textController = TextEditingController();
   String _errorMessage = '';
   bool _isSending = false;
   late AnimationController _pulseController;
@@ -35,12 +35,14 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
+    _textController.addListener(() => setState(() {}));
     _initSpeech();
   }
 
   @override
   void dispose() {
     _pulseController.dispose();
+    _textController.dispose();
     if (_isListening) {
       _speech.stop();
     }
@@ -73,11 +75,13 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
     setState(() {
       _errorMessage = '';
       _isListening = true;
+      _textController.clear();
     });
     await _speech.listen(
       onResult: (result) {
         if (!mounted) return;
-        setState(() => _recognizedText = result.recognizedWords);
+        _textController.text = result.recognizedWords;
+        if (mounted) setState(() {});
       },
       listenFor: const Duration(seconds: 60),
       pauseFor: const Duration(seconds: 3),
@@ -97,7 +101,7 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
       final result = await SummaryRepository().verifyKnowledgeCardAnswer(
         cardTitle: widget.card.title,
         cardContent: widget.card.content,
-        userAnswer: _recognizedText.trim().isEmpty ? ' ' : _recognizedText.trim(),
+        userAnswer: _textController.text.trim().isEmpty ? ' ' : _textController.text.trim(),
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -146,6 +150,23 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Task instruction and card title
+              Text(
+                l10n.knowledgeCards_voiceAnswerTask,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade700,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                widget.card.title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
               const SizedBox(height: 24),
               // Mic button and listening indicator
               Center(
@@ -194,26 +215,31 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
                 ),
               ),
               const SizedBox(height: 32),
-              // Recognized text
+              // Text input: editable when not listening, read-only during voice input
               Expanded(
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Colors.grey.shade50,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(color: Colors.grey.shade300),
                   ),
-                  child: SingleChildScrollView(
-                    child: Text(
-                      _recognizedText.isEmpty
-                          ? ' '
-                          : _recognizedText,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                        height: 1.5,
-                      ),
+                  child: TextField(
+                    controller: _textController,
+                    readOnly: _isListening,
+                    maxLines: null,
+                    minLines: 6,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                      hintText: '',
+                    ),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                      height: 1.5,
                     ),
                   ),
                 ),
@@ -229,9 +255,11 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
                 ),
               ],
               const SizedBox(height: 24),
-              // Send button
+              // Send button (disabled when no text or sending)
               FilledButton(
-                onPressed: _isSending ? null : _onSend,
+                onPressed: (_isSending || _textController.text.trim().isEmpty)
+                    ? null
+                    : _onSend,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: _isSending

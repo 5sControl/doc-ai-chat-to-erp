@@ -627,6 +627,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerTask => 'Explain in your own words';
+
+  @override
   String get knowledgeCards_voiceAnswerSend => 'Send';
 
   @override

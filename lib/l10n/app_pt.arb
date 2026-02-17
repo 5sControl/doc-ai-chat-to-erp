@@ -264,6 +264,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerTask": "Explique com suas próprias palavras",
   "knowledgeCards_voiceAnswerSend": "Enviar",
   "knowledgeCards_voiceAnswerStubMessage": "A verificação da sua resposta estará disponível no aplicativo em breve.",
   "knowledgeCards_voiceAnswerError": "Não foi possível verificar a resposta. Verifique sua conexão e tente novamente.",

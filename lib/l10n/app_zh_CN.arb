@@ -264,6 +264,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerTask": "请用你自己的话解释",
   "knowledgeCards_voiceAnswerSend": "发送",
   "knowledgeCards_voiceAnswerStubMessage": "您的答案验证将很快在应用中提供。",
   "knowledgeCards_voiceAnswerError": "无法验证答案，请检查网络连接后重试。",
