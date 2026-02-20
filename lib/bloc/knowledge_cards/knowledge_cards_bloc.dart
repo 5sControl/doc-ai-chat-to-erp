@@ -13,6 +13,10 @@ part 'knowledge_cards_event.dart';
 part 'knowledge_cards_state.dart';
 part 'knowledge_cards_bloc.g.dart';
 
+/// Separator for composite card id (summaryKey + backend card id).
+/// Ensures saved state is per-document.
+const String _kCardIdSeparator = '::';
+
 class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCardsState> {
   final MixpanelBloc mixpanelBloc;
   final SavedCardsBloc savedCardsBloc;
@@ -50,7 +54,11 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     List<KnowledgeCard> extractedCards;
 
     try {
-      extractedCards = await SummaryRepository().extractKnowledgeCards(event.summaryText);
+      final rawCards = await SummaryRepository().extractKnowledgeCards(event.summaryText);
+      // Composite id so saved state is per-document (backend returns card_1, card_2 for every doc).
+      extractedCards = rawCards
+          .map((card) => card.copyWith(id: '${event.summaryKey}$_kCardIdSeparator${card.id}'))
+          .toList();
     } catch (error) {
       emit(state.copyWith(
         extractionStatuses: {
@@ -230,8 +238,12 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       return;
     }
 
-    // Get pre-generated demo cards
-    final demoCards = DemoKnowledgeCards.getDemoCards();
+    // Get pre-generated demo cards and assign composite ids for consistency
+    final rawDemoCards = DemoKnowledgeCards.getDemoCards();
+    final demoCards = rawDemoCards
+        .map((card) =>
+            card.copyWith(id: '${DemoKnowledgeCards.demoKey}$_kCardIdSeparator${card.id}'))
+        .toList();
 
     // Add demo cards to state
     emit(state.copyWith(
