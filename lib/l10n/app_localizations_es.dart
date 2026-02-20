@@ -254,6 +254,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get research_mermaidOpenLive => 'Open in Mermaid Live';
 
   @override
+  String get diagram_share => 'Compartir';
+
+  @override
   String get quiz_failedToGenerate => 'Error al generar el quiz';
 
   @override

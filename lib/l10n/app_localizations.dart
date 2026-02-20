@@ -579,6 +579,12 @@ abstract class AppLocalizations {
   /// **'Open in Mermaid Live'**
   String get research_mermaidOpenLive;
 
+  /// No description provided for @diagram_share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get diagram_share;
+
   /// No description provided for @quiz_failedToGenerate.
   ///
   /// In en, this message translates to:

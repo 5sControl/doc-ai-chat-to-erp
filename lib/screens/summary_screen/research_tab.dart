@@ -508,7 +508,9 @@ class _MermaidLinkBlock extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Row(
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
             children: [
               TextButton.icon(
                 onPressed: () => _copyCode(context),

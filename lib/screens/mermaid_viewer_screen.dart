@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:summify/l10n/app_localizations.dart';
 
 /// Full-screen viewer for a Mermaid diagram. Loads HTML template from assets
 /// with Mermaid.js from CDN and renders the [mermaidCode] inside the app.
@@ -68,8 +71,18 @@ class _MermaidViewerScreenState extends State<MermaidViewerScreen> {
     });
   }
 
+  Future<void> _share(BuildContext context) async {
+    final box = context.findRenderObject() as RenderBox?;
+    await Share.share(
+      widget.mermaidCode,
+      subject: widget.title,
+      sharePositionOrigin: box != null ? box.localToGlobal(Offset.zero) & box.size : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -85,6 +98,13 @@ class _MermaidViewerScreenState extends State<MermaidViewerScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () => _share(context),
+            tooltip: l10n.diagram_share,
+          ),
+        ],
       ),
       body: _error != null
           ? Center(

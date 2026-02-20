@@ -252,6 +252,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get research_mermaidOpenLive => 'Open in Mermaid Live';
 
   @override
+  String get diagram_share => 'Chia sẻ';
+
+  @override
   String get quiz_failedToGenerate => 'Không tạo được câu đố';
 
   @override

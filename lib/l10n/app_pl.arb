@@ -105,6 +105,7 @@
   "research_diagramRequest": "Create a Mermaid diagram for this document",
   "research_mermaidCopy": "Copy",
   "research_mermaidOpenLive": "Open in Mermaid Live",
+  "diagram_share": "Udostępnij",
 
   "quiz_failedToGenerate": "Nie udało się wygenerować quizu",
   "quiz_retry": "Ponów",

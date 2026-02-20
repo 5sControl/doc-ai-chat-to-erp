@@ -247,6 +247,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get research_mermaidOpenLive => 'Open in Mermaid Live';
 
   @override
+  String get diagram_share => '分享';
+
+  @override
   String get quiz_failedToGenerate => '生成测验失败';
 
   @override
@@ -874,6 +877,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get research_mermaidOpenLive => 'Open in Mermaid Live';
+
+  @override
+  String get diagram_share => '分享';
 
   @override
   String get quiz_failedToGenerate => '生成测验失败';

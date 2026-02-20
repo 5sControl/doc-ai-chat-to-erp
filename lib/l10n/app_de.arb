@@ -105,6 +105,7 @@
   "research_diagramRequest": "Create a Mermaid diagram for this document",
   "research_mermaidCopy": "Copy",
   "research_mermaidOpenLive": "Open in Mermaid Live",
+  "diagram_share": "Teilen",
 
   "quiz_failedToGenerate": "Quiz konnte nicht generiert werden",
   "quiz_retry": "Wiederholen",

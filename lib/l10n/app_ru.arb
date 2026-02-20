@@ -105,6 +105,7 @@
   "research_diagramRequest": "Создай Mermaid-диаграмму по этому документу",
   "research_mermaidCopy": "Копировать",
   "research_mermaidOpenLive": "Открыть в Mermaid Live",
+  "diagram_share": "Поделиться",
 
   "quiz_failedToGenerate": "Не удалось создать квиз",
   "quiz_retry": "Повторить",
