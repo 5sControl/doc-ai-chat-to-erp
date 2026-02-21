@@ -22,6 +22,7 @@ import 'package:summify/screens/settings_screen/select_ui_lang_dialog.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:summify/constants.dart';
 import 'package:summify/l10n/app_localizations.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
@@ -348,59 +349,61 @@ class SettingsScreen extends StatelessWidget {
     }
 
     final List<ButtonItem> mainGroup = [
-      ButtonItem(
-        title: 'App Bundle',
-        leadingIcon: Assets.icons.present,
-        onTap: onPressSubscription1,
-        trailing: Container(
-          width: 90,
-          margin: const EdgeInsets.only(left: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: Color.fromRGBO(90, 255, 245, 1),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          child: const Text(
-            'New',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
+      if (!kIsFreeApp) ...[
+        ButtonItem(
+          title: 'App Bundle',
+          leadingIcon: Assets.icons.present,
+          onTap: onPressSubscription1,
+          trailing: Container(
+            width: 90,
+            margin: const EdgeInsets.only(left: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: Color.fromRGBO(90, 255, 245, 1),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            child: const Text(
+              'New',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
-      ),
-      ButtonItem(
-        title: 'Subscription',
-        leadingIcon: Assets.icons.crown,
-        onTap: onPressSubscription,
-        trailing: Container(
-          width: 90,
-          margin: const EdgeInsets.only(left: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            gradient: const LinearGradient(
-              colors: [
-                Color.fromRGBO(255, 238, 90, 1),
-                Color.fromRGBO(255, 208, 74, 1),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+        ButtonItem(
+          title: 'Subscription',
+          leadingIcon: Assets.icons.crown,
+          onTap: onPressSubscription,
+          trailing: Container(
+            width: 90,
+            margin: const EdgeInsets.only(left: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              gradient: const LinearGradient(
+                colors: [
+                  Color.fromRGBO(255, 238, 90, 1),
+                  Color.fromRGBO(255, 208, 74, 1),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          child: const Text(
-            'Upgrade',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            child: const Text(
+              'Upgrade',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
-      ),
+      ],
       ButtonItem(
         title: l10n.giftCode_menuTitle,
         leadingIcon: Assets.icons.present,
@@ -547,11 +550,12 @@ class SettingsScreen extends StatelessWidget {
         leadingIcon: Assets.icons.privacy,
         onTap: onPressPrivacy,
       ),
-      ButtonItem(
-        title: 'Restore purchase',
-        leadingIcon: Assets.icons.restore,
-        onTap: onPressRestore,
-      ),
+      if (!kIsFreeApp)
+        ButtonItem(
+          title: 'Restore purchase',
+          leadingIcon: Assets.icons.restore,
+          onTap: onPressRestore,
+        ),
     ];
 
     final List<ButtonItem> authGroup = [

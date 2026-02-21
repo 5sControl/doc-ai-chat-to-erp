@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:summify/constants.dart';
 import 'package:summify/services/bundle_service.dart';
 
 import '../../../helpers/purchases.dart';
@@ -44,6 +45,10 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     final PurchasesService purchasesService = PurchasesService();
 
     on<InitSubscriptions>((event, emit) async {
+      if (kIsFreeApp) {
+        emit(state.copyWith(subscriptionStatus: SubscriptionStatus.subscribed));
+        return;
+      }
       // Only initialize if we don't already have available products
       if (state.availableProducts == null) {
         emit(SubscriptionsStateLoading(
@@ -68,6 +73,22 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     });
 
     on<MakePurchase>((event, emit) async {
+      if (kIsFreeApp) {
+        emit(state.copyWith(subscriptionStatus: SubscriptionStatus.subscribed));
+        if (event.context.mounted) {
+          showMaterialModalBottomSheet(
+              context: event.context,
+              expand: false,
+              bounce: false,
+              barrierColor: Colors.black54,
+              backgroundColor: Colors.transparent,
+              enableDrag: false,
+              builder: (context) {
+                return const PurchaseSuccessScreen();
+              });
+        }
+        return;
+      }
       try {
         CustomerInfo customerInfo =
             await Purchases.purchasePackage(event.product);
@@ -123,6 +144,10 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     });
 
     on<GetSubscriptionStatus>((event, emit) async {
+      if (kIsFreeApp) {
+        emit(state.copyWith(subscriptionStatus: SubscriptionStatus.subscribed));
+        return;
+      }
       try {
         User? user = FirebaseAuth.instance.currentUser;
         CustomerInfo customerInfo = await Purchases.getCustomerInfo();
@@ -143,6 +168,9 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     });
 
     on<RestoreSubscriptions>((RestoreSubscriptions event, emit) async {
+      if (kIsFreeApp) {
+        return;
+      }
       try {
         await purchasesService.syncSubscriptions();
         CustomerInfo customerInfo = await Purchases.restorePurchases();
@@ -170,6 +198,9 @@ class SubscriptionsBloc extends Bloc<SubscriptionsEvent, SubscriptionsState> {
     });
 
     on<SyncSubscriptions>((event, emit) async {
+      if (kIsFreeApp) {
+        return;
+      }
       try {
         await purchasesService.syncSubscriptions();
       } catch (e) {
