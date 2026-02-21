@@ -201,6 +201,36 @@ abstract class AppLocalizations {
   /// **'Select language'**
   String get settings_selectLanguageTitle;
 
+  /// No description provided for @settings_group_subscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription & more'**
+  String get settings_group_subscription;
+
+  /// No description provided for @settings_group_about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get settings_group_about;
+
+  /// No description provided for @settings_group_support.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get settings_group_support;
+
+  /// No description provided for @settings_group_account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settings_group_account;
+
+  /// No description provided for @settings_group_voice.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice'**
+  String get settings_group_voice;
+
   /// No description provided for @wordTapHint_title.
   ///
   /// In en, this message translates to:

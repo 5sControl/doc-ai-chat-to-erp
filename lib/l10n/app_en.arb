@@ -17,6 +17,11 @@
   "settings_interfaceLanguage": "Interface language",
   "settings_translationLanguage": "Translation language",
   "settings_selectLanguageTitle": "Select language",
+  "settings_group_subscription": "Subscription & more",
+  "settings_group_about": "About",
+  "settings_group_support": "Support",
+  "settings_group_account": "Account",
+  "settings_group_voice": "Voice",
 
   "wordTapHint_title": "Word translation",
   "wordTapHint_message": "Tap a word to get its translation.",

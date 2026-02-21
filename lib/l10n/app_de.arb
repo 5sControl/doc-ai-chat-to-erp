@@ -17,6 +17,11 @@
   "settings_interfaceLanguage": "Sprache der Oberfläche",
   "settings_translationLanguage": "Übersetzungssprache",
   "settings_selectLanguageTitle": "Sprache auswählen",
+  "settings_group_subscription": "Abo & mehr",
+  "settings_group_about": "Über",
+  "settings_group_support": "Support",
+  "settings_group_account": "Konto",
+  "settings_group_voice": "Stimme",
 
   "wordTapHint_title": "Wortübersetzung",
   "wordTapHint_message": "Tippen Sie auf ein Wort, um die Übersetzung zu erhalten.",

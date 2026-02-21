@@ -53,6 +53,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Выберите язык';
 
   @override
+  String get settings_group_subscription => 'Подписка и другое';
+
+  @override
+  String get settings_group_about => 'О приложении';
+
+  @override
+  String get settings_group_support => 'Поддержка';
+
+  @override
+  String get settings_group_account => 'Аккаунт';
+
+  @override
+  String get settings_group_voice => 'Голос';
+
+  @override
   String get wordTapHint_title => 'Перевод слова';
 
   @override

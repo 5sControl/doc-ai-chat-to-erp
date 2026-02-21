@@ -17,6 +17,11 @@
   "settings_interfaceLanguage": "Arayüz dili",
   "settings_translationLanguage": "Çeviri dili",
   "settings_selectLanguageTitle": "Dil seç",
+  "settings_group_subscription": "Abonelik ve daha fazlası",
+  "settings_group_about": "Hakkında",
+  "settings_group_support": "Destek",
+  "settings_group_account": "Hesap",
+  "settings_group_voice": "Ses",
 
   "wordTapHint_title": "Kelime çevirisi",
   "wordTapHint_message": "Çevirisini almak için bir kelimeye dokunun.",

@@ -17,6 +17,11 @@
   "settings_interfaceLanguage": "Язык интерфейса",
   "settings_translationLanguage": "Язык перевода",
   "settings_selectLanguageTitle": "Выберите язык",
+  "settings_group_subscription": "Подписка и другое",
+  "settings_group_about": "О приложении",
+  "settings_group_support": "Поддержка",
+  "settings_group_account": "Аккаунт",
+  "settings_group_voice": "Голос",
 
   "wordTapHint_title": "Перевод слова",
   "wordTapHint_message": "Нажмите на слово, чтобы получить его перевод.",

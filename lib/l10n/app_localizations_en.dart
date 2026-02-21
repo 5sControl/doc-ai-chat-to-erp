@@ -53,6 +53,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Select language';
 
   @override
+  String get settings_group_subscription => 'Subscription & more';
+
+  @override
+  String get settings_group_about => 'About';
+
+  @override
+  String get settings_group_support => 'Support';
+
+  @override
+  String get settings_group_account => 'Account';
+
+  @override
+  String get settings_group_voice => 'Voice';
+
+  @override
   String get wordTapHint_title => 'Word translation';
 
   @override

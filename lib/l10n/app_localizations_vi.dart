@@ -52,6 +52,21 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Chọn ngôn ngữ';
 
   @override
+  String get settings_group_subscription => 'Gói đăng ký và thêm';
+
+  @override
+  String get settings_group_about => 'Giới thiệu';
+
+  @override
+  String get settings_group_support => 'Hỗ trợ';
+
+  @override
+  String get settings_group_account => 'Tài khoản';
+
+  @override
+  String get settings_group_voice => 'Giọng nói';
+
+  @override
   String get wordTapHint_title => 'Dịch từ';
 
   @override

@@ -17,6 +17,11 @@
   "settings_interfaceLanguage": "Lingua dell'interfaccia",
   "settings_translationLanguage": "Lingua di traduzione",
   "settings_selectLanguageTitle": "Seleziona la lingua",
+  "settings_group_subscription": "Abbonamento e altro",
+  "settings_group_about": "Informazioni",
+  "settings_group_support": "Supporto",
+  "settings_group_account": "Account",
+  "settings_group_voice": "Voce",
 
   "wordTapHint_title": "Traduzione parole",
   "wordTapHint_message": "Tocca una parola per ottenere la traduzione.",

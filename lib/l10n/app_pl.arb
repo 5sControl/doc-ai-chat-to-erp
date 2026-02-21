@@ -17,6 +17,11 @@
   "settings_interfaceLanguage": "Język interfejsu",
   "settings_translationLanguage": "Język tłumaczenia",
   "settings_selectLanguageTitle": "Wybierz język",
+  "settings_group_subscription": "Subskrypcja i więcej",
+  "settings_group_about": "O aplikacji",
+  "settings_group_support": "Pomoc",
+  "settings_group_account": "Konto",
+  "settings_group_voice": "Głos",
 
   "wordTapHint_title": "Tłumaczenie słowa",
   "wordTapHint_message": "Dotknij słowa, aby uzyskać jego tłumaczenie.",

@@ -17,6 +17,11 @@
   "settings_interfaceLanguage": "Ngôn ngữ giao diện",
   "settings_translationLanguage": "Ngôn ngữ dịch",
   "settings_selectLanguageTitle": "Chọn ngôn ngữ",
+  "settings_group_subscription": "Gói đăng ký và thêm",
+  "settings_group_about": "Giới thiệu",
+  "settings_group_support": "Hỗ trợ",
+  "settings_group_account": "Tài khoản",
+  "settings_group_voice": "Giọng nói",
 
   "wordTapHint_title": "Dịch từ",
   "wordTapHint_message": "Chạm vào một từ để xem bản dịch.",

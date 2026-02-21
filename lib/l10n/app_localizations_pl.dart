@@ -53,6 +53,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Wybierz język';
 
   @override
+  String get settings_group_subscription => 'Subskrypcja i więcej';
+
+  @override
+  String get settings_group_about => 'O aplikacji';
+
+  @override
+  String get settings_group_support => 'Pomoc';
+
+  @override
+  String get settings_group_account => 'Konto';
+
+  @override
+  String get settings_group_voice => 'Głos';
+
+  @override
   String get wordTapHint_title => 'Tłumaczenie słowa';
 
   @override

@@ -51,6 +51,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings_selectLanguageTitle => '选择语言';
 
   @override
+  String get settings_group_subscription => '订阅与更多';
+
+  @override
+  String get settings_group_about => '关于';
+
+  @override
+  String get settings_group_support => '支持';
+
+  @override
+  String get settings_group_account => '账户';
+
+  @override
+  String get settings_group_voice => '语音';
+
+  @override
   String get wordTapHint_title => '单词翻译';
 
   @override
@@ -681,6 +696,21 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get settings_selectLanguageTitle => '选择语言';
+
+  @override
+  String get settings_group_subscription => '订阅与更多';
+
+  @override
+  String get settings_group_about => '关于';
+
+  @override
+  String get settings_group_support => '支持';
+
+  @override
+  String get settings_group_account => '账户';
+
+  @override
+  String get settings_group_voice => '语音';
 
   @override
   String get wordTapHint_title => '单词翻译';

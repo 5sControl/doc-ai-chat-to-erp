@@ -52,6 +52,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settings_selectLanguageTitle => 'Dil seç';
 
   @override
+  String get settings_group_subscription => 'Abonelik ve daha fazlası';
+
+  @override
+  String get settings_group_about => 'Hakkında';
+
+  @override
+  String get settings_group_support => 'Destek';
+
+  @override
+  String get settings_group_account => 'Hesap';
+
+  @override
+  String get settings_group_voice => 'Ses';
+
+  @override
   String get wordTapHint_title => 'Kelime çevirisi';
 
   @override

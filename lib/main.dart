@@ -27,6 +27,8 @@ import 'package:summify/screens/auth/auth_screen.dart';
 import 'package:summify/screens/onboarding_screen.dart';
 import 'package:summify/screens/request_screen.dart';
 import 'package:summify/screens/saved_cards_screen/saved_cards_screen.dart';
+import 'package:summify/screens/settings_screen/settings_group_screen.dart';
+import 'package:summify/screens/settings_screen/settings_models.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 import 'package:summify/services/authentication.dart';
@@ -362,6 +364,20 @@ class _SummishareAppState extends State<SummishareApp> {
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SettingsScreen(),
                         settings: settings);
+                  case '/settings/group': {
+                    final args = settings.arguments as SettingsGroupArgs?;
+                    if (args == null) {
+                      return MaterialWithModalsPageRoute(
+                          builder: (_) => const SettingsScreen(),
+                          settings: settings);
+                    }
+                    return MaterialWithModalsPageRoute(
+                        builder: (_) => SettingsGroupScreen(
+                              groupId: args.id,
+                              title: args.title,
+                            ),
+                        settings: settings);
+                  }
                   case '/saved-cards':
                     return MaterialWithModalsPageRoute(
                         builder: (_) => const SavedCardsScreen(),
