@@ -38,7 +38,7 @@ class ProfileHeader extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: SvgPicture.asset(
-                            Assets.icons.profile,
+                            Assets.icons.settings,
                             height: 35,
                             colorFilter: ColorFilter.mode(
                               Theme.of(context).textTheme.bodySmall!.color!,
@@ -80,7 +80,7 @@ class ProfileHeader extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: SvgPicture.asset(
-                            Assets.icons.login,
+                            Assets.icons.settings,
                             height: 35,
                             colorFilter: ColorFilter.mode(
                               Theme.of(context).textTheme.bodySmall!.color!,
