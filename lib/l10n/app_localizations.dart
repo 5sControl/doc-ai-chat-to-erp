@@ -183,6 +183,18 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settings_title;
 
+  /// No description provided for @settings_neverLoseData.
+  ///
+  /// In en, this message translates to:
+  /// **'Never lose your data!'**
+  String get settings_neverLoseData;
+
+  /// No description provided for @settings_logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get settings_logIn;
+
   /// No description provided for @settings_general.
   ///
   /// In en, this message translates to:

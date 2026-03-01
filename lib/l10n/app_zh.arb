@@ -14,6 +14,8 @@
 
   "settings_profile": "个人资料",
   "settings_title": "设置",
+  "settings_neverLoseData": "永不丢失您的数据！",
+  "settings_logIn": "登录",
   "settings_general": "通用",
   "settings_interfaceLanguage": "界面语言",
   "settings_translationLanguage": "翻译语言",

@@ -43,6 +43,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settings_title => 'Ayarlar';
 
   @override
+  String get settings_neverLoseData => 'Verilerinizi asla kaybetmeyin!';
+
+  @override
+  String get settings_logIn => 'Giriş yap';
+
+  @override
   String get settings_general => 'Genel';
 
   @override

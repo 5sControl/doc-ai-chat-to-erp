@@ -44,6 +44,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settings_title => 'Настройки';
 
   @override
+  String get settings_neverLoseData => 'Никогда не теряйте свои данные!';
+
+  @override
+  String get settings_logIn => 'Войти';
+
+  @override
   String get settings_general => 'Общие';
 
   @override

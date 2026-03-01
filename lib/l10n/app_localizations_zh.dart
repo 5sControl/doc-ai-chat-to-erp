@@ -42,6 +42,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings_title => '设置';
 
   @override
+  String get settings_neverLoseData => '永不丢失您的数据！';
+
+  @override
+  String get settings_logIn => '登录';
+
+  @override
   String get settings_general => '通用';
 
   @override
@@ -722,6 +728,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get settings_title => '设置';
+
+  @override
+  String get settings_neverLoseData => '永不丢失您的数据！';
+
+  @override
+  String get settings_logIn => '登录';
 
   @override
   String get settings_general => '通用';

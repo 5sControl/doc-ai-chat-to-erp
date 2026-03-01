@@ -14,6 +14,8 @@
 
   "settings_profile": "Hồ sơ",
   "settings_title": "Cài đặt",
+  "settings_neverLoseData": "Không bao giờ mất dữ liệu của bạn!",
+  "settings_logIn": "Đăng nhập",
   "settings_general": "Chung",
   "settings_interfaceLanguage": "Ngôn ngữ giao diện",
   "settings_translationLanguage": "Ngôn ngữ dịch",

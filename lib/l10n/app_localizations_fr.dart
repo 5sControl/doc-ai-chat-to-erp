@@ -44,6 +44,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settings_title => 'Paramètres';
 
   @override
+  String get settings_neverLoseData => 'Ne perdez jamais vos données !';
+
+  @override
+  String get settings_logIn => 'Connexion';
+
+  @override
   String get settings_general => 'Général';
 
   @override
@@ -685,7 +691,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get knowledgeCards_voiceAnswerQuestion =>
-      'Comment comprenez-vous le terme ?';
+      'Comment comprenez-vous le terme?';
 
   @override
   String get knowledgeCards_voiceAnswerTask =>

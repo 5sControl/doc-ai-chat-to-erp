@@ -44,6 +44,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings_title => 'Settings';
 
   @override
+  String get settings_neverLoseData => 'Never lose your data!';
+
+  @override
+  String get settings_logIn => 'Log in';
+
+  @override
   String get settings_general => 'General';
 
   @override

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../gen/assets.gen.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
@@ -72,6 +73,7 @@ class ProfileHeader extends StatelessWidget {
                       ],
                     );
                   }
+                  final l10n = AppLocalizations.of(context);
                   return InkWell(
                     onTap: () => Navigator.of(context).pushNamed('/login'),
                     child: Row(
@@ -92,7 +94,7 @@ class ProfileHeader extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Never lose your data!',
+                              l10n.settings_neverLoseData,
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: Theme.of(context).textTheme.bodySmall!.color,
@@ -101,7 +103,7 @@ class ProfileHeader extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Log in',
+                              l10n.settings_logIn,
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: Theme.of(context).textTheme.bodySmall!.color,

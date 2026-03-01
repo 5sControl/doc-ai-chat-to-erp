@@ -43,6 +43,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settings_title => 'Cài đặt';
 
   @override
+  String get settings_neverLoseData => 'Không bao giờ mất dữ liệu của bạn!';
+
+  @override
+  String get settings_logIn => 'Đăng nhập';
+
+  @override
   String get settings_general => 'Chung';
 
   @override

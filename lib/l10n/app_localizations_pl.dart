@@ -44,6 +44,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settings_title => 'Ustawienia';
 
   @override
+  String get settings_neverLoseData => 'Nie trać swoich danych!';
+
+  @override
+  String get settings_logIn => 'Zaloguj się';
+
+  @override
   String get settings_general => 'Ogólne';
 
   @override

@@ -14,6 +14,8 @@
 
   "settings_profile": "Profil",
   "settings_title": "Ayarlar",
+  "settings_neverLoseData": "Verilerinizi asla kaybetmeyin!",
+  "settings_logIn": "Giriş yap",
   "settings_general": "Genel",
   "settings_interfaceLanguage": "Arayüz dili",
   "settings_translationLanguage": "Çeviri dili",

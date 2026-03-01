@@ -14,6 +14,8 @@
 
   "settings_profile": "Profil",
   "settings_title": "Ustawienia",
+  "settings_neverLoseData": "Nie trać swoich danych!",
+  "settings_logIn": "Zaloguj się",
   "settings_general": "Ogólne",
   "settings_interfaceLanguage": "Język interfejsu",
   "settings_translationLanguage": "Język tłumaczenia",

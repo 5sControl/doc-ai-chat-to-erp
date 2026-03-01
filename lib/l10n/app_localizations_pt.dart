@@ -44,6 +44,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settings_title => 'Definições';
 
   @override
+  String get settings_neverLoseData => 'Nunca perca seus dados!';
+
+  @override
+  String get settings_logIn => 'Entrar';
+
+  @override
   String get settings_general => 'Geral';
 
   @override
