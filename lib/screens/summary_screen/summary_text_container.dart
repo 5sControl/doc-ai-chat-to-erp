@@ -55,7 +55,13 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
   late final ScrollController _scrollController;
   Timer? _wordTapHintTimer;
   DateTime? _lastHighlightLog;
+  bool _blockOrderLogged = false;
+  /// Deferred by one frame to avoid OOM when TTS starts (phonemization + cache leave heap full; highlight build does many substrings).
+  bool _ttsHighlightReady = false;
   static const bool _kLogHighlight = true;
+
+  /// TODO: TTS highlight disabled to restore sound/playback. computeBlockOffsets + _buildTtsHighlightPlain cause OOM (Exhausted heap space). Re-enable when we have a memory-safe implementation (e.g. chunked/lazy highlight or skip highlight for long text).
+  static const bool _kTtsHighlightEnabled = false;
 
   void _logHighlightIfNeeded({
     required bool showTtsHighlight,
@@ -93,6 +99,62 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
     if (ctx == null) return false;
     return ctx.summaryKey == widget.summaryKey &&
         ctx.activeTab == widget.tabIndex;
+  }
+
+  /// Plain-text TTS highlight when MarkdownBody builders are not invoked.
+  /// Shows flattened text with read/current word highlighting so user sees progress.
+  Widget _buildTtsHighlightPlain(
+    BuildContext context,
+    String flattenedText,
+    int readEndIndex,
+    int currentWordStart,
+    int currentWordEnd,
+    MarkdownStyleSheet styleSheet,
+    double fontSize,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final readColor = (isDark ? Colors.amber : Colors.amber.shade200)
+        .withValues(alpha: isDark ? 0.35 : 0.5);
+    final currentColor = (isDark ? Colors.amber : Colors.amber.shade700)
+        .withValues(alpha: isDark ? 0.5 : 0.65);
+
+    final baseStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          fontSize: fontSize,
+        ) ??
+        TextStyle(fontSize: fontSize);
+
+    final spans = <TextSpan>[];
+    int i = 0;
+    while (i < flattenedText.length) {
+      final (wordStart, wordEnd) = wordBoundariesAtOffset(flattenedText, i);
+      if (wordStart >= wordEnd) {
+        spans.add(TextSpan(text: flattenedText[i], style: baseStyle));
+        i++;
+        continue;
+      }
+      final word = flattenedText.substring(wordStart, wordEnd);
+      Color? backgroundColor;
+      TextStyle spanStyle = baseStyle;
+      if (wordStart < currentWordEnd && wordEnd > currentWordStart) {
+        backgroundColor = currentColor;
+        spanStyle = spanStyle.copyWith(
+          backgroundColor: currentColor,
+          decoration: TextDecoration.underline,
+          decorationColor: Colors.orange,
+          decorationThickness: 2,
+        );
+      } else if (wordEnd <= readEndIndex) {
+        backgroundColor = readColor;
+        spanStyle = spanStyle.copyWith(backgroundColor: readColor);
+      }
+      spans.add(TextSpan(text: word, style: spanStyle));
+      i = wordEnd;
+    }
+
+    return SelectableText.rich(
+      TextSpan(children: spans, style: baseStyle),
+      textAlign: TextAlign.start,
+    );
   }
 
   Map<String, MarkdownElementBuilder> _ttsHighlightBuilders(
@@ -332,16 +394,45 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
 
                   final showTtsHighlight = _isShowingOriginalText(widget.summaryTranslate) &&
                       _shouldShowTtsHighlight(ttsService);
+                  // Defer heavy highlight (computeBlockOffsets + many substrings) by one frame to avoid OOM when TTS just started.
+                  // When _kTtsHighlightEnabled is false, highlight is fully off (TODO: re-enable after memory-safe implementation).
+                  final effectiveShowTtsHighlight = _kTtsHighlightEnabled && showTtsHighlight && _ttsHighlightReady;
+                  if (_kTtsHighlightEnabled && showTtsHighlight && !_ttsHighlightReady) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) setState(() => _ttsHighlightReady = true);
+                    });
+                  } else if (_kTtsHighlightEnabled && !showTtsHighlight && _ttsHighlightReady) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) setState(() => _ttsHighlightReady = false);
+                    });
+                  }
 
                   int readEndIndex = 0;
                   int currentWordStart = 0;
                   int currentWordEnd = 0;
 
-                  final (blockOffsets, flattenedText) = showTtsHighlight
+                  final (blockOffsets, flattenedText) = effectiveShowTtsHighlight
                       ? computeBlockOffsets(textToDisplay)
                       : (<int>[], '');
 
-                  if (showTtsHighlight && flattenedText.isNotEmpty) {
+                  if (effectiveShowTtsHighlight &&
+                      blockOffsets.isNotEmpty &&
+                      flattenedText.isNotEmpty &&
+                      !_blockOrderLogged) {
+                    _blockOrderLogged = true;
+                    for (var i = 0; i < blockOffsets.length && i < 15; i++) {
+                      final start = blockOffsets[i];
+                      final len = i + 1 < blockOffsets.length
+                          ? blockOffsets[i + 1] - start - 1
+                          : flattenedText.length - start;
+                      debugPrint(
+                        '[SummaryTextContainer] BLOCK_COMPUTED: idx=$i start=$start len=$len',
+                      );
+                    }
+                  }
+                  if (!effectiveShowTtsHighlight) _blockOrderLogged = false;
+
+                  if (effectiveShowTtsHighlight && flattenedText.isNotEmpty) {
                     final ctx = ttsService.playbackContext.value;
                     final pos = ttsService.playbackPosition.value;
                     final dur = ttsService.playbackDuration.value;
@@ -389,7 +480,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                       currentWordEnd = we;
                     }
                     _logHighlightIfNeeded(
-                      showTtsHighlight: showTtsHighlight,
+                      showTtsHighlight: effectiveShowTtsHighlight,
                       hasCtx: ctx != null,
                       pos: pos,
                       dur: dur,
@@ -404,7 +495,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                   final builders =
                       _isShowingOriginalText(widget.summaryTranslate)
                           ? <String, MarkdownElementBuilder>{
-                              if (showTtsHighlight)
+                              if (effectiveShowTtsHighlight)
                                 ..._ttsHighlightBuilders(
                                   context,
                                   onWordLookup,
@@ -418,15 +509,25 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                             }
                           : const <String, MarkdownElementBuilder>{};
 
-                          return Animate(
-                            effects: const [FadeEffect()],
-                            child: MarkdownBody(
-                              data: textToDisplay,
-                              selectable: true,
-                              styleSheet: styleSheet,
-                              builders: builders,
-                            ),
-                          );
+                  return Animate(
+                    effects: const [FadeEffect()],
+                    child: effectiveShowTtsHighlight && flattenedText.isNotEmpty
+                        ? _buildTtsHighlightPlain(
+                            context,
+                            flattenedText,
+                            readEndIndex,
+                            currentWordStart,
+                            currentWordEnd,
+                            styleSheet,
+                            state.fontSize.toDouble(),
+                          )
+                        : MarkdownBody(
+                            data: textToDisplay,
+                            selectable: true,
+                            styleSheet: styleSheet,
+                            builders: builders,
+                          ),
+                  );
                         },
                       );
                     },

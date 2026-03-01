@@ -136,6 +136,7 @@ class TtsService {
   Completer<void>? _downloadCompleter;
   final List<TtsVoice> _voices = [];
   Completer<void>? _speechCompleter;
+  /// When true, user (or tab/screen exit) called stop(); do not auto-play next chunk.
   bool _playbackStoppedByUser = false;
   TtsResumeState? _resumeState;
   String? _currentAudioPath;
@@ -731,7 +732,49 @@ class TtsService {
         throw Exception('Kokoro TTS not initialized');
       }
 
-      // Tab-based cache: check before phonemization so resume/play from cache is fast and spinner clears immediately.
+      final voice = _voices.firstWhere(
+        (voice) => voice.id == voiceId,
+        orElse:
+            () =>
+                _voices.isNotEmpty
+                    ? _voices.first
+                    : TtsVoice(
+                      id: 'af',
+                      name: 'Amber (English US)',
+                      language: 'en-US',
+                    ),
+      );
+
+      // Convert language code from 'en-US' to 'en-us' format
+      final langCode = voice.language.toLowerCase().replaceAll('_', '-');
+
+      // Phonemize text using Tokenizer
+      if (_tokenizer == null) {
+        _tokenizer = Tokenizer();
+        await _tokenizer!.ensureInitialized();
+      }
+      
+      String phonemes;
+      try {
+        phonemes = await _tokenizer!.phonemize(textToSpeak, lang: langCode);
+      } catch (e) {
+        // If phonemization fails due to missing assets, throw a more descriptive error
+        // Don't try to use text directly as Kokoro may not handle it well
+        if (e.toString().contains('us_gold.json') || 
+            e.toString().contains('Unable to load asset') ||
+            e.toString().contains('lexicon')) {
+          debugPrint('Error: Phonemization failed due to missing assets: $e');
+          throw Exception(
+            'Phonemization failed: Required asset files are missing. '
+            'Please ensure all TTS assets are properly installed. '
+            'Original error: $e',
+          );
+        } else {
+          rethrow;
+        }
+      }
+
+      // If using tab-based cache, check cache after phonemization (original order to avoid OOM on devices).
       if (useTabCache) {
         final cachedFile = await _getCachedAudioFile(
           summaryKey: summaryKey,
@@ -797,7 +840,7 @@ class TtsService {
           } finally {
             completeSubscription.cancel();
           }
-          // Auto-play next chunk when multiple chunks
+          // Auto-play next chunk when multiple chunks (skip if user left tab/screen and called stop)
           if (_playbackStoppedByUser) return;
           if (useTabCache &&
               summaryKey != null &&
@@ -816,48 +859,6 @@ class TtsService {
           return;
         }
         debugPrint('[TtsService] Tab cache miss for summaryKey=$summaryKey, activeTab=$activeTab, will generate new audio');
-      }
-
-      final voice = _voices.firstWhere(
-        (voice) => voice.id == voiceId,
-        orElse:
-            () =>
-                _voices.isNotEmpty
-                    ? _voices.first
-                    : TtsVoice(
-                      id: 'af',
-                      name: 'Amber (English US)',
-                      language: 'en-US',
-                    ),
-      );
-
-      // Convert language code from 'en-US' to 'en-us' format
-      final langCode = voice.language.toLowerCase().replaceAll('_', '-');
-
-      // Phonemize text using Tokenizer
-      if (_tokenizer == null) {
-        _tokenizer = Tokenizer();
-        await _tokenizer!.ensureInitialized();
-      }
-      
-      String phonemes;
-      try {
-        phonemes = await _tokenizer!.phonemize(textToSpeak, lang: langCode);
-      } catch (e) {
-        // If phonemization fails due to missing assets, throw a more descriptive error
-        // Don't try to use text directly as Kokoro may not handle it well
-        if (e.toString().contains('us_gold.json') || 
-            e.toString().contains('Unable to load asset') ||
-            e.toString().contains('lexicon')) {
-          debugPrint('Error: Phonemization failed due to missing assets: $e');
-          throw Exception(
-            'Phonemization failed: Required asset files are missing. '
-            'Please ensure all TTS assets are properly installed. '
-            'Original error: $e',
-          );
-        } else {
-          rethrow;
-        }
       }
 
       // Check phoneme length and truncate if needed (Kokoro limit is 510 phonemes)
@@ -920,6 +921,7 @@ class TtsService {
       }
 
       // Synthesize speech using Kokoro
+      debugPrint('[TtsService] MEMORY_DEBUG: about to call createTTS (synthesis)');
       TtsResult result;
       try {
         result = await _kokoro!.createTTS(
@@ -1003,6 +1005,7 @@ class TtsService {
               : Float32List.fromList(
                 result.audio.map((e) => e.toDouble()).toList(),
               );
+      debugPrint('[TtsService] MEMORY_DEBUG: about to save audio to file (generated path)');
       await _saveAudioToFile(audioData, result.sampleRate, audioFile);
       debugPrint('[TtsService] Saved audio to cache: ${audioFile.path}');
 
@@ -1070,12 +1073,11 @@ class TtsService {
         }
         await completer.future;
       } finally {
-        completeSubscription.cancel();
-        // Clear truncation message after playback
+        completeSubscription?.cancel();
         textTruncationMessage.value = null;
       }
 
-      // Auto-play next chunk when multiple chunks (generated path)
+      // Auto-play next chunk when multiple chunks (generated path); skip if user left tab/screen and called stop
       if (_playbackStoppedByUser) return;
       if (useTabCache &&
           summaryKey != null &&
