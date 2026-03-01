@@ -121,9 +121,23 @@ class TtsService {
   Completer<void>? _downloadCompleter;
   final List<TtsVoice> _voices = [];
   Completer<void>? _speechCompleter;
+  bool _playbackStoppedByUser = false;
   String? _currentAudioPath;
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<Duration>? _durationSubscription;
+  DateTime? _lastPositionLog;
+  static const bool _kLogHighlight = false;
+
+  void _logPositionIfNeeded(Duration p) {
+    if (!_kLogHighlight) return;
+    final now = DateTime.now();
+    if (_lastPositionLog != null &&
+        now.difference(_lastPositionLog!).inMilliseconds < 500) {
+      return;
+    }
+    _lastPositionLog = now;
+    debugPrint('[TtsService] HIGHLIGHT_DEBUG: position=${p.inMilliseconds}ms');
+  }
 
   Future<void> ensureModelReady() async {
     if (_modelReady && _kokoro != null) return;
@@ -566,6 +580,7 @@ class TtsService {
   }
 
   Future<void> stop() async {
+    _playbackStoppedByUser = true;
     await _audioPlayer.stop();
     nextChunkIndex.value = null;
     _clearPlaybackState();
@@ -617,9 +632,13 @@ class TtsService {
       );
       _positionSubscription = _audioPlayer.onPositionChanged.listen((p) {
         playbackPosition.value = p;
+        _logPositionIfNeeded(p);
       });
       _durationSubscription = _audioPlayer.onDurationChanged.listen((d) {
         playbackDuration.value = d;
+        if (_kLogHighlight) {
+          debugPrint('[TtsService] HIGHLIGHT_DEBUG: duration=${d.inMilliseconds}ms');
+        }
       });
     }
   }
@@ -663,6 +682,7 @@ class TtsService {
 
     final originalTextForCache = useTabCache ? textToSpeak : trimmedFull;
     try {
+      _playbackStoppedByUser = false;
       isGenerating.value = true;
       await ensureModelReady();
 
@@ -771,6 +791,7 @@ class TtsService {
             completeSubscription.cancel();
           }
           // Auto-play next chunk when multiple chunks
+          if (_playbackStoppedByUser) return;
           if (useTabCache &&
               summaryKey != null &&
               activeTab != null &&
@@ -998,6 +1019,7 @@ class TtsService {
       }
 
       // Auto-play next chunk when multiple chunks (generated path)
+      if (_playbackStoppedByUser) return;
       if (useTabCache &&
           summaryKey != null &&
           activeTab != null &&
