@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
       },
       builder: (context, state) {
         return SettingsScreenLayout(
-          title: l10n.settings_profile,
+          title: l10n.settings_title,
           body: Container(
             height: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
