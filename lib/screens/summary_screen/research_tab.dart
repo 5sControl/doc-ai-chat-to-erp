@@ -29,6 +29,15 @@ class ResearchTab extends StatefulWidget {
 class _ResearchTabState extends State<ResearchTab> {
   final ScrollController controller = ScrollController();
 
+  /// Height of fade gradient at top and bottom (adjust to change transition size).
+  static const double _kChatFadeHeight = 24;
+
+  static Color _chatBackgroundColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromRGBO(15, 57, 60, 1)
+        : const Color.fromRGBO(191, 249, 249, 1);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,6 +87,7 @@ class _ResearchTabState extends State<ResearchTab> {
       builder: (context, state) {
         final topInset = 55.0;
         final bottomInset = 6.0 + MediaQuery.of(context).padding.bottom;
+        final backgroundColor = _chatBackgroundColor(context);
         return Padding(
           padding: EdgeInsets.only(
             top: topInset,
@@ -85,17 +95,61 @@ class _ResearchTabState extends State<ResearchTab> {
             right: 15,
             bottom: bottomInset,
           ),
-          child: Scrollbar(
-            controller: controller,
-            child: ListView(
-              controller: controller,
-              padding: EdgeInsets.zero,
-              children: state.questions[widget.summaryKey]
-                      ?.map((question) => AnswerAndQuestionItem(
-                          question: question, summaryKey: widget.summaryKey))
-                      .toList() ??
-                  [Container()],
-            ),
+          child: Stack(
+            children: [
+              Scrollbar(
+                controller: controller,
+                child: ListView(
+                  controller: controller,
+                  padding: EdgeInsets.zero,
+                  children: state.questions[widget.summaryKey]
+                          ?.map((question) => AnswerAndQuestionItem(
+                              question: question, summaryKey: widget.summaryKey))
+                          .toList() ??
+                      [Container()],
+                ),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: _kChatFadeHeight,
+                child: IgnorePointer(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          backgroundColor,
+                          backgroundColor.withValues(alpha: 0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: _kChatFadeHeight,
+                child: IgnorePointer(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          backgroundColor,
+                          backgroundColor.withValues(alpha: 0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },
