@@ -168,9 +168,8 @@ class _VoiceButtonState extends State<VoiceButton> {
           : getTransformedText(text: raw);
     }
     final raw = widget.summaryData.longSummary.summaryText ?? '';
-    return isDemo
-        ? stripMarkdownForTts(raw)
-        : getTransformedText(text: raw);
+    final transformed = getTransformedText(text: raw);
+    return isDemo ? stripMarkdownForTts(raw) : stripMarkdownForTts(transformed);
   }
 
   bool _modelReadyInfoShown = false;

@@ -30,9 +30,10 @@ String getTransformedText({required String text}) {
 }
 
 /// Strips Markdown syntax so TTS does not read "hash hash" or asterisks.
-/// Removes ##, ###, ####, **, __ (leaving the text content).
+/// Removes ##, ###, ####, **, __, leading --- (leaving the text content).
 String stripMarkdownForTts(String text) {
   return text
+      .replaceFirst(RegExp(r'^-{2,}\s*'), '')
       .replaceAll(RegExp(r'^#+\s*', multiLine: true), '')
       .replaceAll('**', '')
       .replaceAll('__', '');

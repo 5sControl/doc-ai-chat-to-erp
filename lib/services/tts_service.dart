@@ -647,6 +647,7 @@ class TtsService {
     if (useTabCache) {
       final chunkEntries = chunkTextForTtsWithOffsets(trimmedFull);
       totalChunks = chunkEntries.length;
+      debugPrint('[TtsService] CHUNK_DEBUG: textLength=${trimmedFull.length} totalChunks=$totalChunks chunkIndex=$chunkIndex');
       if (chunkIndex >= totalChunks) return;
       if (totalChunks > 1) {
         final entry = chunkEntries[chunkIndex];
@@ -768,6 +769,21 @@ class TtsService {
             await completer.future;
           } finally {
             completeSubscription.cancel();
+          }
+          // Auto-play next chunk when multiple chunks
+          if (useTabCache &&
+              summaryKey != null &&
+              activeTab != null &&
+              totalChunks > 1 &&
+              chunkIndex + 1 < totalChunks) {
+            await speak(
+              text: trimmedFull,
+              voiceId: voiceId,
+              speed: speed,
+              summaryKey: summaryKey,
+              activeTab: activeTab,
+              chunkIndex: chunkIndex + 1,
+            );
           }
           return;
         }
@@ -979,6 +995,22 @@ class TtsService {
         completeSubscription.cancel();
         // Clear truncation message after playback
         textTruncationMessage.value = null;
+      }
+
+      // Auto-play next chunk when multiple chunks (generated path)
+      if (useTabCache &&
+          summaryKey != null &&
+          activeTab != null &&
+          totalChunks > 1 &&
+          chunkIndex + 1 < totalChunks) {
+        await speak(
+          text: trimmedFull,
+          voiceId: voiceId,
+          speed: speed,
+          summaryKey: summaryKey,
+          activeTab: activeTab,
+          chunkIndex: chunkIndex + 1,
+        );
       }
     } catch (error) {
       // Clear truncation message on error
