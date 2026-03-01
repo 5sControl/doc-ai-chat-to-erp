@@ -681,6 +681,9 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerQuestion => 'Jak rozumiesz termin?';
+
+  @override
   String get knowledgeCards_voiceAnswerTask => 'Wyjaśnij własnymi słowami';
 
   @override

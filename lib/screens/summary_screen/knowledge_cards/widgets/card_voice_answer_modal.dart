@@ -141,12 +141,25 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+    final inputTheme = theme.inputDecorationTheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: theme.scaffoldBackgroundColor == Colors.transparent
+          ? theme.canvasColor
+          : theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          l10n.knowledgeCards_voiceAnswerTitle(widget.card.title),
-          style: const TextStyle(fontSize: 16),
+          l10n.knowledgeCards_voiceAnswerQuestion.toUpperCase(),
+          style: textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ) ?? const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -162,18 +175,18 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
               // Task instruction and card title
               Text(
                 l10n.knowledgeCards_voiceAnswerTask,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade700,
+                style: textTheme.bodySmall?.copyWith(
+                  color: textTheme.bodySmall?.color?.withOpacity(0.8),
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 widget.card.title,
-                style: const TextStyle(
+                style: textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ) ?? const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
                 ),
               ),
               const SizedBox(height: 24),
@@ -197,12 +210,14 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
                                 shape: BoxShape.circle,
                                 color: _isListening
                                     ? Colors.red.shade100
-                                    : Colors.grey.shade200,
+                                    : colorScheme.surfaceContainerHighest,
                               ),
                               child: Icon(
                                 _isListening ? Icons.mic : Icons.mic_none,
                                 size: 40,
-                                color: _isListening ? Colors.red : Colors.grey.shade700,
+                                color: _isListening
+                                    ? Colors.red
+                                    : theme.iconTheme.color ?? colorScheme.onSurfaceVariant,
                               ),
                             ),
                           );
@@ -214,9 +229,8 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
                       _isListening
                           ? l10n.knowledgeCards_listening
                           : l10n.knowledgeCards_tapMicToSpeak,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: textTheme.bodySmall?.color?.withOpacity(0.8),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -230,9 +244,9 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
+                    color: inputTheme.fillColor ??
+                        const Color.fromRGBO(227, 255, 254, 1),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.grey.shade300),
                   ),
                   child: TextField(
                     controller: _textController,
@@ -245,11 +259,8 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
                       contentPadding: EdgeInsets.zero,
                       hintText: '',
                     ),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                      height: 1.5,
-                    ),
+                    style: textTheme.labelMedium?.copyWith(height: 1.5) ??
+                        const TextStyle(fontSize: 16, height: 1.5),
                   ),
                 ),
               ),
@@ -257,15 +268,19 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
                 const SizedBox(height: 8),
                 Text(
                   _errorMessage,
-                  style: const TextStyle(
+                  style: textTheme.bodySmall?.copyWith(
                     fontSize: 12,
-                    color: Colors.red,
-                  ),
+                    color: colorScheme.error,
+                  ) ?? TextStyle(fontSize: 12, color: colorScheme.error),
                 ),
               ],
               const SizedBox(height: 24),
               // Send button (disabled when no text or sending)
               FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: theme.primaryColor,
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: (_isSending || _textController.text.trim().isEmpty)
                     ? null
                     : _onSend,

@@ -681,6 +681,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerQuestion => 'Как вы понимаете термин?';
+
+  @override
   String get knowledgeCards_voiceAnswerTask => 'Объясните своими словами';
 
   @override

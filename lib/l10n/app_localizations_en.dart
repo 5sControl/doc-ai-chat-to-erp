@@ -678,6 +678,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get knowledgeCards_voiceAnswerQuestion =>
+      'How do you understand the term?';
+
+  @override
   String get knowledgeCards_voiceAnswerTask => 'Explain in your own words';
 
   @override

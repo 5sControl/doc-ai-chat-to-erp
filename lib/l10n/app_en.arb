@@ -282,6 +282,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerQuestion": "How do you understand the term?",
   "knowledgeCards_voiceAnswerTask": "Explain in your own words",
   "knowledgeCards_voiceAnswerSend": "Send",
   "knowledgeCards_voiceAnswerStubMessage": "Verification of your answer will be available in the app soon.",

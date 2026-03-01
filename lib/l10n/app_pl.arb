@@ -280,6 +280,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerQuestion": "Jak rozumiesz termin?",
   "knowledgeCards_voiceAnswerTask": "Wyjaśnij własnymi słowami",
   "knowledgeCards_voiceAnswerSend": "Wyślij",
   "knowledgeCards_voiceAnswerStubMessage": "Weryfikacja Twojej odpowiedzi będzie wkrótce dostępna w aplikacji.",

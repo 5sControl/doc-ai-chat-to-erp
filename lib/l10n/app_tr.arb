@@ -280,6 +280,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerQuestion": "Terimi nasıl anlıyorsunuz?",
   "knowledgeCards_voiceAnswerTask": "Kendi cümlelerinizle açıklayın",
   "knowledgeCards_voiceAnswerSend": "Gönder",
   "knowledgeCards_voiceAnswerStubMessage": "Yanıtınızın doğrulanması yakında uygulamada kullanılabilecek.",

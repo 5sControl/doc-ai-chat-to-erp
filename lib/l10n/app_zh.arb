@@ -280,6 +280,7 @@
       "term": {}
     }
   },
+  "knowledgeCards_voiceAnswerQuestion": "你如何理解這個術語？",
   "knowledgeCards_voiceAnswerTask": "請用你自己的話解釋",
   "knowledgeCards_voiceAnswerSend": "發送",
   "knowledgeCards_voiceAnswerStubMessage": "您的答案驗證將很快在應用中提供。",
