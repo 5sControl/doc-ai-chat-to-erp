@@ -33,6 +33,13 @@ class InfoModal extends StatelessWidget {
     final savedTimeShort = originalSummaryReadingTime - shortSummaryReadingTime;
     final savedTimeLong = originalSummaryReadingTime - longSummaryReadingTime;
 
+    final l10n = AppLocalizations.of(context)!;
+    final maxTime = [
+      originalSummaryReadingTime.inMinutes,
+      shortSummaryReadingTime.inMinutes,
+      longSummaryReadingTime.inMinutes,
+    ].reduce((a, b) => a > b ? a : b).toDouble();
+
     return Material(
       color: Theme.of(context).canvasColor,
       child: Container(
@@ -42,159 +49,257 @@ class InfoModal extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                    padding: const EdgeInsets.only(left: 15, top: 20),
-                    child: Text(
-                      AppLocalizations.of(context)!.info_productivityInfo,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    )),
+                  padding: const EdgeInsets.only(left: 24, top: 16),
+                  child: Text(
+                    l10n.info_productivityInfo,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
                 const Padding(
-                    padding: EdgeInsets.only(right: 5), child: BackArrow()),
+                  padding: EdgeInsets.only(right: 5),
+                  child: BackArrow(),
+                ),
               ],
             ),
-            const SizedBox(
-              height: 20,
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: _ProductivityBarChart(
+                textStyle: textStyle,
+                originalMinutes: originalSummaryReadingTime.inMinutes,
+                briefMinutes: shortSummaryReadingTime.inMinutes,
+                deepMinutes: longSummaryReadingTime.inMinutes,
+                maxTime: maxTime,
+                l10n: l10n,
+              ),
             ),
-            GridView(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4, childAspectRatio: 3.5, mainAxisSpacing: 7),
-              children: [
-                const SizedBox(),
-                Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.info_words,
-                    style: textStyle,
-                    textAlign: TextAlign.center,
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Table(
+                columnWidths: const {
+                  0: IntrinsicColumnWidth(),
+                  1: FlexColumnWidth(1),
+                  2: FlexColumnWidth(1),
+                  3: FlexColumnWidth(1),
+                },
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children: [
+                  TableRow(
+                    children: [
+                      const SizedBox.shrink(),
+                      _cellRight(context, textStyle, l10n.info_words),
+                      _cellRight(
+                        context,
+                        textStyle,
+                        '${l10n.info_time}${l10n.info_timeMin}',
+                      ),
+                      _cellRight(
+                        context,
+                        textStyle,
+                        '${l10n.info_saved}${l10n.info_timeMin}',
+                      ),
+                    ],
                   ),
-                ),
-                Center(
-                  child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(children: [
-                        TextSpan(text: AppLocalizations.of(context)!.info_time, style: textStyle),
-                        TextSpan(
-                            text: AppLocalizations.of(context)!.info_timeMin,
-                            style: textStyle.copyWith(fontSize: 10)),
-                      ])),
-                ),
-                Center(
-                  child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(children: [
-                        TextSpan(text: AppLocalizations.of(context)!.info_saved, style: textStyle),
-                        TextSpan(
-                            text: AppLocalizations.of(context)!.info_timeMin,
-                            style: textStyle.copyWith(fontSize: 10)),
-                      ])),
-                ),
-                Center(
-                    child: Text(AppLocalizations.of(context)!.info_original,
-                        style: textStyle, textAlign: TextAlign.center)),
-                Center(
-                  child: Text(
-                    originalSummaryWordsCount.toString(),
-                    style: textStyle,
-                    textAlign: TextAlign.center,
+                  TableRow(
+                    children: [
+                      _cellLeft(context, textStyle, l10n.info_original),
+                      _cellRight(
+                          context, textStyle, originalSummaryWordsCount.toString()),
+                      _cellRight(
+                          context,
+                          textStyle,
+                          originalSummaryReadingTime.inMinutes.toString()),
+                      _cellRight(context, textStyle, '–'),
+                    ],
                   ),
-                ),
-                Center(
-                  child: Text(
-                    originalSummaryReadingTime.inMinutes.toString(),
-                    style: textStyle,
-                    textAlign: TextAlign.center,
+                  TableRow(
+                    children: [
+                      _cellLeft(context, textStyle, l10n.info_brief),
+                      _cellRight(
+                          context, textStyle, shortSummaryWordsCount.toString()),
+                      _cellRight(
+                          context,
+                          textStyle,
+                          shortSummaryReadingTime.inMinutes.toString()),
+                      _savedCell(context, textStyle, savedTimeShort.inMinutes.toString()),
+                    ],
                   ),
-                ),
-                Center(
-                  child: Text(
-                    '-',
-                    style: textStyle,
-                    textAlign: TextAlign.center,
+                  TableRow(
+                    children: [
+                      _cellLeft(context, textStyle, l10n.info_deep),
+                      _cellRight(
+                          context, textStyle, longSummaryWordsCount.toString()),
+                      _cellRight(
+                          context,
+                          textStyle,
+                          longSummaryReadingTime.inMinutes.toString()),
+                      _savedCell(context, textStyle, savedTimeLong.inMinutes.toString()),
+                    ],
                   ),
-                ),
-                Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.info_brief,
-                    style: textStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    shortSummaryWordsCount.toString(),
-                    style: textStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    shortSummaryReadingTime.inMinutes.toString(),
-                    style: textStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(
-                          color: Theme.of(context).primaryColor, width: 1.5)),
-                  child: Center(
-                    child: Text(
-                      savedTimeShort.inMinutes.toString(),
-                      style: textStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    AppLocalizations.of(context)!.info_deep,
-                    style: textStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    longSummaryWordsCount.toString(),
-                    style: textStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    longSummaryReadingTime.inMinutes.toString(),
-                    style: textStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                            color: Theme.of(context).primaryColor, width: 1.5)),
-                    child: Center(
-                        child: Text(
-                      savedTimeLong.inMinutes.toString(),
-                      style: textStyle,
-                      textAlign: TextAlign.center,
-                    ))),
-              ],
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 50,
-            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
+    );
+  }
+}
+
+Widget _cellLeft(
+    BuildContext context, TextStyle textStyle, String text) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 4, bottom: 4),
+    child: Align(
+      alignment: Alignment.centerLeft,
+      child: Text(text, style: textStyle),
+    ),
+  );
+}
+
+Widget _cellRight(
+    BuildContext context, TextStyle textStyle, String text) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 4, bottom: 4),
+    child: Align(
+      alignment: Alignment.centerRight,
+      child: Text(text, style: textStyle, textAlign: TextAlign.right),
+    ),
+  );
+}
+
+Widget _savedCell(
+    BuildContext context, TextStyle textStyle, String text) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 4, bottom: 4),
+    child: Align(
+      alignment: Alignment.centerRight,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor.withOpacity(0.12),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Text(text, style: textStyle, textAlign: TextAlign.right),
+      ),
+    ),
+  );
+}
+
+class _ProductivityBarChart extends StatelessWidget {
+  const _ProductivityBarChart({
+    required this.textStyle,
+    required this.originalMinutes,
+    required this.briefMinutes,
+    required this.deepMinutes,
+    required this.maxTime,
+    required this.l10n,
+  });
+
+  final TextStyle textStyle;
+  final int originalMinutes;
+  final int briefMinutes;
+  final int deepMinutes;
+  final double maxTime;
+  final AppLocalizations l10n;
+
+  static const double _chartHeight = 100;
+
+  @override
+  Widget build(BuildContext context) {
+    final barColor = Theme.of(context).primaryColor;
+    return SizedBox(
+      height: _chartHeight,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: _BarColumn(
+              label: l10n.info_original,
+              value: originalMinutes.toDouble(),
+              maxValue: maxTime,
+              barColor: barColor,
+              textStyle: textStyle,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: _BarColumn(
+              label: l10n.info_brief,
+              value: briefMinutes.toDouble(),
+              maxValue: maxTime,
+              barColor: barColor,
+              textStyle: textStyle,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Expanded(
+            child: _BarColumn(
+              label: l10n.info_deep,
+              value: deepMinutes.toDouble(),
+              maxValue: maxTime,
+              barColor: barColor,
+              textStyle: textStyle,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BarColumn extends StatelessWidget {
+  const _BarColumn({
+    required this.label,
+    required this.value,
+    required this.maxValue,
+    required this.barColor,
+    required this.textStyle,
+  });
+
+  final String label;
+  final double value;
+  final double maxValue;
+  final Color barColor;
+  final TextStyle textStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    final fraction = maxValue > 0 ? (value / maxValue).clamp(0.0, 1.0) : 0.0;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(
+          child: FractionallySizedBox(
+            alignment: Alignment.bottomCenter,
+            heightFactor: fraction,
+            child: Container(
+              margin: const EdgeInsets.only(left: 4, right: 4),
+              decoration: BoxDecoration(
+                color: barColor.withOpacity(0.25),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          label,
+          style: textStyle,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     );
   }
 }
