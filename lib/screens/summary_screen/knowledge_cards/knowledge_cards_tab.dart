@@ -26,6 +26,14 @@ class KnowledgeCardsTab extends StatefulWidget {
 class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
   KnowledgeCardType? _selectedType;
 
+  static const double _kCardsFadeHeight = 24;
+
+  static Color _cardsBackgroundColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromRGBO(15, 57, 60, 1)
+        : const Color.fromRGBO(191, 249, 249, 1);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -192,19 +200,63 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
                 ],
               ),
 
-              // Cards list
+              // Cards list with top/bottom fade
               Expanded(
-                child: CardsListView(
-                cards: filteredCards,
-                status: status,
-                onCardTap: _onCardTap,
-                onCardSave: _onCardSave,
-                onRetry: _extractKnowledgeCards,
-                onCardMicTap: _onCardMicTap,
+                child: Stack(
+                  children: [
+                    CardsListView(
+                      cards: filteredCards,
+                      status: status,
+                      onCardTap: _onCardTap,
+                      onCardSave: _onCardSave,
+                      onRetry: _extractKnowledgeCards,
+                      onCardMicTap: _onCardMicTap,
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: _kCardsFadeHeight,
+                      child: IgnorePointer(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                _cardsBackgroundColor(context),
+                                _cardsBackgroundColor(context).withValues(alpha: 0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: _kCardsFadeHeight,
+                      child: IgnorePointer(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                _cardsBackgroundColor(context),
+                                _cardsBackgroundColor(context).withValues(alpha: 0),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         );
       },
     );
