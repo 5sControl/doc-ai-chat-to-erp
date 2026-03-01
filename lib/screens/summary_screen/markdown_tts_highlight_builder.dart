@@ -291,10 +291,11 @@ class _HighlightedWordTapTextState extends State<_HighlightedWordTapText> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final readColor = (isDark ? Colors.amber : Colors.amber)
-        .withValues(alpha: 0.12);
-    final currentColor = (isDark ? Colors.amber : Colors.amber)
-        .withValues(alpha: 0.35);
+    // High visibility: already-played (lighter) and current word (brighter)
+    final readColor = (isDark ? Colors.amber : Colors.amber.shade200)
+        .withValues(alpha: isDark ? 0.35 : 0.5);
+    final currentColor = (isDark ? Colors.amber : Colors.amber.shade700)
+        .withValues(alpha: isDark ? 0.5 : 0.65);
 
     final spans = <TextSpan>[];
     int i = 0;
@@ -310,18 +311,21 @@ class _HighlightedWordTapTextState extends State<_HighlightedWordTapText> {
       final globalEnd = widget.blockStart + wordEnd;
 
       Color? backgroundColor;
+      TextStyle spanStyle = widget.style;
       if (globalStart < widget.currentWordEnd && globalEnd > widget.currentWordStart) {
         backgroundColor = currentColor;
+        spanStyle = spanStyle.copyWith(
+          backgroundColor: currentColor,
+          decoration: TextDecoration.underline,
+          decorationColor: Colors.orange,
+          decorationThickness: 2,
+        );
       } else if (globalEnd <= widget.readEndIndex) {
         backgroundColor = readColor;
+        spanStyle = spanStyle.copyWith(backgroundColor: readColor);
       }
 
-      spans.add(
-        TextSpan(
-          text: word,
-          style: widget.style.copyWith(backgroundColor: backgroundColor),
-        ),
-      );
+      spans.add(TextSpan(text: word, style: spanStyle));
       i = wordEnd;
     }
 

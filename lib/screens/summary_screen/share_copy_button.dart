@@ -200,7 +200,7 @@ class _VoiceButtonState extends State<VoiceButton> {
     _modelReadyInfoShown = true;
   }
 
-  Future<void> _handleVoicePlay(BuildContext context, {int chunkIndex = 0}) async {
+  Future<void> _handleVoicePlay(BuildContext context, {int chunkIndex = 0, Duration? startPosition}) async {
     final text = _currentText;
     if (text == null || text.trim().isEmpty) {
       return;
@@ -229,6 +229,7 @@ class _VoiceButtonState extends State<VoiceButton> {
         summaryKey: widget.summaryKey,
         activeTab: widget.activeTab,
         chunkIndex: chunkIndex,
+        startPosition: startPosition,
       );
 
       final truncationMessage = service.textTruncationMessage.value;
@@ -297,7 +298,16 @@ class _VoiceButtonState extends State<VoiceButton> {
                                   } else if (showContinue) {
                                     await _handleVoicePlay(context, chunkIndex: nextChunk);
                                   } else {
-                                    await _handleVoicePlay(context);
+                                    final resume = service.getResumeState(widget.summaryKey, widget.activeTab);
+                                    if (resume != null) {
+                                      await _handleVoicePlay(
+                                        context,
+                                        chunkIndex: resume.chunkIndex,
+                                        startPosition: resume.position,
+                                      );
+                                    } else {
+                                      await _handleVoicePlay(context);
+                                    }
                                   }
                                 },
                           child: isLoading

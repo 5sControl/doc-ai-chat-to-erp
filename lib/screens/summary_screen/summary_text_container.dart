@@ -54,10 +54,39 @@ class SummaryTextContainer extends StatefulWidget {
 class _SummaryTextContainerState extends State<SummaryTextContainer> {
   late final ScrollController _scrollController;
   Timer? _wordTapHintTimer;
+  DateTime? _lastHighlightLog;
+  static const bool _kLogHighlight = true;
+
+  void _logHighlightIfNeeded({
+    required bool showTtsHighlight,
+    required bool hasCtx,
+    required Duration? pos,
+    required Duration? dur,
+    required int fullLen,
+    required int flatLen,
+    required int readEndIndex,
+    required int currentWordStart,
+    required int currentWordEnd,
+  }) {
+    if (!_kLogHighlight || !showTtsHighlight) return;
+    final now = DateTime.now();
+    if (_lastHighlightLog != null &&
+        now.difference(_lastHighlightLog!).inMilliseconds < 800) {
+      return;
+    }
+    _lastHighlightLog = now;
+    debugPrint(
+      '[SummaryTextContainer] HIGHLIGHT_DEBUG: tab=${widget.tabIndex} hasCtx=$hasCtx '
+      'pos=${pos?.inMilliseconds}ms dur=${dur?.inMilliseconds}ms '
+      'fullLen=$fullLen flatLen=$flatLen readEnd=$readEndIndex word=$currentWordStart-$currentWordEnd',
+    );
+  }
 
   bool _isShowingOriginalText(SummaryTranslate? summaryTranslate) =>
       summaryTranslate == null || !summaryTranslate.isActive;
 
+  /// TTS highlight is shown only on the tab that is currently playing.
+  /// tabIndex 0 = source, 1 = brief, 2 = deep. Stay on the same tab where you pressed Play.
   bool _shouldShowTtsHighlight(TtsService tts) {
     if (!tts.isSpeaking.value) return false;
     final ctx = tts.playbackContext.value;
@@ -359,6 +388,17 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                       currentWordStart = ws;
                       currentWordEnd = we;
                     }
+                    _logHighlightIfNeeded(
+                      showTtsHighlight: showTtsHighlight,
+                      hasCtx: ctx != null,
+                      pos: pos,
+                      dur: dur,
+                      fullLen: ctx?.fullText?.length ?? 0,
+                      flatLen: flattenedText.length,
+                      readEndIndex: readEndIndex,
+                      currentWordStart: currentWordStart,
+                      currentWordEnd: currentWordEnd,
+                    );
                   }
 
                   final builders =

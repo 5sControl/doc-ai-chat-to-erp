@@ -67,6 +67,21 @@ class TtsPlaybackContext {
   });
 }
 
+/// Saved state to resume playback from the position where the user paused.
+class TtsResumeState {
+  final String summaryKey;
+  final int activeTab;
+  final int chunkIndex;
+  final Duration position;
+
+  const TtsResumeState({
+    required this.summaryKey,
+    required this.activeTab,
+    required this.chunkIndex,
+    required this.position,
+  });
+}
+
 /// Single TTS mechanism for the app: Kokoro TTS + [audioplayers] for playback.
 ///
 /// Used only on the **summary screen** (Source / Brief / Deep tabs) via [VoiceButton]
@@ -122,11 +137,12 @@ class TtsService {
   final List<TtsVoice> _voices = [];
   Completer<void>? _speechCompleter;
   bool _playbackStoppedByUser = false;
+  TtsResumeState? _resumeState;
   String? _currentAudioPath;
   StreamSubscription<Duration>? _positionSubscription;
   StreamSubscription<Duration>? _durationSubscription;
   DateTime? _lastPositionLog;
-  static const bool _kLogHighlight = false;
+  static const bool _kLogHighlight = true;
 
   void _logPositionIfNeeded(Duration p) {
     if (!_kLogHighlight) return;
@@ -579,8 +595,26 @@ class TtsService {
     playbackContext.value = null;
   }
 
+  /// Returns saved resume state for this tab so playback can continue from pause position. Null if none.
+  TtsResumeState? getResumeState(String summaryKey, int activeTab) {
+    final s = _resumeState;
+    if (s == null) return null;
+    if (s.summaryKey != summaryKey || s.activeTab != activeTab) return null;
+    return s;
+  }
+
   Future<void> stop() async {
     _playbackStoppedByUser = true;
+    final ctx = playbackContext.value;
+    final pos = playbackPosition.value;
+    if (ctx != null && pos != null && ctx.summaryKey.isNotEmpty) {
+      _resumeState = TtsResumeState(
+        summaryKey: ctx.summaryKey,
+        activeTab: ctx.activeTab,
+        chunkIndex: ctx.chunkIndex,
+        position: pos,
+      );
+    }
     await _audioPlayer.stop();
     nextChunkIndex.value = null;
     _clearPlaybackState();
@@ -651,12 +685,19 @@ class TtsService {
     int? activeTab,
     /// For long texts (tab-based): 0 = first chunk, 1+ = continue. Ignored when no summaryKey/activeTab.
     int chunkIndex = 0,
+    /// When set, playback starts from this position (e.g. after user resumed from pause).
+    Duration? startPosition,
   }) async {
     final trimmedFull = text.trim();
     if (trimmedFull.isEmpty) return;
     final completer = Completer<void>();
-    // Determine if we should use tab-based caching and chunking
     final useTabCache = summaryKey != null && activeTab != null;
+    if (useTabCache && chunkIndex == 0 && startPosition == null) {
+      if (_resumeState?.summaryKey == summaryKey && _resumeState?.activeTab == activeTab) {
+        _resumeState = null;
+      }
+    }
+    // Determine if we should use tab-based caching and chunking (useTabCache already set above)
     String textToSpeak = trimmedFull;
     String? fullTextForContext;
     int totalChunks = 1;
@@ -690,49 +731,7 @@ class TtsService {
         throw Exception('Kokoro TTS not initialized');
       }
 
-      final voice = _voices.firstWhere(
-        (voice) => voice.id == voiceId,
-        orElse:
-            () =>
-                _voices.isNotEmpty
-                    ? _voices.first
-                    : TtsVoice(
-                      id: 'af',
-                      name: 'Amber (English US)',
-                      language: 'en-US',
-                    ),
-      );
-
-      // Convert language code from 'en-US' to 'en-us' format
-      final langCode = voice.language.toLowerCase().replaceAll('_', '-');
-
-      // Phonemize text using Tokenizer
-      if (_tokenizer == null) {
-        _tokenizer = Tokenizer();
-        await _tokenizer!.ensureInitialized();
-      }
-      
-      String phonemes;
-      try {
-        phonemes = await _tokenizer!.phonemize(textToSpeak, lang: langCode);
-      } catch (e) {
-        // If phonemization fails due to missing assets, throw a more descriptive error
-        // Don't try to use text directly as Kokoro may not handle it well
-        if (e.toString().contains('us_gold.json') || 
-            e.toString().contains('Unable to load asset') ||
-            e.toString().contains('lexicon')) {
-          debugPrint('Error: Phonemization failed due to missing assets: $e');
-          throw Exception(
-            'Phonemization failed: Required asset files are missing. '
-            'Please ensure all TTS assets are properly installed. '
-            'Original error: $e',
-          );
-        } else {
-          rethrow;
-        }
-      }
-
-      // If using tab-based cache, check cache BEFORE phonemization (saves time)
+      // Tab-based cache: check before phonemization so resume/play from cache is fast and spinner clears immediately.
       if (useTabCache) {
         final cachedFile = await _getCachedAudioFile(
           summaryKey: summaryKey,
@@ -786,6 +785,14 @@ class TtsService {
 
           try {
             await _audioPlayer.play(DeviceFileSource(cachedFile.path));
+            if (startPosition != null && startPosition.inMilliseconds > 0) {
+              try {
+                await _audioPlayer.seek(startPosition);
+              } catch (e) {
+                debugPrint('[TtsService] seek failed, playing from start: $e');
+              }
+              _resumeState = null;
+            }
             await completer.future;
           } finally {
             completeSubscription.cancel();
@@ -809,6 +816,48 @@ class TtsService {
           return;
         }
         debugPrint('[TtsService] Tab cache miss for summaryKey=$summaryKey, activeTab=$activeTab, will generate new audio');
+      }
+
+      final voice = _voices.firstWhere(
+        (voice) => voice.id == voiceId,
+        orElse:
+            () =>
+                _voices.isNotEmpty
+                    ? _voices.first
+                    : TtsVoice(
+                      id: 'af',
+                      name: 'Amber (English US)',
+                      language: 'en-US',
+                    ),
+      );
+
+      // Convert language code from 'en-US' to 'en-us' format
+      final langCode = voice.language.toLowerCase().replaceAll('_', '-');
+
+      // Phonemize text using Tokenizer
+      if (_tokenizer == null) {
+        _tokenizer = Tokenizer();
+        await _tokenizer!.ensureInitialized();
+      }
+      
+      String phonemes;
+      try {
+        phonemes = await _tokenizer!.phonemize(textToSpeak, lang: langCode);
+      } catch (e) {
+        // If phonemization fails due to missing assets, throw a more descriptive error
+        // Don't try to use text directly as Kokoro may not handle it well
+        if (e.toString().contains('us_gold.json') || 
+            e.toString().contains('Unable to load asset') ||
+            e.toString().contains('lexicon')) {
+          debugPrint('Error: Phonemization failed due to missing assets: $e');
+          throw Exception(
+            'Phonemization failed: Required asset files are missing. '
+            'Please ensure all TTS assets are properly installed. '
+            'Original error: $e',
+          );
+        } else {
+          rethrow;
+        }
       }
 
       // Check phoneme length and truncate if needed (Kokoro limit is 510 phonemes)
@@ -1011,6 +1060,14 @@ class TtsService {
 
       try {
         await _audioPlayer.play(DeviceFileSource(audioFile.path));
+        if (startPosition != null && startPosition.inMilliseconds > 0) {
+          try {
+            await _audioPlayer.seek(startPosition);
+          } catch (e) {
+            debugPrint('[TtsService] seek failed, playing from start: $e');
+          }
+          _resumeState = null;
+        }
         await completer.future;
       } finally {
         completeSubscription.cancel();
