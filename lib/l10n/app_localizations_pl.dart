@@ -41,6 +41,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settings_profile => 'Profil';
 
   @override
+  String get settings_title => 'Ustawienia';
+
+  @override
   String get settings_general => 'Ogólne';
 
   @override
@@ -459,7 +462,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get info_deep => 'Szczegółowe';
 
   @override
-  String get extension_growYourProductivity => 'ZWIĘKSZ PRODUKTYWNOŚĆ';
+  String get extension_growYourProductivity => 'Szybko też na desktopie';
 
   @override
   String get extension_copyLink => 'Kopiuj link';
@@ -476,6 +479,15 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get extension_buyMobileGetDesktop =>
       'Jedna zakup — korzystaj na telefonie i komputerze';
+
+  @override
+  String get extension_offerBuy => 'Kup ';
+
+  @override
+  String get extension_offerAndGetOn => ' i korzystaj na ';
+
+  @override
+  String get extension_offerForFree => ' za darmo!';
 
   @override
   String get auth_skip => 'Pomiń';

@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "Personal AI Summarizer",
 
   "settings_profile": "Profile",
+  "settings_title": "Settings",
   "settings_general": "General",
   "settings_interfaceLanguage": "Interface language",
   "settings_translationLanguage": "Translation language",
@@ -194,12 +195,15 @@
   "info_brief": "Brief",
   "info_deep": "Deep",
 
-  "extension_growYourProductivity": "GROW YOUR PRODUCTIVITY",
+  "extension_growYourProductivity": "Be Fast on Desktop Too",
   "extension_copyLink": "Copy link",
   "extension_sendLink": "Send link",
   "extension_enterYourEmail": "Enter your email",
   "extension_openLink": "Open link",
   "extension_buyMobileGetDesktop": "One purchase — use on phone and desktop",
+  "extension_offerBuy": "BUY ",
+  "extension_offerAndGetOn": " AND GET ON ",
+  "extension_offerForFree": " FOR FREE!",
 
   "auth_skip": "Skip",
   "auth_hello": "Hello!",

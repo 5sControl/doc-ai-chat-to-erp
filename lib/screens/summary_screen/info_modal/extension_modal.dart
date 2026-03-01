@@ -80,14 +80,8 @@ class _ExtensionModalState extends State<ExtensionModal> {
                         child: Text(
                             AppLocalizations.of(context)!
                                 .extension_growYourProductivity,
-                            style: Theme.of(context).textTheme.bodyLarge),
-                      ),
-                      const SizedBox(height: 10),
-                      SvgPicture.asset(
-                        Assets.icons.oneOne,
-                        colorFilter: ColorFilter.mode(
-                            Theme.of(context).textTheme.bodySmall!.color!,
-                            BlendMode.srcIn),
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold)),
                       ),
                       const SizedBox(height: 10),
                       RichText(
@@ -98,7 +92,9 @@ class _ExtensionModalState extends State<ExtensionModal> {
                                   .bodySmall!
                                   .copyWith(fontWeight: FontWeight.w700),
                               children: [
-                                const TextSpan(text: "BUY "),
+                                TextSpan(
+                                    text: AppLocalizations.of(context)!
+                                        .extension_offerBuy),
                                 WidgetSpan(
                                     child: SvgPicture.asset(
                                       Assets.icons.phone,
@@ -110,7 +106,9 @@ class _ExtensionModalState extends State<ExtensionModal> {
                                           BlendMode.srcIn),
                                     ),
                                     alignment: PlaceholderAlignment.middle),
-                                const TextSpan(text: " AND GET ON "),
+                                TextSpan(
+                                    text: AppLocalizations.of(context)!
+                                        .extension_offerAndGetOn),
                                 WidgetSpan(
                                     child: SvgPicture.asset(
                                       Assets.icons.desctop,
@@ -122,8 +120,17 @@ class _ExtensionModalState extends State<ExtensionModal> {
                                           BlendMode.srcIn),
                                     ),
                                     alignment: PlaceholderAlignment.middle),
-                                const TextSpan(text: " FOR FREE!"),
+                                TextSpan(
+                                    text: AppLocalizations.of(context)!
+                                        .extension_offerForFree),
                               ])),
+                      const SizedBox(height: 10),
+                      SvgPicture.asset(
+                        Assets.icons.oneOne,
+                        colorFilter: ColorFilter.mode(
+                            Theme.of(context).textTheme.bodySmall!.color!,
+                            BlendMode.srcIn),
+                      ),
                       const SizedBox(height: 6),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),

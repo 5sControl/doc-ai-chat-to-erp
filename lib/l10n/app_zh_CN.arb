@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "个人 AI 摘要工具",
 
   "settings_profile": "个人资料",
+  "settings_title": "设置",
   "settings_general": "通用",
   "settings_interfaceLanguage": "界面语言",
   "settings_translationLanguage": "翻译语言",
@@ -194,12 +195,15 @@
   "info_brief": "简要",
   "info_deep": "深入",
 
-  "extension_growYourProductivity": "提高您的生产力",
+  "extension_growYourProductivity": "桌面端也要快",
   "extension_copyLink": "复制链接",
   "extension_sendLink": "发送链接",
   "extension_enterYourEmail": "输入邮箱",
   "extension_openLink": "打开链接",
   "extension_buyMobileGetDesktop": "一次购买，手机和电脑都能用",
+  "extension_offerBuy": "购买",
+  "extension_offerAndGetOn": "，免费获得",
+  "extension_offerForFree": "！",
 
   "auth_skip": "跳过",
   "auth_hello": "你好！",

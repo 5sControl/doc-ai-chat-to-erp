@@ -40,6 +40,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settings_profile => 'Profil';
 
   @override
+  String get settings_title => 'Ayarlar';
+
+  @override
   String get settings_general => 'Genel';
 
   @override
@@ -459,7 +462,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get info_deep => 'Derin';
 
   @override
-  String get extension_growYourProductivity => 'ÜRETKENLİĞİNİZİ ARTIRIN';
+  String get extension_growYourProductivity => 'Masaüstünde de hızlı ol';
 
   @override
   String get extension_copyLink => 'Bağlantıyı kopyala';
@@ -476,6 +479,15 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get extension_buyMobileGetDesktop =>
       'Tek alışveriş — telefonda ve bilgisayarda kullanın';
+
+  @override
+  String get extension_offerBuy => 'Al ';
+
+  @override
+  String get extension_offerAndGetOn => ' ve ';
+
+  @override
+  String get extension_offerForFree => ' ücretsiz kullan!';
 
   @override
   String get auth_skip => 'Atla';

@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "Resumidor IA personal",
 
   "settings_profile": "Perfil",
+  "settings_title": "Ajustes",
   "settings_general": "General",
   "settings_interfaceLanguage": "Idioma de la interfaz",
   "settings_translationLanguage": "Idioma de traducción",
@@ -194,12 +195,15 @@
   "info_brief": "Breve",
   "info_deep": "Profundo",
 
-  "extension_growYourProductivity": "AUMENTA TU PRODUCTIVIDAD",
+  "extension_growYourProductivity": "Rápido también en escritorio",
   "extension_copyLink": "Copiar enlace",
   "extension_sendLink": "Enviar enlace",
   "extension_enterYourEmail": "Introduce tu correo",
   "extension_openLink": "Abrir enlace",
   "extension_buyMobileGetDesktop": "Una compra — úsalo en móvil y escritorio",
+  "extension_offerBuy": "Compra ",
+  "extension_offerAndGetOn": " y obtén ",
+  "extension_offerForFree": " ¡gratis!",
 
   "auth_skip": "Omitir",
   "auth_hello": "¡Hola!",

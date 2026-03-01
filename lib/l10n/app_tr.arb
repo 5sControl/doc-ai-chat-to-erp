@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "Kişisel AI Özetleyici",
 
   "settings_profile": "Profil",
+  "settings_title": "Ayarlar",
   "settings_general": "Genel",
   "settings_interfaceLanguage": "Arayüz dili",
   "settings_translationLanguage": "Çeviri dili",
@@ -194,12 +195,15 @@
   "info_brief": "Kısa",
   "info_deep": "Derin",
 
-  "extension_growYourProductivity": "ÜRETKENLİĞİNİZİ ARTIRIN",
+  "extension_growYourProductivity": "Masaüstünde de hızlı ol",
   "extension_copyLink": "Bağlantıyı kopyala",
   "extension_sendLink": "Bağlantıyı gönder",
   "extension_enterYourEmail": "E-postanızı girin",
   "extension_openLink": "Bağlantıyı aç",
   "extension_buyMobileGetDesktop": "Tek alışveriş — telefonda ve bilgisayarda kullanın",
+  "extension_offerBuy": "Al ",
+  "extension_offerAndGetOn": " ve ",
+  "extension_offerForFree": " ücretsiz kullan!",
 
   "auth_skip": "Atla",
   "auth_hello": "Merhaba!",

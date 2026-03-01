@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "Osobisty podsumowujący AI",
 
   "settings_profile": "Profil",
+  "settings_title": "Ustawienia",
   "settings_general": "Ogólne",
   "settings_interfaceLanguage": "Język interfejsu",
   "settings_translationLanguage": "Język tłumaczenia",
@@ -194,12 +195,15 @@
   "info_brief": "Krótkie",
   "info_deep": "Szczegółowe",
 
-  "extension_growYourProductivity": "ZWIĘKSZ PRODUKTYWNOŚĆ",
+  "extension_growYourProductivity": "Szybko też na desktopie",
   "extension_copyLink": "Kopiuj link",
   "extension_sendLink": "Wyślij link",
   "extension_enterYourEmail": "Wpisz swój e-mail",
   "extension_openLink": "Otwórz link",
   "extension_buyMobileGetDesktop": "Jedna zakup — korzystaj na telefonie i komputerze",
+  "extension_offerBuy": "Kup ",
+  "extension_offerAndGetOn": " i korzystaj na ",
+  "extension_offerForFree": " za darmo!",
 
   "auth_skip": "Pomiń",
   "auth_hello": "Witaj!",

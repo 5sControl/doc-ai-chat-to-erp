@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "Trình tóm tắt AI cá nhân",
 
   "settings_profile": "Hồ sơ",
+  "settings_title": "Cài đặt",
   "settings_general": "Chung",
   "settings_interfaceLanguage": "Ngôn ngữ giao diện",
   "settings_translationLanguage": "Ngôn ngữ dịch",
@@ -194,12 +195,15 @@
   "info_brief": "Ngắn gọn",
   "info_deep": "Sâu",
 
-  "extension_growYourProductivity": "TĂNG NĂNG SUẤT CỦA BẠN",
+  "extension_growYourProductivity": "Nhanh cả trên desktop",
   "extension_copyLink": "Sao chép liên kết",
   "extension_sendLink": "Gửi liên kết",
   "extension_enterYourEmail": "Nhập email của bạn",
   "extension_openLink": "Mở liên kết",
   "extension_buyMobileGetDesktop": "Một lần mua — dùng trên điện thoại và máy tính",
+  "extension_offerBuy": "Mua ",
+  "extension_offerAndGetOn": " và dùng ",
+  "extension_offerForFree": " miễn phí!",
 
   "auth_skip": "Bỏ qua",
   "auth_hello": "Xin chào!",

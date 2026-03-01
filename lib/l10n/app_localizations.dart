@@ -177,6 +177,12 @@ abstract class AppLocalizations {
   /// **'Profile'**
   String get settings_profile;
 
+  /// No description provided for @settings_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings_title;
+
   /// No description provided for @settings_general.
   ///
   /// In en, this message translates to:
@@ -960,7 +966,7 @@ abstract class AppLocalizations {
   /// No description provided for @extension_growYourProductivity.
   ///
   /// In en, this message translates to:
-  /// **'GROW YOUR PRODUCTIVITY'**
+  /// **'Be Fast on Desktop Too'**
   String get extension_growYourProductivity;
 
   /// No description provided for @extension_copyLink.
@@ -992,6 +998,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'One purchase — use on phone and desktop'**
   String get extension_buyMobileGetDesktop;
+
+  /// No description provided for @extension_offerBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'BUY '**
+  String get extension_offerBuy;
+
+  /// No description provided for @extension_offerAndGetOn.
+  ///
+  /// In en, this message translates to:
+  /// **' AND GET ON '**
+  String get extension_offerAndGetOn;
+
+  /// No description provided for @extension_offerForFree.
+  ///
+  /// In en, this message translates to:
+  /// **' FOR FREE!'**
+  String get extension_offerForFree;
 
   /// No description provided for @auth_skip.
   ///

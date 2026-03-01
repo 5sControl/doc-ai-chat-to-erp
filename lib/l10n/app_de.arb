@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "Persönlicher KI-Zusammenfasser",
 
   "settings_profile": "Profil",
+  "settings_title": "Einstellungen",
   "settings_general": "Allgemein",
   "settings_interfaceLanguage": "Sprache der Oberfläche",
   "settings_translationLanguage": "Übersetzungssprache",
@@ -194,12 +195,15 @@
   "info_brief": "Kurz",
   "info_deep": "Ausführlich",
 
-  "extension_growYourProductivity": "STEIGERE DEINE PRODUKTIVITÄT",
+  "extension_growYourProductivity": "Schnell auch am Desktop",
   "extension_copyLink": "Link kopieren",
   "extension_sendLink": "Link senden",
   "extension_enterYourEmail": "E-Mail eingeben",
   "extension_openLink": "Link öffnen",
   "extension_buyMobileGetDesktop": "Ein Kauf — Nutzung auf Handy und Desktop",
+  "extension_offerBuy": "Kauf ",
+  "extension_offerAndGetOn": " und nutze ",
+  "extension_offerForFree": " kostenlos!",
 
   "auth_skip": "Überspringen",
   "auth_hello": "Hallo!",

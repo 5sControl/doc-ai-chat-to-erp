@@ -39,6 +39,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings_profile => '个人资料';
 
   @override
+  String get settings_title => '设置';
+
+  @override
   String get settings_general => '通用';
 
   @override
@@ -446,7 +449,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get info_deep => '深入';
 
   @override
-  String get extension_growYourProductivity => '提高您的生产力';
+  String get extension_growYourProductivity => '桌面端也要快';
 
   @override
   String get extension_copyLink => '复制链接';
@@ -462,6 +465,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get extension_buyMobileGetDesktop => '一次购买，手机和电脑都能用';
+
+  @override
+  String get extension_offerBuy => '购买';
+
+  @override
+  String get extension_offerAndGetOn => '，免费获得';
+
+  @override
+  String get extension_offerForFree => '！';
 
   @override
   String get auth_skip => '跳过';
@@ -704,6 +716,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get settings_profile => '个人资料';
+
+  @override
+  String get settings_title => '设置';
 
   @override
   String get settings_general => '通用';
@@ -1113,7 +1128,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get info_deep => '深入';
 
   @override
-  String get extension_growYourProductivity => '提高您的生产力';
+  String get extension_growYourProductivity => '桌面端也要快';
 
   @override
   String get extension_copyLink => '复制链接';
@@ -1129,6 +1144,15 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get extension_buyMobileGetDesktop => '一次购买，手机和电脑都能用';
+
+  @override
+  String get extension_offerBuy => '购买';
+
+  @override
+  String get extension_offerAndGetOn => '，免费获得';
+
+  @override
+  String get extension_offerForFree => '！';
 
   @override
   String get auth_skip => '跳过';

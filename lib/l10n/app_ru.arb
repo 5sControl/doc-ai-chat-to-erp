@@ -13,6 +13,7 @@
   "onboarding_welcomeSubtitle": "Персональный AI-саммаризатор",
 
   "settings_profile": "Профиль",
+  "settings_title": "Настройки",
   "settings_general": "Общие",
   "settings_interfaceLanguage": "Язык интерфейса",
   "settings_translationLanguage": "Язык перевода",
@@ -194,12 +195,15 @@
   "info_brief": "Краткое",
   "info_deep": "Глубокое",
 
-  "extension_growYourProductivity": "ПОВЫШАЙТЕ ПРОДУКТИВНОСТЬ",
+  "extension_growYourProductivity": "Быстро и на десктопе",
   "extension_copyLink": "Скопировать ссылку",
   "extension_sendLink": "Отправить ссылку",
   "extension_enterYourEmail": "Введите ваш email",
   "extension_openLink": "Открыть ссылку",
   "extension_buyMobileGetDesktop": "Одна покупка — приложение на телефон и на компьютер",
+  "extension_offerBuy": "Купи ",
+  "extension_offerAndGetOn": " — получи ",
+  "extension_offerForFree": " бесплатно!",
 
   "auth_skip": "Пропустить",
   "auth_hello": "Привет!",

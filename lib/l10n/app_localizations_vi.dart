@@ -40,6 +40,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settings_profile => 'Hồ sơ';
 
   @override
+  String get settings_title => 'Cài đặt';
+
+  @override
   String get settings_general => 'Chung';
 
   @override
@@ -454,7 +457,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get info_deep => 'Sâu';
 
   @override
-  String get extension_growYourProductivity => 'TĂNG NĂNG SUẤT CỦA BẠN';
+  String get extension_growYourProductivity => 'Nhanh cả trên desktop';
 
   @override
   String get extension_copyLink => 'Sao chép liên kết';
@@ -471,6 +474,15 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get extension_buyMobileGetDesktop =>
       'Một lần mua — dùng trên điện thoại và máy tính';
+
+  @override
+  String get extension_offerBuy => 'Mua ';
+
+  @override
+  String get extension_offerAndGetOn => ' và dùng ';
+
+  @override
+  String get extension_offerForFree => ' miễn phí!';
 
   @override
   String get auth_skip => 'Bỏ qua';

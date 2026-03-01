@@ -41,6 +41,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settings_profile => 'Профиль';
 
   @override
+  String get settings_title => 'Настройки';
+
+  @override
   String get settings_general => 'Общие';
 
   @override
@@ -459,7 +462,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get info_deep => 'Глубокое';
 
   @override
-  String get extension_growYourProductivity => 'ПОВЫШАЙТЕ ПРОДУКТИВНОСТЬ';
+  String get extension_growYourProductivity => 'Быстро и на десктопе';
 
   @override
   String get extension_copyLink => 'Скопировать ссылку';
@@ -476,6 +479,15 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get extension_buyMobileGetDesktop =>
       'Одна покупка — приложение на телефон и на компьютер';
+
+  @override
+  String get extension_offerBuy => 'Купи ';
+
+  @override
+  String get extension_offerAndGetOn => ' — получи ';
+
+  @override
+  String get extension_offerForFree => ' бесплатно!';
 
   @override
   String get auth_skip => 'Пропустить';
