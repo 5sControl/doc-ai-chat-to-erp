@@ -154,27 +154,30 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
           });
         }
 
-        return Column(
-          children: [
-            // Type filter
-            Row(
-              children: [
-                Expanded(
-                  child: CardsTypeFilter(
-                    selectedType: _selectedType,
-                    onTypeSelected: (type) {
-                      setState(() {
-                        _selectedType = type;
-                      });
-                    },
+        final bottomInset = 10.0 + MediaQuery.of(context).padding.bottom;
+        return Padding(
+          padding: EdgeInsets.only(bottom: bottomInset),
+          child: Column(
+            children: [
+              // Type filter
+              Row(
+                children: [
+                  Expanded(
+                    child: CardsTypeFilter(
+                      selectedType: _selectedType,
+                      onTypeSelected: (type) {
+                        setState(() {
+                          _selectedType = type;
+                        });
+                      },
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            // Cards list
-            Expanded(
-              child: CardsListView(
+              // Cards list
+              Expanded(
+                child: CardsListView(
                 cards: filteredCards,
                 status: status,
                 onCardTap: _onCardTap,
@@ -184,6 +187,7 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
               ),
             ),
           ],
+        ),
         );
       },
     );
