@@ -124,21 +124,32 @@ class _SendRequestFieldState extends State<SendRequestField> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: ActionChip(
-                    label: Text(l10n.research_chipAskQuestion),
+                    label: Text(l10n.research_chipMermaidDiagram),
                     onPressed: () {
-                      _focusNode.requestFocus();
+                      _sendRequest(
+                        question: l10n.research_diagramRequest,
+                        systemHint: 'diagram',
+                      );
+                    },
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: ActionChip(
+                    label: Text(l10n.research_chipSuggestedQuestions),
+                    onPressed: () {
+                      _sendRequest(question: l10n.research_suggestedQuestionsRequest);
                     },
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     visualDensity: VisualDensity.compact,
                   ),
                 ),
                 ActionChip(
-                  label: Text(l10n.research_chipMermaidDiagram),
+                  label: Text(l10n.research_chipPitfallsLimitations),
                   onPressed: () {
-                    _sendRequest(
-                      question: l10n.research_diagramRequest,
-                      systemHint: 'diagram',
-                    );
+                    _sendRequest(question: l10n.research_pitfallsLimitationsRequest);
                   },
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,

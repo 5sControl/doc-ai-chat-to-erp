@@ -258,6 +258,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String get research_chipAskQuestion => 'Задать вопрос';
 
   @override
+  String get research_chipSuggestedQuestions => 'Типовые вопросы';
+
+  @override
+  String get research_suggestedQuestionsRequest =>
+      'Сгенерируй 5–7 конкретных вопросов, которые стоит задать по этому документу: для уточнения, проверки понимания или обсуждения. Краткий список.';
+
+  @override
+  String get research_chipPitfallsLimitations => 'Ограничения и риски';
+
+  @override
+  String get research_pitfallsLimitationsRequest =>
+      'Перечисли основные ограничения, подводные камни и риски, о которых говорится в документе или которые из него следуют. Кратко, по пунктам.';
+
+  @override
   String get research_chipMermaidDiagram => 'Mermaid-диаграмма';
 
   @override

@@ -585,6 +585,30 @@ abstract class AppLocalizations {
   /// **'Ask a question'**
   String get research_chipAskQuestion;
 
+  /// No description provided for @research_chipSuggestedQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested questions'**
+  String get research_chipSuggestedQuestions;
+
+  /// No description provided for @research_suggestedQuestionsRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate 5–7 specific questions worth asking about this document: for clarification, checking understanding, or discussion. Short list only.'**
+  String get research_suggestedQuestionsRequest;
+
+  /// No description provided for @research_chipPitfallsLimitations.
+  ///
+  /// In en, this message translates to:
+  /// **'Pitfalls & limitations'**
+  String get research_chipPitfallsLimitations;
+
+  /// No description provided for @research_pitfallsLimitationsRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'List the main limitations, pitfalls, and risks mentioned in or implied by this document. Briefly, as bullet points.'**
+  String get research_pitfallsLimitationsRequest;
+
   /// No description provided for @research_chipMermaidDiagram.
   ///
   /// In en, this message translates to:

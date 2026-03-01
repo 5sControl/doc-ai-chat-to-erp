@@ -257,6 +257,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get research_chipAskQuestion => 'Ask a question';
 
   @override
+  String get research_chipSuggestedQuestions => 'Questions suggérées';
+
+  @override
+  String get research_suggestedQuestionsRequest =>
+      'Génère 5 à 7 questions précises à poser sur ce document : pour clarifier, vérifier la compréhension ou discuter. Liste courte uniquement.';
+
+  @override
+  String get research_chipPitfallsLimitations => 'Pièges et limites';
+
+  @override
+  String get research_pitfallsLimitationsRequest =>
+      'Liste les principales limites, pièges et risques mentionnés ou impliqués par ce document. Brièvement, en puces.';
+
+  @override
   String get research_chipMermaidDiagram => 'Mermaid diagram';
 
   @override

@@ -256,6 +256,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get research_chipAskQuestion => 'Ask a question';
 
   @override
+  String get research_chipSuggestedQuestions => 'Önerilen sorular';
+
+  @override
+  String get research_suggestedQuestionsRequest =>
+      'Bu belge hakkında sorulmaya değer 5–7 somut soru oluştur: açıklama, anlama kontrolü veya tartışma için. Sadece kısa liste.';
+
+  @override
+  String get research_chipPitfallsLimitations => 'Tuzaklar ve sınırlamalar';
+
+  @override
+  String get research_pitfallsLimitationsRequest =>
+      'Bu belgede belirtilen veya ima edilen başlıca sınırlamaları, tuzakları ve riskleri listeleyin. Kısaca, madde madde.';
+
+  @override
   String get research_chipMermaidDiagram => 'Mermaid diagram';
 
   @override

@@ -106,6 +106,10 @@
   "summary_sourceNotAvailable": "Văn bản nguồn không khả dụng cho loại tóm tắt này",
 
   "research_chipAskQuestion": "Ask a question",
+  "research_chipSuggestedQuestions": "Câu hỏi gợi ý",
+  "research_suggestedQuestionsRequest": "Tạo 5–7 câu hỏi cụ thể đáng đặt về tài liệu này: để làm rõ, kiểm tra hiểu biết hoặc thảo luận. Chỉ danh sách ngắn.",
+  "research_chipPitfallsLimitations": "Cạm bẫy và hạn chế",
+  "research_pitfallsLimitationsRequest": "Liệt kê các hạn chế, cạm bẫy và rủi ro chính được nêu hoặc ngụ ý trong tài liệu này. Ngắn gọn, dạng gạch đầu dòng.",
   "research_chipMermaidDiagram": "Mermaid diagram",
   "research_diagramRequest": "Create a Mermaid diagram for this document",
   "research_mermaidCopy": "Copy",

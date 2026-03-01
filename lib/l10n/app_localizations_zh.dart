@@ -249,6 +249,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get research_chipAskQuestion => 'Ask a question';
 
   @override
+  String get research_chipSuggestedQuestions => '建議問題';
+
+  @override
+  String get research_suggestedQuestionsRequest =>
+      '針對此文件生成 5–7 個值得提問的具體問題：用於澄清、檢驗理解或討論。僅簡短列表。';
+
+  @override
+  String get research_chipPitfallsLimitations => '陷阱與限制';
+
+  @override
+  String get research_pitfallsLimitationsRequest =>
+      '列出此文件提及或暗示的主要限制、陷阱和風險。簡要、分點列出。';
+
+  @override
   String get research_chipMermaidDiagram => 'Mermaid diagram';
 
   @override
@@ -894,6 +908,20 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get research_chipAskQuestion => 'Ask a question';
+
+  @override
+  String get research_chipSuggestedQuestions => '建议问题';
+
+  @override
+  String get research_suggestedQuestionsRequest =>
+      '针对此文档生成 5–7 个值得提问的具体问题：用于澄清、检验理解或讨论。仅简短列表。';
+
+  @override
+  String get research_chipPitfallsLimitations => '陷阱与限制';
+
+  @override
+  String get research_pitfallsLimitationsRequest =>
+      '列出此文档提及或暗示的主要限制、陷阱和风险。简要、分点列出。';
 
   @override
   String get research_chipMermaidDiagram => 'Mermaid diagram';

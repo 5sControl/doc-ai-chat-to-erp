@@ -106,6 +106,10 @@
   "summary_sourceNotAvailable": "此类摘要无法使用源文本",
 
   "research_chipAskQuestion": "Ask a question",
+  "research_chipSuggestedQuestions": "建議問題",
+  "research_suggestedQuestionsRequest": "針對此文件生成 5–7 個值得提問的具體問題：用於澄清、檢驗理解或討論。僅簡短列表。",
+  "research_chipPitfallsLimitations": "陷阱與限制",
+  "research_pitfallsLimitationsRequest": "列出此文件提及或暗示的主要限制、陷阱和風險。簡要、分點列出。",
   "research_chipMermaidDiagram": "Mermaid diagram",
   "research_diagramRequest": "Create a Mermaid diagram for this document",
   "research_mermaidCopy": "Copy",

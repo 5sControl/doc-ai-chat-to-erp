@@ -256,6 +256,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get research_chipAskQuestion => 'Ask a question';
 
   @override
+  String get research_chipSuggestedQuestions => 'Preguntas sugeridas';
+
+  @override
+  String get research_suggestedQuestionsRequest =>
+      'Genera 5–7 preguntas concretas que vale la pena hacer sobre este documento: para aclarar, comprobar comprensión o debatir. Solo lista breve.';
+
+  @override
+  String get research_chipPitfallsLimitations => 'Trampas y limitaciones';
+
+  @override
+  String get research_pitfallsLimitationsRequest =>
+      'Enumera las principales limitaciones, trampas y riesgos mencionados o implícitos en este documento. Brevemente, en viñetas.';
+
+  @override
   String get research_chipMermaidDiagram => 'Mermaid diagram';
 
   @override

@@ -106,6 +106,10 @@
   "summary_sourceNotAvailable": "Source text is not available for this type of summary",
 
   "research_chipAskQuestion": "Ask a question",
+  "research_chipSuggestedQuestions": "Suggested questions",
+  "research_suggestedQuestionsRequest": "Generate 5–7 specific questions worth asking about this document: for clarification, checking understanding, or discussion. Short list only.",
+  "research_chipPitfallsLimitations": "Pitfalls & limitations",
+  "research_pitfallsLimitationsRequest": "List the main limitations, pitfalls, and risks mentioned in or implied by this document. Briefly, as bullet points.",
   "research_chipMermaidDiagram": "Mermaid diagram",
   "research_diagramRequest": "Create a Mermaid diagram for this document",
   "research_mermaidCopy": "Copy",

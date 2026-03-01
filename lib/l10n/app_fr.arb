@@ -106,6 +106,10 @@
   "summary_sourceNotAvailable": "Le texte source n'est pas disponible pour ce type de résumé",
 
   "research_chipAskQuestion": "Ask a question",
+  "research_chipSuggestedQuestions": "Questions suggérées",
+  "research_suggestedQuestionsRequest": "Génère 5 à 7 questions précises à poser sur ce document : pour clarifier, vérifier la compréhension ou discuter. Liste courte uniquement.",
+  "research_chipPitfallsLimitations": "Pièges et limites",
+  "research_pitfallsLimitationsRequest": "Liste les principales limites, pièges et risques mentionnés ou impliqués par ce document. Brièvement, en puces.",
   "research_chipMermaidDiagram": "Mermaid diagram",
   "research_diagramRequest": "Create a Mermaid diagram for this document",
   "research_mermaidCopy": "Copy",

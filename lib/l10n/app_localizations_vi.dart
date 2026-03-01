@@ -254,6 +254,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get research_chipAskQuestion => 'Ask a question';
 
   @override
+  String get research_chipSuggestedQuestions => 'Câu hỏi gợi ý';
+
+  @override
+  String get research_suggestedQuestionsRequest =>
+      'Tạo 5–7 câu hỏi cụ thể đáng đặt về tài liệu này: để làm rõ, kiểm tra hiểu biết hoặc thảo luận. Chỉ danh sách ngắn.';
+
+  @override
+  String get research_chipPitfallsLimitations => 'Cạm bẫy và hạn chế';
+
+  @override
+  String get research_pitfallsLimitationsRequest =>
+      'Liệt kê các hạn chế, cạm bẫy và rủi ro chính được nêu hoặc ngụ ý trong tài liệu này. Ngắn gọn, dạng gạch đầu dòng.';
+
+  @override
   String get research_chipMermaidDiagram => 'Mermaid diagram';
 
   @override
