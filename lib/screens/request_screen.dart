@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:summify/helpers/email_validator.dart';
-import 'package:summify/helpers/language_codes.dart';
-import 'package:summify/services/summaryApi.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'modal_screens/send_request_screen.dart';
+const String _supportEmail = 'support@englishingames.com';
 
 class RequestScreen extends StatefulWidget {
   final String? initialMessage;
-  final String? initialName;
-  final String? initialEmail;
   final String title;
 
   const RequestScreen({
     super.key,
     this.initialMessage,
-    this.initialName,
-    this.initialEmail,
     this.title = 'Request a feature',
   });
 
@@ -27,35 +20,13 @@ class RequestScreen extends StatefulWidget {
 
 class _RequestScreenState extends State<RequestScreen> {
   Set<String> selectedOptions = {};
-  String selectedLang = '';
-  bool emailError = false;
-  final emailController = TextEditingController();
-  final nameController = TextEditingController();
   final messageController = TextEditingController();
 
   @override
   void initState() {
-    if (widget.initialEmail != null && widget.initialEmail!.isNotEmpty) {
-      emailController.text = widget.initialEmail!;
-    }
-    if (widget.initialName != null && widget.initialName!.isNotEmpty) {
-      nameController.text = widget.initialName!;
-    }
     if (widget.initialMessage != null && widget.initialMessage!.isNotEmpty) {
       messageController.text = widget.initialMessage!;
     }
-
-    emailController.addListener(() {
-      if (validateEmail(emailController.value.text) == null) {
-        setState(() {
-          emailError = false;
-        });
-      } else {
-        setState(() {
-          emailError = true;
-        });
-      }
-    });
     super.initState();
   }
 
@@ -69,53 +40,64 @@ class _RequestScreenState extends State<RequestScreen> {
     });
   }
 
-  void onSelectLang({required String lang}) {
-    setState(() {
-      selectedLang = lang;
-    });
-  }
-
-  void onPressSubmit() async {
-    if (!emailError && emailController.value.text.isNotEmpty) {
-      final res = await SummaryRepository().sendFeature(
-          getMoreSummaries: selectedOptions.contains('Secure summarization'),
-          addTranslation: selectedOptions.contains('Read my book'),
-          askAQuestions: selectedOptions.contains('Speech to text feature'),
-          readBook: selectedOptions.contains('Text to speech feature'),
-          addLang: selectedOptions.contains('Add language')
-              ? selectedLang
-              : 'Not selected',
-          name:
-              nameController.text.isNotEmpty ? nameController.text : 'Unknown',
-          email: emailController.text,
-          message: messageController.text);
-
-      if (res == SendFeatureStatus.Sended) {
-        onRequestSend();
-      } else {
-        Navigator.of(context).pushNamed('/');
+  Future<void> onPressSubmit() async {
+    final subject = 'Summify: ${widget.title}';
+    final bodyParts = <String>[];
+    if (selectedOptions.isNotEmpty) {
+      bodyParts.add('Selected options:');
+      for (final option in selectedOptions) {
+        bodyParts.add('- $option');
       }
+      bodyParts.add('');
     }
-  }
-
-  void onRequestSend() {
-    showMaterialModalBottomSheet(
-      context: context,
-      expand: false,
-      bounce: false,
-      barrierColor: Colors.black54,
-      backgroundColor: Colors.transparent,
-      enableDrag: false,
-      builder: (context) {
-        return const SendRequestScreen();
-      },
+    final messageText = messageController.text.trim();
+    if (messageText.isNotEmpty) {
+      bodyParts.add(messageText);
+    }
+    final body = bodyParts.join('\n');
+    final mailtoUrl = Uri(
+      scheme: 'mailto',
+      path: _supportEmail,
+      queryParameters: {'subject': subject, 'body': body},
     );
+    try {
+      final launched = await launchUrl(
+        mailtoUrl,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!mounted) return;
+      if (launched) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Почтовое приложение открыто. Отправьте письмо, когда будете готовы.',
+            ),
+          ),
+        );
+        Navigator.of(context).pop();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Не удалось открыть почту. Установите приложение почты или проверьте настройки.',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Ошибка: $e',
+          ),
+        ),
+      );
+    }
   }
 
   @override
   void dispose() {
-    emailController.dispose();
-    nameController.dispose();
     messageController.dispose();
     super.dispose();
   }
@@ -127,7 +109,9 @@ class _RequestScreenState extends State<RequestScreen> {
       'Read my book',
       'Speech to text feature',
       'Text to speech feature',
-      'Add language'
+      'Add language',
+      'Support for large files',
+      'Work with groups of files',
     ];
 
     return Stack(
@@ -135,133 +119,76 @@ class _RequestScreenState extends State<RequestScreen> {
       children: [
         const BackgroundGradient(),
         Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-            ),
-            // extendBody: true,
-            body: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height -
-                        MediaQuery.of(context).padding.bottom -
-                        MediaQuery.of(context).padding.top -
-                        (MediaQuery.of(context).viewInsets.bottom / 2) ),
-                child: Container(
-                  margin: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom + 10,
-                      left: 15,
-                      right: 15,
-                      top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: options
-                            .map((option) => OptionContainer(
-                                title: option,
-                                selectedOptions: selectedOptions,
-                                onSelectOption: onSelectOption,
-                                onSelectLang: onSelectLang))
-                            .toList(),
-                      ),
-                      const Divider(
-                        color: Colors.transparent,
-                      ),
-                      const Text(
-                        'Or write us a message',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
-                      CustomInput(
-                        title: 'Name',
-                        placeholder: 'Enter your name',
-                        required: false,
-                        controller: nameController,
-                      ),
-                      CustomInput(
-                        title: 'Email',
-                        placeholder: 'Enter your email',
-                        required: true,
-                        controller: emailController,
-                      ),
-                      CustomInput(
-                        title: 'Message',
-                        placeholder: 'Enter your request',
-                        required: false,
-                        controller: messageController,
-                      ),
-                      const Spacer(),
-                      ConfirmButton(
-                          onPressSubmit: onPressSubmit, emailError: emailError),
-                      SizedBox(height:MediaQuery.of(context).size.shortestSide <
-                                            600 ? 10 : 40,)
-                    ],
-                  ),
-                ),
+          appBar: AppBar(
+            title: Text(widget.title),
+          ),
+          body: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom + 10,
+                left: 15,
+                right: 15,
+                top: 10,
               ),
-            )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ...options.map(
+                    (option) => OptionContainer(
+                      title: option,
+                      selectedOptions: selectedOptions,
+                      onSelectOption: onSelectOption,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Or write us a message',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  MessageInput(controller: messageController),
+                  const SizedBox(height: 16),
+                  ConfirmButton(onPressSubmit: onPressSubmit),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.shortestSide < 600
+                        ? 10
+                        : 40,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
 
-class CustomInput extends StatefulWidget {
-  final String title;
-  final String placeholder;
-  final bool required;
-  final TextEditingController? controller;
+class MessageInput extends StatelessWidget {
+  final TextEditingController controller;
 
-  const CustomInput(
-      {super.key,
-      required this.title,
-      required this.placeholder,
-      required this.required,
-      this.controller});
+  const MessageInput({super.key, required this.controller});
 
-  @override
-  State<CustomInput> createState() => _CustomInputState();
-}
-
-class _CustomInputState extends State<CustomInput> {
   @override
   Widget build(BuildContext context) {
-    final bool isMessage = widget.title == 'Message';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Divider(
-          color: Colors.transparent,
-        ),
-        Row(
-          children: [
-            Text(widget.title),
-            if (widget.required)
-              const Text(
-                '*',
-                style: TextStyle(color: Colors.red),
-              ),
-          ],
-        ),
+        const SizedBox(height: 8),
+        const Text('Message'),
+        const SizedBox(height: 4),
         TextFormField(
-          controller: widget.controller,
-          autovalidateMode: widget.title == 'Email'
-              ? AutovalidateMode.onUserInteraction
-              : AutovalidateMode.disabled,
-          validator: widget.title == 'Email' ? validateEmail : null,
-          textInputAction: isMessage ? TextInputAction.newline : TextInputAction.done,
-          keyboardType: widget.title == 'Email'
-              ? TextInputType.emailAddress
-              : (isMessage ? TextInputType.multiline : TextInputType.text),
-          minLines: isMessage ? 6 : 1,
-          maxLines: isMessage ? 12 : 1,
-          decoration: InputDecoration(
-            hintText: ' ${widget.placeholder}',
+          controller: controller,
+          textInputAction: TextInputAction.newline,
+          keyboardType: TextInputType.multiline,
+          minLines: 4,
+          maxLines: 12,
+          decoration: const InputDecoration(
+            hintText: ' Enter your request',
           ),
-          // onEditingComplete: () {},
           style: Theme.of(context).textTheme.labelMedium,
         ),
       ],
@@ -271,9 +198,8 @@ class _CustomInputState extends State<CustomInput> {
 
 class ConfirmButton extends StatelessWidget {
   final VoidCallback onPressSubmit;
-  final bool emailError;
-  const ConfirmButton(
-      {super.key, required this.onPressSubmit, required this.emailError});
+
+  const ConfirmButton({super.key, required this.onPressSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -281,8 +207,7 @@ class ConfirmButton extends StatelessWidget {
       color: Theme.of(context).hintColor,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
       child: InkWell(
-        highlightColor:
-            !emailError ? Colors.white24 : Colors.red.withOpacity(0.6),
+        highlightColor: Colors.white24,
         borderRadius: BorderRadius.circular(8),
         onTap: onPressSubmit,
         child: Container(
@@ -291,7 +216,10 @@ class ConfirmButton extends StatelessWidget {
             'Submit',
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontWeight: FontWeight.w600, color: Colors.white, fontSize: 16),
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+              fontSize: 16,
+            ),
           ),
         ),
       ),
@@ -303,107 +231,66 @@ class OptionContainer extends StatelessWidget {
   final String title;
   final Set<String> selectedOptions;
   final Function({required String option}) onSelectOption;
-  final Function({required String lang}) onSelectLang;
-  const OptionContainer(
-      {super.key,
-      required this.title,
-      required this.selectedOptions,
-      required this.onSelectOption,
-      required this.onSelectLang});
+
+  const OptionContainer({
+    super.key,
+    required this.title,
+    required this.selectedOptions,
+    required this.onSelectOption,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final isAddLanguage = title == 'Add language';
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
       decoration: BoxDecoration(
-          color: Theme.of(context).hintColor,
-          borderRadius: BorderRadius.circular(8)),
+        color: Theme.of(context).hintColor,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           Checkbox(
-            activeColor: Theme.of(context).highlightColor,
             value: selectedOptions.contains(title),
             onChanged: (_) => onSelectOption(option: title),
+            activeColor: Colors.white,
+            checkColor: Theme.of(context).hintColor,
+            fillColor: WidgetStateProperty.resolveWith<Color>((states) {
+              if (states.contains(WidgetState.selected)) {
+                return Colors.white;
+              }
+              return Colors.white24;
+            }),
           ),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.white),
-          ),
-          // Spacer(),
-          const SizedBox(
-            width: 20,
-          ),
-          if (title == 'Add language')
-            Flexible(
-              child: AnimatedCrossFade(
-                  firstChild: LanguagesDropdown(onSelectLang: onSelectLang),
-                  secondChild: Container(),
-                  crossFadeState: selectedOptions.contains(title)
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                  duration: const Duration(milliseconds: 500)),
-            )
-        ],
-      ),
-    );
-  }
-}
-
-class LanguagesDropdown extends StatefulWidget {
-  final Function({required String lang}) onSelectLang;
-  const LanguagesDropdown({super.key, required this.onSelectLang});
-
-  @override
-  State<LanguagesDropdown> createState() => _LanguagesDropdownState();
-}
-
-class _LanguagesDropdownState extends State<LanguagesDropdown> {
-  String? selectedLang;
-
-  @override
-  Widget build(BuildContext context) {
-    return ButtonTheme(
-      padding: EdgeInsets.zero,
-      splashColor: Colors.white,
-      alignedDropdown: true,
-      child: DropdownButton(
-        value: selectedLang,
-        alignment: Alignment.centerRight,
-        isExpanded: true,
-        dropdownColor: Theme.of(context).hintColor.withOpacity(1),
-        isDense: true,
-        hint: Text(selectedLang ?? 'Select language',
-            textAlign: TextAlign.end,
-            overflow: TextOverflow.visible,
-            maxLines: 1,
-            style: Theme.of(context).textTheme.labelSmall),
-        menuMaxHeight: 100,
-        padding: EdgeInsets.zero,
-        style: Theme.of(context).textTheme.labelSmall,
-        // underline: Divider(),
-        icon: const Icon(
-          Icons.keyboard_arrow_down_rounded,
-          color: Colors.black,
-        ),
-        items: languages.values.map((lang) {
-          return DropdownMenuItem<String>(
-            // alignment: Alignment.centerRight,
-            value: lang,
-            child: Text(
-              lang,
-              textAlign: TextAlign.end,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(color: Colors.white),
+                ),
+                if (isAddLanguage)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      'Add a language — write which one in the message below',
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                    ),
+                  ),
+              ],
             ),
-          );
-        }).toList(),
-
-        onChanged: (val) {
-          setState(() {
-            selectedLang = val;
-            widget.onSelectLang(lang: val!);
-          });
-        },
+          ),
+        ],
       ),
     );
   }
