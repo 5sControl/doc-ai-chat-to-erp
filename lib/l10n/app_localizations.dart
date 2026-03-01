@@ -981,6 +981,18 @@ abstract class AppLocalizations {
   /// **'Enter your email'**
   String get extension_enterYourEmail;
 
+  /// No description provided for @extension_openLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Open link'**
+  String get extension_openLink;
+
+  /// No description provided for @extension_buyMobileGetDesktop.
+  ///
+  /// In en, this message translates to:
+  /// **'One purchase — use on phone and desktop'**
+  String get extension_buyMobileGetDesktop;
+
   /// No description provided for @auth_skip.
   ///
   /// In en, this message translates to:

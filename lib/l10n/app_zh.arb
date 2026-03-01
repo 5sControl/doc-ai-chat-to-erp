@@ -198,6 +198,8 @@
   "extension_copyLink": "复制链接",
   "extension_sendLink": "发送链接",
   "extension_enterYourEmail": "输入邮箱",
+  "extension_openLink": "打开链接",
+  "extension_buyMobileGetDesktop": "一次购买，手机和电脑都能用",
 
   "auth_skip": "跳过",
   "auth_hello": "你好！",

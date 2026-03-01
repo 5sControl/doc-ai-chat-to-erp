@@ -472,6 +472,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get extension_enterYourEmail => 'Inserisci la tua email';
 
   @override
+  String get extension_openLink => 'Apri link';
+
+  @override
+  String get extension_buyMobileGetDesktop =>
+      'Un acquisto — usalo su telefono e desktop';
+
+  @override
   String get auth_skip => 'Salta';
 
   @override

@@ -198,6 +198,8 @@
   "extension_copyLink": "Скопировать ссылку",
   "extension_sendLink": "Отправить ссылку",
   "extension_enterYourEmail": "Введите ваш email",
+  "extension_openLink": "Открыть ссылку",
+  "extension_buyMobileGetDesktop": "Одна покупка — приложение на телефон и на компьютер",
 
   "auth_skip": "Пропустить",
   "auth_hello": "Привет!",

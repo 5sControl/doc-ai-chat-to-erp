@@ -198,6 +198,8 @@
   "extension_copyLink": "Bağlantıyı kopyala",
   "extension_sendLink": "Bağlantıyı gönder",
   "extension_enterYourEmail": "E-postanızı girin",
+  "extension_openLink": "Bağlantıyı aç",
+  "extension_buyMobileGetDesktop": "Tek alışveriş — telefonda ve bilgisayarda kullanın",
 
   "auth_skip": "Atla",
   "auth_hello": "Merhaba!",

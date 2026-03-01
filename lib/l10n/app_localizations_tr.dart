@@ -471,6 +471,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get extension_enterYourEmail => 'E-postanızı girin';
 
   @override
+  String get extension_openLink => 'Bağlantıyı aç';
+
+  @override
+  String get extension_buyMobileGetDesktop =>
+      'Tek alışveriş — telefonda ve bilgisayarda kullanın';
+
+  @override
   String get auth_skip => 'Atla';
 
   @override

@@ -466,6 +466,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get extension_enterYourEmail => 'Nhập email của bạn';
 
   @override
+  String get extension_openLink => 'Mở liên kết';
+
+  @override
+  String get extension_buyMobileGetDesktop =>
+      'Một lần mua — dùng trên điện thoại và máy tính';
+
+  @override
   String get auth_skip => 'Bỏ qua';
 
   @override

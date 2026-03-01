@@ -469,6 +469,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get extension_enterYourEmail => 'Digite seu e-mail';
 
   @override
+  String get extension_openLink => 'Abrir link';
+
+  @override
+  String get extension_buyMobileGetDesktop =>
+      'Uma compra — use no celular e no computador';
+
+  @override
   String get auth_skip => 'Pular';
 
   @override

@@ -458,6 +458,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get extension_enterYourEmail => '输入邮箱';
 
   @override
+  String get extension_openLink => '打开链接';
+
+  @override
+  String get extension_buyMobileGetDesktop => '一次购买，手机和电脑都能用';
+
+  @override
   String get auth_skip => '跳过';
 
   @override
@@ -1117,6 +1123,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get extension_enterYourEmail => '输入邮箱';
+
+  @override
+  String get extension_openLink => '打开链接';
+
+  @override
+  String get extension_buyMobileGetDesktop => '一次购买，手机和电脑都能用';
 
   @override
   String get auth_skip => '跳过';

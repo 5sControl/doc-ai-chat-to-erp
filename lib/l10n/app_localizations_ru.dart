@@ -471,6 +471,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String get extension_enterYourEmail => 'Введите ваш email';
 
   @override
+  String get extension_openLink => 'Открыть ссылку';
+
+  @override
+  String get extension_buyMobileGetDesktop =>
+      'Одна покупка — приложение на телефон и на компьютер';
+
+  @override
   String get auth_skip => 'Пропустить';
 
   @override

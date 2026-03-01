@@ -198,6 +198,8 @@
   "extension_copyLink": "Sao chép liên kết",
   "extension_sendLink": "Gửi liên kết",
   "extension_enterYourEmail": "Nhập email của bạn",
+  "extension_openLink": "Mở liên kết",
+  "extension_buyMobileGetDesktop": "Một lần mua — dùng trên điện thoại và máy tính",
 
   "auth_skip": "Bỏ qua",
   "auth_hello": "Xin chào!",

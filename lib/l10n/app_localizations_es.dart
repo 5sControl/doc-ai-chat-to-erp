@@ -471,6 +471,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get extension_enterYourEmail => 'Introduce tu correo';
 
   @override
+  String get extension_openLink => 'Abrir enlace';
+
+  @override
+  String get extension_buyMobileGetDesktop =>
+      'Una compra — úsalo en móvil y escritorio';
+
+  @override
   String get auth_skip => 'Omitir';
 
   @override

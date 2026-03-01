@@ -471,6 +471,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get extension_enterYourEmail => 'Wpisz swój e-mail';
 
   @override
+  String get extension_openLink => 'Otwórz link';
+
+  @override
+  String get extension_buyMobileGetDesktop =>
+      'Jedna zakup — korzystaj na telefonie i komputerze';
+
+  @override
   String get auth_skip => 'Pomiń';
 
   @override

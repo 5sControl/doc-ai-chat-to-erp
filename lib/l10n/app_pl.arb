@@ -198,6 +198,8 @@
   "extension_copyLink": "Kopiuj link",
   "extension_sendLink": "Wyślij link",
   "extension_enterYourEmail": "Wpisz swój e-mail",
+  "extension_openLink": "Otwórz link",
+  "extension_buyMobileGetDesktop": "Jedna zakup — korzystaj na telefonie i komputerze",
 
   "auth_skip": "Pomiń",
   "auth_hello": "Witaj!",
