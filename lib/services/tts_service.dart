@@ -38,18 +38,40 @@ class TtsVoice {
 }
 
 /// Context for TTS playback used for text highlighting.
+///
+/// For long texts split into chunks: [chunkIndex], [totalChunks], and
+/// [playedUpToCharIndex] describe progress; [text] is the current chunk being
+/// played (null when paused between chunks).
 class TtsPlaybackContext {
   final String summaryKey;
   final int activeTab;
-  final String text;
+  /// Current chunk text being played, or null when playback stopped between chunks.
+  final String? text;
+  /// Full display text for this tab (used for multi-chunk highlighting).
+  final String? fullText;
+  /// Zero-based index of the current or last-played chunk.
+  final int chunkIndex;
+  /// Total number of chunks for this tab's text.
+  final int totalChunks;
+  /// Character index in [fullText] up to which playback has completed (for highlight).
+  final int playedUpToCharIndex;
 
   const TtsPlaybackContext({
     required this.summaryKey,
     required this.activeTab,
-    required this.text,
+    this.text,
+    this.fullText,
+    this.chunkIndex = 0,
+    this.totalChunks = 1,
+    this.playedUpToCharIndex = 0,
   });
 }
 
+/// Single TTS mechanism for the app: Kokoro TTS + [audioplayers] for playback.
+///
+/// Used only on the **summary screen** (Source / Brief / Deep tabs) via [VoiceButton]
+/// in [ShareAndCopyButton], and for word tap in [word_lookup_helper]. The library
+/// document screen has no TTS (Share and Copy only).
 class TtsService {
   static const _modelUrl =
       'https://huggingface.co/NeuML/kokoro-base-onnx/resolve/main/model.onnx';
@@ -80,6 +102,8 @@ class TtsService {
   final ValueNotifier<Duration?> playbackDuration = ValueNotifier(null);
   final ValueNotifier<TtsPlaybackContext?> playbackContext =
       ValueNotifier(null);
+  /// When non-null, long text was split into chunks and this is the next chunk index to play (Continue).
+  final ValueNotifier<int?> nextChunkIndex = ValueNotifier(null);
   final Dio _dio = Dio();
   final ValueNotifier<List<TtsVoice>> voiceListNotifier = ValueNotifier(
     const [],
@@ -273,17 +297,20 @@ class TtsService {
     return ttsCacheDir;
   }
 
-  /// Generate cache key from text, voiceId, and speed (legacy) or from summaryKey and activeTab (tab-based)
+  /// Generate cache key from text, voiceId, and speed (legacy) or from summaryKey, activeTab, and optional chunkIndex (tab-based)
   String _getCacheKey({
     String? text,
     String? voiceId,
     double? speed,
     String? summaryKey,
     int? activeTab,
+    int? chunkIndex,
   }) {
-    // Tab-based caching: use summaryKey + activeTab
+    // Tab-based caching: use summaryKey + activeTab + optional chunkIndex
     if (summaryKey != null && activeTab != null) {
-      final keyString = '$summaryKey|$activeTab';
+      final keyString = chunkIndex != null
+          ? '$summaryKey|$activeTab|$chunkIndex'
+          : '$summaryKey|$activeTab';
       final bytes = utf8.encode(keyString);
       final digest = sha256.convert(bytes);
       return digest.toString();
@@ -305,6 +332,7 @@ class TtsService {
     double? speed,
     String? summaryKey,
     int? activeTab,
+    int? chunkIndex,
   }) async {
     try {
       final cacheDir = await _getCacheDirectory();
@@ -314,6 +342,7 @@ class TtsService {
         speed: speed,
         summaryKey: summaryKey,
         activeTab: activeTab,
+        chunkIndex: chunkIndex,
       );
       final cachedFile = File('${cacheDir.path}/$cacheKey.wav');
       final exists = await cachedFile.exists();
@@ -475,6 +504,53 @@ class TtsService {
 
   List<TtsVoice> get availableVoices => voiceListNotifier.value;
 
+  /// Chunk with start offset in [text] for highlighting. [text] should be trimmed.
+  static List<({String text, int start, int end})> chunkTextForTtsWithOffsets(
+    String text, {
+    int maxCharsPerChunk = 250,
+  }) {
+    final trimmed = text.trim();
+    if (trimmed.isEmpty) return [];
+    if (trimmed.length <= maxCharsPerChunk) {
+      return [(text: trimmed, start: 0, end: trimmed.length)];
+    }
+
+    final result = <({String text, int start, int end})>[];
+    final sentenceEnd = RegExp(r'[.!?]\s*');
+    int start = 0;
+    while (start < trimmed.length) {
+      int end = (start + maxCharsPerChunk).clamp(0, trimmed.length);
+      if (end < trimmed.length) {
+        final slice = trimmed.substring(start, end);
+        final lastMatch = sentenceEnd.allMatches(slice).lastOrNull;
+        if (lastMatch != null) {
+          end = start + lastMatch.end;
+        } else {
+          final lastSpace = slice.lastIndexOf(' ');
+          if (lastSpace > maxCharsPerChunk ~/ 2) {
+            end = start + lastSpace + 1;
+          }
+        }
+      } else {
+        end = trimmed.length;
+      }
+      final chunk = trimmed.substring(start, end).trim();
+      if (chunk.isNotEmpty) result.add((text: chunk, start: start, end: end));
+      start = end;
+    }
+    return result.isEmpty
+        ? [(text: trimmed, start: 0, end: trimmed.length)]
+        : result;
+  }
+
+  /// Splits text into chunks suitable for TTS (Kokoro ~510 phoneme limit; ~400 chars phonemes safe).
+  /// Uses sentence boundaries when possible; [maxCharsPerChunk] is a conservative plain-text limit.
+  static List<String> chunkTextForTts(String text, {int maxCharsPerChunk = 250}) {
+    return chunkTextForTtsWithOffsets(text, maxCharsPerChunk: maxCharsPerChunk)
+        .map((e) => e.text)
+        .toList();
+  }
+
   void _emitVoices() {
     voiceListNotifier.value = List.unmodifiable(_voices);
   }
@@ -491,6 +567,7 @@ class TtsService {
 
   Future<void> stop() async {
     await _audioPlayer.stop();
+    nextChunkIndex.value = null;
     _clearPlaybackState();
     if (_speechCompleter != null && !_speechCompleter!.isCompleted) {
       _speechCompleter!.complete();
@@ -523,12 +600,20 @@ class TtsService {
     required String text,
     String? summaryKey,
     int? activeTab,
+    String? fullText,
+    int chunkIndex = 0,
+    int totalChunks = 1,
+    int playedUpToCharIndex = 0,
   }) {
     if (summaryKey != null && activeTab != null) {
       playbackContext.value = TtsPlaybackContext(
         summaryKey: summaryKey,
         activeTab: activeTab,
         text: text,
+        fullText: fullText,
+        chunkIndex: chunkIndex,
+        totalChunks: totalChunks,
+        playedUpToCharIndex: playedUpToCharIndex,
       );
       _positionSubscription = _audioPlayer.onPositionChanged.listen((p) {
         playbackPosition.value = p;
@@ -545,15 +630,38 @@ class TtsService {
     required double speed,
     String? summaryKey,
     int? activeTab,
+    /// For long texts (tab-based): 0 = first chunk, 1+ = continue. Ignored when no summaryKey/activeTab.
+    int chunkIndex = 0,
   }) async {
-    if (text.trim().isEmpty) return;
+    final trimmedFull = text.trim();
+    if (trimmedFull.isEmpty) return;
     final completer = Completer<void>();
-    // Store original text for cache key (before any processing) - only if not using tab-based cache
-    final originalTextForCache = text.trim();
-    // Determine if we should use tab-based caching
+    // Determine if we should use tab-based caching and chunking
     final useTabCache = summaryKey != null && activeTab != null;
+    String textToSpeak = trimmedFull;
+    String? fullTextForContext;
+    int totalChunks = 1;
+    int playedUpToCharIndex = 0;
+
+    int? chunkEndForCompletion;
+    if (useTabCache) {
+      final chunkEntries = chunkTextForTtsWithOffsets(trimmedFull);
+      totalChunks = chunkEntries.length;
+      if (chunkIndex >= totalChunks) return;
+      if (totalChunks > 1) {
+        final entry = chunkEntries[chunkIndex];
+        textToSpeak = entry.text;
+        fullTextForContext = trimmedFull;
+        playedUpToCharIndex = entry.start;
+        chunkEndForCompletion = entry.end;
+        if (chunkIndex == 0) nextChunkIndex.value = null;
+      } else {
+        nextChunkIndex.value = null;
+      }
+    }
+
+    final originalTextForCache = useTabCache ? textToSpeak : trimmedFull;
     try {
-      // Set generating state to true
       isGenerating.value = true;
       await ensureModelReady();
 
@@ -585,7 +693,7 @@ class TtsService {
       
       String phonemes;
       try {
-        phonemes = await _tokenizer!.phonemize(text, lang: langCode);
+        phonemes = await _tokenizer!.phonemize(textToSpeak, lang: langCode);
       } catch (e) {
         // If phonemization fails due to missing assets, throw a more descriptive error
         // Don't try to use text directly as Kokoro may not handle it well
@@ -608,28 +716,50 @@ class TtsService {
         final cachedFile = await _getCachedAudioFile(
           summaryKey: summaryKey,
           activeTab: activeTab,
+          chunkIndex: totalChunks > 1 ? chunkIndex : null,
         );
         if (cachedFile != null) {
-          // Use cached file
           debugPrint('[TtsService] Using cached audio file from tab cache: ${cachedFile.path}');
           isGenerating.value = false;
           _currentAudioPath = cachedFile.path;
-          
-          // Play audio using AudioPlayer
+
           _speechCompleter = completer;
           isSpeaking.value = true;
           _setupPlaybackTracking(
             text: originalTextForCache,
             summaryKey: summaryKey,
             activeTab: activeTab,
+            fullText: fullTextForContext,
+            chunkIndex: chunkIndex,
+            totalChunks: totalChunks,
+            playedUpToCharIndex: playedUpToCharIndex,
           );
 
           StreamSubscription? completeSubscription;
           completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
-            _clearPlaybackState();
-            if (!completer.isCompleted) {
-              completer.complete();
+            _positionSubscription?.cancel();
+            _positionSubscription = null;
+            _durationSubscription?.cancel();
+            _durationSubscription = null;
+            playbackPosition.value = null;
+            playbackDuration.value = null;
+            if (chunkEndForCompletion != null && fullTextForContext != null) {
+              final end = chunkEndForCompletion;
+              playbackContext.value = TtsPlaybackContext(
+                summaryKey: summaryKey,
+                activeTab: activeTab,
+                text: null,
+                fullText: fullTextForContext,
+                chunkIndex: chunkIndex,
+                totalChunks: totalChunks,
+                playedUpToCharIndex: end,
+              );
+              nextChunkIndex.value = chunkIndex + 1 < totalChunks ? chunkIndex + 1 : null;
+            } else {
+              playbackContext.value = null;
+              nextChunkIndex.value = null;
             }
+            if (!completer.isCompleted) completer.complete();
             completeSubscription?.cancel();
           });
 
@@ -655,14 +785,11 @@ class TtsService {
       bool wasTruncated = false;
       final originalLength = phonemes.length;
       
-      if (phonemes.length > maxPhonemeChars) {
+      // Only truncate when not using chunks (chunked text is already within limit)
+      if (totalChunks == 1 && phonemes.length > maxPhonemeChars) {
         debugPrint('[TtsService] Phonemes too long: $originalLength chars, truncating to $maxPhonemeChars');
-        // Truncate by character length, trying to break at word boundaries (spaces)
-        // Use deterministic truncation: always truncate to exact maxPhonemeChars first
         truncatedPhonemes = phonemes.substring(0, maxPhonemeChars);
-        // Try to find last space to break at word boundary (deterministic: always use same threshold)
         final lastSpace = truncatedPhonemes.lastIndexOf(' ');
-        // Use fixed threshold (70% of maxPhonemeChars = 280) to ensure deterministic behavior
         if (lastSpace > 280) {
           truncatedPhonemes = truncatedPhonemes.substring(0, lastSpace);
         }
@@ -767,13 +894,16 @@ class TtsService {
       }
 
       // Save audio to cache directory
-      // Use tab-based cache key if available, otherwise use text-based cache key
       final cacheDir = await _getCacheDirectory();
       final cacheKey = useTabCache
-          ? _getCacheKey(summaryKey: summaryKey, activeTab: activeTab)
+          ? _getCacheKey(
+              summaryKey: summaryKey,
+              activeTab: activeTab,
+              chunkIndex: totalChunks > 1 ? chunkIndex : null,
+            )
           : _getCacheKey(text: originalTextForCache, voiceId: voiceId, speed: speed);
       if (useTabCache) {
-        debugPrint('[TtsService] Saving to tab cache with key: $cacheKey (summaryKey=$summaryKey, activeTab=$activeTab)');
+        debugPrint('[TtsService] Saving to tab cache with key: $cacheKey (summaryKey=$summaryKey, activeTab=$activeTab, chunkIndex=${totalChunks > 1 ? chunkIndex : null})');
       } else {
         debugPrint('[TtsService] Saving to text cache with key: $cacheKey (original text length: ${originalTextForCache.length}, truncated phonemes: ${truncatedPhonemes.length})');
       }
@@ -793,7 +923,6 @@ class TtsService {
       // Generation complete, set generating to false before starting playback
       isGenerating.value = false;
 
-      // Play audio using AudioPlayer
       _speechCompleter = completer;
       isSpeaking.value = true;
       if (useTabCache) {
@@ -801,22 +930,44 @@ class TtsService {
           text: originalTextForCache,
           summaryKey: summaryKey,
           activeTab: activeTab,
+          fullText: fullTextForContext,
+          chunkIndex: chunkIndex,
+          totalChunks: totalChunks,
+          playedUpToCharIndex: playedUpToCharIndex,
         );
       }
 
       StreamSubscription? completeSubscription;
       completeSubscription = _audioPlayer.onPlayerComplete.listen((_) {
-        _clearPlaybackState();
-        if (!completer.isCompleted) {
-          completer.complete();
+        _positionSubscription?.cancel();
+        _positionSubscription = null;
+        _durationSubscription?.cancel();
+        _durationSubscription = null;
+        playbackPosition.value = null;
+        playbackDuration.value = null;
+        if (chunkEndForCompletion != null && fullTextForContext != null && summaryKey != null && activeTab != null) {
+          final end = chunkEndForCompletion;
+          playbackContext.value = TtsPlaybackContext(
+            summaryKey: summaryKey,
+            activeTab: activeTab,
+            text: null,
+            fullText: fullTextForContext,
+            chunkIndex: chunkIndex,
+            totalChunks: totalChunks,
+            playedUpToCharIndex: end,
+          );
+          nextChunkIndex.value = chunkIndex + 1 < totalChunks ? chunkIndex + 1 : null;
+        } else {
+          playbackContext.value = null;
+          nextChunkIndex.value = null;
         }
+        if (!completer.isCompleted) completer.complete();
         completeSubscription?.cancel();
       });
 
-      // If text was truncated, notify UI (audio will still play)
       if (wasTruncated) {
-        textTruncationMessage.value = 
-          'Text is too long. Only the first part is being played.';
+        textTruncationMessage.value =
+            'Text is too long. Only the first part is being played.';
       } else {
         textTruncationMessage.value = null;
       }

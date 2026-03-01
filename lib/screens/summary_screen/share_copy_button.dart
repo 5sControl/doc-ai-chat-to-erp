@@ -136,6 +136,8 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
   }
 }
 
+/// Single TTS entry point for the summary screen (Source / Brief / Deep tabs).
+/// Uses [TtsService.instance]; long texts show "Continue" to play the next chunk.
 class VoiceButton extends StatefulWidget {
   final int activeTab;
   final SummaryData summaryData;
@@ -199,7 +201,7 @@ class _VoiceButtonState extends State<VoiceButton> {
     _modelReadyInfoShown = true;
   }
 
-  Future<void> _handleVoicePlay(BuildContext context) async {
+  Future<void> _handleVoicePlay(BuildContext context, {int chunkIndex = 0}) async {
     final text = _currentText;
     if (text == null || text.trim().isEmpty) {
       return;
@@ -208,8 +210,7 @@ class _VoiceButtonState extends State<VoiceButton> {
     final service = TtsService.instance;
     final settings = context.read<SettingsBloc>().state;
     final messenger = ScaffoldMessenger.of(context);
-    
-    // Check if model needs to be downloaded (only show dialog if not downloaded)
+
     final isDownloaded = await service.isModelDownloaded();
     if (!isDownloaded && !service.isModelReady) {
       final ready = await showDialog<bool>(
@@ -228,9 +229,9 @@ class _VoiceButtonState extends State<VoiceButton> {
         speed: settings.kokoroSynthesisSpeed,
         summaryKey: widget.summaryKey,
         activeTab: widget.activeTab,
+        chunkIndex: chunkIndex,
       );
-      
-      // Check if text was truncated and show message
+
       final truncationMessage = service.textTruncationMessage.value;
       if (truncationMessage != null && mounted) {
         messenger.showSnackBar(
@@ -260,6 +261,7 @@ class _VoiceButtonState extends State<VoiceButton> {
   @override
   Widget build(BuildContext context) {
     final service = TtsService.instance;
+    final l10n = AppLocalizations.of(context);
     return Expanded(
       child: Container(
         margin: const EdgeInsets.only(right: 5, left: 5),
@@ -273,37 +275,56 @@ class _VoiceButtonState extends State<VoiceButton> {
                 return ValueListenableBuilder<bool>(
                   valueListenable: service.isSpeaking,
                   builder: (context, isSpeaking, __) {
-                    final isLoading = isDownloading || isGenerating;
-                    return MaterialButton(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      color: const Color.fromRGBO(0, 186, 195, 1),
-                      disabledColor: const Color.fromRGBO(0, 186, 195, 1),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                      ),
-                      onPressed: isLoading
-                          ? null
-                          : () async {
-                              if (isSpeaking) {
-                                await service.stop();
-                              } else {
-                                await _handleVoicePlay(context);
-                              }
-                            },
-                      child: isLoading
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2.5,
-                              ),
-                            )
-                          : Icon(
-                              isSpeaking ? Icons.pause : Icons.play_arrow,
-                              color: Colors.white,
-                              size: 26,
-                            ),
+                    return ValueListenableBuilder<int?>(
+                      valueListenable: service.nextChunkIndex,
+                      builder: (context, nextChunk, __) {
+                        final isLoading = isDownloading || isGenerating;
+                        final showContinue = !isLoading &&
+                            !isSpeaking &&
+                            nextChunk != null &&
+                            _isSameSummaryAndTab(service);
+                        return MaterialButton(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          color: const Color.fromRGBO(0, 186, 195, 1),
+                          disabledColor: const Color.fromRGBO(0, 186, 195, 1),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                          ),
+                          onPressed: isLoading
+                              ? null
+                              : () async {
+                                  if (isSpeaking) {
+                                    await service.stop();
+                                  } else if (showContinue) {
+                                    await _handleVoicePlay(context, chunkIndex: nextChunk);
+                                  } else {
+                                    await _handleVoicePlay(context);
+                                  }
+                                },
+                          child: isLoading
+                              ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  ),
+                                )
+                              :                               showContinue
+                                  ? Text(
+                                      l10n.common_continue,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )
+                                  : Icon(
+                                      isSpeaking ? Icons.pause : Icons.play_arrow,
+                                      color: Colors.white,
+                                      size: 26,
+                                    ),
+                        );
+                      },
                     );
                   },
                 );
@@ -313,6 +334,12 @@ class _VoiceButtonState extends State<VoiceButton> {
         ),
       ),
     );
+  }
+
+  bool _isSameSummaryAndTab(TtsService service) {
+    final ctx = service.playbackContext.value;
+    if (ctx == null) return false;
+    return ctx.summaryKey == widget.summaryKey && ctx.activeTab == widget.activeTab;
   }
 }
 

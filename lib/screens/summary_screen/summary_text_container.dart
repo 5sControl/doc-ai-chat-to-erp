@@ -313,9 +313,39 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                       : (<int>[], '');
 
                   if (showTtsHighlight && flattenedText.isNotEmpty) {
+                    final ctx = ttsService.playbackContext.value;
                     final pos = ttsService.playbackPosition.value;
                     final dur = ttsService.playbackDuration.value;
-                    if (pos != null &&
+                    if (ctx != null &&
+                        ctx.fullText != null &&
+                        ctx.fullText!.isNotEmpty &&
+                        flattenedText.isNotEmpty) {
+                      final fullLen = ctx.fullText!.length;
+                      int playedChars = ctx.playedUpToCharIndex;
+                      if (ctx.text != null &&
+                          ctx.text!.isNotEmpty &&
+                          pos != null &&
+                          dur != null &&
+                          dur.inMilliseconds > 0) {
+                        final progress =
+                            pos.inMilliseconds / dur.inMilliseconds;
+                        playedChars = (ctx.playedUpToCharIndex +
+                                (progress * ctx.text!.length).round())
+                            .clamp(0, fullLen);
+                        final estimatedCharIndex = (playedChars / fullLen * flattenedText.length)
+                            .round()
+                            .clamp(0, flattenedText.length);
+                        final (ws, we) =
+                            wordBoundariesAtOffset(flattenedText, estimatedCharIndex);
+                        currentWordStart = ws;
+                        currentWordEnd = we;
+                      }
+                      readEndIndex = fullLen > 0
+                          ? (playedChars / fullLen * flattenedText.length)
+                              .round()
+                              .clamp(0, flattenedText.length)
+                          : 0;
+                    } else if (pos != null &&
                         dur != null &&
                         dur.inMilliseconds > 0) {
                       final progress =
