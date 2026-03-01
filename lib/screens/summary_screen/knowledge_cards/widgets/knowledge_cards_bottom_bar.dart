@@ -73,7 +73,7 @@ class KnowledgeCardsBottomBar extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(right: 5, left: 5),
         child: MaterialButton(
-          padding: const EdgeInsets.symmetric(vertical: 7),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           color: _buttonColor,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),

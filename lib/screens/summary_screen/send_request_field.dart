@@ -100,7 +100,6 @@ class _SendRequestFieldState extends State<SendRequestField> {
 
     return Container(
       decoration: BoxDecoration(
-          color: Colors.red,
           gradient: LinearGradient(
               colors: gradientColors,
               begin: Alignment.bottomCenter,

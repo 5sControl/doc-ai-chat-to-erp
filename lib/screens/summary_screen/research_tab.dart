@@ -76,17 +76,26 @@ class _ResearchTabState extends State<ResearchTab> {
         });
       },
       builder: (context, state) {
-        return Scrollbar(
-          controller: controller,
-          child: ListView(
+        final topInset = 55.0;
+        final bottomInset = 6.0 + MediaQuery.of(context).padding.bottom;
+        return Padding(
+          padding: EdgeInsets.only(
+            top: topInset,
+            left: 15,
+            right: 15,
+            bottom: bottomInset,
+          ),
+          child: Scrollbar(
             controller: controller,
-            padding: const EdgeInsets.only(
-                left: 15, right: 15, top: 60, bottom: 100),
-            children: state.questions[widget.summaryKey]
-                    ?.map((question) => AnswerAndQuestionItem(
-                        question: question, summaryKey: widget.summaryKey))
-                    .toList() ??
-                [Container()],
+            child: ListView(
+              controller: controller,
+              padding: EdgeInsets.zero,
+              children: state.questions[widget.summaryKey]
+                      ?.map((question) => AnswerAndQuestionItem(
+                          question: question, summaryKey: widget.summaryKey))
+                      .toList() ??
+                  [Container()],
+            ),
           ),
         );
       },

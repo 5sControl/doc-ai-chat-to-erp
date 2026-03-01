@@ -83,6 +83,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
         ),
       ),
       padding: EdgeInsets.only(
+        top: 6,
         bottom: MediaQuery.of(context).padding.bottom,
         left: 15,
         right: 15,
@@ -117,7 +118,7 @@ class _ShareAndCopyButtonState extends State<ShareAndCopyButton> {
       child: Container(
         margin: const EdgeInsets.only(right: 5, left: 5),
         child: MaterialButton(
-          padding: const EdgeInsets.symmetric(vertical: 7),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           color: const Color.fromRGBO(0, 186, 195, 1),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -274,7 +275,7 @@ class _VoiceButtonState extends State<VoiceButton> {
                   builder: (context, isSpeaking, __) {
                     final isLoading = isDownloading || isGenerating;
                     return MaterialButton(
-                      padding: const EdgeInsets.symmetric(vertical: 7),
+                      padding: const EdgeInsets.symmetric(vertical: 4),
                       color: const Color.fromRGBO(0, 186, 195, 1),
                       disabledColor: const Color.fromRGBO(0, 186, 195, 1),
                       shape: const RoundedRectangleBorder(
@@ -486,7 +487,7 @@ class TranslateButton extends StatelessWidget {
               child: Container(
                 margin: const EdgeInsets.only(right: 5, left: 5),
                 child: MaterialButton(
-                  padding: const EdgeInsets.symmetric(vertical: 7),
+                  padding: const EdgeInsets.symmetric(vertical: 4),
                   color:
                       isActive ? Colors.white : Theme.of(context).primaryColor,
                   shape: const RoundedRectangleBorder(

@@ -179,17 +179,40 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
     super.dispose();
   }
 
+  /// Top inset: match tab bar height so text starts right below it (no gap).
+  static const double _kViewportTopInset = 57;
+
+  /// Height of fade gradient at top and bottom edges.
+  static const double _kFadeHeight = 24;
+
+  static Color _contentBackgroundColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark
+        ? const Color.fromRGBO(15, 57, 60, 1)
+        : const Color.fromRGBO(191, 249, 249, 1);
+  }
+
   @override
   Widget build(BuildContext context) {
     final onWordLookup = widget.onWordLookup;
+    final bottomInset = -5 + MediaQuery.of(context).padding.bottom;
+    final backgroundColor = _contentBackgroundColor(context);
 
-    return Scrollbar(
-      controller: _scrollController,
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        padding: const EdgeInsets.only(top: 60, bottom: 90, left: 15, right: 15),
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
+    return Padding(
+      padding: EdgeInsets.only(
+        top: _kViewportTopInset,
+        left: 15,
+        right: 15,
+        bottom: bottomInset,
+      ),
+      child: Stack(
+        children: [
+          Scrollbar(
+            controller: _scrollController,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              padding: const EdgeInsets.only(left: 0, right: 0),
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Container(
           key: Key(widget.summaryTranslate != null && widget.summaryTranslate!.isActive
               ? 'short'
               : 'long'),
@@ -341,8 +364,51 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                 },
               );
             },
+              ),
+            ),
           ),
         ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: _kFadeHeight,
+            child: IgnorePointer(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      backgroundColor,
+                      backgroundColor.withValues(alpha: 0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: _kFadeHeight,
+            child: IgnorePointer(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      backgroundColor,
+                      backgroundColor.withValues(alpha: 0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
