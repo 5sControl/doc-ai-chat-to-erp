@@ -308,7 +308,7 @@ class Answer extends StatelessWidget {
           ),
           a: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontSize: state.fontSize.toDouble(),
-            color: Colors.blue.shade700,
+            color: Theme.of(context).primaryColor,
             decoration: TextDecoration.underline,
           ),
         );
@@ -555,17 +555,17 @@ class _MermaidLinkBlock extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.account_tree_outlined,
-                      size: 20, color: Colors.blue.shade700),
+                      size: 20, color: Theme.of(context).primaryColor),
                   const SizedBox(width: 8),
                   Text(
                     label,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: Colors.blue.shade700,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                   ),
                   const SizedBox(width: 4),
-                  Icon(Icons.open_in_new, size: 16, color: Colors.blue.shade700),
+                  Icon(Icons.open_in_new, size: 16, color: Theme.of(context).primaryColor),
                 ],
               ),
             ),
@@ -582,24 +582,24 @@ class _MermaidLinkBlock extends StatelessWidget {
                   width: 16,
                   height: 16,
                   colorFilter: ColorFilter.mode(
-                    Colors.blue.shade700,
+                    Theme.of(context).primaryColor,
                     BlendMode.srcIn,
                   ),
                 ),
                 label: Text(
                   copyLabel,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.blue.shade700,
+                        color: Theme.of(context).primaryColor,
                       ),
                 ),
               ),
               TextButton.icon(
                 onPressed: () => _openMermaidLive(context),
-                icon: Icon(Icons.open_in_new, size: 14, color: Colors.blue.shade700),
+                icon: Icon(Icons.open_in_new, size: 14, color: Theme.of(context).primaryColor),
                 label: Text(
                   openLiveLabel,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Colors.blue.shade700,
+                        color: Theme.of(context).primaryColor,
                       ),
                 ),
               ),

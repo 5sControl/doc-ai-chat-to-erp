@@ -361,7 +361,7 @@ class ErrorButtons extends StatelessWidget {
               IconButton(
                   tooltip: 'Retry',
                   onPressed: onPressRetry,
-                  highlightColor: Colors.teal.withOpacity(0.2),
+                  highlightColor: Theme.of(context).primaryColor.withOpacity(0.2),
                   padding: EdgeInsets.zero,
                   iconSize: 22,
                   visualDensity: VisualDensity.compact,
@@ -477,11 +477,11 @@ class _LoaderState extends State<Loader> {
                 height: 7,
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
-                    color: Colors.teal.withOpacity(0.2),
+                    color: Theme.of(context).primaryColor.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(10)),
-                child: const LinearProgressIndicator(
-                  color: Colors.teal,
-                  backgroundColor: Colors.white,
+                child: LinearProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                  backgroundColor: Theme.of(context).primaryColorLight,
                 ),
               ),
             ),

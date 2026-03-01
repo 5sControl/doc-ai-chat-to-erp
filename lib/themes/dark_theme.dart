@@ -41,12 +41,17 @@ final darkTheme = ThemeData(
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: Colors.white,
-        selectedItemColor: Colors.teal,
+        selectedItemColor: Color.fromRGBO(0, 186, 195, 1),
         elevation: 10,
         selectedIconTheme: IconThemeData(size: 30),
         unselectedIconTheme: IconThemeData(size: 25)),
-    floatingActionButtonTheme:
-        const FloatingActionButtonThemeData(backgroundColor: Colors.teal),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Color.fromRGBO(0, 186, 195, 1)),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: Color.fromRGBO(0, 186, 195, 1),
+      linearTrackColor: Color.fromRGBO(227, 255, 254, 1),
+      circularTrackColor: Color.fromRGBO(227, 255, 254, 1),
+    ),
     tabBarTheme: const TabBarThemeData(
       splashFactory: NoSplash.splashFactory,
       labelColor: Colors.black,

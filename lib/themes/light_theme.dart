@@ -47,6 +47,11 @@ final lightTheme = ThemeData(
         unselectedIconTheme: IconThemeData(size: 25)),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: Color.fromRGBO(0, 186, 195, 1)),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: Color.fromRGBO(0, 186, 195, 1),
+      linearTrackColor: Color.fromRGBO(227, 255, 254, 1),
+      circularTrackColor: Color.fromRGBO(227, 255, 254, 1),
+    ),
     tabBarTheme: const TabBarThemeData(
       splashFactory: NoSplash.splashFactory,
       labelColor: Colors.black,
