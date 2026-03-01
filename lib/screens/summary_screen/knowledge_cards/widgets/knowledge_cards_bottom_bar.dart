@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/knowledge_cards/knowledge_cards_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/demo_knowledge_cards.dart';
@@ -117,6 +118,7 @@ class KnowledgeCardsBottomBar extends StatelessWidget {
       ),
     );
     if (confirmed == true && context.mounted) {
+      context.read<MixpanelBloc>().add(KnowledgeCardsRegenerateRequested(summaryKey: summaryKey));
       _requestExtractFromSummary(context);
     }
   }

@@ -9,6 +9,7 @@ import 'package:stream_transform/stream_transform.dart';
 import '../../constants.dart';
 import '../../models/models.dart';
 import '../../services/authentication.dart';
+import '../mixpanel/mixpanel_bloc.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -23,9 +24,10 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthService authService = AuthService();
+  final AuthService authService;
+  final MixpanelBloc mixpanelBloc;
 
-  AuthenticationBloc({required this.authService})
+  AuthenticationBloc({required this.authService, required this.mixpanelBloc})
       : super(AuthenticationInitial()) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
@@ -34,6 +36,7 @@ class AuthenticationBloc
                 displayName: user.displayName,
                 email: user.email,
                 id: user.uid)));
+        mixpanelBloc.add(IdentifyUser(uid: user.uid, email: user.email));
       }
     });
 
@@ -44,6 +47,7 @@ class AuthenticationBloc
             name: event.name, email: event.email, password: event.password);
         if (res is UserModel) {
           emit(AuthenticationSuccessState(user: res));
+          mixpanelBloc.add(IdentifyUser(uid: res.id!, email: res.email));
           if (!kIsFreeApp) {
             await Purchases.logIn(res.id!);
           }
@@ -61,6 +65,7 @@ class AuthenticationBloc
             await authService.signInUserWithEmail(event.email, event.password);
         if (res is UserModel) {
           emit(AuthenticationSuccessState(user: res));
+          mixpanelBloc.add(IdentifyUser(uid: res.id!, email: res.email));
           if (!kIsFreeApp) {
             await Purchases.logIn(res.id!);
           }
@@ -77,6 +82,7 @@ class AuthenticationBloc
         final UserModel? user = await authService.signInWithGoogle();
         if (user != null) {
           emit(AuthenticationSuccessState(user: user));
+          mixpanelBloc.add(IdentifyUser(uid: user.id!, email: user.email));
           if (!kIsFreeApp) {
             await Purchases.logIn(user.id!);
           }
@@ -98,6 +104,7 @@ class AuthenticationBloc
         final UserModel? user = await authService.signInWithApple();
         if (user != null) {
           emit(AuthenticationSuccessState(user: user));
+          mixpanelBloc.add(IdentifyUser(uid: user.id!, email: user.email));
           if (!kIsFreeApp) {
             await Purchases.logIn(user.id!);
           }

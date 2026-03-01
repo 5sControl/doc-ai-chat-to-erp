@@ -120,6 +120,8 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
       final Map<String, Quiz> quizzes = Map.from(state.quizzes);
       quizzes[event.documentKey] = updatedQuiz;
       emit(state.copyWith(quizzes: quizzes));
+
+      mixpanelBloc.add(TrackQuizAnswer(documentKey: event.documentKey, correct: isCorrect));
     });
 
     on<NextQuestion>((event, emit) {
@@ -161,6 +163,16 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
       final Map<String, Quiz> quizzes = Map.from(state.quizzes);
       quizzes[event.documentKey] = completedQuiz;
       emit(state.copyWith(quizzes: quizzes));
+
+      final total = quiz.questions.length;
+      final correctCount = quiz.questions.where((q) => q.isCorrect == true).length;
+      final scorePercent = total > 0 ? (correctCount / total * 100).round() : 0;
+      mixpanelBloc.add(QuizCompleted(
+        documentKey: event.documentKey,
+        scorePercent: scorePercent,
+        correctCount: correctCount,
+        total: total,
+      ));
     });
 
     on<ResetQuiz>((event, emit) {
@@ -188,6 +200,8 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
       final Map<String, Quiz> quizzes = Map.from(state.quizzes);
       quizzes[event.documentKey] = resetQuiz;
       emit(state.copyWith(quizzes: quizzes));
+
+      mixpanelBloc.add(QuizRetake(documentKey: event.documentKey));
     });
 
     on<PreviousQuestion>((event, emit) {
@@ -269,6 +283,11 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
     final Map<String, Quiz> quizzes = Map.from(state.quizzes);
     quizzes[documentKey] = startedQuiz;
     emit(state.copyWith(quizzes: quizzes));
+
+    mixpanelBloc.add(QuizStarted(
+      documentKey: documentKey,
+      questionsCount: quiz.questions.length,
+    ));
   }
 
   @override

@@ -4,6 +4,23 @@ sealed class MixpanelEvent extends Equatable {
   const MixpanelEvent();
 }
 
+// SCREEN TRACKING
+class ScreenView extends MixpanelEvent {
+  final String screenName;
+  const ScreenView({required this.screenName});
+  @override
+  List<Object?> get props => [screenName];
+}
+
+// USER IDENTIFICATION
+class IdentifyUser extends MixpanelEvent {
+  final String uid;
+  final String? email;
+  const IdentifyUser({required this.uid, this.email});
+  @override
+  List<Object?> get props => [uid, email];
+}
+
 // APP
 
 class OnboardingStep extends MixpanelEvent {
@@ -332,4 +349,126 @@ class KnowledgeCardsUnsupportedDevice extends MixpanelEvent {
 
   @override
   List<Object?> get props => [summaryKey];
+}
+
+class KnowledgeCardsTabOpen extends MixpanelEvent {
+  final String summaryKey;
+  const KnowledgeCardsTabOpen({required this.summaryKey});
+  @override
+  List<Object?> get props => [summaryKey];
+}
+
+class KnowledgeCardOpen extends MixpanelEvent {
+  final String cardId;
+  final String summaryKey;
+  const KnowledgeCardOpen({required this.cardId, required this.summaryKey});
+  @override
+  List<Object?> get props => [cardId, summaryKey];
+}
+
+class KnowledgeCardVoiceCheckOpen extends MixpanelEvent {
+  final String cardId;
+  final String summaryKey;
+  const KnowledgeCardVoiceCheckOpen({
+    required this.cardId,
+    required this.summaryKey,
+  });
+  @override
+  List<Object?> get props => [cardId, summaryKey];
+}
+
+class KnowledgeCardVoiceCheckSent extends MixpanelEvent {
+  final String cardId;
+  final String summaryKey;
+  final int? accuracy;
+  const KnowledgeCardVoiceCheckSent({
+    required this.cardId,
+    required this.summaryKey,
+    this.accuracy,
+  });
+  @override
+  List<Object?> get props => [cardId, summaryKey, accuracy];
+}
+
+class KnowledgeCardsRegenerateRequested extends MixpanelEvent {
+  final String summaryKey;
+  const KnowledgeCardsRegenerateRequested({required this.summaryKey});
+  @override
+  List<Object?> get props => [summaryKey];
+}
+
+// SAVED CARDS SCREEN
+class SavedCardsScreenOpen extends MixpanelEvent {
+  const SavedCardsScreenOpen();
+  @override
+  List<Object?> get props => [];
+}
+
+class SavedCardView extends MixpanelEvent {
+  final String cardId;
+  final String? summaryKey;
+  const SavedCardView({required this.cardId, this.summaryKey});
+  @override
+  List<Object?> get props => [cardId, summaryKey];
+}
+
+class SavedCardRemoved extends MixpanelEvent {
+  final String cardId;
+  final String? summaryKey;
+  const SavedCardRemoved({required this.cardId, this.summaryKey});
+  @override
+  List<Object?> get props => [cardId, summaryKey];
+}
+
+// QUIZ
+class QuizTabOpen extends MixpanelEvent {
+  final String documentKey;
+  const QuizTabOpen({required this.documentKey});
+  @override
+  List<Object?> get props => [documentKey];
+}
+
+class QuizStarted extends MixpanelEvent {
+  final String documentKey;
+  final int questionsCount;
+  const QuizStarted({required this.documentKey, required this.questionsCount});
+  @override
+  List<Object?> get props => [documentKey, questionsCount];
+}
+
+class TrackQuizAnswer extends MixpanelEvent {
+  final String documentKey;
+  final bool correct;
+  const TrackQuizAnswer({required this.documentKey, required this.correct});
+  @override
+  List<Object?> get props => [documentKey, correct];
+}
+
+class QuizCompleted extends MixpanelEvent {
+  final String documentKey;
+  final int scorePercent;
+  final int correctCount;
+  final int total;
+  const QuizCompleted({
+    required this.documentKey,
+    required this.scorePercent,
+    required this.correctCount,
+    required this.total,
+  });
+  @override
+  List<Object?> get props => [documentKey, scorePercent, correctCount, total];
+}
+
+class QuizRetake extends MixpanelEvent {
+  final String documentKey;
+  const QuizRetake({required this.documentKey});
+  @override
+  List<Object?> get props => [documentKey];
+}
+
+class QuizRegenerateRequested extends MixpanelEvent {
+  final String documentKey;
+  const QuizRegenerateRequested({required this.documentKey});
+  @override
+  List<Object?> get props => [documentKey];
 }

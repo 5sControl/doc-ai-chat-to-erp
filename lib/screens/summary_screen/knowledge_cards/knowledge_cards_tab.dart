@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/knowledge_cards/knowledge_cards_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/demo_knowledge_cards.dart';
@@ -28,6 +29,11 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<MixpanelBloc>().add(KnowledgeCardsTabOpen(summaryKey: widget.summaryKey));
+      }
+    });
     // Extract knowledge cards when tab is first opened
     _extractKnowledgeCards();
     // Sync with saved cards
@@ -92,6 +98,10 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
   }
 
   void _onCardTap(KnowledgeCard card) {
+    context.read<MixpanelBloc>().add(KnowledgeCardOpen(
+          cardId: card.id,
+          summaryKey: widget.summaryKey,
+        ));
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -101,9 +111,16 @@ class _KnowledgeCardsTabState extends State<KnowledgeCardsTab> {
   }
 
   void _onCardMicTap(KnowledgeCard card) {
+    context.read<MixpanelBloc>().add(KnowledgeCardVoiceCheckOpen(
+          cardId: card.id,
+          summaryKey: widget.summaryKey,
+        ));
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (context) => CardVoiceAnswerModal(card: card),
+        builder: (context) => CardVoiceAnswerModal(
+          card: card,
+          summaryKey: widget.summaryKey,
+        ),
         fullscreenDialog: true,
       ),
     );

@@ -40,6 +40,7 @@ import 'bloc/subscriptions/subscriptions_bloc.dart';
 import 'bloc/summaries/summaries_bloc.dart';
 import 'bloc/knowledge_cards/knowledge_cards_bloc.dart';
 import 'bloc/saved_cards/saved_cards_bloc.dart';
+import 'navigation/mixpanel_route_observer.dart';
 import 'screens/main_screen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -259,7 +260,7 @@ class _SummishareAppState extends State<SummishareApp> {
               }),
           BlocProvider(
               create: (context) =>
-                  AuthenticationBloc(authService: authService)),
+                  AuthenticationBloc(authService: authService, mixpanelBloc: _mixpanelBloc)),
           BlocProvider(create: (context) => OffersBloc()),
           BlocProvider.value(value: _savedCardsBloc),
           BlocProvider(
@@ -323,7 +324,10 @@ class _SummishareAppState extends State<SummishareApp> {
               locale: localeFromUiCode(settingsState.uiLocaleCode),
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              navigatorObservers: [_TtsRouteObserver()],
+              navigatorObservers: [
+                MixpanelRouteObserver(_mixpanelBloc),
+                _TtsRouteObserver(),
+              ],
               //builder: (context, Widget? child) => child!,
               initialRoute:
                   settingsState.onboardingPassed ? '/' : '/onboarding',

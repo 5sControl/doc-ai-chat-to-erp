@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/quiz/quiz_bloc.dart';
 import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
@@ -23,8 +24,9 @@ class _QuizTabState extends State<QuizTab> {
   @override
   void initState() {
     super.initState();
-    // Check if quiz exists, if not generate it
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<MixpanelBloc>().add(QuizTabOpen(documentKey: widget.documentKey));
       final quizBloc = context.read<QuizBloc>();
       final quiz = quizBloc.state.getQuiz(widget.documentKey);
       if (quiz == null || quiz.status == QuizStatus.error) {
@@ -67,6 +69,9 @@ class _QuizTabState extends State<QuizTab> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
+                      context.read<MixpanelBloc>().add(QuizRegenerateRequested(
+                            documentKey: widget.documentKey,
+                          ));
                       context.read<QuizBloc>().add(GenerateQuiz(
                             documentKey: widget.documentKey,
                             text: widget.documentText,

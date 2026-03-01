@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/l10n/app_localizations.dart';
@@ -20,6 +21,18 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
   final TextEditingController _searchController = TextEditingController();
   KnowledgeCardType? _selectedType;
   String _searchQuery = '';
+  bool _screenOpenTracked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_screenOpenTracked) {
+        _screenOpenTracked = true;
+        context.read<MixpanelBloc>().add(const SavedCardsScreenOpen());
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -28,6 +41,10 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
   }
 
   void _onCardTap(KnowledgeCard card) {
+    context.read<MixpanelBloc>().add(SavedCardView(
+          cardId: card.id,
+          summaryKey: card.sourceSummaryKey,
+        ));
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -51,6 +68,10 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
           ),
           TextButton(
             onPressed: () {
+              context.read<MixpanelBloc>().add(SavedCardRemoved(
+                    cardId: card.id,
+                    summaryKey: card.sourceSummaryKey,
+                  ));
               context.read<SavedCardsBloc>().add(RemoveSavedCard(cardId: card.id));
               Navigator.pop(dialogContext);
               

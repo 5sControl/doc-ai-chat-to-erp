@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/summaryApi.dart';
@@ -8,10 +10,12 @@ import 'package:summify/services/summaryApi.dart';
 /// User taps mic to record, sees transcribed text, and can send (stub: no server yet).
 class CardVoiceAnswerModal extends StatefulWidget {
   final KnowledgeCard card;
+  final String summaryKey;
 
   const CardVoiceAnswerModal({
     super.key,
     required this.card,
+    required this.summaryKey,
   });
 
   @override
@@ -104,6 +108,11 @@ class _CardVoiceAnswerModalState extends State<CardVoiceAnswerModal>
         userAnswer: _textController.text.trim().isEmpty ? ' ' : _textController.text.trim(),
       );
       if (!mounted) return;
+      context.read<MixpanelBloc>().add(KnowledgeCardVoiceCheckSent(
+            cardId: widget.card.id,
+            summaryKey: widget.summaryKey,
+            accuracy: result.accuracy,
+          ));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${result.shortFeedback} — ${result.accuracy}%'),
