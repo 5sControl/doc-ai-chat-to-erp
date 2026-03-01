@@ -335,6 +335,7 @@ class OnboardingScreen4 extends StatelessWidget {
             case 'it':
             case 'vi':
             case 'tr':
+            case 'nl':
               return code;
           }
           return null;

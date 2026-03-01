@@ -1,0 +1,292 @@
+{
+  "@@locale": "nl",
+
+  "common_continue": "Doorgaan",
+  "common_select": "Selecteren",
+  "common_ok": "OK",
+  "common_error": "Fout",
+
+  "onboarding_translateSummarizationTo": "Samenvatting vertalen naar",
+  "onboarding_goodbyeInfoOverload": "Weg met informatie-overload!",
+  "onboarding_oneClickShareToGetSummary": "Eén klik op \"delen\" voor een samenvatting",
+  "onboarding_welcomeTitle": "Welkom bij Summify",
+  "onboarding_welcomeSubtitle": "Persoonlijke AI-samenvatter",
+
+  "settings_profile": "Profiel",
+  "settings_title": "Instellingen",
+  "settings_neverLoseData": "Verlies nooit je gegevens!",
+  "settings_logIn": "Inloggen",
+  "settings_general": "Algemeen",
+  "settings_interfaceLanguage": "Taal van de interface",
+  "settings_translationLanguage": "Vertaltaal",
+  "settings_selectLanguageTitle": "Taal selecteren",
+  "settings_group_subscription": "Abonnement & meer",
+  "settings_group_about": "Over",
+  "settings_group_support": "Ondersteuning",
+  "settings_group_account": "Account",
+  "settings_group_voice": "Stem",
+
+  "wordTapHint_title": "Woordvertaling",
+  "wordTapHint_message": "Tik op een woord voor de vertaling.",
+  "wordTapHint_dontShowAgain": "Niet meer tonen",
+  "wordTapHint_showLater": "Later tonen",
+
+  "paywall_beSmartWithYourTime": "Benut je tijd slim!",
+  "paywall_payWeekly": "Wekelijks betalen",
+  "paywall_payAnnually": "Jaarlijks betalen",
+  "paywall_saveUpTo": "Bespaar tot {amount}\\$",
+  "@paywall_saveUpTo": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "paywall_buy": "KOPEN",
+  "paywall_andGetOn": "EN KRIJG",
+  "paywall_forFree": "GRATIS!",
+
+  "paywall_12Months": "12 maanden",
+  "paywall_1Week": "1 week",
+  "paywall_1Month": "1 maand",
+  "paywall_1WeekMultiline": "1 week",
+  "paywall_1MonthMultiline": "1 maand",
+  "paywall_12MonthsMultiline": "12 maanden",
+  "paywall_accessAllPremiumCancelAnytime": "Toegang tot alle premiumfuncties! Altijd opzegbaar",
+  "paywall_pricePerYear": "{price}/jaar",
+  "@paywall_pricePerYear": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+  "paywall_pricePerWeek": "{price}/week",
+  "@paywall_pricePerWeek": {
+    "placeholders": {
+      "price": {}
+    }
+  },
+
+  "paywall_termsOfUse": "Gebruiksvoorwaarden",
+  "paywall_restorePurchase": "Aankoop herstellen",
+  "paywall_privacyPolicy": "Privacybeleid",
+
+  "paywall_unlimitedSummaries": "Onbeperkte samenvattingen",
+  "paywall_documentResearch": "Documentonderzoek",
+  "paywall_briefAndDeepSummary": "Korte en diepgaande samenvatting",
+  "paywall_translation": "Vertaling",
+  "paywall_addToChromeForFree": "Gratis toevoegen aan Chrome",
+
+  "offer_needMoreSummaries": "Heb je meer succes nodig?",
+  "offer_maximizeYourProductivity": "Maximaliseer je productiviteit!",
+  "offer_outOfSummaries": "Geen samenvattingen meer?",
+  "offer_maximizeProductivityAndEfficiency": "Maximaliseer je productiviteit en efficiëntie!",
+  "offer_getMoreInNoTime": "Krijg meer in een mum van tijd!",
+  "offer_goUnlimited": "Ga onbeperkt",
+
+  "bundle_subscriptionsNotAvailable": "Abonnementen niet beschikbaar",
+  "bundle_getForFree": "GRATIS OPHALEN",
+  "bundle_on": "op",
+  "bundle_version": "Versie",
+  "bundle_offer_unlockLimitless": "Ontgrendel grenzeloze",
+  "bundle_offer_possibilities": "mogelijkheden",
+  "bundle_offer_endlessPossibilities": "Eindeloze mogelijkheden",
+  "bundle_offer_with50Off": "met 50% korting",
+  "bundle_offer_get4UnlimitedApps": "Krijg 4 onbeperkte apps",
+  "bundle_tabBundle": "Bundle",
+  "bundle_tabUnlimited": "Onbeperkt",
+
+  "purchase_youAreTheBest": "Je bent de beste!",
+  "purchase_get": "Krijg",
+  "purchase_versionForFree": "versie gratis!",
+  "purchase_copyLink": "Link kopiëren",
+  "purchase_collectYourGift": "Haal je cadeau op",
+  "purchase_enterYourEmail": "Vul je e-mail in",
+
+  "summary_couldNotOpenURL": "URL kon niet worden geopend",
+  "summary_couldNotOpenFile": "Bestand kon niet worden geopend",
+  "summary_originalFileNoLongerAvailable": "Origineel bestand is niet meer beschikbaar",
+  "summary_filePathNotFound": "Bestandspad niet gevonden",
+  "summary_originalTextNotAvailable": "Originele tekst niet beschikbaar",
+  "summary_breakThroughTheLimits": "Doorbreek de grenzen",
+  "summary_sourceNotAvailable": "Brontekst is niet beschikbaar voor dit type samenvatting",
+
+  "research_chipAskQuestion": "Stel een vraag",
+  "research_chipSuggestedQuestions": "Voorgestelde vragen",
+  "research_suggestedQuestionsRequest": "Genereer 5–7 concrete vragen over dit document: ter verduidelijking, begripscheck of discussie. Alleen een korte lijst.",
+  "research_chipPitfallsLimitations": "Valkuilen & beperkingen",
+  "research_pitfallsLimitationsRequest": "Noem de belangrijkste beperkingen, valkuilen en risico's in dit document. Kort, als opsomming.",
+  "research_chipMermaidDiagram": "Mermaid-diagram",
+  "research_diagramRequest": "Maak een Mermaid-diagram voor dit document",
+  "research_mermaidCopy": "Kopiëren",
+  "research_mermaidOpenLive": "Openen in Mermaid Live",
+  "diagram_share": "Delen",
+
+  "quiz_failedToGenerate": "Quiz kon niet worden gegenereerd",
+  "quiz_retry": "Opnieuw proberen",
+  "quiz_knowledgeQuiz": "Kennisquiz",
+  "quiz_testYourUnderstanding": "Test je begrip van dit document",
+  "quiz_questions": "Vragen",
+  "quiz_estimatedTime": "Geschatte tijd",
+  "quiz_minutes": "min",
+  "quiz_startQuiz": "Quiz starten",
+  "quiz_explanation": "Uitleg",
+  "quiz_previous": "Vorige",
+  "quiz_viewResults": "Resultaten bekijken",
+  "quiz_nextQuestion": "Volgende vraag",
+  "quiz_questionNofTotal": "Vraag {current} van {total}",
+  "@quiz_questionNofTotal": {
+    "placeholders": {
+      "current": {},
+      "total": {}
+    }
+  },
+  "quiz_overview": "Overzicht",
+  "quiz_stepByStep": "Stap voor stap",
+  "quiz_excellent": "Uitstekend! 🎉",
+  "quiz_goodJob": "Goed gedaan! 👍",
+  "quiz_notBad": "Niet slecht! Blijf leren 📚",
+  "quiz_keepPracticing": "Blijf oefenen! 💪",
+  "quiz_correct": "Juist",
+  "quiz_incorrect": "Onjuist",
+  "quiz_total": "Totaal",
+  "quiz_retakeQuiz": "Quiz opnieuw doen",
+  "quiz_reviewAnswers": "Antwoorden bekijken",
+  "quiz_question": "Vraag {number}",
+  "@quiz_question": {
+    "placeholders": {
+      "number": {}
+    }
+  },
+
+  "savedCards_title": "Opgeslagen kaarten",
+  "savedCards_removeBookmarkTitle": "Bladwijzer verwijderen?",
+  "savedCards_removeBookmarkMessage": "Deze kaart wordt uit je bladwijzers verwijderd.",
+  "savedCards_cancel": "Annuleren",
+  "savedCards_remove": "Verwijderen",
+  "savedCards_cardRemoved": "Kaart uit bladwijzers verwijderd",
+  "savedCards_sourceNotFound": "Brondocument niet gevonden",
+  "savedCards_clearAll": "Alles wissen",
+  "savedCards_searchHint": "Door opgeslagen kaarten zoeken...",
+  "savedCards_cardCount": "{count} kaart",
+  "@savedCards_cardCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_cardsCount": "{count} kaarten",
+  "@savedCards_cardsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "savedCards_clearFilters": "Filters wissen",
+  "savedCards_noCardsYet": "Nog geen opgeslagen kaarten",
+  "savedCards_saveCardsToAccess": "Sla interessante kaarten op om ze later te bekijken",
+  "savedCards_noCardsFound": "Geen kaarten gevonden",
+  "savedCards_tryAdjustingFilters": "Probeer je filters aan te passen",
+  "savedCards_clearAllTitle": "Alle opgeslagen kaarten wissen?",
+  "savedCards_clearAllMessage": "Dit verwijdert al je opgeslagen kaarten. Deze actie kan niet ongedaan worden gemaakt.",
+  "savedCards_allCleared": "Alle opgeslagen kaarten gewist",
+
+  "home_search": "Zoeken",
+
+  "info_productivityInfo": "Productiviteitsinfo",
+  "info_words": "Woorden",
+  "info_time": "Tijd, ",
+  "info_timeMin": "(min)",
+  "info_saved": "Bespaard, ",
+  "info_original": "Origineel",
+  "info_brief": "Kort",
+  "info_deep": "Diepgaand",
+
+  "extension_growYourProductivity": "Ook snel op desktop",
+  "extension_copyLink": "Link kopiëren",
+  "extension_sendLink": "Link verzenden",
+  "extension_enterYourEmail": "Vul je e-mail in",
+  "extension_openLink": "Link openen",
+  "extension_buyMobileGetDesktop": "Eén aankoop — gebruik op telefoon en desktop",
+  "extension_offerBuy": "KOOP ",
+  "extension_offerAndGetOn": " EN KRIJG ",
+  "extension_offerForFree": " GRATIS!",
+
+  "auth_skip": "Overslaan",
+  "auth_hello": "Hallo!",
+  "auth_fillInToGetStarted": "Vul in om te beginnen",
+  "auth_emailAddress": "E-mailadres",
+  "auth_password": "Wachtwoord",
+  "auth_forgotPassword": "Wachtwoord vergeten?",
+  "auth_loginIn": "Inloggen",
+  "auth_orLoginWith": "Of log in met",
+  "auth_dontHaveAccount": "Nog geen account? ",
+  "auth_registerNow": "Nu registreren",
+  "auth_passwordCannotBeEmpty": "Wachtwoord mag niet leeg zijn",
+  "auth_passwordMustBe6Chars": "Wachtwoord moet minimaal 6 tekens bevatten",
+
+  "registration_skip": "Overslaan",
+  "registration_registerAndGet": "Registreer en krijg",
+  "registration_2Free": "2 gratis ",
+  "registration_1FreePerDay": "1 gratis per dag",
+  "registration_unlimited": "onbeperkte",
+  "limit_onePerDay": "1 gratis samenvatting per dag",
+  "limit_resetsTomorrow": "Limiet reset om middernacht. Morgen krijg je weer 1 gratis samenvatting.",
+  "limit_usedTodayTryTomorrow": "Je hebt vandaag je gratis samenvatting gebruikt. Kom morgen terug voor een nieuwe, of ga onbeperkt.",
+  "limit_blockedCardOverlay": "Deze samenvatting is boven je daglimiet gemaakt. Ontgrendel met Premium. Morgen krijg je 1 nieuwe gratis samenvatting.",
+  "giftCode_menuTitle": "Cadeaucode inwisselen",
+  "giftCode_dialogTitle": "Cadeaucode invoeren",
+  "giftCode_placeholder": "Code",
+  "giftCode_activate": "Activeren",
+  "giftCode_success": "Cadeaucode geaccepteerd. Je hebt {count} documenten ontvangen.",
+  "@giftCode_success": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "giftCode_error": "Ongeldige of al gebruikte code.",
+  "registration_summarizations": "samenvattingen",
+  "registration_name": "Naam",
+  "registration_emailAddress": "E-mailadres",
+  "registration_password": "Wachtwoord",
+  "registration_confirmPassword": "Wachtwoord bevestigen",
+  "registration_register": "Registreren",
+  "registration_orLoginWith": "Of log in met",
+  "registration_alreadyHaveAccount": "Heb je al een account? ",
+  "registration_loginNow": "Nu inloggen",
+  "registration_passwordMismatch": "Wachtwoorden komen niet overeen",
+
+  "request_secureSum": "Veilige samenvatting",
+  "request_readMyBook": "Lees mijn boek",
+  "request_speechToText": "Spraak-naar-tekstfunctie",
+  "request_textToSpeech": "Tekst-naar-spraakfunctie",
+  "request_addLanguage": "Taal toevoegen",
+  "request_orWriteMessage": "Of stuur ons een bericht",
+  "request_name": "Naam",
+  "request_enterYourName": "Vul je naam in",
+  "request_email": "E-mail",
+  "request_enterYourEmail": "Vul je e-mail in",
+  "request_message": "Bericht",
+  "request_enterYourRequest": "Vul je verzoek in",
+  "request_submit": "Verzenden",
+  "request_selectLanguage": "Taal selecteren",
+
+  "ttsDownloadDialogTitle": "Stemmodel downloaden",
+  "ttsDownloadDialogBody": "Houd de app open tijdens het downloaden van de stemresources.",
+  "ttsModelReadyTitle": "Stemmodel gereed",
+  "ttsModelReadyMessage": "Stemmodel succesvol gedownload. Je kunt een stem kiezen in Instellingen.",
+
+  "knowledgeCards_regenerate": "Opnieuw genereren",
+  "knowledgeCards_regenerateTitle": "Kenniskaarten opnieuw genereren?",
+  "knowledgeCards_regenerateMessage": "Je huidige kaarten worden verwijderd en er worden nieuwe gegenereerd. Doorgaan?",
+  "knowledgeCards_cancel": "Annuleren",
+
+  "knowledgeCards_voiceAnswerTitle": "Hoe begrijp je de term \"{term}\"?",
+  "@knowledgeCards_voiceAnswerTitle": {
+    "placeholders": {
+      "term": {}
+    }
+  },
+  "knowledgeCards_voiceAnswerQuestion": "Hoe begrijp je de term?",
+  "knowledgeCards_voiceAnswerTask": "Leg uit in je eigen woorden",
+  "knowledgeCards_voiceAnswerSend": "Verzenden",
+  "knowledgeCards_voiceAnswerStubMessage": "Controle van je antwoord komt binnenkort beschikbaar in de app.",
+  "knowledgeCards_voiceAnswerError": "Antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer opnieuw.",
+  "knowledgeCards_tapMicToSpeak": "Tik op de microfoon om te spreken",
+  "knowledgeCards_listening": "Opnemen..."
+}
