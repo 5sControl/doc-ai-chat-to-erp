@@ -288,5 +288,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "La verificación de su respuesta estará disponible en la aplicación pronto.",
   "knowledgeCards_voiceAnswerError": "No se pudo verificar la respuesta. Compruebe su conexión e inténtelo de nuevo.",
   "knowledgeCards_tapMicToSpeak": "Toque el micrófono para hablar",
-  "knowledgeCards_listening": "Escuchando..."
+  "knowledgeCards_listening": "Escuchando...",
+
+  "copy_paste_required_title": "No se pudo cargar la página",
+  "copy_paste_required_message": "No es un error. El servidor no pudo cargar esta página automáticamente. Copie el texto de la página y pégalo en el campo de la aplicación."
 }

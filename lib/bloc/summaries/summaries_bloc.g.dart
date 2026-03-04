@@ -28,6 +28,7 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
               .toSet() ??
           {},
       lastRedeemMessage: json['lastRedeemMessage'] as String?,
+      copyPasteRequiredForUrl: json['copyPasteRequiredForUrl'] as String?,
     );
 
 Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>
@@ -41,6 +42,7 @@ Map<String, dynamic> _$SummariesStateToJson(SummariesState instance) =>
       'giftBalance': instance.giftBalance,
       'redeemedGiftCodes': instance.redeemedGiftCodes.toList(),
       'lastRedeemMessage': instance.lastRedeemMessage,
+      'copyPasteRequiredForUrl': instance.copyPasteRequiredForUrl,
     };
 
 const _$SummaryTypeEnumMap = {

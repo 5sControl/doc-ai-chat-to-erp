@@ -290,5 +290,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "Verification of your answer will be available in the app soon.",
   "knowledgeCards_voiceAnswerError": "Couldn't verify the answer. Check your connection and try again.",
   "knowledgeCards_tapMicToSpeak": "Tap the microphone to speak",
-  "knowledgeCards_listening": "Listening..."
+  "knowledgeCards_listening": "Listening...",
+
+  "copy_paste_required_title": "Page could not be loaded",
+  "copy_paste_required_message": "This is not an error. The server could not load this page automatically. Please copy the text from the page and paste it in the text field in the app."
 }

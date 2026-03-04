@@ -708,4 +708,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Ouvindo...';
+
+  @override
+  String get copy_paste_required_title => 'Não foi possível carregar a página';
+
+  @override
+  String get copy_paste_required_message =>
+      'Isso não é um erro. O servidor não pôde carregar esta página automaticamente. Copie o texto da página e cole-o no campo da aplicação.';
 }

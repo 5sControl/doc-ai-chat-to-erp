@@ -288,5 +288,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "您的答案验证将很快在应用中提供。",
   "knowledgeCards_voiceAnswerError": "无法验证答案，请检查网络连接后重试。",
   "knowledgeCards_tapMicToSpeak": "点击麦克风说话",
-  "knowledgeCards_listening": "正在听..."
+  "knowledgeCards_listening": "正在听...",
+
+  "copy_paste_required_title": "无法加载页面",
+  "copy_paste_required_message": "这不是错误。服务器无法自动加载此页面。请从页面复制文本并粘贴到应用输入框中。"
 }

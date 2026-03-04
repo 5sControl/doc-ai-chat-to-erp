@@ -706,4 +706,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Listening...';
+
+  @override
+  String get copy_paste_required_title => 'Page could not be loaded';
+
+  @override
+  String get copy_paste_required_message =>
+      'This is not an error. The server could not load this page automatically. Please copy the text from the page and paste it in the text field in the app.';
 }

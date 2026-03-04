@@ -288,5 +288,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "您的答案驗證將很快在應用中提供。",
   "knowledgeCards_voiceAnswerError": "無法驗證答案，請檢查網路連線後重試。",
   "knowledgeCards_tapMicToSpeak": "點擊麥克風說話",
-  "knowledgeCards_listening": "正在聽..."
+  "knowledgeCards_listening": "正在聽...",
+
+  "copy_paste_required_title": "無法載入頁面",
+  "copy_paste_required_message": "這不是錯誤。伺服器無法自動載入此頁面。請從頁面複製文字並貼到應用程式的輸入欄位。"
 }

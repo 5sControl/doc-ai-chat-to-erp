@@ -16,6 +16,9 @@ class ErrorDecode {
   ErrorDecode({required this.detail});
 }
 
+/// Thrown when server returns 404 with error.code PAGE_COULD_NOT_LOAD (show copy-paste dialog).
+class PageCouldNotLoadException implements Exception {}
+
 /// Result of fetching an article by URL (content, title, image URL for list preview).
 class FetchArticleResult {
   final String content;
@@ -99,6 +102,16 @@ class SummaryApiRepository {
       }
       return null;
     } on DioException catch (e) {
+      try {
+        final decoded = json.decode(e.response?.data?.toString() ?? '{}') as Map<String, dynamic>;
+        final errorObj = decoded['error'];
+        final code = errorObj is Map ? errorObj['code'] as String? : null;
+        if (code == 'PAGE_COULD_NOT_LOAD') {
+          throw PageCouldNotLoadException();
+        }
+      } catch (err) {
+        if (err is PageCouldNotLoadException) rethrow;
+      }
       ErrorDecode error;
       try {
         final decodedMap = json.decode(e.response?.data);

@@ -53,6 +53,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           lastFreeSummaryDate: '',
           giftBalance: 0,
           redeemedGiftCodes: {},
+          copyPasteRequiredForUrl: null,
         )) {
     subscriptionBlocSubscription = subscriptionBloc.stream.listen((state) {
       if (state.subscriptionStatus == SubscriptionStatus.subscribed) {
@@ -190,6 +191,10 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
 
     on<ClearRedeemMessage>((event, emit) {
       emit(state.copyWith(clearRedeemMessage: true));
+    });
+
+    on<ClearCopyPastePrompt>((event, emit) {
+      emit(state.copyWith(clearCopyPastePrompt: true));
     });
 
     // Initialize demo data after state is loaded from storage
@@ -336,6 +341,15 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         longSummaryResponse = results[1];
       }
     } catch (e) {
+      if (e is PageCouldNotLoadException) {
+        final newSummaries = Map<String, SummaryData>.from(state.summaries)
+          ..remove(summaryKey);
+        emit(state.copyWith(
+          summaries: newSummaries,
+          copyPasteRequiredForUrl: summaryKey,
+        ));
+        return;
+      }
       shortSummaryResponse = e is Exception ? e : Exception(e.toString());
       longSummaryResponse = shortSummaryResponse;
     }

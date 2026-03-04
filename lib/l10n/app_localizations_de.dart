@@ -713,4 +713,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Aufnahme...';
+
+  @override
+  String get copy_paste_required_title => 'Seite konnte nicht geladen werden';
+
+  @override
+  String get copy_paste_required_message =>
+      'Das ist kein Fehler. Der Server konnte diese Seite nicht automatisch laden. Bitte kopieren Sie den Text von der Seite und fügen Sie ihn im App-Eingabefeld ein.';
 }

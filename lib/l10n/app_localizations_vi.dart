@@ -703,4 +703,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Đang nghe...';
+
+  @override
+  String get copy_paste_required_title => 'Không thể tải trang';
+
+  @override
+  String get copy_paste_required_message =>
+      'Đây không phải lỗi. Máy chủ không thể tải trang này tự động. Vui lòng sao chép văn bản từ trang và dán vào ô nhập trong ứng dụng.';
 }

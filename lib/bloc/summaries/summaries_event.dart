@@ -117,3 +117,10 @@ class ClearRedeemMessage extends SummariesEvent {
   @override
   List<Object?> get props => [];
 }
+
+class ClearCopyPastePrompt extends SummariesEvent {
+  const ClearCopyPastePrompt();
+
+  @override
+  List<Object?> get props => [];
+}

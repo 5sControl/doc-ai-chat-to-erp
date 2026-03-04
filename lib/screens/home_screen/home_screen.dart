@@ -144,7 +144,32 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
+    return BlocListener<SummariesBloc, SummariesState>(
+      listenWhen: (prev, curr) =>
+          prev.copyPasteRequiredForUrl != curr.copyPasteRequiredForUrl &&
+          curr.copyPasteRequiredForUrl != null,
+      listener: (context, state) {
+        final url = state.copyPasteRequiredForUrl;
+        if (url == null) return;
+        final l10n = AppLocalizations.of(context);
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(l10n.copy_paste_required_title),
+            content: Text(l10n.copy_paste_required_message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                  context.read<SummariesBloc>().add(const ClearCopyPastePrompt());
+                },
+                child: Text(l10n.common_ok),
+              ),
+            ],
+          ),
+        );
+      },
+      child: PopScope(
       canPop: false,
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, settingsState) {
@@ -336,6 +361,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           );
         },
       ),
+    ),
     );
   }
 }

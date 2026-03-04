@@ -288,5 +288,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "Controle van je antwoord komt binnenkort beschikbaar in de app.",
   "knowledgeCards_voiceAnswerError": "Antwoord kon niet worden gecontroleerd. Controleer je verbinding en probeer opnieuw.",
   "knowledgeCards_tapMicToSpeak": "Tik op de microfoon om te spreken",
-  "knowledgeCards_listening": "Opnemen..."
+  "knowledgeCards_listening": "Opnemen...",
+
+  "copy_paste_required_title": "Pagina kon niet worden geladen",
+  "copy_paste_required_message": "Dit is geen fout. De server kon deze pagina niet automatisch laden. Kopieer de tekst van de pagina en plak deze in het invoerveld van de app."
 }

@@ -290,5 +290,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "Проверка верности ответа появится в программе в скором времени.",
   "knowledgeCards_voiceAnswerError": "Не удалось проверить ответ. Проверьте подключение и попробуйте снова.",
   "knowledgeCards_tapMicToSpeak": "Нажмите на микрофон, чтобы говорить",
-  "knowledgeCards_listening": "Идёт запись..."
+  "knowledgeCards_listening": "Идёт запись...",
+
+  "copy_paste_required_title": "Не удалось загрузить страницу",
+  "copy_paste_required_message": "Это не ошибка. Сервер не может загрузить этот материал автоматически. Скопируйте текст со страницы и вставьте его в поле ввода в приложении."
 }

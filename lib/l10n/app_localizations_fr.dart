@@ -713,4 +713,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Écoute...';
+
+  @override
+  String get copy_paste_required_title => 'Impossible de charger la page';
+
+  @override
+  String get copy_paste_required_message =>
+      'Ce n\'est pas une erreur. Le serveur n\'a pas pu charger cette page automatiquement. Veuillez copier le texte de la page et le coller dans le champ de l\'application.';
 }

@@ -288,5 +288,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "Việc xác minh câu trả lời của bạn sẽ sớm có trong ứng dụng.",
   "knowledgeCards_voiceAnswerError": "Không thể xác minh câu trả lời. Kiểm tra kết nối và thử lại.",
   "knowledgeCards_tapMicToSpeak": "Chạm vào micrô để nói",
-  "knowledgeCards_listening": "Đang nghe..."
+  "knowledgeCards_listening": "Đang nghe...",
+
+  "copy_paste_required_title": "Không thể tải trang",
+  "copy_paste_required_message": "Đây không phải lỗi. Máy chủ không thể tải trang này tự động. Vui lòng sao chép văn bản từ trang và dán vào ô nhập trong ứng dụng."
 }

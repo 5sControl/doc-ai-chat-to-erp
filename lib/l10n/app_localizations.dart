@@ -1432,6 +1432,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Listening...'**
   String get knowledgeCards_listening;
+
+  /// No description provided for @copy_paste_required_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Page could not be loaded'**
+  String get copy_paste_required_title;
+
+  /// No description provided for @copy_paste_required_message.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not an error. The server could not load this page automatically. Please copy the text from the page and paste it in the text field in the app.'**
+  String get copy_paste_required_message;
 }
 
 class _AppLocalizationsDelegate

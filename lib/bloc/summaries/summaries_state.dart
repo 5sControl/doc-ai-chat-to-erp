@@ -13,6 +13,7 @@ class SummariesState extends Equatable {
   final int giftBalance;
   final Set<String> redeemedGiftCodes;
   final String? lastRedeemMessage;
+  final String? copyPasteRequiredForUrl;
 
   const SummariesState({
     required this.summaries,
@@ -24,6 +25,7 @@ class SummariesState extends Equatable {
     this.giftBalance = 0,
     this.redeemedGiftCodes = const {},
     this.lastRedeemMessage,
+    this.copyPasteRequiredForUrl,
   });
 
   SummariesState copyWith({
@@ -37,6 +39,8 @@ class SummariesState extends Equatable {
     Set<String>? redeemedGiftCodes,
     String? lastRedeemMessage,
     bool clearRedeemMessage = false,
+    String? copyPasteRequiredForUrl,
+    bool clearCopyPastePrompt = false,
   }) {
     return SummariesState(
       summaries: summaries ?? this.summaries,
@@ -50,6 +54,9 @@ class SummariesState extends Equatable {
       redeemedGiftCodes: redeemedGiftCodes ?? this.redeemedGiftCodes,
       lastRedeemMessage:
           clearRedeemMessage ? null : (lastRedeemMessage ?? this.lastRedeemMessage),
+      copyPasteRequiredForUrl: clearCopyPastePrompt
+          ? null
+          : (copyPasteRequiredForUrl ?? this.copyPasteRequiredForUrl),
     );
   }
 
@@ -69,5 +76,6 @@ class SummariesState extends Equatable {
         giftBalance,
         redeemedGiftCodes,
         lastRedeemMessage,
+        copyPasteRequiredForUrl,
       ];
 }

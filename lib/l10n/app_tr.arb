@@ -288,5 +288,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "Yanıtınızın doğrulanması yakında uygulamada kullanılabilecek.",
   "knowledgeCards_voiceAnswerError": "Yanıt doğrulanamadı. Bağlantınızı kontrol edin ve tekrar deneyin.",
   "knowledgeCards_tapMicToSpeak": "Konuşmak için mikrofona dokunun",
-  "knowledgeCards_listening": "Dinleniyor..."
+  "knowledgeCards_listening": "Dinleniyor...",
+
+  "copy_paste_required_title": "Sayfa yüklenemedi",
+  "copy_paste_required_message": "Bu bir hata değildir. Sunucu bu sayfayı otomatik olarak yükleyemedi. Lütfen metni sayfadan kopyalayıp uygulama alanına yapıştırın."
 }

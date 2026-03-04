@@ -690,6 +690,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => '正在聽...';
+
+  @override
+  String get copy_paste_required_title => '無法載入頁面';
+
+  @override
+  String get copy_paste_required_message =>
+      '這不是錯誤。伺服器無法自動載入此頁面。請從頁面複製文字並貼到應用程式的輸入欄位。';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -1378,4 +1385,11 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get knowledgeCards_listening => '正在听...';
+
+  @override
+  String get copy_paste_required_title => '无法加载页面';
+
+  @override
+  String get copy_paste_required_message =>
+      '这不是错误。服务器无法自动加载此页面。请从页面复制文本并粘贴到应用输入框中。';
 }

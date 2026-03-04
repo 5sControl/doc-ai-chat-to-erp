@@ -709,4 +709,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Идёт запись...';
+
+  @override
+  String get copy_paste_required_title => 'Не удалось загрузить страницу';
+
+  @override
+  String get copy_paste_required_message =>
+      'Это не ошибка. Сервер не может загрузить этот материал автоматически. Скопируйте текст со страницы и вставьте его в поле ввода в приложении.';
 }

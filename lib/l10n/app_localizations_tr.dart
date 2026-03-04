@@ -708,4 +708,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Dinleniyor...';
+
+  @override
+  String get copy_paste_required_title => 'Sayfa yüklenemedi';
+
+  @override
+  String get copy_paste_required_message =>
+      'Bu bir hata değildir. Sunucu bu sayfayı otomatik olarak yükleyemedi. Lütfen metni sayfadan kopyalayıp uygulama alanına yapıştırın.';
 }

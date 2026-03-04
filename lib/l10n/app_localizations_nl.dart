@@ -710,4 +710,11 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Opnemen...';
+
+  @override
+  String get copy_paste_required_title => 'Pagina kon niet worden geladen';
+
+  @override
+  String get copy_paste_required_message =>
+      'Dit is geen fout. De server kon deze pagina niet automatisch laden. Kopieer de tekst van de pagina en plak deze in het invoerveld van de app.';
 }

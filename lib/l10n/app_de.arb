@@ -288,5 +288,8 @@
   "knowledgeCards_voiceAnswerStubMessage": "Die Überprüfung Ihrer Antwort wird bald in der App verfügbar sein.",
   "knowledgeCards_voiceAnswerError": "Antwort konnte nicht überprüft werden. Bitte Verbindung prüfen und erneut versuchen.",
   "knowledgeCards_tapMicToSpeak": "Tippen Sie auf das Mikrofon, um zu sprechen",
-  "knowledgeCards_listening": "Aufnahme..."
+  "knowledgeCards_listening": "Aufnahme...",
+
+  "copy_paste_required_title": "Seite konnte nicht geladen werden",
+  "copy_paste_required_message": "Das ist kein Fehler. Der Server konnte diese Seite nicht automatisch laden. Bitte kopieren Sie den Text von der Seite und fügen Sie ihn im App-Eingabefeld ein."
 }

@@ -708,4 +708,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get knowledgeCards_listening => 'Słucham...';
+
+  @override
+  String get copy_paste_required_title => 'Nie udało się załadować strony';
+
+  @override
+  String get copy_paste_required_message =>
+      'To nie jest błąd. Serwer nie mógł automatycznie załadować tej strony. Skopiuj tekst ze strony i wklej go w pole w aplikacji.';
 }
