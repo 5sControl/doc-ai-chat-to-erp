@@ -7,6 +7,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'package:summify/bloc/offers/offers_state.dart';
+import 'package:summify/constants.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/bundle_screen/bundle_offer_screen.dart';
 import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
@@ -142,6 +143,7 @@ class _BundleScreenState extends State<BundleScreen>
 
     return BlocConsumer<SubscriptionsBloc, SubscriptionsState>(
       listener: (context, state) {
+        if (kIsFreeApp) return;
         // Автоматически закрываем paywall после успешной покупки подписки
         if (state.subscriptionStatus == SubscriptionStatus.subscribed &&
             context.mounted) {
@@ -168,6 +170,15 @@ class _BundleScreenState extends State<BundleScreen>
         }
       },
       builder: (context, state) {
+        if (kIsFreeApp) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/', (Route<dynamic> route) => false);
+            }
+          });
+          return const SizedBox.shrink();
+        }
         // final abTest = context.read<SettingsBloc>().state.abTest;
 
         if (state.availableProducts == null ||

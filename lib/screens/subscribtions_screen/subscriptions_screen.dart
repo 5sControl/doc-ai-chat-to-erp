@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:summify/l10n/app_localizations.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:summify/constants.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
 import 'package:summify/screens/subscribtions_screen/terms_restore_privacy.dart';
@@ -47,6 +48,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (kIsFreeApp) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
+      });
+      return const SizedBox.shrink();
+    }
     // final abTest = context.read<SettingsBloc>().state.abTest;
 
     // void onSubscriptionsComplete() {

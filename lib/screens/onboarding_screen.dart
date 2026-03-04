@@ -8,6 +8,7 @@ import 'package:summify/bloc/settings/settings_bloc.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
 import 'package:summify/l10n/app_localizations.dart';
 
+import 'package:summify/constants.dart';
 import '../gen/assets.gen.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -55,7 +56,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       passOnboarding();
       context.read<MixpanelBloc>().add(OnboardingStep(step: _currentPageIndex));
 
-      if (!kIsWeb && Platform.isIOS) {
+      if (kIsFreeApp) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      } else if (!kIsWeb && Platform.isIOS) {
         Navigator.of(context).pushNamedAndRemoveUntil(
             '/bundle', (Route<dynamic> route) => false);
       } else {
