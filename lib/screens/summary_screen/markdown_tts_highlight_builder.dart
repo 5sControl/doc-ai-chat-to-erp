@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
@@ -59,6 +60,8 @@ class MarkdownTtsHighlightBuilder extends MarkdownElementBuilder {
 
   int _blockIndex = 0;
 
+  static int _elementLogCount = 0;
+
   @override
   bool isBlockElement() => false;
 
@@ -75,12 +78,21 @@ class MarkdownTtsHighlightBuilder extends MarkdownElementBuilder {
     TextStyle? parentStyle,
   ) {
     final tag = element.tag;
+    if (kDebugMode && _elementLogCount < 20) {
+      debugPrint('[TtsHighlight] ELEMENT: tag=$tag blockMatch=${_blockTags.contains(tag)}');
+      _elementLogCount++;
+    }
     if (_blockTags.contains(tag)) {
       final blockText = element.textContent;
       if (blockText.isEmpty) return null;
       final blockStart = _blockIndex < blockOffsets.length
           ? blockOffsets[_blockIndex]
           : 0;
+      if (kDebugMode && _blockIndex < 15) {
+        debugPrint(
+          '[TtsHighlight] BLOCK_VISIT: tag=$tag idx=$_blockIndex blockStart=$blockStart blockLen=${blockText.length}',
+        );
+      }
       _blockIndex++;
       final style = preferredStyle ?? parentStyle ?? const TextStyle();
       return _HighlightableWordTapText(
