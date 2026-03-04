@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/screens/summary_screen/markdown_word_tap_builder.dart';

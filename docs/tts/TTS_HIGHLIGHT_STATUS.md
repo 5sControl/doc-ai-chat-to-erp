@@ -24,7 +24,7 @@
 
 2. **Сопоставление блоков Markdown и координат**  
    В [lib/screens/summary_screen/markdown_tts_highlight_builder.dart](lib/screens/summary_screen/markdown_tts_highlight_builder.dart) для каждого блока (p, h1, …) берётся `blockStart` из `blockOffsets[_blockIndex]`. Эти оффсеты строятся в [markdown_tts_highlight_builder.dart](lib/screens/summary_screen/markdown_tts_highlight_builder.dart) через `computeBlockOffsets(textToDisplay)` на базе парсера пакета `markdown`. Возможные расхождения:
-   - порядок обхода блоков в `MarkdownBody` (flutter_markdown) и порядок блоков в `computeBlockOffsets` могут не совпадать;
+   - порядок обхода блоков в `MarkdownBody` (flutter_markdown_plus) и порядок блоков в `computeBlockOffsets` могут не совпадать;
    - разный парсинг/структура (например, другой состав блоков) → неверный `blockStart` → неверные `globalStart`/`globalEnd` и выделение не там или на всём тексте.
 
 3. **Проверка по логам**  
