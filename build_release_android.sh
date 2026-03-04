@@ -59,6 +59,20 @@ echo -e "${BLUE}📥 Зависимости...${NC}"
 flutter pub get
 echo ""
 
+# Исправление битого NDK: если папка NDK есть без source.properties — удалить, Gradle перекачает
+NDK_DIR="${ANDROID_HOME:-$HOME/Library/Android/sdk}/ndk"
+if [ -d "$NDK_DIR" ]; then
+    for dir in "$NDK_DIR"/28.* "$NDK_DIR"/26.* "$NDK_DIR"/27.*; do
+        [ -d "$dir" ] || continue
+        if [ ! -f "$dir/source.properties" ]; then
+            echo -e "${YELLOW}⚠️  Удаляю битый NDK (нет source.properties): $dir${NC}"
+            rm -rf "$dir"
+            echo -e "${GREEN}   Gradle скачает NDK заново при сборке.${NC}"
+        fi
+    done
+fi
+echo ""
+
 echo -e "${BLUE}🔨 Сборка AAB...${NC}"
 flutter build appbundle --release
 
