@@ -28,7 +28,16 @@ List<ButtonItem> buildSupportGroupItems(BuildContext context) {
         );
   }
 
+  void onPressFeedback() {
+    Navigator.of(context).pushNamed('/request');
+  }
+
   return [
+    ButtonItem(
+      title: 'Request a feature',
+      leadingIcon: Assets.icons.chat,
+      onTap: onPressFeedback,
+    ),
     if (!kIsWeb && Platform.isIOS)
       ButtonItem(
         title: 'Terms of use',

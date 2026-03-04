@@ -18,6 +18,31 @@ import '../../gen/assets.gen.dart';
 import '../../models/models.dart';
 import '../summary_screen/summary_screen.dart';
 
+/// Cleans server error text for the problem report: removes box-drawing and
+/// similar noise, trims lines, collapses excess newlines.
+String? _sanitizeReportError(String? text) {
+  if (text == null || text.isEmpty) return text;
+  var out = text.replaceAll(RegExp(r'[\u2500-\u257F]'), '');
+  out = out.replaceAll('+', ' ');
+  final lines = out.split(RegExp(r'\r?\n')).map((s) => s.trim()).toList();
+  final buffer = StringBuffer();
+  var lastWasBlank = false;
+  for (final line in lines) {
+    final isBlank = line.isEmpty;
+    if (isBlank && lastWasBlank) continue;
+    if (buffer.isNotEmpty) buffer.writeln();
+    if (isBlank) {
+      buffer.writeln();
+      lastWasBlank = true;
+    } else {
+      buffer.write(line);
+      lastWasBlank = false;
+    }
+  }
+  final result = buffer.toString().trim();
+  return result.isEmpty ? null : result;
+}
+
 class SummaryTile extends StatefulWidget {
   final String sharedLink;
 
@@ -298,34 +323,32 @@ class ErrorButtons extends StatelessWidget {
     }
 
     void onPressReport() {
-      final errorText = (summaryData.longSummary.summaryError ??
+      final rawError = (summaryData.longSummary.summaryError ??
               summaryData.shortSummary.summaryError)
           ?.trim();
+      final errorText = _sanitizeReportError(rawError);
 
       final title = (summaryData.summaryPreview.title ?? '').trim();
       final origin = summaryData.summaryOrigin.name;
       final filePath = summaryData.filePath;
       final userTextLen = summaryData.userText?.length;
 
+      final sourceLine = origin == 'url'
+          ? summaryLink
+          : (origin == 'file'
+              ? (filePath ?? '(unknown file)')
+              : 'Pasted text (${userTextLen ?? 0} characters)');
+
       final buffer = StringBuffer()
         ..writeln('Problem report')
+        ..writeln('---')
         ..writeln()
-        ..writeln('Summary key: $summaryLink')
-        ..writeln('Title: ${title.isEmpty ? '(none)' : title}')
-        ..writeln('Origin: $origin')
-        ..writeln('Created at: ${summaryData.date.toIso8601String()}')
+        ..writeln('Document: ${title.isEmpty ? sourceLine : title}')
+        ..writeln('Source: $sourceLine')
+        ..writeln('Created: ${summaryData.date.toIso8601String()}')
         ..writeln()
-        ..writeln('Source:')
-        ..writeln(origin == 'url'
-            ? summaryLink
-            : (origin == 'file'
-                ? (filePath ?? '(filePath is null)')
-                : 'text (length: ${userTextLen ?? 0})'))
-        ..writeln()
-        ..writeln('Server error:')
-        ..writeln((errorText == null || errorText.isEmpty)
-            ? '(empty)'
-            : errorText);
+        ..writeln('Error:')
+        ..writeln(errorText == null || errorText.isEmpty ? '(no message)' : errorText);
 
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => RequestScreen(

@@ -43,11 +43,10 @@ class _RequestScreenState extends State<RequestScreen> {
   Future<void> onPressSubmit() async {
     final subject = 'Summify: ${widget.title}';
     final bodyParts = <String>[];
+    for (final option in selectedOptions) {
+      bodyParts.add('$option — ');
+    }
     if (selectedOptions.isNotEmpty) {
-      bodyParts.add('Selected options:');
-      for (final option in selectedOptions) {
-        bodyParts.add('- $option');
-      }
       bodyParts.add('');
     }
     final messageText = messageController.text.trim();
@@ -107,11 +106,12 @@ class _RequestScreenState extends State<RequestScreen> {
     final List<String> options = [
       'Secure summarization',
       'Read my book',
-      'Speech to text feature',
-      'Text to speech feature',
       'Add language',
       'Support for large files',
       'Work with groups of files',
+      'More tools for active learning',
+      'Add active learning section',
+      'Quiz or comprehension check after summary',
     ];
 
     return Stack(
@@ -134,12 +134,29 @@ class _RequestScreenState extends State<RequestScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ...options.map(
-                    (option) => OptionContainer(
-                      title: option,
-                      selectedOptions: selectedOptions,
-                      onSelectOption: onSelectOption,
-                    ),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: options.map((option) {
+                      final selected = selectedOptions.contains(option);
+                      return FilterChip(
+                        label: Text(option),
+                        selected: selected,
+                        onSelected: (_) => onSelectOption(option: option),
+                        selectedColor: Theme.of(context).hintColor,
+                        checkmarkColor: Colors.white,
+                        labelStyle: TextStyle(
+                          color: selected ? Colors.white : null,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Selected items will be added to the email; you can add details after the dash below or in your email app.',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.white70,
+                        ),
                   ),
                   const SizedBox(height: 16),
                   const Text(
@@ -227,71 +244,3 @@ class ConfirmButton extends StatelessWidget {
   }
 }
 
-class OptionContainer extends StatelessWidget {
-  final String title;
-  final Set<String> selectedOptions;
-  final Function({required String option}) onSelectOption;
-
-  const OptionContainer({
-    super.key,
-    required this.title,
-    required this.selectedOptions,
-    required this.onSelectOption,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isAddLanguage = title == 'Add language';
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-      decoration: BoxDecoration(
-        color: Theme.of(context).hintColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Checkbox(
-            value: selectedOptions.contains(title),
-            onChanged: (_) => onSelectOption(option: title),
-            activeColor: Colors.white,
-            checkColor: Theme.of(context).hintColor,
-            fillColor: WidgetStateProperty.resolveWith<Color>((states) {
-              if (states.contains(WidgetState.selected)) {
-                return Colors.white;
-              }
-              return Colors.white24;
-            }),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium!
-                      .copyWith(color: Colors.white),
-                ),
-                if (isAddLanguage)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Text(
-                      'Add a language — write which one in the message below',
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                            color: Colors.white70,
-                            fontSize: 12,
-                          ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
