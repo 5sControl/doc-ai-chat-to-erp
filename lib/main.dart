@@ -91,6 +91,9 @@ class _SummishareAppState extends State<SummishareApp> {
   late MixpanelBloc _mixpanelBloc;
   late SavedCardsBloc _savedCardsBloc;
   
+  /// Flag to ensure pending shared data is checked only once after bloc init
+  bool _pendingShareChecked = false;
+  
   static const platform = MethodChannel('com.summify.share');
 
   @override
@@ -148,25 +151,43 @@ class _SummishareAppState extends State<SummishareApp> {
       print('🔥 Error getting initial link: $e');
     }
 
-    // For Android: Check for share intent
-    if (!kIsWeb && Platform.isAndroid) {
-      _checkAndroidShareIntent();
-    }
+    // Note: Share intent/extension check for both iOS and Android is handled
+    // by _checkPendingSharedData() which runs after blocs are initialized.
   }
 
-  void _checkAndroidShareIntent() async {
+  /// Checks for any pending shared data from native side (iOS and Android).
+  ///
+  /// BUG FIX: Solves cold start timing issue for ALL content types (URLs, text,
+  /// media, files). On cold start, the native side (iOS Share Extension or Android
+  /// Share Intent) may store data before Flutter's MethodChannel handler is ready.
+  /// By calling 'getSharedData' via MethodChannel, we pull any pending data
+  /// from the native side after blocs are initialized.
+  void _checkPendingSharedData() async {
+    if (kIsWeb) return;
+    
     try {
-      final intent = await platform.invokeMethod('getSharedData');
-      if (intent != null) {
-        print('🔥 Android share intent: $intent');
-        if (intent is String) {
-          _handleSharedText(intent);
-        } else if (intent is Map) {
-          _handleSharedMedia(intent);
+      final result = await platform.invokeMethod('getSharedData');
+      if (result != null) {
+        print('🔥 Pending shared data received: $result');
+        if (result is List) {
+          // iOS returns [String] array for text/URL shares
+          for (var item in result) {
+            if (item is String) {
+              _handleSharedText(item);
+            } else if (item is Map) {
+              _handleSharedMedia(item);
+            }
+          }
+        } else if (result is String) {
+          // Android returns a single String
+          _handleSharedText(result);
+        } else if (result is Map) {
+          // Android can return a Map for media
+          _handleSharedMedia(result);
         }
       }
     } catch (e) {
-      print('🔥 No Android share intent or error: $e');
+      print('🔥 No pending shared data or error: $e');
     }
   }
 
@@ -256,6 +277,18 @@ class _SummishareAppState extends State<SummishareApp> {
                 _summariesBloc = SummariesBloc(
                     mixpanelBloc: _mixpanelBloc,
                     subscriptionBloc: context.read<SubscriptionsBloc>());
+                
+                // BUG FIX: Check for pending shared data AFTER blocs are initialized.
+                // On cold start, the native side may have stored shared data before
+                // Flutter was ready. Now that _summariesBloc exists, pull pending data.
+                // Uses addPostFrameCallback to ensure the widget tree is fully built.
+                if (!_pendingShareChecked) {
+                  _pendingShareChecked = true;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _checkPendingSharedData();
+                  });
+                }
+                
                 return _summariesBloc;
               }),
           BlocProvider(
