@@ -31,7 +31,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Özet almak için tek tıkla \"paylaş\"';
 
   @override
-  String get onboarding_welcomeTitle => 'Summify\'a Hoş Geldiniz';
+  String get onboarding_welcomeTitle => 'LM Notebook Studio\'ya Hoş Geldiniz';
 
   @override
   String get onboarding_welcomeSubtitle => 'Kişisel AI Özetleyici';

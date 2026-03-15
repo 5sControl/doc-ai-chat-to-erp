@@ -32,7 +32,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Mit einem Klick auf „Teilen“ zur Zusammenfassung';
 
   @override
-  String get onboarding_welcomeTitle => 'Willkommen bei Summify';
+  String get onboarding_welcomeTitle => 'Willkommen bei LM Notebook Studio';
 
   @override
   String get onboarding_welcomeSubtitle => 'Persönlicher KI-Zusammenfasser';

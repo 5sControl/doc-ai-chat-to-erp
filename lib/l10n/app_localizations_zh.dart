@@ -30,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get onboarding_oneClickShareToGetSummary => '一键“分享”获取摘要';
 
   @override
-  String get onboarding_welcomeTitle => '欢迎使用 Summify';
+  String get onboarding_welcomeTitle => '欢迎使用 LM Notebook Studio';
 
   @override
   String get onboarding_welcomeSubtitle => '个人 AI 摘要工具';
@@ -725,7 +725,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get onboarding_oneClickShareToGetSummary => '一键“分享”获取摘要';
 
   @override
-  String get onboarding_welcomeTitle => '欢迎使用 Summify';
+  String get onboarding_welcomeTitle => '欢迎使用 LM Notebook Studio';
 
   @override
   String get onboarding_welcomeSubtitle => '个人 AI 摘要工具';

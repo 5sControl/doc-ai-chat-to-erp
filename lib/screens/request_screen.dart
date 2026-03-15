@@ -41,7 +41,7 @@ class _RequestScreenState extends State<RequestScreen> {
   }
 
   Future<void> onPressSubmit() async {
-    final subject = 'Summify: ${widget.title}';
+    final subject = 'LM Notebook Studio: ${widget.title}';
     final bodyParts = <String>[];
     for (final option in selectedOptions) {
       bodyParts.add('$option — ');

@@ -32,7 +32,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Un clic en \"Compartir\" para obtener un resumen';
 
   @override
-  String get onboarding_welcomeTitle => 'Bienvenido a Summify';
+  String get onboarding_welcomeTitle => 'Bienvenido a LM Notebook Studio';
 
   @override
   String get onboarding_welcomeSubtitle => 'Resumidor IA personal';

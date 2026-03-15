@@ -132,7 +132,7 @@ List<ButtonItem> buildSubscriptionGroupItems(BuildContext context) {
       onTap: () => showRedeemGiftCodeDialog(context: context),
     ),
     ButtonItem(
-      title: 'Add Summify for Chrome',
+      title: 'Add LM Notebook Studio for Chrome',
       leadingIcon: Assets.icons.chromeMini,
       onTap: onPressChrome,
       trailing: Container(
@@ -168,7 +168,7 @@ List<ButtonItem> buildSubscriptionGroupItems(BuildContext context) {
     ),
     if (!kIsWeb && Platform.isIOS)
       ButtonItem(
-        title: 'Rate Summify',
+        title: 'Rate LM Notebook Studio',
         leadingIcon: Assets.icons.star,
         onTap: onPressRateApp,
       ),

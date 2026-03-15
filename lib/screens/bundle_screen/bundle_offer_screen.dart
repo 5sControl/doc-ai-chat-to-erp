@@ -134,7 +134,7 @@ class Body extends StatelessWidget {
                     height: isTablet ? 88 : 68,
                   ),
                   Text(
-                    'Summify',
+                    'LM Notebook Studio',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: isTablet ? 20 : 16),
@@ -247,7 +247,7 @@ class Body1 extends StatelessWidget {
                     InkWell(
                       onTap: onPressDesktop,
                       child: Text(
-                        'Summify',
+                        'LM Notebook Studio',
                         style: TextStyle(
                             fontSize: isTablet ? 20 : 16,
                             color: Colors.black,

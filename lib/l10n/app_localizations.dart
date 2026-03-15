@@ -164,7 +164,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboarding_welcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Summify'**
+  /// **'Welcome to LM Notebook Studio'**
   String get onboarding_welcomeTitle;
 
   /// No description provided for @onboarding_welcomeSubtitle.
