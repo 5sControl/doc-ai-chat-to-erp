@@ -4,75 +4,45 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:summify/models/models.dart';
 
+import 'summary_api_models.dart';
+
+export 'summary_api_models.dart';
+
 enum SendRateStatus { Loading, Sended, Error }
 
 enum SendFeatureStatus { Loading, Sended, Error }
 
 enum SummaryType { long, short }
 
-class ErrorDecode {
-  final String detail;
-
-  ErrorDecode({required this.detail});
-}
-
-/// Thrown when server returns 404 with error.code PAGE_COULD_NOT_LOAD (show copy-paste dialog).
-class PageCouldNotLoadException implements Exception {}
-
-/// Result of fetching an article by URL (content, title, image URL for list preview).
-class FetchArticleResult {
-  final String content;
-  final String? title;
-  final String? imageUrl;
-
-  FetchArticleResult({required this.content, this.title, this.imageUrl});
-}
-
 class SummaryApiRepository {
-  // Summarization endpoints
-  final String summarizeUrl =
-      "https://employees-training.com/api/v1/summaries";
+  /// Primary host: documents, parsing, LLM-backed API (`/api/v1/...`).
+  static const String _baseUrlPrimary = 'https://api.lmnotebookpro.com';
 
-  final String summarizeFileUrl =
-      "https://employees-training.com/api/v1/summaries/files";
+  // Planned fallback bases (same paths). Enable cascade in [_postWithFallback] when ready.
+  // static const List<String> _fallbackBaseUrls = <String>[
+  //   'https://api.employees-training.com',
+  //   'https://chromium.employees-training.com',
+  // ];
 
-  // Question answering endpoints
-  final String askQuestionUrl =
-      "https://employees-training.com/api/v1/questions";
+  // API paths (appended to whichever base host is used)
+  static const String _pathSummaries = '/api/v1/summaries';
+  static const String _pathSummariesFiles = '/api/v1/summaries/files';
+  static const String _pathQuestions = '/api/v1/questions';
+  static const String _pathQuestionsFiles = '/api/v1/questions/files';
+  static const String _pathQuizzesGenerate = '/api/v1/quizzes/generate';
+  static const String _pathReviews = '/api/v1/reviews';
+  static const String _pathFeedback = '/api/v1/feedback';
+  static const String _pathTranslations = '/api/v1/translations';
+  static const String _pathKnowledgeCards = '/api/v1/knowledge-cards';
+  static const String _pathKnowledgeCardsVerify = '/api/v1/knowledge-cards/verify';
 
-  final String askQuestionFileUrl =
-      "https://employees-training.com/api/v1/questions/files";
-
-  // Quiz generation endpoint
-  final String generateQuizUrl =
-      "https://employees-training.com/api/v1/quizzes/generate";
-
-  // Other endpoints
-  final String reviewsUrl =
-      'https://employees-training.com/api/v1/reviews';
-
-  final String feedbackUrl =
-      'https://employees-training.com/api/v1/feedback';
-
-  final String translateUrl =
-      'https://employees-training.com/api/v1/translations';
-
+  // Other endpoints (not LM Notebook Pro API; no host fallback)
   final String sendEmailUrl =
       'https://easy4learn.com/django-api/applications/email/';
 
-  // Knowledge cards extraction endpoint
-  final String extractKnowledgeCardsUrl =
-      "https://employees-training.com/api/v1/knowledge-cards";
-
-  // Knowledge cards verify answer endpoint
-  final String verifyKnowledgeCardAnswerUrl =
-      "https://employees-training.com/api/v1/knowledge-cards/verify";
-
-  // API Key for authentication with employees-training.com API
-  // Using a static key to avoid build-time complexities
+  // API Key for authentication with document/LLM API
   static const String _apiKey = 'acf8421909af3940f4731f629e28ca486c9ed6af7d7f704a050494773a27c8a9';
 
-  // Initialize Dio with API key header
   late final Dio _dio = Dio(
     BaseOptions(
       responseType: ResponseType.plain,
@@ -82,14 +52,78 @@ class SummaryApiRepository {
     ),
   );
 
+  static bool _isNetworkFailure(DioException e) {
+    return e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.receiveTimeout ||
+        (e.type == DioExceptionType.unknown && e.response == null);
+  }
+
+  /// POST to document/LLM API ([_baseUrlPrimary] only for now).
+  ///
+  /// Fallback cascade through [_fallbackBaseUrls] is prepared but commented out below.
+  Future<Response> _postWithFallback(
+    String path,
+    dynamic data, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    return await _dio.post(
+      _baseUrlPrimary + path,
+      data: data,
+      queryParameters: queryParameters,
+    );
+
+    // --- Uncomment to try fallbacks after primary network failure (see _fallbackBaseUrls) ---
+    // try {
+    //   return await _dio.post(
+    //     _baseUrlPrimary + path,
+    //     data: data,
+    //     queryParameters: queryParameters,
+    //   );
+    // } on DioException catch (e) {
+    //   if (!_isNetworkFailure(e)) rethrow;
+    //   DioException? last = e;
+    //   for (final base in _fallbackBaseUrls) {
+    //     try {
+    //       return await _dio.post(
+    //         base + path,
+    //         data: data,
+    //         queryParameters: queryParameters,
+    //       );
+    //     } on DioException catch (e2) {
+    //       last = e2;
+    //       if (!_isNetworkFailure(e2)) rethrow;
+    //     }
+    //   }
+    //   throw last!;
+    // }
+  }
+
+  ErrorDecode _parseDioError(DioException e, {String defaultDetail = 'Processing error'}) {
+    try {
+      final data = e.response?.data;
+      if (data == null) return ErrorDecode(detail: defaultDetail);
+      final decodedMap = json.decode(data.toString()) as Map<String, dynamic>?;
+      final detail = decodedMap?['detail'];
+      return ErrorDecode(detail: detail is String ? detail : defaultDetail);
+    } catch (_) {
+      return ErrorDecode(detail: defaultDetail);
+    }
+  }
+
+  Never _throwDioError(DioException e, {String defaultDetail = 'Processing error'}) {
+    throw Exception(_parseDioError(e, defaultDetail: defaultDetail).detail);
+  }
+
   static const String _fetchArticlePath = '/fetch';
 
   /// Fetches article by URL: content, title, image_url. No summarization.
   Future<FetchArticleResult?> fetchArticleByUrl(String url) async {
     try {
-      final response = await _dio.post(
-        summarizeUrl + _fetchArticlePath,
-        data: {'url': url},
+      final response = await _postWithFallback(
+        _pathSummaries + _fetchArticlePath,
+        {'url': url},
       );
       if (response.statusCode == 200 && response.data != null) {
         final res = jsonDecode(response.data.toString()) as Map<String, dynamic>;
@@ -112,14 +146,7 @@ class SummaryApiRepository {
       } catch (err) {
         if (err is PageCouldNotLoadException) rethrow;
       }
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-        error = ErrorDecode(detail: decodedMap['detail']);
-      } catch (_) {
-        error = ErrorDecode(detail: 'Processing error');
-      }
-      throw Exception(error.detail);
+      _throwDioError(e);
     } catch (error) {
       throw Exception('Some error');
     }
@@ -128,7 +155,7 @@ class SummaryApiRepository {
   FutureOr<Object?> getFromLink(
       {required String summaryLink, required SummaryType summaryType}) async {
     try {
-      Response response = await _dio.post(summarizeUrl, data: {
+      Response response = await _postWithFallback(_pathSummaries, {
         'url': summaryLink,
         'context': '',
         "type_summary": summaryType.name
@@ -142,19 +169,7 @@ class SummaryApiRepository {
         Exception('Some error');
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-        error = ErrorDecode(
-          detail: decodedMap['detail'],
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-
-      return Exception(error.detail);
+      return Exception(_parseDioError(e).detail);
     } catch (error) {
       return Exception('Some error');
     }
@@ -164,9 +179,9 @@ class SummaryApiRepository {
   Future<dynamic> getFromText(
       {required String textToSummify, required SummaryType summaryType}) async {
     try {
-      Response response = await _dio.post(
-        summarizeUrl,
-        data: {
+      Response response = await _postWithFallback(
+        _pathSummaries,
+        {
           'url': '',
           'context': textToSummify,
           "type_summary": summaryType.name
@@ -179,20 +194,7 @@ class SummaryApiRepository {
             summaryText: res['summary'], contextLength: res['context_length']);
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-
-        error = ErrorDecode(
-          detail: decodedMap['detail'],
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-
-      return Exception(error.detail);
+      return Exception(_parseDioError(e).detail);
     } catch (error) {
       return Exception('Some error');
     }
@@ -211,8 +213,11 @@ class SummaryApiRepository {
     });
 
     try {
-      Response response = await _dio.post(summarizeFileUrl,
-          data: formData, queryParameters: {'type_summary': summaryType.name});
+      Response response = await _postWithFallback(
+        _pathSummariesFiles,
+        formData,
+        queryParameters: {'type_summary': summaryType.name},
+      );
 
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
@@ -220,20 +225,7 @@ class SummaryApiRepository {
             summaryText: res['summary'], contextLength: res['context_length']);
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-
-        error = ErrorDecode(
-          detail: decodedMap['detail'],
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-
-      return Exception(error.detail);
+      return Exception(_parseDioError(e).detail);
     } catch (error) {
       return Exception('Some error');
     }
@@ -254,7 +246,7 @@ class SummaryApiRepository {
         requestData['language_name'] = languageName;
       }
       
-      Response response = await _dio.post(translateUrl, data: requestData);
+      Response response = await _postWithFallback(_pathTranslations, requestData);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['translated_text'];
@@ -262,20 +254,7 @@ class SummaryApiRepository {
         throw Exception('Translation error');
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-
-        error = ErrorDecode(
-          detail: decodedMap['detail'],
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-
-      throw Exception(error.detail);
+      _throwDioError(e);
     } catch (error) {
       throw Exception('Some error');
     }
@@ -295,7 +274,7 @@ class SummaryApiRepository {
       if (systemHint != null && systemHint.isNotEmpty) {
         data['system_hint'] = systemHint;
       }
-      Response response = await _dio.post(askQuestionUrl, data: data);
+      Response response = await _postWithFallback(_pathQuestions, data);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['answer'];
@@ -303,20 +282,7 @@ class SummaryApiRepository {
         throw Exception('Translation error');
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-
-        error = ErrorDecode(
-          detail: decodedMap['detail'],
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-
-      throw Exception(error.detail);
+      _throwDioError(e);
     } catch (error) {
       throw Exception('Some error');
     }
@@ -336,7 +302,7 @@ class SummaryApiRepository {
       if (systemHint != null && systemHint.isNotEmpty) {
         data['system_hint'] = systemHint;
       }
-      Response response = await _dio.post(askQuestionUrl, data: data);
+      Response response = await _postWithFallback(_pathQuestions, data);
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['answer'];
@@ -344,20 +310,7 @@ class SummaryApiRepository {
         throw Exception('Translation error');
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-
-        error = ErrorDecode(
-          detail: decodedMap['detail'],
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-
-      throw Exception(error.detail);
+      _throwDioError(e);
     } catch (error) {
       throw Exception('Some error');
     }
@@ -380,8 +333,11 @@ class SummaryApiRepository {
       if (systemHint != null && systemHint.isNotEmpty) {
         queryParams['system_hint'] = systemHint;
       }
-      Response response = await _dio.post(askQuestionFileUrl,
-          data: formData, queryParameters: queryParams);
+      Response response = await _postWithFallback(
+        _pathQuestionsFiles,
+        formData,
+        queryParameters: queryParams,
+      );
       if (response.statusCode == 200) {
         final res = jsonDecode(response.data) as Map<String, dynamic>;
         return res['answer'];
@@ -392,38 +348,6 @@ class SummaryApiRepository {
       print(e);
       throw Exception();
     }
-
-    // try {
-    //   Response response = await _dio.post(researchUrl, data: {
-    //     'url': summaryUrl,
-    //     'user_query': question,
-    //     "context": "",
-    //     "type_summary": "",
-    //   });
-    //   if (response.statusCode == 200) {
-    //     final res = jsonDecode(response.data) as Map<String, dynamic>;
-    //     return res['answer'];
-    //   } else {
-    //     throw Exception('Translation error');
-    //   }
-    // } on DioException catch (e) {
-    //   ErrorDecode error;
-    //   try {
-    //     final decodedMap = json.decode(e.response?.data);
-    //
-    //     error = ErrorDecode(
-    //       detail: decodedMap['detail'],
-    //     );
-    //   } catch (e) {
-    //     error = ErrorDecode(
-    //       detail: 'Processing error',
-    //     );
-    //   }
-    //
-    //   throw Exception(error.detail);
-    // } catch (error) {
-    //   throw Exception('Some error');
-    // }
   }
 
   Future<SendRateStatus> sendRate(
@@ -433,9 +357,9 @@ class SummaryApiRepository {
       required String device,
       required String comment}) async {
     try {
-      Response response = await _dio.post(
-        reviewsUrl,
-        data: {
+      Response response = await _postWithFallback(
+        _pathReviews,
+        {
           'comment': comment,
           'device': device,
           'grade': rate,
@@ -468,9 +392,9 @@ class SummaryApiRepository {
     required String message,
   }) async {
     try {
-      Response response = await _dio.post(
-        feedbackUrl,
-        data: {
+      Response response = await _postWithFallback(
+        _pathFeedback,
+        {
           "getMoreSummaries": getMoreSummaries,
           "addTranslation": addTranslation,
           "askAQuestions": askAQuestions,
@@ -521,9 +445,9 @@ class SummaryApiRepository {
     String difficulty = "medium",
   }) async {
     try {
-      Response response = await _dio.post(
-        generateQuizUrl,
-        data: {
+      Response response = await _postWithFallback(
+        _pathQuizzesGenerate,
+        {
           'text': text,
           'num_questions': numQuestions,
           'difficulty': difficulty,
@@ -575,18 +499,7 @@ class SummaryApiRepository {
         throw Exception('Failed to generate quiz');
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-        error = ErrorDecode(
-          detail: decodedMap['detail'] ?? 'Failed to generate quiz',
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-      throw Exception(error.detail);
+      _throwDioError(e, defaultDetail: 'Failed to generate quiz');
     } catch (error) {
       throw Exception('Failed to generate quiz: $error');
     }
@@ -594,7 +507,7 @@ class SummaryApiRepository {
 
   Future<List<KnowledgeCard>> extractKnowledgeCards(String summaryText) async {
     try {
-      Response response = await _dio.post(extractKnowledgeCardsUrl, data: {
+      Response response = await _postWithFallback(_pathKnowledgeCards, {
         'text': summaryText,
       });
 
@@ -621,18 +534,7 @@ class SummaryApiRepository {
         throw Exception('Failed to extract knowledge cards');
       }
     } on DioException catch (e) {
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-        error = ErrorDecode(
-          detail: decodedMap['detail'] ?? 'Failed to extract knowledge cards',
-        );
-      } catch (e) {
-        error = ErrorDecode(
-          detail: 'Processing error',
-        );
-      }
-      throw Exception(error.detail);
+      _throwDioError(e, defaultDetail: 'Failed to extract knowledge cards');
     } catch (error) {
       throw Exception('Failed to extract knowledge cards: $error');
     }
@@ -646,9 +548,9 @@ class SummaryApiRepository {
     required String userAnswer,
   }) async {
     try {
-      Response response = await _dio.post(
-        verifyKnowledgeCardAnswerUrl,
-        data: {
+      Response response = await _postWithFallback(
+        _pathKnowledgeCardsVerify,
+        {
           'cardTitle': cardTitle,
           'cardContent': cardContent,
           'userAnswer': userAnswer,
@@ -666,38 +568,14 @@ class SummaryApiRepository {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 404 || e.response?.statusCode == 501) {
-        // Endpoint not implemented yet
         throw KnowledgeCardVerifyUnavailableException();
       }
-      ErrorDecode error;
-      try {
-        final decodedMap = json.decode(e.response?.data);
-        error = ErrorDecode(
-          detail: decodedMap['detail'] ?? 'Failed to verify answer',
-        );
-      } catch (_) {
-        error = ErrorDecode(detail: 'Processing error');
-      }
-      throw Exception(error.detail);
+      _throwDioError(e, defaultDetail: 'Failed to verify answer');
     } catch (error) {
       throw Exception('Failed to verify answer: $error');
     }
   }
 }
-
-/// Result of knowledge card answer verification.
-class KnowledgeCardVerifyResult {
-  final String shortFeedback;
-  final int accuracy;
-
-  KnowledgeCardVerifyResult({
-    required this.shortFeedback,
-    required this.accuracy,
-  });
-}
-
-/// Thrown when verify endpoint is not implemented yet (404/501).
-class KnowledgeCardVerifyUnavailableException implements Exception {}
 
 class SummaryRepository {
   final SummaryApiRepository _summaryRepository = SummaryApiRepository();

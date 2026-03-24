@@ -30,7 +30,7 @@ Key Concepts:
 ''';
 
   const apiKey = 'acf8421909af3940f4731f629e28ca486c9ed6af7d7f704a050494773a27c8a9';
-  const generateQuizUrl = 'https://employees-training.com/api/v1/quizzes/generate';
+  const generateQuizUrl = 'https://api.lmnotebookpro.com/api/v1/quizzes/generate';
 
   final dio = Dio(
     BaseOptions(

@@ -33,7 +33,7 @@ CHAPTER 8: HABIT #7 - SHARPEN THE SAW
 Chefs use their knives every day, they constantly chop, slice, and dice eventually making their knife dull. We must devote time to ourselves physically, spiritually, mentally, and socially.''';
 
   const apiKey = 'acf8421909af3940f4731f629e28ca486c9ed6af7d7f704a050494773a27c8a9';
-  const generateQuizUrl = 'https://employees-training.com/api/v1/quizzes/generate';
+  const generateQuizUrl = 'https://api.lmnotebookpro.com/api/v1/quizzes/generate';
 
   final dio = Dio(
     BaseOptions(
