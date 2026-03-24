@@ -32,7 +32,7 @@ class AppLocalizationsNl extends AppLocalizations {
       'Eén klik op \"delen\" voor een samenvatting';
 
   @override
-  String get onboarding_welcomeTitle => 'Welkom bij LM Notebook Studio';
+  String get onboarding_welcomeTitle => 'Welkom bij LM Notebook Pro';
 
   @override
   String get onboarding_welcomeSubtitle => 'Persoonlijke AI-samenvatter';

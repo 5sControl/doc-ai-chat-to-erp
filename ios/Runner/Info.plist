@@ -24,7 +24,7 @@
 		<string>nl</string>
 	</array>
 	<key>CFBundleDisplayName</key>
-	<string>LM Notebook Studio</string>
+	<string>LM Notebook Pro</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -61,7 +61,7 @@
 	<key>FacebookClientToken</key>
 	<string>9234edcf2a13ecc376b25ecc771c9528</string>
 	<key>FacebookDisplayName</key>
-	<string>LM Notebook Studio</string>
+	<string>LM Notebook Pro</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>mailto</string>
@@ -78,9 +78,9 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To upload photos, please allow permission to access your photo library.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>LM Notebook Studio uses the microphone so you can answer knowledge card questions by voice and check your understanding.</string>
+	<string>LM Notebook Pro uses the microphone so you can answer knowledge card questions by voice and check your understanding.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>LM Notebook Studio uses speech recognition to turn your spoken answers into text when you practice knowledge cards by voice.</string>
+	<string>LM Notebook Pro uses speech recognition to turn your spoken answers into text when you practice knowledge cards by voice.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

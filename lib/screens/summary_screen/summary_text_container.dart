@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
+import '../../helpers/get_transformed_text.dart';
 import '../../l10n/app_localizations.dart';
 import '../../models/models.dart';
 import '../../services/tts_service.dart';
@@ -322,6 +323,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                       widget.summaryTranslate != null && widget.summaryTranslate!.isActive
                           ? (widget.summaryTranslate!.translate ?? widget.summaryText)
                           : widget.summaryText;
+                  final displayText = formatTextForDisplay(text: textToDisplay);
 
                   final styleSheet = MarkdownStyleSheet(
                     h1: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -412,7 +414,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                   int currentWordEnd = 0;
 
                   final (blockOffsets, flattenedText) = effectiveShowTtsHighlight
-                      ? computeBlockOffsets(textToDisplay)
+                      ? computeBlockOffsets(displayText)
                       : (<int>[], '');
 
                   if (effectiveShowTtsHighlight &&
@@ -522,7 +524,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                             state.fontSize.toDouble(),
                           )
                         : MarkdownBody(
-                            data: textToDisplay,
+                            data: displayText,
                             selectable: true,
                             styleSheet: styleSheet,
                             builders: builders,

@@ -48,7 +48,7 @@ class _SetUpShareScreenState extends State<SetUpShareScreen> {
             InstructionStep(
                 step: 'Step 3',
                 image: Assets.setUp.setUp3.path,
-                description: 'Tap "Edit" and scroll\ntill LM Notebook Studio'),
+                description: 'Tap "Edit" and scroll\ntill LM Notebook Pro'),
             InstructionStep(
                 step: 'Step 4',
                 image: Assets.setUp.setUp4.path,
@@ -66,15 +66,15 @@ class _SetUpShareScreenState extends State<SetUpShareScreen> {
             InstructionStep(
                 step: 'Step 2',
                 image: Assets.setUp.setUp2A.path,
-                description: 'Hold LM Notebook Studio icon'),
+                description: 'Hold LM Notebook Pro icon'),
             InstructionStep(
                 step: 'Step 3',
                 image: Assets.setUp.setUp3A.path,
-                description: 'Tap "Pin LM Notebook Studio"'),
+                description: 'Tap "Pin LM Notebook Pro"'),
             InstructionStep(
                 step: 'Step 4',
                 image: Assets.setUp.setUp4A.path,
-                description: 'LM Notebook Studio is ready "Add"'),
+                description: 'LM Notebook Pro is ready "Add"'),
           ];
 
     void onPressClose() {

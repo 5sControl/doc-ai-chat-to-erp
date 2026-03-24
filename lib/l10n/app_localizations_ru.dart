@@ -32,7 +32,7 @@ class AppLocalizationsRu extends AppLocalizations {
       'В один клик «Поделиться» — и получите саммари';
 
   @override
-  String get onboarding_welcomeTitle => 'Добро пожаловать в LM Notebook Studio';
+  String get onboarding_welcomeTitle => 'Добро пожаловать в LM Notebook Pro';
 
   @override
   String get onboarding_welcomeSubtitle => 'Персональный AI-саммаризатор';

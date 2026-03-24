@@ -32,7 +32,7 @@ class AppLocalizationsPl extends AppLocalizations {
       'Jedno kliknięcie „Udostępnij”, aby uzyskać podsumowanie';
 
   @override
-  String get onboarding_welcomeTitle => 'Witamy w LM Notebook Studio';
+  String get onboarding_welcomeTitle => 'Witamy w LM Notebook Pro';
 
   @override
   String get onboarding_welcomeSubtitle => 'Osobisty podsumowujący AI';

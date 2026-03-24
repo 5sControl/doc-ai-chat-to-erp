@@ -32,7 +32,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'One-click \"share\" to get summary';
 
   @override
-  String get onboarding_welcomeTitle => 'Welcome to LM Notebook Studio';
+  String get onboarding_welcomeTitle => 'Welcome to LM Notebook Pro';
 
   @override
   String get onboarding_welcomeSubtitle => 'Personal AI Summarizer';

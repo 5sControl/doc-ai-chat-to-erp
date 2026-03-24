@@ -31,7 +31,7 @@ class AppLocalizationsVi extends AppLocalizations {
       'Chỉ một lần \"Chia sẻ\" để nhận tóm tắt';
 
   @override
-  String get onboarding_welcomeTitle => 'Chào mừng đến với LM Notebook Studio';
+  String get onboarding_welcomeTitle => 'Chào mừng đến với LM Notebook Pro';
 
   @override
   String get onboarding_welcomeSubtitle => 'Trình tóm tắt AI cá nhân';

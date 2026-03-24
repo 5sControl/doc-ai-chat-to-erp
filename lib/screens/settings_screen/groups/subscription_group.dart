@@ -132,7 +132,7 @@ List<ButtonItem> buildSubscriptionGroupItems(BuildContext context) {
       onTap: () => showRedeemGiftCodeDialog(context: context),
     ),
     ButtonItem(
-      title: 'Add LM Notebook Studio for Chrome',
+      title: 'Add LM Notebook Pro for Chrome',
       leadingIcon: Assets.icons.chromeMini,
       onTap: onPressChrome,
       trailing: Container(
@@ -168,7 +168,7 @@ List<ButtonItem> buildSubscriptionGroupItems(BuildContext context) {
     ),
     if (!kIsWeb && Platform.isIOS)
       ButtonItem(
-        title: 'Rate LM Notebook Studio',
+        title: 'Rate LM Notebook Pro',
         leadingIcon: Assets.icons.star,
         onTap: onPressRateApp,
       ),

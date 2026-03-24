@@ -24,7 +24,7 @@ class Logo extends StatelessWidget {
                   Theme.of(context).cardColor, BlendMode.srcIn),
             ),
             Text(
-              ' LM Notebook Studio',
+              ' LM Notebook Pro',
               style: TextStyle(
                   color: Theme.of(context).cardColor,
                   fontSize: 17,
