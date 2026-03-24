@@ -152,6 +152,12 @@ class _SummaryScreenState extends State<SummaryScreen>
                     text: summaryData.longSummary.summaryText ?? '',
                   );
 
+            final displaySourceText = formatTextForDisplay(text: sourceText);
+            final displayBriefSummaryText =
+                formatTextForDisplay(text: briefSummaryText);
+            final displayDeepSummaryText =
+                formatTextForDisplay(text: deepSummaryText);
+
             void showRateScreen() {
               showMaterialModalBottomSheet(
                 context: context,
@@ -341,8 +347,10 @@ class _SummaryScreenState extends State<SummaryScreen>
                                   controller: _tabController,
                                   children: [
                                     SummaryTextContainer(
-                                      summaryText: sourceText,
-                                      summary: Summary(summaryText: sourceText),
+                                      summaryText: displaySourceText,
+                                      summary: Summary(
+                                        summaryText: displaySourceText,
+                                      ),
                                       summaryStatus: SummaryStatus.complete,
                                       summaryTranslate: null,
                                       tabIndex: 0,
@@ -350,7 +358,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       onWordLookup: onWordLookup,
                                     ),
                                     SummaryTextContainer(
-                                      summaryText: briefSummaryText,
+                                      summaryText: displayBriefSummaryText,
                                       summary: summaryData.shortSummary,
                                       summaryStatus:
                                           summaryData.shortSummaryStatus,
@@ -362,7 +370,7 @@ class _SummaryScreenState extends State<SummaryScreen>
                                       onWordLookup: onWordLookup,
                                     ),
                                     SummaryTextContainer(
-                                      summaryText: deepSummaryText,
+                                      summaryText: displayDeepSummaryText,
                                       summary: summaryData.longSummary,
                                       summaryStatus:
                                           summaryData.longSummaryStatus,

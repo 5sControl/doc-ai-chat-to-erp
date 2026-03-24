@@ -29,6 +29,20 @@ String getTransformedText({required String text}) {
           'Implications or Conclusions:', '\n\nImplications or Conclusions:\n');
 }
 
+/// Adds one empty line before and after visible text for a softer layout.
+/// Keeps content intact while normalizing only edge newlines.
+String formatTextForDisplay({required String text}) {
+  if (text.isEmpty) return text;
+
+  final normalized = text
+      .replaceFirst(RegExp(r'^[\r\n]+'), '')
+      .replaceFirst(RegExp(r'[\r\n]+$'), '');
+
+  if (normalized.isEmpty) return '';
+
+  return '\n$normalized\n';
+}
+
 /// Strips Markdown syntax so TTS does not read "hash hash" or asterisks.
 /// Removes ##, ###, ####, **, __, leading --- (leaving the text content).
 String stripMarkdownForTts(String text) {
