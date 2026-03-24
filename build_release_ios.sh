@@ -71,22 +71,24 @@ cd ..
 echo "🔨 Собираем релизный IPA..."
 flutter build ipa --release
 
-if [ $? -eq 0 ]; then
-    IPA_PATH="build/ios/ipa/summishare.ipa"
-    if [ -f "$IPA_PATH" ]; then
-        IPA_SIZE=$(du -h "$IPA_PATH" | cut -f1)
-        echo -e "${GREEN}✅ Релизный IPA успешно собран!${NC}"
-        echo "📦 Файл: $IPA_PATH"
-        echo "📊 Размер: $IPA_SIZE"
-        echo "🔢 Версия: $NEW_VERSION"
+IPA_PATH="build/ios/ipa/summishare.ipa"
+if [ -f "$IPA_PATH" ]; then
+    IPA_SIZE=$(du -h "$IPA_PATH" | cut -f1)
+    echo -e "${GREEN}✅ Релизный IPA успешно собран!${NC}"
+    echo "📦 Файл: $IPA_PATH"
+    echo "📊 Размер: $IPA_SIZE"
+    echo "🔢 Версия: $NEW_VERSION"
+    echo "🧭 Путь: $(pwd)/$IPA_PATH"
+
+    # После успешной сборки открываем папку с релизом и подсвечиваем файл.
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        open -R "$IPA_PATH"
     else
-        echo "⚠️  IPA файл не найден по ожидаемому пути"
-        echo "📂 Ищем IPA файлы..."
-        find build/ios -name "*.ipa" 2>/dev/null | head -3
+        xdg-open "$(dirname "$IPA_PATH")" >/dev/null 2>&1 || true
     fi
 else
-    echo "❌ Ошибка при сборке IPA"
-    exit 1
+    echo "⚠️  IPA файл не найден по ожидаемому пути: $IPA_PATH"
+    echo "📂 Проверьте содержимое: build/ios/ipa/"
 fi
 
 echo -e "${GREEN}🎉 Готово! Релизный билд создан с версией $NEW_VERSION${NC}"

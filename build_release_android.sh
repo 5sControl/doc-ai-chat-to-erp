@@ -95,5 +95,13 @@ echo ""
 echo -e "📌 Версия: ${GREEN}$NEW_VERSION${NC}"
 echo -e "📁 Файл:  ${YELLOW}$FINAL_NAME${NC}"
 echo -e "💾 Размер: $AAB_SIZE"
+echo -e "🧭 Путь:  $(pwd)/$FINAL_NAME"
 echo ""
+
+# После успешной сборки открываем папку с релизом и подсвечиваем файл.
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    open -R "$FINAL_NAME"
+else
+    xdg-open "$(dirname "$FINAL_NAME")" >/dev/null 2>&1 || true
+fi
 
