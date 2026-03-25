@@ -9,6 +9,7 @@ import 'package:summify/screens/saved_cards_screen/saved_card_tile.dart';
 import 'package:summify/screens/summary_screen/knowledge_cards/widgets/cards_type_filter.dart';
 import 'package:summify/screens/summary_screen/knowledge_cards/widgets/card_detail_modal.dart';
 import 'package:summify/screens/summary_screen/summary_screen.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 class SavedCardsScreen extends StatefulWidget {
   const SavedCardsScreen({super.key});
@@ -54,19 +55,28 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
   }
 
   void _onCardRemove(KnowledgeCard card) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.savedCards_removeBookmarkTitle),
-        content: Text(
-          AppLocalizations.of(context)!.savedCards_removeBookmarkMessage,
+      builder: (dialogContext) => AppThemedAlertDialog.build(
+        context: dialogContext,
+        title: AppThemedAlertDialog.titleText(
+          dialogContext,
+          l10n.savedCards_removeBookmarkTitle,
+        ),
+        content: AppThemedAlertDialog.contentText(
+          dialogContext,
+          l10n.savedCards_removeBookmarkMessage,
         ),
         actions: [
-          TextButton(
+          AppThemedAlertDialog.secondaryAction(
+            context: dialogContext,
+            label: l10n.savedCards_cancel,
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text(AppLocalizations.of(context)!.savedCards_cancel),
           ),
-          TextButton(
+          AppThemedAlertDialog.destructiveFilled(
+            context: dialogContext,
+            label: l10n.savedCards_remove,
             onPressed: () {
               context.read<MixpanelBloc>().add(SavedCardRemoved(
                     cardId: card.id,
@@ -74,18 +84,13 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
                   ));
               context.read<SavedCardsBloc>().add(RemoveSavedCard(cardId: card.id));
               Navigator.pop(dialogContext);
-              
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(AppLocalizations.of(context)!.savedCards_cardRemoved),
+                  content: Text(l10n.savedCards_cardRemoved),
                   duration: const Duration(seconds: 2),
                 ),
               );
             },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.red,
-            ),
-            child: Text(AppLocalizations.of(context)!.savedCards_remove),
           ),
         ],
       ),
@@ -355,34 +360,38 @@ class _SavedCardsScreenState extends State<SavedCardsScreen> {
   }
 
   void _showClearAllDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.savedCards_clearAllTitle),
-        content: Text(
-          AppLocalizations.of(context)!.savedCards_clearAllMessage,
+      builder: (dialogContext) => AppThemedAlertDialog.build(
+        context: dialogContext,
+        title: AppThemedAlertDialog.titleText(
+          dialogContext,
+          l10n.savedCards_clearAllTitle,
+        ),
+        content: AppThemedAlertDialog.contentText(
+          dialogContext,
+          l10n.savedCards_clearAllMessage,
         ),
         actions: [
-          TextButton(
+          AppThemedAlertDialog.secondaryAction(
+            context: dialogContext,
+            label: l10n.savedCards_cancel,
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text(AppLocalizations.of(context)!.savedCards_cancel),
           ),
-          TextButton(
+          AppThemedAlertDialog.destructiveFilled(
+            context: dialogContext,
+            label: l10n.savedCards_clearAll,
             onPressed: () {
               context.read<SavedCardsBloc>().add(const ClearAllSavedCards());
               Navigator.pop(dialogContext);
-              
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(AppLocalizations.of(context)!.savedCards_allCleared),
+                  content: Text(l10n.savedCards_allCleared),
                   duration: const Duration(seconds: 2),
                 ),
               );
             },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.red,
-            ),
-            child: Text(AppLocalizations.of(context)!.savedCards_clearAll),
           ),
         ],
       ),

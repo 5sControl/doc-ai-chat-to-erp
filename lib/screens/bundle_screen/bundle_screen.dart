@@ -13,6 +13,7 @@ import 'package:summify/screens/bundle_screen/bundle_offer_screen.dart';
 import 'package:summify/screens/modal_screens/purchase_success_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'package:summify/widgets/backgroung_gradient.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/subscriptions/subscriptions_bloc.dart';
@@ -190,15 +191,18 @@ class _BundleScreenState extends State<BundleScreen>
             
             showDialog(
               context: context,
-              builder: (ctx) => AlertDialog(
-                title: Text(l10n.common_error),
-                content: Text(l10n.bundle_subscriptionsNotAvailable),
+              builder: (ctx) => AppThemedAlertDialog.build(
+                context: ctx,
+                title: AppThemedAlertDialog.titleText(ctx, l10n.common_error),
+                content: AppThemedAlertDialog.contentText(
+                  ctx,
+                  l10n.bundle_subscriptionsNotAvailable,
+                ),
                 actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(ctx).pop();
-                    },
-                    child: Text(l10n.common_ok),
+                  AppThemedAlertDialog.primaryFilled(
+                    context: ctx,
+                    label: l10n.common_ok,
+                    onPressed: () => Navigator.of(ctx).pop(),
                   ),
                 ],
               ),

@@ -11,6 +11,7 @@ import 'package:summify/helpers/language_codes.dart';
 import 'package:summify/services/summaryApi.dart';
 import 'package:summify/services/tts_service.dart';
 import 'package:summify/l10n/app_localizations.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../bloc/settings/settings_bloc.dart';
@@ -181,17 +182,22 @@ class _VoiceButtonState extends State<VoiceButton> {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(localizations?.ttsModelReadyTitle ?? 'Voice model ready'),
-          content: Text(
-            localizations?.ttsModelReadyMessage ??
-                'Voice model downloaded successfully. You can choose a voice in Settings.',
+      builder: (dialogContext) {
+        return AppThemedAlertDialog.build(
+          context: dialogContext,
+          title: AppThemedAlertDialog.titleText(
+            dialogContext,
+            localizations.ttsModelReadyTitle,
+          ),
+          content: AppThemedAlertDialog.contentText(
+            dialogContext,
+            localizations.ttsModelReadyMessage,
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(MaterialLocalizations.of(context).okButtonLabel),
+            AppThemedAlertDialog.primaryFilled(
+              context: dialogContext,
+              label: MaterialLocalizations.of(dialogContext).okButtonLabel,
+              onPressed: () => Navigator.of(dialogContext).pop(),
             ),
           ],
         );
@@ -382,24 +388,32 @@ class _TtsDownloadDialogState extends State<TtsDownloadDialog> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
+    final theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async => false,
-      child: AlertDialog(
-        title: Text(
-          localizations?.ttsDownloadDialogTitle ?? 'Downloading voice model',
+      child: AppThemedAlertDialog.build(
+        context: context,
+        title: AppThemedAlertDialog.titleText(
+          context,
+          localizations.ttsDownloadDialogTitle,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              localizations?.ttsDownloadDialogBody ??
-                  'Please keep the app open while we download the voice resources.',
+              localizations.ttsDownloadDialogBody,
+              style: AppThemedAlertDialog.contentTextStyle(theme),
             ),
             const SizedBox(height: 12),
             ValueListenableBuilder<double>(
               valueListenable: widget.service.downloadProgress,
               builder: (context, progress, child) {
-                return LinearProgressIndicator(value: progress.clamp(0, 1));
+                return LinearProgressIndicator(
+                  value: progress.clamp(0, 1),
+                  color: theme.primaryColor,
+                  backgroundColor: theme.primaryColorLight,
+                );
               },
             ),
             const SizedBox(height: 8),
@@ -408,7 +422,10 @@ class _TtsDownloadDialogState extends State<TtsDownloadDialog> {
               builder: (context, child) {
                 final percent = (widget.service.downloadProgress.value * 100)
                     .clamp(0, 100);
-                return Text('${percent.toStringAsFixed(0)}%');
+                return Text(
+                  '${percent.toStringAsFixed(0)}%',
+                  style: AppThemedAlertDialog.contentTextStyle(theme),
+                );
               },
             ),
           ],

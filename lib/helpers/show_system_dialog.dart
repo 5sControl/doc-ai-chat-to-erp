@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dialogs/flutter_dialogs.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 void showSystemDialog({required BuildContext context, required String title}) {
-  showPlatformDialog(
+  showDialog<void>(
     context: context,
-    builder: (context) => BasicDialogAlert(
-      title: Text(title),
-      actions: <Widget>[
-        BasicDialogAction(
-          title: const Text("OK"),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    builder: (ctx) => AppThemedAlertDialog.build(
+      context: ctx,
+      title: AppThemedAlertDialog.titleText(ctx, title),
+      actions: [
+        AppThemedAlertDialog.primaryFilled(
+          context: ctx,
+          label: MaterialLocalizations.of(ctx).okButtonLabel,
+          onPressed: () => Navigator.pop(ctx),
         ),
       ],
     ),

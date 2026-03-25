@@ -8,6 +8,7 @@ import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import '../../bloc/settings/settings_bloc.dart';
 import '../../helpers/get_transformed_text.dart';
 import '../../l10n/app_localizations.dart';
+import '../../widgets/themed_alert_dialog.dart';
 import '../../models/models.dart';
 import '../../services/tts_service.dart';
 import 'markdown_tts_highlight_builder.dart';
@@ -232,20 +233,29 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
     final scaffoldContext = context;
     showDialog<void>(
       context: scaffoldContext,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.wordTapHint_title),
-        content: Text(l10n.wordTapHint_message),
+      builder: (dialogContext) => AppThemedAlertDialog.build(
+        context: dialogContext,
+        title: AppThemedAlertDialog.titleText(
+          dialogContext,
+          l10n.wordTapHint_title,
+        ),
+        content: AppThemedAlertDialog.contentText(
+          dialogContext,
+          l10n.wordTapHint_message,
+        ),
         actions: [
-          TextButton(
+          AppThemedAlertDialog.secondaryAction(
+            context: dialogContext,
+            label: l10n.wordTapHint_showLater,
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(l10n.wordTapHint_showLater),
           ),
-          TextButton(
+          AppThemedAlertDialog.primaryFilled(
+            context: dialogContext,
+            label: l10n.wordTapHint_dontShowAgain,
             onPressed: () {
               scaffoldContext.read<SettingsBloc>().add(const WordTapHintDismissed());
               Navigator.of(dialogContext).pop();
             },
-            child: Text(l10n.wordTapHint_dontShowAgain),
           ),
         ],
       ),

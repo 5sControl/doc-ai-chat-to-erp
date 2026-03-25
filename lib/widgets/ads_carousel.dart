@@ -122,7 +122,7 @@ class _AdCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasLink = ad.storeUrl != null && ad.storeUrl!.isNotEmpty;
-    const borderBlue = Color(0xFF3490FA); // rgb(52, 144, 250)
+    final borderColor = Theme.of(context).primaryColor;
     final cardColor = Theme.of(context).brightness == Brightness.dark
         ? Theme.of(context).canvasColor.withValues(alpha: 0.75)
         : Theme.of(context).canvasColor.withValues(alpha: 0.85);
@@ -132,7 +132,7 @@ class _AdCard extends StatelessWidget {
         color: cardColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: borderBlue,
+          color: borderColor,
           width: 1.5,
         ),
       ),

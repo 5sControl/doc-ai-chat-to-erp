@@ -19,6 +19,7 @@ import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.
 import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 import 'package:summify/services/demo_data_initializer.dart';
 import 'package:summify/widgets/ads_carousel.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 import 'logo.dart';
 import 'summary_tile.dart';
@@ -154,16 +155,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         final l10n = AppLocalizations.of(context);
         showDialog(
           context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text(l10n.copy_paste_required_title),
-            content: Text(l10n.copy_paste_required_message),
+          builder: (ctx) => AppThemedAlertDialog.build(
+            context: ctx,
+            title: AppThemedAlertDialog.titleText(
+              ctx,
+              l10n.copy_paste_required_title,
+            ),
+            content: AppThemedAlertDialog.contentText(
+              ctx,
+              l10n.copy_paste_required_message,
+            ),
             actions: [
-              TextButton(
+              AppThemedAlertDialog.primaryFilled(
+                context: ctx,
+                label: l10n.common_ok,
                 onPressed: () {
                   Navigator.of(ctx).pop();
                   context.read<SummariesBloc>().add(const ClearCopyPastePrompt());
                 },
-                child: Text(l10n.common_ok),
               ),
             ],
           ),

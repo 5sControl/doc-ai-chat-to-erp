@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/l10n/app_localizations.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 Future<void> showRedeemGiftCodeDialog({required BuildContext context}) {
   return showDialog<void>(
@@ -28,7 +29,7 @@ class _RedeemGiftCodeDialogState extends State<RedeemGiftCodeDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return BlocConsumer<SummariesBloc, SummariesState>(
       listener: (context, state) {
         if (state.lastRedeemMessage == null) return;
@@ -46,8 +47,9 @@ class _RedeemGiftCodeDialogState extends State<RedeemGiftCodeDialog> {
         }
       },
       builder: (context, state) {
-        return AlertDialog(
-          title: Text(l10n.giftCode_dialogTitle),
+        return AppThemedAlertDialog.build(
+          context: context,
+          title: AppThemedAlertDialog.titleText(context, l10n.giftCode_dialogTitle),
           content: TextField(
             controller: _controller,
             decoration: InputDecoration(
@@ -58,17 +60,19 @@ class _RedeemGiftCodeDialogState extends State<RedeemGiftCodeDialog> {
             autocorrect: false,
           ),
           actions: [
-            TextButton(
+            AppThemedAlertDialog.secondaryAction(
+              context: context,
+              label: MaterialLocalizations.of(context).cancelButtonLabel,
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
             ),
-            FilledButton(
+            AppThemedAlertDialog.primaryFilled(
+              context: context,
+              label: l10n.giftCode_activate,
               onPressed: () {
                 final code = _controller.text.trim();
                 if (code.isEmpty) return;
                 context.read<SummariesBloc>().add(RedeemGiftCode(code: code));
               },
-              child: Text(l10n.giftCode_activate),
             ),
           ],
         );

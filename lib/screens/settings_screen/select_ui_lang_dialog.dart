@@ -70,7 +70,7 @@ class _InterfaceLanguageDialogState extends State<_InterfaceLanguageDialog> {
 
     return Dialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Container(
         width: MediaQuery.of(context).size.shortestSide < 600
@@ -78,8 +78,8 @@ class _InterfaceLanguageDialogState extends State<_InterfaceLanguageDialog> {
             : 343,
         padding: const EdgeInsets.only(top: 5, bottom: 5),
         decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.circular(8.0),
+          color: Theme.of(context).primaryColorLight,
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Stack(
           children: [

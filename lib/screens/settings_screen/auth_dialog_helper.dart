@@ -17,7 +17,7 @@ void showAuthDialog(
         insetPadding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(16),
             color:
                 Theme.of(context).brightness == Brightness.dark
                     ? const Color.fromRGBO(5, 49, 57, 1)

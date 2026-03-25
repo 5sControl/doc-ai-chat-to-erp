@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 import 'unsupported_device_placeholder.dart';
 
@@ -21,7 +22,10 @@ class KnowledgeCardsUnavailableDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Dialog(
+      shape: AppThemedAlertDialog.shapeOf(theme),
+      backgroundColor: AppThemedAlertDialog.backgroundColor(theme),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height * 0.85,
@@ -39,17 +43,19 @@ class KnowledgeCardsUnavailableDialog extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
+                  AppThemedAlertDialog.secondaryAction(
+                    context: context,
+                    label: 'Got it',
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Got it'),
                   ),
                   const SizedBox(width: 8),
-                  FilledButton(
+                  AppThemedAlertDialog.primaryFilled(
+                    context: context,
+                    label: 'Try again',
                     onPressed: () {
                       Navigator.of(context).pop();
                       onRetry();
                     },
-                    child: const Text('Try again'),
                   ),
                 ],
               ),

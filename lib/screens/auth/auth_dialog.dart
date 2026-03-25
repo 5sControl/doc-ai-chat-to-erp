@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
 
 class AuthDialog extends StatelessWidget {
 
@@ -72,9 +71,9 @@ class AuthDialog extends StatelessWidget {
                     alignment: Alignment.center, 
                     padding: const EdgeInsets.symmetric(vertical: 10), 
                     width: MediaQuery.of(context).size.width - 60, 
-                    decoration: BoxDecoration( 
-                      color: Colors.teal.shade300, 
-                      borderRadius: BorderRadius.circular(12), 
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.circular(12),
                     ), // End BoxDecoration
                     child: Text( 
                       textButton, 

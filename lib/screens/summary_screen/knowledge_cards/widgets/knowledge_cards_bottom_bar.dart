@@ -5,6 +5,7 @@ import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/demo_knowledge_cards.dart';
+import 'package:summify/widgets/themed_alert_dialog.dart';
 
 class KnowledgeCardsBottomBar extends StatelessWidget {
   final String summaryKey;
@@ -102,17 +103,26 @@ class KnowledgeCardsBottomBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.knowledgeCards_regenerateTitle),
-        content: Text(l10n.knowledgeCards_regenerateMessage),
+      builder: (dialogContext) => AppThemedAlertDialog.build(
+        context: dialogContext,
+        title: AppThemedAlertDialog.titleText(
+          dialogContext,
+          l10n.knowledgeCards_regenerateTitle,
+        ),
+        content: AppThemedAlertDialog.contentText(
+          dialogContext,
+          l10n.knowledgeCards_regenerateMessage,
+        ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.knowledgeCards_cancel),
+          AppThemedAlertDialog.secondaryAction(
+            context: dialogContext,
+            label: l10n.knowledgeCards_cancel,
+            onPressed: () => Navigator.of(dialogContext).pop(false),
           ),
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.knowledgeCards_regenerate),
+          AppThemedAlertDialog.primaryFilled(
+            context: dialogContext,
+            label: l10n.knowledgeCards_regenerate,
+            onPressed: () => Navigator.of(dialogContext).pop(true),
           ),
         ],
       ),
