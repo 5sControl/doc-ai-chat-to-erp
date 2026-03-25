@@ -13,27 +13,55 @@
 //           '<b>\n\nImplications or Conclusions:\n</b>');
 // }
 
-/// Horizontal rule glued to an ATX heading (e.g. `---### Summary`) breaks MD; split them.
-String splitHorizontalRuleFromHeading(String text) {
+/// LLMs often prefix `---### Title`. Putting `---` on its own MD line renders as `<hr>`.
+/// Drop the dash run and keep the ATX heading so layout stays clean.
+String _dropDecorativeRuleBeforeAtxHeading(String text) {
   return text.replaceAllMapped(
-    RegExp(r'(-{3,})(#{1,6})'),
-    (m) => '${m[1]}\n\n${m[2]}',
+    RegExp(r'-{3,}\s*(#{1,6})'),
+    (m) => m[1]!,
+  );
+}
+
+/// Removes leading lines that are only a thematic break (`---`, `***`, `___`).
+String _stripLeadingThematicBreakLines(String text) {
+  final lines = text.split('\n');
+  var i = 0;
+  while (i < lines.length) {
+    final line = lines[i];
+    if (RegExp(r'^\s*(-{3,}|\*{3,}|_{3,})\s*$').hasMatch(line)) {
+      i++;
+    } else {
+      break;
+    }
+  }
+  if (i == 0) return text;
+  return lines.sublist(i).join('\n');
+}
+
+/// Normalizes summary markdown for on-screen rendering (brief/deep/source tabs).
+String prepareMarkdownForDisplay(String text) {
+  return _stripLeadingThematicBreakLines(
+    _dropDecorativeRuleBeforeAtxHeading(text),
   );
 }
 
 String getTransformedText({required String text}) {
-  return splitHorizontalRuleFromHeading(text.replaceAll('\n', ''))
-      .replaceAll('   ', '')
-      .replaceAll('\n\n', '\n')
-      .replaceAll('\n\n\n', '\n')
-      .replaceAll('.- ', '.\n- ')
-      .replaceFirst('Summary:', 'Summary:\n')
-      .replaceFirst('Key Points:', '\n\nKey Points:\n')
-      .replaceFirst('In-depth Analysis:', '\n\nIn-depth Analysis:\n')
-      .replaceFirst('Additional Context:', '\n\nAdditional Context:\n')
-      .replaceFirst('Supporting Evidence:', '\n\nSupporting Evidence:\n')
-      .replaceFirst(
-          'Implications or Conclusions:', '\n\nImplications or Conclusions:\n');
+  return _stripLeadingThematicBreakLines(
+    _dropDecorativeRuleBeforeAtxHeading(text.replaceAll('\n', ''))
+        .replaceAll('   ', '')
+        .replaceAll('\n\n', '\n')
+        .replaceAll('\n\n\n', '\n')
+        .replaceAll('.- ', '.\n- ')
+        .replaceFirst('Summary:', 'Summary:\n')
+        .replaceFirst('Key Points:', '\n\nKey Points:\n')
+        .replaceFirst('In-depth Analysis:', '\n\nIn-depth Analysis:\n')
+        .replaceFirst('Additional Context:', '\n\nAdditional Context:\n')
+        .replaceFirst('Supporting Evidence:', '\n\nSupporting Evidence:\n')
+        .replaceFirst(
+          'Implications or Conclusions:',
+          '\n\nImplications or Conclusions:\n',
+        ),
+  );
 }
 
 /// Strips Markdown syntax so TTS does not read "hash hash" or asterisks.

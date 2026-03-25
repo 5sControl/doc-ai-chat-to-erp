@@ -326,7 +326,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                   /// ~one body line of vertical space; Markdown ignores leading/trailing blank lines here.
                   final verticalPad = state.fontSize * 1.35;
                   final markdownData =
-                      splitHorizontalRuleFromHeading(textToDisplay);
+                      prepareMarkdownForDisplay(textToDisplay);
 
                   final styleSheet = MarkdownStyleSheet(
                     h1: Theme.of(context).textTheme.headlineMedium?.copyWith(
