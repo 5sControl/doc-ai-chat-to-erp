@@ -323,7 +323,10 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                       widget.summaryTranslate != null && widget.summaryTranslate!.isActive
                           ? (widget.summaryTranslate!.translate ?? widget.summaryText)
                           : widget.summaryText;
-                  final displayText = formatTextForDisplay(text: textToDisplay);
+                  /// ~one body line of vertical space; Markdown ignores leading/trailing blank lines here.
+                  final verticalPad = state.fontSize * 1.35;
+                  final markdownData =
+                      splitHorizontalRuleFromHeading(textToDisplay);
 
                   final styleSheet = MarkdownStyleSheet(
                     h1: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -414,7 +417,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
                   int currentWordEnd = 0;
 
                   final (blockOffsets, flattenedText) = effectiveShowTtsHighlight
-                      ? computeBlockOffsets(displayText)
+                      ? computeBlockOffsets(markdownData)
                       : (<int>[], '');
 
                   if (effectiveShowTtsHighlight &&
@@ -513,22 +516,28 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
 
                   return Animate(
                     effects: const [FadeEffect()],
-                    child: effectiveShowTtsHighlight && flattenedText.isNotEmpty
-                        ? _buildTtsHighlightPlain(
-                            context,
-                            flattenedText,
-                            readEndIndex,
-                            currentWordStart,
-                            currentWordEnd,
-                            styleSheet,
-                            state.fontSize.toDouble(),
-                          )
-                        : MarkdownBody(
-                            data: displayText,
-                            selectable: true,
-                            styleSheet: styleSheet,
-                            builders: builders,
-                          ),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: verticalPad,
+                        bottom: verticalPad,
+                      ),
+                      child: effectiveShowTtsHighlight && flattenedText.isNotEmpty
+                          ? _buildTtsHighlightPlain(
+                              context,
+                              flattenedText,
+                              readEndIndex,
+                              currentWordStart,
+                              currentWordEnd,
+                              styleSheet,
+                              state.fontSize.toDouble(),
+                            )
+                          : MarkdownBody(
+                              data: markdownData,
+                              selectable: true,
+                              styleSheet: styleSheet,
+                              builders: builders,
+                            ),
+                    ),
                   );
                         },
                       );

@@ -13,9 +13,16 @@
 //           '<b>\n\nImplications or Conclusions:\n</b>');
 // }
 
+/// Horizontal rule glued to an ATX heading (e.g. `---### Summary`) breaks MD; split them.
+String splitHorizontalRuleFromHeading(String text) {
+  return text.replaceAllMapped(
+    RegExp(r'(-{3,})(#{1,6})'),
+    (m) => '${m[1]}\n\n${m[2]}',
+  );
+}
+
 String getTransformedText({required String text}) {
-  return text
-      .replaceAll('\n', '')
+  return splitHorizontalRuleFromHeading(text.replaceAll('\n', ''))
       .replaceAll('   ', '')
       .replaceAll('\n\n', '\n')
       .replaceAll('\n\n\n', '\n')
@@ -27,20 +34,6 @@ String getTransformedText({required String text}) {
       .replaceFirst('Supporting Evidence:', '\n\nSupporting Evidence:\n')
       .replaceFirst(
           'Implications or Conclusions:', '\n\nImplications or Conclusions:\n');
-}
-
-/// Adds one empty line before and after visible text for a softer layout.
-/// Keeps content intact while normalizing only edge newlines.
-String formatTextForDisplay({required String text}) {
-  if (text.isEmpty) return text;
-
-  final normalized = text
-      .replaceFirst(RegExp(r'^[\r\n]+'), '')
-      .replaceFirst(RegExp(r'[\r\n]+$'), '');
-
-  if (normalized.isEmpty) return '';
-
-  return '\n$normalized\n';
 }
 
 /// Strips Markdown syntax so TTS does not read "hash hash" or asterisks.

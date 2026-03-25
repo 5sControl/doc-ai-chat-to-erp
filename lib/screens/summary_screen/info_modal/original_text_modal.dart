@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../bloc/mixpanel/mixpanel_bloc.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../helpers/get_transformed_text.dart';
 
 class OriginalTextModal extends StatelessWidget {
   final String originalText;
@@ -14,8 +13,6 @@ class OriginalTextModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayText = formatTextForDisplay(text: originalText);
-
     void onPressCopy() {
       Clipboard.setData(ClipboardData(text: originalText));
       context.read<MixpanelBloc>().add(const CopySummary());
@@ -59,12 +56,15 @@ class OriginalTextModal extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: SelectableText(
-                  displayText,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: SelectableText(
+                    originalText,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 16,
                         height: 1.5,
                       ),
+                  ),
                 ),
               ),
             ),
