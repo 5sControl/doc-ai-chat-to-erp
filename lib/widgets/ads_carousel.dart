@@ -19,16 +19,16 @@ class _AdsCarouselState extends State<AdsCarousel> {
   static const String _adsJsonPath = 'assets/ads/ads.json';
 
   late final PageController _pageController;
-  late final Future<List<AdSlide>> _adsFuture;
+  late final Future<List<AdPayload>> _adsFuture;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    _adsFuture = _loadAds();
+    _adsFuture = _loadAdPayloads();
   }
 
-  Future<List<AdSlide>> _loadAds() async {
+  Future<List<AdPayload>> _loadAdPayloads() async {
     try {
       final raw = await rootBundle.loadString(_adsJsonPath);
       final dynamic decoded = jsonDecode(raw);
@@ -41,16 +41,16 @@ class _AdsCarouselState extends State<AdsCarousel> {
         items = const [];
       }
 
-      final ads = <AdSlide>[];
+      final payloads = <AdPayload>[];
       for (final item in items) {
         if (item is Map) {
-          ads.add(AdSlide.fromJson(Map<String, dynamic>.from(item)));
+          payloads.add(AdPayload.fromJson(Map<String, dynamic>.from(item)));
         }
       }
 
-      return ads.isEmpty ? AdSlide.fallbackAds : ads;
+      return payloads;
     } catch (_) {
-      return AdSlide.fallbackAds;
+      return const [];
     }
   }
 
@@ -62,10 +62,16 @@ class _AdsCarouselState extends State<AdsCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<AdSlide>>(
+    final locale = Localizations.localeOf(context);
+    return FutureBuilder<List<AdPayload>>(
       future: _adsFuture,
       builder: (context, snapshot) {
-        final ads = snapshot.data ?? AdSlide.fallbackAds;
+        final payloads = snapshot.data;
+        final List<AdSlide> ads = payloads == null || payloads.isEmpty
+            ? AdSlide.fallbackAds
+                .map((s) => AdPayload.fallbackFromSlide(s).resolve(locale))
+                .toList()
+            : payloads.map((p) => p.resolve(locale)).toList();
         if (ads.isEmpty) {
           return const SizedBox.shrink();
         }
@@ -101,6 +107,94 @@ class _AdsCarouselState extends State<AdsCarousel> {
         );
       },
     );
+  }
+}
+
+/// Loaded ad config with per-locale strings; [resolve] picks copy for [Locale].
+class AdPayload {
+  final String id;
+  final Map<String, String> titleByLocale;
+  final Map<String, String> subtitleByLocale;
+  final String? legacyTitle;
+  final String? legacySubtitle;
+  final String iconPath;
+  final String? urlAndroid;
+  final String? urlIos;
+
+  const AdPayload({
+    required this.id,
+    required this.titleByLocale,
+    required this.subtitleByLocale,
+    required this.iconPath,
+    this.legacyTitle,
+    this.legacySubtitle,
+    this.urlAndroid,
+    this.urlIos,
+  });
+
+  factory AdPayload.fromJson(Map<String, dynamic> json) {
+    return AdPayload(
+      id: json['id'] as String? ?? '',
+      iconPath: json['iconPath'] as String? ?? '',
+      urlAndroid: json['urlAndroid'] as String?,
+      urlIos: json['urlIos'] as String?,
+      titleByLocale: _parseStringMap(json['localized_title']),
+      subtitleByLocale: _parseStringMap(json['localized_subtitle']),
+      legacyTitle: json['title'] as String?,
+      legacySubtitle: json['subtitle'] as String?,
+    );
+  }
+
+  /// For English-only fallback rows from [AdSlide.fallbackAds].
+  factory AdPayload.fallbackFromSlide(AdSlide slide) {
+    return AdPayload(
+      id: slide.id,
+      iconPath: slide.iconPath,
+      urlAndroid: slide.urlAndroid,
+      urlIos: slide.urlIos,
+      titleByLocale: const {},
+      subtitleByLocale: const {},
+      legacyTitle: slide.title,
+      legacySubtitle: slide.subtitle,
+    );
+  }
+
+  static Map<String, String> _parseStringMap(dynamic value) {
+    if (value is! Map) return {};
+    return value.map(
+      (k, v) => MapEntry(k.toString(), v?.toString() ?? ''),
+    );
+  }
+
+  AdSlide resolve(Locale locale) {
+    return AdSlide(
+      id: id,
+      title: _pickLocalized(titleByLocale, legacyTitle, locale),
+      subtitle: _pickLocalized(subtitleByLocale, legacySubtitle, locale),
+      iconPath: iconPath,
+      urlAndroid: urlAndroid,
+      urlIos: urlIos,
+    );
+  }
+
+  static String _pickLocalized(
+    Map<String, String> map,
+    String? legacy,
+    Locale locale,
+  ) {
+    if (map.isNotEmpty) {
+      final country = locale.countryCode;
+      if (country != null && country.isNotEmpty) {
+        final full = '${locale.languageCode}_$country';
+        final v = map[full] ?? map['${locale.languageCode}_${country.toUpperCase()}'];
+        if (v != null && v.isNotEmpty) return v;
+      }
+      final byLang = map[locale.languageCode];
+      if (byLang != null && byLang.isNotEmpty) return byLang;
+      final en = map['en'];
+      if (en != null && en.isNotEmpty) return en;
+    }
+    return legacy ?? '';
   }
 }
 
@@ -273,17 +367,6 @@ class AdSlide {
       default:
         return urlAndroid ?? urlIos;
     }
-  }
-
-  factory AdSlide.fromJson(Map<String, dynamic> json) {
-    return AdSlide(
-      id: json['id'] as String? ?? '',
-      title: json['title'] as String? ?? '',
-      subtitle: json['subtitle'] as String? ?? '',
-      iconPath: json['iconPath'] as String? ?? '',
-      urlAndroid: json['urlAndroid'] as String?,
-      urlIos: json['urlIos'] as String?,
-    );
   }
 
   static const List<AdSlide> fallbackAds = [

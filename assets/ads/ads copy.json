@@ -2,43 +2,183 @@
   "ads": [
     {
       "id": "ad_3",
-      "title": "YouTube Double Subtitles",
-      "subtitle": "Turn any YouTube video into a listening lesson",
       "iconPath": "assets/ads/subtune.png",
       "urlAndroid": "https://elang.app/",
-      "urlIos": "https://apps.apple.com/us/app/subtune-listening-podcast/id6464495720"
+      "urlIos": "https://apps.apple.com/us/app/id6464495720",
+      "localized_title": {
+        "en": "YouTube Double Subtitles",
+        "de": "YouTube-Doppeluntertitel",
+        "es": "Dobles subtítulos en YouTube",
+        "fr": "Double sous-titres YouTube",
+        "it": "Doppi sottotitoli YouTube",
+        "nl": "YouTube dubbele ondertitels",
+        "pl": "Podwójne napisy na YouTube",
+        "pt": "Legendas duplas no YouTube",
+        "ru": "Двойные субтитры для YouTube",
+        "tr": "YouTube çift altyazı",
+        "vi": "Phụ đề kép YouTube",
+        "zh": "YouTube 双字幕",
+        "zh_CN": "YouTube 双字幕"
+      },
+      "localized_subtitle": {
+        "en": "Turn any YouTube video into a listening lesson",
+        "de": "Mach aus jedem YouTube-Video eine Hörübung",
+        "es": "Convierte cualquier vídeo de YouTube en una lección de escucha",
+        "fr": "Transformez n'importe quelle vidéo YouTube en leçon d'écoute",
+        "it": "Trasforma qualsiasi video YouTube in una lezione di ascolto",
+        "nl": "Maak van elke YouTube-video een luisterles",
+        "pl": "Zamień dowolny film YouTube w lekcję słuchania",
+        "pt": "Transforme qualquer vídeo do YouTube em uma lição de escuta",
+        "ru": "Превратите любое видео с YouTube в урок прослушивания",
+        "tr": "Herhangi bir YouTube videosunu dinleme dersine dönüştürün",
+        "vi": "Biến mọi video YouTube thành bài nghe",
+        "zh": "把任何 YouTube 视频变成听力练习",
+        "zh_CN": "把任何 YouTube 视频变成听力练习"
+      }
     },
     {
       "id": "ad_4",
-      "title": "YouTube & Netflix trainers",
-      "subtitle": "Repeat words from your subtitle translation history in quick, contextual drills",
       "iconPath": "assets/ads/tutor.png",
       "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.easy5",
-      "urlIos": "https://apps.apple.com/us/app/english-words-new-vocabulary/id1622786750"
+      "urlIos": "https://apps.apple.com/us/app/id1622786750",
+      "localized_title": {
+        "en": "YouTube & Netflix trainers",
+        "de": "YouTube- & Netflix-Trainer",
+        "es": "Entrenadores YouTube y Netflix",
+        "fr": "Entraîneurs YouTube et Netflix",
+        "it": "Allenatori YouTube e Netflix",
+        "nl": "YouTube- en Netflix-trainers",
+        "pl": "Treningi YouTube i Netflix",
+        "pt": "Treinos YouTube e Netflix",
+        "ru": "Тренажёры YouTube и Netflix",
+        "tr": "YouTube ve Netflix antrenörleri",
+        "vi": "Luyện tập YouTube & Netflix",
+        "zh": "YouTube 与 Netflix 训练",
+        "zh_CN": "YouTube 与 Netflix 训练"
+      },
+      "localized_subtitle": {
+        "en": "Repeat words from your subtitle translation history in quick, contextual drills",
+        "de": "Wiederhole Wörter aus deiner Untertitel-Übersetzungshistorie in kurzen Kontextübungen",
+        "es": "Repite palabras de tu historial de traducciones de subtítulos en ejercicios contextuales breves",
+        "fr": "Répétez les mots de votre historique de traduction des sous-titres dans de courts exercices contextuels",
+        "it": "Ripeti le parole dalla cronologia delle traduzioni dei sottotitoli in brevi esercizi contestuali",
+        "nl": "Herhaal woorden uit je ondertitelvertaalgeschiedenis in korte contextoefeningen",
+        "pl": "Powtarzaj słowa z historii tłumaczeń napisów w krótkich ćwiczeniach kontekstowych",
+        "pt": "Repita palavras do histórico de tradução de legendas em exercícios contextuais rápidos",
+        "ru": "Повторяйте слова из истории переводов субтитров в коротких контекстных упражнениях",
+        "tr": "Altyazı çeviri geçmişinizdeki kelimeleri kısa bağlamsal alıştırmalarda tekrarlayın",
+        "vi": "Ôn từ trong lịch sử dịch phụ đề qua bài luyện ngữ cảnh ngắn",
+        "zh": "在简短情境练习中复现字幕翻译记录里的单词",
+        "zh_CN": "在简短情境练习中复现字幕翻译记录里的单词"
+      }
     },
     {
       "id": "verbs5",
-      "title": "Irregular Verbs: Tutor",
-      "subtitle": "5 verbs Every day",
       "iconPath": "assets/ads/verbs5-225-72.png",
       "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.easy5verbs",
-      "urlIos": "https://apps.apple.com/by/app/irregular-verbs-in-english-pro/id1638688704"
-    }, 
+      "urlIos": "https://apps.apple.com/by/app/id1638688704",
+      "localized_title": {
+        "en": "Irregular Verbs: Tutor",
+        "de": "Unregelmäßige Verben: Tutor",
+        "es": "Verbos irregulares: Tutor",
+        "fr": "Verbes irréguliers : Tutor",
+        "it": "Verbi irregolari: Tutor",
+        "nl": "Onregelmatige werkwoorden: Tutor",
+        "pl": "Czasowniki nieregularne: Tutor",
+        "pt": "Verbos irregulares: Tutor",
+        "ru": "Неправильные глаголы: Tutor",
+        "tr": "Düzensiz fiiller: Tutor",
+        "vi": "Động từ bất quy tắc: Tutor",
+        "zh": "不规则动词：Tutor",
+        "zh_CN": "不规则动词：Tutor"
+      },
+      "localized_subtitle": {
+        "en": "5 verbs. Every day.",
+        "de": "5 Verben. Jeden Tag.",
+        "es": "5 verbos. Cada día.",
+        "fr": "5 verbes. Chaque jour.",
+        "it": "5 verbi. Ogni giorno.",
+        "nl": "5 werkwoorden. Elke dag.",
+        "pl": "5 czasowników. Codziennie.",
+        "pt": "5 verbos. Todos os dias.",
+        "ru": "5 глаголов. Каждый день.",
+        "tr": "Her gün 5 fiil.",
+        "vi": "5 động từ mỗi ngày.",
+        "zh": "每天 5 个动词。",
+        "zh_CN": "每天 5 个动词。"
+      }
+    },
     {
       "id": "ad_1",
-      "title": "Flashcards",
-      "subtitle": "Learn and remember new words with smart flashcards",
       "iconPath": "assets/ads/cards.png",
       "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.englishcards",
-      "urlIos": "https://apps.apple.com/us/app/english-vocab-words-duo-cards/id1658981786"
+      "urlIos": "https://apps.apple.com/us/app/id1658981786",
+      "localized_title": {
+        "en": "Flashcards",
+        "de": "Karteikarten",
+        "es": "Tarjetas didácticas",
+        "fr": "Cartes mémoire",
+        "it": "Flashcard",
+        "nl": "Flashcards",
+        "pl": "Fiszki",
+        "pt": "Flashcards",
+        "ru": "Карточки",
+        "tr": "Bilgi kartları",
+        "vi": "Thẻ ghi nhớ",
+        "zh": "单词卡",
+        "zh_CN": "单词卡"
+      },
+      "localized_subtitle": {
+        "en": "Learn and remember new words with smart flashcards",
+        "de": "Lerne und behalte neue Wörter mit cleveren Karteikarten",
+        "es": "Aprende y recuerda palabras nuevas con tarjetas inteligentes",
+        "fr": "Apprenez et mémorisez du vocabulaire avec des cartes intelligentes",
+        "it": "Impara e ricorda parole nuove con flashcard intelligenti",
+        "nl": "Leer nieuwe woorden en onthoud ze met slimme flashcards",
+        "pl": "Ucz się i zapamiętuj nowe słowa dzięki mądrym fiszkom",
+        "pt": "Aprenda e memorize palavras novas com flashcards inteligentes",
+        "ru": "Учите и запоминайте слова с умными карточками",
+        "tr": "Akıllı bilgi kartlarıyla yeni kelimeler öğrenin ve hatırlayın",
+        "vi": "Học và nhớ từ mới với thẻ ghi nhớ thông minh",
+        "zh": "用智能单词卡学习与记忆生词",
+        "zh_CN": "用智能单词卡学习与记忆生词"
+      }
     },
     {
       "id": "ad_2",
-      "title": "Listening by Books/Podcasts",
-      "subtitle": "Listen, read along, and grow your comprehension + Quizes",
-      "iconPath": "assets/ads/listening.png",  
+      "iconPath": "assets/ads/listening.png",
       "urlAndroid": "https://play.google.com/store/apps/details?id=com.englishingames.listening",
-      "urlIos": "https://apps.apple.com/us/app/english-listening-by-podcast/id6447188725"
+      "urlIos": "https://apps.apple.com/us/app/id6447188725",
+      "localized_title": {
+        "en": "Listening by Books/Podcasts",
+        "de": "Hören mit Büchern/Podcasts",
+        "es": "Escucha con libros y podcasts",
+        "fr": "Écoute avec livres et podcasts",
+        "it": "Ascolto con libri e podcast",
+        "nl": "Luisteren met boeken/podcasts",
+        "pl": "Słuchanie przy książkach i podcastach",
+        "pt": "Escuta com livros e podcasts",
+        "ru": "Аудирование: книги и подкасты",
+        "tr": "Kitap ve podcast ile dinleme",
+        "vi": "Nghe qua sách và podcast",
+        "zh": "图书/播客听力",
+        "zh_CN": "图书/播客听力"
+      },
+      "localized_subtitle": {
+        "en": "Listen, read along, and grow your comprehension",
+        "de": "Hör zu, lies mit und verbessere dein Verständnis",
+        "es": "Escucha, lee en paralelo y mejora tu comprensión",
+        "fr": "Écoutez, lisez en parallèle et progressez en compréhension",
+        "it": "Ascolta, leggi in parallelo e migliora la comprensione",
+        "nl": "Luister, lees mee en werk aan je begrip",
+        "pl": "Słuchaj, czytaj równolegle i rozwijaj zrozumienie",
+        "pt": "Ouça, leia junto e aprimore sua compreensão",
+        "ru": "Слушайте, читайте вслух и развивайте понимание на слух",
+        "tr": "Dinleyin, eşlik edin ve anlama becerinizi geliştirin",
+        "vi": "Nghe, đọc theo và nâng kỹ năng hiểu",
+        "zh": "边听边读，提升听力理解",
+        "zh_CN": "边听边读，提升听力理解"
+      }
     }
   ]
 }
