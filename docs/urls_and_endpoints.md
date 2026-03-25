@@ -6,16 +6,19 @@
 
 ## 1. API Summify (документы, парсинг, LLM)
 
-**Сервер:** один активный хост; цепочка fallback заложена в коде, но **закомментирована** (см. `lib/services/summaryApi.dart`).
+**Сервер:** основной хост; при **сетевом** сбое запрос повторяется по очереди на резервных хостах (те же пути `/api/v1/...`). Реализация: [`lib/services/summaryApi.dart`](lib/services/summaryApi.dart) — `_postWithFallback`, `_isNetworkFailure`.
 
 | Назначение | Базовый URL | Файл |
 |------------|-------------|------|
-| Основной (активен) | `https://api.lmnotebookpro.com` | `lib/services/summaryApi.dart` (`_baseUrlPrimary`) |
+| Основной | `https://api.lmnotebookpro.com` | `_baseUrlPrimary` |
 
-**Запланированные fallback-хосты** (тот же префикс путей `/api/v1/...`; включить — раскомментировать `_fallbackBaseUrls` и блок в `_postWithFallback`):
+**Условие переключения:** только сетевые ошибки Dio — `connectionTimeout`, `connectionError`, `sendTimeout`, `receiveTimeout`, а также `unknown` без `response`. Ответы с HTTP-кодом (4xx/5xx) на основном хосте **не** перенаправляются на fallback.
 
-1. `https://api.employees-training.com`
-2. `https://chromium.employees-training.com`
+**Fallback-хосты** (порядок попыток после сбоя основного):
+
+1. `https://employees-training.com`
+2. `https://api.employees-training.com`
+3. `https://chromium.employees-training.com`
 
 **Эндпоинты (пути добавляются к базовому URL):**
 
@@ -152,7 +155,7 @@
 
 1. **`lib/services/summaryApi.dart`**
    - `_baseUrlPrimary` — основной хост для всех эндпоинтов `/api/v1/...`.
-   - При включении резервов — раскомментировать `_fallbackBaseUrls` и тело `_postWithFallback`.
+   - `_fallbackBaseUrls` — порядок резервных хостов при сетевых сбоях (см. раздел 1).
    - При необходимости — `sendEmailUrl` (отдельный сервис на easy4learn).
 
 2. **`lib/services/bundle_service.dart`**

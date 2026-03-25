@@ -18,11 +18,12 @@ class SummaryApiRepository {
   /// Primary host: documents, parsing, LLM-backed API (`/api/v1/...`).
   static const String _baseUrlPrimary = 'https://api.lmnotebookpro.com';
 
-  // Planned fallback bases (same paths). Enable cascade in [_postWithFallback] when ready.
-  // static const List<String> _fallbackBaseUrls = <String>[
-  //   'https://api.employees-training.com',
-  //   'https://chromium.employees-training.com',
-  // ];
+  /// Reserve hosts for document/LLM API (same `/api/v1/...` paths) after primary network failure.
+  static const List<String> _fallbackBaseUrls = <String>[
+    'https://employees-training.com',
+    'https://api.employees-training.com',
+    'https://chromium.employees-training.com',
+  ];
 
   // API paths (appended to whichever base host is used)
   static const String _pathSummaries = '/api/v1/summaries';
@@ -60,44 +61,37 @@ class SummaryApiRepository {
         (e.type == DioExceptionType.unknown && e.response == null);
   }
 
-  /// POST to document/LLM API ([_baseUrlPrimary] only for now).
+  /// POST to document/LLM API: [_baseUrlPrimary] first; on network failure, each host in [_fallbackBaseUrls].
   ///
-  /// Fallback cascade through [_fallbackBaseUrls] is prepared but commented out below.
+  /// Non-network Dio errors (e.g. HTTP 4xx/5xx with a response) are not retried on another host.
   Future<Response> _postWithFallback(
     String path,
     dynamic data, {
     Map<String, dynamic>? queryParameters,
   }) async {
-    return await _dio.post(
-      _baseUrlPrimary + path,
-      data: data,
-      queryParameters: queryParameters,
-    );
-
-    // --- Uncomment to try fallbacks after primary network failure (see _fallbackBaseUrls) ---
-    // try {
-    //   return await _dio.post(
-    //     _baseUrlPrimary + path,
-    //     data: data,
-    //     queryParameters: queryParameters,
-    //   );
-    // } on DioException catch (e) {
-    //   if (!_isNetworkFailure(e)) rethrow;
-    //   DioException? last = e;
-    //   for (final base in _fallbackBaseUrls) {
-    //     try {
-    //       return await _dio.post(
-    //         base + path,
-    //         data: data,
-    //         queryParameters: queryParameters,
-    //       );
-    //     } on DioException catch (e2) {
-    //       last = e2;
-    //       if (!_isNetworkFailure(e2)) rethrow;
-    //     }
-    //   }
-    //   throw last!;
-    // }
+    try {
+      return await _dio.post(
+        _baseUrlPrimary + path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+    } on DioException catch (e) {
+      if (!_isNetworkFailure(e)) rethrow;
+      var last = e;
+      for (final base in _fallbackBaseUrls) {
+        try {
+          return await _dio.post(
+            base + path,
+            data: data,
+            queryParameters: queryParameters,
+          );
+        } on DioException catch (e2) {
+          last = e2;
+          if (!_isNetworkFailure(e2)) rethrow;
+        }
+      }
+      throw last;
+    }
   }
 
   ErrorDecode _parseDioError(DioException e, {String defaultDetail = 'Processing error'}) {
