@@ -6,6 +6,11 @@
   "common_ok": "OK",
   "common_error": "Błąd",
 
+  "home_deleteSummary_title": "Usunąć dokument?",
+  "home_deleteSummary_message": "Czy na pewno chcesz usunąć ten wpis? Tej operacji nie można cofnąć.",
+  "home_deleteSummary_confirm": "Usuń",
+  "home_deleteSummary_cancel": "Anuluj",
+
   "onboarding_translateSummarizationTo": "Tłumacz podsumowania na",
   "onboarding_goodbyeInfoOverload": "Żegnaj, przeciążenie informacjami!",
   "onboarding_oneClickShareToGetSummary": "Jedno kliknięcie „Udostępnij”, aby uzyskać podsumowanie",

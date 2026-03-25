@@ -6,6 +6,11 @@
   "common_ok": "OK",
   "common_error": "Fout",
 
+  "home_deleteSummary_title": "Document verwijderen?",
+  "home_deleteSummary_message": "Weet je zeker dat je dit item wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+  "home_deleteSummary_confirm": "Verwijderen",
+  "home_deleteSummary_cancel": "Annuleren",
+
   "onboarding_translateSummarizationTo": "Samenvatting vertalen naar",
   "onboarding_goodbyeInfoOverload": "Weg met informatie-overload!",
   "onboarding_oneClickShareToGetSummary": "Eén klik op \"delen\" voor een samenvatting",

@@ -6,6 +6,11 @@
   "common_ok": "OK",
   "common_error": "Erreur",
 
+  "home_deleteSummary_title": "Supprimer le document ?",
+  "home_deleteSummary_message": "Voulez-vous vraiment supprimer cet élément ? Cette action est irréversible.",
+  "home_deleteSummary_confirm": "Supprimer",
+  "home_deleteSummary_cancel": "Annuler",
+
   "onboarding_translateSummarizationTo": "Traduire les résumés en",
   "onboarding_goodbyeInfoOverload": "Adieu à la surcharge d’informations !",
   "onboarding_oneClickShareToGetSummary": "Un clic sur « Partager » pour obtenir un résumé",

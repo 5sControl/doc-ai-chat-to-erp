@@ -6,6 +6,11 @@
   "common_ok": "OK",
   "common_error": "Lỗi",
 
+  "home_deleteSummary_title": "Xóa tài liệu?",
+  "home_deleteSummary_message": "Bạn có chắc muốn xóa mục này? Hành động này không thể hoàn tác.",
+  "home_deleteSummary_confirm": "Xóa",
+  "home_deleteSummary_cancel": "Hủy",
+
   "onboarding_translateSummarizationTo": "Dịch tóm tắt sang",
   "onboarding_goodbyeInfoOverload": "Tạm biệt quá tải thông tin!",
   "onboarding_oneClickShareToGetSummary": "Chỉ một lần \"Chia sẻ\" để nhận tóm tắt",

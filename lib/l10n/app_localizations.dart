@@ -143,6 +143,30 @@ abstract class AppLocalizations {
   /// **'Error'**
   String get common_error;
 
+  /// No description provided for @home_deleteSummary_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete document?'**
+  String get home_deleteSummary_title;
+
+  /// No description provided for @home_deleteSummary_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this item? This action cannot be undone.'**
+  String get home_deleteSummary_message;
+
+  /// No description provided for @home_deleteSummary_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get home_deleteSummary_confirm;
+
+  /// No description provided for @home_deleteSummary_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get home_deleteSummary_cancel;
+
   /// No description provided for @onboarding_translateSummarizationTo.
   ///
   /// In en, this message translates to:

@@ -21,6 +21,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get common_error => 'Error';
 
   @override
+  String get home_deleteSummary_title => 'Delete document?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Are you sure you want to delete this item? This action cannot be undone.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Delete';
+
+  @override
+  String get home_deleteSummary_cancel => 'Cancel';
+
+  @override
   String get onboarding_translateSummarizationTo =>
       'Translate summarization to';
 

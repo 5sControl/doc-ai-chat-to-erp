@@ -6,6 +6,11 @@
   "common_ok": "Tamam",
   "common_error": "Hata",
 
+  "home_deleteSummary_title": "Belge silinsin mi?",
+  "home_deleteSummary_message": "Bu öğeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  "home_deleteSummary_confirm": "Sil",
+  "home_deleteSummary_cancel": "İptal",
+
   "onboarding_translateSummarizationTo": "Özeti şu dile çevir",
   "onboarding_goodbyeInfoOverload": "Bilgi yükünden kurtulun!",
   "onboarding_oneClickShareToGetSummary": "Özet almak için tek tıkla \"paylaş\"",

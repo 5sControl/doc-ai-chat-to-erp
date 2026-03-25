@@ -6,6 +6,11 @@
   "common_ok": "好",
   "common_error": "错误",
 
+  "home_deleteSummary_title": "删除文档？",
+  "home_deleteSummary_message": "确定要删除此项吗？此操作无法撤销。",
+  "home_deleteSummary_confirm": "删除",
+  "home_deleteSummary_cancel": "取消",
+
   "onboarding_translateSummarizationTo": "将摘要翻译为",
   "onboarding_goodbyeInfoOverload": "告别信息过载！",
   "onboarding_oneClickShareToGetSummary": "一键“分享”获取摘要",

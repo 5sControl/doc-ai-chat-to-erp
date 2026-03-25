@@ -21,6 +21,19 @@ class AppLocalizationsPl extends AppLocalizations {
   String get common_error => 'Błąd';
 
   @override
+  String get home_deleteSummary_title => 'Usunąć dokument?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Czy na pewno chcesz usunąć ten wpis? Tej operacji nie można cofnąć.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Usuń';
+
+  @override
+  String get home_deleteSummary_cancel => 'Anuluj';
+
+  @override
   String get onboarding_translateSummarizationTo => 'Tłumacz podsumowania na';
 
   @override

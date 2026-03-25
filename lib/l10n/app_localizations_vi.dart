@@ -21,6 +21,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get common_error => 'Lỗi';
 
   @override
+  String get home_deleteSummary_title => 'Xóa tài liệu?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Bạn có chắc muốn xóa mục này? Hành động này không thể hoàn tác.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Xóa';
+
+  @override
+  String get home_deleteSummary_cancel => 'Hủy';
+
+  @override
   String get onboarding_translateSummarizationTo => 'Dịch tóm tắt sang';
 
   @override

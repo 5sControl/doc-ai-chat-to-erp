@@ -6,6 +6,11 @@
   "common_ok": "OK",
   "common_error": "Fehler",
 
+  "home_deleteSummary_title": "Dokument löschen?",
+  "home_deleteSummary_message": "Möchten Sie diesen Eintrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "home_deleteSummary_confirm": "Löschen",
+  "home_deleteSummary_cancel": "Abbrechen",
+
   "onboarding_translateSummarizationTo": "Zusammenfassungen übersetzen nach",
   "onboarding_goodbyeInfoOverload": "Tschüss, Informationsflut!",
   "onboarding_oneClickShareToGetSummary": "Mit einem Klick auf „Teilen“ zur Zusammenfassung",

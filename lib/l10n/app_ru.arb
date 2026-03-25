@@ -6,6 +6,11 @@
   "common_ok": "Ок",
   "common_error": "Ошибка",
 
+  "home_deleteSummary_title": "Удалить документ?",
+  "home_deleteSummary_message": "Вы уверены, что хотите удалить эту запись? Это действие нельзя отменить.",
+  "home_deleteSummary_confirm": "Удалить",
+  "home_deleteSummary_cancel": "Отмена",
+
   "onboarding_translateSummarizationTo": "Переводить саммари на",
   "onboarding_goodbyeInfoOverload": "Прощай, информационная перегрузка!",
   "onboarding_oneClickShareToGetSummary": "В один клик «Поделиться» — и получите саммари",

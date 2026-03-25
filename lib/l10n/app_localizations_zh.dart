@@ -21,6 +21,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get common_error => '错误';
 
   @override
+  String get home_deleteSummary_title => '删除文档？';
+
+  @override
+  String get home_deleteSummary_message => '确定要删除此项吗？此操作无法撤销。';
+
+  @override
+  String get home_deleteSummary_confirm => '删除';
+
+  @override
+  String get home_deleteSummary_cancel => '取消';
+
+  @override
   String get onboarding_translateSummarizationTo => '将摘要翻译为';
 
   @override
@@ -714,6 +726,18 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get common_error => '错误';
+
+  @override
+  String get home_deleteSummary_title => '删除文档？';
+
+  @override
+  String get home_deleteSummary_message => '确定要删除此项吗？此操作无法撤销。';
+
+  @override
+  String get home_deleteSummary_confirm => '删除';
+
+  @override
+  String get home_deleteSummary_cancel => '取消';
 
   @override
   String get onboarding_translateSummarizationTo => '将摘要翻译为';

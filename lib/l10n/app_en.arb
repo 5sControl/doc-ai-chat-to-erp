@@ -6,6 +6,11 @@
   "common_ok": "OK",
   "common_error": "Error",
 
+  "home_deleteSummary_title": "Delete document?",
+  "home_deleteSummary_message": "Are you sure you want to delete this item? This action cannot be undone.",
+  "home_deleteSummary_confirm": "Delete",
+  "home_deleteSummary_cancel": "Cancel",
+
   "onboarding_translateSummarizationTo": "Translate summarization to",
   "onboarding_goodbyeInfoOverload": "Goodbye information overload!",
   "onboarding_oneClickShareToGetSummary": "One-click \"share\" to get summary",

@@ -21,6 +21,19 @@ class AppLocalizationsRu extends AppLocalizations {
   String get common_error => 'Ошибка';
 
   @override
+  String get home_deleteSummary_title => 'Удалить документ?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Вы уверены, что хотите удалить эту запись? Это действие нельзя отменить.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Удалить';
+
+  @override
+  String get home_deleteSummary_cancel => 'Отмена';
+
+  @override
   String get onboarding_translateSummarizationTo => 'Переводить саммари на';
 
   @override

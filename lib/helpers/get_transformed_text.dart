@@ -38,30 +38,63 @@ String _stripLeadingThematicBreakLines(String text) {
   return lines.sublist(i).join('\n');
 }
 
+/// [getTransformedText] collapses all newlines, so "###" often glues to the prior
+/// sentence (e.g. `codebase.###Key Points`). ATX headings must start a line and
+/// (per CommonMark) need a space after the hash run before the title text.
+String _ensureNewlineBeforeGluedAtxHeading(String text) {
+  var s = text.replaceAllMapped(
+    RegExp(r'(?<![0-9])\.\s*(#{1,6})(?=[A-Za-zА-Яа-яЁё#])'),
+    (m) => '.\n${m[1]}',
+  );
+  s = s.replaceAllMapped(
+    RegExp(r'([!?:)\]])\s*(#{1,6})(?=[A-Za-zА-Яа-яЁё#])'),
+    (m) => '${m[1]}\n${m[2]}',
+  );
+  s = s.replaceAllMapped(
+    RegExp(r'([a-zа-яёё])\s*(#{1,6})(?=[A-Za-zА-Яа-яЁё#])'),
+    (m) => '${m[1]}\n${m[2]}',
+  );
+  return s;
+}
+
+String _ensureSpaceAfterAtxLineStart(String text) {
+  return text.replaceAllMapped(
+    RegExp(r'(^|\n)(#{1,6})([A-Za-zА-Яа-яЁё])', multiLine: true),
+    (m) => '${m[1]}${m[2]} ${m[3]}',
+  );
+}
+
 /// Normalizes summary markdown for on-screen rendering (brief/deep/source tabs).
 String prepareMarkdownForDisplay(String text) {
   return _stripLeadingThematicBreakLines(
-    _dropDecorativeRuleBeforeAtxHeading(text),
+    _ensureSpaceAfterAtxLineStart(
+      _ensureNewlineBeforeGluedAtxHeading(
+        _dropDecorativeRuleBeforeAtxHeading(text),
+      ),
+    ),
   );
 }
 
 String getTransformedText({required String text}) {
-  return _stripLeadingThematicBreakLines(
-    _dropDecorativeRuleBeforeAtxHeading(text.replaceAll('\n', ''))
-        .replaceAll('   ', '')
-        .replaceAll('\n\n', '\n')
-        .replaceAll('\n\n\n', '\n')
-        .replaceAll('.- ', '.\n- ')
-        .replaceFirst('Summary:', 'Summary:\n')
-        .replaceFirst('Key Points:', '\n\nKey Points:\n')
-        .replaceFirst('In-depth Analysis:', '\n\nIn-depth Analysis:\n')
-        .replaceFirst('Additional Context:', '\n\nAdditional Context:\n')
-        .replaceFirst('Supporting Evidence:', '\n\nSupporting Evidence:\n')
-        .replaceFirst(
-          'Implications or Conclusions:',
-          '\n\nImplications or Conclusions:\n',
-        ),
-  );
+  var s = text.replaceAll('\n', '');
+  s = _dropDecorativeRuleBeforeAtxHeading(s);
+  s = _ensureNewlineBeforeGluedAtxHeading(s);
+  s = s
+      .replaceAll('   ', '')
+      .replaceAll('\n\n', '\n')
+      .replaceAll('\n\n\n', '\n')
+      .replaceAll('.- ', '.\n- ')
+      .replaceFirst('Summary:', 'Summary:\n')
+      .replaceFirst('Key Points:', '\n\nKey Points:\n')
+      .replaceFirst('In-depth Analysis:', '\n\nIn-depth Analysis:\n')
+      .replaceFirst('Additional Context:', '\n\nAdditional Context:\n')
+      .replaceFirst('Supporting Evidence:', '\n\nSupporting Evidence:\n')
+      .replaceFirst(
+        'Implications or Conclusions:',
+        '\n\nImplications or Conclusions:\n',
+      );
+  s = _ensureSpaceAfterAtxLineStart(s);
+  return _stripLeadingThematicBreakLines(s);
 }
 
 /// Strips Markdown syntax so TTS does not read "hash hash" or asterisks.

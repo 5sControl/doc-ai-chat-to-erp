@@ -21,6 +21,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get common_error => 'Hata';
 
   @override
+  String get home_deleteSummary_title => 'Belge silinsin mi?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Bu öğeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Sil';
+
+  @override
+  String get home_deleteSummary_cancel => 'İptal';
+
+  @override
   String get onboarding_translateSummarizationTo => 'Özeti şu dile çevir';
 
   @override

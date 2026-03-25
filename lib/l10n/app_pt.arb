@@ -6,6 +6,11 @@
   "common_ok": "OK",
   "common_error": "Erro",
 
+  "home_deleteSummary_title": "Excluir documento?",
+  "home_deleteSummary_message": "Tem certeza de que deseja excluir este item? Esta ação não pode ser desfeita.",
+  "home_deleteSummary_confirm": "Excluir",
+  "home_deleteSummary_cancel": "Cancelar",
+
   "onboarding_translateSummarizationTo": "Traduzir os resumos para",
   "onboarding_goodbyeInfoOverload": "Adeus à sobrecarga de informação!",
   "onboarding_oneClickShareToGetSummary": "Um clique em \"Compartilhar\" para obter o resumo",

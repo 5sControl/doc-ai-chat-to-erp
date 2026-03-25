@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/screens/request_screen.dart';
@@ -135,9 +136,54 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
         }
 
         return Builder(builder: (context) {
+          final l10n = AppLocalizations.of(context);
+          final theme = Theme.of(context);
           return Dismissible(
             behavior: HitTestBehavior.translucent,
             key: Key(widget.sharedLink),
+            confirmDismiss: (direction) async {
+              final confirmed = await showDialog<bool>(
+                context: context,
+                barrierDismissible: false,
+                builder: (ctx) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  backgroundColor: theme.primaryColorLight,
+                  title: Text(
+                    l10n.home_deleteSummary_title,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  content: Text(
+                    l10n.home_deleteSummary_message,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.black,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(ctx).pop(false),
+                      child: Text(
+                        l10n.home_deleteSummary_cancel,
+                        style: TextStyle(color: theme.primaryColor),
+                      ),
+                    ),
+                    FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.red.shade400,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () => Navigator.of(ctx).pop(true),
+                      child: Text(l10n.home_deleteSummary_confirm),
+                    ),
+                  ],
+                ),
+              );
+              return confirmed ?? false;
+            },
             onDismissed: (direction) {
               onPressDelete();
             },
@@ -156,10 +202,11 @@ class _SummaryTileState extends State<SummaryTile> with WidgetsBindingObserver {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    ' Delete',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  Text(
+                    l10n.home_deleteSummary_confirm,
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
+                  const SizedBox(width: 6),
                   SvgPicture.asset(Assets.icons.delete,
                       colorFilter: const ColorFilter.mode(
                           Colors.white, BlendMode.srcIn)),

@@ -21,6 +21,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get common_error => 'Erro';
 
   @override
+  String get home_deleteSummary_title => 'Excluir documento?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Tem certeza de que deseja excluir este item? Esta ação não pode ser desfeita.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Excluir';
+
+  @override
+  String get home_deleteSummary_cancel => 'Cancelar';
+
+  @override
   String get onboarding_translateSummarizationTo => 'Traduzir os resumos para';
 
   @override

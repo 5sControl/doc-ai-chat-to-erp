@@ -21,6 +21,19 @@ class AppLocalizationsNl extends AppLocalizations {
   String get common_error => 'Fout';
 
   @override
+  String get home_deleteSummary_title => 'Document verwijderen?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Weet je zeker dat je dit item wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Verwijderen';
+
+  @override
+  String get home_deleteSummary_cancel => 'Annuleren';
+
+  @override
   String get onboarding_translateSummarizationTo =>
       'Samenvatting vertalen naar';
 

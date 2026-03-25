@@ -21,6 +21,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get common_error => 'Fehler';
 
   @override
+  String get home_deleteSummary_title => 'Dokument löschen?';
+
+  @override
+  String get home_deleteSummary_message =>
+      'Möchten Sie diesen Eintrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get home_deleteSummary_confirm => 'Löschen';
+
+  @override
+  String get home_deleteSummary_cancel => 'Abbrechen';
+
+  @override
   String get onboarding_translateSummarizationTo =>
       'Zusammenfassungen übersetzen nach';
 
