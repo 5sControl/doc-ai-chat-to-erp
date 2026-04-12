@@ -7,6 +7,71 @@ import 'package:summify/models/models.dart';
 
 import '../../bloc/settings/settings_bloc.dart';
 
+/// Feedback colors for quiz cards: light pastels vs dark tinted surfaces.
+class _QuizPalette {
+  _QuizPalette._({
+    required this.correctBg,
+    required this.correctFg,
+    required this.correctIcon,
+    required this.correctBorder,
+    required this.wrongBg,
+    required this.wrongFg,
+    required this.wrongIcon,
+    required this.wrongBorder,
+    required this.infoBg,
+    required this.infoBorder,
+    required this.infoTitle,
+    required this.infoBody,
+  });
+
+  factory _QuizPalette.of(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (isDark) {
+      return _QuizPalette._(
+        correctBg: const Color(0xFF1A3D32),
+        correctFg: const Color(0xFFB2DFDB),
+        correctIcon: const Color(0xFF81C784),
+        correctBorder: const Color(0xFF2E6B52),
+        wrongBg: const Color(0xFF3D2528),
+        wrongFg: const Color(0xFFFFB4AB),
+        wrongIcon: const Color(0xFFE57373),
+        wrongBorder: const Color(0xFF8B4B52),
+        infoBg: const Color(0xFF1A2838),
+        infoBorder: const Color(0xFF3D5A80),
+        infoTitle: const Color(0xFF90CAF9),
+        infoBody: const Color(0xFFB8CBE8),
+      );
+    }
+    return _QuizPalette._(
+      correctBg: Colors.green.shade100,
+      correctFg: Colors.green.shade900,
+      correctIcon: Colors.green.shade700,
+      correctBorder: Colors.green.shade200,
+      wrongBg: Colors.red.shade100,
+      wrongFg: Colors.red.shade900,
+      wrongIcon: Colors.red.shade700,
+      wrongBorder: Colors.red.shade200,
+      infoBg: Colors.blue.shade50,
+      infoBorder: Colors.blue.shade200,
+      infoTitle: Colors.blue.shade700,
+      infoBody: Colors.blue.shade900,
+    );
+  }
+
+  final Color correctBg;
+  final Color correctFg;
+  final Color correctIcon;
+  final Color correctBorder;
+  final Color wrongBg;
+  final Color wrongFg;
+  final Color wrongIcon;
+  final Color wrongBorder;
+  final Color infoBg;
+  final Color infoBorder;
+  final Color infoTitle;
+  final Color infoBody;
+}
+
 class QuizTab extends StatefulWidget {
   final String documentKey;
   final String documentText;
@@ -245,6 +310,10 @@ class _QuizQuestionScreen extends StatelessWidget {
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
+        final palette = _QuizPalette.of(context);
+        final colorScheme = Theme.of(context).colorScheme;
+        final neutralOptionBg = colorScheme.surfaceContainerLow;
+
         return SingleChildScrollView(
           padding: const EdgeInsets.only(
             left: 15,
@@ -296,23 +365,24 @@ class _QuizQuestionScreen extends StatelessWidget {
                 Color? textColor;
                 if (hasAnswer) {
                   if (isCorrect) {
-                    backgroundColor = Colors.green.shade100;
-                    textColor = Colors.green.shade900;
+                    backgroundColor = palette.correctBg;
+                    textColor = palette.correctFg;
                   } else if (isWrong) {
-                    backgroundColor = Colors.red.shade100;
-                    textColor = Colors.red.shade900;
+                    backgroundColor = palette.wrongBg;
+                    textColor = palette.wrongFg;
                   } else if (option.id == currentQuestion.correctAnswerId) {
-                    backgroundColor = Colors.green.shade100;
-                    textColor = Colors.green.shade900;
+                    backgroundColor = palette.correctBg;
+                    textColor = palette.correctFg;
                   }
                 } else if (isSelected) {
-                  backgroundColor = Theme.of(context).primaryColor.withOpacity(0.2);
+                  backgroundColor =
+                      Theme.of(context).primaryColor.withValues(alpha: 0.2);
                 }
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Material(
-                    color: backgroundColor ?? Colors.white,
+                    color: backgroundColor ?? neutralOptionBg,
                     borderRadius: BorderRadius.circular(12),
                     child: InkWell(
                       onTap: hasAnswer
@@ -346,7 +416,7 @@ class _QuizQuestionScreen extends StatelessWidget {
                                 border: Border.all(
                                   color: isSelected
                                       ? Theme.of(context).primaryColor
-                                      : Colors.grey.shade400,
+                                      : colorScheme.outlineVariant,
                                   width: 2,
                                 ),
                                 color: isSelected
@@ -380,12 +450,12 @@ class _QuizQuestionScreen extends StatelessWidget {
                             if (hasAnswer && isCorrect)
                               Icon(
                                 Icons.check_circle,
-                                color: Colors.green.shade700,
+                                color: palette.correctIcon,
                               ),
                             if (hasAnswer && isWrong)
                               Icon(
                                 Icons.cancel,
-                                color: Colors.red.shade700,
+                                color: palette.wrongIcon,
                               ),
                           ],
                         ),
@@ -400,9 +470,9 @@ class _QuizQuestionScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
+                    color: palette.infoBg,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.blue.shade200),
+                    border: Border.all(color: palette.infoBorder),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -411,7 +481,7 @@ class _QuizQuestionScreen extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.lightbulb_outline,
-                            color: Colors.blue.shade700,
+                            color: palette.infoTitle,
                             size: 20,
                         ),
                         const SizedBox(width: 8),
@@ -421,7 +491,7 @@ class _QuizQuestionScreen extends StatelessWidget {
                               .textTheme
                               .titleSmall
                               ?.copyWith(
-                                color: Colors.blue.shade700,
+                                color: palette.infoTitle,
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
@@ -432,7 +502,7 @@ class _QuizQuestionScreen extends StatelessWidget {
                         currentQuestion.explanation,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontSize: settingsState.fontSize.toDouble(),
-                              color: Colors.blue.shade900,
+                              color: palette.infoBody,
                             ),
                       ),
                     ],
@@ -539,7 +609,7 @@ class QuizNavigationDots extends StatelessWidget {
             dotColor = Colors.grey;
           }
         } else {
-          dotColor = Colors.grey.shade300;
+          dotColor = Theme.of(context).colorScheme.surfaceContainerHighest;
         }
 
         return GestureDetector(
@@ -562,7 +632,9 @@ class QuizNavigationDots extends StatelessWidget {
               boxShadow: isCurrent
                   ? [
                       BoxShadow(
-                        color: Theme.of(context).primaryColor.withOpacity(0.3),
+                        color: Theme.of(context)
+                            .primaryColor
+                            .withValues(alpha: 0.3),
                         blurRadius: 8,
                         spreadRadius: 2,
                       )
@@ -621,7 +693,8 @@ class QuizProgressIndicator extends StatelessWidget {
         const SizedBox(height: 8),
         LinearProgressIndicator(
           value: progress,
-          backgroundColor: Colors.grey.shade300,
+          backgroundColor:
+              Theme.of(context).colorScheme.surfaceContainerHighest,
           valueColor: AlwaysStoppedAnimation<Color>(
             Theme.of(context).primaryColor,
           ),
@@ -651,6 +724,8 @@ class _QuizResultsScreen extends StatelessWidget {
 
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
+        final colorScheme = Theme.of(context).colorScheme;
+
         return SingleChildScrollView(
           padding: const EdgeInsets.only(
             left: 15,
@@ -665,7 +740,7 @@ class _QuizResultsScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: colorScheme.surfaceContainer,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -682,13 +757,14 @@ class _QuizResultsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: reviewMode == ReviewMode.overview
-                                ? Colors.white
+                                ? colorScheme.surfaceContainerHigh
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: reviewMode == ReviewMode.overview
                                 ? [
                                     BoxShadow(
-                                      color: Colors.grey.shade300,
+                                      color: colorScheme.shadow
+                                          .withValues(alpha: 0.12),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     )
@@ -704,7 +780,7 @@ class _QuizResultsScreen extends StatelessWidget {
                               : FontWeight.normal,
                           color: reviewMode == ReviewMode.overview
                               ? Theme.of(context).primaryColor
-                              : Colors.grey.shade600,
+                              : colorScheme.onSurfaceVariant,
                         ),
                       ),
                         ),
@@ -722,13 +798,14 @@ class _QuizResultsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: reviewMode == ReviewMode.stepByStep
-                                ? Colors.white
+                                ? colorScheme.surfaceContainerHigh
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: reviewMode == ReviewMode.stepByStep
                                 ? [
                                     BoxShadow(
-                                      color: Colors.grey.shade300,
+                                      color: colorScheme.shadow
+                                          .withValues(alpha: 0.12),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     )
@@ -744,7 +821,7 @@ class _QuizResultsScreen extends StatelessWidget {
                               : FontWeight.normal,
                           color: reviewMode == ReviewMode.stepByStep
                               ? Theme.of(context).primaryColor
-                              : Colors.grey.shade600,
+                              : colorScheme.onSurfaceVariant,
                         ),
                       ),
                         ),
@@ -918,14 +995,15 @@ class _QuestionReviewCard extends StatelessWidget {
     final isCorrect = question.isCorrect == true;
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
+        final palette = _QuizPalette.of(context);
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isCorrect ? Colors.green.shade50 : Colors.red.shade50,
+            color: isCorrect ? palette.correctBg : palette.wrongBg,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isCorrect ? Colors.green.shade200 : Colors.red.shade200,
+              color: isCorrect ? palette.correctBorder : palette.wrongBorder,
             ),
           ),
           child: Column(
@@ -970,6 +1048,7 @@ class _QuestionReviewCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontSize: settingsState.fontSize.toDouble() + 2,
                       fontWeight: FontWeight.bold,
+                      color: isCorrect ? palette.correctFg : palette.wrongFg,
                     ),
               ),
               const SizedBox(height: 12),
@@ -978,6 +1057,7 @@ class _QuestionReviewCard extends StatelessWidget {
                   question.explanation,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: settingsState.fontSize.toDouble(),
+                        color: isCorrect ? palette.correctFg : palette.wrongFg,
                       ),
                 ),
               ],
@@ -1005,6 +1085,8 @@ class _StepByStepReviewContent extends StatelessWidget {
     final currentIndex = quiz.currentQuestionIndex ?? 0;
     final currentQuestion = quiz.questions[currentIndex];
     final isCorrect = currentQuestion.isCorrect == true;
+    final palette = _QuizPalette.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1085,11 +1167,11 @@ class _StepByStepReviewContent extends StatelessWidget {
           Color? backgroundColor;
           Color? textColor;
           if (isCorrectAnswer) {
-            backgroundColor = Colors.green.shade100;
-            textColor = Colors.green.shade900;
+            backgroundColor = palette.correctBg;
+            textColor = palette.correctFg;
           } else if (isUserAnswer && !isCorrectAnswer) {
-            backgroundColor = Colors.red.shade100;
-            textColor = Colors.red.shade900;
+            backgroundColor = palette.wrongBg;
+            textColor = palette.wrongFg;
           }
 
           return Padding(
@@ -1097,23 +1179,26 @@ class _StepByStepReviewContent extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: backgroundColor ?? Colors.grey.shade100,
+                color: backgroundColor ?? colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isUserAnswer || isCorrectAnswer
-                      ? (isCorrectAnswer ? Colors.green : Colors.red)
-                      : Colors.grey.shade300,
+                      ? (isCorrectAnswer
+                          ? palette.correctBorder
+                          : palette.wrongBorder)
+                      : colorScheme.outlineVariant,
                   width: 2,
                 ),
               ),
               child: Row(
                 children: [
                   if (isCorrectAnswer)
-                    Icon(Icons.check_circle, color: Colors.green.shade700)
+                    Icon(Icons.check_circle, color: palette.correctIcon)
                   else if (isUserAnswer)
-                    Icon(Icons.cancel, color: Colors.red.shade700)
+                    Icon(Icons.cancel, color: palette.wrongIcon)
                   else
-                    Icon(Icons.circle_outlined, color: Colors.grey.shade400),
+                    Icon(Icons.circle_outlined,
+                        color: colorScheme.outlineVariant),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Text(
@@ -1138,9 +1223,9 @@ class _StepByStepReviewContent extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.blue.shade50,
+              color: palette.infoBg,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.blue.shade200),
+              border: Border.all(color: palette.infoBorder),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1149,14 +1234,14 @@ class _StepByStepReviewContent extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.lightbulb_outline,
-                      color: Colors.blue.shade700,
+                      color: palette.infoTitle,
                       size: 20,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.of(context)!.quiz_explanation,
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                            color: Colors.blue.shade700,
+                            color: palette.infoTitle,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -1167,7 +1252,7 @@ class _StepByStepReviewContent extends StatelessWidget {
                   currentQuestion.explanation,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: settingsState.fontSize.toDouble(),
-                        color: Colors.blue.shade900,
+                        color: palette.infoBody,
                       ),
                 ),
               ],

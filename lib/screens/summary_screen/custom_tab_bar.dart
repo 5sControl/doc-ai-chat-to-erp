@@ -6,16 +6,20 @@ class CustomTabBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final primary = Theme.of(context).primaryColor;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
       padding: const EdgeInsets.all(1.5),
       height: 68,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(8)),
+        color: colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: colorScheme.outlineVariant),
+      ),
       child: TabBar(
-        //indicatorColor: Color.fromRGBO(0, 186, 195, 1),
         controller: tabController,
-        // isScrollable: true,
         labelColor: Colors.white,
         automaticIndicatorColorAdjustment: false,
         mouseCursor: null,
@@ -23,7 +27,7 @@ class CustomTabBar extends StatelessWidget {
         enableFeedback: false,
         padding: EdgeInsets.zero,
         splashFactory: NoSplash.splashFactory,
-        unselectedLabelColor: Colors.black,
+        unselectedLabelColor: colorScheme.onSurface,
         dividerColor: Colors.transparent,
         labelPadding: const EdgeInsets.symmetric(
           horizontal: 1,
@@ -31,19 +35,18 @@ class CustomTabBar extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         tabAlignment: TabAlignment.fill,
         indicator: BoxDecoration(
-            color: Color.fromRGBO(0, 186, 195, 1),
-            borderRadius: BorderRadius.circular(6)),
-        tabs: [
-          const Tab(
+            color: primary, borderRadius: BorderRadius.circular(6)),
+        tabs: const [
+          Tab(
             text: "Source",
           ),
-          const Tab(
+          Tab(
             text: "Brief",
           ),
-          const Tab(text: "Deep"),
-          const Tab(text: "Chat"),
-          const Tab(text: "Quiz"),
-          const Tab(text: "Cards"),
+          Tab(text: "Deep"),
+          Tab(text: "Chat"),
+          Tab(text: "Quiz"),
+          Tab(text: "Cards"),
         ],
       ),
     );
