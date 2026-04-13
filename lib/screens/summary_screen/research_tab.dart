@@ -314,54 +314,24 @@ class Answer extends StatelessWidget {
         );
 
         final onWordLookup = createWordLookupHandler(context);
+        final surroundingText = answer ?? '';
+
+        void handleTap(String w) {
+          final trimmed = w.trim();
+          if (trimmed.isNotEmpty) onWordLookup(context, trimmed, surroundingText);
+        }
 
         Map<String, MarkdownElementBuilder> wordTapBuilders() {
           return {
-            'p': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'h1': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'h2': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'h3': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'h4': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'h5': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'h6': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'li': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
-            'blockquote': MarkdownWordTapBuilder(
-                onWordTap: (w) {
-                  final trimmed = w.trim();
-                  if (trimmed.isNotEmpty) onWordLookup(context, trimmed);
-                }),
+            'p': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'h1': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'h2': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'h3': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'h4': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'h5': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'h6': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'li': MarkdownWordTapBuilder(onWordTap: handleTap),
+            'blockquote': MarkdownWordTapBuilder(onWordTap: handleTap),
           };
         }
 

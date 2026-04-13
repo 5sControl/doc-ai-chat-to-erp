@@ -213,52 +213,21 @@ class CardDetailModal extends StatelessWidget {
   }) {
     final onWordLookup = createWordLookupHandler(context);
 
+    void handleTap(String w) {
+      final t = w.trim();
+      if (t.isNotEmpty) onWordLookup(context, t, data);
+    }
+
     final builders = <String, MarkdownElementBuilder>{
-      'p': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'h1': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'h2': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'h3': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'h4': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'h5': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'h6': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'li': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
-      'blockquote': MarkdownWordTapBuilder(
-          onWordTap: (w) {
-            final t = w.trim();
-            if (t.isNotEmpty) onWordLookup(context, t);
-          }),
+      'p': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'h1': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'h2': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'h3': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'h4': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'h5': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'h6': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'li': MarkdownWordTapBuilder(onWordTap: handleTap),
+      'blockquote': MarkdownWordTapBuilder(onWordTap: handleTap),
     };
 
     return MarkdownBody(
