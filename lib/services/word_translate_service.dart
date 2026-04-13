@@ -1,15 +1,21 @@
 import 'package:translator/translator.dart';
 
-/// Result of a single-word lookup: word, translation, and optional extra definitions.
+import 'summaryApi.dart';
+
+/// Result of a single-word lookup: word, translation, and optional extra fields.
 class WordLookupResult {
   final String word;
   final String translation;
+  final String? transcription;
+  final String? contextNote;
   final String? errorMessage;
   final List<String>? extraDefinitions;
 
   const WordLookupResult({
     required this.word,
     required this.translation,
+    this.transcription,
+    this.contextNote,
     this.errorMessage,
     this.extraDefinitions,
   });
@@ -44,7 +50,35 @@ class _LRUCache<K, V> {
   }
 }
 
-/// Service for translating a single word via free Google Translate, with in-memory LRU cache.
+/// Extracts the sentence surrounding [word] from [fullText].
+/// Returns null if the word is not found. Caps at ~300 chars.
+String? extractSentenceContext(String fullText, String word) {
+  final idx = fullText.toLowerCase().indexOf(word.toLowerCase());
+  if (idx < 0) return null;
+
+  const sentenceBreaks = {'.', '!', '?', '\n'};
+  int start = idx;
+  while (start > 0 && !sentenceBreaks.contains(fullText[start - 1])) {
+    start--;
+  }
+  int end = idx + word.length;
+  while (end < fullText.length && !sentenceBreaks.contains(fullText[end])) {
+    end++;
+  }
+  // Include the terminating punctuation if present.
+  if (end < fullText.length && sentenceBreaks.contains(fullText[end]) && fullText[end] != '\n') {
+    end++;
+  }
+
+  var sentence = fullText.substring(start, end).trim();
+  if (sentence.length > 300) {
+    sentence = sentence.substring(0, 300);
+  }
+  return sentence.isEmpty ? null : sentence;
+}
+
+/// Service for translating a single word, with backend API (context-aware) and
+/// Google Translate fallback for multi-word selections.
 class WordTranslateService {
   WordTranslateService._();
   static final WordTranslateService instance = WordTranslateService._();
@@ -73,14 +107,22 @@ class WordTranslateService {
     return punct.contains(c);
   }
 
-  /// Cache key: normalized word (lowercase) + target language.
   static String _cacheKey(String normalizedWord, String targetLang) {
     return '${normalizedWord.toLowerCase()}|$targetLang';
   }
 
-  /// Look up translation for [word]. Uses [targetLang] (e.g. 'ru', 'en', 'tr').
-  /// Returns cached result if available; otherwise calls Google Translate and caches.
-  Future<WordLookupResult> lookup(String word, String targetLang) async {
+  static bool _isSingleWord(String text) => !text.contains(RegExp(r'\s'));
+
+  /// Look up translation for [word].
+  ///
+  /// Single words with [sentenceContext] use the backend language-proxy API
+  /// (`translate_with_context`); on API failure, falls back to Google Translate.
+  /// Multi-word selections always use Google Translate directly.
+  Future<WordLookupResult> lookup(
+    String word,
+    String targetLang, {
+    String? sentenceContext,
+  }) async {
     final normalized = normalizeWord(word);
     if (normalized.isEmpty) {
       return WordLookupResult(
@@ -94,6 +136,48 @@ class WordTranslateService {
     final cached = _cache.get(key);
     if (cached != null) return cached;
 
+    if (_isSingleWord(normalized) && sentenceContext != null) {
+      try {
+        final result = await _lookupViaApi(normalized, targetLang, sentenceContext);
+        _cache.put(key, result);
+        return result;
+      } catch (_) {
+        // Fall through to Google Translate on any API error.
+      }
+    }
+
+    return _lookupViaGoogleTranslate(normalized, targetLang, key);
+  }
+
+  /// Backend API call using `translate_with_context` template.
+  Future<WordLookupResult> _lookupViaApi(
+    String word,
+    String targetLang,
+    String context,
+  ) async {
+    final api = SummaryApiRepository();
+    final json = await api.languageCompletion(
+      promptTemplate: 'translate_with_context',
+      templateParams: {
+        'target_language': targetLang,
+        'context': context,
+      },
+      message: word,
+    );
+    return WordLookupResult(
+      word: word,
+      translation: (json['translation'] as String?) ?? '',
+      transcription: (json['transcription'] as String?),
+      contextNote: (json['context_note'] as String?),
+    );
+  }
+
+  /// Fallback: free Google Translate (no context, no transcription).
+  Future<WordLookupResult> _lookupViaGoogleTranslate(
+    String normalized,
+    String targetLang,
+    String cacheKey,
+  ) async {
     try {
       final result = await _translator.translate(
         normalized,
@@ -104,15 +188,14 @@ class WordTranslateService {
         word: normalized,
         translation: result.text,
       );
-      _cache.put(key, lookup);
+      _cache.put(cacheKey, lookup);
       return lookup;
     } catch (e) {
-      final lookup = WordLookupResult(
+      return WordLookupResult(
         word: normalized,
         translation: '',
         errorMessage: e.toString(),
       );
-      return lookup;
     }
   }
 }

@@ -36,6 +36,7 @@ class SummaryApiRepository {
   static const String _pathTranslations = '/api/v1/translations';
   static const String _pathKnowledgeCards = '/api/v1/knowledge-cards';
   static const String _pathKnowledgeCardsVerify = '/api/v1/knowledge-cards/verify';
+  static const String _pathLanguageCompletions = '/api/v1/language/completions';
 
   // Other endpoints (not LM Notebook Pro API; no host fallback)
   final String sendEmailUrl =
@@ -534,6 +535,39 @@ class SummaryApiRepository {
     }
   }
 
+  /// Calls the language-proxy completions endpoint with a prompt template.
+  /// Returns the parsed JSON response from the LLM.
+  Future<Map<String, dynamic>> languageCompletion({
+    required String promptTemplate,
+    required Map<String, String> templateParams,
+    required String message,
+    double temperature = 0.2,
+    int maxTokens = 1024,
+  }) async {
+    try {
+      Response response = await _postWithFallback(
+        _pathLanguageCompletions,
+        {
+          'prompt_template': promptTemplate,
+          'template_params': templateParams,
+          'message': message,
+          'temperature': temperature,
+          'max_tokens': maxTokens,
+        },
+      );
+      if (response.statusCode == 200) {
+        return jsonDecode(response.data) as Map<String, dynamic>;
+      } else {
+        throw Exception('Language completion error');
+      }
+    } on DioException catch (e) {
+      _throwDioError(e, defaultDetail: 'Language completion error');
+    } catch (error) {
+      if (error is Exception) rethrow;
+      throw Exception('Language completion error: $error');
+    }
+  }
+
   /// Verifies user's answer against the card definition.
   /// Returns shortFeedback and accuracy (0-100). API not implemented yet.
   Future<KnowledgeCardVerifyResult> verifyKnowledgeCardAnswer({
@@ -709,6 +743,22 @@ class SummaryRepository {
       cardTitle: cardTitle,
       cardContent: cardContent,
       userAnswer: userAnswer,
+    );
+  }
+
+  Future<Map<String, dynamic>> languageCompletion({
+    required String promptTemplate,
+    required Map<String, String> templateParams,
+    required String message,
+    double temperature = 0.2,
+    int maxTokens = 1024,
+  }) {
+    return _summaryRepository.languageCompletion(
+      promptTemplate: promptTemplate,
+      templateParams: templateParams,
+      message: message,
+      temperature: temperature,
+      maxTokens: maxTokens,
     );
   }
 }

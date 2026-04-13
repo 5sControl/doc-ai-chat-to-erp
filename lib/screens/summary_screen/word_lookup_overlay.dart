@@ -20,6 +20,7 @@ void showWordLookupOverlay(
   BuildContext context, {
   required String word,
   required String targetLang,
+  String? sentenceContext,
   Duration duration = WordLookupOverlay.defaultDuration,
   void Function(String word)? onSpeakWord,
 }) {
@@ -66,7 +67,9 @@ void showWordLookupOverlay(
   overlay.insert(entry!);
   _removeCurrentWordLookup = remove;
 
-  WordTranslateService.instance.lookup(word, targetLang).then((result) {
+  WordTranslateService.instance
+      .lookup(word, targetLang, sentenceContext: sentenceContext)
+      .then((result) {
     if (entry == null) return;
     state.value = _LookupState(word: word, result: result, loading: false);
     if (word.length <= _longTextLengthThreshold) {
@@ -86,7 +89,8 @@ class _LookupState {
   _LookupState({required this.word, this.result, required this.loading});
 }
 
-/// Compact overlay showing word + translation (or loading/error). Auto-hides after [duration].
+/// Compact overlay showing word + translation + optional transcription.
+/// Auto-hides after [duration].
 class WordLookupOverlay extends StatelessWidget {
   final String word;
   final WordLookupResult? result;
@@ -159,7 +163,7 @@ class WordLookupOverlay extends StatelessWidget {
                         ),
                       ],
                     )
-                  else if (result != null)
+                  else if (result != null) ...[
                     Text(
                       result!.isError
                           ? (result!.errorMessage ?? 'Error')
@@ -170,6 +174,21 @@ class WordLookupOverlay extends StatelessWidget {
                             : null,
                       ),
                     ),
+                    if (!result!.isError &&
+                        result!.transcription != null &&
+                        result!.transcription!.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          '[${result!.transcription}]',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.textTheme.bodySmall?.color
+                                ?.withValues(alpha: 0.6),
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                  ],
                 ],
               ),
             ),

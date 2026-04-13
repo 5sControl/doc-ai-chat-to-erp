@@ -16,8 +16,9 @@ import 'markdown_word_tap_builder.dart'
     show MarkdownWordTapBuilder, wordBoundariesAtOffset;
 
 /// Callback to show word lookup outside the control (e.g. via system overlay).
-/// Called when user double-taps a word while showing original (untranslated) text.
-typedef OnWordLookup = void Function(BuildContext context, String word);
+/// Called when user taps a word while showing original (untranslated) text.
+/// [surroundingText] is the full tab text, used to extract sentence context.
+typedef OnWordLookup = void Function(BuildContext context, String word, String surroundingText);
 
 /// Shown at most once per app session so multiple tabs don't show the hint repeatedly.
 bool _wordTapHintShownThisSession = false;
@@ -219,7 +220,7 @@ class _SummaryTextContainerState extends State<SummaryTextContainer> {
   void _onWordTap(BuildContext context, String word, OnWordLookup callback) {
     if (_isShowingOriginalText(widget.summaryTranslate)) {
       final trimmed = word.trim();
-      if (trimmed.isNotEmpty) callback(context, trimmed);
+      if (trimmed.isNotEmpty) callback(context, trimmed, widget.summaryText);
     }
   }
 
