@@ -1,120 +1,255 @@
 {
-    "project_info": {
-      "project_number": "905111238498",
-      "firebase_url": "https://elang-extension-dev-default-rtdb.europe-west1.firebasedatabase.app",
-      "project_id": "elang-extension-dev",
-      "storage_bucket": "elang-extension-dev.appspot.com"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:905111238498:android:8d7be25da669b938bfde3b",
-          "android_client_info": {
-            "package_name": "com.englishingames.elang.tv"
-          }
-        },
-        "oauth_client": [
-          {
-            "client_id": "905111238498-ht72i36eopj8rpgo46uaojkqdcm9cmlh.apps.googleusercontent.com",
-            "client_type": 3
-          }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaSyCJWZV5oXU4Vx39EAKx00FAOlV8MNkkoKU"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "905111238498-ht72i36eopj8rpgo46uaojkqdcm9cmlh.apps.googleusercontent.com",
-                "client_type": 3
-              },
-              {
-                "client_id": "905111238498-1l4fom9c69i5vlutiuras65vnbgsd1qf.apps.googleusercontent.com",
-                "client_type": 2,
-                "ios_info": {
-                  "bundle_id": "com.englishingames.summiShare"
-                }
-              }
-            ]
-          }
+  "project_info": {
+    "project_number": "1006377902393",
+    "firebase_url": "https://elang-extension-prod-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "elang-extension-prod",
+    "storage_bucket": "elang-extension-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006377902393:android:21a94ec141ca20dad308e8",
+        "android_client_info": {
+          "package_name": "com.englishingames.easy5"
         }
       },
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:905111238498:android:251721ecac3b0148bfde3b",
-          "android_client_info": {
-            "package_name": "com.englishingames.listening"
+      "oauth_client": [
+        {
+          "client_id": "1006377902393-4k94k2cv1dbnvvjem2gccd0omr0p6s0i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.easy5",
+            "certificate_hash": "5867de6dbaaf18e683db3732b432710d4dc74977"
           }
         },
-        "oauth_client": [
-          {
-            "client_id": "905111238498-ht72i36eopj8rpgo46uaojkqdcm9cmlh.apps.googleusercontent.com",
-            "client_type": 3
+        {
+          "client_id": "1006377902393-5gotsmrlvavu473gngfi2a9ak4135nqa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.easy5",
+            "certificate_hash": "099a63742831563457b411e2e6166839b57ba7e0"
           }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaSyCJWZV5oXU4Vx39EAKx00FAOlV8MNkkoKU"
+        },
+        {
+          "client_id": "1006377902393-nd02j9i9poqo5d13pp1bq2q4hfhcqr7v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.easy5",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "905111238498-ht72i36eopj8rpgo46uaojkqdcm9cmlh.apps.googleusercontent.com",
-                "client_type": 3
-              },
-              {
-                "client_id": "905111238498-1l4fom9c69i5vlutiuras65vnbgsd1qf.apps.googleusercontent.com",
-                "client_type": 2,
-                "ios_info": {
-                  "bundle_id": "com.englishingames.summiShare"
-                }
-              }
-            ]
+        },
+        {
+          "client_id": "1006377902393-rjc5n485l91br3f7c5rt0toa7cdmh68j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.easy5",
+            "certificate_hash": "c4f484b301d00929ee28f19a1555a09647eac786"
           }
+        },
+        {
+          "client_id": "1006377902393-s3dstfts2jc17r71irhvp7i33ikncm5g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.easy5",
+            "certificate_hash": "91317b374e9509397a282239d068b87a02664441"
+          }
+        },
+        {
+          "client_id": "1006377902393-lankcacrcs7njkarvnhnrb85pl7uhsrv.apps.googleusercontent.com",
+          "client_type": 3
         }
-      },
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:905111238498:android:853f7d0530ae4a12bfde3b",
-          "android_client_info": {
-            "package_name": "com.englishingames.summishare"
-          }
-        },
-        "oauth_client": [
-          {
-            "client_id": "905111238498-ht72i36eopj8rpgo46uaojkqdcm9cmlh.apps.googleusercontent.com",
-            "client_type": 3
-          }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaSyCJWZV5oXU4Vx39EAKx00FAOlV8MNkkoKU"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "905111238498-ht72i36eopj8rpgo46uaojkqdcm9cmlh.apps.googleusercontent.com",
-                "client_type": 3
-              },
-              {
-                "client_id": "905111238498-1l4fom9c69i5vlutiuras65vnbgsd1qf.apps.googleusercontent.com",
-                "client_type": 2,
-                "ios_info": {
-                  "bundle_id": "com.englishingames.summiShare"
-                }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWABnjXzEdAETSYbKHqF2M50zRyXTiIGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006377902393-0smr19gp5gjofm3850o8t0n9ou1ovtsk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1006377902393-2khp0el7npif3u0nlkqvpji0jvded3q3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.englishingames.listening"
               }
-            ]
-          }
+            }
+          ]
         }
       }
-    ],
-    "configuration_version": "1"
-  }
-  
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006377902393:android:eb8745de880dc2dfd308e8",
+        "android_client_info": {
+          "package_name": "com.englishingames.englishcards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006377902393-lankcacrcs7njkarvnhnrb85pl7uhsrv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWABnjXzEdAETSYbKHqF2M50zRyXTiIGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006377902393-0smr19gp5gjofm3850o8t0n9ou1ovtsk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1006377902393-2khp0el7npif3u0nlkqvpji0jvded3q3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.englishingames.listening"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006377902393:android:c08338799b2a610fd308e8",
+        "android_client_info": {
+          "package_name": "com.englishingames.listening"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006377902393-28mq8so8ls5uj5qqkn1g2qjfl7o4c0dm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.listening",
+            "certificate_hash": "450e34353454d9b01280b0dfa3aa153f9d2473d3"
+          }
+        },
+        {
+          "client_id": "1006377902393-him8nhdl0gbmk8jcklirtrn0sch6lsvv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.listening",
+            "certificate_hash": "24dd73ade3096e134d96a3119b91148e9d1ae954"
+          }
+        },
+        {
+          "client_id": "1006377902393-lankcacrcs7njkarvnhnrb85pl7uhsrv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWABnjXzEdAETSYbKHqF2M50zRyXTiIGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006377902393-0smr19gp5gjofm3850o8t0n9ou1ovtsk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1006377902393-2khp0el7npif3u0nlkqvpji0jvded3q3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.englishingames.listening"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006377902393:android:c3ac6a72b2fd133bd308e8",
+        "android_client_info": {
+          "package_name": "com.englishingames.summishare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006377902393-gu4ml8jh4ott31hsjdpaocc4kejb4c1r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.englishingames.summishare",
+            "certificate_hash": "5c84fb9987afb392c774a05d3ab1f6ced882f238"
+          }
+        },
+        {
+          "client_id": "1006377902393-lankcacrcs7njkarvnhnrb85pl7uhsrv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWABnjXzEdAETSYbKHqF2M50zRyXTiIGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006377902393-0smr19gp5gjofm3850o8t0n9ou1ovtsk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1006377902393-2khp0el7npif3u0nlkqvpji0jvded3q3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.englishingames.listening"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006377902393:android:147ee71bb3d60ceed308e8",
+        "android_client_info": {
+          "package_name": "com.example.transcriptor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006377902393-lankcacrcs7njkarvnhnrb85pl7uhsrv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWABnjXzEdAETSYbKHqF2M50zRyXTiIGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006377902393-0smr19gp5gjofm3850o8t0n9ou1ovtsk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1006377902393-2khp0el7npif3u0nlkqvpji0jvded3q3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.englishingames.listening"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

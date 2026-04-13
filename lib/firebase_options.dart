@@ -47,12 +47,12 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCJWZV5oXU4Vx39EAKx00FAOlV8MNkkoKU',
-    appId: '1:905111238498:android:853f7d0530ae4a12bfde3b',
-    messagingSenderId: '905111238498',
-    projectId: 'elang-extension-dev',
-    databaseURL: 'https://elang-extension-dev-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'elang-extension-dev.appspot.com',
+    apiKey: 'AIzaSyCWABnjXzEdAETSYbKHqF2M50zRyXTiIGw',
+    appId: '1:1006377902393:android:c3ac6a72b2fd133bd308e8',
+    messagingSenderId: '1006377902393',
+    projectId: 'elang-extension-prod',
+    databaseURL: 'https://elang-extension-prod-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'elang-extension-prod.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

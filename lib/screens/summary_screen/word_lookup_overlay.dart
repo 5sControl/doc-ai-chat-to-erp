@@ -43,6 +43,11 @@ void showWordLookupOverlay(
     }
   }
 
+  void cancelTimer() {
+    dismissTimer?.cancel();
+    dismissTimer = null;
+  }
+
   entry = OverlayEntry(
     builder: (ctx) {
       return Positioned(
@@ -58,6 +63,7 @@ void showWordLookupOverlay(
               result: s.result,
               isLoading: s.loading,
               onDismiss: remove,
+              onExpand: cancelTimer,
             );
           },
         ),
@@ -89,13 +95,13 @@ class _LookupState {
   _LookupState({required this.word, this.result, required this.loading});
 }
 
-/// Compact overlay showing word + translation + optional transcription.
-/// Auto-hides after [duration].
-class WordLookupOverlay extends StatelessWidget {
+/// Compact overlay showing word + translation + optional transcription + expandable context note.
+class WordLookupOverlay extends StatefulWidget {
   final String word;
   final WordLookupResult? result;
   final bool isLoading;
   final VoidCallback? onDismiss;
+  final VoidCallback? onExpand;
 
   const WordLookupOverlay({
     super.key,
@@ -103,23 +109,37 @@ class WordLookupOverlay extends StatelessWidget {
     this.result,
     this.isLoading = false,
     this.onDismiss,
+    this.onExpand,
   });
 
   static const Duration defaultDuration = Duration(seconds: 5);
 
   @override
+  State<WordLookupOverlay> createState() => _WordLookupOverlayState();
+}
+
+class _WordLookupOverlayState extends State<WordLookupOverlay> {
+  bool _expanded = false;
+
+  bool get _hasContextNote =>
+      widget.result != null &&
+      !widget.result!.isError &&
+      widget.result!.contextNote != null &&
+      widget.result!.contextNote!.isNotEmpty;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final result = widget.result;
+
     return Material(
       color: Colors.transparent,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: isDark
-              ? Colors.grey.shade800
-              : Colors.grey.shade100,
+          color: isDark ? Colors.grey.shade800 : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
@@ -139,13 +159,13 @@ class WordLookupOverlay extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    word,
+                    widget.word,
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  if (isLoading)
+                  if (widget.isLoading)
                     Row(
                       children: [
                         SizedBox(
@@ -157,30 +177,25 @@ class WordLookupOverlay extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          '…',
-                          style: theme.textTheme.bodySmall,
-                        ),
+                        Text('…', style: theme.textTheme.bodySmall),
                       ],
                     )
                   else if (result != null) ...[
                     Text(
-                      result!.isError
-                          ? (result!.errorMessage ?? 'Error')
-                          : result!.translation,
+                      result.isError
+                          ? (result.errorMessage ?? 'Error')
+                          : result.translation,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: result!.isError
-                            ? theme.colorScheme.error
-                            : null,
+                        color: result.isError ? theme.colorScheme.error : null,
                       ),
                     ),
-                    if (!result!.isError &&
-                        result!.transcription != null &&
-                        result!.transcription!.isNotEmpty)
+                    if (!result.isError &&
+                        result.transcription != null &&
+                        result.transcription!.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
-                          '[${result!.transcription}]',
+                          '[${result.transcription}]',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.textTheme.bodySmall?.color
                                 ?.withValues(alpha: 0.6),
@@ -188,14 +203,60 @@ class WordLookupOverlay extends StatelessWidget {
                           ),
                         ),
                       ),
+                    if (_hasContextNote && !_expanded)
+                      GestureDetector(
+                        onTap: _toggleExpand,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                size: 14,
+                                color: theme.primaryColor,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                'more',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.primaryColor,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (_hasContextNote && _expanded)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: isDark
+                                ? Colors.grey.shade700
+                                : Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            result.contextNote!,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              fontSize: 12,
+                              height: 1.4,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ],
               ),
             ),
-            if (onDismiss != null)
+            if (widget.onDismiss != null)
               IconButton(
                 icon: const Icon(Icons.close, size: 18),
-                onPressed: onDismiss,
+                onPressed: widget.onDismiss,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               ),
@@ -203,5 +264,10 @@ class WordLookupOverlay extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _toggleExpand() {
+    setState(() => _expanded = true);
+    widget.onExpand?.call();
   }
 }
