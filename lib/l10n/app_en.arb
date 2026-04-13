@@ -309,5 +309,12 @@
   "knowledgeCards_listening": "Listening...",
 
   "copy_paste_required_title": "Page could not be loaded",
-  "copy_paste_required_message": "This is not an error. The server could not load this page automatically. Please copy the text from the page and paste it in the text field in the app."
+  "copy_paste_required_message": "This is not an error. The server could not load this page automatically. Please copy the text from the page and paste it in the text field in the app.",
+
+  "auth_passwordMustBe6Chars": "Password must be at least 6 characters long",
+  "auth_gate_title": "Sign up to continue",
+  "auth_gate_description": "Registration is free. We don't send ads or promotional emails.",
+  "auth_gate_signUp": "Sign Up",
+  "auth_gate_logIn": "Log In",
+  "auth_gate_cancel": "Cancel"
 }

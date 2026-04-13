@@ -742,6 +742,22 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get copy_paste_required_message =>
       '這不是錯誤。伺服器無法自動載入此頁面。請從頁面複製文字並貼到應用程式的輸入欄位。';
+
+  @override
+  String get auth_gate_title => 'Sign up to continue';
+
+  @override
+  String get auth_gate_description =>
+      'Registration is free. We don\'t send ads or promotional emails.';
+
+  @override
+  String get auth_gate_signUp => 'Sign Up';
+
+  @override
+  String get auth_gate_logIn => 'Log In';
+
+  @override
+  String get auth_gate_cancel => 'Cancel';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

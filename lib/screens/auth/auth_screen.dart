@@ -17,7 +17,11 @@ import 'package:summify/widgets/backgroung_gradient.dart';
 import '../../bloc/authentication/authentication_bloc.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  /// When `true`, the "Skip" button in the app bar is hidden (e.g. when
+  /// the screen is opened from the auth gate that requires login).
+  final bool hideSkip;
+
+  const AuthScreen({super.key, this.hideSkip = false});
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -121,14 +125,15 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             
             actions: [
-              TextButton(
-                  onPressed: () {Navigator.of(context)
-              .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-              },
-                  child: Text(
-                    AppLocalizations.of(context)!.auth_skip,
-                    style: TextStyle(fontSize: 16, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
-                  ))
+              if (!widget.hideSkip)
+                TextButton(
+                    onPressed: () {Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+                },
+                    child: Text(
+                      AppLocalizations.of(context)!.auth_skip,
+                      style: TextStyle(fontSize: 16, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                    ))
             ],
           ),
           body: Container(

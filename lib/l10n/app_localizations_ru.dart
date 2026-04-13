@@ -766,4 +766,20 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get copy_paste_required_message =>
       'Это не ошибка. Сервер не может загрузить этот материал автоматически. Скопируйте текст со страницы и вставьте его в поле ввода в приложении.';
+
+  @override
+  String get auth_gate_title => 'Зарегистрируйтесь для продолжения';
+
+  @override
+  String get auth_gate_description =>
+      'Регистрация бесплатная. Мы не рассылаем рекламу.';
+
+  @override
+  String get auth_gate_signUp => 'Зарегистрироваться';
+
+  @override
+  String get auth_gate_logIn => 'Войти';
+
+  @override
+  String get auth_gate_cancel => 'Отмена';
 }

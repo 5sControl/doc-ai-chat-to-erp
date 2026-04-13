@@ -1534,6 +1534,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This is not an error. The server could not load this page automatically. Please copy the text from the page and paste it in the text field in the app.'**
   String get copy_paste_required_message;
+
+  /// No description provided for @auth_gate_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up to continue'**
+  String get auth_gate_title;
+
+  /// No description provided for @auth_gate_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration is free. We don\'t send ads or promotional emails.'**
+  String get auth_gate_description;
+
+  /// No description provided for @auth_gate_signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get auth_gate_signUp;
+
+  /// No description provided for @auth_gate_logIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get auth_gate_logIn;
+
+  /// No description provided for @auth_gate_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get auth_gate_cancel;
 }
 
 class _AppLocalizationsDelegate

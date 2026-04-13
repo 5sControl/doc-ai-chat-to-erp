@@ -760,4 +760,20 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get copy_paste_required_message =>
       'Đây không phải lỗi. Máy chủ không thể tải trang này tự động. Vui lòng sao chép văn bản từ trang và dán vào ô nhập trong ứng dụng.';
+
+  @override
+  String get auth_gate_title => 'Sign up to continue';
+
+  @override
+  String get auth_gate_description =>
+      'Registration is free. We don\'t send ads or promotional emails.';
+
+  @override
+  String get auth_gate_signUp => 'Sign Up';
+
+  @override
+  String get auth_gate_logIn => 'Log In';
+
+  @override
+  String get auth_gate_cancel => 'Cancel';
 }

@@ -767,4 +767,20 @@ class AppLocalizationsNl extends AppLocalizations {
   @override
   String get copy_paste_required_message =>
       'Dit is geen fout. De server kon deze pagina niet automatisch laden. Kopieer de tekst van de pagina en plak deze in het invoerveld van de app.';
+
+  @override
+  String get auth_gate_title => 'Sign up to continue';
+
+  @override
+  String get auth_gate_description =>
+      'Registration is free. We don\'t send ads or promotional emails.';
+
+  @override
+  String get auth_gate_signUp => 'Sign Up';
+
+  @override
+  String get auth_gate_logIn => 'Log In';
+
+  @override
+  String get auth_gate_cancel => 'Cancel';
 }

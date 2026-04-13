@@ -765,4 +765,20 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get copy_paste_required_message =>
       'Bu bir hata değildir. Sunucu bu sayfayı otomatik olarak yükleyemedi. Lütfen metni sayfadan kopyalayıp uygulama alanına yapıştırın.';
+
+  @override
+  String get auth_gate_title => 'Sign up to continue';
+
+  @override
+  String get auth_gate_description =>
+      'Registration is free. We don\'t send ads or promotional emails.';
+
+  @override
+  String get auth_gate_signUp => 'Sign Up';
+
+  @override
+  String get auth_gate_logIn => 'Log In';
+
+  @override
+  String get auth_gate_cancel => 'Cancel';
 }

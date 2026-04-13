@@ -767,4 +767,20 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get copy_paste_required_message =>
       'Non è un errore. Il server non ha potuto caricare questa pagina automaticamente. Copia il testo dalla pagina e incollalo nel campo dell\'app.';
+
+  @override
+  String get auth_gate_title => 'Sign up to continue';
+
+  @override
+  String get auth_gate_description =>
+      'Registration is free. We don\'t send ads or promotional emails.';
+
+  @override
+  String get auth_gate_signUp => 'Sign Up';
+
+  @override
+  String get auth_gate_logIn => 'Log In';
+
+  @override
+  String get auth_gate_cancel => 'Cancel';
 }
