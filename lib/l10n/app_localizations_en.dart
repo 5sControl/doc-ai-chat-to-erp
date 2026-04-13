@@ -51,6 +51,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Personal AI Summarizer';
 
   @override
+  String get onboarding_moreThanSummary => 'More than just a summary';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Brief & Deep';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Short or detailed AI summary of any content';
+
+  @override
+  String get onboarding_feature_chat_title => 'AI Chat';
+
+  @override
+  String get onboarding_feature_chat_desc => 'Ask questions about the document';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Quiz';
+
+  @override
+  String get onboarding_feature_quiz_desc =>
+      'Test your knowledge with AI questions';
+
+  @override
+  String get onboarding_feature_cards_title => 'Knowledge Cards';
+
+  @override
+  String get onboarding_feature_cards_desc => 'Save key insights as flashcards';
+
+  @override
+  String get onboarding_feature_input_title => 'Links, Files & Text';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'URLs, PDFs, docs, or pasted text';
+
+  @override
   String get settings_profile => 'Profile';
 
   @override

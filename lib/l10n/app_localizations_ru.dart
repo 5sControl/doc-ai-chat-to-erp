@@ -51,6 +51,43 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Персональный AI-саммаризатор';
 
   @override
+  String get onboarding_moreThanSummary => 'Намного больше, чем саммари';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Краткое и подробное';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Короткое или детальное AI-саммари любого контента';
+
+  @override
+  String get onboarding_feature_chat_title => 'AI Чат';
+
+  @override
+  String get onboarding_feature_chat_desc => 'Задавайте вопросы по документу';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Тест';
+
+  @override
+  String get onboarding_feature_quiz_desc =>
+      'Проверяйте знания с помощью AI-вопросов';
+
+  @override
+  String get onboarding_feature_cards_title => 'Карточки знаний';
+
+  @override
+  String get onboarding_feature_cards_desc =>
+      'Сохраняйте ключевые мысли как флеш-карточки';
+
+  @override
+  String get onboarding_feature_input_title => 'Ссылки, файлы и текст';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'URL, PDF, документы или вставленный текст';
+
+  @override
   String get settings_profile => 'Профиль';
 
   @override

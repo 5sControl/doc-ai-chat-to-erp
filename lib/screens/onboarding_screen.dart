@@ -29,7 +29,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   void initState() {
     super.initState();
     _pageViewController = PageController();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -52,7 +52,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
-    if (_currentPageIndex >= 2) {
+    if (_currentPageIndex >= 3) {
       passOnboarding();
       context.read<MixpanelBloc>().add(OnboardingStep(step: _currentPageIndex));
 
@@ -107,6 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           // OnboardingScreen1(),
                           OnboardingScreen2(),
                           OnboardingScreen3(),
+                          OnboardingScreen5(),
                           OnboardingScreen4(),
                         ],
                       ),
@@ -422,6 +423,143 @@ class OnboardingScreen4 extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class OnboardingScreen5 extends StatelessWidget {
+  const OnboardingScreen5({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    final features = [
+      _FeatureItem(
+        icon: Icons.article_outlined,
+        title: l10n.onboarding_feature_briefDeep_title,
+        description: l10n.onboarding_feature_briefDeep_desc,
+      ),
+      _FeatureItem(
+        icon: Icons.chat_bubble_outline,
+        title: l10n.onboarding_feature_chat_title,
+        description: l10n.onboarding_feature_chat_desc,
+      ),
+      _FeatureItem(
+        icon: Icons.quiz_outlined,
+        title: l10n.onboarding_feature_quiz_title,
+        description: l10n.onboarding_feature_quiz_desc,
+      ),
+      _FeatureItem(
+        icon: Icons.style_outlined,
+        title: l10n.onboarding_feature_cards_title,
+        description: l10n.onboarding_feature_cards_desc,
+      ),
+      _FeatureItem(
+        icon: Icons.upload_file_outlined,
+        title: l10n.onboarding_feature_input_title,
+        description: l10n.onboarding_feature_input_desc,
+      ),
+    ];
+
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 25),
+              Text(
+                l10n.onboarding_moreThanSummary,
+                style: const TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w700,
+                  height: 1.1,
+                ),
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(height: 30),
+              ...features.map((f) => _FeatureRow(item: f)),
+              const SizedBox(height: 100),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FeatureItem {
+  final IconData icon;
+  final String title;
+  final String description;
+
+  const _FeatureItem({
+    required this.icon,
+    required this.title,
+    required this.description,
+  });
+}
+
+class _FeatureRow extends StatelessWidget {
+  final _FeatureItem item;
+
+  const _FeatureRow({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 22),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: const Color.fromRGBO(0, 186, 195, 0.15),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              item.icon,
+              color: const Color.fromRGBO(0, 186, 195, 1),
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  item.description,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.color
+                        ?.withValues(alpha: 0.6),
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

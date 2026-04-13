@@ -197,6 +197,72 @@ abstract class AppLocalizations {
   /// **'Personal AI Summarizer'**
   String get onboarding_welcomeSubtitle;
 
+  /// No description provided for @onboarding_moreThanSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'More than just a summary'**
+  String get onboarding_moreThanSummary;
+
+  /// No description provided for @onboarding_feature_briefDeep_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Brief & Deep'**
+  String get onboarding_feature_briefDeep_title;
+
+  /// No description provided for @onboarding_feature_briefDeep_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Short or detailed AI summary of any content'**
+  String get onboarding_feature_briefDeep_desc;
+
+  /// No description provided for @onboarding_feature_chat_title.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get onboarding_feature_chat_title;
+
+  /// No description provided for @onboarding_feature_chat_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask questions about the document'**
+  String get onboarding_feature_chat_desc;
+
+  /// No description provided for @onboarding_feature_quiz_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiz'**
+  String get onboarding_feature_quiz_title;
+
+  /// No description provided for @onboarding_feature_quiz_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Test your knowledge with AI questions'**
+  String get onboarding_feature_quiz_desc;
+
+  /// No description provided for @onboarding_feature_cards_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Knowledge Cards'**
+  String get onboarding_feature_cards_title;
+
+  /// No description provided for @onboarding_feature_cards_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Save key insights as flashcards'**
+  String get onboarding_feature_cards_desc;
+
+  /// No description provided for @onboarding_feature_input_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Links, Files & Text'**
+  String get onboarding_feature_input_title;
+
+  /// No description provided for @onboarding_feature_input_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'URLs, PDFs, docs, or pasted text'**
+  String get onboarding_feature_input_desc;
+
   /// No description provided for @settings_profile.
   ///
   /// In en, this message translates to:

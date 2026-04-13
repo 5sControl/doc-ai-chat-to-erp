@@ -50,6 +50,43 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Kişisel AI Özetleyici';
 
   @override
+  String get onboarding_moreThanSummary => 'Özetten çok daha fazlası';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Kısa & Derinlemesine';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Herhangi bir içeriğin kısa veya ayrıntılı AI özeti';
+
+  @override
+  String get onboarding_feature_chat_title => 'AI Sohbet';
+
+  @override
+  String get onboarding_feature_chat_desc => 'Belge hakkında sorular sorun';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Quiz';
+
+  @override
+  String get onboarding_feature_quiz_desc =>
+      'AI sorularıyla bilginizi test edin';
+
+  @override
+  String get onboarding_feature_cards_title => 'Bilgi Kartları';
+
+  @override
+  String get onboarding_feature_cards_desc =>
+      'Önemli içgörüleri flash kart olarak kaydedin';
+
+  @override
+  String get onboarding_feature_input_title => 'Bağlantılar, Dosyalar ve Metin';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'URL\'ler, PDF\'ler, belgeler veya yapıştırılan metin';
+
+  @override
   String get settings_profile => 'Profil';
 
   @override

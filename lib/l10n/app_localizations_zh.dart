@@ -48,6 +48,39 @@ class AppLocalizationsZh extends AppLocalizations {
   String get onboarding_welcomeSubtitle => '个人 AI 摘要工具';
 
   @override
+  String get onboarding_moreThanSummary => '不仅仅是摘要';
+
+  @override
+  String get onboarding_feature_briefDeep_title => '简洁 & 深度';
+
+  @override
+  String get onboarding_feature_briefDeep_desc => '对任何内容生成简短或详细的AI摘要';
+
+  @override
+  String get onboarding_feature_chat_title => 'AI 对话';
+
+  @override
+  String get onboarding_feature_chat_desc => '对文档提问';
+
+  @override
+  String get onboarding_feature_quiz_title => '测验';
+
+  @override
+  String get onboarding_feature_quiz_desc => '用AI问题测试你的知识';
+
+  @override
+  String get onboarding_feature_cards_title => '知识卡片';
+
+  @override
+  String get onboarding_feature_cards_desc => '将关键见解保存为闪卡';
+
+  @override
+  String get onboarding_feature_input_title => '链接、文件与文本';
+
+  @override
+  String get onboarding_feature_input_desc => 'URL、PDF、文档或粘贴的文本';
+
+  @override
   String get settings_profile => '个人资料';
 
   @override
@@ -753,6 +786,39 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get onboarding_welcomeSubtitle => '个人 AI 摘要工具';
+
+  @override
+  String get onboarding_moreThanSummary => '不仅仅是摘要';
+
+  @override
+  String get onboarding_feature_briefDeep_title => '简洁 & 深度';
+
+  @override
+  String get onboarding_feature_briefDeep_desc => '对任何内容生成简短或详细的AI摘要';
+
+  @override
+  String get onboarding_feature_chat_title => 'AI 对话';
+
+  @override
+  String get onboarding_feature_chat_desc => '对文档提问';
+
+  @override
+  String get onboarding_feature_quiz_title => '测验';
+
+  @override
+  String get onboarding_feature_quiz_desc => '用AI问题测试你的知识';
+
+  @override
+  String get onboarding_feature_cards_title => '知识卡片';
+
+  @override
+  String get onboarding_feature_cards_desc => '将关键见解保存为闪卡';
+
+  @override
+  String get onboarding_feature_input_title => '链接、文件与文本';
+
+  @override
+  String get onboarding_feature_input_desc => 'URL、PDF、文档或粘贴的文本';
 
   @override
   String get settings_profile => '个人资料';

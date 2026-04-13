@@ -51,6 +51,43 @@ class AppLocalizationsNl extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Persoonlijke AI-samenvatter';
 
   @override
+  String get onboarding_moreThanSummary =>
+      'Veel meer dan alleen samenvattingen';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Beknopt & Diepgaand';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Korte of gedetailleerde AI-samenvatting van alle inhoud';
+
+  @override
+  String get onboarding_feature_chat_title => 'AI-Chat';
+
+  @override
+  String get onboarding_feature_chat_desc => 'Stel vragen over het document';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Quiz';
+
+  @override
+  String get onboarding_feature_quiz_desc => 'Test je kennis met AI-vragen';
+
+  @override
+  String get onboarding_feature_cards_title => 'Kenniskaarten';
+
+  @override
+  String get onboarding_feature_cards_desc =>
+      'Sla kernpunten op als flashcards';
+
+  @override
+  String get onboarding_feature_input_title => 'Links, Bestanden & Tekst';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'URL\'s, PDF\'s, documenten of geplakte tekst';
+
+  @override
   String get settings_profile => 'Profiel';
 
   @override

@@ -51,6 +51,44 @@ class AppLocalizationsPl extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Osobisty podsumowujący AI';
 
   @override
+  String get onboarding_moreThanSummary => 'Dużo więcej niż tylko streszczenie';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Krótkie i Głębokie';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Krótkie lub szczegółowe streszczenie AI dowolnej treści';
+
+  @override
+  String get onboarding_feature_chat_title => 'Czat AI';
+
+  @override
+  String get onboarding_feature_chat_desc =>
+      'Zadawaj pytania dotyczące dokumentu';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Quiz';
+
+  @override
+  String get onboarding_feature_quiz_desc =>
+      'Sprawdź swoją wiedzę za pomocą pytań AI';
+
+  @override
+  String get onboarding_feature_cards_title => 'Karty wiedzy';
+
+  @override
+  String get onboarding_feature_cards_desc =>
+      'Zapisuj kluczowe wnioski jako fiszki';
+
+  @override
+  String get onboarding_feature_input_title => 'Linki, Pliki i Tekst';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'Adresy URL, PDF-y, dokumenty lub wklejony tekst';
+
+  @override
   String get settings_profile => 'Profil';
 
   @override

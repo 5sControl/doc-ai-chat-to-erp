@@ -51,6 +51,43 @@ class AppLocalizationsPt extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Resumidor de IA pessoal';
 
   @override
+  String get onboarding_moreThanSummary => 'Muito mais do que apenas resumos';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Breve e Detalhado';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Resumo IA curto ou detalhado de qualquer conteúdo';
+
+  @override
+  String get onboarding_feature_chat_title => 'Chat IA';
+
+  @override
+  String get onboarding_feature_chat_desc => 'Faça perguntas sobre o documento';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Quiz';
+
+  @override
+  String get onboarding_feature_quiz_desc =>
+      'Teste seus conhecimentos com perguntas de IA';
+
+  @override
+  String get onboarding_feature_cards_title => 'Cartões de conhecimento';
+
+  @override
+  String get onboarding_feature_cards_desc =>
+      'Salve os principais insights como flashcards';
+
+  @override
+  String get onboarding_feature_input_title => 'Links, Arquivos e Texto';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'URLs, PDFs, documentos ou texto colado';
+
+  @override
   String get settings_profile => 'Perfil';
 
   @override

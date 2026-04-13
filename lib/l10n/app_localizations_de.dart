@@ -51,6 +51,44 @@ class AppLocalizationsDe extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Persönlicher KI-Zusammenfasser';
 
   @override
+  String get onboarding_moreThanSummary =>
+      'Viel mehr als nur Zusammenfassungen';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Kurz & Ausführlich';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Kurze oder detaillierte KI-Zusammenfassung jedes Inhalts';
+
+  @override
+  String get onboarding_feature_chat_title => 'KI-Chat';
+
+  @override
+  String get onboarding_feature_chat_desc => 'Stellen Sie Fragen zum Dokument';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Quiz';
+
+  @override
+  String get onboarding_feature_quiz_desc =>
+      'Testen Sie Ihr Wissen mit KI-Fragen';
+
+  @override
+  String get onboarding_feature_cards_title => 'Wissenskarten';
+
+  @override
+  String get onboarding_feature_cards_desc =>
+      'Speichern Sie wichtige Erkenntnisse als Lernkarten';
+
+  @override
+  String get onboarding_feature_input_title => 'Links, Dateien & Text';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'URLs, PDFs, Dokumente oder kopierten Text';
+
+  @override
   String get settings_profile => 'Profil';
 
   @override

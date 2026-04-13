@@ -50,6 +50,43 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onboarding_welcomeSubtitle => 'Trình tóm tắt AI cá nhân';
 
   @override
+  String get onboarding_moreThanSummary => 'Nhiều hơn chỉ là tóm tắt';
+
+  @override
+  String get onboarding_feature_briefDeep_title => 'Ngắn gọn & Chuyên sâu';
+
+  @override
+  String get onboarding_feature_briefDeep_desc =>
+      'Tóm tắt AI ngắn hoặc chi tiết về bất kỳ nội dung nào';
+
+  @override
+  String get onboarding_feature_chat_title => 'Chat AI';
+
+  @override
+  String get onboarding_feature_chat_desc => 'Đặt câu hỏi về tài liệu';
+
+  @override
+  String get onboarding_feature_quiz_title => 'Trắc nghiệm';
+
+  @override
+  String get onboarding_feature_quiz_desc =>
+      'Kiểm tra kiến thức với câu hỏi AI';
+
+  @override
+  String get onboarding_feature_cards_title => 'Thẻ kiến thức';
+
+  @override
+  String get onboarding_feature_cards_desc =>
+      'Lưu những ý chính dưới dạng flashcard';
+
+  @override
+  String get onboarding_feature_input_title => 'Liên kết, Tệp & Văn bản';
+
+  @override
+  String get onboarding_feature_input_desc =>
+      'URL, PDF, tài liệu hoặc văn bản dán';
+
+  @override
   String get settings_profile => 'Hồ sơ';
 
   @override
