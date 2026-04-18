@@ -20,13 +20,14 @@ SummariesState _$SummariesStateFromJson(Map<String, dynamic> json) =>
         _$SummaryTypeEnumMap,
         json['defaultSummaryType'],
       ),
-      freeSummariesUsedToday: (json['freeSummariesUsedToday'] as num?)?.toInt() ?? 0,
-      lastFreeSummaryDate: (json['lastFreeSummaryDate'] as String?) ?? '',
+      freeSummariesUsedToday: (json['freeSummariesUsedToday'] as num).toInt(),
+      lastFreeSummaryDate: json['lastFreeSummaryDate'] as String,
       giftBalance: (json['giftBalance'] as num?)?.toInt() ?? 0,
-      redeemedGiftCodes: (json['redeemedGiftCodes'] as List<dynamic>?)
+      redeemedGiftCodes:
+          (json['redeemedGiftCodes'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toSet() ??
-          {},
+          const {},
       lastRedeemMessage: json['lastRedeemMessage'] as String?,
       copyPasteRequiredForUrl: json['copyPasteRequiredForUrl'] as String?,
     );

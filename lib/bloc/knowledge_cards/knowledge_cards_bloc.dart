@@ -7,6 +7,7 @@ import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
 import 'package:summify/bloc/saved_cards/saved_cards_bloc.dart';
 import 'package:summify/models/models.dart';
 import 'package:summify/services/demo_knowledge_cards.dart';
+import 'package:summify/services/document_api_service.dart';
 import 'package:summify/services/summaryApi.dart';
 
 part 'knowledge_cards_event.dart';
@@ -20,6 +21,7 @@ const String _kCardIdSeparator = '::';
 class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCardsState> {
   final MixpanelBloc mixpanelBloc;
   final SavedCardsBloc savedCardsBloc;
+  final DocumentApiService _documentApi = DocumentApiService();
 
   KnowledgeCardsBloc({
     required this.mixpanelBloc,
@@ -134,12 +136,17 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       },
     ));
 
-    // Add to global saved cards
     if (cardToSave != null) {
       savedCardsBloc.add(AddSavedCard(card: cardToSave!));
     }
 
-    // Track analytics
+    // Sync save state to server (fire-and-forget).
+    if (event.documentServerId != null && cardToSave?.serverId != null) {
+      _documentApi
+          .updateCard(event.documentServerId!, cardToSave!.serverId!, isSaved: true)
+          .then<void>((_) {}, onError: (_) {});
+    }
+
     mixpanelBloc.add(KnowledgeCardSaved(
       summaryKey: event.summaryKey,
       cardId: event.cardId,
@@ -153,8 +160,10 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
     final currentCards = state.knowledgeCards[event.summaryKey];
     if (currentCards == null) return;
 
+    KnowledgeCard? unsavedCard;
     final updatedCards = currentCards.map((card) {
       if (card.id == event.cardId) {
+        unsavedCard = card;
         return card.copyWith(isSaved: false);
       }
       return card;
@@ -167,10 +176,15 @@ class KnowledgeCardsBloc extends HydratedBloc<KnowledgeCardsEvent, KnowledgeCard
       },
     ));
 
-    // Remove from global saved cards
     savedCardsBloc.add(RemoveSavedCard(cardId: event.cardId));
 
-    // Track analytics
+    // Sync save state to server (fire-and-forget).
+    if (event.documentServerId != null && unsavedCard?.serverId != null) {
+      _documentApi
+          .updateCard(event.documentServerId!, unsavedCard!.serverId!, isSaved: false)
+          .then<void>((_) {}, onError: (_) {});
+    }
+
     mixpanelBloc.add(KnowledgeCardUnsaved(
       summaryKey: event.summaryKey,
       cardId: event.cardId,

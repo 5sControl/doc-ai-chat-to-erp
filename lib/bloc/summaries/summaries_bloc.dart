@@ -9,6 +9,8 @@ import 'package:stream_transform/stream_transform.dart';
 
 import '../../models/models.dart';
 import '../../services/summaryApi.dart';
+import '../../services/document_api_service.dart';
+import '../../services/document_api_models.dart';
 import '../../services/demo_data_initializer.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -42,6 +44,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
   final MixpanelBloc mixpanelBloc;
   late final StreamSubscription subscriptionBlocSubscription;
   final SummaryRepository summaryRepository = SummaryRepository();
+  final DocumentApiService _documentApi = DocumentApiService();
 
   SummariesBloc({required this.subscriptionBloc, required this.mixpanelBloc})
       : super(const SummariesState(
@@ -119,9 +122,13 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       transformer: throttleDroppable(throttleDuration),
     );
 
-    on<DeleteSummary>((event, emit) {
-      _deleteSummary(event.summaryUrl, emit);
+    on<DeleteSummary>((event, emit) async {
+      await _deleteSummary(event.summaryUrl, emit);
       mixpanelBloc.add(const DeleteSummaryM());
+    });
+
+    on<FetchServerDocuments>((event, emit) async {
+      await _fetchServerDocuments(emit);
     });
 
     on<RateSummary>((event, emit) async {
@@ -303,43 +310,106 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     required bool fromShare,
     required Emitter<SummariesState> emit,
   }) async {
-    dynamic shortSummaryResponse;
-    dynamic longSummaryResponse;
-
     try {
+      // Step 1: Fetch article preview via v1 for fast UX (title + image).
       final article = await summaryRepository.getArticleByUrl(summaryKey);
       if (article == null) {
-        final err = Exception('Could not fetch article');
-        shortSummaryResponse = err;
-        longSummaryResponse = err;
-      } else {
-        final summaryMap = Map<String, SummaryData>.from(state.summaries);
-        summaryMap.update(summaryKey, (summaryData) {
-          return summaryData.copyWith(
-            summaryPreview: SummaryPreview(
-              title: article.title?.isNotEmpty == true
-                  ? article.title
-                  : summaryKey.replaceAll('https://', ''),
-              imageUrl: article.imageUrl ?? Assets.placeholderLogo.path,
-            ),
-            userText: article.content,
-          );
-        });
-        emit(state.copyWith(summaries: summaryMap));
-
-        final results = await Future.wait([
-          summaryRepository.getSummaryFromText(
-            textToSummify: article.content,
-            summaryType: SummaryType.short,
-          ),
-          summaryRepository.getSummaryFromText(
-            textToSummify: article.content,
-            summaryType: SummaryType.long,
-          ),
-        ]);
-        shortSummaryResponse = results[0];
-        longSummaryResponse = results[1];
+        throw Exception('Could not fetch article');
       }
+
+      final articleTitle = article.title?.isNotEmpty == true
+          ? article.title!
+          : summaryKey.replaceAll('https://', '');
+
+      {
+        final summaryMap = Map<String, SummaryData>.from(state.summaries);
+        summaryMap.update(summaryKey, (d) => d.copyWith(
+          summaryPreview: SummaryPreview(
+            title: articleTitle,
+            imageUrl: article.imageUrl ?? Assets.placeholderLogo.path,
+          ),
+          userText: article.content,
+        ));
+        emit(state.copyWith(summaries: summaryMap));
+      }
+
+      // Step 2: Create document on server via v2 (short summary).
+      DocumentDetailResponse? serverDoc;
+      try {
+        serverDoc = await _documentApi.createDocument(
+          sourceType: 'url',
+          title: articleTitle,
+          sourceUrl: summaryKey,
+          originalText: article.content,
+          imageUrl: article.imageUrl,
+          typeSummary: 'short',
+        );
+      } catch (e) {
+        print('v2 createDocument failed, falling back to v1: $e');
+      }
+
+      Summary shortSummaryResult;
+      String? serverId;
+
+      if (serverDoc != null && serverDoc.shortSummary != null) {
+        serverId = serverDoc.id;
+        shortSummaryResult = Summary(
+          summaryText: serverDoc.shortSummary,
+          contextLength: serverDoc.contextLength,
+        );
+      } else {
+        // Fallback: generate short summary via v1.
+        final v1Result = await summaryRepository.getSummaryFromText(
+          textToSummify: article.content,
+          summaryType: SummaryType.short,
+        );
+        shortSummaryResult = v1Result is Summary
+            ? v1Result
+            : throw (v1Result is Exception ? v1Result : Exception('$v1Result'));
+      }
+
+      // Update state with short summary + serverId.
+      {
+        final summaryMap = Map<String, SummaryData>.from(state.summaries);
+        summaryMap.update(summaryKey, (d) => d.copyWith(
+          serverId: serverId,
+          shortSummary: shortSummaryResult,
+          shortSummaryStatus: SummaryStatus.complete,
+        ));
+        emit(state.copyWith(summaries: summaryMap));
+      }
+
+      // Step 3: Generate long summary via v1 (v2 only does one type).
+      Summary longSummaryResult;
+      final longResponse = await summaryRepository.getSummaryFromText(
+        textToSummify: article.content,
+        summaryType: SummaryType.long,
+      );
+      longSummaryResult = longResponse is Summary
+          ? longResponse
+          : Summary(summaryError: longResponse.toString().replaceAll('Exception:', ''));
+
+      // Finalize: apply billing logic and emit complete state.
+      final usedToday = _usedTodayEffective(state);
+      final subscribed = subscriptionBloc.state.subscriptionStatus ==
+          SubscriptionStatus.subscribed;
+      final useDaily = !subscribed && usedToday < freeDailyLimit;
+      final useGift =
+          !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
+      final isBlocked = !subscribed && !useDaily && !useGift;
+      if (useDaily) add(const IncrementFreeSummaries());
+      if (useGift) add(const UseGiftSlot());
+      mixpanelBloc.add(SummarizingSuccess(url: summaryKey, fromShare: fromShare));
+
+      final summaryMap = Map<String, SummaryData>.from(state.summaries);
+      summaryMap.update(summaryKey, (d) => d.copyWith(
+        isBlocked: isBlocked,
+        longSummary: longSummaryResult,
+        longSummaryStatus: longSummaryResult.summaryError != null
+            ? SummaryStatus.error
+            : SummaryStatus.complete,
+      ));
+      emit(state.copyWith(summaries: summaryMap));
     } catch (e) {
       if (e is PageCouldNotLoadException) {
         final newSummaries = Map<String, SummaryData>.from(state.summaries)
@@ -350,50 +420,21 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         ));
         return;
       }
-      shortSummaryResponse = e is Exception ? e : Exception(e.toString());
-      longSummaryResponse = shortSummaryResponse;
+      final errMsg = e is Exception
+          ? e.toString().replaceAll('Exception:', '')
+          : e.toString();
+      mixpanelBloc.add(SummarizingError(
+        url: summaryKey, fromShare: fromShare, error: errMsg,
+      ));
+      final summaryMap = Map<String, SummaryData>.from(state.summaries);
+      summaryMap.update(summaryKey, (d) => d.copyWith(
+        shortSummary: Summary(summaryError: errMsg),
+        longSummary: Summary(summaryError: errMsg),
+        shortSummaryStatus: SummaryStatus.error,
+        longSummaryStatus: SummaryStatus.error,
+      ));
+      emit(state.copyWith(summaries: summaryMap));
     }
-
-    final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
-    summaryMap.update(summaryKey, (summaryData) {
-      if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
-        final usedToday = _usedTodayEffective(state);
-        final subscribed = subscriptionBloc.state.subscriptionStatus ==
-            SubscriptionStatus.subscribed;
-        final useDaily = !subscribed && usedToday < freeDailyLimit;
-        final useGift =
-            !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
-        final isBlocked = !subscribed && !useDaily && !useGift;
-        if (useDaily) add(const IncrementFreeSummaries());
-        if (useGift) add(const UseGiftSlot());
-        mixpanelBloc.add(
-          SummarizingSuccess(url: summaryKey, fromShare: fromShare),
-        );
-        return summaryData.copyWith(
-          isBlocked: isBlocked,
-          shortSummary: shortSummaryResponse,
-          shortSummaryStatus: SummaryStatus.complete,
-          longSummary: longSummaryResponse,
-          longSummaryStatus: SummaryStatus.complete,
-        );
-      } else {
-        final errMsg = shortSummaryResponse is Exception
-            ? shortSummaryResponse.toString().replaceAll('Exception:', '')
-            : shortSummaryResponse.toString();
-        mixpanelBloc.add(SummarizingError(
-          url: summaryKey,
-          fromShare: fromShare,
-          error: errMsg,
-        ));
-        return summaryData.copyWith(
-          longSummary: Summary(summaryError: errMsg),
-          shortSummary: Summary(summaryError: errMsg),
-          longSummaryStatus: SummaryStatus.error,
-          shortSummaryStatus: SummaryStatus.error,
-        );
-      }
-    });
-    emit(state.copyWith(summaries: summaryMap));
   }
 
   Future<void> _loadSummaryFromText({
@@ -401,89 +442,99 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     required String text,
     required Emitter<SummariesState> emit,
   }) async {
-    final shortSummaryResponse = await summaryRepository.getSummaryFromText(
-      textToSummify: text,
-      summaryType: SummaryType.short,
-    );
-    final longSummaryResponse = await summaryRepository.getSummaryFromText(
-      textToSummify: text,
-      summaryType: SummaryType.long,
-    );
+    try {
+      // Step 1: Create document on server via v2 (short summary).
+      DocumentDetailResponse? serverDoc;
+      try {
+        serverDoc = await _documentApi.createDocument(
+          sourceType: 'text',
+          title: summaryTitle,
+          originalText: text,
+          typeSummary: 'short',
+        );
+      } catch (e) {
+        print('v2 createDocument failed, falling back to v1: $e');
+      }
 
-    final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
-    summaryMap.update(summaryTitle, (summaryData) {
-      if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
-        final usedToday = _usedTodayEffective(state);
-        final subscribed = subscriptionBloc.state.subscriptionStatus ==
-            SubscriptionStatus.subscribed;
-        final useDaily = !subscribed && usedToday < freeDailyLimit;
-        final useGift =
-            !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
-        final isBlocked = !subscribed && !useDaily && !useGift;
-        if (useDaily) add(const IncrementFreeSummaries());
-        if (useGift) add(const UseGiftSlot());
-        mixpanelBloc.add(
-          const SummarizingSuccess(url: 'from text', fromShare: false),
-        );
-        return summaryData.copyWith(
-          isBlocked: isBlocked,
-          summaryOrigin: SummaryOrigin.text,
-          userText: text,
-          shortSummary: shortSummaryResponse,
-          shortSummaryStatus: SummaryStatus.complete,
-          longSummary: longSummaryResponse,
-          longSummaryStatus: SummaryStatus.complete,
-        );
-      } else if (shortSummaryResponse is Exception) {
-        mixpanelBloc.add(SummarizingError(
-          url: 'from Text',
-          fromShare: false,
-          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
-        ));
-        return summaryData.copyWith(
-          summaryOrigin: SummaryOrigin.text,
-          userText: text,
-          longSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          shortSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          longSummaryStatus: SummaryStatus.error,
-          shortSummaryStatus: SummaryStatus.error,
+      Summary shortSummaryResult;
+      String? serverId;
+
+      if (serverDoc != null && serverDoc.shortSummary != null) {
+        serverId = serverDoc.id;
+        shortSummaryResult = Summary(
+          summaryText: serverDoc.shortSummary,
+          contextLength: serverDoc.contextLength,
         );
       } else {
-        mixpanelBloc.add(SummarizingError(
-          url: 'from Text',
-          fromShare: false,
-          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
-        ));
-        return summaryData.copyWith(
-          summaryOrigin: SummaryOrigin.text,
-          userText: text,
-          longSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          shortSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          longSummaryStatus: SummaryStatus.error,
-          shortSummaryStatus: SummaryStatus.error,
+        final v1 = await summaryRepository.getSummaryFromText(
+          textToSummify: text, summaryType: SummaryType.short,
         );
+        shortSummaryResult = v1 is Summary
+            ? v1
+            : throw (v1 is Exception ? v1 : Exception('$v1'));
       }
-    });
-    emit(state.copyWith(
-      summaries: summaryMap,
-      textCounter: state.textCounter + 1,
-    ));
+
+      // Update with short summary.
+      {
+        final m = Map<String, SummaryData>.from(state.summaries);
+        m.update(summaryTitle, (d) => d.copyWith(
+          serverId: serverId,
+          userText: text,
+          shortSummary: shortSummaryResult,
+          shortSummaryStatus: SummaryStatus.complete,
+        ));
+        emit(state.copyWith(summaries: m));
+      }
+
+      // Step 2: Long summary via v1.
+      Summary longSummaryResult;
+      final longResp = await summaryRepository.getSummaryFromText(
+        textToSummify: text, summaryType: SummaryType.long,
+      );
+      longSummaryResult = longResp is Summary
+          ? longResp
+          : Summary(summaryError: longResp.toString().replaceAll('Exception:', ''));
+
+      // Billing + emit.
+      final usedToday = _usedTodayEffective(state);
+      final subscribed = subscriptionBloc.state.subscriptionStatus ==
+          SubscriptionStatus.subscribed;
+      final useDaily = !subscribed && usedToday < freeDailyLimit;
+      final useGift =
+          !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
+      final isBlocked = !subscribed && !useDaily && !useGift;
+      if (useDaily) add(const IncrementFreeSummaries());
+      if (useGift) add(const UseGiftSlot());
+      mixpanelBloc.add(
+        const SummarizingSuccess(url: 'from text', fromShare: false),
+      );
+
+      final m = Map<String, SummaryData>.from(state.summaries);
+      m.update(summaryTitle, (d) => d.copyWith(
+        isBlocked: isBlocked,
+        summaryOrigin: SummaryOrigin.text,
+        longSummary: longSummaryResult,
+        longSummaryStatus: longSummaryResult.summaryError != null
+            ? SummaryStatus.error
+            : SummaryStatus.complete,
+      ));
+      emit(state.copyWith(summaries: m, textCounter: state.textCounter + 1));
+    } catch (e) {
+      final errMsg = e.toString().replaceAll('Exception:', '');
+      mixpanelBloc.add(SummarizingError(
+        url: 'from Text', fromShare: false, error: errMsg,
+      ));
+      final m = Map<String, SummaryData>.from(state.summaries);
+      m.update(summaryTitle, (d) => d.copyWith(
+        summaryOrigin: SummaryOrigin.text,
+        userText: text,
+        shortSummary: Summary(summaryError: errMsg),
+        longSummary: Summary(summaryError: errMsg),
+        shortSummaryStatus: SummaryStatus.error,
+        longSummaryStatus: SummaryStatus.error,
+      ));
+      emit(state.copyWith(summaries: m, textCounter: state.textCounter + 1));
+    }
   }
 
   Future<void> _loadSummaryFromFile({
@@ -492,90 +543,174 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     required bool fromShare,
     required Emitter<SummariesState> emit,
   }) async {
-    final shortSummaryResponse = await summaryRepository.getSummaryFromFile(
-      fileName: fileName,
-      filePath: filePath,
-      summaryType: SummaryType.short,
-    );
-    final longSummaryResponse = await summaryRepository.getSummaryFromFile(
-      fileName: fileName,
-      filePath: filePath,
-      summaryType: SummaryType.long,
-    );
+    try {
+      // Step 1: Upload file to server via v2 (short summary).
+      DocumentDetailResponse? serverDoc;
+      try {
+        serverDoc = await _documentApi.uploadDocument(
+          filePath: filePath,
+          fileName: fileName,
+          typeSummary: 'short',
+        );
+      } catch (e) {
+        print('v2 uploadDocument failed, falling back to v1: $e');
+      }
 
-    final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
-    summaryMap.update(fileName, (summaryData) {
-      if (shortSummaryResponse is Summary && longSummaryResponse is Summary) {
-        final usedToday = _usedTodayEffective(state);
-        final subscribed = subscriptionBloc.state.subscriptionStatus ==
-            SubscriptionStatus.subscribed;
-        final useDaily = !subscribed && usedToday < freeDailyLimit;
-        final useGift =
-            !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
-        final isBlocked = !subscribed && !useDaily && !useGift;
-        if (useDaily) add(const IncrementFreeSummaries());
-        if (useGift) add(const UseGiftSlot());
-        mixpanelBloc.add(
-          SummarizingSuccess(url: fileName, fromShare: fromShare),
-        );
-        return summaryData.copyWith(
-          isBlocked: isBlocked,
-          filePath: filePath,
-          shortSummary: shortSummaryResponse,
-          shortSummaryStatus: SummaryStatus.complete,
-          longSummary: longSummaryResponse,
-          longSummaryStatus: SummaryStatus.complete,
-        );
-      } else if (shortSummaryResponse is Exception) {
-        mixpanelBloc.add(SummarizingError(
-          url: fileName,
-          fromShare: false,
-          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
-        ));
-        return summaryData.copyWith(
-          filePath: filePath,
-          longSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          shortSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          longSummaryStatus: SummaryStatus.error,
-          shortSummaryStatus: SummaryStatus.error,
+      Summary shortSummaryResult;
+      String? serverId;
+      String? originalText;
+
+      if (serverDoc != null && serverDoc.shortSummary != null) {
+        serverId = serverDoc.id;
+        originalText = serverDoc.originalText;
+        shortSummaryResult = Summary(
+          summaryText: serverDoc.shortSummary,
+          contextLength: serverDoc.contextLength,
         );
       } else {
-        mixpanelBloc.add(SummarizingError(
-          url: fileName,
-          fromShare: false,
-          error: shortSummaryResponse.toString().replaceAll('Exception:', ''),
-        ));
-        return summaryData.copyWith(
-          longSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          shortSummary: Summary(
-            summaryError: shortSummaryResponse
-                .toString()
-                .replaceAll('Exception:', ''),
-          ),
-          longSummaryStatus: SummaryStatus.error,
-          shortSummaryStatus: SummaryStatus.error,
+        final v1 = await summaryRepository.getSummaryFromFile(
+          fileName: fileName, filePath: filePath, summaryType: SummaryType.short,
         );
+        shortSummaryResult = v1 is Summary
+            ? v1
+            : throw (v1 is Exception ? v1 : Exception('$v1'));
       }
-    });
-    emit(state.copyWith(summaries: summaryMap));
+
+      // Update with short summary.
+      {
+        final m = Map<String, SummaryData>.from(state.summaries);
+        m.update(fileName, (d) => d.copyWith(
+          serverId: serverId,
+          filePath: filePath,
+          userText: originalText,
+          shortSummary: shortSummaryResult,
+          shortSummaryStatus: SummaryStatus.complete,
+        ));
+        emit(state.copyWith(summaries: m));
+      }
+
+      // Step 2: Long summary via v1.
+      Summary longSummaryResult;
+      if (originalText != null && originalText.isNotEmpty) {
+        final longResp = await summaryRepository.getSummaryFromText(
+          textToSummify: originalText, summaryType: SummaryType.long,
+        );
+        longSummaryResult = longResp is Summary
+            ? longResp
+            : Summary(summaryError: longResp.toString().replaceAll('Exception:', ''));
+      } else {
+        final longResp = await summaryRepository.getSummaryFromFile(
+          fileName: fileName, filePath: filePath, summaryType: SummaryType.long,
+        );
+        longSummaryResult = longResp is Summary
+            ? longResp
+            : Summary(summaryError: longResp.toString().replaceAll('Exception:', ''));
+      }
+
+      // Billing + emit.
+      final usedToday = _usedTodayEffective(state);
+      final subscribed = subscriptionBloc.state.subscriptionStatus ==
+          SubscriptionStatus.subscribed;
+      final useDaily = !subscribed && usedToday < freeDailyLimit;
+      final useGift =
+          !subscribed && usedToday >= freeDailyLimit && state.giftBalance > 0;
+      final isBlocked = !subscribed && !useDaily && !useGift;
+      if (useDaily) add(const IncrementFreeSummaries());
+      if (useGift) add(const UseGiftSlot());
+      mixpanelBloc.add(SummarizingSuccess(url: fileName, fromShare: fromShare));
+
+      final m = Map<String, SummaryData>.from(state.summaries);
+      m.update(fileName, (d) => d.copyWith(
+        isBlocked: isBlocked,
+        longSummary: longSummaryResult,
+        longSummaryStatus: longSummaryResult.summaryError != null
+            ? SummaryStatus.error
+            : SummaryStatus.complete,
+      ));
+      emit(state.copyWith(summaries: m));
+    } catch (e) {
+      final errMsg = e.toString().replaceAll('Exception:', '');
+      mixpanelBloc.add(SummarizingError(
+        url: fileName, fromShare: fromShare, error: errMsg,
+      ));
+      final m = Map<String, SummaryData>.from(state.summaries);
+      m.update(fileName, (d) => d.copyWith(
+        filePath: filePath,
+        shortSummary: Summary(summaryError: errMsg),
+        longSummary: Summary(summaryError: errMsg),
+        shortSummaryStatus: SummaryStatus.error,
+        longSummaryStatus: SummaryStatus.error,
+      ));
+      emit(state.copyWith(summaries: m));
+    }
   }
 
-  void _deleteSummary(String summaryUrl, Emitter<SummariesState> emit) {
+  Future<void> _deleteSummary(String summaryUrl, Emitter<SummariesState> emit) async {
+    final doc = state.summaries[summaryUrl];
+    if (doc?.serverId != null) {
+      try {
+        await _documentApi.deleteDocument(doc!.serverId!);
+      } catch (e) {
+        print('v2 deleteDocument failed: $e');
+      }
+    }
     final Map<String, SummaryData> summaryMap = Map.from(state.summaries);
     summaryMap.remove(summaryUrl);
     emit(state.copyWith(summaries: summaryMap));
+  }
+
+  /// Fetches the user's document list from the server and merges into local state.
+  Future<void> _fetchServerDocuments(Emitter<SummariesState> emit) async {
+    try {
+      final response = await _documentApi.listDocuments(page: 1, pageSize: 200);
+      final serverDocs = response.items;
+      final localIds = state.summaries.values
+          .where((d) => d.serverId != null)
+          .map((d) => d.serverId)
+          .toSet();
+
+      final summaryMap = Map<String, SummaryData>.from(state.summaries);
+      for (final doc in serverDocs) {
+        if (localIds.contains(doc.id)) continue;
+
+        final key = doc.sourceUrl ?? doc.title;
+        if (summaryMap.containsKey(key)) continue;
+
+        // List endpoint only returns metadata, not summary text.
+        // Use `initial` so the UI knows content must be fetched on open.
+        summaryMap[key] = SummaryData(
+          shortSummaryStatus: SummaryStatus.initial,
+          longSummaryStatus: SummaryStatus.initial,
+          date: doc.createdAt,
+          summaryOrigin: _parseOrigin(doc.sourceType),
+          shortSummary: const Summary(),
+          longSummary: const Summary(),
+          summaryPreview: SummaryPreview(
+            title: doc.title,
+            imageUrl: doc.imageUrl,
+          ),
+          isBlocked: doc.isBlocked,
+          serverId: doc.id,
+        );
+      }
+
+      if (summaryMap.length != state.summaries.length) {
+        emit(state.copyWith(summaries: summaryMap));
+      }
+    } catch (e) {
+      print('FetchServerDocuments failed: $e');
+    }
+  }
+
+  static SummaryOrigin _parseOrigin(String sourceType) {
+    switch (sourceType) {
+      case 'url':
+        return SummaryOrigin.url;
+      case 'file':
+        return SummaryOrigin.file;
+      default:
+        return SummaryOrigin.text;
+    }
   }
 
   Future<void> _rateSummary(

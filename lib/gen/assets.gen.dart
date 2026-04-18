@@ -11,6 +11,44 @@
 
 import 'package:flutter/widgets.dart';
 
+class $AssetsAdsGen {
+  const $AssetsAdsGen();
+
+  /// File path: assets/ads/ads copy.json
+  String get adsCopy => 'assets/ads/ads copy.json';
+
+  /// File path: assets/ads/ads.json
+  String get ads => 'assets/ads/ads.json';
+
+  /// File path: assets/ads/cards.png
+  AssetGenImage get cards => const AssetGenImage('assets/ads/cards.png');
+
+  /// File path: assets/ads/listening.png
+  AssetGenImage get listening =>
+      const AssetGenImage('assets/ads/listening.png');
+
+  /// File path: assets/ads/subtune.png
+  AssetGenImage get subtune => const AssetGenImage('assets/ads/subtune.png');
+
+  /// File path: assets/ads/tutor.png
+  AssetGenImage get tutor => const AssetGenImage('assets/ads/tutor.png');
+
+  /// File path: assets/ads/verbs5-225-72.png
+  AssetGenImage get verbs522572 =>
+      const AssetGenImage('assets/ads/verbs5-225-72.png');
+
+  /// List of all assets
+  List<dynamic> get values => [
+    adsCopy,
+    ads,
+    cards,
+    listening,
+    subtune,
+    tutor,
+    verbs522572,
+  ];
+}
+
 class $AssetsFlagsGen {
   const $AssetsFlagsGen();
 
@@ -109,6 +147,16 @@ class $AssetsFlagsGen {
     vi,
     zh,
   ];
+}
+
+class $AssetsHtmlGen {
+  const $AssetsHtmlGen();
+
+  /// File path: assets/html/mermaid_viewer.html
+  String get mermaidViewer => 'assets/html/mermaid_viewer.html';
+
+  /// List of all assets
+  List<String> get values => [mermaidViewer];
 }
 
 class $AssetsIconsGen {
@@ -570,6 +618,7 @@ class $AssetsTtsModelsKokoroGen {
 class Assets {
   const Assets._();
 
+  static const $AssetsAdsGen ads = $AssetsAdsGen();
   static const AssetGenImage bgDark = AssetGenImage('assets/bg_dark.png');
   static const AssetGenImage bgLight = AssetGenImage('assets/bg_light.png');
   static const AssetGenImage extension = AssetGenImage('assets/extension.png');
@@ -579,6 +628,7 @@ class Assets {
   static const String happyBoxFloor = 'assets/happy_box_floor.svg';
   static const String happyBoxLeftHand = 'assets/happy_box_left_hand.svg';
   static const String happyBoxRightHand = 'assets/happy_box_right_hand.svg';
+  static const $AssetsHtmlGen html = $AssetsHtmlGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const String lexicon = 'assets/lexicon.json';
   static const $AssetsLibraryGen library = $AssetsLibraryGen();

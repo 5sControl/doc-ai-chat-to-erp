@@ -46,6 +46,7 @@ SummaryData _$SummaryDataFromJson(Map<String, dynamic> json) => SummaryData(
   filePath: json['filePath'] as String?,
   isBlocked: json['isBlocked'] as bool?,
   userText: json['userText'] as String?,
+  serverId: json['serverId'] as String?,
 );
 
 Map<String, dynamic> _$SummaryDataToJson(
@@ -61,6 +62,7 @@ Map<String, dynamic> _$SummaryDataToJson(
   'filePath': instance.filePath,
   'userText': instance.userText,
   'isBlocked': instance.isBlocked,
+  'serverId': instance.serverId,
 };
 
 const _$SummaryStatusEnumMap = {
@@ -145,6 +147,7 @@ KnowledgeCard _$KnowledgeCardFromJson(Map<String, dynamic> json) =>
           json['savedAt'] == null
               ? null
               : DateTime.parse(json['savedAt'] as String),
+      serverId: json['serverId'] as String?,
     );
 
 Map<String, dynamic> _$KnowledgeCardToJson(KnowledgeCard instance) =>
@@ -159,6 +162,7 @@ Map<String, dynamic> _$KnowledgeCardToJson(KnowledgeCard instance) =>
       'sourceSummaryKey': instance.sourceSummaryKey,
       'sourceTitle': instance.sourceTitle,
       'savedAt': instance.savedAt?.toIso8601String(),
+      'serverId': instance.serverId,
     };
 
 const _$KnowledgeCardTypeEnumMap = {

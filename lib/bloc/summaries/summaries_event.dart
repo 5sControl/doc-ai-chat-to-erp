@@ -124,3 +124,11 @@ class ClearCopyPastePrompt extends SummariesEvent {
   @override
   List<Object?> get props => [];
 }
+
+/// Fetches the user's documents from the server and merges them into local state.
+class FetchServerDocuments extends SummariesEvent {
+  const FetchServerDocuments();
+
+  @override
+  List<Object?> get props => [];
+}

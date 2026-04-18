@@ -1,6 +1,7 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:summify/services/document_api_service.dart';
 import 'package:summify/services/summaryApi.dart';
 import 'package:summify/services/quiz_asset_loader.dart';
 import '../../models/models.dart';
@@ -11,7 +12,8 @@ part 'quiz_state.dart';
 
 class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
   final MixpanelBloc mixpanelBloc;
-  
+  final DocumentApiService _documentApi = DocumentApiService();
+
   QuizBloc({required this.mixpanelBloc})
       : super(const QuizState(quizzes: {})) {
     on<GenerateQuiz>((event, emit) async {
@@ -167,6 +169,20 @@ class QuizBloc extends HydratedBloc<QuizEvent, QuizState> {
       final total = quiz.questions.length;
       final correctCount = quiz.questions.where((q) => q.isCorrect == true).length;
       final scorePercent = total > 0 ? (correctCount / total * 100).round() : 0;
+
+      // Sync quiz progress to server (fire-and-forget).
+      // quiz.serverId holds the parent document's server UUID.
+      if (quiz.serverId != null) {
+        _documentApi
+            .updateQuiz(
+              quiz.serverId!,
+              userAnswers: quiz.answers?.map((a) => a.toJson()).toList(),
+              status: 'completed',
+              score: scorePercent,
+            )
+            .then<void>((_) {}, onError: (_) {});
+      }
+
       mixpanelBloc.add(QuizCompleted(
         documentKey: event.documentKey,
         scorePercent: scorePercent,

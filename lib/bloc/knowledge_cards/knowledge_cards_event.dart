@@ -21,28 +21,33 @@ class SaveKnowledgeCard extends KnowledgeCardsEvent {
   final String summaryKey;
   final String cardId;
   final String? sourceTitle;
+  /// Server document UUID. When set, also syncs save state via v2 API.
+  final String? documentServerId;
 
   const SaveKnowledgeCard({
     required this.summaryKey,
     required this.cardId,
     this.sourceTitle,
+    this.documentServerId,
   });
 
   @override
-  List<Object?> get props => [summaryKey, cardId, sourceTitle];
+  List<Object?> get props => [summaryKey, cardId, sourceTitle, documentServerId];
 }
 
 class UnsaveKnowledgeCard extends KnowledgeCardsEvent {
   final String summaryKey;
   final String cardId;
+  final String? documentServerId;
 
   const UnsaveKnowledgeCard({
     required this.summaryKey,
     required this.cardId,
+    this.documentServerId,
   });
 
   @override
-  List<Object?> get props => [summaryKey, cardId];
+  List<Object?> get props => [summaryKey, cardId, documentServerId];
 }
 
 class ClearKnowledgeCards extends KnowledgeCardsEvent {

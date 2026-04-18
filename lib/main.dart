@@ -316,6 +316,9 @@ class _SummishareAppState extends State<SummishareApp> {
                   _pendingShareChecked = true;
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _checkPendingSharedData();
+                    if (_isUserAuthenticated) {
+                      _summariesBloc.add(const FetchServerDocuments());
+                    }
                   });
                 }
                 
@@ -336,6 +339,7 @@ class _SummishareAppState extends State<SummishareApp> {
           listener: (context, state) {
             if (state is AuthenticationSuccessState) {
               _processPendingSharePayload();
+              _summariesBloc.add(const FetchServerDocuments());
             }
           },
           child: BlocBuilder<SettingsBloc, SettingsState>(

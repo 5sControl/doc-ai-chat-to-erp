@@ -75,6 +75,10 @@ class SummaryData extends Equatable {
   final String? userText;
   final bool? isBlocked;
 
+  /// Server-side document UUID. `null` means the document is local-only
+  /// (not yet migrated to the backend).
+  final String? serverId;
+
   const SummaryData(
       {required this.shortSummaryStatus,
       required this.longSummaryStatus,
@@ -85,7 +89,8 @@ class SummaryData extends Equatable {
       required this.summaryPreview,
       this.filePath,
       this.isBlocked,
-      this.userText});
+      this.userText,
+      this.serverId});
 
   SummaryData copyWith({
     SummaryStatus? shortSummaryStatus,
@@ -98,6 +103,7 @@ class SummaryData extends Equatable {
     String? filePath,
     String? userText,
     bool? isBlocked,
+    String? serverId,
   }) {
     return SummaryData(
         shortSummaryStatus: shortSummaryStatus ?? this.shortSummaryStatus,
@@ -109,7 +115,8 @@ class SummaryData extends Equatable {
         summaryPreview: summaryPreview ?? this.summaryPreview,
         filePath: filePath ?? this.filePath,
         userText: userText ?? this.userText,
-        isBlocked: isBlocked ?? this.isBlocked);
+        isBlocked: isBlocked ?? this.isBlocked,
+        serverId: serverId ?? this.serverId);
   }
 
   factory SummaryData.fromJson(Map<String, dynamic> json) =>
@@ -127,7 +134,8 @@ class SummaryData extends Equatable {
         summaryOrigin,
         filePath,
         userText,
-        isBlocked
+        isBlocked,
+        serverId,
       ];
 }
 
@@ -371,6 +379,11 @@ class Quiz extends Equatable {
   final int? currentQuestionIndex;
   final ReviewMode? reviewMode;
 
+  /// Server-side UUID of the parent document (from v2 API).
+  /// Used to sync quiz progress via `/api/v2/documents/{id}/quiz`.
+  /// `null` for quizzes of locally-only documents.
+  final String? serverId;
+
   const Quiz({
     required this.quizId,
     required this.documentKey,
@@ -381,6 +394,7 @@ class Quiz extends Equatable {
     this.completedAt,
     this.currentQuestionIndex,
     this.reviewMode,
+    this.serverId,
   });
 
   Quiz copyWith({
@@ -393,6 +407,7 @@ class Quiz extends Equatable {
     DateTime? completedAt,
     int? currentQuestionIndex,
     ReviewMode? reviewMode,
+    String? serverId,
   }) {
     return Quiz(
       quizId: quizId ?? this.quizId,
@@ -404,6 +419,7 @@ class Quiz extends Equatable {
       completedAt: completedAt ?? this.completedAt,
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
       reviewMode: reviewMode ?? this.reviewMode,
+      serverId: serverId ?? this.serverId,
     );
   }
 
@@ -452,6 +468,7 @@ class Quiz extends Equatable {
               orElse: () => ReviewMode.overview,
             )
           : null,
+      serverId: json['serverId'] as String?,
     );
   }
 
@@ -466,6 +483,7 @@ class Quiz extends Equatable {
       'completedAt': completedAt?.toIso8601String(),
       'currentQuestionIndex': currentQuestionIndex,
       'reviewMode': reviewMode?.name,
+      'serverId': serverId,
     };
   }
 
@@ -480,6 +498,7 @@ class Quiz extends Equatable {
         completedAt,
         currentQuestionIndex,
         reviewMode,
+        serverId,
       ];
 }
 
@@ -540,6 +559,9 @@ class KnowledgeCard extends Equatable {
   final String? sourceTitle;
   final DateTime? savedAt;
 
+  /// Server-side card UUID (from v2 API). `null` for locally-generated cards.
+  final String? serverId;
+
   const KnowledgeCard({
     required this.id,
     required this.type,
@@ -551,6 +573,7 @@ class KnowledgeCard extends Equatable {
     this.sourceSummaryKey,
     this.sourceTitle,
     this.savedAt,
+    this.serverId,
   });
 
   KnowledgeCard copyWith({
@@ -564,6 +587,7 @@ class KnowledgeCard extends Equatable {
     String? sourceSummaryKey,
     String? sourceTitle,
     DateTime? savedAt,
+    String? serverId,
   }) {
     return KnowledgeCard(
       id: id ?? this.id,
@@ -576,6 +600,7 @@ class KnowledgeCard extends Equatable {
       sourceSummaryKey: sourceSummaryKey ?? this.sourceSummaryKey,
       sourceTitle: sourceTitle ?? this.sourceTitle,
       savedAt: savedAt ?? this.savedAt,
+      serverId: serverId ?? this.serverId,
     );
   }
 
@@ -596,5 +621,6 @@ class KnowledgeCard extends Equatable {
         sourceSummaryKey,
         sourceTitle,
         savedAt,
+        serverId,
       ];
 }
