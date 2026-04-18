@@ -9,6 +9,7 @@ import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/summaries/summaries_bloc.dart';
 import '../../gen/assets.gen.dart';
+import '../../helpers/auth_gate.dart';
 import '../../widgets/summify_button.dart';
 
 class TextModalScreen extends StatefulWidget {
@@ -25,6 +26,10 @@ class _TextModalScreenState extends State<TextModalScreen> {
   void onPressSummify() {
     Future.delayed(const Duration(milliseconds: 300), () {
       if (controllerText.isNotEmpty) {
+        if (!requireAuth(context)) {
+          Navigator.of(context).pop();
+          return;
+        }
         if (SummariesBloc.isFreeDailyLimitReached(
           context.read<SummariesBloc>().state,
           context.read<SubscriptionsBloc>().state.subscriptionStatus,

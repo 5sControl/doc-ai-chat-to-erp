@@ -19,6 +19,7 @@ import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.
 import 'package:summify/screens/summary_screen/info_modal/extension_modal.dart';
 import 'package:summify/services/demo_data_initializer.dart';
 import 'package:summify/widgets/ads_carousel.dart';
+import 'package:summify/helpers/auth_gate.dart';
 import 'package:summify/widgets/themed_alert_dialog.dart';
 
 import 'logo.dart';
@@ -39,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void getSummary({required String summaryUrl}) {
     Future.delayed(const Duration(milliseconds: 300), () {
       if (!mounted) return;
+      if (!requireAuth(context)) return;
       if (SummariesBloc.isFreeDailyLimitReached(
         context.read<SummariesBloc>().state,
         context.read<SubscriptionsBloc>().state.subscriptionStatus,
@@ -63,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       {required String filePath, required String fileName}) {
     Future.delayed(const Duration(milliseconds: 300), () {
       if (!mounted) return;
+      if (!requireAuth(context)) return;
       if (SummariesBloc.isFreeDailyLimitReached(
         context.read<SummariesBloc>().state,
         context.read<SubscriptionsBloc>().state.subscriptionStatus,

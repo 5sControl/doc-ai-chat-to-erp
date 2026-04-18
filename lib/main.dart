@@ -31,6 +31,7 @@ import 'package:summify/screens/settings_screen/settings_group_screen.dart';
 import 'package:summify/screens/settings_screen/settings_models.dart';
 import 'package:summify/screens/settings_screen/settings_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:summify/services/authentication.dart';
 import 'package:summify/services/notify.dart';
 import 'package:summify/services/tts_service.dart';
@@ -93,8 +94,15 @@ class _SummishareAppState extends State<SummishareApp> {
   
   /// Flag to ensure pending shared data is checked only once after bloc init
   bool _pendingShareChecked = false;
-  
+
+  /// Shared data that arrived while user was not authenticated.
+  /// Processed after successful login.
+  Map<String, dynamic>? _pendingSharePayload;
+
   static const platform = MethodChannel('com.summify.share');
+
+  bool get _isUserAuthenticated =>
+      FirebaseAuth.instance.currentUser != null;
 
   @override
   void initState() {
@@ -198,8 +206,13 @@ class _SummishareAppState extends State<SummishareApp> {
 
   void _handleSharedText(String text) {
     print('🔥 Processing shared text: $text');
-    
-    // Check if it's a URL
+
+    if (!_isUserAuthenticated) {
+      print('🔥 User not authenticated, storing pending share');
+      _pendingSharePayload = {'type': 'text', 'data': text};
+      return;
+    }
+
     if (text.startsWith('http://') || text.startsWith('https://')) {
       print('🔥 Detected URL, processing summary...');
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -207,7 +220,6 @@ class _SummishareAppState extends State<SummishareApp> {
         _mixpanelBloc.add(Summify(option: 'url'));
       });
     } else {
-      // Plain text
       print('🔥 Detected plain text');
       Future.delayed(const Duration(milliseconds: 500), () {
         _summariesBloc.add(GetSummaryFromText(text: text, fromShare: true));
@@ -218,17 +230,22 @@ class _SummishareAppState extends State<SummishareApp> {
 
   void _handleSharedMedia(Map<dynamic, dynamic> media) {
     print('🔥 Processing shared media: $media');
-    
+
+    if (!_isUserAuthenticated) {
+      print('🔥 User not authenticated, storing pending share');
+      _pendingSharePayload = {'type': 'media', 'data': Map<String, dynamic>.from(media)};
+      return;
+    }
+
     final String? path = media['path'] as String?;
     final int? type = media['type'] as int?;
-    
+
     if (path != null) {
-      // Remove file:// prefix if present
       final cleanPath = path.replaceFirst('file://', '');
       final fileName = cleanPath.split('/').last;
-      
+
       print('🔥 File path: $cleanPath, fileName: $fileName, type: $type');
-      
+
       Future.delayed(const Duration(milliseconds: 500), () {
         _summariesBloc.add(GetSummaryFromFile(
           filePath: cleanPath,
@@ -237,6 +254,19 @@ class _SummishareAppState extends State<SummishareApp> {
         ));
         _mixpanelBloc.add(Summify(option: 'file'));
       });
+    }
+  }
+
+  void _processPendingSharePayload() {
+    final payload = _pendingSharePayload;
+    if (payload == null) return;
+    _pendingSharePayload = null;
+
+    final type = payload['type'] as String;
+    if (type == 'text') {
+      _handleSharedText(payload['data'] as String);
+    } else if (type == 'media') {
+      _handleSharedMedia(payload['data'] as Map<dynamic, dynamic>);
     }
   }
 
@@ -302,7 +332,13 @@ class _SummishareAppState extends State<SummishareApp> {
                 savedCardsBloc: _savedCardsBloc,
               )),
         ],
-        child: BlocBuilder<SettingsBloc, SettingsState>(
+        child: BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            if (state is AuthenticationSuccessState) {
+              _processPendingSharePayload();
+            }
+          },
+          child: BlocBuilder<SettingsBloc, SettingsState>(
             builder: (context, settingsState) {
               if (!settingsState.subscriptionsSynced) {
                 context.read<SubscriptionsBloc>().add(const SyncSubscriptions());
@@ -442,7 +478,8 @@ class _SummishareAppState extends State<SummishareApp> {
               debugShowCheckedModeBanner: false,
             );
           },
-        ));
+        )),
+  );
   }
 }
 

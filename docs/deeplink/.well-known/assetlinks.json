@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.englishingames.summishare",
+      "sha256_cert_fingerprints": [
+        "7A:3E:DB:3C:09:49:FD:18:18:36:4C:C1:DB:84:E4:E6:E6:E4:36:85:A3:EA:E3:B7:75:D5:DC:91:14:DF:09:6B"
+      ]
+    }
+  }
+]

@@ -9,6 +9,7 @@ import 'package:summify/widgets/modal_handle.dart';
 
 import '../../bloc/summaries/summaries_bloc.dart';
 import '../../gen/assets.gen.dart';
+import '../../helpers/auth_gate.dart';
 import '../../widgets/summify_button.dart';
 
 class UrlModalScreen extends StatefulWidget {
@@ -66,6 +67,10 @@ class _UrlModalScreenState extends State<UrlModalScreen> {
         // } else
 
           if (controllerText.isNotEmpty) {
+          if (!requireAuth(context)) {
+            Navigator.of(context).pop();
+            return;
+          }
           if (SummariesBloc.isFreeDailyLimitReached(
             context.read<SummariesBloc>().state,
             context.read<SubscriptionsBloc>().state.subscriptionStatus,

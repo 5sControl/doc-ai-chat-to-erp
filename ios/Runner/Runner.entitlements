@@ -11,6 +11,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:5scontrol.com</string>
+		<string>applinks:lmnotebook.pro</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>

@@ -8,6 +8,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
 import 'package:summify/bloc/summaries/summaries_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
+import 'package:summify/helpers/auth_gate.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 
 import '../bloc/mixpanel/mixpanel_bloc.dart';
@@ -28,6 +29,7 @@ class AddSummaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressURl() {
+      if (!requireAuth(context)) return;
       showCupertinoModalBottomSheet(
         context: context,
         expand: false,
@@ -41,6 +43,7 @@ class AddSummaryButton extends StatelessWidget {
     }
 
     void onPressText() {
+      if (!requireAuth(context)) return;
       showCupertinoModalBottomSheet(
         context: context,
         expand: false,
@@ -54,11 +57,7 @@ class AddSummaryButton extends StatelessWidget {
     }
 
     void onPressOpenFile() async {
-      // final DateFormat formatter = DateFormat('MM.dd.yy');
-      // final thisDay = formatter.format(DateTime.now());
-      // final limit = context.read<SummariesBloc>().state.dailyLimit;
-      // final daySummaries =
-      //     context.read<SummariesBloc>().state.dailySummariesMap[thisDay] ?? 15;
+      if (!requireAuth(context)) return;
 
       FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.custom,

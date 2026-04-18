@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "C52BX6VAT9.com.englishingames.summiShare",
+        "paths": ["/invite", "/invite/*"]
+      },
+      {
+        "appID": "C52BX6VAT9.com.englishingames.summiShare.ShareExtension",
+        "paths": ["/invite", "/invite/*"]
+      }
+    ]
+  }
+}
