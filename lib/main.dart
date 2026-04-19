@@ -112,31 +112,30 @@ class _SummishareAppState extends State<SummishareApp> {
   }
 
   void _initShareChannel() {
-    if (!kIsWeb && Platform.isIOS) {
-      platform.setMethodCallHandler((call) async {
-        print('🔥 Flutter: Received method call: ${call.method}');
-        
-        if (call.method == 'onSharedText') {
-          final List<dynamic> sharedData = call.arguments as List<dynamic>;
-          print('🔥 Flutter: Shared text received: $sharedData');
-          
-          for (var item in sharedData) {
-            if (item is String) {
-              _handleSharedText(item);
-            }
-          }
-        } else if (call.method == 'onSharedMedia') {
-          final List<dynamic> sharedMedia = call.arguments as List<dynamic>;
-          print('🔥 Flutter: Shared media received: $sharedMedia');
-          
-          for (var media in sharedMedia) {
-            if (media is Map) {
-              _handleSharedMedia(media);
-            }
+    if (kIsWeb || (!Platform.isIOS && !Platform.isAndroid)) return;
+    platform.setMethodCallHandler((call) async {
+      print('🔥 Flutter: Received method call: ${call.method}');
+
+      if (call.method == 'onSharedText') {
+        final List<dynamic> sharedData = call.arguments as List<dynamic>;
+        print('🔥 Flutter: Shared text received: $sharedData');
+
+        for (var item in sharedData) {
+          if (item is String) {
+            _handleSharedText(item);
           }
         }
-      });
-    }
+      } else if (call.method == 'onSharedMedia') {
+        final List<dynamic> sharedMedia = call.arguments as List<dynamic>;
+        print('🔥 Flutter: Shared media received: $sharedMedia');
+
+        for (var media in sharedMedia) {
+          if (media is Map) {
+            _handleSharedMedia(media);
+          }
+        }
+      }
+    });
   }
 
   void _initDeepLinks() async {

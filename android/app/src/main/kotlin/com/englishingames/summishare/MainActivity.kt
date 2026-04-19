@@ -2,42 +2,48 @@ package com.englishingames.summishare
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity: FlutterActivity() {
-    private val CHANNEL = "com.summify.share"
-    private var sharedData: String? = null
+class MainActivity : FlutterActivity() {
+    private val channelName = "com.summify.share"
+
+    /**
+     * Pending payload for Flutter [getSharedData]: String (text), Map (single file), or List (mixed / multiple files).
+     * Cleared after a successful push via MethodChannel or after Flutter reads it.
+     */
+    private var pendingSharePayload: Any? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName).setMethodCallHandler { call, result ->
             if (call.method == "getSharedData") {
-                result.success(sharedData)
-                sharedData = null // Clear after reading
+                val payload = pendingSharePayload
+                pendingSharePayload = null
+                result.success(payload)
             } else {
                 result.notImplemented()
             }
         }
 
-        // Handle initial share intent
         handleIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         handleIntent(intent)
     }
 
     private fun handleIntent(intent: Intent?) {
-        Log.d("Summify", "🔥 MainActivity: handleIntent called")
-        Log.d("Summify", "🔥 Intent action: ${intent?.action}")
-        Log.d("Summify", "🔥 Intent type: ${intent?.type}")
+        Log.d("Summify", "MainActivity: handleIntent action=${intent?.action} type=${intent?.type} data=${intent?.data}")
 
         when (intent?.action) {
+            Intent.ACTION_VIEW -> handleViewIntent(intent)
             Intent.ACTION_SEND -> {
                 if (intent.type?.startsWith("text/") == true) {
                     handleSendText(intent)
@@ -45,67 +51,81 @@ class MainActivity: FlutterActivity() {
                     handleSendFile(intent)
                 }
             }
-            Intent.ACTION_SEND_MULTIPLE -> {
-                handleSendMultipleFiles(intent)
-            }
+            Intent.ACTION_SEND_MULTIPLE -> handleSendMultipleFiles(intent)
         }
+    }
+
+    private fun handleViewIntent(intent: Intent) {
+        val uri = intent.data ?: return
+        // Avoid treating https invite / universal links as local files
+        if (uri.scheme.equals("https", ignoreCase = true) ||
+            uri.scheme.equals("http", ignoreCase = true)
+        ) {
+            return
+        }
+        val path = getRealPathFromURI(uri) ?: return
+        val fileData = mapOf(
+            "path" to path,
+            "type" to 2,
+        )
+        deliverMediaToFlutter(listOf(fileData))
     }
 
     private fun handleSendText(intent: Intent) {
         intent.getStringExtra(Intent.EXTRA_TEXT)?.let { text ->
-            Log.d("Summify", "🔥 Shared text: $text")
-            sharedData = text
-            
-            // Send to Flutter immediately if engine is ready
+            Log.d("Summify", "Shared text: $text")
+            pendingSharePayload = text
             flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
-                MethodChannel(messenger, CHANNEL).invokeMethod("onSharedText", listOf(text))
+                MethodChannel(messenger, channelName).invokeMethod("onSharedText", listOf(text))
+                pendingSharePayload = null
             }
         }
     }
 
     private fun handleSendFile(intent: Intent) {
-        (intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM))?.let { uri ->
-            Log.d("Summify", "🔥 Shared file URI: $uri")
-            
-            val path = getRealPathFromURI(uri)
-            if (path != null) {
-                val fileData = mapOf(
-                    "path" to path,
-                    "type" to 2 // file type
-                )
-                
-                flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
-                    MethodChannel(messenger, CHANNEL).invokeMethod("onSharedMedia", listOf(fileData))
-                }
-            }
-        }
+        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(Intent.EXTRA_STREAM)
+        } ?: return
+
+        Log.d("Summify", "Shared file URI: $uri")
+        val path = getRealPathFromURI(uri) ?: return
+        val fileData = mapOf("path" to path, "type" to 2)
+        deliverMediaToFlutter(listOf(fileData))
     }
 
     private fun handleSendMultipleFiles(intent: Intent) {
-        intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)?.let { uris ->
-            Log.d("Summify", "🔥 Shared multiple files: ${uris.size}")
-            
-            val files = uris.mapNotNull { uri ->
-                getRealPathFromURI(uri)?.let { path ->
-                    mapOf(
-                        "path" to path,
-                        "type" to 2
-                    )
-                }
+        val uris: ArrayList<Uri> = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+        } ?: return
+
+        Log.d("Summify", "Shared multiple files: ${uris.size}")
+        val files = uris.mapNotNull { uri ->
+            getRealPathFromURI(uri)?.let { path ->
+                mapOf("path" to path, "type" to 2)
             }
-            
-            if (files.isNotEmpty()) {
-                flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
-                    MethodChannel(messenger, CHANNEL).invokeMethod("onSharedMedia", files)
-                }
-            }
+        }
+        if (files.isNotEmpty()) {
+            deliverMediaToFlutter(files)
+        }
+    }
+
+    private fun deliverMediaToFlutter(files: List<Map<String, Any>>) {
+        pendingSharePayload = if (files.size == 1) files[0] else files
+        flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
+            MethodChannel(messenger, channelName).invokeMethod("onSharedMedia", files)
+            pendingSharePayload = null
         }
     }
 
     private fun getRealPathFromURI(uri: Uri): String? {
         return try {
             contentResolver.openInputStream(uri)?.use { inputStream ->
-                // For content:// URIs, copy to app's cache directory
                 val fileName = getFileName(uri)
                 val file = java.io.File(cacheDir, fileName)
                 file.outputStream().use { outputStream ->
@@ -114,7 +134,7 @@ class MainActivity: FlutterActivity() {
                 file.absolutePath
             }
         } catch (e: Exception) {
-            Log.e("Summify", "🔥 Error getting file path: ${e.message}")
+            Log.e("Summify", "Error copying from URI: ${e.message}")
             null
         }
     }

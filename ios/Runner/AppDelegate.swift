@@ -62,6 +62,11 @@ import flutter_local_notifications
     // Must happen after GeneratedPluginRegistrant.register().
     setupMethodChannel()
     
+    // Open-in / document URL when the app was not already running
+    if let launchUrl = launchOptions?[UIApplication.LaunchOptionsKey.url] as? URL {
+      queueDocumentOpened(at: launchUrl)
+    }
+    
     // Check for shared data on cold start.
     // Flutter is likely not ready yet, so data will be stored as pending
     // and delivered when Flutter calls getSharedData.
@@ -88,6 +93,14 @@ import flutter_local_notifications
       print("🔥 Share Extension callback detected")
       checkSharedData()
       NotificationCenter.default.post(name: NSNotification.Name("shareDataReceived"), object: nil)
+      return super.application(app, open: url, options: options)
+    }
+    
+    // "Open in" from Files / other apps (security-scoped or inbox file URL)
+    if url.isFileURL {
+      queueDocumentOpened(at: url)
+      checkSharedData()
+      return true
     }
     
     return super.application(app, open: url, options: options)
@@ -178,6 +191,37 @@ import flutter_local_notifications
       } catch {
         print("🔥 Error parsing shared media: \(error)")
       }
+    }
+  }
+  
+  /// Copies a locally opened file into Caches and queues the same payload shape as the Share Extension.
+  private func queueDocumentOpened(at url: URL) {
+    guard url.isFileURL else { return }
+    
+    let accessed = url.startAccessingSecurityScopedResource()
+    defer {
+      if accessed {
+        url.stopAccessingSecurityScopedResource()
+      }
+    }
+    
+    let fileManager = FileManager.default
+    guard let caches = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+      print("🔥 queueDocumentOpened: no caches directory")
+      return
+    }
+    
+    let baseName = url.lastPathComponent
+    let safeName = baseName.isEmpty ? "document.bin" : baseName
+    let dest = caches.appendingPathComponent("opened_\(UUID().uuidString.prefix(8))_\(safeName)")
+    
+    do {
+      try fileManager.copyItem(at: url, to: dest)
+      let item: [String: Any] = ["path": dest.path, "type": 2]
+      pendingSharedMedia.append(item)
+      print("🔥 Queued opened document at \(dest.path)")
+    } catch {
+      print("🔥 queueDocumentOpened: copy failed: \(error)")
     }
   }
   
