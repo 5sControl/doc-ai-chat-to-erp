@@ -36,10 +36,6 @@
                         android:scheme="https"
                         android:host="lmnotebook.pro"
                         android:pathPrefix="/invite"/>
-                <data
-                        android:scheme="https"
-                        android:host="5scontrol.com"
-                        android:pathPrefix="/invite"/>
             </intent-filter>
 
             <!-- Open in app: content URIs (e.g. Files, Downloads) -->
