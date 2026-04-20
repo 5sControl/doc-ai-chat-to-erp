@@ -61,7 +61,19 @@ class AddSummaryButton extends StatelessWidget {
 
       FilePickerResult? result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
-          allowedExtensions: ['pdf', 'doc', 'docs', 'rtf', 'txt', 'epub'],
+          allowedExtensions: const [
+            'pdf',
+            'docx',
+            'txt',
+            'mp3',
+            'wav',
+            'm4a',
+            'aac',
+            'ogg',
+            'flac',
+            'opus',
+            'webm',
+          ],
           allowMultiple: false);
 
       Future.delayed(const Duration(milliseconds: 10), () async {

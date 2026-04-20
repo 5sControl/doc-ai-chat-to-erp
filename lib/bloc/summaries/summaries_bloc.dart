@@ -537,6 +537,44 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
     }
   }
 
+  /// Backend reports multiple status values across legacy/new code paths:
+  /// - `initial` / `loading` — still processing;
+  /// - `done` / `complete` — summary ready;
+  /// - `error` — something failed on the server.
+  static bool _isServerDocPending(DocumentDetailResponse doc) {
+    final s = doc.shortSummaryStatus.toLowerCase();
+    return s == 'loading' || s == 'initial';
+  }
+
+  static bool _isServerDocError(String status) =>
+      status.toLowerCase() == 'error';
+
+  /// Poll `GET /api/v2/documents/{id}` until the short summary is ready.
+  ///
+  /// Used for audio uploads where transcription + summarisation happen
+  /// asynchronously. The cap (2 minutes) matches typical Whisper `medium`
+  /// runtime on CPU for short clips; larger files may time out here and
+  /// fall through to the v1 fallback in the caller.
+  Future<DocumentDetailResponse?> _pollDocumentUntilReady({
+    required String documentId,
+    required String fileName,
+    required String filePath,
+    required Emitter<SummariesState> emit,
+    Duration interval = const Duration(seconds: 3),
+    Duration maxWait = const Duration(minutes: 4),
+  }) async {
+    final deadline = DateTime.now().add(maxWait);
+    while (DateTime.now().isBefore(deadline)) {
+      await Future<void>.delayed(interval);
+      final fresh = await _documentApi.getDocument(documentId);
+      final status = fresh.shortSummaryStatus.toLowerCase();
+      if (status != 'loading' && status != 'initial') {
+        return fresh;
+      }
+    }
+    return null;
+  }
+
   Future<void> _loadSummaryFromFile({
     required String fileName,
     required String filePath,
@@ -556,6 +594,24 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         print('v2 uploadDocument failed, falling back to v1: $e');
       }
 
+      // Audio uploads return immediately with status == "loading" — poll the
+      // backend until transcription + summarisation finish (or fail).
+      if (serverDoc != null &&
+          _isServerDocPending(serverDoc) &&
+          serverDoc.shortSummary == null) {
+        try {
+          serverDoc = await _pollDocumentUntilReady(
+            documentId: serverDoc.id,
+            fileName: fileName,
+            filePath: filePath,
+            emit: emit,
+          );
+        } catch (e) {
+          print('v2 polling failed: $e');
+          serverDoc = null;
+        }
+      }
+
       Summary shortSummaryResult;
       String? serverId;
       String? originalText;
@@ -567,6 +623,9 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
           summaryText: serverDoc.shortSummary,
           contextLength: serverDoc.contextLength,
         );
+      } else if (serverDoc != null &&
+          _isServerDocError(serverDoc.shortSummaryStatus)) {
+        throw Exception('Server could not process the file');
       } else {
         final v1 = await summaryRepository.getSummaryFromFile(
           fileName: fileName, filePath: filePath, summaryType: SummaryType.short,

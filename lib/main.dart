@@ -227,6 +227,23 @@ class _SummishareAppState extends State<SummishareApp> {
     }
   }
 
+  static const Set<String> _supportedDocExtensions = {
+    'pdf',
+    'docx',
+    'txt',
+  };
+  static const Set<String> _supportedAudioExtensions = {
+    'mp3',
+    'wav',
+    'm4a',
+    'aac',
+    'ogg',
+    'flac',
+    'opus',
+    'wma',
+    'webm',
+  };
+
   void _handleSharedMedia(Map<dynamic, dynamic> media) {
     print('🔥 Processing shared media: $media');
 
@@ -239,21 +256,30 @@ class _SummishareAppState extends State<SummishareApp> {
     final String? path = media['path'] as String?;
     final int? type = media['type'] as int?;
 
-    if (path != null) {
-      final cleanPath = path.replaceFirst('file://', '');
-      final fileName = cleanPath.split('/').last;
+    if (path == null) return;
 
-      print('🔥 File path: $cleanPath, fileName: $fileName, type: $type');
+    final cleanPath = path.replaceFirst('file://', '');
+    final fileName = cleanPath.split('/').last;
+    final ext = fileName.contains('.') ? fileName.split('.').last.toLowerCase() : '';
 
-      Future.delayed(const Duration(milliseconds: 500), () {
-        _summariesBloc.add(GetSummaryFromFile(
-          filePath: cleanPath,
-          fileName: fileName,
-          fromShare: true,
-        ));
-        _mixpanelBloc.add(Summify(option: 'file'));
-      });
+    final isDocument = _supportedDocExtensions.contains(ext);
+    final isAudio = _supportedAudioExtensions.contains(ext);
+
+    if (!isDocument && !isAudio) {
+      print('🔥 Skipping unsupported shared file (ext=$ext): $fileName');
+      return;
     }
+
+    print('🔥 File path: $cleanPath, fileName: $fileName, type: $type, ext: $ext');
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _summariesBloc.add(GetSummaryFromFile(
+        filePath: cleanPath,
+        fileName: fileName,
+        fromShare: true,
+      ));
+      _mixpanelBloc.add(Summify(option: isAudio ? 'audio' : 'file'));
+    });
   }
 
   void _processPendingSharePayload() {

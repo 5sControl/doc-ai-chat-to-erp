@@ -15,6 +15,8 @@ class ShareViewController: UIViewController {
     let textContentType = kUTTypeText as String
     let urlContentType = kUTTypeURL as String
     let fileURLType = kUTTypeFileURL as String
+    /// PDFs are often `public.pdf` / `com.adobe.pdf` without `public.file-url` in the share sheet.
+    let pdfContentType = kUTTypePDF as String
   
     private func loadIds() {
         // loading Share extension App Id
@@ -90,9 +92,12 @@ class ShareViewController: UIViewController {
             } else if attachment.hasItemConformingToTypeIdentifier(videoContentType) {
                 print("🔥 Share Extension: Detected video type")
                 handleVideos(content: content, attachment: attachment, index: index)
+            } else if attachment.hasItemConformingToTypeIdentifier(pdfContentType) {
+                print("🔥 Share Extension: Detected PDF type")
+                handleFiles(content: content, attachment: attachment, index: index, itemType: pdfContentType)
             } else if attachment.hasItemConformingToTypeIdentifier(fileURLType) {
                 print("🔥 Share Extension: Detected file type")
-                handleFiles(content: content, attachment: attachment, index: index)
+                handleFiles(content: content, attachment: attachment, index: index, itemType: fileURLType)
             } else {
                 print("🔥 Share Extension: Unknown attachment type")
             }
@@ -251,8 +256,8 @@ class ShareViewController: UIViewController {
         }
     }
 
-    private func handleFiles(content: NSExtensionItem, attachment: NSItemProvider, index: Int) {
-        attachment.loadItem(forTypeIdentifier: fileURLType, options: nil) { [weak self] data, error in
+    private func handleFiles(content: NSExtensionItem, attachment: NSItemProvider, index: Int, itemType: String) {
+        attachment.loadItem(forTypeIdentifier: itemType, options: nil) { [weak self] data, error in
 
             if error == nil, let url = data as? URL, let this = self {
 

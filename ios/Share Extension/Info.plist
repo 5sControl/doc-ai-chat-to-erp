@@ -8,24 +8,12 @@
   <dict>
     <key>NSExtensionAttributes</key>
     <dict>
-      <key>PHSupportedMediaTypes</key>
-      <array>
-        <string>Video</string>
-        <string>Image</string>
-      </array>
+      <!--
+        Share sheet visibility is driven by this predicate (not by Runner CFBundleDocumentTypes).
+        The previous dictionary rule + PHSupportedMediaTypes often hid the extension for PDFs and documents.
+      -->
       <key>NSExtensionActivationRule</key>
-      <dict>
-        <key>NSExtensionActivationSupportsText</key>
-        <true/>
-        <key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-        <integer>1</integer>
-        <key>NSExtensionActivationSupportsImageWithMaxCount</key>
-        <integer>100</integer>
-        <key>NSExtensionActivationSupportsMovieWithMaxCount</key>
-        <integer>100</integer>
-        <key>NSExtensionActivationSupportsFileWithMaxCount</key>
-        <integer>1</integer>
-      </dict>
+      <string>SUBQUERY(extensionItems, $extensionItem, SUBQUERY($extensionItem.attachments, $attachment, ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.plain-text" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.text" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.image" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.movie" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.audio" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.file-url" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.data" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.pdf" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.adobe.pdf" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.openxmlformats.wordprocessingml.document" OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.microsoft.word.doc").@count &gt;= 1).@count &gt;= 1</string>
     </dict>
     <key>NSExtensionPrincipalClass</key>
     <string>$(PRODUCT_MODULE_NAME).ShareViewController</string>
