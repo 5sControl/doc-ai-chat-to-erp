@@ -8,6 +8,11 @@
             android:name="${applicationName}"
             android:icon="@mipmap/ic_launcher"
             android:localeConfig="@xml/locales_config">
+        <!-- Firebase Sessions toggle is controlled per build type in app/build.gradle.
+             TODO: Re-enable in release once verified safe with updated Firebase SDK on affected devices. -->
+        <meta-data
+                android:name="firebase_sessions_enabled"
+                android:value="${firebaseSessionsEnabled}" />
         <activity
                 android:name=".MainActivity"
                 android:exported="true"

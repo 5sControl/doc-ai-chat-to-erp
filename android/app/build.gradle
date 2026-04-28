@@ -73,6 +73,8 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+        // Enable Firebase Sessions by default (used for debug/profile unless overridden below).
+        manifestPlaceholders["firebaseSessionsEnabled"] = "true"
     }
 
     signingConfigs {
@@ -87,6 +89,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            // Temporary Android-only mitigation for Firebase Sessions startup crash
+            // on some devices (NoSuchMethodError: Process.myProcessName).
+            // TODO: Set back to "true" after validating newer Firebase SDK on prod devices.
+            manifestPlaceholders.firebaseSessionsEnabled = "false"
         }
     }
 }
