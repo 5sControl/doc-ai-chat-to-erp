@@ -21,6 +21,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get common_error => 'Hata';
 
   @override
+  String get common_networkUnavailable =>
+      'Internet baglantisi yok. Aginizi kontrol edin ve tekrar deneyin.';
+
+  @override
   String get home_deleteSummary_title => 'Belge silinsin mi?';
 
   @override

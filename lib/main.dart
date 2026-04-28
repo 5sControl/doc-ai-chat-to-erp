@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'package:summify/helpers/purchases.dart';
+import 'package:summify/helpers/network_error_utils.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
 import 'package:summify/screens/subscribtions_screen/subscriptions_screen_limit.dart';
 import 'firebase_options.dart';
@@ -64,8 +65,13 @@ void main() async {
         .setCrashlyticsCollectionEnabled(!kDebugMode);
     FlutterError.onError =
         FirebaseCrashlytics.instance.recordFlutterFatalError;
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+      final isExpectedNetworkFailure = isNetworkError(error);
+      FirebaseCrashlytics.instance.recordError(
+        error,
+        stack,
+        fatal: !isExpectedNetworkFailure,
+      );
       return true;
     };
   }

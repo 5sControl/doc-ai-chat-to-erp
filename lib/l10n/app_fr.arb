@@ -5,6 +5,7 @@
   "common_select": "Sélectionner",
   "common_ok": "OK",
   "common_error": "Erreur",
+  "common_networkUnavailable": "Pas de connexion Internet. Verifiez votre reseau et reessayez.",
 
   "home_deleteSummary_title": "Supprimer le document ?",
   "home_deleteSummary_message": "Voulez-vous vraiment supprimer cet élément ? Cette action est irréversible.",

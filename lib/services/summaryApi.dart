@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:summify/helpers/network_error_utils.dart';
 import 'package:summify/models/models.dart';
 
 import 'summary_api_models.dart';
@@ -55,11 +56,7 @@ class SummaryApiRepository {
   );
 
   static bool _isNetworkFailure(DioException e) {
-    return e.type == DioExceptionType.connectionTimeout ||
-        e.type == DioExceptionType.connectionError ||
-        e.type == DioExceptionType.sendTimeout ||
-        e.type == DioExceptionType.receiveTimeout ||
-        (e.type == DioExceptionType.unknown && e.response == null);
+    return isNetworkError(e);
   }
 
   /// POST to document/LLM API: [_baseUrlPrimary] first; on network failure, each host in [_fallbackBaseUrls].
@@ -96,6 +93,9 @@ class SummaryApiRepository {
   }
 
   ErrorDecode _parseDioError(DioException e, {String defaultDetail = 'Processing error'}) {
+    if (_isNetworkFailure(e)) {
+      return ErrorDecode(detail: kNetworkUnavailableErrorCode);
+    }
     try {
       final data = e.response?.data;
       if (data == null) return ErrorDecode(detail: defaultDetail);

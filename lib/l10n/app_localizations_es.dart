@@ -21,6 +21,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get common_error => 'Error';
 
   @override
+  String get common_networkUnavailable =>
+      'No hay conexion a internet. Revisa tu red e intentalo de nuevo.';
+
+  @override
   String get home_deleteSummary_title => '¿Eliminar documento?';
 
   @override

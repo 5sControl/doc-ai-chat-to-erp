@@ -21,6 +21,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get common_error => '错误';
 
   @override
+  String get common_networkUnavailable => '网络不可用，请检查网络后重试。';
+
+  @override
   String get home_deleteSummary_title => '删除文档？';
 
   @override
@@ -775,6 +778,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get common_error => '错误';
+
+  @override
+  String get common_networkUnavailable => '网络不可用，请检查网络后重试。';
 
   @override
   String get home_deleteSummary_title => '删除文档？';

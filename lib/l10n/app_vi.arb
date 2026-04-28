@@ -5,6 +5,7 @@
   "common_select": "Chọn",
   "common_ok": "OK",
   "common_error": "Lỗi",
+  "common_networkUnavailable": "Khong co ket noi internet. Vui long kiem tra mang va thu lai.",
 
   "home_deleteSummary_title": "Xóa tài liệu?",
   "home_deleteSummary_message": "Bạn có chắc muốn xóa mục này? Hành động này không thể hoàn tác.",

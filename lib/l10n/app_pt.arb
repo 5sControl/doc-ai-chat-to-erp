@@ -5,6 +5,7 @@
   "common_select": "Selecionar",
   "common_ok": "OK",
   "common_error": "Erro",
+  "common_networkUnavailable": "Sem conexao com a internet. Verifique sua rede e tente novamente.",
 
   "home_deleteSummary_title": "Excluir documento?",
   "home_deleteSummary_message": "Tem certeza de que deseja excluir este item? Esta ação não pode ser desfeita.",

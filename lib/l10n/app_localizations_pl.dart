@@ -21,6 +21,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get common_error => 'Błąd';
 
   @override
+  String get common_networkUnavailable =>
+      'Brak polaczenia z internetem. Sprawdz siec i sprobuj ponownie.';
+
+  @override
   String get home_deleteSummary_title => 'Usunąć dokument?';
 
   @override

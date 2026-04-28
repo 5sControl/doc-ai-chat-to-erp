@@ -5,6 +5,7 @@
   "common_select": "选择",
   "common_ok": "好",
   "common_error": "错误",
+  "common_networkUnavailable": "网络不可用，请检查网络后重试。",
 
   "home_deleteSummary_title": "删除文档？",
   "home_deleteSummary_message": "确定要删除此项吗？此操作无法撤销。",

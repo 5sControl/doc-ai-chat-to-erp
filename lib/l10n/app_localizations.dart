@@ -143,6 +143,12 @@ abstract class AppLocalizations {
   /// **'Error'**
   String get common_error;
 
+  /// No description provided for @common_networkUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection. Check your network and try again.'**
+  String get common_networkUnavailable;
+
   /// No description provided for @home_deleteSummary_title.
   ///
   /// In en, this message translates to:

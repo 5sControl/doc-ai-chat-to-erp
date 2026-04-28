@@ -21,6 +21,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get common_error => 'Ошибка';
 
   @override
+  String get common_networkUnavailable =>
+      'Нет подключения к интернету. Проверьте сеть и попробуйте снова.';
+
+  @override
   String get home_deleteSummary_title => 'Удалить документ?';
 
   @override

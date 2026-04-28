@@ -21,6 +21,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get common_error => 'Fehler';
 
   @override
+  String get common_networkUnavailable =>
+      'Keine Internetverbindung. Bitte prüfen Sie Ihr Netzwerk und versuchen Sie es erneut.';
+
+  @override
   String get home_deleteSummary_title => 'Dokument löschen?';
 
   @override

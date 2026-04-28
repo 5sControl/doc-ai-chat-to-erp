@@ -21,6 +21,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get common_error => 'Lỗi';
 
   @override
+  String get common_networkUnavailable =>
+      'Khong co ket noi internet. Vui long kiem tra mang va thu lai.';
+
+  @override
   String get home_deleteSummary_title => 'Xóa tài liệu?';
 
   @override

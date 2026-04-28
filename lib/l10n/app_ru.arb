@@ -5,6 +5,7 @@
   "common_select": "Выбрать",
   "common_ok": "Ок",
   "common_error": "Ошибка",
+  "common_networkUnavailable": "Нет подключения к интернету. Проверьте сеть и попробуйте снова.",
 
   "home_deleteSummary_title": "Удалить документ?",
   "home_deleteSummary_message": "Вы уверены, что хотите удалить эту запись? Это действие нельзя отменить.",

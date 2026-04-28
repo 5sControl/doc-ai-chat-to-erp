@@ -21,6 +21,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get common_error => 'Fout';
 
   @override
+  String get common_networkUnavailable =>
+      'Geen internetverbinding. Controleer je netwerk en probeer het opnieuw.';
+
+  @override
   String get home_deleteSummary_title => 'Document verwijderen?';
 
   @override

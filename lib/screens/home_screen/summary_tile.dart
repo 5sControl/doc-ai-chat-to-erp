@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:summify/bloc/mixpanel/mixpanel_bloc.dart';
+import 'package:summify/helpers/network_error_utils.dart';
 import 'package:summify/l10n/app_localizations.dart';
 import 'package:summify/widgets/themed_alert_dialog.dart';
 import 'package:summify/bloc/subscriptions/subscriptions_bloc.dart';
@@ -456,7 +457,7 @@ class ErrorMessage extends StatelessWidget {
         secondChild: Column(
           children: [
             Text(
-              summaryData.longSummary.summaryError ?? 'Some error',
+              localizeUiError(context, summaryData.longSummary.summaryError),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

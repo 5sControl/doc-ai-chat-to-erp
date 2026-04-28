@@ -5,6 +5,7 @@
   "common_select": "Seç",
   "common_ok": "Tamam",
   "common_error": "Hata",
+  "common_networkUnavailable": "Internet baglantisi yok. Aginizi kontrol edin ve tekrar deneyin.",
 
   "home_deleteSummary_title": "Belge silinsin mi?",
   "home_deleteSummary_message": "Bu öğeyi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",

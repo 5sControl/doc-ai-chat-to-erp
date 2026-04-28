@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:summify/bloc/translates/translates_bloc.dart';
 import 'package:summify/gen/assets.gen.dart';
 import 'package:summify/helpers/get_transformed_text.dart';
+import 'package:summify/helpers/network_error_utils.dart';
 import 'package:summify/services/demo_data_initializer.dart';
 import 'package:summify/helpers/language_codes.dart';
 import 'package:summify/services/summaryApi.dart';
@@ -254,7 +255,11 @@ class _VoiceButtonState extends State<VoiceButton> {
       if (service.isSpeaking.value) {
         await service.stop();
       }
-      final errorMessage = error.toString().contains('us_gold.json') ||
+      if (!mounted) return;
+      final l10n = AppLocalizations.of(context);
+      final errorMessage = isNetworkError(error)
+          ? l10n.common_networkUnavailable
+          : error.toString().contains('us_gold.json') ||
               error.toString().contains('Unable to load asset')
           ? 'Voice synthesis requires additional files. Please restart the app.'
           : 'Unable to play voice on this device.';

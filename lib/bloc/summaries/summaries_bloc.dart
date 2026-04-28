@@ -8,6 +8,7 @@ import 'package:summify/gen/assets.gen.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 import '../../models/models.dart';
+import '../../helpers/network_error_utils.dart';
 import '../../services/summaryApi.dart';
 import '../../services/document_api_service.dart';
 import '../../services/document_api_models.dart';
@@ -420,9 +421,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
         ));
         return;
       }
-      final errMsg = e is Exception
-          ? e.toString().replaceAll('Exception:', '')
-          : e.toString();
+      final errMsg = normalizeUiError(e);
       mixpanelBloc.add(SummarizingError(
         url: summaryKey, fromShare: fromShare, error: errMsg,
       ));
@@ -520,7 +519,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       ));
       emit(state.copyWith(summaries: m, textCounter: state.textCounter + 1));
     } catch (e) {
-      final errMsg = e.toString().replaceAll('Exception:', '');
+      final errMsg = normalizeUiError(e);
       mixpanelBloc.add(SummarizingError(
         url: 'from Text', fromShare: false, error: errMsg,
       ));
@@ -688,7 +687,7 @@ class SummariesBloc extends HydratedBloc<SummariesEvent, SummariesState> {
       ));
       emit(state.copyWith(summaries: m));
     } catch (e) {
-      final errMsg = e.toString().replaceAll('Exception:', '');
+      final errMsg = normalizeUiError(e);
       mixpanelBloc.add(SummarizingError(
         url: fileName, fromShare: fromShare, error: errMsg,
       ));

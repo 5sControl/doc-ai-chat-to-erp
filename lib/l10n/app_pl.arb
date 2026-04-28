@@ -5,6 +5,7 @@
   "common_select": "Wybierz",
   "common_ok": "OK",
   "common_error": "Błąd",
+  "common_networkUnavailable": "Brak polaczenia z internetem. Sprawdz siec i sprobuj ponownie.",
 
   "home_deleteSummary_title": "Usunąć dokument?",
   "home_deleteSummary_message": "Czy na pewno chcesz usunąć ten wpis? Tej operacji nie można cofnąć.",
