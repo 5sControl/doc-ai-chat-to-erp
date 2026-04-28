@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:summify/bloc/settings/settings_bloc.dart';
+import 'package:summify/services/firebase_summary_analytics.dart';
 part 'mixpanel_event.dart';
 part 'mixpanel_state.dart';
 
@@ -163,6 +166,13 @@ class MixpanelBloc extends Bloc<MixpanelEvent, MixpanelState> {
         'summary_url': event.url,
         'AB': event.AB
       });
+      unawaited(
+        logSummaryTabView(
+          tab: event.type,
+          screenContext: 'summary',
+          abVariant: event.AB,
+        ),
+      );
     });
 
     on<TrackResearchSummary>((event, emit) {

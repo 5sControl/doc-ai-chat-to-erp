@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:summify/models/models.dart';
 
 import '../../bloc/mixpanel/mixpanel_bloc.dart';
+import '../../services/firebase_summary_analytics.dart';
 import '../../bloc/quiz/quiz_bloc.dart';
 import '../../bloc/research/research_bloc.dart';
 import '../../bloc/settings/settings_bloc.dart';
@@ -39,9 +41,18 @@ class _LibraryDocumentScreenState extends State<LibraryDocumentScreen>
         TabController(length: 4, vsync: this, initialIndex: activeTab);
 
     _tabController.addListener(() {
+      if (_tabController.indexIsChanging) return;
       setState(() {
         activeTab = _tabController.index;
       });
+      final tab = switch (_tabController.index) {
+        0 => 'short',
+        1 => 'long',
+        2 => 'research',
+        3 => 'quiz',
+        _ => 'unknown',
+      };
+      unawaited(logSummaryTabView(tab: tab, screenContext: 'library'));
     });
     super.initState();
   }

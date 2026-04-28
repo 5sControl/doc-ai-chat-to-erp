@@ -1,7 +1,9 @@
-import 'dart:io';
 import 'dart:async';
+import 'dart:io';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:summify/bloc/offers/offers_bloc.dart';
 import 'package:summify/helpers/purchases.dart';
 import 'package:summify/screens/bundle_screen/bundle_screen.dart';
@@ -43,7 +45,7 @@ import 'bloc/knowledge_cards/knowledge_cards_bloc.dart';
 import 'bloc/saved_cards/saved_cards_bloc.dart';
 import 'navigation/mixpanel_route_observer.dart';
 import 'screens/main_screen.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +58,17 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
+    await FirebaseCrashlytics.instance
+        .setCrashlyticsCollectionEnabled(!kDebugMode);
+    FlutterError.onError =
+        FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 
   final purchasesService = PurchasesService();
   await purchasesService.initPlatformState();
@@ -88,7 +101,7 @@ class SummishareApp extends StatefulWidget {
 class _SummishareAppState extends State<SummishareApp> {
   late AppLinks _appLinks;
   StreamSubscription<Uri>? _linkSubscription;
-  late SummariesBloc _summariesBloc;
+  SummariesBloc? _summariesBloc;
   late MixpanelBloc _mixpanelBloc;
   late SavedCardsBloc _savedCardsBloc;
   
@@ -206,6 +219,11 @@ class _SummishareAppState extends State<SummishareApp> {
   void _handleSharedText(String text) {
     print('🔥 Processing shared text: $text');
 
+    if (_summariesBloc == null) {
+      _pendingSharePayload = {'type': 'text', 'data': text};
+      return;
+    }
+
     if (!_isUserAuthenticated) {
       print('🔥 User not authenticated, storing pending share');
       _pendingSharePayload = {'type': 'text', 'data': text};
@@ -215,13 +233,13 @@ class _SummishareAppState extends State<SummishareApp> {
     if (text.startsWith('http://') || text.startsWith('https://')) {
       print('🔥 Detected URL, processing summary...');
       Future.delayed(const Duration(milliseconds: 500), () {
-        _summariesBloc.add(GetSummaryFromUrl(summaryUrl: text, fromShare: true));
+        _summariesBloc?.add(GetSummaryFromUrl(summaryUrl: text, fromShare: true));
         _mixpanelBloc.add(Summify(option: 'url'));
       });
     } else {
       print('🔥 Detected plain text');
       Future.delayed(const Duration(milliseconds: 500), () {
-        _summariesBloc.add(GetSummaryFromText(text: text, fromShare: true));
+        _summariesBloc?.add(GetSummaryFromText(text: text, fromShare: true));
         _mixpanelBloc.add(Summify(option: 'text'));
       });
     }
@@ -246,6 +264,14 @@ class _SummishareAppState extends State<SummishareApp> {
 
   void _handleSharedMedia(Map<dynamic, dynamic> media) {
     print('🔥 Processing shared media: $media');
+
+    if (_summariesBloc == null) {
+      _pendingSharePayload = {
+        'type': 'media',
+        'data': Map<String, dynamic>.from(media),
+      };
+      return;
+    }
 
     if (!_isUserAuthenticated) {
       print('🔥 User not authenticated, storing pending share');
@@ -273,7 +299,7 @@ class _SummishareAppState extends State<SummishareApp> {
     print('🔥 File path: $cleanPath, fileName: $fileName, type: $type, ext: $ext');
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      _summariesBloc.add(GetSummaryFromFile(
+      _summariesBloc?.add(GetSummaryFromFile(
         filePath: cleanPath,
         fileName: fileName,
         fromShare: true,
@@ -329,9 +355,10 @@ class _SummishareAppState extends State<SummishareApp> {
           ),
           BlocProvider(
               create: (context) {
-                _summariesBloc = SummariesBloc(
+                final summariesBloc = SummariesBloc(
                     mixpanelBloc: _mixpanelBloc,
                     subscriptionBloc: context.read<SubscriptionsBloc>());
+                _summariesBloc = summariesBloc;
                 
                 // BUG FIX: Check for pending shared data AFTER blocs are initialized.
                 // On cold start, the native side may have stored shared data before
@@ -342,12 +369,12 @@ class _SummishareAppState extends State<SummishareApp> {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     _checkPendingSharedData();
                     if (_isUserAuthenticated) {
-                      _summariesBloc.add(const FetchServerDocuments());
+                      summariesBloc.add(const FetchServerDocuments());
                     }
                   });
                 }
                 
-                return _summariesBloc;
+                return summariesBloc;
               }),
           BlocProvider(
               create: (context) =>
@@ -364,7 +391,8 @@ class _SummishareAppState extends State<SummishareApp> {
           listener: (context, state) {
             if (state is AuthenticationSuccessState) {
               _processPendingSharePayload();
-              _summariesBloc.add(const FetchServerDocuments());
+              final summariesBloc = _summariesBloc ?? context.read<SummariesBloc>();
+              summariesBloc.add(const FetchServerDocuments());
             }
           },
           child: BlocBuilder<SettingsBloc, SettingsState>(

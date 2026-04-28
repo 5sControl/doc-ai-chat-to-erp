@@ -1,7 +1,7 @@
 name: summify
 description: "Summify Extension"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.9.6+79
+version: 1.9.7+80
 
 environment:
   sdk: '>=3.7.0 <4.0.0'
@@ -20,6 +20,8 @@ dependencies:
   dio: ^5.7.0
   firebase_core: ^3.13.0
   firebase_auth: ^5.5.2
+  firebase_crashlytics: ^4.3.6
+  firebase_analytics: ^11.4.6
   google_sign_in: ^6.3.0
   sign_in_with_apple: ^7.0.1
   crypto: ^3.0.6
