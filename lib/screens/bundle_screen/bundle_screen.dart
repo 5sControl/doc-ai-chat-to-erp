@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,6 +41,7 @@ class _BundleScreenState extends State<BundleScreen>
     with SingleTickerProviderStateMixin {
      bool showSubscriptionScreenLimit = false;
   late TabController _tabController;
+  Timer? _showLimitTimer;
   var selectedSubscriptionIndex = 1;
   Color appBarColor = Colors.transparent; // Default color for the first tab
   bool isUnlimited = false;
@@ -68,7 +71,8 @@ class _BundleScreenState extends State<BundleScreen>
         _updateState(); // Update state on tab change
       });
     });
-    Future.delayed(const Duration(seconds: 2), () {
+    _showLimitTimer = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
       setState(() {
         showSubscriptionScreenLimit = true;
       });
@@ -107,6 +111,7 @@ class _BundleScreenState extends State<BundleScreen>
 
   @override
   void dispose() {
+    _showLimitTimer?.cancel();
     _tabController.dispose();
     super.dispose();
   }
