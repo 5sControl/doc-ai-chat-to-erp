@@ -1,7 +1,7 @@
 name: summify
 description: "Summify Extension"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.9.7+80
+version: 1.9.8+81
 
 environment:
   sdk: '>=3.7.0 <4.0.0'

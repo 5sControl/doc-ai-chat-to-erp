@@ -38,6 +38,15 @@ class _ResearchTabState extends State<ResearchTab> {
         : const Color.fromRGBO(191, 249, 249, 1);
   }
 
+  void _scrollToBottom({required Duration duration}) {
+    if (!mounted || !controller.hasClients) return;
+    controller.animateTo(
+      controller.position.maxScrollExtent,
+      curve: Curves.easeOut,
+      duration: duration,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -47,11 +56,7 @@ class _ResearchTabState extends State<ResearchTab> {
       }
     });
     Future.delayed(const Duration(milliseconds: 200), () {
-      controller.animateTo(
-        controller.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 1000),
-      );
+      _scrollToBottom(duration: const Duration(milliseconds: 1000));
     });
   }
 
@@ -77,11 +82,7 @@ class _ResearchTabState extends State<ResearchTab> {
       },
       listener: (context, state) {
         Future.delayed(const Duration(milliseconds: 200), () {
-          controller.animateTo(
-            controller.position.maxScrollExtent,
-            curve: Curves.easeOut,
-            duration: const Duration(milliseconds: 500),
-          );
+          _scrollToBottom(duration: const Duration(milliseconds: 500));
         });
       },
       builder: (context, state) {
