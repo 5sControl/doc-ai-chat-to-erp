@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -26,32 +28,22 @@ class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthService authService;
   final MixpanelBloc mixpanelBloc;
+  late final StreamSubscription<User?> _authSub;
 
   AuthenticationBloc({required this.authService, required this.mixpanelBloc})
       : super(AuthenticationInitial()) {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        emit(AuthenticationSuccessState(
-            user: UserModel(
-                displayName: user.displayName,
-                email: user.email,
-                id: user.uid)));
-        mixpanelBloc.add(IdentifyUser(uid: user.uid, email: user.email));
-      }
-    });
+    _authSub = FirebaseAuth.instance.authStateChanges().listen(
+      (user) => add(AuthenticationAuthStateChanged(user)),
+    );
+    add(AuthenticationAuthStateChanged(FirebaseAuth.instance.currentUser));
+
+    on<AuthenticationAuthStateChanged>(_onAuthStateChanged);
 
     on<SignUpWithEmail>((event, emit) async {
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
-        final UserModel? res = await authService.signUpUser(
+        await authService.signUpUser(
             name: event.name, email: event.email, password: event.password);
-        if (res is UserModel) {
-          emit(AuthenticationSuccessState(user: res));
-          mixpanelBloc.add(IdentifyUser(uid: res.id!, email: res.email));
-          if (!kIsFreeApp) {
-            await Purchases.logIn(res.id!);
-          }
-        }
       } catch (e) {
         emit(AuthenticationFailureState(
             errorMessage: e.toString().replaceAll('Exception: ', '')));
@@ -63,12 +55,8 @@ class AuthenticationBloc
       try {
         final UserModel? res =
             await authService.signInUserWithEmail(event.email, event.password);
-        if (res is UserModel) {
-          emit(AuthenticationSuccessState(user: res));
-          mixpanelBloc.add(IdentifyUser(uid: res.id!, email: res.email));
-          if (!kIsFreeApp) {
-            await Purchases.logIn(res.id!);
-          }
+        if (res == null) {
+          emit(const AuthenticationFailureState(errorMessage: 'Some error'));
         }
       } catch (e) {
         emit(AuthenticationFailureState(
@@ -80,13 +68,7 @@ class AuthenticationBloc
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
         final UserModel? user = await authService.signInWithGoogle();
-        if (user != null) {
-          emit(AuthenticationSuccessState(user: user));
-          mixpanelBloc.add(IdentifyUser(uid: user.id!, email: user.email));
-          if (!kIsFreeApp) {
-            await Purchases.logIn(user.id!);
-          }
-        } else {
+        if (user == null) {
           emit(const AuthenticationFailureState(errorMessage: 'Some error'));
         }
       } catch (e) {
@@ -102,13 +84,7 @@ class AuthenticationBloc
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
         final UserModel? user = await authService.signInWithApple();
-        if (user != null) {
-          emit(AuthenticationSuccessState(user: user));
-          mixpanelBloc.add(IdentifyUser(uid: user.id!, email: user.email));
-          if (!kIsFreeApp) {
-            await Purchases.logIn(user.id!);
-          }
-        } else {
+        if (user == null) {
           emit(const AuthenticationFailureState(errorMessage: 'Some error'));
         }
       } catch (e) {
@@ -125,8 +101,7 @@ class AuthenticationBloc
     on<SignOut>((event, emit) async {
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
-        authService.signOutUser();
-        emit(AuthenticationInitial());
+        await authService.signOutUser();
         if (!kIsFreeApp) {
           await Purchases.logOut();
         }
@@ -152,9 +127,8 @@ class AuthenticationBloc
     on<DeleteUser>((event, emit) async {
       emit(const AuthenticationLoadingState(isLoading: true));
       try {
-        authService.deleteUser();
+        await authService.deleteUser();
         emit(const DeleteUserState());
-        emit(AuthenticationInitial());
         if (!kIsFreeApp) {
           await Purchases.logOut();
         }
@@ -163,5 +137,33 @@ class AuthenticationBloc
         emit(AuthenticationInitial());
       }
     });
+  }
+
+  void _onAuthStateChanged(
+    AuthenticationAuthStateChanged event,
+    Emitter<AuthenticationState> emit,
+  ) {
+    final user = event.user;
+    if (user != null) {
+      emit(AuthenticationSuccessState(
+        user: UserModel(
+          displayName: user.displayName,
+          email: user.email,
+          id: user.uid,
+        ),
+      ));
+      mixpanelBloc.add(IdentifyUser(uid: user.uid, email: user.email));
+      if (!kIsFreeApp) {
+        unawaited(Purchases.logIn(user.uid));
+      }
+    } else {
+      emit(AuthenticationInitial());
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _authSub.cancel();
+    return super.close();
   }
 }

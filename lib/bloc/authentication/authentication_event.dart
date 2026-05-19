@@ -56,3 +56,12 @@ class DeleteUser extends AuthenticationEvent {
   @override
   List<Object> get props => [];
 }
+
+class AuthenticationAuthStateChanged extends AuthenticationEvent {
+  final User? user;
+
+  const AuthenticationAuthStateChanged(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}

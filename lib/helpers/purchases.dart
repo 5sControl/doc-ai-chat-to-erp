@@ -7,7 +7,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:summify/constants.dart';
 
 class PurchasesService {
-  User? user = FirebaseAuth.instance.currentUser;
   Future<void> initPlatformState() async {
     if (kIsFreeApp) return;
     if (!kIsWeb) {
@@ -21,7 +20,8 @@ class PurchasesService {
           configuration =
               PurchasesConfiguration('appl_CzcmziXEyjKtEOYgYuQMLCTGvtf');
         }
-        await Purchases.configure(configuration..appUserID = user?.uid);
+        final uid = FirebaseAuth.instance.currentUser?.uid;
+        await Purchases.configure(configuration..appUserID = uid);
       } on PlatformException catch (e) {
         print('Failed to initialize RevenueCat: ${e.message} (Code: ${e.code})');
         rethrow;

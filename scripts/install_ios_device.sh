@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Установка приложения на физический iOS‑девайс (подключённый по кабелю).
-# После установки кабель можно отключить — приложение остаётся на устройстве,
-# его можно запускать и перезапускать с домашнего экрана.
+# Сборка, установка и запуск на iPhone/iPad (USB).
+# Если физического девайса нет — iOS Simulator (debug).
 
 set -e
 
@@ -11,54 +10,75 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-# Переходим в корень проекта (скрипт лежит в scripts/)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$PROJECT_ROOT"
 
-echo "📱 Установка на подключённый iOS‑девайс (оффлайн-сборка)"
-echo "   Каталог проекта: $PROJECT_ROOT"
+echo "📱 Summify → iOS (девайс или симулятор)"
+echo "   $PROJECT_ROOT"
 echo ""
 
-# Режим: release (по умолчанию) или debug
 MODE="${1:-release}"
 if [[ "$MODE" != "release" && "$MODE" != "debug" ]]; then
     echo -e "${RED}Использование: $0 [release|debug]${NC}"
-    echo "  release — установка релизной сборки (рекомендуется, быстрее без кабеля)"
-    echo "  debug   — отладочная сборка"
     exit 1
 fi
 
-# Проверяем, что девайс подключён
-echo "🔍 Проверка подключённых устройств..."
-if ! flutter devices | grep -q "ios"; then
-    echo -e "${RED}❌ Не найден подключённый iOS‑девайс.${NC}"
-    echo "   Подключите iPhone/iPad по кабелю и разрешите доверие компьютеру на устройстве."
-    exit 1
+pick_device_id_from_line() {
+    echo "$1" | awk -F '•' '{print $2}' | xargs
+}
+
+echo "🔍 Поиск устройства..."
+FLUTTER_DEVICES=$(flutter devices 2>/dev/null || true)
+
+DEVICE_LINE=$(echo "$FLUTTER_DEVICES" | grep -E "ios" | grep -E "iPhone|iPad" | grep -v -i simulator | grep -v -i wireless | head -1 || true)
+TARGET_KIND="device"
+
+if [[ -z "$DEVICE_LINE" ]]; then
+    echo -e "${YELLOW}⚠️  USB iPhone/iPad не найден → симулятор${NC}"
+    DEVICE_LINE=$(echo "$FLUTTER_DEVICES" | grep -i simulator | grep -E "iPhone|iPad" | head -1 || true)
+    TARGET_KIND="simulator"
+
+    if [[ -z "$DEVICE_LINE" ]]; then
+        echo "🚀 Запуск iOS Simulator..."
+        EMULATOR_ID=$(flutter emulators 2>/dev/null | grep -E "ios|iOS" | awk -F '•' '{print $1}' | xargs | head -1 || true)
+        [[ -z "$EMULATOR_ID" ]] && EMULATOR_ID="apple_ios_simulator"
+        flutter emulators --launch "$EMULATOR_ID" || true
+        open -a Simulator 2>/dev/null || true
+        for _ in $(seq 1 30); do
+            sleep 2
+            FLUTTER_DEVICES=$(flutter devices 2>/dev/null || true)
+            DEVICE_LINE=$(echo "$FLUTTER_DEVICES" | grep -i simulator | grep -E "iPhone|iPad" | head -1 || true)
+            [[ -n "$DEVICE_LINE" ]] && break
+        done
+    fi
+
+    if [[ -z "$DEVICE_LINE" ]]; then
+        echo -e "${RED}❌ Симулятор недоступен. Проверьте Xcode.${NC}"
+        exit 1
+    fi
+
+    if [[ "$MODE" == "release" ]]; then
+        echo -e "${YELLOW}   На симуляторе: debug вместо release${NC}"
+        MODE="debug"
+    fi
 fi
 
-DEVICE_LINE=$(flutter devices | grep -E "iPhone|iPad" | head -1)
-echo -e "${GREEN}✅ Устройство: $DEVICE_LINE${NC}"
+DEVICE_ID=$(pick_device_id_from_line "$DEVICE_LINE")
+echo -e "${GREEN}✅ $TARGET_KIND: $DEVICE_LINE${NC}"
 echo ""
 
-# Зависимости и поды (при необходимости)
-echo "📦 Flutter pub get..."
 flutter pub get
-
-echo "📦 iOS: pod install..."
 (cd ios && pod install)
+
+echo ""
+echo "🔨 flutter run ($MODE) на $DEVICE_ID"
+echo "   Сборка может занять несколько минут. Приложение откроется само."
+echo "   Остановка: q или Ctrl+C в этом терминале."
 echo ""
 
 if [[ "$MODE" == "release" ]]; then
-    echo "🔨 Сборка в режиме release и установка на устройство..."
-    echo "   (первый раз может занять несколько минут)"
-    flutter run --release
+    flutter run --release -d "$DEVICE_ID"
 else
-    echo "🔨 Сборка в режиме debug и установка на устройство..."
-    flutter run --debug
+    flutter run --debug -d "$DEVICE_ID"
 fi
-
-echo ""
-echo -e "${GREEN}✅ Готово.${NC}"
-echo "   Приложение установлено на устройство. Можете отключить кабель."
-echo "   Запуск и перезапуск — с домашнего экрана по иконке приложения."
