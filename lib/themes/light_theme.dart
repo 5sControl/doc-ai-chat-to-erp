@@ -24,7 +24,6 @@ final lightTheme = ThemeData(
       checkColor: WidgetStatePropertyAll(Colors.white),
     ),
     cardColor: Colors.black,
-    indicatorColor: Colors.black,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       systemOverlayStyle: SystemUiOverlayStyle.dark,

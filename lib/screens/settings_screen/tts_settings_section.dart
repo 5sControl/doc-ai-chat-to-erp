@@ -58,11 +58,7 @@ class _TtsSettingsSectionState extends State<TtsSettingsSection> {
                               style: TextStyle(color: Colors.orange),
                             ),
                             const SizedBox(height: 8),
-                            DropdownButtonFormField<String>(
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                                border: OutlineInputBorder(),
-                              ),
+                            _kokoroVoiceDropdown(
                               value: state.kokoroVoiceId,
                               items: const [],
                               onChanged: null,
@@ -70,11 +66,7 @@ class _TtsSettingsSectionState extends State<TtsSettingsSection> {
                           ],
                         );
                       }
-                      return DropdownButtonFormField<String>(
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                          border: OutlineInputBorder(),
-                        ),
+                      return _kokoroVoiceDropdown(
                         value: state.kokoroVoiceId,
                         items:
                             voices
@@ -138,4 +130,27 @@ class _TtsSettingsSectionState extends State<TtsSettingsSection> {
       },
     );
   }
+}
+
+/// Controlled voice picker (Bloc state). Uses [DropdownButton] instead of
+/// [DropdownButtonFormField] because `value` on the form field is deprecated.
+Widget _kokoroVoiceDropdown({
+  required String? value,
+  required List<DropdownMenuItem<String>> items,
+  required ValueChanged<String?>? onChanged,
+}) {
+  return InputDecorator(
+    decoration: const InputDecoration(
+      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+      border: OutlineInputBorder(),
+    ),
+    child: DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        isExpanded: true,
+        value: value,
+        items: items,
+        onChanged: onChanged,
+      ),
+    ),
+  );
 }

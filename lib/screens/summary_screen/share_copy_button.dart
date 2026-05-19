@@ -394,8 +394,8 @@ class _TtsDownloadDialogState extends State<TtsDownloadDialog> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    return WillPopScope(
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false,
       child: AppThemedAlertDialog.build(
         context: context,
         title: AppThemedAlertDialog.titleText(
