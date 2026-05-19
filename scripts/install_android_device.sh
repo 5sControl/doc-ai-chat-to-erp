@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Сборка, установка и запуск на Android (USB).
-# Если API < minSdk или нет USB — эмулятор (предпочтительно API 34+).
+# Если API < minSdk или нет USB — эмулятор.
 
 set -e
 
@@ -25,7 +25,7 @@ if [[ "$MODE" != "release" && "$MODE" != "debug" ]]; then
 fi
 
 MIN_SDK=$(grep -E 'minSdkVersion' android/app/build.gradle | grep -oE '[0-9]+' | head -1)
-MIN_SDK=${MIN_SDK:-34}
+MIN_SDK=${MIN_SDK:-24}
 TARGET_KIND="device"
 DEVICE_ID=""
 
@@ -86,9 +86,9 @@ use_android_emulator() {
     DEVICE_ID=""
 
     echo "🚀 Запуск Android Emulator (нужен API >= $MIN_SDK)..."
-    EMULATOR_ID=$(flutter emulators 2>/dev/null | grep -E "Pixel_7_API_36|API_3[4-9]" | awk -F '•' '{print $1}' | xargs | head -1 || true)
+    EMULATOR_ID=$(flutter emulators 2>/dev/null | grep -E "Pixel_7_API_36|API_2[4-9]|API_3[0-9]" | awk -F '•' '{print $1}' | xargs | head -1 || true)
     [[ -z "$EMULATOR_ID" ]] && EMULATOR_ID=$(flutter emulators 2>/dev/null | grep -i android | awk -F '•' '{print $1}' | xargs | head -1 || true)
-    [[ -z "$EMULATOR_ID" ]] && { echo -e "${RED}❌ Нет AVD с API >= $MIN_SDK. Создайте Pixel API 34+ в Android Studio.${NC}"; exit 1; }
+    [[ -z "$EMULATOR_ID" ]] && { echo -e "${RED}❌ Нет AVD с API >= $MIN_SDK. Создайте AVD в Android Studio.${NC}"; exit 1; }
 
     echo "   AVD: $EMULATOR_ID"
     flutter emulators --launch "$EMULATOR_ID" || true
