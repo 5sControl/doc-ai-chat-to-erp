@@ -1,9 +1,10 @@
 import 'package:summify/models/models.dart';
+import 'package:summify/services/demo_data_initializer.dart';
 
 /// Pre-generated knowledge cards for demo summary
 /// These cards are available on all devices, even without Apple Intelligence
 class DemoKnowledgeCards {
-  static const String demoKey = 'Atomic Habits (Rephrase)';
+  static const String demoKey = DemoDataInitializer.demoKey;
 
   /// Returns pre-generated knowledge cards for the demo summary
   static List<KnowledgeCard> getDemoCards() {

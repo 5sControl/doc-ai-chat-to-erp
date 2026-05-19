@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../models/models.dart';
+import 'demo_data_initializer.dart';
 
 class QuizAssetLoader {
   // Map of document keys to their asset file names
   static const Map<String, String> _quizAssets = {
     'The 7 Habits of Highly Effective People': 'the_7_habits_quiz.json',
-    'Atomic Habits (Rephrase)': 'atomic_habits_quiz.json',
+    DemoDataInitializer.demoKey: 'atomic_habits_quiz.json',
   };
 
   /// Attempts to load a pre-generated quiz from assets

@@ -32,11 +32,6 @@ class AuthenticationBloc
 
   AuthenticationBloc({required this.authService, required this.mixpanelBloc})
       : super(AuthenticationInitial()) {
-    _authSub = FirebaseAuth.instance.authStateChanges().listen(
-      (user) => add(AuthenticationAuthStateChanged(user)),
-    );
-    add(AuthenticationAuthStateChanged(FirebaseAuth.instance.currentUser));
-
     on<AuthenticationAuthStateChanged>(_onAuthStateChanged);
 
     on<SignUpWithEmail>((event, emit) async {
@@ -137,6 +132,11 @@ class AuthenticationBloc
         emit(AuthenticationInitial());
       }
     });
+
+    _authSub = FirebaseAuth.instance.authStateChanges().listen(
+      (user) => add(AuthenticationAuthStateChanged(user)),
+    );
+    add(AuthenticationAuthStateChanged(FirebaseAuth.instance.currentUser));
   }
 
   void _onAuthStateChanged(

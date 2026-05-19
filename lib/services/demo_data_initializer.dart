@@ -4,7 +4,7 @@ import 'package:summify/models/models.dart';
 
 /// Service for creating demo data
 class DemoDataInitializer {
-  static const String demoKey = 'Atomic Habits (Rephrase)';
+  static const String demoKey = 'Demo for Book: Atomic Habits (Rephrase)';
 
   /// Creates the demo summary data with all required fields including original text
   static SummaryData createDemoSummary() {
@@ -13,7 +13,7 @@ class DemoDataInitializer {
       longSummaryStatus: SummaryStatus.complete,
       date: DateTime.now(),
       summaryPreview: SummaryPreview(
-        title: 'Atomic Habits (Rephrase)',
+        title: demoKey,
         imageUrl: Assets.library.atomicHabitsRephrase.path,
       ),
       summaryOrigin: SummaryOrigin.text,

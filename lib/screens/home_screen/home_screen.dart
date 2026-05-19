@@ -219,7 +219,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               ),
                             ),
                             backgroundColor: Colors.transparent,
-                            automaticallyImplyLeading: false,
+                            leading: IconButton(
+                              onPressed: onPressDesktop,
+                              visualDensity: VisualDensity.compact,
+                              icon: SvgPicture.asset(
+                                Assets.icons.desctop,
+                                colorFilter: ColorFilter.mode(
+                                    Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.white
+                                        : Colors.black,
+                                    BlendMode.srcIn),
+                              ),
+                            ),
+                            title: const Logo(),
+                            actions: [
+                              BookmarksButton(
+                                  onPressBookmarks: onPressBookmarks),
+                              SettingsButton(
+                                  onPressSettings: onPressSettings),
+                            ],
                             elevation: 0,
                             bottom: PreferredSize(
                               preferredSize: Size(
@@ -279,42 +298,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 ],
                               ),
                             ),
-                            title: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: onPressDesktop,
-                                  padding: EdgeInsets.only(
-                                      right: MediaQuery.of(context).size.width *
-                                          0.15),
-                                  visualDensity: VisualDensity.compact,
-                                  icon: SvgPicture.asset(
-                                    Assets.icons.desctop,
-                                    colorFilter: ColorFilter.mode(
-                                        Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black,
-                                        BlendMode.srcIn),
-                                  ),
-                                ),
-                                const Logo(),
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      BookmarksButton(
-                                          onPressBookmarks: onPressBookmarks),
-                                      const SizedBox(width: 8),
-                                      SettingsButton(
-                                          onPressSettings: onPressSettings),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
+                        ),
                         body: TabBarView(
                           children: [
                             Padding(

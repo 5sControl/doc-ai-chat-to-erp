@@ -8,31 +8,25 @@ class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              Assets.icons.logo,
-              height: 17,
-              width: 17,
-              colorFilter: ColorFilter.mode(
-                  Theme.of(context).cardColor, BlendMode.srcIn),
-            ),
-            Text(
-              ' LM Notebook Pro',
-              style: TextStyle(
-                  color: Theme.of(context).cardColor,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SvgPicture.asset(
+          Assets.icons.logo,
+          height: 17,
+          width: 17,
+          colorFilter: ColorFilter.mode(
+              Theme.of(context).cardColor, BlendMode.srcIn),
         ),
-      ),
+        Text(
+          ' LM Notebook Pro',
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+              color: Theme.of(context).cardColor,
+              fontSize: 17,
+              fontWeight: FontWeight.w600),
+        ),
+      ],
     );
   }
 }

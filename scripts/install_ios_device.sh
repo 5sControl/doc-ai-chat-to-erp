@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# Сборка, установка и запуск на iPhone/iPad (USB).
-# Если физического девайса нет — iOS Simulator (debug).
+# iOS: симулятор — flutter run (debug, hot reload).
+#       физический iPhone/iPad — release-сборка + установка (можно отключить USB).
+#
+# Использование:
+#   ./scripts/install_ios_device.sh           # авто: sim → debug+run, device → release install
+#   ./scripts/install_ios_device.sh debug     # принудительно debug + flutter run
+#   ./scripts/install_ios_device.sh release   # на девайсе: release install; на симуляторе → debug+run
 
 set -e
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+CYAN='\033[0;36m'
 NC='\033[0m'
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -18,9 +24,9 @@ echo "📱 Summify → iOS (девайс или симулятор)"
 echo "   $PROJECT_ROOT"
 echo ""
 
-MODE="${1:-release}"
-if [[ "$MODE" != "release" && "$MODE" != "debug" ]]; then
-    echo -e "${RED}Использование: $0 [release|debug]${NC}"
+MODE="${1:-auto}"
+if [[ "$MODE" != "auto" && "$MODE" != "release" && "$MODE" != "debug" ]]; then
+    echo -e "${RED}Использование: $0 [auto|release|debug]${NC}"
     exit 1
 fi
 
@@ -57,11 +63,6 @@ if [[ -z "$DEVICE_LINE" ]]; then
         echo -e "${RED}❌ Симулятор недоступен. Проверьте Xcode.${NC}"
         exit 1
     fi
-
-    if [[ "$MODE" == "release" ]]; then
-        echo -e "${YELLOW}   На симуляторе: debug вместо release${NC}"
-        MODE="debug"
-    fi
 fi
 
 DEVICE_ID=$(pick_device_id_from_line "$DEVICE_LINE")
@@ -72,13 +73,35 @@ flutter pub get
 (cd ios && pod install)
 
 echo ""
-echo "🔨 flutter run ($MODE) на $DEVICE_ID"
-echo "   Сборка может занять несколько минут. Приложение откроется само."
-echo "   Остановка: q или Ctrl+C в этом терминале."
+
+if [[ "$TARGET_KIND" == "simulator" ]]; then
+    if [[ "$MODE" == "release" ]]; then
+        echo -e "${YELLOW}   На симуляторе release не используется → debug + hot reload${NC}"
+    fi
+    echo -e "${CYAN}🔨 Симулятор: flutter run (debug)${NC}"
+    echo "   Hot reload:  ${GREEN}r${NC}  |  Hot restart: ${GREEN}R${NC}  |  Выход: ${GREEN}q${NC} или Ctrl+C"
+    echo "   Терминал должен оставаться открытым — так работает live reload."
+    echo ""
+    flutter run --debug -d "$DEVICE_ID"
+    exit 0
+fi
+
+# Физический iPhone/iPad
+if [[ "$MODE" == "debug" ]]; then
+    echo -e "${CYAN}🔨 Девайс: flutter run (debug)${NC}"
+    echo "   Hot reload: r | Hot restart: R | Кабель нужен, пока открыт этот терминал."
+    echo ""
+    flutter run --debug -d "$DEVICE_ID"
+    exit 0
+fi
+
+echo -e "${CYAN}🔨 Девайс: release-сборка и установка${NC}"
+echo "   После «Установлено» можно отключить USB — приложение останется на iPhone."
+echo "   (без hot reload; для разработки с кабелем: $0 debug)"
 echo ""
 
-if [[ "$MODE" == "release" ]]; then
-    flutter run --release -d "$DEVICE_ID"
-else
-    flutter run --debug -d "$DEVICE_ID"
-fi
+flutter build ios --release
+flutter install --release -d "$DEVICE_ID"
+
+echo ""
+echo -e "${GREEN}✅ Установлено на iPhone/iPad. Можно отключить кабель и запустить приложение с экрана.${NC}"

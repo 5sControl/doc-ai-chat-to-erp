@@ -208,9 +208,9 @@ class _AdCard extends StatelessWidget {
     final url = ad.storeUrl;
     if (url == null || url.isEmpty) return;
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
+    // Do not gate on canLaunchUrl — on Android 11+ it returns false without
+    // <queries> in the manifest even when the browser can open the link.
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
   @override

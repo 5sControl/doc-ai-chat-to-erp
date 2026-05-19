@@ -58,7 +58,7 @@ Key Concepts:
       
       // Update with correct document key
       quizData['quiz_id'] = 'demo_atomic_habits';
-      quizData['documentKey'] = 'Atomic Habits';
+      quizData['documentKey'] = 'Demo for Book: Atomic Habits (Rephrase)';
       
       // Pretty print JSON
       final encoder = JsonEncoder.withIndent('  ');
